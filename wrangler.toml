@@ -6,7 +6,6 @@ pages_build_output_dir = ".vercel/output/static"
 
 [assets]
 directory = ".vercel/output/static"
-binding = "ASSETS"
 
 [vars]
 SHOPIFY_STORE_DOMAIN = "m06wpv-na.myshopify.com"
