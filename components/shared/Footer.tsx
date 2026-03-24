@@ -1,5 +1,32 @@
 import { LandingFooter, LandingFooterColumn, LandingFooterLink } from '@/components/landing';
 
+const collectionLinks = [
+  {
+    href: '/collections/garmin-avionics',
+    label: 'Garmin install-only',
+  },
+  {
+    href: '/collections/garmin-avionics-certified-retail',
+    label: 'Garmin retail',
+  },
+  {
+    href: '/collections/garmin-avionics-accessories',
+    label: 'Garmin accessories',
+  },
+  {
+    href: '/collections/retail-experimental',
+    label: 'Experimental avionics',
+  },
+  {
+    href: '/collections/rigging-tools',
+    label: 'Papa-Alpha tools',
+  },
+  {
+    href: '/collections/on-sale',
+    label: 'On Sale',
+  },
+];
+
 export const Footer = ({ className }: { className?: string }) => {
   return (
     <LandingFooter
@@ -20,21 +47,19 @@ export const Footer = ({ className }: { className?: string }) => {
         </div>
       }
     >
-      <LandingFooterColumn title="Services">
-        <LandingFooterLink href="#services">Avionics</LandingFooterLink>
-        <LandingFooterLink href="#services">NDT</LandingFooterLink>
-        <LandingFooterLink href="#services">Fabrication</LandingFooterLink>
+      <LandingFooterColumn title="Collections">
+        {collectionLinks.slice(0, 3).map((link) => (
+          <LandingFooterLink key={link.href} href={link.href}>
+            {link.label}
+          </LandingFooterLink>
+        ))}
       </LandingFooterColumn>
-      <LandingFooterColumn title="Commerce">
-        <LandingFooterLink href="https://rogerwilcoaviation.com/collections/all">
-          Shop all products
-        </LandingFooterLink>
-        <LandingFooterLink href="https://rogerwilcoaviation.com/collections/garmin-avionics">
-          Garmin certified
-        </LandingFooterLink>
-        <LandingFooterLink href="https://rogerwilcoaviation.com/collections/rigging-tools">
-          Papa-Alpha tools
-        </LandingFooterLink>
+      <LandingFooterColumn title="More products">
+        {collectionLinks.slice(3).map((link) => (
+          <LandingFooterLink key={link.href} href={link.href}>
+            {link.label}
+          </LandingFooterLink>
+        ))}
       </LandingFooterColumn>
       <LandingFooterColumn title="Company">
         <LandingFooterLink href="https://rogerwilcoaviation.com/pages/about">
@@ -47,10 +72,14 @@ export const Footer = ({ className }: { className?: string }) => {
           Contact
         </LandingFooterLink>
       </LandingFooterColumn>
-      <LandingFooterColumn title="Next phase">
-        <LandingFooterLink href="#featured-products">Storefront integration</LandingFooterLink>
-        <LandingFooterLink href="#why-rwas">Homepage build</LandingFooterLink>
-        <LandingFooterLink href="#contact">Lead capture</LandingFooterLink>
+      <LandingFooterColumn title="Commerce">
+        <LandingFooterLink href="/collections">Browse collections</LandingFooterLink>
+        <LandingFooterLink href="https://rogerwilcoaviation.com/cart">
+          View Shopify cart
+        </LandingFooterLink>
+        <LandingFooterLink href="https://rogerwilcoaviation.com/pages/contact">
+          Request a quote
+        </LandingFooterLink>
       </LandingFooterColumn>
     </LandingFooter>
   );

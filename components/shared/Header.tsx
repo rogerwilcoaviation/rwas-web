@@ -2,6 +2,21 @@ import { LandingHeader, LandingHeaderMenuItem } from '@/components/landing';
 import ThemeSwitch from '@/components/shared/ThemeSwitch';
 import Link from 'next/link';
 
+const collectionLinks = [
+  {
+    href: '/collections/garmin-avionics',
+    label: 'Garmin',
+  },
+  {
+    href: '/collections/rigging-tools',
+    label: 'Papa-Alpha',
+  },
+  {
+    href: '/collections/on-sale',
+    label: 'On Sale',
+  },
+];
+
 export const Header = ({ className }: { className?: string }) => {
   return (
     <LandingHeader
@@ -25,13 +40,18 @@ export const Header = ({ className }: { className?: string }) => {
         </Link>
       }
     >
+      <LandingHeaderMenuItem href="/collections">Collections</LandingHeaderMenuItem>
+      {collectionLinks.map((item) => (
+        <LandingHeaderMenuItem key={item.href} href={item.href}>
+          {item.label}
+        </LandingHeaderMenuItem>
+      ))}
       <LandingHeaderMenuItem href="#services">Services</LandingHeaderMenuItem>
-      <LandingHeaderMenuItem href="#featured-products">
-        Shop
-      </LandingHeaderMenuItem>
-      <LandingHeaderMenuItem href="#why-rwas">Why RWAS</LandingHeaderMenuItem>
       <LandingHeaderMenuItem href="#contact">Contact</LandingHeaderMenuItem>
-      <LandingHeaderMenuItem type="button" href="https://rogerwilcoaviation.com/collections/all">
+      <LandingHeaderMenuItem
+        type="button"
+        href="https://rogerwilcoaviation.com/collections/all"
+      >
         Browse Products
       </LandingHeaderMenuItem>
 
