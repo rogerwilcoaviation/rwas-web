@@ -1,399 +1,304 @@
-// @ts-nocheck
-
 import Header from '@/components/shared/Header';
 import Footer from '@/components/shared/Footer';
-import { LandingHeaderMenuItem } from '@/components/landing';
-import { LandingPrimaryImageCtaSection } from '@/components/landing';
-import { LandingSocialProof } from '@/components/landing';
-import { LandingFeatureList } from '@/components/landing';
-import { LandingProductSteps } from '@/components/landing';
-import { LandingProductFeature } from '@/components/landing';
-import { LandingTestimonialReadMoreWrapper } from '@/components/landing';
-import { LandingTestimonialGrid } from '@/components/landing';
-import { LandingSaleCtaSection } from '@/components/landing';
-import { LandingFaqCollapsibleSection } from '@/components/landing';
-import { LandingFooter } from '@/components/landing';
-import { LandingFooterColumn } from '@/components/landing';
-import { LandingFooterLink } from '@/components/landing';
-import Image from 'next/image';
 import { Button } from '@/components/shared/ui/button';
+import { getFeaturedProducts } from '@/lib/shopify';
+import { ArrowRight, Gauge, Radar, ShieldCheck, Wrench } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { CreditCard, Lock, Shield, TrendingUp, Users, Zap } from 'lucide-react';
 
-export default function Page() {
+const serviceCards = [
+  {
+    title: 'Garmin avionics sales & integration',
+    description:
+      'Certified and experimental Garmin products, practical upgrade guidance, and support that starts with the mission instead of the brochure.',
+    icon: Gauge,
+  },
+  {
+    title: 'Nondestructive testing',
+    description:
+      'Clean, professional NDT support for aircraft operators who need real answers and a shop that respects downtime.',
+    icon: Radar,
+  },
+  {
+    title: 'Fabrication & problem solving',
+    description:
+      'From panel work to custom shop solutions, RWAS is built around making useful things work in the real world.',
+    icon: Wrench,
+  },
+];
+
+const trustPoints = [
+  'Real aviation shop voice instead of generic marketing fluff',
+  'Headless storefront foundation connected to the live Shopify catalog',
+  'Built to support products, quote-driven installs, and future chatbot workflows',
+];
+
+function formatPrice(amount: string, currencyCode: string) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currencyCode,
+    maximumFractionDigits: 0,
+  }).format(Number(amount));
+}
+
+export default async function Page() {
+  const products = await getFeaturedProducts(4);
+
   return (
     <>
       <Header className="mb-4" />
 
-      <LandingPrimaryImageCtaSection
-        title="A simpler way to manage your money"
-        description="Take charge of your finances with Mevolut. Your money, clear and simple."
-        imageSrc="/static/images/1.jpg"
-        imageAlt="Dashboard Preview"
-        imagePosition="right"
-        imageShadow="hard"
-        textPosition="left"
-        withBackground={false}
-        variant="primary"
-        minHeight={350}
-      >
-        <Button size="xl" asChild>
-          <Link href="/dashboard">Dashboard</Link>
-        </Button>
-        <Button size="xl" variant="outlinePrimary" asChild>
-          <Link href="/pricing">Pricing</Link>
-        </Button>
-        <LandingSocialProof
-          className="mt-6 w-full"
-          avatarItems={[
-            {
-              imageSrc: '/static/images/people/1.webp',
-              name: 'Sarah Johnson',
-            },
-            {
-              imageSrc: '/static/images/people/2.webp',
-              name: 'Michael Chen',
-            },
-            {
-              imageSrc: '/static/images/people/3.webp',
-              name: 'Emily Rodriguez',
-            },
-          ]}
-          numberOfUsers={1100}
-          suffixText="happy users"
-        />
-      </LandingPrimaryImageCtaSection>
+      <main className="bg-[#f5f3ef] text-[#111111]">
+        <section className="relative overflow-hidden border-b border-black/10 pt-28">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(196,154,42,0.22),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(17,17,17,0.08),transparent_28%)]" />
+          <div className="container-wide relative grid gap-12 px-6 py-16 lg:grid-cols-[1.2fr_0.8fr] lg:px-10 lg:py-24">
+            <div className="max-w-3xl">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary-500/30 bg-primary-500/10 px-4 py-2 text-sm font-medium text-primary-700">
+                <ShieldCheck className="h-4 w-4" />
+                Phase 1 homepage build — Shopify-connected foundation
+              </div>
 
-      <div className="container-wide p-12 w-full flex flex-wrap items-center justify-center gap-6 dark:invert">
-        <span className="w-full text-center text-sm opacity-70 dark:invert">
-          As seen on
-        </span>
-        <Image
-          src="/static/images/outlets/tech-crunch.svg"
-          alt="TechCrunch"
-          width={300}
-          height={300}
-          className="w-auto h-6"
-        />
-        <Image
-          src="/static/images/outlets/the-new-york-times.svg"
-          alt="The New York Times"
-          width={300}
-          height={300}
-          className="w-auto h-8"
-        />
-        <Image
-          src="/static/images/outlets/cnn.svg"
-          alt="CNN"
-          width={300}
-          height={300}
-          className="w-auto h-7"
-        />
-        <Image
-          src="/static/images/outlets/the-verge.svg"
-          alt="The Verge"
-          width={300}
-          height={300}
-          className="w-auto h-7"
-        />
-      </div>
+              <h1 className="max-w-4xl text-5xl font-black tracking-tight text-[#111111] sm:text-6xl lg:text-7xl">
+                Aircraft support that looks sharp, sells cleanly, and actually makes sense.
+              </h1>
 
-      <LandingFeatureList
-        id="features"
-        title="Everything you need to manage your money"
-        description="Simple, powerful tools to help you take control of your finances."
-        featureItems={[
-          {
-            title: 'See your spending, simply',
-            description:
-              'Track every transaction automatically. Get instant insights into where your money goes with beautiful, easy-to-understand charts and reports.',
-            icon: <TrendingUp className="w-8 h-8" />,
-          },
-          {
-            title: 'Send and receive money instantly',
-            description:
-              'Transfer money to friends and family in seconds. No fees, no waiting. Just fast, secure payments whenever you need them.',
-            icon: <Zap className="w-8 h-8" />,
-          },
-          {
-            title: 'Save money automatically',
-            description:
-              'Set savings goals and watch your money grow. Our smart algorithms help you save without thinking about it, building your financial future effortlessly.',
-            icon: <CreditCard className="w-8 h-8" />,
-          },
-          {
-            title: 'Bank-level security',
-            description:
-              'Your money and data are protected with 256-bit encryption. We use the same security standards as major banks to keep your information safe.',
-            icon: <Shield className="w-8 h-8" />,
-          },
-          {
-            title: 'Multi-account management',
-            description:
-              'Connect all your bank accounts in one place. Get a complete view of your finances and manage everything from a single dashboard.',
-            icon: <Users className="w-8 h-8" />,
-          },
-          {
-            title: 'Privacy guaranteed',
-            description:
-              "We never sell your data. Your financial information stays private and secure. You're in complete control of who sees what.",
-            icon: <Lock className="w-8 h-8" />,
-          },
-        ]}
-        withBackground
-        withBackgroundGlow
-        variant="primary"
-        backgroundGlowVariant="primary"
-      />
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-black/75 sm:text-xl">
+                Roger Wilco Aviation Services combines Garmin avionics expertise,
+                shop capability, and a real product catalog into a faster, cleaner
+                web experience built for pilots, owners, and operators.
+              </p>
 
-      <LandingProductSteps
-        title="How it Works"
-        description="Get started with Mevolut in three simple steps. No complicated setup, no hidden fees."
-        display="grid"
-        withBackground={false}
-        variant="primary"
-      >
-        <LandingProductFeature
-          title="1. Sign up in minutes"
-          description="Create your account quickly and securely. Just enter your email, set a password, and you're ready to go. No lengthy forms or waiting periods."
-          imageSrc="/static/images/2.jpg"
-          imageAlt="Sign up process"
-          imagePosition="center"
-          imageShadow="soft"
-          zoomOnHover
-          minHeight={350}
-          withBackground={false}
-          withBackgroundGlow={false}
-          variant="primary"
-          backgroundGlowVariant="primary"
-        />
-        <LandingProductFeature
-          title="2. Connect your bank accounts"
-          description="Link your existing bank accounts safely using our secure connection. We support thousands of banks and credit unions across the country."
-          imageSrc="/static/images/3.jpg"
-          imageAlt="Connect banks"
-          imagePosition="center"
-          imageShadow="soft"
-          zoomOnHover
-          minHeight={350}
-          withBackground={false}
-          withBackgroundGlow={false}
-          variant="primary"
-          backgroundGlowVariant="primary"
-        />
-        <LandingProductFeature
-          title="3. Start managing your money"
-          description="View all your accounts in one place. Track spending, set budgets, and achieve your financial goals with powerful insights and automation."
-          imageSrc="/static/images/4.jpg"
-          imageAlt="Manage money"
-          imagePosition="center"
-          imageShadow="soft"
-          zoomOnHover
-          minHeight={350}
-          withBackground={false}
-          withBackgroundGlow={false}
-          variant="primary"
-          backgroundGlowVariant="primary"
-        />
-      </LandingProductSteps>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <Button size="xl" asChild className="bg-[#111111] text-[#f5f3ef] hover:bg-black">
+                  <Link href="https://rogerwilcoaviation.com/collections/all">
+                    Browse the catalog <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button
+                  size="xl"
+                  variant="outlinePrimary"
+                  asChild
+                  className="border-[#C49A2A] text-[#111111] hover:bg-[#C49A2A]/10"
+                >
+                  <Link href="https://rogerwilcoaviation.com/pages/contact">
+                    Talk to the shop
+                  </Link>
+                </Button>
+              </div>
 
-      <LandingProductFeature
-        id="security"
-        title="Your money is safe with us"
-        descriptionComponent={
-          <>
-            <p className="mb-6">
-              We take security seriously. Your financial data is protected with
-              industry-leading encryption and security measures.{' '}
+              <div className="mt-10 grid gap-4 sm:grid-cols-3">
+                {trustPoints.map((point) => (
+                  <div
+                    key={point}
+                    className="rounded-2xl border border-black/10 bg-white/70 p-4 text-sm leading-6 text-black/75 shadow-sm"
+                  >
+                    {point}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary-500/20 blur-3xl" />
+              <div className="absolute -bottom-10 -left-8 h-32 w-32 rounded-full bg-black/10 blur-3xl" />
+              <div className="relative overflow-hidden rounded-[2rem] border border-black/10 bg-[#111111] p-4 shadow-2xl">
+                <div className="rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-[#1b1b1b] via-[#111111] to-[#090909] p-6 text-[#f5f3ef]">
+                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.28em] text-primary-500/80">
+                    <span>RWAS</span>
+                    <span>rogerwilcoaviation.com</span>
+                  </div>
+                  <div className="mt-8 space-y-6">
+                    <div>
+                      <p className="text-sm uppercase tracking-[0.28em] text-primary-500/70">
+                        Now building
+                      </p>
+                      <p className="mt-2 text-3xl font-bold text-white">
+                        Headless Shopify storefront
+                      </p>
+                    </div>
+                    <div className="grid gap-3 text-sm text-white/80">
+                      <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                        Homepage rebrand with RWAS colors and service positioning
+                      </div>
+                      <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                        Live Shopify Storefront API pull for featured products
+                      </div>
+                      <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                        Clean base for Cloudflare Pages, chatbot, and quote workflows
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="services" className="container-wide px-6 py-20 lg:px-10">
+          <div className="max-w-2xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.32em] text-primary-700">
+              Core capabilities
             </p>
-            <ul className="space-y-3 mb-8">
-              <li className="flex items-start">
-                <Shield className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" />
-                <span>
-                  <strong>256-bit encryption: </strong>
-                  Bank-level security protects all your data
-                </span>
-              </li>
-              <li className="flex items-start">
-                <Shield className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" />
-                <span>
-                  <strong>FDIC insurance: </strong>
-                  Your deposits are insured up to $250,000
-                </span>
-              </li>
-              <li className="flex items-start">
-                <Shield className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" />
-                <span>
-                  <strong>Privacy guaranteed: </strong>
-                  We never sell your personal information
-                </span>
-              </li>
-            </ul>
-          </>
-        }
-        imageSrc="/static/images/5.jpg"
-        imageAlt="Security features"
-        imagePosition="right"
-        imageShadow="hard"
-        textPosition="left"
-        withBackground
-        withBackgroundGlow
-        variant="primary"
-        backgroundGlowVariant="primary"
-        imagePerspective="bottom"
-        zoomOnHover
-        minHeight={350}
-      />
+            <h2 className="mt-4 text-4xl font-black tracking-tight">
+              Built for aviation work, not template theater.
+            </h2>
+            <p className="mt-4 text-lg leading-8 text-black/70">
+              This first pass positions RWAS around the three things that matter:
+              avionics capability, technical credibility, and a storefront that can
+              support both products and quote-driven projects.
+            </p>
+          </div>
 
-      <LandingTestimonialReadMoreWrapper>
-        <LandingTestimonialGrid
-          title="Loved by thousands of users"
-          description="See what our customers have to say about managing their finances with Mevolut."
-          testimonialItems={[
-            {
-              name: 'Sarah Anderson',
-              text: 'Mevolut made budgeting so much easier for me. I can finally see where my money goes each month and make smarter decisions about my spending.',
-              handle: '@sarahanderson',
-              imageSrc: '/static/images/people/4.webp',
-              url: '#',
-              verified: true,
-            },
-            {
-              name: 'John Bennett',
-              text: "Mevolut helped me finally understand where my money goes each month. Now I feel in control of my finances and I'm actually saving money for the first time.",
-              handle: '@johnbennett',
-              imageSrc: '/static/images/people/5.webp',
-              url: '#',
-              verified: true,
-            },
-            {
-              name: 'Maria Garcia',
-              text: "The automatic savings feature is a game changer. I've saved more in three months with Mevolut than I did all last year trying to do it manually.",
-              handle: '@mariagarcia',
-              imageSrc: '/static/images/people/6.webp',
-              url: '#',
-            },
-            {
-              name: 'David Kim',
-              text: 'I love how simple everything is. No confusing menus or complicated features. Just straightforward money management that actually works.',
-              handle: '@davidkim',
-              imageSrc: '/static/images/people/7.webp',
-              url: '#',
-              verified: true,
-            },
-            {
-              name: 'Emily Rodriguez',
-              text: 'Being able to see all my accounts in one place has been incredible. I finally have a complete picture of my financial situation and can plan accordingly.',
-              handle: '@emilyrodriguez',
-              imageSrc: '/static/images/people/8.webp',
-              url: '#',
-            },
-            {
-              name: 'Michael Thompson',
-              text: "The security features give me peace of mind. I know my financial data is protected and my privacy is respected. That's worth everything to me.",
-              handle: '@michaelthompson',
-              imageSrc: '/static/images/people/9.webp',
-              url: '#',
-              verified: true,
-            },
-            {
-              name: 'Jessica Lee',
-              text: 'Mevolut has completely changed how I think about money. The insights and reports help me make better financial decisions every single day.',
-              handle: '@jessicalee',
-              imageSrc: '/static/images/people/10.webp',
-              url: '#',
-            },
-            {
-              name: 'Robert Martinez',
-              text: "I was skeptical at first, but Mevolut has exceeded all my expectations. It's intuitive, powerful, and has genuinely improved my financial health.",
-              handle: '@robertmartinez',
-              imageSrc: '/static/images/people/11.webp',
-              url: '#',
-              verified: true,
-            },
-            {
-              name: 'Amanda Chen',
-              text: 'The instant money transfers are so convenient. I can split bills with friends or send money to family in seconds. No more waiting days for transfers.',
-              handle: '@amandachen',
-              imageSrc: '/static/images/people/12.webp',
-              url: '#',
-            },
-          ]}
-          withBackground={false}
-          variant="primary"
-        />
-      </LandingTestimonialReadMoreWrapper>
+          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            {serviceCards.map(({ title, description, icon: Icon }) => (
+              <div
+                key={title}
+                className="rounded-[1.75rem] border border-black/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-500/15 text-primary-700">
+                  <Icon className="h-6 w-6" />
+                </div>
+                <h3 className="mt-6 text-2xl font-bold">{title}</h3>
+                <p className="mt-4 text-base leading-7 text-black/70">{description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      <LandingSaleCtaSection
-        id="pricing"
-        title="Simple, fair pricing"
-        description="No hidden fees. No surprises. Just transparent pricing that makes sense for everyone."
-        withBackground
-        withBackgroundGlow
-        variant="primary"
-        backgroundGlowVariant="primary"
-      >
-        <Button size="xl" asChild>
-          <Link href="/plans">See Plans</Link>
-        </Button>
-      </LandingSaleCtaSection>
+        <section id="featured-products" className="border-y border-black/10 bg-white/70">
+          <div className="container-wide px-6 py-20 lg:px-10">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <div className="max-w-2xl">
+                <p className="text-sm font-semibold uppercase tracking-[0.32em] text-primary-700">
+                  Live from Shopify
+                </p>
+                <h2 className="mt-4 text-4xl font-black tracking-tight">
+                  Featured products pulled from the Storefront API.
+                </h2>
+                <p className="mt-4 text-lg leading-8 text-black/70">
+                  The homepage is already talking to the live Shopify catalog, so this
+                  rebuild starts with real inventory instead of fake brochure data.
+                </p>
+              </div>
 
-      <LandingFaqCollapsibleSection
-        id="faq"
-        title="Frequently Asked Questions"
-        description="Got questions? We've got answers. Find everything you need to know about Mevolut."
-        faqItems={[
-          {
-            question: 'Is Mevolut free to use?',
-            answer:
-              'Yes! Mevolut offers a free plan with essential features. We also have premium plans with advanced features for users who need more functionality. There are no hidden fees or surprise charges.',
-          },
-          {
-            question: 'How secure is my financial data?',
-            answer:
-              'Your security is our top priority. We use 256-bit encryption, the same level of security used by major banks. Your data is protected with multiple layers of security, and we never sell your personal information to third parties.',
-          },
-          {
-            question: 'Which banks can I connect to Mevolut?',
-            answer:
-              'Mevolut supports thousands of banks and credit unions across the United States. We work with all major banks and most regional institutions. If you have questions about a specific bank, please contact our support team.',
-          },
-          {
-            question: 'Can I use Mevolut on my phone?',
-            answer:
-              'Absolutely! Mevolut works seamlessly on all devices including smartphones, tablets, and desktop computers. Access your finances anytime, anywhere with our responsive web app.',
-          },
-          {
-            question: 'How does automatic saving work?',
-            answer:
-              "Our smart algorithms analyze your spending patterns and income to automatically set aside small amounts you won't miss. You can customize your savings goals and rules, and we'll handle the rest automatically.",
-          },
-          {
-            question: 'What if I need help or have questions?',
-            answer:
-              'Our customer support team is here to help! You can reach us via email, live chat, or phone. We also have a comprehensive help center with guides and tutorials to help you get the most out of Mevolut.',
-          },
-        ]}
-        withBackground={false}
-        withBackgroundGlow={false}
-        variant="primary"
-        backgroundGlowVariant="primary"
-      />
+              <Button asChild size="xl" className="bg-[#111111] text-[#f5f3ef] hover:bg-black">
+                <Link href="https://rogerwilcoaviation.com/collections/all">
+                  View full catalog
+                </Link>
+              </Button>
+            </div>
 
-      <LandingSaleCtaSection
-        title="Ready to take control? Join Mevolut today."
-        description="Start managing your money smarter. Sign up free and see the difference in minutes."
-        withBackground
-        withBackgroundGlow
-        variant="primary"
-        backgroundGlowVariant="primary"
-      >
-        <Button size="xl" asChild>
-          <Link href="/signup">Sign Up Free</Link>
-        </Button>
-      </LandingSaleCtaSection>
+            <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+              {products.map((product) => (
+                <Link
+                  key={product.id}
+                  href={`https://rogerwilcoaviation.com/products/${product.handle}`}
+                  className="group overflow-hidden rounded-[1.75rem] border border-black/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <div className="relative aspect-[4/3] bg-[#f5f3ef]">
+                    {product.featuredImage ? (
+                      <Image
+                        src={product.featuredImage.url}
+                        alt={product.featuredImage.altText || product.title}
+                        fill
+                        className="object-contain p-6 transition duration-300 group-hover:scale-[1.03]"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
+                      />
+                    ) : null}
+                  </div>
+                  <div className="space-y-3 p-6">
+                    <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-700">
+                      Shopify product
+                    </p>
+                    <h3 className="line-clamp-3 text-xl font-bold leading-snug text-[#111111]">
+                      {product.title}
+                    </h3>
+                    <p className="text-sm text-black/60">
+                      From{' '}
+                      {formatPrice(
+                        product.priceRange.minVariantPrice.amount,
+                        product.priceRange.minVariantPrice.currencyCode
+                      )}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
 
-      <Footer className="mt-8" />
+        <section id="why-rwas" className="container-wide grid gap-10 px-6 py-20 lg:grid-cols-[0.9fr_1.1fr] lg:px-10">
+          <div className="rounded-[2rem] border border-black/10 bg-[#111111] p-8 text-[#f5f3ef] shadow-xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.32em] text-primary-500/80">
+              Why this matters
+            </p>
+            <h2 className="mt-4 text-4xl font-black tracking-tight text-white">
+              A better front door for the same real shop.
+            </h2>
+            <p className="mt-4 text-base leading-8 text-white/75">
+              The old site proved the business. This new build gives it room to breathe:
+              proper marketing pages, product browsing, quote flows, and eventually a
+              Jerry-backed chatbot without forcing everything through Liquid templates.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            {[
+              {
+                title: 'Headless foundation',
+                body: 'Next.js gives RWAS full control over the homepage, service pages, product storytelling, and future quote capture flows.',
+              },
+              {
+                title: 'Shopify retained for commerce',
+                body: 'Catalog, inventory, checkout, and products stay in Shopify where they belong. The frontend simply stops looking like a hostage negotiation.',
+              },
+              {
+                title: 'Brand-first UI',
+                body: 'Tailwind is now keyed to RWAS black, gold, and warm off-white so the site feels like an aviation brand instead of a recycled fintech starter.',
+              },
+              {
+                title: 'Built for Phase 2',
+                body: 'This codebase is ready for collection pages, service detail pages, a real contact flow, and Cloudflare deployment once you want to keep pushing.',
+              },
+            ].map((item) => (
+              <div key={item.title} className="rounded-[1.75rem] border border-black/10 bg-white p-8 shadow-sm">
+                <h3 className="text-2xl font-bold text-[#111111]">{item.title}</h3>
+                <p className="mt-4 text-base leading-7 text-black/70">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="contact" className="border-t border-black/10 bg-[#111111]">
+          <div className="container-wide flex flex-col gap-8 px-6 py-20 lg:flex-row lg:items-center lg:justify-between lg:px-10">
+            <div className="max-w-2xl text-[#f5f3ef]">
+              <p className="text-sm font-semibold uppercase tracking-[0.32em] text-primary-500/80">
+                Next move
+              </p>
+              <h2 className="mt-4 text-4xl font-black tracking-tight text-white">
+                The homepage is live in code. Now we can keep building the real thing.
+              </h2>
+              <p className="mt-4 text-lg leading-8 text-white/75">
+                Phase 1 now has a rebranded homepage, live Shopify product pull, and a clean base repo for the rest of RWDEV.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-4">
+              <Button size="xl" asChild className="bg-[#C49A2A] text-[#111111] hover:bg-[#d8b55a]">
+                <Link href="https://rogerwilcoaviation.com/pages/contact">
+                  Contact RWAS
+                </Link>
+              </Button>
+              <Button size="xl" variant="outlinePrimary" asChild className="border-[#C49A2A] text-[#f5f3ef] hover:bg-white/10">
+                <Link href="https://github.com/rogerwilcoaviation/rwas-web">
+                  View repo
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer className="mt-0" />
     </>
   );
 }

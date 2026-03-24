@@ -1,59 +1,56 @@
-import {
-  LandingFooter,
-  LandingFooterColumn,
-  LandingFooterLink,
-} from '@/components/landing';
-import Image from 'next/image';
-import Link from 'next/link';
+import { LandingFooter, LandingFooterColumn, LandingFooterLink } from '@/components/landing';
 
 export const Footer = ({ className }: { className?: string }) => {
   return (
     <LandingFooter
       className={className}
-      title="Mevolut"
-      description="A simpler way to manage your money"
+      title="Roger Wilco Aviation Services"
+      description="Garmin avionics, NDT, fabrication, and practical aircraft support from a real working shop."
       withBackground
       withBackgroundGlow={false}
       variant="primary"
       backgroundGlowVariant="primary"
       withBackgroundGradient
       logoComponent={
-        <div className="flex items-center text-primary-900 dark:text-primary-100 gap-3">
-          <Image
-            src="/static/images/logo.png"
-            alt="Mevolut logo"
-            width={200}
-            height={200}
-            className="h-8 w-8 rounded-full"
-          />
-          {'Mevolut '}
+        <div className="flex items-center gap-3 text-primary-100">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full border border-primary-500/40 bg-primary-500/10 text-sm font-bold text-primary-500">
+            RW
+          </div>
+          <span className="font-semibold">RWAS</span>
         </div>
       }
     >
-      <LandingFooterColumn title="Product">
-        <LandingFooterLink href="/features">{'Features'}</LandingFooterLink>
-        <LandingFooterLink href="/pricing">{'Pricing'}</LandingFooterLink>
-        <LandingFooterLink href="/security">{'Security'}</LandingFooterLink>
-        <LandingFooterLink href="/faq">{'FAQ'}</LandingFooterLink>
+      <LandingFooterColumn title="Services">
+        <LandingFooterLink href="#services">Avionics</LandingFooterLink>
+        <LandingFooterLink href="#services">NDT</LandingFooterLink>
+        <LandingFooterLink href="#services">Fabrication</LandingFooterLink>
+      </LandingFooterColumn>
+      <LandingFooterColumn title="Commerce">
+        <LandingFooterLink href="https://rogerwilcoaviation.com/collections/all">
+          Shop all products
+        </LandingFooterLink>
+        <LandingFooterLink href="https://rogerwilcoaviation.com/collections/garmin-avionics">
+          Garmin certified
+        </LandingFooterLink>
+        <LandingFooterLink href="https://rogerwilcoaviation.com/collections/rigging-tools">
+          Papa-Alpha tools
+        </LandingFooterLink>
       </LandingFooterColumn>
       <LandingFooterColumn title="Company">
-        <LandingFooterLink href="/about">{'About Us'}</LandingFooterLink>
-        <LandingFooterLink href="/careers">{'Careers'}</LandingFooterLink>
-        <LandingFooterLink href="/press">{'Press'}</LandingFooterLink>
-      </LandingFooterColumn>
-      <LandingFooterColumn title="Support">
-        <LandingFooterLink href="/help">{'Help Center'}</LandingFooterLink>
-        <LandingFooterLink href="/contact">{'Contact Us'}</LandingFooterLink>
-        <LandingFooterLink href="/status">{'System Status'}</LandingFooterLink>
-      </LandingFooterColumn>
-      <LandingFooterColumn title="Legal">
-        <LandingFooterLink href="/terms">
-          {'Terms of Service'}
+        <LandingFooterLink href="https://rogerwilcoaviation.com/pages/about">
+          About
         </LandingFooterLink>
-        <LandingFooterLink href="/privacy">
-          {'Privacy Policy'}
+        <LandingFooterLink href="https://rogerwilcoaviation.com/pages/shop-capabilities">
+          Shop capabilities
         </LandingFooterLink>
-        <LandingFooterLink href="/cookies">{'Cookie Policy'}</LandingFooterLink>
+        <LandingFooterLink href="https://rogerwilcoaviation.com/pages/contact">
+          Contact
+        </LandingFooterLink>
+      </LandingFooterColumn>
+      <LandingFooterColumn title="Next phase">
+        <LandingFooterLink href="#featured-products">Storefront integration</LandingFooterLink>
+        <LandingFooterLink href="#why-rwas">Homepage build</LandingFooterLink>
+        <LandingFooterLink href="#contact">Lead capture</LandingFooterLink>
       </LandingFooterColumn>
     </LandingFooter>
   );

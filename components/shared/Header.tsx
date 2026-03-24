@@ -1,6 +1,6 @@
 import { LandingHeader, LandingHeaderMenuItem } from '@/components/landing';
 import ThemeSwitch from '@/components/shared/ThemeSwitch';
-import Image from 'next/image';
+import Link from 'next/link';
 
 export const Header = ({ className }: { className?: string }) => {
   return (
@@ -10,28 +10,29 @@ export const Header = ({ className }: { className?: string }) => {
       withBackground
       variant="primary"
       logoComponent={
-        <div className="flex items-center text-primary-500 dark:text-primary-500 gap-3">
-          <Image
-            src="/static/images/logo.png"
-            alt="Mevolut logo"
-            width={200}
-            height={200}
-            className="h-8 w-8 rounded-full"
-          />
-          <span className="font-bold text-lg">Mevolut</span>
-        </div>
+        <Link href="/" className="flex items-center gap-3 text-primary-500">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full border border-primary-500/40 bg-primary-500/10 text-sm font-bold text-primary-500">
+            RW
+          </div>
+          <div className="flex flex-col leading-none">
+            <span className="text-sm font-semibold uppercase tracking-[0.28em] text-primary-500/80">
+              Roger Wilco
+            </span>
+            <span className="text-base font-bold text-foreground">
+              Aviation Services
+            </span>
+          </div>
+        </Link>
       }
     >
-      <LandingHeaderMenuItem href="/features">
-        {'Features'}
+      <LandingHeaderMenuItem href="#services">Services</LandingHeaderMenuItem>
+      <LandingHeaderMenuItem href="#featured-products">
+        Shop
       </LandingHeaderMenuItem>
-      <LandingHeaderMenuItem href="/pricing">{'Pricing'}</LandingHeaderMenuItem>
-      <LandingHeaderMenuItem href="/security">
-        {'Security'}
-      </LandingHeaderMenuItem>
-      <LandingHeaderMenuItem href="/help">{'Help'}</LandingHeaderMenuItem>
-      <LandingHeaderMenuItem type="button" href="/dashboard">
-        Dashboard
+      <LandingHeaderMenuItem href="#why-rwas">Why RWAS</LandingHeaderMenuItem>
+      <LandingHeaderMenuItem href="#contact">Contact</LandingHeaderMenuItem>
+      <LandingHeaderMenuItem type="button" href="https://rogerwilcoaviation.com/collections/all">
+        Browse Products
       </LandingHeaderMenuItem>
 
       <ThemeSwitch />

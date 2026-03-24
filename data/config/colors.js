@@ -1,18 +1,18 @@
-/* Configure colors at https://shipixen.com/color-theme-explorer-shadcn */
+/* RWAS brand colors */
 const colors = {
   primary: {
-    lighter: '#86efac',
-    light: '#4ade80',
-    main: '#22c55e',
-    dark: '#16a34a',
-    darker: '#15803d',
+    lighter: '#f8e7a8',
+    light: '#e0b94a',
+    main: '#C49A2A',
+    dark: '#a37f20',
+    darker: '#7e6217',
   },
   secondary: {
-    lighter: '#374151',
-    light: '#1f2937',
-    main: '#111827',
-    dark: '#0f172a',
-    darker: '#030712',
+    lighter: '#3a3a3a',
+    light: '#242424',
+    main: '#111111',
+    dark: '#0b0b0b',
+    darker: '#050505',
   },
 };
 

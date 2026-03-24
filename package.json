@@ -1,6 +1,6 @@
 {
-  "name": "Mevolut",
-  "description": "Manage your money the easy way with Mevolut. Track expenses, send money, and grow your savings – safely and simply. Sign up free today!",
+  "name": "rwas-web",
+  "description": "Manage your money the easy way with Mevolut. Track expenses, send money, and grow your savings \u2013 safely and simply. Sign up free today!",
   "version": "1.0.0",
   "private": true,
   "scripts": {

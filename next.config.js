@@ -82,6 +82,12 @@ module.exports = () => {
           port: '',
           pathname: '**/*',
         },
+        {
+          protocol: 'https',
+          hostname: 'cdn.shopify.com',
+          port: '',
+          pathname: '**/*',
+        },
       ],
     },
     async headers() {
