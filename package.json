@@ -1,6 +1,6 @@
 {
   "name": "rwas-web",
-  "description": "Manage your money the easy way with Mevolut. Track expenses, send money, and grow your savings \u2013 safely and simply. Sign up free today!",
+  "description": "Manage your money the easy way with Mevolut. Track expenses, send money, and grow your savings – safely and simply. Sign up free today!",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,9 @@
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "next lint --fix --dir pages --dir app --dir components --dir lib --dir layouts --dir scripts",
     "pretty": "prettier --write .",
-    "appinfo": "node ./scripts/generateAppInfo.mjs"
+    "appinfo": "node ./scripts/generateAppInfo.mjs",
+    "pages:build": "npm run appinfo && npx @cloudflare/next-on-pages",
+    "pages:deploy:preview": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.4.0",
@@ -96,6 +98,7 @@
     "zod": "^4.1.8"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.16",
     "@next/bundle-analyzer": "^15.5.9",
     "@svgr/webpack": "^8.1.0",
     "@types/mdx": "^2.0.13",
@@ -114,7 +117,8 @@
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "typescript": "^5.9.2",
-    "vfile": "^6.0.3"
+    "vfile": "^6.0.3",
+    "wrangler": "^4.76.0"
   },
   "overrides": {
     "react": "^19.2.1",

@@ -1,6 +1,8 @@
 import { addCartLine, createCart, getCart } from '@/lib/shopify';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const runtime = 'edge';
+
 export async function GET(request: NextRequest) {
   const cartId = request.nextUrl.searchParams.get('cartId');
 

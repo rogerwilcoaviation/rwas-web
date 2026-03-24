@@ -1,47 +1,10 @@
 import { ImageResponse } from '@vercel/og';
 import { colors } from '@/data/config/colors';
 import { metadata } from '@/data/config/metadata';
-import { readFile } from 'fs/promises';
-import sizeOf from 'image-size';
-import path from 'path';
-import mime from 'mime-types';
 
-const MAX_LOGO_HEIGHT = 150;
-const MAX_LOGO_WIDTH = 350;
-
-const getLogoSize = (dimensions: { width: number; height: number }) => {
-  // Calculate image size, with the height being maximum MAX_LOGO_HEIGHT or width being maximum MAX_LOGO_WIDTH
-  const imageWidth = dimensions.width;
-  const imageHeight = dimensions.height;
-
-  let logoWidth = imageWidth;
-  let logoHeight = imageHeight;
-
-  if (imageWidth > MAX_LOGO_WIDTH) {
-    logoWidth = MAX_LOGO_WIDTH;
-    logoHeight = (imageHeight * MAX_LOGO_WIDTH) / imageWidth;
-  }
-
-  if (logoHeight > MAX_LOGO_HEIGHT) {
-    logoHeight = MAX_LOGO_HEIGHT;
-    logoWidth = (imageWidth * MAX_LOGO_HEIGHT) / imageHeight;
-  }
-
-  return {
-    logoWidth,
-    logoHeight,
-  };
-};
+export const runtime = 'edge';
 
 export async function GET() {
-  const imagePath = path.join(process.cwd(), '/public/static/images/logo.png');
-  const file = await readFile(imagePath);
-  const mimeType = mime.lookup(imagePath);
-  const dimensions = sizeOf(file) as { width: number; height: number };
-
-  const { logoWidth, logoHeight } = getLogoSize(dimensions);
-  const logoImage = `data:${mimeType};base64,${file.toString('base64')}`;
-
   return new ImageResponse(
     (
       <div
@@ -51,100 +14,63 @@ export async function GET() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'center',
+          background: `linear-gradient(135deg, ${colors.secondary.main} 0%, ${colors.secondary.darker} 100%)`,
+          color: 'white',
+          padding: '64px',
           position: 'relative',
-          backgroundColor: 'transparent',
         }}
       >
-        <svg
-          viewBox="0 0 1024 1024"
-          aria-hidden="true"
-          style={{
-            opacity: 1,
-            width: '1000px',
-            height: '1000px',
-            position: 'absolute',
-            top: '-500px',
-          }}
-        >
-          <circle
-            cx="512"
-            cy="512"
-            r="512"
-            fill={`url(#gradient)`}
-            fillOpacity="0.7"
-          ></circle>
-          <defs>
-            <radialGradient
-              id={`gradient`}
-              cx="0"
-              cy="0"
-              r="1"
-              gradientUnits="userSpaceOnUse"
-              gradientTransform="translate(512 512) rotate(90) scale(512)"
-            >
-              <stop stopColor={colors.primary.light} stopOpacity="0.5"></stop>
-              <stop
-                offset="1"
-                stopColor={colors.primary.lighter}
-                stopOpacity="0"
-              ></stop>
-            </radialGradient>
-          </defs>
-        </svg>
-
         <div
           style={{
-            padding: 60,
+            position: 'absolute',
+            inset: 0,
+            background: `radial-gradient(circle at top right, ${colors.primary.main}55, transparent 30%)`,
+          }}
+        />
+        <div
+          style={{
+            width: 140,
+            height: 140,
+            borderRadius: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: `${colors.primary.main}22`,
+            border: `3px solid ${colors.primary.main}`,
+            fontSize: 56,
+            fontWeight: 800,
+            zIndex: 1,
+          }}
+        >
+          RW
+        </div>
+        <div
+          style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            height: '100%',
+            marginTop: 32,
+            zIndex: 1,
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={logoImage}
-            alt="Logo"
+          <div style={{ fontSize: 56, fontWeight: 800, textAlign: 'center' }}>
+            Roger Wilco Aviation Services
+          </div>
+          <div
             style={{
-              padding: 20,
-              backgroundColor: 'white',
-              borderRadius: '100%',
-              width: logoWidth,
-              height: logoHeight,
-            }}
-          />
-
-          <h1
-            style={{
-              fontSize: 48,
-              fontWeight: 700,
-              color: 'black',
-              marginBottom: 0,
+              fontSize: 28,
+              color: colors.primary.light,
+              marginTop: 20,
               textAlign: 'center',
-            }}
-          >
-            {metadata.title}
-          </h1>
-          <p
-            style={{
-              marginTop: 12,
-              fontSize: 26,
-              color: 'black',
-              fontWeight: 700,
-              textAlign: 'center',
+              maxWidth: 980,
             }}
           >
             {metadata.description}
-          </p>
+          </div>
         </div>
       </div>
     ),
-    {
-      width: 1200,
-      height: 600,
-    },
+    { width: 1200, height: 630 }
   );
 }

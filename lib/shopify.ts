@@ -103,7 +103,9 @@ type ShopifyResponse<T> = {
 
 const SHOP_DOMAIN =
   process.env.SHOPIFY_STORE_DOMAIN || 'm06wpv-na.myshopify.com';
-const STOREFRONT_TOKEN = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+const STOREFRONT_TOKEN =
+  process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN ||
+  process.env.SHOPIFY_STOREFRONT_TOKEN;
 const API_VERSION = process.env.SHOPIFY_STOREFRONT_API_VERSION || '2026-01';
 
 const FEATURED_COLLECTION_HANDLES = [
