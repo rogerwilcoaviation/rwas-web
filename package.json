@@ -11,8 +11,10 @@
     "lint": "next lint --fix --dir pages --dir app --dir components --dir lib --dir layouts --dir scripts",
     "pretty": "prettier --write .",
     "appinfo": "node ./scripts/generateAppInfo.mjs",
-    "pages:build": "npm run appinfo && npx @cloudflare/next-on-pages",
-    "pages:deploy:preview": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview"
+    "pages:build": "npm run build:cloudflare",
+    "pages:deploy:preview": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview",
+    "build:cloudflare": "npm run appinfo && npx @cloudflare/next-on-pages",
+    "deploy:preview": "npm run build:cloudflare && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.4.0",

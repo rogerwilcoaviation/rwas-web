@@ -1,7 +1,12 @@
 name = "rwas-web"
+main = ".vercel/output/static/_worker.js/index.js"
 compatibility_date = "2026-03-24"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = ".vercel/output/static"
+
+[assets]
+directory = ".vercel/output/static"
+binding = "ASSETS"
 
 [vars]
 SHOPIFY_STORE_DOMAIN = "m06wpv-na.myshopify.com"
