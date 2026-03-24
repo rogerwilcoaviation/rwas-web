@@ -48,9 +48,10 @@ export const Header = ({ className }: { className?: string }) => {
       ))}
       <LandingHeaderMenuItem href="#services">Services</LandingHeaderMenuItem>
       <LandingHeaderMenuItem href="#contact">Contact</LandingHeaderMenuItem>
+      <LandingHeaderMenuItem href="/cart">Cart</LandingHeaderMenuItem>
       <LandingHeaderMenuItem
         type="button"
-        href="https://rogerwilcoaviation.com/collections/all"
+        href="/collections"
       >
         Browse Products
       </LandingHeaderMenuItem>
