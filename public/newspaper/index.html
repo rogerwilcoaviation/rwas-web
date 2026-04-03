@@ -187,10 +187,124 @@ body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
         <hr class="rule-thick">
         <div style="border:2px solid #1a1a1a;padding:10px;margin-top:10px;background:#ede9e2;text-align:center;">
           <div style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Ask Captain Jerry</div>
-          <img src="images/g3x_garmin.jpg" style="width:100%;display:block;height:140px;object-fit:cover;object-position:center center;border-bottom:1px solid #1a1a1a;margin-bottom:7px;">
-          <div style="font-family:Georgia,serif;font-style:italic;font-size:11px;color:#333;line-height:1.5;margin-bottom:8px;">Your on-call expert for Garmin avionics and Papa-Alpha rigging tools. Ask Captain Jerry anything.</div>
-          <a href="https://jerry.rwas.team" style="display:inline-block;background:#1a1a1a;color:#f7f4ef;font-family:Arial,sans-serif;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;padding:4px 12px;text-decoration:none;">Chat with Jerry &rarr;</a>
-        </div>
+          <div id="jerry-widget" style="border:2px solid #1a1a1a;padding:10px;margin-top:10px;background:#ede9e2;">
+            <div style="font-family:Arial,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Ask Captain Jerry</div>
+            <img src="images/captain_jerry.jpg" style="width:100%;display:block;height:130px;object-fit:cover;object-position:center top;border-bottom:1px solid #1a1a1a;margin-bottom:7px;">
+            <div id="jerry-chat" style="max-height:220px;overflow-y:auto;margin-bottom:8px;font-size:12px;font-family:Georgia,serif;line-height:1.6;"></div>
+            <div id="jerry-status" style="font-family:Arial,sans-serif;font-size:10px;color:#666;font-style:italic;margin-bottom:6px;min-height:14px;"></div>
+            <div id="jerry-input-row" style="display:flex;gap:5px;">
+              <input id="jerry-input" type="text" placeholder="Ask Jerry anything…"
+                style="flex:1;font-family:Georgia,serif;font-size:12px;border:1px solid #aaa;padding:5px 7px;background:#fff;outline:none;min-width:0;">
+              <button id="jerry-send" onclick="jerryChat()"
+                style="font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:#1a1a1a;color:#f7f4ef;border:none;padding:6px 10px;cursor:pointer;white-space:nowrap;">
+                Send →
+              </button>
+            </div>
+            <div id="jerry-confirm" style="display:none;background:#1a1a1a;color:#f7f4ef;font-family:Georgia,serif;font-size:12px;padding:10px;margin-top:8px;line-height:1.6;"></div>
+          </div>
+
+          <script>
+          (function(){
+            const CHAT_URL   = '/api/chat';
+            const INTAKE_URL = '/api/intake';
+            const INTAKE_SECRET = 'rwas-intake-2026';
+            const history    = [];
+            let submitted    = false;
+
+            function bubble(role, text) {
+              const chat = document.getElementById('jerry-chat');
+              const row  = document.createElement('div');
+              row.style.cssText = role === 'user'
+                ? 'text-align:right;margin-bottom:6px;'
+                : 'text-align:left;margin-bottom:8px;';
+              const b = document.createElement('span');
+              b.style.cssText = role === 'user'
+                ? 'display:inline-block;background:#1a1a1a;color:#f7f4ef;padding:5px 9px;font-size:12px;font-family:Georgia,serif;max-width:88%;text-align:left;'
+                : 'display:inline-block;background:#fff;border:1px solid #ccc;padding:5px 9px;font-size:12px;font-family:Georgia,serif;max-width:92%;text-align:left;white-space:pre-wrap;';
+              b.textContent = text;
+              row.appendChild(b);
+              chat.appendChild(row);
+              chat.scrollTop = chat.scrollHeight;
+            }
+
+            function status(msg) {
+              document.getElementById('jerry-status').textContent = msg;
+            }
+
+            async function submitIntake(data) {
+              status('Filing your intake with our team…');
+              try {
+                data._secret = INTAKE_SECRET;
+                const res  = await fetch(INTAKE_URL, {
+                  method:  'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body:    JSON.stringify(data),
+                });
+                const json = await res.json();
+                document.getElementById('jerry-input-row').style.display = 'none';
+                status('');
+                const el = document.getElementById('jerry-confirm');
+                el.style.display = 'block';
+                el.textContent = json.ok
+                  ? "You're all set — our team has your info and will be in touch. Ref: " + (json.ref || 'filed')
+                  : "Something went wrong filing your info. Please call us: (605) 665-4414";
+              } catch(e) {
+                status('Could not reach our server. Please call: (605) 665-4414');
+              }
+            }
+
+            window.jerryChat = async function() {
+              if (submitted) return;
+              const input = document.getElementById('jerry-input');
+              const msg   = input.value.trim();
+              if (!msg) return;
+              input.value = '';
+              bubble('user', msg);
+              history.push({ role:'user', content:msg });
+              status('Captain Jerry is thinking…');
+              document.getElementById('jerry-send').disabled = true;
+
+              try {
+                const res  = await fetch(CHAT_URL, {
+                  method:  'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body:    JSON.stringify({ messages: history }),
+                });
+                const data = await res.json();
+                const raw  = data.reply || 'Radio trouble on my end. Try again. — Capt. Jerry, RWAS';
+
+                // Detect intake completion signal
+                const m = raw.match(/INTAKE_COMPLETE:(\{[\s\S]*?\})\s*$/m);
+                const display = m ? raw.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m,'').trim() : raw;
+
+                bubble('assistant', display);
+                history.push({ role:'assistant', content: display });
+                status('');
+
+                if (m && !submitted) {
+                  submitted = true;
+                  try { await submitIntake(JSON.parse(m[1])); }
+                  catch(e) { status('Could not parse intake. Please call: (605) 665-4414'); }
+                }
+              } catch(e) {
+                bubble('assistant','Radio trouble on my end. Try again or visit jerry.rwas.team — Capt. Jerry, RWAS');
+                status('');
+              }
+
+              document.getElementById('jerry-send').disabled = false;
+              input.focus();
+            };
+
+            document.getElementById('jerry-input').addEventListener('keydown', function(e){
+              if (e.key === 'Enter') window.jerryChat();
+            });
+
+            // Opening message
+            const opener = "Captain Jerry here. Avionics question, service inquiry, or just looking around — what can I do for you? — Capt. Jerry, RWAS";
+            bubble('assistant', opener);
+            history.push({ role:'assistant', content: opener });
+          })();
+          </script>
       </div>
 
     </div>
