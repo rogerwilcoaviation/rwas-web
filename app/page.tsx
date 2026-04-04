@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <div style={{ background: '#ddd9d2', minHeight: '100vh', fontFamily: "Georgia, 'Times New Roman', serif" }}>
+    <div className="np-wrapper" style={{ background: '#ddd9d2', minHeight: '100vh', fontFamily: "Georgia, 'Times New Roman', serif" }}>
       <div className="np-page">
 
         {/* ── Dateline ── */}
