@@ -60,7 +60,7 @@ export default function Home() {
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
           <a href="/pages/financing">Financing</a>
           <a href="/pages/shop-capabilities">Shop Capabilities</a>
-          <a href="/pages/contact">Contact</a>
+          <a href="/contact">Contact</a>
         </nav>
 
         {/* ── Ticker bar ── */}
@@ -99,7 +99,7 @@ export default function Home() {
                   <a href="/pages/shop-capabilities"><span>NDT Services</span><span className="np-box-pg">C1 &rarr;</span></a>
                 </div>
                 <div className="np-box-row">
-                  <a href="/pages/contact"><span>Scheduling</span><span className="np-box-pg">D1 &rarr;</span></a>
+                  <a href="/contact"><span>Scheduling</span><span className="np-box-pg">D1 &rarr;</span></a>
                 </div>
               </div>
 
