@@ -112,7 +112,7 @@ export default function Home() {
                 <div style={{ fontFamily: 'Arial, sans-serif', fontSize: '9px', color: '#666', marginBottom: '7px', letterSpacing: '0.05em' }}>
                   Tiered pricing on all components
                 </div>
-                <a className="np-ad-btn" href="/collections/aircraft-management">Order Papa-Alpha</a>
+                <a className="np-ad-btn" href="/collections/rigging-tools">Order Papa-Alpha</a>
               </div>
 
               <div className="np-img-box">
