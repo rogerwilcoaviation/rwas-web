@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
-/* eslint-disable @next/next/no-img-element */
 import './newspaper.css';
 import JerryHero from './components/JerryHero';
 
@@ -210,7 +208,6 @@ export default function Home() {
 
               {/* ── Captain Jerry Chat Widget ── */}
               <div className="np-jerry-widget">
-                <div className="np-jerry-title">Ask Captain Jerry</div>
                 <JerryHero />
               </div>
             </div>

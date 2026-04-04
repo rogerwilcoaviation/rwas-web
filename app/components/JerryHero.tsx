@@ -41,7 +41,6 @@ export default function JerryHero() {
       const data = await res.json();
       const raw  = data.reply || 'Radio trouble on my end. Try again. — Capt. Jerry, RWAS';
 
-      // Detect intake completion
       const m = raw.match(/INTAKE_COMPLETE:(\{[\s\S]*?\})\s*$/m);
       const display = m ? raw.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim() : raw;
 
@@ -80,56 +79,129 @@ export default function JerryHero() {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-black/10 bg-[#111111] p-5 shadow-2xl flex flex-col h-full min-h-[360px]">
-      {/* Header */}
-      <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-4">
-        <div className="h-10 w-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-400 font-bold text-sm flex-shrink-0">
-          CJ
-        </div>
-        <div>
-          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-primary-500/80">
-            Captain Jerry
-          </div>
-          <div className="text-xs text-white/50">
-            RWAS AI Advisor · Avionics &amp; Service
-          </div>
-        </div>
-        <div className="ml-auto flex items-center gap-1.5">
-          <div className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-          <span className="text-xs text-white/40">online</span>
-        </div>
+    <div style={{
+      border: '2px solid #1a1a1a',
+      background: '#ede9e2',
+      display: 'flex',
+      flexDirection: 'column',
+      fontFamily: "Georgia, 'Times New Roman', serif",
+    }}>
+      {/* Header label */}
+      <div style={{
+        fontFamily: 'Arial, sans-serif',
+        fontSize: '9.5px',
+        fontWeight: 700,
+        letterSpacing: '0.12em',
+        textTransform: 'uppercase' as const,
+        textAlign: 'center' as const,
+        padding: '6px 8px 0',
+        color: '#1a1a1a',
+      }}>
+        Ask Captain Jerry
+      </div>
+
+      {/* Jerry photo */}
+      <img
+        src="/newspaper/images/captain_jerry.jpg"
+        alt="Captain Jerry — RWAS AI Advisor"
+        style={{
+          width: '100%',
+          height: '100px',
+          objectFit: 'cover',
+          objectPosition: 'center top',
+          display: 'block',
+          borderTop: '1px solid #1a1a1a',
+          borderBottom: '1px solid #1a1a1a',
+          margin: '6px 0 0',
+        }}
+      />
+
+      {/* Status line */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '5px',
+        padding: '5px 8px',
+        borderBottom: '1px dotted #bbb',
+      }}>
+        <div style={{
+          width: '6px',
+          height: '6px',
+          borderRadius: '50%',
+          background: '#2a7e2a',
+        }} />
+        <span style={{
+          fontFamily: 'Arial, sans-serif',
+          fontSize: '9px',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase' as const,
+          color: '#555',
+        }}>
+          Online — Avionics &amp; Service
+        </span>
       </div>
 
       {/* Chat history */}
       <div
         ref={chatRef}
-        className="flex-1 overflow-y-auto space-y-3 mb-4 pr-1 scrollbar-thin"
-        style={{ maxHeight: '220px' }}
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          padding: '6px 8px',
+          maxHeight: '180px',
+          minHeight: '80px',
+        }}
       >
         {history.map((m, i) => (
           <div
             key={i}
-            className={
-              m.role === 'user'
-                ? 'flex justify-end'
-                : 'flex justify-start'
-            }
+            style={{
+              marginBottom: '5px',
+              textAlign: m.role === 'user' ? 'right' as const : 'left' as const,
+            }}
           >
             <div
-              className={
-                m.role === 'user'
-                  ? 'max-w-[85%] rounded-2xl rounded-tr-sm bg-primary-500/20 px-3 py-2 text-xs leading-relaxed text-primary-100'
-                  : 'max-w-[90%] rounded-2xl rounded-tl-sm bg-white/8 px-3 py-2 text-xs leading-relaxed text-white/85'
-              }
-              style={m.role === 'assistant' ? { background: 'rgba(255,255,255,0.07)' } : undefined}
+              style={{
+                display: 'inline-block',
+                maxWidth: '92%',
+                padding: '4px 7px',
+                fontFamily: "Georgia, serif",
+                fontSize: '11px',
+                lineHeight: '1.5',
+                textAlign: 'left' as const,
+                ...(m.role === 'user'
+                  ? {
+                      background: '#f7f4ef',
+                      border: '1px solid #ccc',
+                      color: '#1a1a1a',
+                    }
+                  : {
+                      background: '#fff',
+                      border: '1px solid #1a1a1a',
+                      color: '#333',
+                      fontStyle: 'italic' as const,
+                    }),
+              }}
             >
               {m.content}
             </div>
           </div>
         ))}
         {loading && (
-          <div className="flex justify-start">
-            <div className="rounded-2xl rounded-tl-sm px-3 py-2 text-xs text-white/40" style={{ background: 'rgba(255,255,255,0.07)' }}>
+          <div style={{ marginBottom: '5px' }}>
+            <div
+              style={{
+                display: 'inline-block',
+                padding: '4px 7px',
+                background: '#fff',
+                border: '1px solid #1a1a1a',
+                fontFamily: 'Georgia, serif',
+                fontSize: '11px',
+                fontStyle: 'italic',
+                color: '#999',
+              }}
+            >
               thinking…
             </div>
           </div>
@@ -138,26 +210,62 @@ export default function JerryHero() {
 
       {/* Confirmation */}
       {confirmed && (
-        <div className="rounded-xl bg-primary-500/15 border border-primary-500/30 px-3 py-2 text-xs text-primary-200 mb-3">
+        <div style={{
+          margin: '0 8px 5px',
+          padding: '4px 7px',
+          border: '1px solid #2a7e2a',
+          background: '#e8f5e8',
+          fontFamily: 'Georgia, serif',
+          fontSize: '11px',
+          color: '#1a5e1a',
+        }}>
           {confirmed}
         </div>
       )}
 
       {/* Input */}
       {!submitted && (
-        <div className="flex gap-2">
+        <div style={{
+          display: 'flex',
+          gap: '4px',
+          padding: '0 8px 8px',
+        }}>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && send()}
             placeholder="Ask Jerry anything…"
             disabled={loading}
-            className="flex-1 min-w-0 rounded-xl bg-white/10 border border-white/15 px-3 py-2 text-xs text-white placeholder:text-white/35 focus:outline-none focus:border-primary-500/60 disabled:opacity-50"
+            style={{
+              flex: 1,
+              minWidth: 0,
+              border: '1px solid #1a1a1a',
+              background: '#fff',
+              padding: '5px 7px',
+              fontFamily: 'Georgia, serif',
+              fontSize: '11px',
+              color: '#1a1a1a',
+              outline: 'none',
+              opacity: loading ? 0.5 : 1,
+            }}
           />
           <button
             onClick={send}
             disabled={loading || !input.trim()}
-            className="rounded-xl bg-primary-500 px-3 py-2 text-xs font-semibold text-black hover:bg-primary-400 disabled:opacity-40 transition-colors flex-shrink-0"
+            style={{
+              background: '#1a1a1a',
+              color: '#f7f4ef',
+              border: 'none',
+              padding: '5px 10px',
+              fontFamily: 'Arial, sans-serif',
+              fontSize: '9px',
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase' as const,
+              cursor: loading || !input.trim() ? 'default' : 'pointer',
+              opacity: loading || !input.trim() ? 0.4 : 1,
+              flexShrink: 0,
+            }}
           >
             Send
           </button>

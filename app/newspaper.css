@@ -149,7 +149,7 @@
 /* Above-fold 3-column grid */
 .np-above-fold {
   display: grid;
-  grid-template-columns: 200px 1px minmax(0,1fr) 1px 185px;
+  grid-template-columns: 200px 1px minmax(0,1fr) 1px 250px;
   border-bottom: 2px solid #1a1a1a;
   padding: 12px 0;
   align-items: stretch;
@@ -469,21 +469,7 @@
 }
 
 /* Jerry widget container in right column */
-.np-jerry-widget {
-  border: 2px solid #1a1a1a;
-  padding: 10px;
-  margin-top: 10px;
-  background: #ede9e2;
-}
-.np-jerry-title {
-  font-family: Arial, sans-serif;
-  font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  text-align: center;
-}
+.np-jerry-widget {  margin-top: 10px;}
 
 /* Headline link style */
 .np-headline-link {
