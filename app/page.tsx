@@ -107,12 +107,12 @@ export default function Home() {
               </div>
 
               <div className="np-ad-box">
-                <div className="np-ad-title">Parts Depot</div>
-                <div className="np-ad-sub">Garmin &middot; Papa-Alpha Tools</div>
+                <div className="np-ad-title">Papa-Alpha Depot</div>
+                <div className="np-ad-sub">Precision Piper rigging tools</div>
                 <div style={{ fontFamily: 'Arial, sans-serif', fontSize: '9px', color: '#666', marginBottom: '7px', letterSpacing: '0.05em' }}>
                   Tiered pricing on all components
                 </div>
-                <a className="np-ad-btn" href="/collections/aircraft-management">Order Parts &amp; Tools</a>
+                <a className="np-ad-btn" href="/collections/aircraft-management">Order Papa-Alpha</a>
               </div>
 
               <div className="np-img-box">
