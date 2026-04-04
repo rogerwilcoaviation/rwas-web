@@ -47,7 +47,7 @@ export default function ContactPage() {
         <nav className="np-nav">
           <a href="/">Home</a>
           <a href="/collections/on-sale">On Sale</a>
-          <a href="/pages/garmin-avionics-accessories">Garmin</a>
+          <a href="/garmin">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
           <a href="/financing">Financing</a>
           <a href="/shop-capabilities">Shop Capabilities</a>
@@ -126,7 +126,7 @@ export default function ContactPage() {
 
               <div className="np-box" style={{ marginBottom: '10px' }}>
                 <div className="np-box-title">Services</div>
-                <div className="np-box-row"><a href="/pages/garmin-avionics-accessories"><span>Garmin Avionics</span><span className="np-box-pg">&rarr;</span></a></div>
+                <div className="np-box-row"><a href="/garmin"><span>Garmin Avionics</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/collections/rigging-tools"><span>Papa-Alpha Tools</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/shop-capabilities"><span>A&amp;P Maintenance</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/shop-capabilities"><span>NDT Inspection</span><span className="np-box-pg">&rarr;</span></a></div>

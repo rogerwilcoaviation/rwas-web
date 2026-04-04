@@ -47,7 +47,7 @@ export default function ShopCapabilitiesPage() {
         <nav className="np-nav">
           <a href="/">Home</a>
           <a href="/collections/on-sale">On Sale</a>
-          <a href="/pages/garmin-avionics-accessories">Garmin</a>
+          <a href="/garmin">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
           <a href="/financing">Financing</a>
           <a className="active" href="/shop-capabilities">Shop Capabilities</a>

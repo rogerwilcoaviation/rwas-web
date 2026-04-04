@@ -41,7 +41,7 @@ export default function FinancingPage() {
         <nav className="np-nav">
           <a href="/">Home</a>
           <a href="/collections/on-sale">On Sale</a>
-          <a href="/pages/garmin-avionics-accessories">Garmin</a>
+          <a href="/garmin">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
           <a className="active" href="/financing">Financing</a>
           <a href="/shop-capabilities">Shop Capabilities</a>

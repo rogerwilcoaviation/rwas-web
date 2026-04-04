@@ -56,7 +56,7 @@ export default function Home() {
           <a className="active" href="/">Home</a>
           <JerryPopup />
           <a href="/collections/on-sale">On Sale</a>
-          <a href="/pages/garmin-avionics-accessories">Garmin</a>
+          <a href="/garmin">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
           <a href="/financing">Financing</a>
           <a href="/shop-capabilities">Shop Capabilities</a>
@@ -84,7 +84,7 @@ export default function Home() {
               <div className="np-box">
                 <div className="np-box-title">Today&rsquo;s Edition</div>
                 <div className="np-box-row">
-                  <a href="/pages/garmin-avionics-accessories"><span>Avionics Upgrades</span><span className="np-box-pg">A2 &rarr;</span></a>
+                  <a href="/garmin"><span>Avionics Upgrades</span><span className="np-box-pg">A2 &rarr;</span></a>
                 </div>
                 <div className="np-box-row">
                   <a href="/collections/garmin-avionics"><span>G3X Touch Suite</span><span className="np-box-pg">A3 &rarr;</span></a>
@@ -183,7 +183,7 @@ export default function Home() {
             {/* ── RIGHT COLUMN ── */}
             <div className="np-col">
               <span className="np-kicker">Avionics</span>
-              <a href="/pages/garmin-avionics-accessories" className="np-headline-link">
+              <a href="/garmin" className="np-headline-link">
                 <h3 className="np-headline-md">Garmin Installations Now Available</h3>
               </a>
               <hr className="np-rule" />
