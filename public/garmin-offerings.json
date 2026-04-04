@@ -2,6 +2,21 @@
   "last_updated": "2026-04-04",
   "memos": [
     {
+      "id": "new-dual-g5-aihsi-promotion-save-over-600-through-june-15",
+      "date": "2026-04-01",
+      "title": "New Dual G5 AI/HSI Promotion \u2014 Save Over 600 Through June 15",
+      "summary": "Garmin announces a new promotional Dual G5 Kit (Part K10-00280-51) combining attitude indicator and horizontal situation indicator functions in a single package with all installation accessories included. The kit lists at 6995 and offers over 600 in savings compared to purchasing components individually. Includes GMU 11 magnetometer, GAD 13 adapter, GAD 29D adapter, GPS antenna, and complete connector kits. This limited-time promotional pricing is available now through June 15, 2026. Contact RWAS for installed pricing and scheduling.",
+      "products": [
+        "G5",
+        "Dual G5 AI/HSI Kit",
+        "GMU 11",
+        "GAD 13",
+        "GAD 29D"
+      ],
+      "category": "promotion",
+      "source_pdf": "2026_mktgmemo___g5_ai_hsi_promo_final.pdf"
+    },
+    {
       "id": "new-dual-g5-aihsi-promotion-save-over-600",
       "date": "2026-04-01",
       "title": "New Dual G5 AI/HSI Promotion \u2014 Save Over $600",
