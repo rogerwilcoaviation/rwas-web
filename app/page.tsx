@@ -121,7 +121,7 @@ export default function Home() {
                   Papa-Alpha rigging reference tools &mdash; CNC-machined aircraft-grade aluminum.
                 </div>
               </div>
-              </div>
+
             </div>
 
             <div className="np-col-divider" />
