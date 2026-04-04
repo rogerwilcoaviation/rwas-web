@@ -524,15 +524,16 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #f7f4ef;
-  background: #1a1a1a;
+  color: #1a1a1a;
+  background: #e8d9a0;
   border-right: 1px solid #1a1a1a;
+  border-left: 1px solid #1a1a1a;
   cursor: pointer;
   font-weight: 700;
 }
 .np-nav-jerry:hover {
-  background: #333;
-  color: #f7f4ef;
+  background: #d4c47a;
+  color: #1a1a1a;
 }
 /* Headline link style */
 .np-headline-link {
