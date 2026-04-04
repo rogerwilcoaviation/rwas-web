@@ -221,6 +221,20 @@ export default function Home() {
               </p>
 
               <hr className="np-rule-thick" />
+
+              <div className="np-photo-box">
+                <div className="np-photo-area">
+                  <img
+                    src="/newspaper/images/laser_cutter.jpg"
+                    alt="Industrial fiber laser cutting"
+                    style={{ objectPosition: 'center center' }}
+                  />
+                </div>
+                <div className="np-photo-cap">
+                  New capability &mdash; fiber laser cutting, welding, and scaling.
+                </div>
+              </div>
+
             </div>
 
           </div>
