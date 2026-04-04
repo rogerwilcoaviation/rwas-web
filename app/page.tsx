@@ -54,9 +54,9 @@ export default function Home() {
         <nav className="np-nav">
           <a className="active" href="/">Home</a>
           <a href="/collections/aircraft-management">Aircraft Management</a>
-          <a href="/collections/on-sale/Garmin-Product-On-Sale">On Sale</a>
+          <a href="/collections/on-sale">On Sale</a>
           <a href="/pages/garmin-avionics-accessories">Garmin</a>
-          <a href="/collections/rigging-tools/Papa-Alpha-Rigging-Reference-Tools">Papa-Alpha Tools</a>
+          <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
           <a href="/pages/financing">Financing</a>
           <a href="/pages/shop-capabilities">Shop Capabilities</a>
           <a href="/pages/contact">Contact</a>
@@ -238,7 +238,7 @@ export default function Home() {
               <div className="np-sec-label">Papa-Alpha Tools</div>
               <div className="np-svc">
                 <div className="np-svc-name">
-                  <a href="/collections/rigging-tools/Papa-Alpha-Rigging-Reference-Tools">Piper Rigging Reference Tools</a>
+                  <a href="/collections/rigging-tools">Piper Rigging Reference Tools</a>
                 </div>
                 <div className="np-svc-desc">
                   Precision flight control rigging tools for Piper PA-28, PA-30, PA-31, PA-36 series. CNC-machined aircraft-grade aluminum, powder coated and UV printed. Sold worldwide.
@@ -252,13 +252,13 @@ export default function Home() {
               </div>
               <div className="np-svc">
                 <div className="np-svc-name">
-                  <a href="/collections/rigging-tools/Papa-Alpha-Rigging-Reference-Tools">Individual Tools</a>
+                  <a href="/collections/rigging-tools">Individual Tools</a>
                 </div>
                 <div className="np-svc-desc">Stabilator, rudder, aileron &amp; flap, bell crank, and PA-31/PA-36 specific tools available separately. From $59.99.</div>
               </div>
               <div className="np-svc">
                 <div className="np-svc-name">
-                  <a href="/collections/rigging-tools/Papa-Alpha-Rigging-Reference-Tools">Available At</a>
+                  <a href="/collections/rigging-tools">Available At</a>
                 </div>
                 <div className="np-svc-desc">rogerwilcoaviation.com, Aircraft Spruce, and Amazon (coming soon). Made by professional mechanics for professional mechanics.</div>
               </div>
