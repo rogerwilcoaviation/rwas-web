@@ -44,7 +44,6 @@
   width: 60px;
   height: 60px;
   object-fit: contain;
-  filter: grayscale(100%);
   flex-shrink: 0;
 }
 .np-masthead-center {
@@ -501,7 +500,6 @@
   object-fit: cover;
   object-position: center top;
   border: 1px solid #1a1a1a;
-  filter: grayscale(30%);
 }
 .np-jerry-inline-name {
   font-family: Arial, sans-serif;
@@ -560,7 +558,6 @@
   object-fit: cover;
   object-position: center top;
   display: block;
-  filter: grayscale(30%);
 }
 .np-jerry-portrait-cap {
   padding: 5px 7px;
