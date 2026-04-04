@@ -168,7 +168,23 @@ export default function Home() {
                 Under the direction of John Halsted &mdash; a veteran Delta Air Lines captain with extensive aviation experience &mdash; RWAS offers sheet metal fabrication and complete Garmin avionics installations including the G3X Touch suite and GFC 500 autopilot.
               </p>
 
+              <hr className="np-rule-thick" />
 
+              {/* Captain Jerry Chat */}
+              <div className="np-jerry-inline">
+                <div className="np-jerry-inline-header">
+                  <img
+                    src="/newspaper/images/captain_jerry.jpg"
+                    alt="Captain Jerry"
+                    className="np-jerry-inline-avatar"
+                  />
+                  <div>
+                    <div className="np-jerry-inline-name">Ask Captain Jerry</div>
+                    <div className="np-jerry-inline-desc">Avionics &amp; service inquiries</div>
+                  </div>
+                </div>
+                <JerryHero />
+              </div>
             </div>
 
             <div className="np-col-divider" />
@@ -209,24 +225,6 @@ export default function Home() {
 
           </div>
 
-          {/* ── Captain Jerry Service Desk ── */}
-          <div className="np-jerry-section">
-            <div className="np-jerry-section-label">Service Desk</div>
-            <div className="np-jerry-layout">
-              <div className="np-jerry-portrait">
-                <img
-                  src="/newspaper/images/captain_jerry.jpg"
-                  alt="Captain Jerry"
-                />
-                <div className="np-jerry-portrait-cap">
-                  Captain Jerry &mdash; your on-call expert for Garmin avionics, Papa-Alpha rigging tools, and aircraft service inquiries.
-                </div>
-              </div>
-              <div className="np-jerry-chat">
-                <JerryHero />
-              </div>
-            </div>
-          </div>
 
           {/* ── Lower 4-column services grid ── */}
           <div className="np-lower">

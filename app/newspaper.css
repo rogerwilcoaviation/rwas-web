@@ -471,6 +471,39 @@
 /* Jerry widget container in right column */
 .np-jerry-widget {  margin-top: 10px;}
 
+
+/* Jerry inline in center column */
+.np-jerry-inline {
+  margin-top: 10px;
+}
+.np-jerry-inline-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.np-jerry-inline-avatar {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  object-position: center top;
+  border: 1px solid #1a1a1a;
+  filter: grayscale(30%);
+}
+.np-jerry-inline-name {
+  font-family: Arial, sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+.np-jerry-inline-desc {
+  font-family: Georgia, serif;
+  font-size: 10px;
+  font-style: italic;
+  color: #555;
+}
 /* Headline link style */
 .np-headline-link {
   text-decoration: none;
