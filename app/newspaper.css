@@ -475,6 +475,10 @@
 /* Jerry inline in center column */
 .np-jerry-inline {
   margin-top: 10px;
+  margin-left: -80px;
+  margin-right: -80px;
+  padding-left: 80px;
+  padding-right: 80px;
 }
 .np-jerry-inline-header {
   display: flex;
