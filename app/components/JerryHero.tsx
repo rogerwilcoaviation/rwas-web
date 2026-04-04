@@ -61,10 +61,10 @@ export default function JerryHero() {
           setConfirmed(
             ir.ok
               ? "You're all set — our team will be in touch. Ref: " + (ir.ref || 'filed')
-              : 'Something went wrong. Please call: (605) 665-4414'
+              : 'Something went wrong. Please call: (605) 299-8178'
           );
         } catch {
-          setConfirmed('Could not file intake. Please call: (605) 665-4414');
+          setConfirmed('Could not file intake. Please call: (605) 299-8178');
         }
       }
     } catch {
