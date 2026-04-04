@@ -4,6 +4,7 @@
 /* eslint-disable @next/next/no-img-element */
 import './newspaper.css';
 import JerryHero from './components/JerryHero';
+import JerryPopup from './components/JerryPopup';
 
 export const metadata = {
   title: 'Roger Wilco Aviation Services | Garmin Avionics, NDT, Fabrication & Aircraft Support',
@@ -53,7 +54,7 @@ export default function Home() {
         {/* ── Navigation ── */}
         <nav className="np-nav">
           <a className="active" href="/">Home</a>
-          <a href="/collections/aircraft-management">Aircraft Management</a>
+          <JerryPopup />
           <a href="/collections/on-sale">On Sale</a>
           <a href="/pages/garmin-avionics-accessories">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>

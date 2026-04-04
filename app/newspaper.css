@@ -515,6 +515,25 @@
   font-style: italic;
   color: #555;
 }
+
+/* Jerry nav link styling */
+.np-nav-jerry {
+  padding: 7px 11px;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #f7f4ef;
+  background: #1a1a1a;
+  border-right: 1px solid #1a1a1a;
+  cursor: pointer;
+  font-weight: 700;
+}
+.np-nav-jerry:hover {
+  background: #333;
+  color: #f7f4ef;
+}
 /* Headline link style */
 .np-headline-link {
   text-decoration: none;
