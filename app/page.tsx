@@ -89,7 +89,7 @@ export default function Home() {
                   <a href="/collections/garmin-avionics"><span>G3X Touch Suite</span><span className="np-box-pg">A3 &rarr;</span></a>
                 </div>
                 <div className="np-box-row">
-                  <a href="/collections/aircraft-management"><span>Parts Procurement</span><span className="np-box-pg">B1 &rarr;</span></a>
+                  <a href="/collections/rigging-tools"><span>Parts Procurement</span><span className="np-box-pg">B1 &rarr;</span></a>
                 </div>
                 <div className="np-box-row">
                   <a href="/pages/shop-capabilities"><span>Annual Inspections</span><span className="np-box-pg">B2 &rarr;</span></a>
