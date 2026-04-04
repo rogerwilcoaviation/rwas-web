@@ -182,13 +182,13 @@ export default function Home() {
 
             {/* ── RIGHT COLUMN ── */}
             <div className="np-col">
-              <span className="np-kicker">Avionics</span>
+              <span className="np-kicker">Promotion</span>
               <a href="/garmin" className="np-headline-link">
-                <h3 className="np-headline-md">Garmin Installations Now Available</h3>
+                <h3 className="np-headline-md">New Dual G5 AI/HSI Kit &mdash; Save Over 00</h3>
               </a>
               <hr className="np-rule" />
               <p className="np-body-text">
-                Certified Garmin dealer. G3X Touch, GTN series, and GFC 500 autopilot for most GA aircraft types.
+                Garmin promotional Dual G5 Kit with combined attitude indicator and HSI, plus all installation accessories. Special pricing through June 15, 2026.
               </p>
 
               <hr className="np-rule-thick" />
