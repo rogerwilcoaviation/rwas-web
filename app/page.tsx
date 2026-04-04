@@ -184,7 +184,7 @@ export default function Home() {
             <div className="np-col">
               <span className="np-kicker">Promotion</span>
               <a href="/garmin" className="np-headline-link">
-                <h3 className="np-headline-md">New Dual G5 AI/HSI Kit &mdash; Save Over 00</h3>
+                <h3 className="np-headline-md">New Dual G5 AI/HSI Kit &mdash; Save Over $600</h3>
               </a>
               <hr className="np-rule" />
               <p className="np-body-text">
