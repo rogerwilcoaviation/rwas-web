@@ -87,41 +87,7 @@ export default async function Page() {
                 </Button>
               </div>
 
-              {/* Quick Ask Jerry — inline single-line entry */}
-              <div className="mt-6 flex items-center gap-2 rounded-2xl border border-black/10 bg-white/60 px-4 py-3 shadow-sm">
-                <div className="h-7 w-7 rounded-full bg-primary-500/15 flex items-center justify-center text-primary-700 text-xs font-bold flex-shrink-0">
-                  CJ
-                </div>
-                <input
-                  id="hero-jerry-input"
-                  type="text"
-                  placeholder="Ask Captain Jerry — avionics, service, pricing…"
-                  className="flex-1 min-w-0 bg-transparent text-sm text-[#111111] placeholder:text-black/40 focus:outline-none"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      const val = (e.target as HTMLInputElement).value.trim();
-                      if (val) {
-                        (e.target as HTMLInputElement).value = '';
-                        window.dispatchEvent(new CustomEvent('jerry-hero-message', { detail: val }));
-                      }
-                    }
-                  }}
-                />
-                <button
-                  className="text-xs font-semibold text-primary-700 hover:text-primary-500 transition-colors flex-shrink-0"
-                  onClick={() => {
-                    const inp = document.getElementById('hero-jerry-input') as HTMLInputElement;
-                    if (inp?.value.trim()) {
-                      window.dispatchEvent(new CustomEvent('jerry-hero-message', { detail: inp.value.trim() }));
-                      inp.value = '';
-                    }
-                  }}
-                >
-                  Ask →
-                </button>
-              </div>
-
-              <div className="mt-6 grid gap-4 sm:grid-cols-3">
+              <div className="mt-10 grid gap-4 sm:grid-cols-3">
                 {trustPoints.map((point) => (
                   <div
                     key={point}
