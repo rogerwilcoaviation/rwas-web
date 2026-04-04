@@ -86,36 +86,6 @@ export default function JerryHero() {
       flexDirection: 'column',
       fontFamily: "Georgia, 'Times New Roman', serif",
     }}>
-      {/* Header label */}
-      <div style={{
-        fontFamily: 'Arial, sans-serif',
-        fontSize: '9.5px',
-        fontWeight: 700,
-        letterSpacing: '0.12em',
-        textTransform: 'uppercase' as const,
-        textAlign: 'center' as const,
-        padding: '6px 8px 0',
-        color: '#1a1a1a',
-      }}>
-        Ask Captain Jerry
-      </div>
-
-      {/* Jerry photo */}
-      <img
-        src="/newspaper/images/captain_jerry.jpg"
-        alt="Captain Jerry — RWAS AI Advisor"
-        style={{
-          width: '100%',
-          height: '100px',
-          objectFit: 'cover',
-          objectPosition: 'center top',
-          display: 'block',
-          borderTop: '1px solid #1a1a1a',
-          borderBottom: '1px solid #1a1a1a',
-          margin: '6px 0 0',
-        }}
-      />
-
       {/* Status line */}
       <div style={{
         display: 'flex',
@@ -149,7 +119,7 @@ export default function JerryHero() {
           flex: 1,
           overflowY: 'auto',
           padding: '6px 8px',
-          maxHeight: '180px',
+          maxHeight: '240px',
           minHeight: '80px',
         }}
       >

@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-html-link-for-pages */
+/* eslint-disable @next/next/no-img-element */
 import './newspaper.css';
 import JerryHero from './components/JerryHero';
 
@@ -207,13 +209,27 @@ export default function Home() {
               </p>
 
               <hr className="np-rule-thick" />
+            </div>
 
-              {/* ── Captain Jerry Chat Widget ── */}
-              <div className="np-jerry-widget">
+          </div>
+
+          {/* ── Captain Jerry Service Desk ── */}
+          <div className="np-jerry-section">
+            <div className="np-jerry-section-label">Service Desk</div>
+            <div className="np-jerry-layout">
+              <div className="np-jerry-portrait">
+                <img
+                  src="/newspaper/images/captain_jerry.jpg"
+                  alt="Captain Jerry"
+                />
+                <div className="np-jerry-portrait-cap">
+                  Captain Jerry &mdash; your on-call expert for Garmin avionics, Papa-Alpha rigging tools, and aircraft service inquiries.
+                </div>
+              </div>
+              <div className="np-jerry-chat">
                 <JerryHero />
               </div>
             </div>
-
           </div>
 
           {/* ── Lower 4-column services grid ── */}
