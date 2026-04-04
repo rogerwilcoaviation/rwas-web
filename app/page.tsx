@@ -152,10 +152,10 @@ export default function Home() {
               </div>
 
               <p className="np-body-text np-drop">
-                Roger Wilco Aviation Services provides FAA-certificated maintenance, avionics installation, and non-destructive testing to general aviation, corporate, and commercial operators across the Northern Plains. Operating under Certificate No. RWSR491E, the station is authorized to perform a full spectrum of airframe and powerplant work.
+                Roger Wilco Aviation Services is an FAA-certificated repair station providing full-spectrum airframe, powerplant, avionics, and non-destructive testing services to general aviation, corporate, and commercial operators across the Northern Plains. Operating under Certificate No. RWSR491E, the station is authorized for a complete range of maintenance, repair, and alteration work.
               </p>
               <p className="np-body-text">
-                Under the direction of John Halsted &mdash; a veteran Delta Air Lines captain with extensive aviation experience &mdash; RWAS offers sheet metal fabrication and complete Garmin avionics installations including the G3X Touch suite and GFC 500 autopilot.
+                Under the direction of John Halsted &mdash; with more than 40 years of aviation experience &mdash; RWAS delivers sheet metal fabrication, structural repair, and complete Garmin avionics installations including the G3X Touch suite, GTN navigator series, and GFC 500 autopilot.
               </p>
 
               <hr className="np-rule-thick" />
