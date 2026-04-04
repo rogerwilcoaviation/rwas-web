@@ -124,7 +124,7 @@ export default function Home() {
 
               <div className="np-img-box" style={{ marginTop: '8px' }}>
                 <img
-                  src="/newspaper/images/captain_jerry.jpg"
+                  src="/newspaper/images/g3x_garmin.jpg"
                   alt="Garmin G3X Touch glass cockpit"
                   style={{ objectPosition: 'center top' }}
                 />
@@ -174,7 +174,7 @@ export default function Home() {
               <div className="np-jerry-inline">
                 <div className="np-jerry-inline-header">
                   <img
-                    src="/newspaper/images/g3x_garmin.jpg"
+                    src="/newspaper/images/captain_jerry.jpg"
                     alt="Captain Jerry"
                     className="np-jerry-inline-avatar"
                   />
