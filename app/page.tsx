@@ -5,6 +5,7 @@ import { getFeaturedProducts } from '@/lib/shopify';
 import { ArrowRight, Gauge, Radar, ShieldCheck, Wrench } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import JerryHero from '@/app/components/JerryHero';
 
 const serviceCards = [
   {
@@ -86,7 +87,41 @@ export default async function Page() {
                 </Button>
               </div>
 
-              <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              {/* Quick Ask Jerry — inline single-line entry */}
+              <div className="mt-6 flex items-center gap-2 rounded-2xl border border-black/10 bg-white/60 px-4 py-3 shadow-sm">
+                <div className="h-7 w-7 rounded-full bg-primary-500/15 flex items-center justify-center text-primary-700 text-xs font-bold flex-shrink-0">
+                  CJ
+                </div>
+                <input
+                  id="hero-jerry-input"
+                  type="text"
+                  placeholder="Ask Captain Jerry — avionics, service, pricing…"
+                  className="flex-1 min-w-0 bg-transparent text-sm text-[#111111] placeholder:text-black/40 focus:outline-none"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      const val = (e.target as HTMLInputElement).value.trim();
+                      if (val) {
+                        (e.target as HTMLInputElement).value = '';
+                        window.dispatchEvent(new CustomEvent('jerry-hero-message', { detail: val }));
+                      }
+                    }
+                  }}
+                />
+                <button
+                  className="text-xs font-semibold text-primary-700 hover:text-primary-500 transition-colors flex-shrink-0"
+                  onClick={() => {
+                    const inp = document.getElementById('hero-jerry-input') as HTMLInputElement;
+                    if (inp?.value.trim()) {
+                      window.dispatchEvent(new CustomEvent('jerry-hero-message', { detail: inp.value.trim() }));
+                      inp.value = '';
+                    }
+                  }}
+                >
+                  Ask →
+                </button>
+              </div>
+
+              <div className="mt-6 grid gap-4 sm:grid-cols-3">
                 {trustPoints.map((point) => (
                   <div
                     key={point}
@@ -98,39 +133,8 @@ export default async function Page() {
               </div>
             </div>
 
-            <div className="relative">
-              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary-500/20 blur-3xl" />
-              <div className="absolute -bottom-10 -left-8 h-32 w-32 rounded-full bg-black/10 blur-3xl" />
-              <div className="relative overflow-hidden rounded-[2rem] border border-black/10 bg-[#111111] p-4 shadow-2xl">
-                <div className="rounded-[1.5rem] border border-white/10 bg-gradient-to-br from-[#1b1b1b] via-[#111111] to-[#090909] p-6 text-[#f5f3ef]">
-                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.28em] text-primary-500/80">
-                    <span>RWAS</span>
-                    <span>rogerwilcoaviation.com</span>
-                  </div>
-                  <div className="mt-8 space-y-6">
-                    <div>
-                      <p className="text-sm uppercase tracking-[0.28em] text-primary-500/70">
-                        Now building
-                      </p>
-                      <p className="mt-2 text-3xl font-bold text-white">
-                        Headless Shopify storefront
-                      </p>
-                    </div>
-                    <div className="grid gap-3 text-sm text-white/80">
-                      <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                        Homepage rebrand with RWAS colors and service positioning
-                      </div>
-                      <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                        Live Shopify Storefront API pull for featured products
-                      </div>
-                      <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                        Clean base for Cloudflare Pages, chatbot, and quote workflows
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* Captain Jerry hero widget */}
+            <JerryHero />
           </div>
         </section>
 
