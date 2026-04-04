@@ -58,7 +58,7 @@ export default function Home() {
           <a href="/collections/on-sale">On Sale</a>
           <a href="/pages/garmin-avionics-accessories">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
-          <a href="/pages/financing">Financing</a>
+          <a href="/financing">Financing</a>
           <a href="/shop-capabilities">Shop Capabilities</a>
           <a href="/contact">Contact</a>
         </nav>

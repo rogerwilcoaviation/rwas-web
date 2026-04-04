@@ -49,7 +49,7 @@ export default function ContactPage() {
           <a href="/collections/on-sale">On Sale</a>
           <a href="/pages/garmin-avionics-accessories">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
-          <a href="/pages/financing">Financing</a>
+          <a href="/financing">Financing</a>
           <a href="/shop-capabilities">Shop Capabilities</a>
           <a className="active" href="/contact">Contact</a>
         </nav>
@@ -130,7 +130,7 @@ export default function ContactPage() {
                 <div className="np-box-row"><a href="/collections/rigging-tools"><span>Papa-Alpha Tools</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/shop-capabilities"><span>A&amp;P Maintenance</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/shop-capabilities"><span>NDT Inspection</span><span className="np-box-pg">&rarr;</span></a></div>
-                <div className="np-box-row"><a href="/pages/financing"><span>Financing</span><span className="np-box-pg">&rarr;</span></a></div>
+                <div className="np-box-row"><a href="/financing"><span>Financing</span><span className="np-box-pg">&rarr;</span></a></div>
               </div>
 
               <div className="np-pull-quote" style={{ fontSize: '12px' }}>
