@@ -1,0 +1,56 @@
+{
+  "last_updated": "2026-04-04",
+  "memos": [
+    {
+      "id": "spring-2026-pricing",
+      "date": "2026-03-15",
+      "title": "Spring 2026 Garmin Dealer Pricing Update",
+      "summary": "Garmin has released updated dealer pricing for the Spring 2026 season across the G3X Touch, GTN Xi series, and GFC 500 autopilot product lines. Pricing reflects modest adjustments from the 2025 schedule. Contact RWAS for current installed pricing on all configurations.",
+      "products": ["G3X Touch", "GTN 650Xi", "GTN 750Xi", "GFC 500"],
+      "category": "pricing",
+      "source_pdf": "Garmin-Spring-2026-Dealer-Pricing.pdf"
+    }
+  ],
+  "products": [
+    {
+      "name": "G3X Touch Suite",
+      "category": "Glass Cockpit",
+      "description": "Full glass cockpit upgrade with integrated ADAHRS, EIS, and synthetic vision. STCd for most single-engine piston aircraft including Cessna 172/182, Piper PA-28 series, and Beechcraft Bonanza.",
+      "highlights": ["10.6-inch touchscreen display", "Integrated engine indication system", "Synthetic vision technology", "Connext wireless connectivity"],
+      "stc_aircraft": ["Cessna 172", "Cessna 182", "Piper PA-28", "Piper PA-32", "Beechcraft Bonanza"],
+      "link": "/collections/garmin-avionics"
+    },
+    {
+      "name": "GTN 650Xi",
+      "category": "GPS/NAV/COMM",
+      "description": "Compact GPS/NAV/COMM navigator with WAAS LPV approach capability. Touchscreen interface with full IFR certification and wireless database updates via Connext.",
+      "highlights": ["WAAS LPV approaches", "Touchscreen interface", "Wireless database updates", "4-inch display"],
+      "stc_aircraft": ["Most GA singles and light twins"],
+      "link": "/collections/garmin-avionics"
+    },
+    {
+      "name": "GTN 750Xi",
+      "category": "GPS/NAV/COMM",
+      "description": "Full-featured GPS/NAV/COMM with 6.9-inch touchscreen display. Flight plan integration, WAAS LPV, and optional remote audio panel control.",
+      "highlights": ["6.9-inch touchscreen", "Flight plan integration", "Chart overlay", "Remote transponder control"],
+      "stc_aircraft": ["Most GA singles and light twins"],
+      "link": "/collections/garmin-avionics"
+    },
+    {
+      "name": "GFC 500 Autopilot",
+      "category": "Autopilot",
+      "description": "Digital retrofit autopilot with GPSS steering, altitude hold, vertical speed modes, and optional yaw damper. Integrates with G3X Touch and GTN Xi navigators for coupled approaches.",
+      "highlights": ["GPSS steering", "Altitude preselect", "Coupled VNAV approaches", "Electronic stability protection"],
+      "stc_aircraft": ["Cessna 172", "Cessna 182", "Piper PA-28", "Mooney M20"],
+      "link": "/collections/garmin-avionics"
+    },
+    {
+      "name": "GNX 375",
+      "category": "Transponder/ADS-B",
+      "description": "All-in-one ADS-B transponder with built-in WAAS GPS, providing ADS-B Out compliance and ADS-B In weather and traffic on compatible displays.",
+      "highlights": ["ADS-B Out compliant", "Built-in WAAS GPS", "ADS-B In weather and traffic", "1090ES transponder"],
+      "stc_aircraft": ["Most GA aircraft"],
+      "link": "/collections/garmin-avionics"
+    }
+  ]
+}
