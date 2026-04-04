@@ -121,16 +121,6 @@ export default function Home() {
                   Papa-Alpha rigging reference tools &mdash; CNC-machined aircraft-grade aluminum.
                 </div>
               </div>
-
-              <div className="np-img-box" style={{ marginTop: '8px' }}>
-                <img
-                  src="/newspaper/images/captain_jerry.jpg"
-                  alt="Garmin G3X Touch glass cockpit"
-                  style={{ objectPosition: 'center top' }}
-                />
-                <div className="np-img-box-cap">
-                  Garmin G3X Touch &mdash; full glass cockpit installations by RWAS.
-                </div>
               </div>
             </div>
 
