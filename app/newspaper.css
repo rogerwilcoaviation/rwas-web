@@ -485,6 +485,8 @@
   border-top: 2px solid #1a1a1a;
   border-bottom: 2px solid #1a1a1a;
   padding: 12px 0;
+  max-width: 70%;
+  margin: 0 auto;
 }
 .np-jerry-section-label {
   font-family: Arial, sans-serif;
@@ -526,4 +528,16 @@
 .np-jerry-chat {
   flex: 1;
   min-width: 0;
+}
+/* Credentials bar - bottom of page */
+.np-credentials-bar {
+  font-family: Arial, sans-serif;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #444;
+  text-align: center;
+  line-height: 1.7;
+  padding: 10px 20px;
+  border-top: 1px solid #1a1a1a;
 }

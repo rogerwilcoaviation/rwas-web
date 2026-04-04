@@ -124,7 +124,7 @@ export default function Home() {
 
               <div className="np-img-box" style={{ marginTop: '8px' }}>
                 <img
-                  src="/newspaper/images/captain_jerry.jpg"
+                  src="/newspaper/images/g3x_garmin.jpg"
                   alt="Garmin G3X Touch glass cockpit"
                   style={{ objectPosition: 'center top' }}
                 />
@@ -168,11 +168,7 @@ export default function Home() {
                 Under the direction of John Halsted &mdash; a veteran Delta Air Lines captain with extensive aviation experience &mdash; RWAS offers sheet metal fabrication and complete Garmin avionics installations including the G3X Touch suite and GFC 500 autopilot.
               </p>
 
-              <hr className="np-rule" />
-              <p className="np-credentials">
-                NBAA Member &nbsp;&middot;&nbsp; AEA Member<br />
-                Certified &amp; Trained
-              </p>
+
             </div>
 
             <div className="np-col-divider" />
@@ -332,6 +328,11 @@ export default function Home() {
           </div>
 
         </div>
+
+        {/* ── Credentials ── */}
+          <div className="np-credentials-bar">
+            NBAA Member &nbsp;&middot;&nbsp; AEA Member &nbsp;&middot;&nbsp; Certified &amp; Trained
+          </div>
 
         {/* ── Footer ── */}
         <div className="np-footer">
