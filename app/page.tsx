@@ -59,7 +59,7 @@ export default function Home() {
           <a href="/pages/garmin-avionics-accessories">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
           <a href="/pages/financing">Financing</a>
-          <a href="/pages/shop-capabilities">Shop Capabilities</a>
+          <a href="/shop-capabilities">Shop Capabilities</a>
           <a href="/contact">Contact</a>
         </nav>
 
@@ -93,10 +93,10 @@ export default function Home() {
                   <a href="/collections/rigging-tools"><span>Parts Procurement</span><span className="np-box-pg">B1 &rarr;</span></a>
                 </div>
                 <div className="np-box-row">
-                  <a href="/pages/shop-capabilities"><span>Annual Inspections</span><span className="np-box-pg">B2 &rarr;</span></a>
+                  <a href="/shop-capabilities"><span>Annual Inspections</span><span className="np-box-pg">B2 &rarr;</span></a>
                 </div>
                 <div className="np-box-row">
-                  <a href="/pages/shop-capabilities"><span>NDT Services</span><span className="np-box-pg">C1 &rarr;</span></a>
+                  <a href="/shop-capabilities"><span>NDT Services</span><span className="np-box-pg">C1 &rarr;</span></a>
                 </div>
                 <div className="np-box-row">
                   <a href="/contact"><span>Scheduling</span><span className="np-box-pg">D1 &rarr;</span></a>
@@ -130,7 +130,7 @@ export default function Home() {
             {/* ── CENTER COLUMN ── */}
             <div className="np-col">
               <span className="np-kicker">General Aviation Maintenance &amp; Avionics</span>
-              <a href="/pages/shop-capabilities" className="np-headline-link">
+              <a href="/shop-capabilities" className="np-headline-link">
                 <h1 className="np-headline-xl np-headline-xl-link">
                   Premier Avionics &amp;<br />
                   <em>Maintenance Services</em><br />
@@ -193,7 +193,7 @@ export default function Home() {
 
               <hr className="np-rule-thick" />
               <span className="np-kicker">Maintenance</span>
-              <a href="/pages/shop-capabilities" className="np-headline-link">
+              <a href="/shop-capabilities" className="np-headline-link">
                 <h3 className="np-headline-md">Annual Inspections &amp; A&amp;P Service</h3>
               </a>
               <hr className="np-rule" />
@@ -203,7 +203,7 @@ export default function Home() {
 
               <hr className="np-rule-thick" />
               <span className="np-kicker">Special Capabilities</span>
-              <a href="/pages/shop-capabilities" className="np-headline-link">
+              <a href="/shop-capabilities" className="np-headline-link">
                 <h3 className="np-headline-md">NDT &amp; Sheet Metal Fabrication</h3>
               </a>
               <hr className="np-rule" />
@@ -290,19 +290,19 @@ export default function Home() {
             <div className="np-lower-col">
               <div className="np-sec-label">Airframe &amp; Powerplant</div>
               <div className="np-svc">
-                <div className="np-svc-name"><a href="/pages/shop-capabilities">Annual Inspections</a></div>
+                <div className="np-svc-name"><a href="/shop-capabilities">Annual Inspections</a></div>
                 <div className="np-svc-desc">Thorough airworthiness inspections per FAR 43. Discrepancy reports and return-to-service documentation.</div>
               </div>
               <div className="np-svc">
-                <div className="np-svc-name"><a href="/pages/shop-capabilities">100-Hour Inspections</a></div>
+                <div className="np-svc-name"><a href="/shop-capabilities">100-Hour Inspections</a></div>
                 <div className="np-svc-desc">For aircraft operated for hire under 14 C.F.R. Part 91 and Part 135 requirements.</div>
               </div>
               <div className="np-svc">
-                <div className="np-svc-name"><a href="/pages/shop-capabilities">Sheet Metal &amp; Fabrication</a></div>
+                <div className="np-svc-name"><a href="/shop-capabilities">Sheet Metal &amp; Fabrication</a></div>
                 <div className="np-svc-desc">Structural repair, skin replacement, and custom fabrication in aircraft-grade aluminum alloys.</div>
               </div>
               <div className="np-svc">
-                <div className="np-svc-name"><a href="/pages/shop-capabilities">Engine Troubleshooting</a></div>
+                <div className="np-svc-name"><a href="/shop-capabilities">Engine Troubleshooting</a></div>
                 <div className="np-svc-desc">Powerplant diagnostics, mag checks, compression testing, and engine runs.</div>
               </div>
             </div>
@@ -311,11 +311,11 @@ export default function Home() {
             <div className="np-lower-col">
               <div className="np-sec-label">NDT &amp; Certification</div>
               <div className="np-svc">
-                <div className="np-svc-name"><a href="/pages/shop-capabilities">Eddy Current Inspection</a></div>
+                <div className="np-svc-name"><a href="/shop-capabilities">Eddy Current Inspection</a></div>
                 <div className="np-svc-desc">Subsurface crack and corrosion detection in aluminum and ferrous components without disassembly.</div>
               </div>
               <div className="np-svc">
-                <div className="np-svc-name"><a href="/pages/shop-capabilities">Dye Penetrant Testing</a></div>
+                <div className="np-svc-name"><a href="/shop-capabilities">Dye Penetrant Testing</a></div>
                 <div className="np-svc-desc">Surface crack detection per ASTM E1417 for engine components, castings, and structural parts.</div>
               </div>
               <div className="np-svc">

@@ -50,7 +50,7 @@ export default function ContactPage() {
           <a href="/pages/garmin-avionics-accessories">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
           <a href="/pages/financing">Financing</a>
-          <a href="/pages/shop-capabilities">Shop Capabilities</a>
+          <a href="/shop-capabilities">Shop Capabilities</a>
           <a className="active" href="/contact">Contact</a>
         </nav>
 
@@ -128,8 +128,8 @@ export default function ContactPage() {
                 <div className="np-box-title">Services</div>
                 <div className="np-box-row"><a href="/pages/garmin-avionics-accessories"><span>Garmin Avionics</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/collections/rigging-tools"><span>Papa-Alpha Tools</span><span className="np-box-pg">&rarr;</span></a></div>
-                <div className="np-box-row"><a href="/pages/shop-capabilities"><span>A&amp;P Maintenance</span><span className="np-box-pg">&rarr;</span></a></div>
-                <div className="np-box-row"><a href="/pages/shop-capabilities"><span>NDT Inspection</span><span className="np-box-pg">&rarr;</span></a></div>
+                <div className="np-box-row"><a href="/shop-capabilities"><span>A&amp;P Maintenance</span><span className="np-box-pg">&rarr;</span></a></div>
+                <div className="np-box-row"><a href="/shop-capabilities"><span>NDT Inspection</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/pages/financing"><span>Financing</span><span className="np-box-pg">&rarr;</span></a></div>
               </div>
 
