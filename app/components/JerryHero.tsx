@@ -5,13 +5,20 @@ import { useState, useRef, useEffect } from 'react';
 interface Message { role: 'user' | 'assistant'; content: string; }
 
 export default function JerryHero() {
-  const [history, setHistory] = useState<Message[]>([
-    {
-      role: 'assistant',
-      content:
-        "Captain Jerry here. Avionics question, service inquiry, or just looking around — what can I do for you? — Capt. Jerry, RWAS",
-    },
-  ]);
+  const SK = 'jerry_chat_history';
+  const defaultMsg: Message[] = [{
+    role: 'assistant',
+    content: "Captain Jerry here. Avionics question, service inquiry, or just looking around \u2014 what can I do for you? \u2014 Capt. Jerry, RWAS",
+  }];
+  const [history, setHistory] = useState<Message[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = sessionStorage.getItem(SK);
+        if (saved) return JSON.parse(saved);
+      } catch {}
+    }
+    return defaultMsg;
+  });
   const [input, setInput]       = useState('');
   const [loading, setLoading]   = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -22,6 +29,7 @@ export default function JerryHero() {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
+    try { sessionStorage.setItem(SK, JSON.stringify(history)); } catch {}
   }, [history]);
 
   async function send() {
