@@ -4,6 +4,7 @@
 /* eslint-disable @next/next/no-img-element */
 import './newspaper.css';
 import JerryHero from './components/JerryHero';
+import JerryPopup from './components/JerryPopup';
 
 export const metadata = {
   title: 'Roger Wilco Aviation Services | Garmin Avionics, NDT, Fabrication & Aircraft Support',
