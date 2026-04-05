@@ -88,7 +88,7 @@ export default function Home() {
                   <a href="/pages/garmin-avionics-accessories"><span>Latest From Garmin</span><span className="np-box-pg">A2 &rarr;</span></a>
                 </div>
                 <div className="np-box-row">
-                  <a href="/collections/garmin-avionics"><span>G3X Touch Suite</span><span className="np-box-pg">A3 &rarr;</span></a>
+                  <a href="/garmin"><span>Garmin Store</span><span className="np-box-pg">A3 &rarr;</span></a>
                 </div>
                 <div className="np-box-row">
                   <a href="/collections/rigging-tools"><span>Tool Procurement</span><span className="np-box-pg">B1 &rarr;</span></a>
@@ -130,15 +130,15 @@ export default function Home() {
 
             {/* ── CENTER COLUMN ── */}
             <div className="np-col">
-              <span className="np-kicker">General Aviation Maintenance &amp; Avionics</span>
+              <span className="np-kicker" style={{ textAlign: 'center' }}>General Aviation Maintenance &amp; Avionics</span>
               <a href="/shop-capabilities" className="np-headline-link">
-                <h1 className="np-headline-xl np-headline-xl-link">
+                <h1 className="np-headline-xl np-headline-xl-link" style={{ textAlign: 'center' }}>
                   Premier Avionics &amp;<br />
                   <em>Maintenance Services</em><br />
                   in the Northern Plains
                 </h1>
               </a>
-              <div className="np-byline">Roger Wilco Aviation Services &middot; FAA Cert. RWSR491E</div>
+              <div className="np-byline" style={{ textAlign: 'center' }}>Roger Wilco Aviation Services &middot; FAA Cert. RWSR491E</div>
               <hr className="np-rule" />
 
               <div className="np-photo-box">
