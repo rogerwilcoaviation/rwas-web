@@ -127,8 +127,8 @@ export default function JerryHero() {
           flex: 1,
           overflowY: 'auto',
           padding: '6px 8px',
-          maxHeight: '240px',
-          minHeight: '80px',
+          maxHeight: '400px',
+          minHeight: '120px',
         }}
       >
         {history.map((m, i) => (
@@ -145,7 +145,8 @@ export default function JerryHero() {
                 maxWidth: '92%',
                 padding: '4px 7px',
                 fontFamily: "Arial, Helvetica, sans-serif",
-                fontSize: '11px',
+                fontSize: '12px',
+                fontWeight: 700,
                 lineHeight: '1.5',
                 textAlign: 'left' as const,
                 ...(m.role === 'user'
@@ -174,9 +175,9 @@ export default function JerryHero() {
                 padding: '4px 7px',
                 background: '#fff',
                 border: '1px solid #1a1a1a',
-                fontFamily: 'Georgia, serif',
-                fontSize: '11px',
-                fontStyle: 'italic',
+                fontFamily: 'Arial, Helvetica, sans-serif',
+                fontSize: '12px',
+                fontWeight: 700,
                 color: '#999',
               }}
             >
@@ -220,8 +221,9 @@ export default function JerryHero() {
               border: '1px solid #1a1a1a',
               background: '#fff',
               padding: '5px 7px',
-              fontFamily: 'Georgia, serif',
-              fontSize: '11px',
+              fontFamily: 'Arial, Helvetica, sans-serif',
+              fontSize: '12px',
+              fontWeight: 700,
               color: '#1a1a1a',
               outline: 'none',
               opacity: loading ? 0.5 : 1,
