@@ -149,7 +149,7 @@ export default function Home() {
                   />
                 </div>
                 <div className="np-photo-cap">
-                  Cessna 182RG (N5171S) &mdash; full Garmin G3X Touch glass cockpit installation by Roger Wilco Aviation Services.
+                  Cessna 182RG (N5171S) &mdash; full G500Txi install by Roger Wilco Aviation Services.
                 </div>
               </div>
 
