@@ -7,7 +7,7 @@ export default function JerryPopup() {
   const [open, setOpen] = useState(false);
 
   return (
-    <>
+    <span>
       {/* Nav link trigger */}
       <a
         onClick={(e) => { e.preventDefault(); setOpen(!open); }}
@@ -70,6 +70,6 @@ export default function JerryPopup() {
           </div>
         </div>
       )}
-    </>
+    </span>
   );
 }
