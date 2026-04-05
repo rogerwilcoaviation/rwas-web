@@ -162,21 +162,7 @@ export default function Home() {
 
               <hr className="np-rule-thick" />
 
-              {/* Captain Jerry Chat */}
-              <div className="np-jerry-inline">
-                <div className="np-jerry-inline-header">
-                  <img
-                    src="/newspaper/images/g3x_garmin.jpg"
-                    alt="Captain Jerry"
-                    className="np-jerry-inline-avatar"
-                  />
-                  <div>
-                    <div className="np-jerry-inline-name">Ask Captain Jerry</div>
-                    <div className="np-jerry-inline-desc">Avionics &amp; service inquiries</div>
-                  </div>
-                </div>
-                <JerryHero />
-              </div>
+              <JerryHero />
             </div>
 
             <div className="np-col-divider" />
