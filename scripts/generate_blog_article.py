@@ -1,82 +1,211 @@
+#!/usr/bin/env python3
+"""
+generate_blog_article.py
+========================
+Generates a blog article entry from a Garmin release (press release, memo,
+bulletin, product update) and appends it to blog-articles.json.
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <meta name="google-site-verification"
-              content="m41-YA2o4kXb32RmyuClA1zAXZCyaGaDEUj1QIc5bmc" />
-        <title>
-            Rate Limit Exceeded
-        </title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="dpaste.com is a pastebin site for easily sharing and storing code snippets. Syntax highlighting, clean interface, markup preview, quick sharing options.">
-        <meta name="keywords" content="dpaste, pastebin, snippets, programming, syntax highlighting, share code, programmer tools">
-        <link rel="apple-touch-icon" sizes="180x180" href="https://static.dpaste.com/static/pastebin/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="https://static.dpaste.com/static/pastebin/favicon-16x16.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="https://static.dpaste.com/static/pastebin/favicon-32x32.png">
-        <link rel="icon" type="image/x-icon" href="https://static.dpaste.com/static/pastebin/favicon.ico">
-        <link rel="manifest" href="https://static.dpaste.com/static/pastebin/site.webmanifest">
-        <link rel="me" href="https://fosstodon.org/@dpaste">
-        <link rel="stylesheet" href="https://static.dpaste.com/static/pastebin/css/normalize.css">
-        <link rel="stylesheet" href="https://static.dpaste.com/static/pastebin/css/skeleton.css">
-        <link rel="stylesheet" href="https://static.dpaste.com/static/pastebin/css/main.css">
-        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&amp;display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Fira+Mono" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script defer src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
-        <script defer src="https://static.dpaste.com/static/pastebin/js/base.js"></script>
-        <script defer>
-            
-            
-        </script>
-        <style></style>
-        
-    <meta http-equiv="refresh" content="5; url=/GF8YY6GKE.txt">
+Usage:
+  python3 generate_blog_article.py \
+    --category press-release \
+    --title "Garmin Announces New GTN Xi Feature Pack" \
+    --subtitle "Update adds synthetic vision overlay and vertical nav" \
+    --source "Garmin Press Release" \
+    --source-url "https://www.garmin.com/en-US/newsroom/..." \
+    --lead "Garmin International today announced..." \
+    --body "The new feature pack includes..." \
+    --body "Operators with existing GTN Xi installations..." \
+    --body "Contact RWAS at (605) 299-8178 for scheduling." \
+    --tags garmin,gtn-xi,software-update \
+    --status draft
 
-    </head>
-    
-    <body hx-on:keydown="var path=window.location.pathname; if ((event.key=='n' || event.key=='N') && path && path !== '/' && !path.includes('/duplicate') && !path.includes('/dashboard') && !path.includes('/accounts') && !path.includes('/properties')) { window.location.href = '/'; }">
-        <div id="container">
-            
-            <div class="topbuttons">
-                
-                    <a href="/accounts/login/"
-                       title="Personal dashboard, preferences, API token"
-                       class="button"><b>Sign in</b></a>
-                
-                <a href="/" title="Create a new paste (shortcut: 'N')" class=" button">New</a>
-                <a href="/api/v2/"
-                   title="Paste creation API, with code samples"
-                   class="   button">API</a>
-                <a href="/help/"
-                   title="Usage tips, shortcuts"
-                   class="  button">Help</a>
-                <a href="/about/"
-                   title="Updates, stats, backstory"
-                   class=" button">About</a>
-                <a href="/public/"
-                   title="Public items"
-                   class=" button">Public</a>
-            </div>
-            
-    <div class="error">
-        <h3>Oops!</h3>
-        <p>You have exceeded our rate limit of <b>1 request per second</b>.</p>
-        <p><img class="progressbar" alt="Waiting 5 seconds…" src="https://static.dpaste.com/static/pastebin/stripes-bar-animation.gif" /> Redirecting in 5 seconds to <b>/GF8YY6GKE.txt</b></p>
-        <img src="https://static.dpaste.com/static/pastebin/tumbeast-running.png" alt="Crazed beast running with a router in its mouth" style="width:100%;height:auto;display:block;">
-        <p>Problem? Please create a <a href="https://dpaste.freshdesk.com/support/tickets/new">support ticket</a>. </p>
-        <p>» <a href="/terms/">Terms of Service</a></p>
-    </div>
+Categories: press-release, service-bulletin, product-update, memo, regulatory
 
-        </div>
-        
-        
-        <script>
-            window.fwSettings={'widget_id':22000000180 };
-            !function(){if("function"!=typeof window.FreshworksWidget){var n=function(){n.q.push(arguments)};n.q=[],window.FreshworksWidget=n}}();
-        </script>
-        <script defer src='https://widget.freshworks.com/widgets/22000000180.js'></script>
-    </body>
-</html>
+Status values:
+  draft     - Article generated, awaiting John's approval
+  approved  - John approved, ready to publish
+  published - Live on the website
+
+After generation, run:
+  cd ~/projects/rwas-web && git add blog-articles.json && git commit -m "blog: add <title>" && git push
+"""
+
+import json
+import os
+import sys
+import argparse
+import re
+from datetime import datetime, timezone
+
+REPO_ROOT = os.path.expanduser("~/projects/rwas-web")
+JSON_PATH = os.path.join(REPO_ROOT, "public", "blog-articles.json")
+PHONE = "(605) 299-8178"
+
+def slugify(text):
+    text = text.lower()
+    text = re.sub(r'[^a-z0-9\s-]', '', text)
+    text = re.sub(r'[\s]+', '-', text)
+    text = text.strip('-')
+    return text[:60]
+
+def generate_social_posts(title, lead, category, tags):
+    """Generate Facebook and Instagram post text."""
+    tag_str = ' '.join(['#' + t.replace('-', '').title() for t in tags[:6]])
+    base_tags = "#GarminAvionics #RogerWilcoAviation #KYKN #FlyGA"
+
+    cat_labels = {
+        'press-release': 'NEWS',
+        'service-bulletin': 'SERVICE BULLETIN',
+        'product-update': 'UPDATE',
+        'memo': 'DEALER UPDATE',
+        'regulatory': 'REGULATORY'
+    }
+    cat_label = cat_labels.get(category, 'NEWS')
+
+    # Facebook — longer, conversational
+    fb_text = f"{lead}\n\n"
+    fb_text += f"Contact us at {PHONE} to learn more or schedule service.\n\n"
+    fb_text += f"{tag_str} {base_tags}"
+
+    # Instagram — shorter, punchy, more hashtags
+    # Truncate lead to ~120 chars for IG
+    ig_lead = lead[:140].rsplit(' ', 1)[0] + '...' if len(lead) > 140 else lead
+    ig_text = f"{ig_lead}\n\n"
+    ig_text += f"Authorized Garmin dealer.\n{PHONE} | rogerwilcoaviation.com\n\n"
+    ig_text += f"{tag_str} {base_tags} #Avionics #PilotLife #GeneralAviation"
+
+    return {
+        "facebook": {"text": fb_text.strip(), "status": "pending"},
+        "instagram": {"text": ig_text.strip(), "status": "pending"}
+    }
+
+def main():
+    parser = argparse.ArgumentParser(description="Generate RWAS blog article from Garmin release")
+    parser.add_argument("--category", required=True,
+                        choices=["press-release", "service-bulletin", "product-update", "memo", "regulatory"])
+    parser.add_argument("--title", required=True)
+    parser.add_argument("--subtitle", default="")
+    parser.add_argument("--source", default="Garmin")
+    parser.add_argument("--source-url", default="")
+    parser.add_argument("--lead", required=True, help="Opening paragraph / summary")
+    parser.add_argument("--body", action="append", default=[], help="Body paragraphs (repeat for multiple)")
+    parser.add_argument("--tags", default="garmin", help="Comma-separated tags")
+    parser.add_argument("--status", default="draft", choices=["draft", "approved", "published"])
+    parser.add_argument("--byline", default="RWAS Avionics Desk")
+    args = parser.parse_args()
+
+    # Load existing JSON
+    if os.path.exists(JSON_PATH):
+        with open(JSON_PATH, 'r') as f:
+            data = json.load(f)
+    else:
+        data = {"meta": {"last_updated": "", "total_articles": 0,
+                         "categories": ["press-release", "service-bulletin", "product-update", "memo", "regulatory"]},
+                "articles": []}
+
+    # Generate article ID
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    article_id = slugify(args.title) + "-" + datetime.now().strftime("%Y%m%d")
+
+    # Check for duplicates
+    existing_ids = [a["id"] for a in data["articles"]]
+    if article_id in existing_ids:
+        print(f"WARNING: Article ID '{article_id}' already exists. Appending counter.")
+        counter = 2
+        while f"{article_id}-{counter}" in existing_ids:
+            counter += 1
+        article_id = f"{article_id}-{counter}"
+
+    tags = [t.strip() for t in args.tags.split(",") if t.strip()]
+    social = generate_social_posts(args.title, args.lead, args.category, tags)
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    article = {
+        "id": article_id,
+        "status": args.status,
+        "category": args.category,
+        "title": args.title,
+        "subtitle": args.subtitle,
+        "author": "Roger Wilco Aviation Services",
+        "byline": args.byline,
+        "date": date_str,
+        "source": args.source,
+        "source_url": args.source_url,
+        "lead": args.lead,
+        "body": args.body,
+        "tags": tags,
+        "social": social,
+    }
+
+    if args.status == "approved":
+        article["approved_at"] = now_iso
+    if args.status == "published":
+        article["approved_at"] = now_iso
+        article["published_at"] = now_iso
+
+    # Prepend to articles list (newest first)
+    data["articles"].insert(0, article)
+    data["meta"]["total_articles"] = len(data["articles"])
+    data["meta"]["last_updated"] = now_iso
+
+    # Write back
+    with open(JSON_PATH, 'w') as f:
+        json.dump(data, f, indent=2)
+
+    print(f"OK: Article '{article_id}' added as '{args.status}'")
+    print(f"    Title: {args.title}")
+    print(f"    Category: {args.category}")
+    print(f"    Tags: {', '.join(tags)}")
+    print(f"    Social posts: Facebook (pending), Instagram (pending)")
+    print(f"\nNext steps:")
+    if args.status == "draft":
+        print(f"  1. Review article at /blog/article.html?id={article_id}")
+        print(f"  2. Approve: python3 {__file__} --approve {article_id}")
+        print(f"  3. Publish: python3 {__file__} --publish {article_id}")
+    elif args.status == "approved":
+        print(f"  1. Publish: python3 {__file__} --publish {article_id}")
+    else:
+        print(f"  1. git add && git commit && git push to deploy")
+
+if __name__ == "__main__":
+    # Handle --approve and --publish shortcut commands
+    if len(sys.argv) >= 3 and sys.argv[1] in ("--approve", "--publish"):
+        target_id = sys.argv[2]
+        new_status = "approved" if sys.argv[1] == "--approve" else "published"
+
+        if os.path.exists(JSON_PATH):
+            with open(JSON_PATH, 'r') as f:
+                data = json.load(f)
+        else:
+            print("ERROR: blog-articles.json not found")
+            sys.exit(1)
+
+        found = False
+        now_iso = datetime.now(timezone.utc).isoformat()
+        for article in data["articles"]:
+            if article["id"] == target_id:
+                article["status"] = new_status
+                if new_status == "approved":
+                    article["approved_at"] = now_iso
+                elif new_status == "published":
+                    if "approved_at" not in article:
+                        article["approved_at"] = now_iso
+                    article["published_at"] = now_iso
+                found = True
+                break
+
+        if not found:
+            print(f"ERROR: Article '{target_id}' not found")
+            sys.exit(1)
+
+        data["meta"]["last_updated"] = now_iso
+        with open(JSON_PATH, 'w') as f:
+            json.dump(data, f, indent=2)
+
+        print(f"OK: Article '{target_id}' status changed to '{new_status}'")
+        if new_status == "published":
+            print("  Don't forget: git add && git commit && git push")
+        sys.exit(0)
+
+    main()
