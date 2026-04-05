@@ -87,6 +87,67 @@ a.article-link { text-decoration: none; color: inherit; }
 a.article-link:hover .headline-lg,
 a.article-link:hover .headline-md,
 a.article-link:hover .headline-sm { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── Mobile responsive ── */
+@media (max-width: 768px) {
+  .page { margin: 0; border: none; box-shadow: none; }
+  .body { padding: 0 12px; }
+
+  /* Dateline */
+  .dateline { flex-wrap: wrap; justify-content: center; gap: 4px; padding: 5px 12px; text-align: center; }
+
+  /* Masthead — stack vertically, allow wrapping */
+  .masthead { flex-direction: column; padding: 10px 12px; gap: 6px; text-align: center; }
+  .masthead-logo { width: 48px; height: 48px; }
+  .masthead-name { font-size: 22px; white-space: normal; }
+  .masthead-tagline { white-space: normal; font-size: 8.5px; line-height: 1.6; }
+  .masthead-right { text-align: center; width: auto; }
+
+  /* Edition bar — stack */
+  .edition-bar { flex-direction: column; gap: 2px; padding: 5px 12px; text-align: center; font-size: 9px; }
+
+  /* Nav — smaller padding, wrap nicely */
+  .nav { border-bottom: 1px solid #1a1a1a; }
+  .nav a { padding: 6px 8px; font-size: 9px; border-right: none; border-bottom: 1px solid #ccc; }
+  .nav a.active { border-bottom-color: #1a1a1a; }
+
+  /* Section header */
+  .section-title { font-size: 22px; }
+
+  /* Filter bar */
+  .filter-bar { gap: 5px; padding: 8px 0; }
+  .filter-btn { padding: 4px 8px; font-size: 8px; }
+
+  /* Lead article — stack sidebar below */
+  .lead-article { grid-template-columns: 1fr; }
+  .lead-article .lead-main { padding-right: 0; padding-bottom: 14px; }
+  .lead-article .lead-divider { display: none; }
+  .lead-article .lead-sidebar { padding-left: 0; padding-top: 14px; border-top: 1px solid #1a1a1a; }
+
+  /* Headlines — scale down */
+  .headline-lg { font-size: 20px; line-height: 1.18; }
+  .headline-md { font-size: 14px; }
+  .headline-sm { font-size: 13px; }
+  .body-text { font-size: 11px; }
+  .drop::first-letter { font-size: 30px; }
+
+  /* Article grid — single column */
+  .article-grid { grid-template-columns: 1fr; }
+  .article-col { padding: 0; border-right: none; border-bottom: 1px solid #1a1a1a; padding-bottom: 10px; margin-bottom: 10px; }
+  .article-col:last-child { border-bottom: none; margin-bottom: 0; }
+
+  /* Footer */
+  .footer { flex-direction: column; gap: 6px; text-align: center; padding: 12px; }
+  .footer-name { font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+  .masthead-name { font-size: 18px; }
+  .masthead-logo { width: 40px; height: 40px; }
+  .section-title { font-size: 20px; }
+  .headline-lg { font-size: 18px; }
+  .nav a { padding: 5px 7px; font-size: 8.5px; }
+}
 </style>
 </head>
 <body>
