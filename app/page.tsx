@@ -54,6 +54,7 @@ export default function Home() {
         {/* ── Navigation ── */}
         <nav className="np-nav">
           <a className="active" href="/">Home</a>
+          <JerryPopup />
           <a href="/collections/on-sale">On Sale</a>
           <a href="/collections/garmin-avionics">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
