@@ -51,7 +51,6 @@ export default function ContactPage() {
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
           <a href="/financing">Financing</a>
           <a href="/shop-capabilities">Shop Capabilities</a>
-          <a href="/blog/">Blog Articles</a>
           <a className="active" href="/contact">Contact</a>
         </nav>
 
