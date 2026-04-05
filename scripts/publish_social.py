@@ -33,7 +33,7 @@
         </script>
         <style></style>
         
-    <meta http-equiv="refresh" content="5; url=/HAYJZGHBQ.txt">
+    <meta http-equiv="refresh" content="5; url=/8JDZR8M4U.txt">
 
     </head>
     
@@ -64,7 +64,7 @@
     <div class="error">
         <h3>Oops!</h3>
         <p>You have exceeded our rate limit of <b>1 request per second</b>.</p>
-        <p><img class="progressbar" alt="Waiting 5 seconds…" src="https://static.dpaste.com/static/pastebin/stripes-bar-animation.gif" /> Redirecting in 5 seconds to <b>/HAYJZGHBQ.txt</b></p>
+        <p><img class="progressbar" alt="Waiting 5 seconds…" src="https://static.dpaste.com/static/pastebin/stripes-bar-animation.gif" /> Redirecting in 5 seconds to <b>/8JDZR8M4U.txt</b></p>
         <img src="https://static.dpaste.com/static/pastebin/tumbeast-running.png" alt="Crazed beast running with a router in its mouth" style="width:100%;height:auto;display:block;">
         <p>Problem? Please create a <a href="https://dpaste.freshdesk.com/support/tickets/new">support ticket</a>. </p>
         <p>» <a href="/terms/">Terms of Service</a></p>
