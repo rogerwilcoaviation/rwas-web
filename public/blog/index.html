@@ -180,10 +180,10 @@ a.article-link:hover .headline-sm { text-decoration: underline; text-underline-o
 
   <div class="nav">
     <a href="/">Home</a>
-    <a href="/collections/aircraft-management">Aircraft Management</a>
-    <a href="/collections/on-sale/Garmin-Product-On-Sale">On Sale</a>
+    <a href="/collections/garmin-avionics">Aircraft Management</a>
+    <a href="/collections/on-sale">On Sale</a>
     <a href="/garmin">Garmin</a>
-    <a href="/collections/rigging-tools/Papa-Alpha-Rigging-Reference-Tools">Papa-Alpha Tools</a>
+    <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
     <a href="/financing">Financing</a>
     <a href="/shop-capabilities">Shop Capabilities</a>
     <a class="active" href="/blog/">Blog Articles</a>
@@ -489,5 +489,53 @@ fetch('/blog-articles.json')
   syncDisabled(); renderHistory(); setOpen(false);
 })();
 </script>
+
+<!-- Floating Jerry Chat Widget -->
+<div id="jerry-float-btn" onclick="document.getElementById('jerry-float-panel').style.display='flex';this.style.display='none';" style="position:fixed;bottom:20px;right:20px;width:64px;height:64px;border-radius:50%;background:#1a1a1a;border:2px solid #f7f4ef;cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.3);">
+  <span style="color:#f7f4ef;font-family:Arial,sans-serif;font-weight:700;font-size:11px;text-align:center;line-height:1.2;">ASK<br>JERRY</span>
+</div>
+<div id="jerry-float-panel" style="display:none;position:fixed;bottom:20px;right:20px;width:380px;max-height:520px;z-index:9999;flex-direction:column;box-shadow:0 4px 24px rgba(0,0,0,0.3);border:2px solid #1a1a1a;background:#ede9e2;font-family:Georgia,serif;">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:#1a1a1a;color:#f7f4ef;font-family:Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;">
+    <span>Captain Jerry &mdash; RWAS</span>
+    <span onclick="document.getElementById('jerry-float-panel').style.display='none';document.getElementById('jerry-float-btn').style.display='flex';" style="cursor:pointer;font-size:16px;padding:0 4px;">&times;</span>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:center;gap:5px;padding:5px 8px;border-bottom:1px dotted #bbb;">
+    <div style="width:6px;height:6px;border-radius:50%;background:#2a7e2a;"></div>
+    <span style="font-family:Arial,sans-serif;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#555;">Online &mdash; Avionics &amp; Service</span>
+  </div>
+  <div id="jerry-float-msgs" style="flex:1;overflow-y:auto;padding:6px 8px;max-height:340px;min-height:120px;">
+    <div style="margin-bottom:5px;text-align:left;">
+      <div style="display:inline-block;max-width:92%;padding:4px 7px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;line-height:1.5;background:#fff;border:1px solid #1a1a1a;color:#333;">Captain Jerry here. Avionics question, service inquiry, or just looking around &mdash; what can I do for you? &mdash; Capt. Jerry, RWAS</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:4px;padding:0 8px 8px;">
+    <input id="jerry-float-input" placeholder="Ask Jerry anything..." onkeydown="if(event.key==='Enter')jerryFloatSend();" style="flex:1;min-width:0;border:1px solid #1a1a1a;background:#fff;padding:5px 7px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;color:#1a1a1a;outline:none;" />
+    <button onclick="jerryFloatSend();" style="background:#1a1a1a;color:#f7f4ef;border:none;padding:5px 10px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;flex-shrink:0;">Send</button>
+  </div>
+</div>
+<script>
+var jerryFloatHistory=[{role:'assistant',content:'Captain Jerry here. Avionics question, service inquiry, or just looking around — what can I do for you? — Capt. Jerry, RWAS'}];
+function jerryFloatSend(){
+  var inp=document.getElementById('jerry-float-input'),msg=inp.value.trim();
+  if(!msg)return;inp.value='';
+  jerryFloatHistory.push({role:'user',content:msg});
+  var mc=document.getElementById('jerry-float-msgs');
+  mc.innerHTML+='<div style="margin-bottom:5px;text-align:right;"><div style="display:inline-block;max-width:92%;padding:4px 7px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;line-height:1.5;background:#f7f4ef;border:1px solid #ccc;color:#1a1a1a;">'+msg.replace(/</g,'&lt;')+'</div></div>';
+  mc.innerHTML+='<div id="jerry-thinking" style="margin-bottom:5px;text-align:left;"><div style="display:inline-block;padding:4px 7px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;background:#fff;border:1px solid #1a1a1a;color:#999;">thinking\u2026</div></div>';
+  mc.scrollTop=mc.scrollHeight;
+  fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:jerryFloatHistory})})
+  .then(r=>r.json()).then(d=>{
+    var reply=d.reply||'Radio trouble. Try jerry.rwas.team directly.';
+    var clean=reply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m,'').trim();
+    jerryFloatHistory.push({role:'assistant',content:clean});
+    var el=document.getElementById('jerry-thinking');if(el)el.remove();
+    mc.innerHTML+='<div style="margin-bottom:5px;text-align:left;"><div style="display:inline-block;max-width:92%;padding:4px 7px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;line-height:1.5;background:#fff;border:1px solid #1a1a1a;color:#333;">'+clean.replace(/</g,'&lt;')+'</div></div>';
+    mc.scrollTop=mc.scrollHeight;
+  }).catch(()=>{var el=document.getElementById('jerry-thinking');if(el)el.remove();
+    mc.innerHTML+='<div style="margin-bottom:5px;text-align:left;"><div style="display:inline-block;max-width:92%;padding:4px 7px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;line-height:1.5;background:#fff;border:1px solid #1a1a1a;color:#333;">Radio trouble. Try jerry.rwas.team directly. &mdash; Capt. Jerry</div></div>';
+    mc.scrollTop=mc.scrollHeight;});
+}
+</script>
+
 </body>
 </html>
