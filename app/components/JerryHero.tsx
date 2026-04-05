@@ -144,7 +144,7 @@ export default function JerryHero() {
                 display: 'inline-block',
                 maxWidth: '92%',
                 padding: '4px 7px',
-                fontFamily: "Georgia, serif",
+                fontFamily: "Arial, Helvetica, sans-serif",
                 fontSize: '11px',
                 lineHeight: '1.5',
                 textAlign: 'left' as const,
