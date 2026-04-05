@@ -130,15 +130,15 @@ export default function Home() {
 
             {/* ── CENTER COLUMN ── */}
             <div className="np-col">
-              <span className="np-kicker" style={{ textAlign: 'center' }}>General Aviation Maintenance &amp; Avionics</span>
+              <span className="np-kicker" style={{ display: "block", textAlign: "center" }}>General Aviation Maintenance &amp; Avionics</span>
               <a href="/shop-capabilities" className="np-headline-link">
-                <h1 className="np-headline-xl np-headline-xl-link" style={{ textAlign: 'center' }}>
+                <h1 className="np-headline-xl np-headline-xl-link" style={{ textAlign: "center" }}>
                   Premier Avionics &amp;<br />
                   <em>Maintenance Services</em><br />
                   in the Northern Plains
                 </h1>
               </a>
-              <div className="np-byline" style={{ textAlign: 'center' }}>Roger Wilco Aviation Services &middot; FAA Cert. RWSR491E</div>
+              <div className="np-byline" style={{ textAlign: "center" }}>Roger Wilco Aviation Services &middot; FAA Cert. RWSR491E</div>
               <hr className="np-rule" />
 
               <div className="np-photo-box">
