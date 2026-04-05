@@ -183,6 +183,7 @@
   color: #555;
   margin-bottom: 5px;
   display: block;
+  text-align: center;
 }
 .np-headline-xl {
   font-family: Georgia, serif;
@@ -191,6 +192,7 @@
   line-height: 1.08;
   color: #0a0a0a;
   margin-bottom: 8px;
+  text-align: center;
 }
 .np-headline-xl em {
   font-style: italic;
@@ -212,6 +214,7 @@
   text-transform: uppercase;
   color: #666;
   margin-bottom: 8px;
+  text-align: center;
 }
 .np-body-text {
   font-family: Georgia, serif;
