@@ -145,7 +145,7 @@ export default function JerryHero() {
                 maxWidth: '92%',
                 padding: '4px 7px',
                 fontFamily: "Arial, Helvetica, sans-serif",
-                fontSize: '13px',
+                fontSize: '26px',
                 fontWeight: 700,
                 lineHeight: '1.5',
                 textAlign: 'left' as const,
@@ -176,7 +176,7 @@ export default function JerryHero() {
                 background: '#fff',
                 border: '1px solid #1a1a1a',
                 fontFamily: 'Arial, Helvetica, sans-serif',
-                fontSize: '13px',
+                fontSize: '26px',
                 fontWeight: 700,
                 color: '#999',
               }}
@@ -195,7 +195,7 @@ export default function JerryHero() {
           border: '1px solid #2a7e2a',
           background: '#e8f5e8',
           fontFamily: 'Georgia, serif',
-          fontSize: '13px',
+          fontSize: '26px',
           color: '#1a5e1a',
         }}>
           {confirmed}
@@ -222,7 +222,7 @@ export default function JerryHero() {
               background: '#fff',
               padding: '5px 7px',
               fontFamily: 'Arial, Helvetica, sans-serif',
-              fontSize: '13px',
+              fontSize: '26px',
               fontWeight: 700,
               color: '#1a1a1a',
               outline: 'none',
