@@ -99,7 +99,12 @@
 /* Navigation */
 .np-nav {
   display: flex;
-  border-bottom: 2px solid #1a1a1a;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 0;
+  border-top: 1px solid #1a1a1a;
+  border-bottom: 1px solid #1a1a1a;
+  background: #f7f4ef;
 }
 .np-nav a {
   padding: 7px 11px;
@@ -525,7 +530,7 @@
 }
 
 /* Jerry nav link styling */
-.np-nav-jerry {
+.np-nav a.np-nav-jerry {
   padding: 7px 11px;
   font-family: Arial, sans-serif;
   font-size: 10px;
@@ -539,7 +544,7 @@
   cursor: pointer;
   font-weight: 700;
 }
-.np-nav-jerry:hover {
+.np-nav a.np-nav-jerry:hover {
   background: #d4c47a;
   color: #1a1a1a;
 }
