@@ -52,6 +52,7 @@ export default function ShopCapabilitiesPage() {
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
           <a href="/financing">Financing</a>
           <a className="active" href="/shop-capabilities">Shop Capabilities</a>
+          <a href="/blog/">Blog Articles</a>
           <a href="/contact">Contact</a>
         </nav>
         {/* Ticker */}
