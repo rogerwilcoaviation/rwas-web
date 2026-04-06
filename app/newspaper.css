@@ -99,12 +99,14 @@
 /* Navigation */
 .np-nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0;
   padding: 0;
   border-top: 1px solid #1a1a1a;
   border-bottom: 1px solid #1a1a1a;
   background: #f7f4ef;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .np-nav a {
   padding: 7px 11px;
@@ -121,6 +123,7 @@
   display: inline-block;
   line-height: 1.2;
   vertical-align: middle;
+  white-space: nowrap;
 }
 .np-nav a:hover,
 .np-nav a.active {
