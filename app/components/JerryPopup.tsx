@@ -21,93 +21,103 @@ export default function JerryPopup() {
       {!open && (
         <div
           onClick={() => setOpen(true)}
+          aria-label="Chat with Captain Jerry"
           style={{
             position: 'fixed',
-            bottom: '20px',
-            right: '20px',
-            width: '64px',
-            height: '64px',
+            bottom: '16px',
+            right: '16px',
+            width: '56px',
+            height: '56px',
             borderRadius: '50%',
             background: '#1a1a1a',
-            border: '2px solid #f7f4ef',
+            border: '2px solid #d1b074',
             cursor: 'pointer',
             zIndex: 9999,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.35)',
+            overflow: 'hidden',
           }}
         >
-          <img
-            src="/newspaper/images/jerry_aviator.png"
-            alt="Ask Captain Jerry"
-            style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '50%',
-              objectFit: 'cover',
-              objectPosition: 'center top',
-            }}
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = 'none';
-              (e.target as HTMLImageElement).parentElement!.innerHTML = '<span style="color:#f7f4ef;font-family:Arial,sans-serif;font-size:20px;font-weight:700;">J</span>';
-            }}
-          />
+          <span style={{
+            color: '#d1b074',
+            fontFamily: 'Arial, sans-serif',
+            fontSize: '22px',
+            fontWeight: 700,
+            lineHeight: 1,
+          }}>J</span>
         </div>
       )}
 
       {/* Floating popup panel */}
       {open && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: '20px',
-            right: '20px',
-            width: '380px',
-            maxHeight: '520px',
-            zIndex: 9999,
-            boxShadow: '0 4px 24px rgba(0,0,0,0.3)',
-            border: '2px solid #1a1a1a',
-            background: '#ede9e2',
-            display: 'flex',
-            flexDirection: 'column',
-            fontFamily: "Georgia, 'Times New Roman', serif",
-          }}
-        >
-          {/* Header bar */}
+        <>
+          {/* Backdrop on mobile */}
+          <div
+            onClick={() => setOpen(false)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.3)',
+              zIndex: 9998,
+            }}
+          />
           <div
             style={{
+              position: 'fixed',
+              bottom: '0',
+              right: '0',
+              width: '100%',
+              maxWidth: '400px',
+              height: '70vh',
+              maxHeight: '520px',
+              zIndex: 9999,
+              boxShadow: '0 -4px 24px rgba(0,0,0,0.3)',
+              border: '2px solid #1a1a1a',
+              background: '#ede9e2',
               display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '6px 10px',
-              background: '#1a1a1a',
-              color: '#f7f4ef',
-              fontFamily: 'Arial, sans-serif',
-              fontSize: '10px',
-              fontWeight: 700,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase' as const,
+              flexDirection: 'column',
+              fontFamily: "Georgia, 'Times New Roman', serif",
             }}
           >
-            <span>Captain Jerry &mdash; RWAS</span>
-            <span
-              onClick={() => setOpen(false)}
+            {/* Header bar */}
+            <div
               style={{
-                cursor: 'pointer',
-                fontSize: '16px',
-                lineHeight: 1,
-                padding: '0 4px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '10px 12px',
+                background: '#1a1a1a',
+                color: '#f7f4ef',
+                fontFamily: 'Arial, sans-serif',
+                fontSize: '11px',
+                fontWeight: 700,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase' as const,
+                flexShrink: 0,
               }}
             >
-              &times;
-            </span>
+              <span style={{ color: '#d1b074' }}>Captain Jerry &mdash; RWAS</span>
+              <span
+                onClick={() => setOpen(false)}
+                style={{
+                  cursor: 'pointer',
+                  fontSize: '20px',
+                  lineHeight: 1,
+                  padding: '0 4px',
+                  color: '#f7f4ef',
+                }}
+              >
+                &times;
+              </span>
+            </div>
+            {/* Chat */}
+            <div style={{ flex: 1, overflow: 'hidden' }}>
+              <JerryHero />
+            </div>
           </div>
-          {/* Chat */}
-          <div style={{ flex: 1, overflow: 'hidden' }}>
-            <JerryHero />
-          </div>
-        </div>
+        </>
       )}
     </span>
   );
