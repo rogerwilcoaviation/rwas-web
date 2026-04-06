@@ -17,7 +17,46 @@ export default function JerryPopup() {
         Ask Jerry
       </a>
 
-      {/* Floating popup */}
+      {/* Floating bubble — always visible when panel is closed */}
+      {!open && (
+        <div
+          onClick={() => setOpen(true)}
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
+            width: '64px',
+            height: '64px',
+            borderRadius: '50%',
+            background: '#1a1a1a',
+            border: '2px solid #f7f4ef',
+            cursor: 'pointer',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+          }}
+        >
+          <img
+            src="/newspaper/images/jerry_aviator.png"
+            alt="Ask Captain Jerry"
+            style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+              objectPosition: 'center top',
+            }}
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = 'none';
+              (e.target as HTMLImageElement).parentElement!.innerHTML = '<span style="color:#f7f4ef;font-family:Arial,sans-serif;font-size:20px;font-weight:700;">J</span>';
+            }}
+          />
+        </div>
+      )}
+
+      {/* Floating popup panel */}
       {open && (
         <div
           style={{
