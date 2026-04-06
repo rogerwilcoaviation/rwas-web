@@ -11,7 +11,13 @@ export const metadata = {
 };
 
 export default async function CollectionsPage() {
-  const collections = await getFeaturedCollections();
+  let collections: Awaited<ReturnType<typeof getFeaturedCollections>> = [];
+
+  try {
+    collections = await getFeaturedCollections();
+  } catch {
+    collections = [];
+  }
 
   return (
     <>
@@ -40,11 +46,28 @@ export default async function CollectionsPage() {
         </section>
 
         <section className="container-wide px-6 py-16 lg:px-10">
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {collections.map((collection) => (
-              <CollectionCard key={collection.id} collection={collection} />
-            ))}
-          </div>
+          {collections.length ? (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {collections.map((collection) => (
+                <CollectionCard key={collection.id} collection={collection} />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[1.5rem] border border-black/10 bg-white p-8 shadow-sm">
+              <h2 className="text-2xl font-bold">Collections temporarily unavailable</h2>
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-black/70">
+                Shopify collection data could not be loaded right now. Please try again shortly or contact us if you need help finding a product.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Button asChild className="bg-[#111111] text-[#f5f3ef] hover:bg-black">
+                  <Link href="/contact">Contact us</Link>
+                </Button>
+                <Button asChild variant="outlinePrimary" className="border-[#C49A2A] text-[#111111] hover:bg-[#C49A2A]/10">
+                  <Link href="/shop-capabilities">Shop capabilities</Link>
+                </Button>
+              </div>
+            </div>
+          )}
         </section>
       </main>
       <Footer />
