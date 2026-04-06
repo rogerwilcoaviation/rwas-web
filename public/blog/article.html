@@ -141,5 +141,144 @@ a { color: inherit; }
   });
 })();
 </script>
+
+<style>
+.jerry-float-bubble { position: fixed; right: 20px; bottom: 20px; z-index: 9999; width: 74px; height: 74px; border-radius: 999px; border: 2px solid #1a1a1a; background: #f7f4ef; box-shadow: 0 12px 28px rgba(0,0,0,0.25); padding: 0; cursor: pointer; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.jerry-float-bubble img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.jerry-float-panel { position: fixed; right: 20px; bottom: 20px; z-index: 9999; width: 380px; height: 500px; background: #f7f4ef; border: 2px solid #1a1a1a; box-shadow: 0 14px 38px rgba(0,0,0,0.28); display: none; flex-direction: column; overflow: hidden; }
+.jerry-float-header { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 12px; background:#1a1a1a; color:#f7f4ef; border-bottom:1px solid #3a3a3a; }
+.jerry-float-title { display:flex; align-items:center; gap:10px; min-width:0; }
+.jerry-float-title img { width:42px; height:42px; border-radius:50%; object-fit:cover; object-position:center top; border:1px solid rgba(247,244,239,0.4); background:#ddd9d2; }
+.jerry-float-name { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #d1b074; }
+.jerry-float-sub { font-family: Arial, Helvetica, sans-serif; font-size: 11px; font-weight: 700; color: #d7d1c7; }
+.jerry-float-close { border:1px solid rgba(247,244,239,0.35); background:transparent; color:#f7f4ef; width:32px; height:32px; font-size:18px; font-weight:700; cursor:pointer; line-height:1; }
+.jerry-float-status { display:flex; align-items:center; justify-content:center; gap:6px; padding:6px 10px; border-bottom:1px dotted #bbb; background:#ede9e2; }
+.jerry-float-dot { width:7px; height:7px; border-radius:50%; background:#2a7e2a; }
+.jerry-float-status span { font-family: Arial, Helvetica, sans-serif; font-size: 10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#555; }
+.jerry-float-chat { flex:1; overflow-y:auto; padding:12px; background:#f1eee8; }
+.jerry-row { margin-bottom:10px; }
+.jerry-row.user { text-align:right; }
+.jerry-row.assistant { text-align:left; }
+.jerry-bubble { display:inline-block; max-width:92%; padding:10px 12px; font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:700; line-height:1.35; text-align:left; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+.jerry-row.user .jerry-bubble { background:#1a1a1a; border:1px solid #1a1a1a; color:#f7f4ef; }
+.jerry-row.assistant .jerry-bubble { background:#fffdf9; border:1px solid #1a1a1a; color:#1a1a1a; }
+.jerry-confirm { margin:0 12px 10px; padding:10px 12px; border:1px solid #2a7e2a; background:#e8f5e8; font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:700; color:#1a5e1a; display:none; }
+.jerry-float-input { display:flex; gap:8px; padding:10px 12px 12px; border-top:1px solid #c8c1b8; background:#ede9e2; }
+.jerry-float-input input { flex:1; min-width:0; border:1px solid #1a1a1a; background:#fffdf9; padding:10px 12px; font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:700; color:#1a1a1a; outline:none; }
+.jerry-float-input button { background:#1a1a1a; color:#f7f4ef; border:none; padding:10px 14px; font-family: Arial, Helvetica, sans-serif; font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; flex-shrink:0; }
+.jerry-float-input button:disabled, .jerry-float-input input:disabled { opacity:0.5; cursor:default; }
+@media (max-width: 480px) { .jerry-float-panel { right: 8px; left: 8px; bottom: 8px; width: auto; height: 70vh; } .jerry-float-bubble { right: 12px; bottom: 12px; width: 64px; height: 64px; } }
+</style>
+<script>
+(function(){
+  var STORAGE_KEY = 'jerry_chat_history_static_article';
+  var defaultHistory = [{ role: 'assistant', content: 'Captain Jerry here. Avionics question, service inquiry, or just looking around — what can I do for you? — Capt. Jerry, RWAS' }];
+  var history = defaultHistory.slice();
+  var loading = false;
+  var submitted = false;
+  try {
+    var saved = sessionStorage.getItem(STORAGE_KEY);
+    if (saved) history = JSON.parse(saved);
+  } catch (e) {}
+
+  var bubble = document.createElement('button');
+  bubble.className = 'jerry-float-bubble';
+  bubble.setAttribute('aria-label', 'Open Captain Jerry chat');
+  bubble.innerHTML = '<img src="/newspaper/images/captain_jerry.jpg" alt="Captain Jerry">';
+
+  var panel = document.createElement('div');
+  panel.className = 'jerry-float-panel';
+  panel.innerHTML = '' +
+    '<div class="jerry-float-header">' +
+      '<div class="jerry-float-title">' +
+        '<img src="/newspaper/images/captain_jerry.jpg" alt="Captain Jerry">' +
+        '<div><div class="jerry-float-name">Captain Jerry</div><div class="jerry-float-sub">Avionics &amp; Service</div></div>' +
+      '</div>' +
+      '<button class="jerry-float-close" aria-label="Close chat">×</button>' +
+    '</div>' +
+    '<div class="jerry-float-status"><div class="jerry-float-dot"></div><span>Online — Avionics &amp; Service</span></div>' +
+    '<div class="jerry-float-chat" id="jerry-float-chat"></div>' +
+    '<div class="jerry-confirm" id="jerry-float-confirm"></div>' +
+    '<div class="jerry-float-input" id="jerry-float-input-row">' +
+      '<input id="jerry-float-input" type="text" placeholder="Ask Jerry anything…">' +
+      '<button id="jerry-float-send">Send</button>' +
+    '</div>';
+
+  document.body.appendChild(bubble);
+  document.body.appendChild(panel);
+
+  var chatEl = panel.querySelector('#jerry-float-chat');
+  var confirmEl = panel.querySelector('#jerry-float-confirm');
+  var inputEl = panel.querySelector('#jerry-float-input');
+  var sendEl = panel.querySelector('#jerry-float-send');
+  var inputRowEl = panel.querySelector('#jerry-float-input-row');
+
+  function saveHistory(){ try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(history)); } catch (e) {} }
+  function renderHistory(){
+    chatEl.innerHTML = '';
+    history.forEach(function(m){
+      var row = document.createElement('div');
+      row.className = 'jerry-row ' + m.role;
+      var b = document.createElement('div');
+      b.className = 'jerry-bubble';
+      b.textContent = m.content;
+      row.appendChild(b);
+      chatEl.appendChild(row);
+    });
+    if (loading) {
+      var row = document.createElement('div'); row.className = 'jerry-row assistant';
+      var b = document.createElement('div'); b.className = 'jerry-bubble'; b.textContent = 'thinking…';
+      row.appendChild(b); chatEl.appendChild(row);
+    }
+    chatEl.scrollTop = chatEl.scrollHeight;
+    saveHistory();
+  }
+  function setOpen(v){ panel.style.display = v ? 'flex' : 'none'; bubble.style.display = v ? 'none' : 'flex'; if (v) setTimeout(function(){ inputEl.focus(); chatEl.scrollTop = chatEl.scrollHeight; }, 10); }
+  function setConfirmed(msg){ confirmEl.style.display = msg ? 'block' : 'none'; confirmEl.textContent = msg || ''; }
+  function syncDisabled(){ inputEl.disabled = loading || submitted; sendEl.disabled = loading || submitted || !inputEl.value.trim(); inputRowEl.style.display = submitted ? 'none' : 'flex'; }
+  async function send(){
+    if (!inputEl.value.trim() || loading || submitted) return;
+    var msg = inputEl.value.trim();
+    inputEl.value = '';
+    history = history.concat([{ role: 'user', content: msg }]);
+    loading = true; syncDisabled(); renderHistory(); setOpen(true);
+    try {
+      var res = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ messages: history }) });
+      var data = await res.json();
+      var raw = data.reply || 'Radio trouble on my end. Try again. — Capt. Jerry, RWAS';
+      var m = raw.match(/INTAKE_COMPLETE:(\{[\s\S]*?\})\s*$/m);
+      var display = m ? raw.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim() : raw;
+      history = history.concat([{ role: 'assistant', content: display }]);
+      renderHistory();
+      if (m && !submitted) {
+        submitted = true;
+        try {
+          var intake = JSON.parse(m[1]);
+          intake._secret = 'rwas-intake-2026';
+          var irRes = await fetch('/api/intake', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(intake) });
+          var ir = await irRes.json();
+          setConfirmed(ir.ok ? "You're all set — our team will be in touch. Ref: " + (ir.ref || 'filed') : 'Something went wrong. Please call: (605) 299-8178');
+        } catch (e) {
+          setConfirmed('Could not file intake. Please call: (605) 299-8178');
+        }
+      }
+    } catch (e) {
+      history = history.concat([{ role: 'assistant', content: 'Radio trouble on my end. Try jerry.rwas.team directly — Capt. Jerry, RWAS' }]);
+      renderHistory();
+    }
+    loading = false; syncDisabled(); renderHistory();
+  }
+
+  bubble.addEventListener('click', function(){ setOpen(true); });
+  panel.querySelector('.jerry-float-close').addEventListener('click', function(){ setOpen(false); });
+  sendEl.addEventListener('click', send);
+  inputEl.addEventListener('input', syncDisabled);
+  inputEl.addEventListener('keydown', function(e){ if (e.key === 'Enter') send(); });
+  syncDisabled(); renderHistory(); setOpen(false);
+})();
+</script>
+
+<!-- Floating Jerry Chat Widget -->
+
 </body>
 </html>

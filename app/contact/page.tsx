@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import '../newspaper.css';
-import JerryHero from '../components/JerryHero';
 import JerryPopup from '../components/JerryPopup';
 
 export const metadata = {
@@ -60,44 +59,9 @@ export default function ContactPage() {
         {/* Body */}
         <div className="np-body">
 
-          {/* Two-column layout */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 340px', padding: '14px 0', borderBottom: '2px solid #1a1a1a', alignItems: 'stretch' }}>
-
-            {/* LEFT — Jerry intake */}
-            <div style={{ padding: '0 2px' }}>
-              <span className="np-kicker">Service Desk</span>
-              <h1 className="np-headline-xl" style={{ fontSize: '28px', marginBottom: '6px' }}>
-                Talk to Captain Jerry
-              </h1>
-              <div className="np-byline">AI-Powered Intake Coordinator &middot; Available 24/7</div>
-              <hr className="np-rule" />
-              <p className="np-body-text" style={{ marginBottom: '10px' }}>
-                Captain Jerry is your first point of contact for all service inquiries, quote requests, and scheduling. Describe your aircraft, the work needed, and your timeline &mdash; Jerry will collect the details and route your request directly to our team.
-              </p>
-              <p className="np-body-text" style={{ marginBottom: '12px' }}>
-                Jerry can help with avionics installation quotes, annual inspection scheduling, parts availability, Papa-Alpha tool orders, and general shop questions.
-              </p>
-
-              <div style={{ border: '2px solid #1a1a1a', background: '#ede9e2' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 10px', borderBottom: '1px dotted #bbb' }}>
-                  <img
-                    src="/newspaper/images/captain_jerry.jpg"
-                    alt="Captain Jerry"
-                    style={{ width: '40px', height: '40px', objectFit: 'cover', objectPosition: 'center top', border: '1px solid #1a1a1a' }}
-                  />
-                  <div>
-                    <div style={{ fontFamily: 'Arial, sans-serif', fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: '#1a1a1a' }}>Captain Jerry</div>
-                    <div style={{ fontFamily: 'Georgia, serif', fontSize: '10px', fontStyle: 'italic' as const, color: '#555' }}>Intake Coordinator &mdash; Avionics &amp; Service</div>
-                  </div>
-                </div>
-                <JerryHero />
-              </div>
-            </div>
-
-            <div className="np-col-divider" />
-
-            {/* RIGHT — Shop info */}
-            <div style={{ padding: '0 2px' }}>
+          {/* Shop info */}
+          <div style={{ padding: '14px 0', borderBottom: '2px solid #1a1a1a' }}>
+            <div style={{ maxWidth: '420px' }}>
               <span className="np-kicker">Shop Information</span>
               <h3 className="np-headline-md" style={{ textDecoration: 'none' }}>Roger Wilco Aviation Services</h3>
               <hr className="np-rule" />

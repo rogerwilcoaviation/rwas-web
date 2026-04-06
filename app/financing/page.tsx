@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import '../newspaper.css';
-import JerryHero from '../components/JerryHero';
 import JerryPopup from '../components/JerryPopup';
 import LoanCalc from '../components/LoanCalc';
 
@@ -118,25 +117,14 @@ export default function FinancingPage() {
 
             <div className="np-col-divider" />
 
-            {/* RIGHT — Jerry + Contact */}
+            {/* RIGHT — Contact */}
             <div style={{ padding: '0 2px' }}>
               <span className="np-kicker">Get a Quote</span>
-              <h3 className="np-headline-md" style={{ textDecoration: 'none' }}>Ask Captain Jerry</h3>
+              <h3 className="np-headline-md" style={{ textDecoration: 'none' }}>Contact RWAS</h3>
               <hr className="np-rule" />
               <p className="np-body-text" style={{ marginBottom: '10px' }}>
-                Tell Jerry what you&rsquo;re looking to finance &mdash; he&rsquo;ll help scope the project and connect you with our team for a formal quote.
+                Use the Jerry popup in the navigation for financing questions, or contact us directly and we&rsquo;ll help scope the project and connect you with our team for a formal quote.
               </p>
-
-              <div style={{ border: '2px solid #1a1a1a', background: '#ede9e2', marginBottom: '14px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 10px', borderBottom: '1px dotted #bbb' }}>
-                  <img src="/newspaper/images/captain_jerry.jpg" alt="Captain Jerry" style={{ width: '40px', height: '40px', objectFit: 'cover', objectPosition: 'center top', border: '1px solid #1a1a1a' }} />
-                  <div>
-                    <div style={{ fontFamily: 'Arial, sans-serif', fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: '#1a1a1a' }}>Captain Jerry</div>
-                    <div style={{ fontFamily: 'Georgia, serif', fontSize: '10px', fontStyle: 'italic' as const, color: '#555' }}>Financing Inquiries</div>
-                  </div>
-                </div>
-                <JerryHero />
-              </div>
 
               <div className="np-box" style={{ marginBottom: '10px' }}>
                 <div className="np-box-title">Call Us</div>
