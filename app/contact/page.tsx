@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import '../newspaper.css';
 import JerryHero from '../components/JerryHero';
+import JerryPopup from '../components/JerryPopup';
 
 export const metadata = {
   title: 'Contact Roger Wilco Aviation Services | Ask Captain Jerry',
@@ -46,6 +47,7 @@ export default function ContactPage() {
         {/* Nav */}
         <nav className="np-nav">
           <a href="/">Home</a>
+          <JerryPopup />
           <a href="/collections/on-sale">On Sale</a>
           <a href="/collections/garmin-avionics">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>

@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import '../newspaper.css';
 import JerryHero from '../components/JerryHero';
+import JerryPopup from '../components/JerryPopup';
 import LoanCalc from '../components/LoanCalc';
 
 export const metadata = {
@@ -40,6 +41,7 @@ export default function FinancingPage() {
 
         <nav className="np-nav">
           <a href="/">Home</a>
+          <JerryPopup />
           <a href="/collections/on-sale">On Sale</a>
           <a href="/collections/garmin-avionics">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
