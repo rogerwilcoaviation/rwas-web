@@ -11,7 +11,7 @@ export default function JerryPopup() {
       {/* Nav link trigger */}
       <a
         onClick={(e) => { e.preventDefault(); setOpen(!open); }}
-        style={{ cursor: 'pointer' }}
+        style={{ cursor: 'pointer', background: '#d4c47a' }}
         className="np-nav-jerry"
       >
         Ask Jerry
