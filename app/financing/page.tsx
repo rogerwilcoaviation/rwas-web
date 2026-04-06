@@ -15,8 +15,8 @@ export default function FinancingPage() {
       <div className="np-page">
 
         <div className="np-dateline">
-          <span>Avionics &amp; Service Financing</span>
-          <span>Payment Options</span>
+          <span>Spring 2026 Edition</span>
+          <span>Vol. XL &middot; No. 1</span>
           <span>rogerwilcoaviation.com</span>
         </div>
 
@@ -33,9 +33,9 @@ export default function FinancingPage() {
         </div>
 
         <div className="np-edition-bar">
-          <span>Flexible avionics financing available</span>
-          <span>Keep your capital working</span>
-          <span>Affordable monthly payments</span>
+          <span>Garmin Spring 2026 pricing now active</span>
+          <span>GFC 500 autopilot installations available</span>
+          <span>Now accepting spring scheduling</span>
         </div>
 
         <nav className="np-nav">
@@ -49,6 +49,15 @@ export default function FinancingPage() {
           <a href="/blog/">Blog Articles</a>
           <a href="/contact">Contact</a>
         </nav>
+        {/* Ticker */}
+        <div className="np-ticker-bar">
+          <span className="np-ticker-label">Bulletin</span>
+          <span className="np-ticker-text">
+            Papa-Alpha rigging reference tools now shipping worldwide &nbsp;&bull;&nbsp;
+            Garmin G3X Touch installations booking into summer 2026 &nbsp;&bull;&nbsp;
+            Annual inspection slots available &mdash; call (605) 299-8178
+          </span>
+        </div>
 
         <div className="np-body">
 
@@ -151,6 +160,10 @@ export default function FinancingPage() {
             </div>
 
           </div>
+        </div>
+
+                <div className="np-credentials-bar">
+          NBAA Member &nbsp;&middot;&nbsp; AEA Member &nbsp;&middot;&nbsp; Certified &amp; Trained
         </div>
 
         <div className="np-footer">

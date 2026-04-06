@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import '../newspaper.css';
+import JerryPopup from '../components/JerryPopup';
 
 export const metadata = {
   title: 'About | Roger Wilco Aviation Services',
@@ -14,8 +15,8 @@ export default function AboutPage() {
 
         {/* Dateline */}
         <div className="np-dateline">
-          <span>About Our Shop</span>
-          <span>Roger Wilco Aviation Services</span>
+          <span>Spring 2026 Edition</span>
+          <span>Vol. XL &middot; No. 1</span>
           <span>rogerwilcoaviation.com</span>
         </div>
 
@@ -37,14 +38,15 @@ export default function AboutPage() {
 
         {/* Edition bar */}
         <div className="np-edition-bar">
-          <span>FAA Part 145 Repair Station</span>
-          <span>Founded 2022</span>
-          <span>Yankton, South Dakota</span>
+          <span>Garmin Spring 2026 pricing now active</span>
+          <span>GFC 500 autopilot installations available</span>
+          <span>Now accepting spring scheduling</span>
         </div>
 
         {/* Nav */}
         <nav className="np-nav">
           <a href="/">Home</a>
+          <JerryPopup />
           <a href="/collections/on-sale">On Sale</a>
           <a href="/collections/garmin-avionics">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
@@ -54,6 +56,15 @@ export default function AboutPage() {
           <a className="active" href="/about">About</a>
           <a href="/contact">Contact</a>
         </nav>
+        {/* Ticker */}
+        <div className="np-ticker-bar">
+          <span className="np-ticker-label">Bulletin</span>
+          <span className="np-ticker-text">
+            Papa-Alpha rigging reference tools now shipping worldwide &nbsp;&bull;&nbsp;
+            Garmin G3X Touch installations booking into summer 2026 &nbsp;&bull;&nbsp;
+            Annual inspection slots available &mdash; call (605) 299-8178
+          </span>
+        </div>
 
         {/* Body */}
         <div className="np-body">
@@ -171,6 +182,10 @@ export default function AboutPage() {
         </div>
 
         {/* Footer */}
+                <div className="np-credentials-bar">
+          NBAA Member &nbsp;&middot;&nbsp; AEA Member &nbsp;&middot;&nbsp; Certified &amp; Trained
+        </div>
+
         <div className="np-footer">
           <span className="np-footer-name">Roger Wilco Aviation Services</span>
           <span>&copy; 2026 RWAS &middot; All Rights Reserved</span>
