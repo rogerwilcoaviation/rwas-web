@@ -5,7 +5,6 @@ import { Button } from '@/components/shared/ui/button';
 import { getProductByHandle, getProductHandles } from '@/lib/shopify';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 
 function formatPrice(amount: string, currencyCode: string) {
   return new Intl.NumberFormat('en-US', {
@@ -15,9 +14,20 @@ function formatPrice(amount: string, currencyCode: string) {
   }).format(Number(amount));
 }
 
+const FALLBACK_PRODUCT_HANDLES = [
+  'garmin-g5-dg-hsi-stcd-for-certified-aircraft-with-lpm',
+  'garmin-g5-primary-electronic-attitude-display-stcd-for-certified-aircraft-with-lpm',
+  'garmin-gea-71b-enhanced',
+  'garmin-gfc-500-digital-autopilot',
+];
+
 export async function generateStaticParams() {
-  const handles = await getProductHandles(120);
-  return handles.map((handle) => ({ handle }));
+  try {
+    const handles = await getProductHandles(120);
+    return handles.map((handle) => ({ handle }));
+  } catch {
+    return FALLBACK_PRODUCT_HANDLES.map((handle) => ({ handle }));
+  }
 }
 
 export async function generateMetadata({
@@ -26,14 +36,19 @@ export async function generateMetadata({
   params: Promise<{ handle: string }>;
 }) {
   const { handle } = await params;
-  const product = await getProductByHandle(handle);
 
-  if (!product) return { title: 'Product not found' };
+  try {
+    const product = await getProductByHandle(handle);
 
-  return {
-    title: `${product.title} | RWAS Products`,
-    description: product.description || `View ${product.title} from Roger Wilco Aviation Services.`,
-  };
+    if (!product) return { title: 'Product not found' };
+
+    return {
+      title: `${product.title} | RWAS Products`,
+      description: product.description || `View ${product.title} from Roger Wilco Aviation Services.`,
+    };
+  } catch {
+    return { title: 'Product not found' };
+  }
 }
 
 export default async function ProductDetailPage({
@@ -42,9 +57,45 @@ export default async function ProductDetailPage({
   params: Promise<{ handle: string }>;
 }) {
   const { handle } = await params;
-  const product = await getProductByHandle(handle);
+  let product: Awaited<ReturnType<typeof getProductByHandle>> = null;
 
-  if (!product) notFound();
+  try {
+    product = await getProductByHandle(handle);
+  } catch {
+    product = null;
+  }
+
+  if (!product) {
+    return (
+      <>
+        <Header />
+        <main className="bg-[#f5f3ef] pt-28 text-[#111111]">
+          <section className="border-b border-black/10">
+            <div className="container-wide px-6 py-16 lg:px-10 lg:py-20">
+              <p className="text-sm font-semibold uppercase tracking-[0.32em] text-primary-700">
+                Product detail
+              </p>
+              <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">
+                Product temporarily unavailable
+              </h1>
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-black/70">
+                We could not load this product from Shopify right now. Please try again shortly.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Button asChild variant="outlinePrimary" className="border-[#C49A2A] text-[#111111] hover:bg-[#C49A2A]/10">
+                  <Link href="/collections">Back to collections</Link>
+                </Button>
+                <Button asChild className="bg-[#111111] text-[#f5f3ef] hover:bg-black">
+                  <Link href="/contact">Contact us</Link>
+                </Button>
+              </div>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   const primaryPrice = product.variants[0]?.price;
 
