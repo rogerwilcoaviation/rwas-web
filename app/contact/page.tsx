@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import '../newspaper.css';
 import JerryPopup from '../components/JerryPopup';
+import JerryHero from '../components/JerryHero';
 
 export const metadata = {
   title: 'Contact Roger Wilco Aviation Services | Ask Captain Jerry',
@@ -15,8 +16,8 @@ export default function ContactPage() {
 
         {/* Dateline */}
         <div className="np-dateline">
-          <span>Contact &amp; Service Inquiries</span>
-          <span>Roger Wilco Aviation Services</span>
+          <span>Spring 2026 Edition</span>
+          <span>Vol. XL &middot; No. 1</span>
           <span>rogerwilcoaviation.com</span>
         </div>
 
@@ -38,9 +39,9 @@ export default function ContactPage() {
 
         {/* Edition bar */}
         <div className="np-edition-bar">
-          <span>Contact &amp; Intake</span>
-          <span>Schedule Service</span>
-          <span>Request a Quote</span>
+          <span>Garmin Spring 2026 pricing now active</span>
+          <span>GFC 500 autopilot installations available</span>
+          <span>Now accepting spring scheduling</span>
         </div>
 
         {/* Nav */}
@@ -56,14 +57,49 @@ export default function ContactPage() {
           <a className="active" href="/contact">Contact</a>
         </nav>
 
-        {/* Body */}
-        <div className="np-body">
+        {/* Ticker */}
+        <div className="np-ticker-bar">
+          <span className="np-ticker-label">Bulletin</span>
+          <span className="np-ticker-text">
+            Papa-Alpha rigging reference tools now shipping worldwide &nbsp;&bull;&nbsp;
+            Garmin G3X Touch installations booking into summer 2026 &nbsp;&bull;&nbsp;
+            Annual inspection slots available &mdash; call (605) 299-8178
+          </span>
+        </div>
 
-          {/* Shop info */}
-          <div style={{ padding: '14px 0', borderBottom: '2px solid #1a1a1a' }}>
-            <div style={{ maxWidth: '420px' }}>
-              <span className="np-kicker">Shop Information</span>
-              <h3 className="np-headline-md" style={{ textDecoration: 'none' }}>Roger Wilco Aviation Services</h3>
+        {/* Body — two column layout */}
+        <div className="np-body">
+          <div style={{ display: 'flex', gap: '0', borderBottom: '2px solid #1a1a1a' }}>
+
+            {/* LEFT — Service Desk */}
+            <div style={{ flex: '1 1 0', padding: '14px 16px 14px 0', borderRight: '1px solid #1a1a1a' }}>
+              <span className="np-kicker" style={{ display: 'block', textAlign: 'center' }}>Service Desk</span>
+              <h1 className="np-headline-xl" style={{ textAlign: 'center', fontSize: '28px', margin: '6px 0' }}>Talk to Captain Jerry</h1>
+              <div style={{ textAlign: 'center', fontFamily: 'Arial, sans-serif', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: '#555', marginBottom: '10px' }}>
+                AI-Powered Intake Coordinator &middot; Available 24/7
+              </div>
+              <hr className="np-rule" />
+
+              <p className="np-body-text" style={{ marginBottom: '10px' }}>
+                Captain Jerry is your first point of contact for all service inquiries, quote requests, and scheduling. Describe your aircraft, the work needed, and your timeline &mdash; Jerry will collect the details and route your request directly to our team.
+              </p>
+              <p className="np-body-text" style={{ marginBottom: '14px' }}>
+                Jerry can help with avionics installation quotes, annual inspection scheduling, parts availability, Papa-Alpha tool orders, and general shop questions.
+              </p>
+
+              {/* Inline Jerry chat */}
+              <JerryHero />
+
+              <div style={{ marginTop: '12px', textAlign: 'center', fontFamily: 'Arial, sans-serif', fontSize: '9px', color: '#888', letterSpacing: '0.05em' }}>
+                Prefer to call? <a href="tel:+16052998178" style={{ color: '#1a1a1a', textDecoration: 'underline' }}>(605) 299-8178</a> &nbsp;&middot;&nbsp;
+                Email: <a href="mailto:avionics@rwas.team" style={{ color: '#1a1a1a', textDecoration: 'underline' }}>avionics@rwas.team</a>
+              </div>
+            </div>
+
+            {/* RIGHT — Shop Info sidebar */}
+            <div style={{ width: '280px', flexShrink: 0, padding: '14px 0 14px 16px' }}>
+              <span className="np-kicker" style={{ display: 'block', textAlign: 'center' }}>Shop Information</span>
+              <h3 className="np-headline-md" style={{ textDecoration: 'none', textAlign: 'center' }}>Roger Wilco Aviation Services</h3>
               <hr className="np-rule" />
 
               <div className="np-box" style={{ marginBottom: '10px' }}>
@@ -83,29 +119,47 @@ export default function ContactPage() {
               </div>
 
               <div className="np-box" style={{ marginBottom: '10px' }}>
-                <div className="np-box-title">Certifications</div>
+                <div className="np-box-title">Email</div>
+                <p className="np-body-text">
+                  <a href="mailto:avionics@rwas.team" style={{ color: '#1a1a1a', textDecoration: 'underline', textUnderlineOffset: '2px' }}>avionics@rwas.team</a>
+                </p>
+              </div>
+
+              <div className="np-box" style={{ marginBottom: '10px' }}>
+                <div className="np-box-title">Hours</div>
+                <p className="np-body-text">
+                  Monday &ndash; Friday<br />
+                  8:00 AM &ndash; 5:00 PM CT
+                </p>
+              </div>
+
+              <div className="np-box" style={{ marginBottom: '10px' }}>
+                <div className="np-box-title">Certifications &amp; Memberships</div>
                 <p className="np-body-text">
                   FAA Repair Station RWSR491E<br />
                   NBAA Member<br />
-                  AEA Member
+                  AEA Member<br />
+                  Certified Garmin Dealer<br />
+                  American Bonanza Society Trained
                 </p>
               </div>
 
               <div className="np-box" style={{ marginBottom: '10px' }}>
                 <div className="np-box-title">Services</div>
-                <div className="np-box-row"><a href="/pages/garmin-avionics-accessories"><span>Garmin Avionics</span><span className="np-box-pg">&rarr;</span></a></div>
+                <div className="np-box-row"><a href="/garmin"><span>Garmin Avionics</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/collections/rigging-tools"><span>Papa-Alpha Tools</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/shop-capabilities"><span>A&amp;P Maintenance</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/shop-capabilities"><span>NDT Inspection</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/financing"><span>Financing</span><span className="np-box-pg">&rarr;</span></a></div>
               </div>
-
-              <div className="np-pull-quote" style={{ fontSize: '12px' }}>
-                &ldquo;We don&rsquo;t just fix aircraft &mdash; we keep them flying safely.&rdquo;
-              </div>
             </div>
 
           </div>
+        </div>
+
+        {/* Credentials */}
+        <div className="np-credentials-bar">
+          NBAA Member &nbsp;&middot;&nbsp; AEA Member &nbsp;&middot;&nbsp; Certified &amp; Trained
         </div>
 
         {/* Footer */}
