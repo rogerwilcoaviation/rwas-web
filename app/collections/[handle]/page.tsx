@@ -6,9 +6,15 @@ import { getCollectionByHandle, getFeaturedCollections, isQuoteCollection } from
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  const collections = await getFeaturedCollections();
-  return collections.map((collection) => ({ handle: collection.handle }));
+  try {
+    const collections = await getFeaturedCollections();
+    return collections.map((collection) => ({ handle: collection.handle }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({
@@ -17,16 +23,21 @@ export async function generateMetadata({
   params: Promise<{ handle: string }>;
 }) {
   const { handle } = await params;
-  const collection = await getCollectionByHandle(handle);
 
-  if (!collection) {
+  try {
+    const collection = await getCollectionByHandle(handle);
+
+    if (!collection) {
+      return { title: 'Collection not found' };
+    }
+
+    return {
+      title: `${collection.title} | RWAS Collections`,
+      description: collection.description || `Browse ${collection.title} at Roger Wilco Aviation Services.`,
+    };
+  } catch {
     return { title: 'Collection not found' };
   }
-
-  return {
-    title: `${collection.title} | RWAS Collections`,
-    description: collection.description || `Browse ${collection.title} at Roger Wilco Aviation Services.`,
-  };
 }
 
 export default async function CollectionDetailPage({
