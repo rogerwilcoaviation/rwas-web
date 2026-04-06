@@ -105,12 +105,17 @@
   padding: 7px 11px;
   font-family: Arial, sans-serif;
   font-size: 10px;
-  letter-spacing: 0.05em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
   color: #1a1a1a;
-  border-right: 1px solid #1a1a1a;
+  border-right: 1px solid #ddd;
   cursor: pointer;
+  background: transparent;
+  display: inline-block;
+  line-height: 1.2;
+  vertical-align: middle;
 }
 .np-nav a:hover,
 .np-nav a.active {
