@@ -6,8 +6,6 @@ import { getCollectionByHandle, getFeaturedCollections, isQuoteCollection } from
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-export const dynamicParams = true;
-
 export async function generateStaticParams() {
   try {
     const collections = await getFeaturedCollections();
