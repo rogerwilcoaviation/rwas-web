@@ -4,7 +4,7 @@ import '../newspaper.css';
 
 export const metadata = {
   title: 'About | Roger Wilco Aviation Services',
-  description: 'About Roger Wilco Aviation Services — FAA Part 145 Repair Station in Yankton, South Dakota. Over 40 years of aviation experience.',
+  description: 'About Roger Wilco Aviation Services — FAA Part 145 Repair Station in Yankton, South Dakota. Over 40 years of aviation experience. Contact information, history, and capabilities.',
 };
 
 export default function AboutPage() {
@@ -53,8 +53,8 @@ export default function AboutPage() {
           <a href="/shop-capabilities">Shop Capabilities</a>
           <a href="/blog/">Blog Articles</a>
           <a className="active" href="/about">About</a>
-          <a href="/contact">Contact</a>
         </nav>
+
         {/* Ticker */}
         <div className="np-ticker-bar">
           <span className="np-ticker-label">Bulletin</span>
@@ -69,23 +69,74 @@ export default function AboutPage() {
         <div className="np-body">
 
           {/* Two-column layout */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 340px', padding: '14px 0', borderBottom: '2px solid #1a1a1a', alignItems: 'stretch' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 300px', padding: '14px 0', borderBottom: '2px solid #1a1a1a', alignItems: 'start' }}>
 
-            {/* LEFT — About copy */}
-            <div style={{ padding: '0 2px' }}>
+            {/* LEFT — About & History */}
+            <div style={{ padding: '0 16px 0 0' }}>
               <span className="np-kicker">About the Shop</span>
               <h1 className="np-headline-xl" style={{ fontSize: '28px', marginBottom: '6px' }}>
                 Roger Wilco Aviation Services
               </h1>
-              <div className="np-byline">FAA Part 145 Repair Station &middot; Certificate No. RWSR491E</div>
+              <div className="np-byline">FAA Part 145 Repair Station &middot; Certificate No. RWSR491E &middot; Yankton, South Dakota</div>
               <hr className="np-rule" />
 
               <p className="np-body-text np-drop">
-                Roger Wilco Aviation Services is an FAA-certificated repair station providing full-spectrum airframe, powerplant, avionics, and non-destructive testing services to general aviation, corporate, and commercial operators across the Northern Plains. Operating under Certificate No. RWSR491E, the station is authorized for a complete range of maintenance, repair, and alteration work.
+                Roger Wilco Aviation Services is an FAA-certificated repair station providing full-spectrum airframe, powerplant, avionics, and non-destructive testing services to general aviation, corporate, and commercial operators across the Northern Plains. Operating from Chan Gurney Municipal Airport (KYKN) in Yankton, South Dakota, the station is authorized under Certificate No. RWSR491E for a complete range of maintenance, repair, and alteration work.
+              </p>
+
+              <hr className="np-rule-thick" />
+
+              <span className="np-kicker">Our History</span>
+              <h3 className="np-headline-md" style={{ textDecoration: 'none', marginBottom: '6px' }}>Four Decades in Aviation</h3>
+              <hr className="np-rule" />
+
+              <p className="np-body-text">
+                RWAS was founded by John Halsted, a veteran Delta Air Lines captain with more than 40 years of hands-on aviation experience spanning airline operations, aircraft maintenance, avionics systems, and flight instruction. What began as a single-hangar maintenance operation at Chan Gurney Municipal Airport has grown into a full-service repair station serving owners and operators from across the upper Midwest and beyond.
               </p>
 
               <p className="np-body-text">
-                Under the direction of John Halsted &mdash; with more than 40 years of aviation experience &mdash; RWAS delivers sheet metal fabrication, structural repair, and complete Garmin avionics installations including the G3X Touch suite, GTN navigator series, and GFC 500 autopilot.
+                Halsted earned his Airframe &amp; Powerplant certificates early in his career and spent decades maintaining and flying aircraft of all types &mdash; from Piper Cherokees and Beechcraft Bonanzas to large transport-category jets on the Delta flight line. That dual perspective &mdash; as both a pilot who depends on the aircraft and a mechanic who maintains it &mdash; is the foundation of every job that comes through the RWAS shop.
+              </p>
+
+              <p className="np-body-text">
+                In the early years, RWAS focused on annual inspections, airframe repair, and basic avionics troubleshooting for the local general aviation fleet at Yankton. As the Garmin glass cockpit revolution took hold, Halsted recognized the opportunity to bring modern avionics capability to the Northern Plains &mdash; a region where most owners previously had to ferry their aircraft hundreds of miles to major metro shops for panel upgrades. RWAS became a certified Garmin dealer and installation center, specializing in the G3X Touch, GTN Xi navigator series, and GFC 500 autopilot.
+              </p>
+
+              <div className="np-photo-box" style={{ margin: '12px 0' }}>
+                <div className="np-photo-area">
+                  <img src="/newspaper/images/r182_panel.jpg" alt="Cessna 182RG avionics panel" />
+                </div>
+                <div className="np-photo-cap">
+                  Cessna 182RG (N5171S) &mdash; full G500Txi glass cockpit installation by Roger Wilco Aviation Services.
+                </div>
+              </div>
+
+              <hr className="np-rule-thick" />
+
+              <span className="np-kicker">Papa-Alpha Tools</span>
+              <h3 className="np-headline-md" style={{ textDecoration: 'none', marginBottom: '6px' }}>Precision Rigging, Built In-House</h3>
+              <hr className="np-rule" />
+
+              <p className="np-body-text">
+                One of the unique capabilities to come out of the RWAS shop is the Papa-Alpha line of precision rigging reference tools for Piper aircraft. Designed by Halsted after years of frustration with imprecise field methods for flight control rigging, the Papa-Alpha tools are CNC-machined from aircraft-grade aluminum, powder coated, and UV printed with permanent reference markings.
+              </p>
+
+              <p className="np-body-text">
+                The tools cover stabilator, rudder, aileron, flap, and bell crank rigging for the PA-28, PA-30, PA-31, and PA-36 series &mdash; replacing the guesswork and tribal knowledge that has plagued Piper rigging for decades. Papa-Alpha tools are now shipped worldwide to maintenance shops, flight schools, and individual owners, and are available through rogerwilcoaviation.com, Aircraft Spruce, and Amazon.
+              </p>
+
+              <hr className="np-rule-thick" />
+
+              <span className="np-kicker">Special Capabilities</span>
+              <h3 className="np-headline-md" style={{ textDecoration: 'none', marginBottom: '6px' }}>NDT, Fabrication &amp; Laser Cutting</h3>
+              <hr className="np-rule" />
+
+              <p className="np-body-text">
+                Beyond avionics and airframe maintenance, RWAS operates non-destructive testing services including eddy current, dye penetrant, and magnetic particle inspection. The shop also maintains a sheet metal fabrication capability for structural repairs, custom cowlings, and bracket fabrication in aircraft-grade aluminum alloys.
+              </p>
+
+              <p className="np-body-text">
+                Recent additions include a fiber laser cutting and welding system, enabling precision work on thin-gauge metals that was previously outsourced. This technology supports both aircraft work and the manufacturing of Papa-Alpha tools in-house.
               </p>
 
               <hr className="np-rule-thick" />
@@ -95,38 +146,17 @@ export default function AboutPage() {
                 To deliver honest, professional aircraft maintenance and avionics work &mdash; on time, documented correctly, and built to last. Every aircraft that leaves this shop is one we&rsquo;d fly ourselves.
               </p>
 
-              <hr className="np-rule-thick" />
-
-              <span className="np-kicker">Capabilities</span>
-              <p className="np-body-text" style={{ marginTop: '6px' }}>
-                RWAS supports light sport aircraft with Rotax engines, traditional general aviation piston singles and twins, and global aviation needs through our Papa-Alpha precision rigging reference tools &mdash; shipped worldwide. Our technicians are American Bonanza Society trained and Garmin certified.
-              </p>
-
-              <p className="np-body-text">
-                Shop capabilities include annual and 100-hour inspections, Garmin avionics sales and installation, eddy current and dye penetrant NDT inspection, sheet metal fabrication, structural repair, fiber laser cutting and welding, and custom CNC work.
-              </p>
-
-              <hr className="np-rule" />
-
-              <div className="np-photo-box" style={{ marginTop: '10px' }}>
-                <div className="np-photo-area">
-                  <img
-                    src="/newspaper/images/r182_panel.jpg"
-                    alt="Cessna 182RG avionics panel"
-                  />
-                </div>
-                <div className="np-photo-cap">
-                  Cessna 182RG (N5171S) &mdash; full G500Txi install by Roger Wilco Aviation Services.
-                </div>
+              <div className="np-pull-quote" style={{ marginTop: '12px' }}>
+                &ldquo;We don&rsquo;t just fix aircraft &mdash; we keep them flying safely.&rdquo;
               </div>
             </div>
 
             <div className="np-col-divider" />
 
-            {/* RIGHT — Shop details */}
-            <div style={{ padding: '0 2px' }}>
-              <span className="np-kicker">Shop Details</span>
-              <h3 className="np-headline-md" style={{ textDecoration: 'none' }}>Quick Reference</h3>
+            {/* RIGHT — Contact & Quick Reference */}
+            <div style={{ padding: '0 0 0 16px' }}>
+              <span className="np-kicker" style={{ display: 'block', textAlign: 'center' }}>Contact &amp; Info</span>
+              <h3 className="np-headline-md" style={{ textDecoration: 'none', textAlign: 'center' }}>Quick Reference</h3>
               <hr className="np-rule" />
 
               <div className="np-box" style={{ marginBottom: '10px' }}>
@@ -146,6 +176,21 @@ export default function AboutPage() {
               </div>
 
               <div className="np-box" style={{ marginBottom: '10px' }}>
+                <div className="np-box-title">Email</div>
+                <p className="np-body-text">
+                  <a href="mailto:avionics@rwas.team" style={{ color: '#1a1a1a', textDecoration: 'underline', textUnderlineOffset: '2px' }}>avionics@rwas.team</a>
+                </p>
+              </div>
+
+              <div className="np-box" style={{ marginBottom: '10px' }}>
+                <div className="np-box-title">Hours</div>
+                <p className="np-body-text">
+                  Monday &ndash; Friday<br />
+                  8:00 AM &ndash; 5:00 PM CT
+                </p>
+              </div>
+
+              <div className="np-box" style={{ marginBottom: '10px' }}>
                 <div className="np-box-title">Certifications &amp; Memberships</div>
                 <p className="np-body-text">
                   FAA Repair Station RWSR491E<br />
@@ -158,7 +203,7 @@ export default function AboutPage() {
 
               <div className="np-box" style={{ marginBottom: '10px' }}>
                 <div className="np-box-title">Services</div>
-                <div className="np-box-row"><a href="/pages/garmin-avionics-accessories"><span>Garmin Avionics</span><span className="np-box-pg">&rarr;</span></a></div>
+                <div className="np-box-row"><a href="/collections/garmin-avionics"><span>Garmin Avionics</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/collections/rigging-tools"><span>Papa-Alpha Tools</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/shop-capabilities"><span>A&amp;P Maintenance</span><span className="np-box-pg">&rarr;</span></a></div>
                 <div className="np-box-row"><a href="/shop-capabilities"><span>NDT Inspection</span><span className="np-box-pg">&rarr;</span></a></div>
@@ -166,25 +211,34 @@ export default function AboutPage() {
                 <div className="np-box-row"><a href="/financing"><span>Financing</span><span className="np-box-pg">&rarr;</span></a></div>
               </div>
 
-              <div className="np-pull-quote" style={{ fontSize: '12px' }}>
-                &ldquo;We don&rsquo;t just fix aircraft &mdash; we keep them flying safely.&rdquo;
+              <div className="np-ad-box" style={{ marginTop: '10px' }}>
+                <div className="np-ad-title">Talk to Captain Jerry</div>
+                <div className="np-ad-sub">Service inquiries &amp; scheduling</div>
+                <div style={{ fontFamily: 'Arial, sans-serif', fontSize: '9px', color: '#666', marginBottom: '7px', letterSpacing: '0.05em' }}>
+                  AI-powered intake &middot; Available 24/7
+                </div>
+                <a className="np-ad-btn" href="#ask-jerry">Ask Jerry</a>
               </div>
 
-              <div className="np-ad-box" style={{ marginTop: '10px' }}>
-                <div className="np-ad-title">Get In Touch</div>
-                <div className="np-ad-sub">Schedule service or request a quote</div>
-                <a className="np-ad-btn" href="/contact">Contact RWAS</a>
+              <div className="np-photo-box" style={{ marginTop: '12px' }}>
+                <div className="np-photo-area">
+                  <img src="/newspaper/images/laser_cutter.jpg" alt="Fiber laser cutting" style={{ objectPosition: 'center center' }} />
+                </div>
+                <div className="np-photo-cap">
+                  Fiber laser cutting &mdash; precision fabrication in-house at RWAS.
+                </div>
               </div>
             </div>
 
           </div>
         </div>
 
-        {/* Footer */}
-                <div className="np-credentials-bar">
+        {/* Credentials */}
+        <div className="np-credentials-bar">
           NBAA Member &nbsp;&middot;&nbsp; AEA Member &nbsp;&middot;&nbsp; Certified &amp; Trained
         </div>
 
+        {/* Footer */}
         <div className="np-footer">
           <span className="np-footer-name">Roger Wilco Aviation Services</span>
           <span>&copy; 2026 RWAS &middot; All Rights Reserved</span>
