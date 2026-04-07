@@ -9,7 +9,38 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="np-wrapper" style={{ background: '#ddd9d2', minHeight: '100vh', fontFamily: "Georgia, 'Times New Roman', serif" }}>
+    <>
+      <style>{`
+        .np-lightbox {
+          display: none;
+          position: fixed;
+          top: 0; left: 0; right: 0; bottom: 0;
+          z-index: 100000;
+          background: rgba(0,0,0,0.92);
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+        .np-lightbox:target {
+          display: flex;
+        }
+        .np-lightbox img {
+          max-width: 95vw;
+          max-height: 90vh;
+          object-fit: contain;
+          box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+        }
+        .np-lightbox-close {
+          position: absolute;
+          top: 20px; right: 30px;
+          font-size: 40px;
+          color: #f7f4ef;
+          text-decoration: none;
+          font-weight: 700;
+          z-index: 100001;
+        }
+      `}</style>
+      <div className="np-wrapper" style={{ background: '#ddd9d2', minHeight: '100vh', fontFamily: "Georgia, 'Times New Roman', serif" }}>
       <div className="np-page">
 
         {/* Dateline */}
@@ -104,11 +135,18 @@ export default function AboutPage() {
 
               <div className="np-photo-box" style={{ margin: '12px 0' }}>
                 <div className="np-photo-area">
-                  <img src="/newspaper/images/n5171s_panel.jpg" alt="N5171S instrument panel" />
+                  <a href="#panel-lightbox">
+                    <img src="/newspaper/images/n5171s_panel.jpg" alt="N5171S instrument panel" style={{ cursor: 'pointer' }} />
+                  </a>
                 </div>
                 <div className="np-photo-cap">
                   N5171S &mdash; Custom laser-cut instrument panel by Roger Wilco Aviation Services.
                 </div>
+              </div>
+
+              <div id="panel-lightbox" className="np-lightbox">
+                <a href="#_" className="np-lightbox-close">&times;</a>
+                <img src="/newspaper/images/n5171s_panel.jpg" alt="N5171S instrument panel" />
               </div>
 
               <hr className="np-rule-thick" />
@@ -246,5 +284,6 @@ export default function AboutPage() {
 
       </div>
     </div>
+    </>
   );
 }
