@@ -30,6 +30,11 @@ export default function Home() {
           position: relative;
           z-index: 1;
         }
+        @media (max-width: 749px) {
+          body::before {
+            display: none !important;
+          }
+        }
       `}</style>
       <div className="np-wrapper" style={{ background: '#ddd9d2', minHeight: '100vh', fontFamily: "Georgia, 'Times New Roman', serif" }}>
       <div className="np-page">
