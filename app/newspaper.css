@@ -5,6 +5,22 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   align-self: stretch;
+  position: relative;
+}
+
+.np-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('/newspaper/images/enr_h05.png') center center / cover no-repeat;
+  opacity: 0.25;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.np-wrapper > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* newspaper.css — Roger Wilco Aviation Services broadsheet homepage */
