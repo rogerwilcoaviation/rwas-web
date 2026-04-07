@@ -11,6 +11,22 @@ export default function AboutPage() {
   return (
     <>
       <style>{`
+        body::before {
+          content: "";
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: url(/newspaper/images/enr_h05.png) center center / cover no-repeat;
+          opacity: 0.25;
+          z-index: 0;
+          pointer-events: none;
+        }
+        body > * {
+          position: relative;
+          z-index: 1;
+        }
         .np-lightbox {
           display: none;
           position: fixed;
