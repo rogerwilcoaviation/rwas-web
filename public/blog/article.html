@@ -135,8 +135,12 @@ a { color: inherit; }
     document.getElementById('article-title').textContent = article.title || 'Untitled';
     document.getElementById('article-meta').innerHTML = esc(article.date || '') + ' &middot; Roger Wilco Aviation Services';
     document.getElementById('article-lead').textContent = article.lead || '';
-    var body = article.content || [];
-    document.getElementById('article-body').innerHTML = body.map(function(p){ return '<p>' + esc(p) + '</p>'; }).join('');
+    var imgHtml = '';
+    if (article.image) {
+      imgHtml = '<figure style="margin:14px 0;border:1px solid #1a1a1a;padding:4px;background:#ede9e2;"><img src="' + esc(article.image) + '" alt="' + esc(article.title) + '" style="width:100%;display:block;">' + (article.image_caption ? '<figcaption style="font-family:Arial,sans-serif;font-size:9px;color:#666;letter-spacing:0.05em;text-transform:uppercase;padding:4px 2px 0;text-align:right;">' + esc(article.image_caption) + '</figcaption>' : '') + '</figure>';
+    }
+    var body = article.body || article.content || [];
+    document.getElementById('article-body').innerHTML = imgHtml + body.map(function(p){ return '<p>' + esc(p) + '</p>'; }).join('');
     var related = articles.filter(function(a){ return a.id !== article.id; }).slice(0,5);
     document.getElementById('related-list').innerHTML = related.map(function(a){ return '<div class="related-item"><a href="/blog/article.html?id=' + encodeURIComponent(a.id) + '" style="text-decoration:none;color:inherit;">' + esc(a.title) + '</a></div>'; }).join('');
   }).catch(function(){

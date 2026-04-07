@@ -1,165 +1,82 @@
-{
-  "meta": {
-    "last_updated": "2026-04-07T15:00:00Z",
-    "total_articles": 4,
-    "categories": [
-      "press-release",
-      "service-bulletin",
-      "product-update",
-      "memo",
-      "regulatory"
-    ]
-  },
-  "articles": [
-    {
-      "id": "garmin-gma-350c-perspective-plus-upgrade-20260407",
-      "status": "published",
-      "category": "product-update",
-      "title": "Garmin Offers GMA 350c Audio Panel for Cirrus Perspective+ Flight Deck Upgrades",
-      "subtitle": "New audio panel option available for SR22T, SR22, and SR20 G3/G5 series aircraft upgrading to Perspective+",
-      "author": "Roger Wilco Aviation Services",
-      "byline": "RWAS Avionics Desk",
-      "date": "2026-04-07",
-      "source": "Garmin Dealer Memo",
-      "source_url": "",
-      "lead": "Garmin has announced a new option to upgrade to the GMA 350c audio panel when performing the Perspective+ Flight Deck Upgrade on Cirrus SR22T, SR22, and SR20 G3 and G5 series aircraft equipped with the original Cirrus Perspective system. The GMA 350c (P/N 010-00871-41) is the only approved audio panel version for this upgrade path, listed at $2,995.",
-      "body": [
-        "The Cirrus SR Perspective+ Flight Deck Upgrade, based on Garmin's G1000 NXi platform, delivers a substantial feature set over the original Perspective system. Highlights include Runway Occupancy Awareness (ROA) when paired with a GTX 345R transponder, stabilized approach advisories, and new connectivity options. Select SR G6 aircraft can also take advantage of an optional software upgrade with PlaneSync-enabled automatic database updates and flight log uploading via the GDL 60.",
-        "The GMA 350c is a full-featured integrated audio panel that replaces the original unit during the Perspective+ conversion. It includes the main unit, backplate assembly, connector kit, audio cables, install rack, and product information kit. The GFC 700 autopilot is required for the Perspective+ upgrade.",
-        "Roger Wilco Aviation Services is an authorized Garmin dealer and FAA-certificated repair station experienced in Garmin avionics installations across a range of general aviation platforms. For Cirrus operators considering the Perspective+ upgrade path, contact RWAS at (605) 299-8178 to discuss pricing, scheduling, and the GMA 350c audio panel option."
-      ],
-      "tags": [
-        "garmin",
-        "gma-350c",
-        "audio-panel",
-        "cirrus",
-        "perspective-plus",
-        "g1000-nxi",
-        "flight-deck-upgrade"
-      ],
-      "social": {
-        "facebook": {
-          "text": "Garmin has added a GMA 350c audio panel option for Cirrus Perspective+ Flight Deck Upgrades on SR22T, SR22, and SR20 G3/G5 aircraft. The Perspective+ upgrade \u2014 based on the G1000 NXi \u2014 brings Runway Occupancy Awareness, stabilized approach advisories, and new connectivity features.\n\nAs an authorized Garmin dealer, we can help Cirrus operators plan their upgrade path. Call (605) 299-8178 for pricing and scheduling.\n\nRead more: https://rogerwilcoaviation.com/blog/article.html?id=garmin-gma-350c-perspective-plus-upgrade-20260407\n\n#GarminAvionics #GMA350c #CirrusSR22 #PerspectivePlus #G1000NXi #FlightDeckUpgrade #RogerWilcoAviation #GeneralAviation",
-          "status": "approved"
-        },
-        "instagram": {
-          "text": "New from Garmin \u2014 GMA 350c audio panel now available for Cirrus Perspective+ Flight Deck Upgrades.\n\nSR22T | SR22 | SR20 G3/G5 series\nG1000 NXi platform | ROA | Stabilized approach advisories\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #GMA350c #Cirrus #SR22 #PerspectivePlus #G1000NXi #AudioPanel #AvionicsUpgrade #FlyGA #RogerWilcoAviation #KYKN #PilotLife",
-          "status": "pending"
-        }
-      },
-      "approved_at": "2026-04-07T15:00:00Z",
-      "published_at": "2026-04-07T15:00:00Z"
-    },
-    {
-      "id": "garmin-gfc500-stc-expansion-2026",
-      "status": "published",
-      "category": "press-release",
-      "title": "Garmin Expands GFC 500 Autopilot STC Coverage to Additional Airframes",
-      "subtitle": "New supplemental type certificates bring digital autopilot capability to Beechcraft Bonanza and Mooney M20 series",
-      "author": "Roger Wilco Aviation Services",
-      "byline": "RWAS Avionics Desk",
-      "date": "2026-03-28",
-      "source": "Garmin Press Release",
-      "source_url": "https://www.garmin.com/en-US/newsroom/",
-      "lead": "Garmin International has announced expanded STC coverage for its popular GFC 500 digital autopilot system, adding approved installations for the Beechcraft Bonanza 33/35/36 series and Mooney M20J/M20K aircraft. The expansion brings Garmin's modern autopilot technology to a broader range of the general aviation fleet.",
-      "body": [
-        "The GFC 500 autopilot is a two-axis digital system offering GPS steering, altitude hold, vertical speed, indicated airspeed hold, and flight level change modes. When paired with a Garmin navigator such as the GTN 650Xi or GTN 750Xi, pilots gain fully coupled approach capability including LPV approaches to near-Category I minimums.",
-        "Roger Wilco Aviation Services, an authorized Garmin dealer and FAA-certificated repair station, is now scheduling GFC 500 installations for these newly approved airframes. The shop has completed multiple GFC 500 installs on Cessna and Piper airframes and brings the same level of expertise to the Beechcraft and Mooney platforms.",
-        "Owners interested in upgrading should contact RWAS at (605) 299-8178 to discuss their specific aircraft configuration, estimated installation timeline, and financing options through the RWAS equipment financing program."
-      ],
-      "tags": [
-        "garmin",
-        "gfc-500",
-        "autopilot",
-        "stc",
-        "beechcraft",
-        "mooney"
-      ],
-      "social": {
-        "facebook": {
-          "text": "Big news for Bonanza and Mooney owners! Garmin has expanded GFC 500 autopilot STC coverage to the Beechcraft 33/35/36 series and Mooney M20J/M20K. We're scheduling installations now \u2014 call (605) 299-8178 to get on the list.\n\n#GarminAvionics #GFC500 #GeneralAviation #AvionicsUpgrade #RogerWilcoAviation",
-          "status": "pending"
-        },
-        "instagram": {
-          "text": "Garmin GFC 500 autopilot \u2014 now STC'd for Bonanza and Mooney.\n\nDigital autopilot with GPS steering, coupled approaches, and altitude preselect. We're an authorized Garmin dealer and scheduling installs now.\n\nLink in bio or call (605) 299-8178.\n\n#GarminAvionics #GFC500 #Autopilot #Bonanza #Mooney #AvionicsShop #PilotLife #GeneralAviation #FlyGA #RogerWilcoAviation #KYKN",
-          "status": "pending"
-        }
-      },
-      "approved_at": "2026-03-28T14:00:00Z",
-      "published_at": "2026-03-28T15:00:00Z"
-    },
-    {
-      "id": "garmin-g3x-touch-software-update-8-20",
-      "status": "published",
-      "category": "product-update",
-      "title": "Garmin G3X Touch Software Version 8.20 Released with Enhanced Engine Monitoring",
-      "subtitle": "Update adds lean-assist improvements, fuel flow totalizer refinements, and new EIS page layouts",
-      "author": "Roger Wilco Aviation Services",
-      "byline": "RWAS Avionics Desk",
-      "date": "2026-03-15",
-      "source": "Garmin Aviation Bulletin",
-      "source_url": "https://fly.garmin.com/fly-garmin/support/software/",
-      "lead": "Garmin has released software version 8.20 for the G3X Touch flight display system, delivering improvements to the engine information system (EIS) pages, lean-assist functionality, and fuel flow totalizer accuracy. The update is available as a free download for all G3X Touch installations.",
-      "body": [
-        "The updated lean-assist feature now provides a graphical bar display showing EGT deviation from peak for each cylinder during the leaning process. This replaces the previous numerical-only display and gives pilots a more intuitive view of engine operation during mixture adjustment.",
-        "Fuel flow totalizer calculations have been refined to improve accuracy during low-flow taxi and descent operations. The new algorithm reduces cumulative drift over long flights, keeping fuel remaining estimates within tighter tolerances.",
-        "Roger Wilco Aviation Services can perform the software update during your next scheduled maintenance visit or as a standalone service call. The update typically takes 30 to 45 minutes and includes verification of all display and sensor functions."
-      ],
-      "tags": [
-        "garmin",
-        "g3x-touch",
-        "software-update",
-        "eis",
-        "engine-monitoring"
-      ],
-      "social": {
-        "facebook": {
-          "text": "Garmin G3X Touch owners \u2014 software version 8.20 is out. Better lean-assist graphics, improved fuel totalizer accuracy, and new EIS layouts. Free update, takes about 30 minutes.\n\nSwing by or call (605) 299-8178 to schedule.\n\n#Garmin #G3XTouch #AvionicsUpdate #RogerWilcoAviation",
-          "status": "pending"
-        },
-        "instagram": {
-          "text": "G3X Touch v8.20 is here.\n\nNew graphical lean-assist display, refined fuel totalizer, updated EIS pages. Free update for all G3X installations.\n\nSchedule yours: (605) 299-8178\n\n#Garmin #G3XTouch #GlassCockpit #AvionicsUpdate #FlyGA #RogerWilcoAviation #KYKN",
-          "status": "pending"
-        }
-      },
-      "approved_at": "2026-03-15T10:00:00Z",
-      "published_at": "2026-03-15T11:00:00Z"
-    },
-    {
-      "id": "garmin-spring-2026-pricing",
-      "status": "published",
-      "category": "memo",
-      "title": "Garmin Spring 2026 Pricing Now in Effect Across All Aviation Product Lines",
-      "subtitle": "Annual price adjustments reflect supply chain stabilization and new product introductions",
-      "author": "Roger Wilco Aviation Services",
-      "byline": "RWAS Parts Desk",
-      "date": "2026-03-01",
-      "source": "Garmin Dealer Memo",
-      "source_url": "",
-      "lead": "Garmin's spring 2026 pricing is now active across all aviation product lines. As an authorized Garmin dealer, Roger Wilco Aviation Services has updated its pricing to reflect the new manufacturer schedules. Operators planning panel upgrades or new installations should review current pricing as part of their project planning.",
-      "body": [
-        "The pricing update covers the full Garmin aviation catalog including the G3X Touch display system, GTN Xi series navigators, GFC 500 and GFC 600 autopilots, GTX transponders, and all associated accessories and harness kits.",
-        "RWAS maintains tiered pricing for its customers based on project scope. Complete panel upgrade packages, which bundle displays, navigators, autopilots, and installation labor, continue to offer the best value per component compared to individual purchases.",
-        "For current pricing on any Garmin product or installation package, contact Roger Wilco Aviation Services at (605) 299-8178 or visit rogerwilcoaviation.com. Financing is available through our equipment financing program for qualifying installations."
-      ],
-      "tags": [
-        "garmin",
-        "pricing",
-        "dealer",
-        "spring-2026"
-      ],
-      "social": {
-        "facebook": {
-          "text": "Garmin spring 2026 pricing is now active. As an authorized dealer, we've updated pricing across all product lines \u2014 G3X Touch, GTN Xi, GFC 500/600, transponders, and accessories.\n\nPlanning a panel upgrade? Call (605) 299-8178 for a project quote. Financing available.\n\n#Garmin #AvionicsUpgrade #RogerWilcoAviation",
-          "status": "pending"
-        },
-        "instagram": {
-          "text": "Spring 2026 Garmin pricing is live.\n\nG3X Touch | GTN Xi | GFC 500/600 | GTX Transponders\n\nAuthorized dealer. Tiered pricing on complete packages. Financing available.\n\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Avionics #PanelUpgrade #FlyGA #RogerWilcoAviation #KYKN",
-          "status": "pending"
-        }
-      },
-      "approved_at": "2026-03-01T09:00:00Z",
-      "published_at": "2026-03-01T10:00:00Z"
-    }
-  ]
-}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="google-site-verification"
+              content="m41-YA2o4kXb32RmyuClA1zAXZCyaGaDEUj1QIc5bmc" />
+        <title>
+            Rate Limit Exceeded
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="dpaste.com is a pastebin site for easily sharing and storing code snippets. Syntax highlighting, clean interface, markup preview, quick sharing options.">
+        <meta name="keywords" content="dpaste, pastebin, snippets, programming, syntax highlighting, share code, programmer tools">
+        <link rel="apple-touch-icon" sizes="180x180" href="https://static.dpaste.com/static/pastebin/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="https://static.dpaste.com/static/pastebin/favicon-16x16.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="https://static.dpaste.com/static/pastebin/favicon-32x32.png">
+        <link rel="icon" type="image/x-icon" href="https://static.dpaste.com/static/pastebin/favicon.ico">
+        <link rel="manifest" href="https://static.dpaste.com/static/pastebin/site.webmanifest">
+        <link rel="me" href="https://fosstodon.org/@dpaste">
+        <link rel="stylesheet" href="https://static.dpaste.com/static/pastebin/css/normalize.css">
+        <link rel="stylesheet" href="https://static.dpaste.com/static/pastebin/css/skeleton.css">
+        <link rel="stylesheet" href="https://static.dpaste.com/static/pastebin/css/main.css">
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&amp;display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Fira+Mono" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script defer src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+        <script defer src="https://static.dpaste.com/static/pastebin/js/base.js"></script>
+        <script defer>
+            
+            
+        </script>
+        <style></style>
+        
+    <meta http-equiv="refresh" content="5; url=/F2NB5K23R.txt">
+
+    </head>
+    
+    <body hx-on:keydown="var path=window.location.pathname; if ((event.key=='n' || event.key=='N') && path && path !== '/' && !path.includes('/duplicate') && !path.includes('/dashboard') && !path.includes('/accounts') && !path.includes('/properties')) { window.location.href = '/'; }">
+        <div id="container">
+            
+            <div class="topbuttons">
+                
+                    <a href="/accounts/login/"
+                       title="Personal dashboard, preferences, API token"
+                       class="button"><b>Sign in</b></a>
+                
+                <a href="/" title="Create a new paste (shortcut: 'N')" class=" button">New</a>
+                <a href="/api/v2/"
+                   title="Paste creation API, with code samples"
+                   class="   button">API</a>
+                <a href="/help/"
+                   title="Usage tips, shortcuts"
+                   class="  button">Help</a>
+                <a href="/about/"
+                   title="Updates, stats, backstory"
+                   class=" button">About</a>
+                <a href="/public/"
+                   title="Public items"
+                   class=" button">Public</a>
+            </div>
+            
+    <div class="error">
+        <h3>Oops!</h3>
+        <p>You have exceeded our rate limit of <b>1 request per second</b>.</p>
+        <p><img class="progressbar" alt="Waiting 5 seconds…" src="https://static.dpaste.com/static/pastebin/stripes-bar-animation.gif" /> Redirecting in 5 seconds to <b>/F2NB5K23R.txt</b></p>
+        <img src="https://static.dpaste.com/static/pastebin/tumbeast-running.png" alt="Crazed beast running with a router in its mouth" style="width:100%;height:auto;display:block;">
+        <p>Problem? Please create a <a href="https://dpaste.freshdesk.com/support/tickets/new">support ticket</a>. </p>
+        <p>» <a href="/terms/">Terms of Service</a></p>
+    </div>
+
+        </div>
+        
+        
+        <script>
+            window.fwSettings={'widget_id':22000000180 };
+            !function(){if("function"!=typeof window.FreshworksWidget){var n=function(){n.q.push(arguments)};n.q=[],window.FreshworksWidget=n}}();
+        </script>
+        <script defer src='https://widget.freshworks.com/widgets/22000000180.js'></script>
+    </body>
+</html>
