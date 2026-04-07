@@ -60,8 +60,16 @@ body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
 .back-link { display: inline-block; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #1a1a1a; text-decoration: none; padding: 10px 0; }
 .back-link:hover { text-decoration: underline; }
 
-.article-hero { margin: 10px 0; }
-.article-hero-img { width: 100%; max-height: 400px; object-fit: cover; object-position: center top; border: 1px solid #1a1a1a; display: block; }
+.article-hero { margin: 10px 0; cursor: pointer; }
+.article-hero-img { width: 100%; max-height: 400px; object-fit: cover; object-position: center top; border: 1px solid #1a1a1a; display: block; transition: opacity 0.15s; }
+.article-hero:hover .article-hero-img { opacity: 0.9; }
+
+/* Lightbox */
+.lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,10,10,0.92); z-index: 9999; cursor: pointer; align-items: center; justify-content: center; }
+.lightbox.active { display: flex; }
+.lightbox img { max-width: 92%; max-height: 90vh; object-fit: contain; border: 2px solid #f7f4ef; box-shadow: 0 4px 40px rgba(0,0,0,0.5); }
+.lightbox-close { position: fixed; top: 14px; right: 20px; font-family: Arial, sans-serif; font-size: 28px; color: #f7f4ef; cursor: pointer; z-index: 10000; line-height: 1; }
+.lightbox-close:hover { color: #ccc; }
 
 .cta-box { border: 2px solid #1a1a1a; padding: 12px; text-align: center; margin-top: 11px; background: #ede9e2; }
 .cta-title { font-family: Arial, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
@@ -204,7 +212,7 @@ fetch('/blog-articles.json')
     }
     html += '<div class="byline">' + article.byline + ' &middot; ' + article.author + '</div>';
     if (article.image) {
-      html += '<div class="article-hero"><img src="' + article.image + '" alt="' + (article.image_alt || article.title) + '" class="article-hero-img"></div>';
+      html += '<div class="article-hero" onclick="openLightbox(this.querySelector(\'img\').src, this.querySelector(\'img\').alt)"><img src="' + article.image + '" alt="' + (article.image_alt || article.title) + '" class="article-hero-img"></div>';
     }
     html += '<hr class="rule">';
     html += '<p class="body-text drop">' + article.lead + '</p>';
@@ -274,6 +282,29 @@ fetch('/blog-articles.json')
   .catch(function() {
     document.getElementById('article-container').innerHTML = '<div class="loading">Unable to load article.</div>';
   });
+</script>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+<script>
+function openLightbox(src, alt) {
+  var lb = document.getElementById('lightbox');
+  var img = document.getElementById('lightbox-img');
+  img.src = src;
+  img.alt = alt || '';
+  lb.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeLightbox();
+});
 </script>
 </body>
 </html>
