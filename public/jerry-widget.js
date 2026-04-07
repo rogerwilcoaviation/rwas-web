@@ -125,6 +125,7 @@
   function setOpen(next) {
     open = !!next;
     panel.style.display = open ? 'flex' : 'none';
+    bubble.style.display = open ? 'none' : 'flex';
     backdrop.style.display = open ? 'block' : 'none';
     if (open) {
       setTimeout(function () {
@@ -190,4 +191,7 @@
 
   render();
   setOpen(false);
+
+  // Expose global open function for nav links
+  window.openJerryChat = function() { setOpen(true); };
 })();
