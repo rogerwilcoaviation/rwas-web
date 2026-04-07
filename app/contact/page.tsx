@@ -45,7 +45,7 @@ export default function ContactPage() {
         {/* Nav */}
         <nav className="np-nav">
           <a href="/">Home</a>
-          <a style={{ background: '#d4c47a', cursor: 'pointer' }} className="np-nav-jerry" onClick={(e) => { e.preventDefault(); if ((window as typeof window & { openJerryChat?: () => void }).openJerryChat) (window as typeof window & { openJerryChat?: () => void }).openJerryChat!(); }}>Ask Jerry</a>
+          <a href="#" style={{ background: '#d4c47a', cursor: 'pointer' }} className="np-nav-jerry" onClick={(e) => { e.preventDefault(); if (typeof window !== 'undefined' && window.openJerryChat) window.openJerryChat(); }}>Ask Jerry</a>
           <a href="/collections/on-sale">On Sale</a>
           <a href="/collections/garmin-avionics">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
