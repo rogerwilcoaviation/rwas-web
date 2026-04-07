@@ -8,6 +8,22 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #ddd9d2; color: #1a1a1a; font-family: Georgia, 'Times New Roman', serif; }
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url(/newspaper/images/enr_h05.png) center center / cover no-repeat;
+  opacity: 0.06;
+  z-index: 0;
+  pointer-events: none;
+}
+body > * {
+  position: relative;
+  z-index: 1;
+}
 a { color: inherit; }
 .page { max-width: 1200px; margin: 20px auto; background: #f7f4ef; border: 1px solid #1a1a1a; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
 .dateline { display: flex; justify-content: space-between; gap: 1rem; padding: 5px 20px; border-bottom: 1px solid #1a1a1a; background: #f7f4ef; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #444; }
