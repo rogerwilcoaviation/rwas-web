@@ -3,8 +3,6 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import './newspaper.css';
-import JerryHero from './components/JerryHero';
-import JerryPopup from './components/JerryPopup';
 
 export const metadata = {
   title: 'Roger Wilco Aviation Services | Garmin Avionics, NDT, Fabrication & Aircraft Support',
@@ -54,7 +52,7 @@ export default function Home() {
         {/* ── Navigation ── */}
         <nav className="np-nav">
           <a className="active" href="/">Home</a>
-          <JerryPopup />
+          <a href="javascript:void(0)" className="np-nav-jerry" style={{ background: '#d4c47a' }}>Ask Jerry</a>
           <a href="/collections/on-sale">On Sale</a>
           <a href="/collections/garmin-avionics">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
@@ -160,9 +158,6 @@ export default function Home() {
                 Under the direction of John Halsted &mdash; with more than 40 years of aviation experience &mdash; RWAS delivers sheet metal fabrication, structural repair, and complete Garmin avionics installations including the G3X Touch suite, GTN navigator series, and GFC 500 autopilot.
               </p>
 
-              <hr className="np-rule-thick" />
-
-              <JerryHero />
             </div>
 
             <div className="np-col-divider" />
