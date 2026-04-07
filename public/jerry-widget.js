@@ -3,8 +3,16 @@
   window.__jerryWidgetLoaded = true;
   window.openJerryChat = function() {};
 
-  var STORAGE_KEY = 'jerry-chat-history';
   var isShopify = typeof window.Shopify !== 'undefined';
+  var watermarkUrl = isShopify
+    ? 'https://rogerwilcoaviation.com/newspaper/images/enr_h05.png'
+    : '/newspaper/images/enr_h05.png';
+  var watermarkStyle = document.createElement("style");
+  watermarkStyle.setAttribute("data-jerry-watermark", "true");
+  watermarkStyle.textContent = "body::before{content:\"\";position:fixed;top:0;left:0;width:100vw;height:100vh;background:url(" + watermarkUrl + ") center center/cover no-repeat;opacity:0.25;z-index:0;pointer-events:none}body>*{position:relative;z-index:1}";
+  document.head.appendChild(watermarkStyle);
+
+  var STORAGE_KEY = 'jerry-chat-history';
   var apiUrl = isShopify
     ? 'https://rogerwilcoaviation.com/api/chat'
     : '/api/chat';
