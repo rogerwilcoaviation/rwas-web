@@ -8,8 +8,12 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #ddd9d2; color: #1a1a1a; font-family: Georgia, 'Times New Roman', serif; }
+body::before { content: ""; position: fixed; inset: 0; background: url(/newspaper/images/enr_h05.png) center center / cover no-repeat; opacity: 0.25; z-index: 0; pointer-events: none; }
+body > * { position: relative; z-index: 1; }
 a { color: inherit; }
-.page { max-width: 1200px; margin: 20px auto; background: #f7f4ef; border: 1px solid #1a1a1a; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+.page { position: relative; max-width: 1200px; margin: 20px auto; background: #f7f4ef; border: 1px solid #1a1a1a; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+.page::before { content: ""; position: absolute; inset: 0; background: #f7f4ef; z-index: 0; pointer-events: none; }
+.page > * { position: relative; z-index: 1; }
 .dateline { display: flex; justify-content: space-between; gap: 1rem; padding: 5px 20px; border-bottom: 1px solid #1a1a1a; background: #f7f4ef; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #444; }
 .masthead { display: grid; grid-template-columns: 72px minmax(0,1fr) 165px; align-items: center; gap: 16px; padding: 10px 20px; border-bottom: 4px double #1a1a1a; background: #f7f4ef; }
 .masthead-logo { width: 60px; height: 60px; object-fit: contain; filter: grayscale(100%); }

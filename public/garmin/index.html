@@ -23,7 +23,9 @@ body > * {
   position: relative;
   z-index: 1;
 }
-.page { max-width: 960px; margin: 20px auto; background: #f7f4ef; border: 1px solid #1a1a1a; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+.page { position: relative; max-width: 960px; margin: 20px auto; background: #f7f4ef; border: 1px solid #1a1a1a; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+.page::before { content: ""; position: absolute; inset: 0; background: #f7f4ef; z-index: 0; pointer-events: none; }
+.page > * { position: relative; z-index: 1; }
 
 .dateline { display: flex; justify-content: space-between; padding: 5px 20px; border-bottom: 1px solid #1a1a1a; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #444; }
 
