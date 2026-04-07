@@ -68,7 +68,7 @@ export default function Home() {
 
         {/* ── Edition bar ── */}
         <div className="np-edition-bar">
-          <span>GMA 350c audio panel now available for Cirrus Perspective+ upgrades</span>
+          <span>New website launch — meet Captain Jerry, your AI avionics expert</span>
           <span>GFC 500 autopilot installations available</span>
           <span>Now accepting spring scheduling</span>
         </div>

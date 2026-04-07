@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-04-07T15:00:00Z",
-    "total_articles": 4,
+    "last_updated": "2026-04-07T16:00:00Z",
+    "total_articles": 5,
     "categories": [
       "press-release",
       "service-bulletin",
@@ -11,6 +11,59 @@
     ]
   },
   "articles": [
+    {
+      "id": "rwas-new-website-meet-captain-jerry-20260407",
+      "status": "published",
+      "category": "product-update",
+      "title": "Roger Wilco Aviation Services Launches New Website \u2014 and Introduces Captain Jerry, Your On-Call AI Avionics Expert",
+      "subtitle": "A newspaper-style web presence built to inform, not decorate \u2014 with an AI copilot who knows Garmin systems inside and out",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Desk \u00b7 with contributions from Captain Jerry",
+      "date": "2026-04-07",
+      "source": "RWAS",
+      "source_url": "https://rogerwilcoaviation.com",
+      "lead": "Roger Wilco Aviation Services has launched a completely redesigned website at rogerwilcoaviation.com \u2014 built in the style of a classic newspaper broadsheet, with a focus on substance over flash. And riding right seat on every page is Captain Jerry, the shop's AI avionics expert, ready to help aircraft owners think through Garmin upgrades, maintenance questions, Papa-Alpha rigging tools, and next steps with real technical grounding behind every answer.",
+      "body": [
+        "The new RWAS website is not just a prettier storefront. It is built to answer questions, guide aircraft owners toward smart decisions, and help people get to the right next step \u2014 without wandering around the internet like a student pilot on his first solo cross-country. The broadsheet newspaper design reflects what the shop values: clear information, organized by relevance, delivered without filler.",
+        "The site features live Garmin product and pricing feeds, a blog section covering Garmin press releases and service bulletins, detailed pages for shop capabilities and financing options, and an integrated chat with Captain Jerry available on every page. Navigation is built for aircraft owners and mechanics who want answers, not animations.",
+        "Captain Jerry is the on-site AI avionics expert for Roger Wilco Aviation Services. He is here to help visitors understand avionics options, maintenance planning, upgrade paths, shop capabilities, and service intake in plain English \u2014 with real technical grounding behind every answer.",
+        "One of Jerry's main jobs is helping customers understand Garmin avionics options and how those systems fit together. A visitor can ask about Garmin displays, navigators, autopilots, transponders, audio panels, and related system upgrades \u2014 including the G3X Touch, GTN 650Xi, GTN 750Xi, GFC 500, GNX 375, G5, GMA 350c, and the broader Garmin ecosystem. He can walk an owner through what each product actually does, what problems it solves, and where it belongs in a panel.",
+        "More importantly, Jerry can help with aircraft-specific upgrade thinking. If a customer asks 'What should I put in my 182?' or 'Can I modernize my panel without starting from scratch?' \u2014 that is exactly the sort of question he is built for. He helps owners think through mission, budget, compatibility, installation logic, and priorities. That does not replace a formal quote or inspection, but it gets customers pointed in the right direction before they start spending money on the wrong hardware.",
+        "Jerry is not operating off marketing brochures alone. He has access to a local Garmin aviation manual library with over 860 documents, which means he can work from actual product references and supporting documentation. If a customer wants to know whether a unit supports a certain function, where it fits in a broader system, or how Garmin positions it in a real installation environment, Jerry can answer from reference material rather than guesswork.",
+        "Integration is where most avionics projects get expensive. Jerry can help customers understand whether an autopilot upgrade pairs well with an existing navigator, whether a display upgrade should happen before or after a GPS/NAV/COM replacement, and whether audio panel, transponder, ADS-B, and engine monitoring upgrades should be combined or phased. As Jerry puts it: customers often arrive with a shopping list built from forum threads and YouTube videos. He helps separate good ideas from expensive detours.",
+        "Not every visitor is shopping for a new panel. Some are dealing with equipment that is already misbehaving. Jerry can help customers ask better troubleshooting questions \u2014 including issues involving navigators, autopilots, transponders, ADS-B compliance, and legacy panel concerns. He also helps them understand when a problem is worth diagnosing, repairing, or replacing.",
+        "On pricing, Jerry is straightforward: he can help customers understand what drives costs, what makes one installation straightforward and another expensive, and what level of budget they may be looking at in broad terms. What he will not do is hand out fake certainty. A real quote requires aircraft details, equipment goals, and usually photos of the current panel. The final number belongs to the shop, not to a talking machine with good manners.",
+        "Jerry also covers Papa-Alpha rigging reference tools \u2014 precision CNC-machined tools for Piper PA-28, PA-30, PA-31, and PA-36 series rigging work. He can help owners, mechanics, and shops understand what each tool does, which aircraft it supports, and how to choose the right one for the job.",
+        "When a customer is ready to move forward, Jerry can collect intake information \u2014 name, tail number, phone, email, and service description \u2014 and start the process toward a real shop conversation. He helps customers understand what photos or documents are useful, whether a design conversation makes sense first, and how to begin the scheduling or quoting process.",
+        "In plain terms, Captain Jerry is the first smart conversation. He helps visitors understand their options, ask better questions, avoid bad buying decisions, learn what RWAS can do for them, and begin the path toward actual shop work. He does not replace a technician, an inspection, a signed estimate, or a real installation plan. He helps customers arrive at those steps with clearer thinking and better information.",
+        "The new website and Captain Jerry are live now at rogerwilcoaviation.com. For direct inquiries, call (605) 299-8178 or email avionics@rwas.team."
+      ],
+      "tags": [
+        "rwas",
+        "website",
+        "captain-jerry",
+        "garmin",
+        "avionics",
+        "ai",
+        "customer-service",
+        "papa-alpha",
+        "g3x-touch",
+        "gfc-500",
+        "upgrade-planning"
+      ],
+      "social": {
+        "facebook": {
+          "text": "We've launched a brand-new website for Roger Wilco Aviation Services \u2014 and with it, Captain Jerry, our on-call AI avionics expert.\n\nJerry lives on every page of rogerwilcoaviation.com and can help you think through Garmin avionics upgrades, panel planning, aircraft compatibility, troubleshooting, Papa-Alpha rigging tools, pricing guidance, and next steps \u2014 all grounded in real technical references, not marketing fluff.\n\nAsk him about the G3X Touch, GTN 650Xi/750Xi, GFC 500, GNX 375, or any Garmin system. He'll help you figure out what makes sense for your airplane before you spend a dime.\n\nTry it out: https://rogerwilcoaviation.com\nOr call us directly: (605) 299-8178\n\n#RogerWilcoAviation #GarminAvionics #CaptainJerry #AIAvionicsExpert #GeneralAviation #PanelUpgrade #G3XTouch #GFC500 #PapaAlphaTools #FAARepairStation #KYKN",
+          "status": "pending_review"
+        },
+        "instagram": {
+          "text": "Meet Captain Jerry \u2014 our AI avionics expert, now live on the all-new rogerwilcoaviation.com.\n\nHe knows Garmin systems inside and out. Ask him about:\n\u2708\ufe0f G3X Touch, GTN Xi, GFC 500, GNX 375\n\ud83d\udd27 Panel planning & aircraft compatibility\n\ud83d\udcb0 Pricing guidance & upgrade phasing\n\ud83d\udee0\ufe0f Troubleshooting & maintenance questions\n\ud83d\udccb Papa-Alpha rigging tools for Piper aircraft\n\nNo fluff. No chatbot runaround. Just real answers from an AI that has access to 860+ Garmin reference documents.\n\nTry it now \u2192 rogerwilcoaviation.com\n\ud83d\udcde (605) 299-8178\n\n#CaptainJerry #RogerWilcoAviation #GarminAvionics #G3XTouch #GFC500 #GTN750Xi #PanelUpgrade #AvionicsInstallation #PapaAlphaTools #FlyGA #KYKN #AIinAviation",
+          "status": "pending_review"
+        }
+      },
+      "approved_at": "2026-04-07T16:00:00Z",
+      "published_at": "2026-04-07T16:00:00Z"
+    },
     {
       "id": "garmin-gma-350c-perspective-plus-upgrade-20260407",
       "status": "published",
