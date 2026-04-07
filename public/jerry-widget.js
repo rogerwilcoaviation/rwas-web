@@ -195,4 +195,18 @@
 
   // Expose global open function for nav links
   window.openJerryChat = function() { setOpen(true); };
+
+  // Auto-intercept Ask Jerry links
+  document.addEventListener("click", function(e) {
+    var target = e.target;
+    while (target && target !== document) {
+      if (target.tagName === "A" && (target.textContent.trim() === "Ask Jerry" || target.getAttribute("href") === "#ask-jerry")) {
+        e.preventDefault();
+        e.stopPropagation();
+        setOpen(true);
+        return;
+      }
+      target = target.parentElement;
+    }
+  }, true);
 })();

@@ -52,7 +52,7 @@ export default function Home() {
         {/* ── Navigation ── */}
         <nav className="np-nav">
           <a className="active" href="/">Home</a>
-          <a href="#" style={{ background: '#d4c47a', cursor: 'pointer' }} className="np-nav-jerry" onClick={(e) => { e.preventDefault(); if (typeof window !== 'undefined' && window.openJerryChat) window.openJerryChat(); }}>Ask Jerry</a>
+          <a href="#ask-jerry" style={{ background: '#d4c47a', cursor: 'pointer' }} className="np-nav-jerry">Ask Jerry</a>
           <a href="/collections/on-sale">On Sale</a>
           <a href="/collections/garmin-avionics">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
