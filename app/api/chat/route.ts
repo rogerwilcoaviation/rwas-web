@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "messages required" }, { status: 400 });
     }
 
-    const lastUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
+    const lastUserMsg = [...messages].reverse().find((m: { role: string; content: string }) => m.role === "user");
     if (!lastUserMsg) {
       return NextResponse.json({ ok: false, error: "no user message" }, { status: 400 });
     }
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     const reply = data.reply || "Radio trouble on my end. Try again. — Capt. Jerry, RWAS";
 
     return NextResponse.json({ ok: true, reply });
-  } catch (err: any) {
+  } catch (err: unknown) {
     return NextResponse.json(
       { ok: false, reply: "Radio trouble on my end. Try again. — Capt. Jerry, RWAS" },
       { status: 500 }
