@@ -86,6 +86,16 @@ for route in "/collections/on-sale" "/collections/garmin-avionics" "/collections
 done
 echo "OK: blog-nav.js routes validated"
 
+# 9. Watermark background present
+for f in public/blog/index.html public/blog/article.html; do
+  if ! grep -q "enr_h05" "$f"; then
+    echo "FAIL: $f missing watermark background"
+    FAIL=1
+  else
+    echo "OK: $f has watermark"
+  fi
+done
+
 echo ""
 if [ "$FAIL" -eq 0 ]; then
   echo "=== ALL CHECKS PASSED ==="
