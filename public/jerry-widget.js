@@ -5,6 +5,32 @@
 
   var isShopify = typeof window.Shopify !== 'undefined';
 
+  if (isShopify) {
+    function forceShopifyHeaderMatch() {
+      var section = document.querySelector('[id^="shopify-section-"] .np-page')?.closest('[id^="shopify-section-"]');
+      var page = section ? section.querySelector('.np-page') : document.querySelector('.np-page');
+      if (!section || !page) return;
+      section.style.background = '#ddd9d2';
+      section.style.padding = '20px 0';
+      page.style.display = 'block';
+      page.style.width = 'min(1200px, calc(100% - 40px))';
+      page.style.maxWidth = '1200px';
+      page.style.margin = '0 auto';
+      page.style.background = '#f7f4ef';
+      page.style.border = '1px solid #1a1a1a';
+      page.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
+      page.style.fontFamily = "Georgia, 'Times New Roman', serif";
+      page.style.padding = '0';
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', forceShopifyHeaderMatch, { once: true });
+    } else {
+      forceShopifyHeaderMatch();
+    }
+    setTimeout(forceShopifyHeaderMatch, 500);
+    setTimeout(forceShopifyHeaderMatch, 1500);
+  }
+
   var STORAGE_KEY = 'jerry-chat-history';
   var apiUrl = isShopify
     ? 'https://rogerwilcoaviation.com/api/chat'
