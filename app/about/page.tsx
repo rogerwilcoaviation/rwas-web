@@ -104,10 +104,10 @@ export default function AboutPage() {
 
               <div className="np-photo-box" style={{ margin: '12px 0' }}>
                 <div className="np-photo-area">
-                  <img src="/newspaper/images/r182_panel.jpg" alt="Cessna 182RG avionics panel" />
+                  <img src="/newspaper/images/n5171s_panel.jpg" alt="N5171S instrument panel" />
                 </div>
                 <div className="np-photo-cap">
-                  Cessna 182RG (N5171S) &mdash; full G500Txi glass cockpit installation by Roger Wilco Aviation Services.
+                  N5171S &mdash; Custom laser-cut instrument panel by Roger Wilco Aviation Services.
                 </div>
               </div>
 
