@@ -46,7 +46,7 @@ export default function FinancingPage() {
           <a className="active" href="/financing">Financing</a>
           <a href="/shop-capabilities">Shop Capabilities</a>
           <a href="/blog/">Blog Articles</a>
-          <a href="/contact">Contact</a>
+          <a href="/about">About</a>
         </nav>
         {/* Ticker */}
         <div className="np-ticker-bar">

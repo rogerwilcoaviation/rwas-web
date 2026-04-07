@@ -52,7 +52,7 @@ export default function ShopCapabilitiesPage() {
           <a href="/financing">Financing</a>
           <a className="active" href="/shop-capabilities">Shop Capabilities</a>
           <a href="/blog/">Blog Articles</a>
-          <a href="/contact">Contact</a>
+          <a href="/about">About</a>
         </nav>
         {/* Ticker */}
         <div className="np-ticker-bar">

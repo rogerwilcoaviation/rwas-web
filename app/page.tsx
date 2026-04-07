@@ -59,7 +59,7 @@ export default function Home() {
           <a href="/financing">Financing</a>
           <a href="/shop-capabilities">Shop Capabilities</a>
           <a href="/blog/">Blog Articles</a>
-          <a href="/contact">Contact</a>
+          <a href="/about">About</a>
         </nav>
 
         {/* ── Ticker bar ── */}

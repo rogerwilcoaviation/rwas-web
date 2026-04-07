@@ -191,7 +191,7 @@ a.article-link:hover .headline-sm { text-decoration: underline; text-underline-o
     <a href="https://rogerwilcoaviation.com/financing">Financing</a>
     <a href="https://rogerwilcoaviation.com/shop-capabilities">Shop Capabilities</a>
     <a class="active" href="https://rogerwilcoaviation.com/blog/">Blog Articles</a>
-    <a href="https://rogerwilcoaviation.com/contact">Contact</a>
+    <a href="https://rogerwilcoaviation.com/about">About</a>
   </div>
 
   <div class="ticker-bar">
