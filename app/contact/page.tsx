@@ -1,8 +1,6 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import '../newspaper.css';
-import JerryPopup from '../components/JerryPopup';
-import JerryHero from '../components/JerryHero';
 
 export const metadata = {
   title: 'Contact Roger Wilco Aviation Services | Ask Captain Jerry',
@@ -47,7 +45,7 @@ export default function ContactPage() {
         {/* Nav */}
         <nav className="np-nav">
           <a href="/">Home</a>
-          <JerryPopup />
+          <a href="javascript:void(0)" className="np-nav-jerry" style={{ background: '#d4c47a' }}>Ask Jerry</a>
           <a href="/collections/on-sale">On Sale</a>
           <a href="/collections/garmin-avionics">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
@@ -86,9 +84,6 @@ export default function ContactPage() {
               <p className="np-body-text" style={{ marginBottom: '14px' }}>
                 Jerry can help with avionics installation quotes, annual inspection scheduling, parts availability, Papa-Alpha tool orders, and general shop questions.
               </p>
-
-              {/* Inline Jerry chat */}
-              <JerryHero />
 
               <div style={{ marginTop: '12px', textAlign: 'center', fontFamily: 'Arial, sans-serif', fontSize: '9px', color: '#888', letterSpacing: '0.05em' }}>
                 Prefer to call? <a href="tel:+16052998178" style={{ color: '#1a1a1a', textDecoration: 'underline' }}>(605) 299-8178</a> &nbsp;&middot;&nbsp;
