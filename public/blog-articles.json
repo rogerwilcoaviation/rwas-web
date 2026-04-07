@@ -62,7 +62,9 @@
         }
       },
       "approved_at": "2026-04-07T16:00:00Z",
-      "published_at": "2026-04-07T16:00:00Z"
+      "published_at": "2026-04-07T16:00:00Z",
+      "image": "/images/captain_jerry_hero.jpg",
+      "image_alt": "Captain Jerry \u2014 AI Avionics Expert, Roger Wilco Aviation Services"
     },
     {
       "id": "garmin-gma-350c-perspective-plus-upgrade-20260407",

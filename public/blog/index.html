@@ -1,4 +1,3 @@
-<!-- deploy-purge-v2 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,12 +7,8 @@
 <meta name="description" content="Garmin avionics news, service bulletins, product updates, and aviation industry dispatches from Roger Wilco Aviation Services.">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; color: #1a1a1a; }
-body::before { content: ""; position: fixed; inset: 0; background: url(/newspaper/images/enr_h05.png) center center / cover no-repeat; opacity: 0.25; z-index: 0; pointer-events: none; }
-body > * { position: relative; z-index: 1; }
-.page { position: relative; max-width: 1200px; margin: 20px auto; background: #f7f4ef; border: 1px solid #1a1a1a; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
-.page::before { content: ""; position: absolute; inset: 0; background: #f7f4ef; z-index: 0; pointer-events: none; }
-.page > * { position: relative; z-index: 1; }
+body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
+.page { max-width: 960px; margin: 20px auto; background: #f7f4ef; border: 1px solid #1a1a1a; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
 
 .dateline { display: flex; justify-content: space-between; padding: 5px 20px; border-bottom: 1px solid #1a1a1a; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #444; }
 
@@ -27,13 +22,9 @@ body > * { position: relative; z-index: 1; }
 
 .edition-bar { display: flex; justify-content: space-between; padding: 4px 20px; background: #1a1a1a; color: #f7f4ef; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
 
-.np-nav { display: flex; border-bottom: 2px solid #1a1a1a; flex-wrap: wrap; }
-.np-nav a { padding: 7px 11px; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none; color: #1a1a1a; border-right: 1px solid #1a1a1a; cursor: pointer; }
-.np-nav a:hover, .np-nav a.active { background: #1a1a1a; color: #f7f4ef; }
-
-.ticker-bar { display: flex; align-items: center; gap: 10px; padding: 5px 20px; background: #2d2d2d; color: #f7f4ef; overflow: hidden; }
-.ticker-label { font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; background: #1a1a1a; color: #f7f4ef; padding: 2px 7px; white-space: nowrap; flex-shrink: 0; }
-.ticker-text { font-family: Georgia, serif; font-style: italic; font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nav { display: flex; border-bottom: 2px solid #1a1a1a; flex-wrap: wrap; }
+.nav a { padding: 7px 11px; font-family: Arial, sans-serif; font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none; color: #1a1a1a; border-right: 1px solid #1a1a1a; cursor: pointer; }
+.nav a:hover, .nav a.active { background: #1a1a1a; color: #f7f4ef; }
 
 .body { padding: 0 20px; }
 
@@ -43,7 +34,7 @@ body > * { position: relative; z-index: 1; }
 
 .filter-bar { display: flex; gap: 8px; padding: 10px 0; border-bottom: 1px solid #1a1a1a; flex-wrap: wrap; align-items: center; }
 .filter-label { font-family: Arial, sans-serif; font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #444; }
-.filter-btn { font-family: Arial, sans-serif; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border: 1px solid #1a1a1a; background: #f7f4ef; color: #1a1a1a; cursor: pointer; }
+.filter-btn { font-family: Arial, sans-serif; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 10px; border: 1px solid #1a1a1a; background: transparent; color: #1a1a1a; cursor: pointer; }
 .filter-btn:hover, .filter-btn.active { background: #1a1a1a; color: #f7f4ef; }
 
 /* Lead article — full width */
@@ -80,7 +71,7 @@ body > * { position: relative; z-index: 1; }
 .source-line { font-family: Arial, sans-serif; font-size: 9px; color: #888; letter-spacing: 0.05em; margin-top: 4px; }
 
 /* Sidebar boxes */
-.sidebar-box { border: 1px solid #1a1a1a; padding: 9px 11px; margin-bottom: 11px; background: #f7f4ef; }
+.sidebar-box { border: 1px solid #1a1a1a; padding: 9px 11px; margin-bottom: 11px; }
 .sidebar-box-title { font-family: Arial, sans-serif; font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid #1a1a1a; padding-bottom: 4px; margin-bottom: 7px; }
 .sidebar-item { display: flex; justify-content: space-between; font-family: Georgia, serif; font-size: 11px; padding: 2.5px 0; border-bottom: 1px dotted #bbb; }
 .sidebar-item:last-child { border-bottom: none; }
@@ -116,9 +107,9 @@ a.article-link:hover .headline-sm { text-decoration: underline; text-underline-o
   .edition-bar { flex-direction: column; gap: 2px; padding: 5px 12px; text-align: center; font-size: 9px; }
 
   /* Nav — smaller padding, wrap nicely */
-  .np-nav { border-bottom: 1px solid #1a1a1a; }
-  .np-nav a { padding: 6px 8px; font-size: 9px; border-right: none; border-bottom: 1px solid #ccc; }
-  .np-nav a.active { border-bottom-color: #1a1a1a; }
+  .nav { border-bottom: 1px solid #1a1a1a; }
+  .nav a { padding: 6px 8px; font-size: 9px; border-right: none; border-bottom: 1px solid #ccc; }
+  .nav a.active { border-bottom-color: #1a1a1a; }
 
   /* Section header */
   .section-title { font-size: 22px; }
@@ -155,7 +146,7 @@ a.article-link:hover .headline-sm { text-decoration: underline; text-underline-o
   .masthead-logo { width: 40px; height: 40px; }
   .section-title { font-size: 20px; }
   .headline-lg { font-size: 18px; }
-  .np-nav a { padding: 5px 7px; font-size: 8.5px; }
+  .nav a { padding: 5px 7px; font-size: 8.5px; }
 }
 </style>
 </head>
@@ -163,13 +154,13 @@ a.article-link:hover .headline-sm { text-decoration: underline; text-underline-o
 <div class="page">
 
   <div class="dateline">
-    <span>Spring 2026 Edition</span>
-    <span>Vol. XL &middot; No. 1</span>
+    <span>Aviation News &amp; Updates</span>
+    <span>Blog Edition</span>
     <span>rogerwilcoaviation.com</span>
   </div>
 
   <div class="masthead">
-    <img class="masthead-logo" src="/newspaper/images/logo.png" alt="Roger Wilco Aviation Services">
+    <a href="/"><img class="masthead-logo" src="/images/logo.png" alt="Roger Wilco Aviation Services"></a>
     <div class="masthead-center">
       <div class="masthead-name">Roger Wilco Aviation Services</div>
       <hr class="masthead-rule">
@@ -182,30 +173,21 @@ a.article-link:hover .headline-sm { text-decoration: underline; text-underline-o
   </div>
 
   <div class="edition-bar">
-    <span>Garmin Spring 2026 pricing now active</span>
-    <span>GFC 500 autopilot installations available</span>
-    <span>Now accepting spring scheduling</span>
+    <span>Garmin press releases &amp; bulletins</span>
+    <span>Product updates &amp; service memos</span>
+    <span>Industry dispatches</span>
   </div>
 
-  <nav class="np-nav">
+  <div class="nav">
     <a href="/">Home</a>
-    <a href="#ask-jerry" style="background:#d4c47a">Ask Jerry</a>
-    <a href="/collections/on-sale">On Sale</a>
-    <a href="/collections/garmin-avionics">Garmin</a>
-    <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
-    <a href="/financing">Financing</a>
-    <a href="/shop-capabilities">Shop Capabilities</a>
+    <a href="/collections/aircraft-management">Aircraft Management</a>
+    <a href="/collections/on-sale/Garmin-Product-On-Sale">On Sale</a>
+    <a href="/garmin">Garmin</a>
+    <a href="/collections/rigging-tools/Papa-Alpha-Rigging-Reference-Tools">Papa-Alpha Tools</a>
+    <a href="/pages/financing">Financing</a>
+    <a href="/pages/shop-capabilities">Shop Capabilities</a>
     <a class="active" href="/blog/">Blog Articles</a>
-    <a href="/about">About</a>
-  </nav>
-
-  <div class="ticker-bar">
-    <span class="ticker-label">Bulletin</span>
-    <span class="ticker-text">
-      Papa-Alpha rigging reference tools now shipping worldwide &nbsp;&bull;&nbsp;
-      Garmin G3X Touch installations booking into summer 2026 &nbsp;&bull;&nbsp;
-      Annual inspection slots available &mdash; call (605) 299-8178
-    </span>
+    <a href="/pages/contact">Contact</a>
   </div>
 
   <div class="body">
@@ -294,6 +276,9 @@ function renderArticles() {
   html += '<h1 class="headline-lg">' + lead.title + '</h1>';
   html += '</a>';
   html += '<div class="byline">' + lead.byline + ' &middot; Source: ' + lead.source + '</div>';
+  if (lead.image) {
+    html += '<div style="margin:8px 0;"><img src="' + lead.image + '" alt="' + (lead.image_alt || lead.title) + '" style="width:100%;max-height:280px;object-fit:cover;object-position:center top;border:1px solid #1a1a1a;display:block;"></div>';
+  }
   html += '<p class="body-text drop">' + lead.lead + '</p>';
   if (lead.body && lead.body.length > 0) {
     html += '<p class="body-text">' + lead.body[0] + '</p>';
@@ -371,7 +356,5 @@ fetch('/blog-articles.json')
     document.getElementById('articles-container').innerHTML = '<div class="loading">Unable to load dispatches. Please try again later.</div>';
   });
 </script>
-
-<script src="/jerry-widget.js"></script>
 </body>
 </html>
