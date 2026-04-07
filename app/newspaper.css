@@ -10,7 +10,7 @@
 
 .np-wrapper::before {
   content: "";
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: url('/newspaper/images/enr_h05.png') center center / cover no-repeat;
   opacity: 0.25;
@@ -19,6 +19,24 @@
 }
 
 .np-wrapper > * {
+  position: relative;
+  z-index: 1;
+}
+
+.np-page {
+  position: relative;
+}
+
+.np-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #f7f4ef;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.np-page > * {
   position: relative;
   z-index: 1;
 }
