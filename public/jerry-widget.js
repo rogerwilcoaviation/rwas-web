@@ -7,28 +7,33 @@
 
   if (isShopify) {
     function forceShopifyHeaderMatch() {
-      var section = document.querySelector('[id^="shopify-section-"] .np-page')?.closest('[id^="shopify-section-"]');
-      var page = section ? section.querySelector('.np-page') : document.querySelector('.np-page');
-      if (!section || !page) return;
-      section.style.background = '#ddd9d2';
-      section.style.padding = '20px 0';
-      page.style.display = 'block';
-      page.style.width = 'min(1200px, calc(100% - 40px))';
-      page.style.maxWidth = '1200px';
-      page.style.margin = '0 auto';
-      page.style.background = '#f7f4ef';
-      page.style.border = '1px solid #1a1a1a';
-      page.style.boxShadow = '0 2px 12px rgba(0,0,0,0.15)';
-      page.style.fontFamily = "Georgia, 'Times New Roman', serif";
-      page.style.padding = '0';
+      var section = document.getElementById('shopify-section-sections--20057122865371__header') || document.querySelector('[id^="shopify-section-"]');
+      if (!section) return false;
+      var page = section.querySelector('.np-page');
+      if (!page) return false;
+      section.style.setProperty('background', '#ddd9d2', 'important');
+      section.style.setProperty('padding', '20px 0', 'important');
+      page.style.setProperty('display', 'block', 'important');
+      page.style.setProperty('width', 'min(1200px, calc(100% - 40px))', 'important');
+      page.style.setProperty('max-width', '1200px', 'important');
+      page.style.setProperty('margin', '20px auto', 'important');
+      page.style.setProperty('background', '#f7f4ef', 'important');
+      page.style.setProperty('border', '1px solid #1a1a1a', 'important');
+      page.style.setProperty('box-shadow', '0 2px 12px rgba(0,0,0,0.15)', 'important');
+      page.style.setProperty('font-family', "Georgia, 'Times New Roman', serif", 'important');
+      page.style.setProperty('padding', '0', 'important');
+      return true;
     }
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', forceShopifyHeaderMatch, { once: true });
     } else {
       forceShopifyHeaderMatch();
     }
-    setTimeout(forceShopifyHeaderMatch, 500);
-    setTimeout(forceShopifyHeaderMatch, 1500);
+    var tries = 0;
+    var timer = setInterval(function() {
+      tries += 1;
+      if (forceShopifyHeaderMatch() || tries > 20) clearInterval(timer);
+    }, 300);
   }
 
   var STORAGE_KEY = 'jerry-chat-history';
