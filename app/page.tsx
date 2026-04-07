@@ -189,7 +189,7 @@ export default function Home() {
             {/* ── RIGHT COLUMN ── */}
             <div className="np-col">
               <span className="np-kicker">Promotion</span>
-              <a href="/pages/garmin-avionics-accessories" className="np-headline-link">
+              <a href="/blog/article?id=garmin-gfc500-stc-expansion-2026" className="np-headline-link">
                 <h3 className="np-headline-md">New Dual G5 AI/HSI Kit &mdash; Save Over $600</h3>
               </a>
               <hr className="np-rule" />
