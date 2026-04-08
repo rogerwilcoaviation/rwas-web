@@ -7,7 +7,7 @@ import Footer from '@/components/shared/Footer';
 import Header from '@/components/shared/Header';
 
 const policyConfig = {
-  lastUpdated: 'March 1st, 2024',
+  lastUpdated: 'April 8, 2026',
 };
 
 export default function TermsPage() {
@@ -231,6 +231,116 @@ export default function TermsPage() {
             information, or other material purchased or obtained by you will
             meet your expectations, or that any errors in the service will be
             corrected.
+          </p>
+        </div>
+
+        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+          <h2 className="text-lg font-semibold mb-4">
+            PLEASE READ BEFORE SIGNING - VERNACULAR
+          </h2>
+          <p className="mb-4">
+            <span className="font-bold">(AWI)</span> means an{' '}
+            <span className="font-bold">Airworthiness Item discrepancy</span>.
+            Our airframe and powerplant inspector has determined that a
+            component or system of the aircraft has a safety issue or is
+            unairworthy according to the Type Certificate Data Sheet, aircraft
+            manufacturer inspection manual, FAR Part 43.13, other acceptable
+            technical data, or sound and reasonable judgment.
+          </p>
+
+          <p className="mb-4">
+            <span className="font-bold">(NA)</span> means a{' '}
+            <span className="font-bold">non-airworthy discrepancy</span>. A
+            member of our team has determined that an item on the aircraft needs
+            to be addressed, but it does not require urgent attention, is not a
+            safety issue, and does not bring the aircraft below airworthiness
+            standards.
+          </p>
+        </div>
+
+        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+          <h2 className="text-lg font-semibold mb-4">
+            RWAS SERVICE AGREEMENT TERMS
+          </h2>
+          <ul className="list-disc pl-6 space-y-3 mb-4">
+            <li>
+              For any maintenance performed, the customer will be presented with
+              an estimate for the work to be completed. This estimate must be
+              reviewed and agreed to by signing the Work Authorization before
+              any work begins.
+            </li>
+            <li>
+              For annual inspections, the estimate will be presented and must be
+              agreed to and signed before the inspection is placed on the
+              calendar. The payment terms listed below must also be completed
+              before the inspection is scheduled.
+            </li>
+            <li>
+              After the inspection, every effort will be made to determine a
+              reasonable labor and parts charge. Parts will be quoted as new.
+            </li>
+            <li>
+              The customer may decline new parts and request used or fabricated
+              part options. The inspector will determine whether used parts are
+              serviceable and acceptable before the aircraft is returned to
+              service. Owner or operator supplied parts are expected to operate
+              within the manufacturer&apos;s specifications. Any labor or
+              troubleshooting associated with defective used parts or owner or
+              operator supplied parts is the responsibility of the owner or
+              operator. Roger Wilco Aviation Services does not accept
+              responsibility for used parts or owner or operator supplied parts
+              and does not provide a warranty for such parts.
+            </li>
+            <li>
+              After the annual inspection, the customer may decline all
+              discrepancies, at which point the aircraft will be returned with a
+              list of discrepancies. The customer is responsible for obtaining a
+              ferry permit to fly off the field if one is required.
+            </li>
+            <li>
+              Due to the duration of work or unforeseen circumstances, pricing
+              may change. If labor for an individual discrepancy is expected to
+              exceed the approved estimate by more than 10 percent, the customer
+              will be notified and must approve the additional cost before work
+              continues.
+            </li>
+            <li>
+              For longer jobs, progress payments may be required.
+            </li>
+            <li>
+              A late fee of 1.5 percent may be imposed if requested payments are
+              delinquent by more than 30 days, and delinquency may affect
+              calendar position.
+            </li>
+            <li>
+              NDT inspections that take longer than one hour will be billed at
+              $150 per additional hour.
+            </li>
+          </ul>
+        </div>
+
+        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+          <h2 className="text-lg font-semibold mb-4">
+            RWAS PAYMENT TERMS
+          </h2>
+          <ul className="list-disc pl-6 space-y-3 mb-4">
+            <li>
+              NDT estimates require a 50 percent down payment to be scheduled on
+              the calendar. Once the inspection is complete, the remaining
+              balance is due upon delivery of the reported findings.
+            </li>
+            <li>
+              Avionics estimates require a 10 percent down payment to be
+              scheduled on the calendar. Parts must be paid in full, and half of
+              labor must be paid before work begins. Once work is complete, the
+              remaining balance is due upon delivery of the aircraft.
+            </li>
+          </ul>
+
+          <p className="mb-4">
+            Thank you for giving us the opportunity to provide the safest, most
+            affordable maintenance possible. We look forward to working with
+            you.
           </p>
         </div>
 
