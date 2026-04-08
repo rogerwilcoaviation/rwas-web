@@ -141,7 +141,7 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         message: buildAugmentedMessage(lastUserMsg.content),
-        sessionKey: "web-chat",
+        sessionKey: "web-" + Date.now() + "-" + Math.random().toString(36).slice(2,8),
         timeout: 30000,
       }),
     });
