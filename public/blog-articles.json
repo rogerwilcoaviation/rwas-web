@@ -13,7 +13,7 @@
   "articles": [
     {
       "id": "garmin-announces-new-garmin-pilot-promotions-20260408",
-      "status": "published",
+      "status": "draft",
       "category": "memo",
       "title": "Garmin Announces New Garmin Pilot Promotions",
       "subtitle": "15-for-12 annual Garmin Pilot offer and Right Seat Rewards window now live",
@@ -43,9 +43,7 @@
           "text": "Garmin has launched a new Garmin Pilot promotion for new customers, offering 15 months for the price of 12 on annual Standard and Premium...\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Garminpilot #Promotion #Dealermemo #GarminAvionics #RogerWilcoAviation #KYKN #FlyGA #Avionics #PilotLife #GeneralAviation",
           "status": "pending"
         }
-      },
-      "approved_at": "2026-04-08T17:01:23.407672+00:00",
-      "published_at": "2026-04-08T17:01:23.407672+00:00"
+      }
     },
     {
       "id": "rwas-new-website-meet-captain-jerry-20260407",
