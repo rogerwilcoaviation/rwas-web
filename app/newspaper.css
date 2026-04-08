@@ -575,14 +575,14 @@
   text-transform: uppercase;
   text-decoration: none;
   color: #1a1a1a;
-  background: #e8d9a0;
+  background: #d4c47a !important;
   border-right: 1px solid #1a1a1a;
   border-left: 1px solid #1a1a1a;
   cursor: pointer;
   font-weight: 700;
 }
 .np-nav a.np-nav-jerry:hover {
-  background: #d4c47a;
+  background: #c8b868 !important;
   color: #1a1a1a;
 }
 /* Headline link style */
