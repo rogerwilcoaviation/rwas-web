@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-04-08T22:39:01.558640+00:00",
+    "last_updated": "2026-04-08T23:03:25.304337+00:00",
     "total_articles": 7,
     "categories": [
       "press-release",
@@ -212,11 +212,17 @@
       "social": {
         "facebook": {
           "text": "Big news for Bonanza and Mooney owners! Garmin has expanded GFC 500 autopilot STC coverage to the Beechcraft 33/35/36 series and Mooney M20J/M20K. We're scheduling installations now \u2014 call (605) 299-8178 to get on the list.\n\n#GarminAvionics #GFC500 #GeneralAviation #AvionicsUpgrade #RogerWilcoAviation",
-          "status": "pending"
+          "status": "published",
+          "approved_at": "2026-04-08T23:03:12.784404+00:00",
+          "published_at": "2026-04-08T23:03:25.304308+00:00",
+          "post_id": "106057782039473_942484185205454"
         },
         "instagram": {
           "text": "Garmin GFC 500 autopilot \u2014 now STC'd for Bonanza and Mooney.\n\nDigital autopilot with GPS steering, coupled approaches, and altitude preselect. We're an authorized Garmin dealer and scheduling installs now.\n\nLink in bio or call (605) 299-8178.\n\n#GarminAvionics #GFC500 #Autopilot #Bonanza #Mooney #AvionicsShop #PilotLife #GeneralAviation #FlyGA #RogerWilcoAviation #KYKN",
-          "status": "pending"
+          "status": "published",
+          "approved_at": "2026-04-08T23:03:12.826903+00:00",
+          "published_at": "2026-04-08T23:04:29.822115+00:00",
+          "media_id": "17882551194530581"
         }
       },
       "approved_at": "2026-03-28T14:00:00Z",
