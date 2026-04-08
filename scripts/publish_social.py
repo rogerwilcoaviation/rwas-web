@@ -116,24 +116,35 @@ def publish_facebook(article_id):
         print(f"ERROR: Facebook post status is '{post.get('status')}', expected 'approved'")
         return False
 
-    # Add article link to post text
     article_url = f"https://rogerwilcoaviation.com/blog/article.html?id={article_id}"
     message = post["text"] + f"\n\nRead more: {article_url}"
-
-    url = f"https://graph.facebook.com/v19.0/{page_id}/feed"
-    params = urllib.parse.urlencode({"message": message, "access_token": token}).encode()
+    image_path = art.get("image", "")
+    image_url = ""
+    if image_path:
+        image_url = image_path if image_path.startswith("http://") or image_path.startswith("https://") else f"https://rogerwilcoaviation.com{image_path}"
 
     try:
-        req = urllib.request.Request(url, data=params, method="POST")
-        with urllib.request.urlopen(req) as resp:
-            result = json.loads(resp.read())
-            post_id = result.get("id", "unknown")
-            art["social"]["facebook"]["status"] = "published"
-            art["social"]["facebook"]["published_at"] = datetime.now(timezone.utc).isoformat()
-            art["social"]["facebook"]["post_id"] = post_id
-            save_data(data)
-            print(f"OK: Published to Facebook. Post ID: {post_id}")
-            return True
+        if image_url:
+            url = f"https://graph.facebook.com/v19.0/{page_id}/photos"
+            params = urllib.parse.urlencode({"url": image_url, "caption": message, "access_token": token}).encode()
+            req = urllib.request.Request(url, data=params, method="POST")
+            with urllib.request.urlopen(req) as resp:
+                result = json.loads(resp.read())
+                post_id = result.get("post_id") or result.get("id", "unknown")
+        else:
+            url = f"https://graph.facebook.com/v19.0/{page_id}/feed"
+            params = urllib.parse.urlencode({"message": message, "access_token": token}).encode()
+            req = urllib.request.Request(url, data=params, method="POST")
+            with urllib.request.urlopen(req) as resp:
+                result = json.loads(resp.read())
+                post_id = result.get("id", "unknown")
+
+        art["social"]["facebook"]["status"] = "published"
+        art["social"]["facebook"]["published_at"] = datetime.now(timezone.utc).isoformat()
+        art["social"]["facebook"]["post_id"] = post_id
+        save_data(data)
+        print(f"OK: Published to Facebook. Post ID: {post_id}")
+        return True
     except Exception as e:
         print(f"ERROR: Facebook publish failed: {e}")
         return False
