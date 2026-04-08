@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-04-08T22:30:32.112992+00:00",
+    "last_updated": "2026-04-08T22:39:01.558640+00:00",
     "total_articles": 7,
     "categories": [
       "press-release",
@@ -38,13 +38,17 @@
       "social": {
         "facebook": {
           "text": "A newly released Garmin dealer memo highlights a limited-time Garmin Pilot promotion for new subscribers, paired with a Right Seat Rewards offer available during the same campaign window. The promotion is aimed at helping pilots adopt Garmin Pilot with added subscription value while supporting spring and summer flying activity.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Garminpilot #Promotion #Rightseatrewards #Dealermemo #GarminAvionics #RogerWilcoAviation #KYKN #FlyGA",
-          "status": "approved",
-          "approved_at": "2026-04-08T22:30:32.071928+00:00"
+          "status": "published",
+          "approved_at": "2026-04-08T22:30:32.071928+00:00",
+          "published_at": "2026-04-08T22:38:53.657916+00:00",
+          "post_id": "106057782039473_942473398539866"
         },
         "instagram": {
           "text": "A newly released Garmin dealer memo highlights a limited-time Garmin Pilot promotion for new subscribers, paired with a Right Seat Rewards...\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Garminpilot #Promotion #Rightseatrewards #Dealermemo #GarminAvionics #RogerWilcoAviation #KYKN #FlyGA #Avionics #PilotLife #GeneralAviation",
-          "status": "approved",
-          "approved_at": "2026-04-08T22:30:32.112845+00:00"
+          "status": "published",
+          "approved_at": "2026-04-08T22:30:32.112845+00:00",
+          "published_at": "2026-04-08T22:39:01.558621+00:00",
+          "media_id": "17964603530907889"
         }
       },
       "image": "/blog-garmin-pilot-crew-walk.jpg",
