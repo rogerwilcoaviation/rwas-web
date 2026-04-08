@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-04-08T17:01:23.407672+00:00",
-    "total_articles": 6,
+    "last_updated": "2026-04-08T20:53:21.937073+00:00",
+    "total_articles": 7,
     "categories": [
       "press-release",
       "service-bulletin",
@@ -11,6 +11,44 @@
     ]
   },
   "articles": [
+    {
+      "id": "garmin-pilot-promotion-adds-value-for-new-subscribers-20260408",
+      "status": "draft",
+      "category": "memo",
+      "title": "Garmin Pilot Promotion Adds Value for New Subscribers",
+      "subtitle": "Spring dealer memo highlights a limited-time Garmin Pilot offer and companion Right Seat Rewards availability.",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Desk",
+      "date": "2026-04-08",
+      "source": "Garmin Dealer Memo",
+      "source_url": "",
+      "lead": "A newly released Garmin dealer memo highlights a limited-time Garmin Pilot promotion for new subscribers, paired with a Right Seat Rewards offer available during the same campaign window. The promotion is aimed at helping pilots adopt Garmin Pilot with added subscription value while supporting spring and summer flying activity.",
+      "body": [
+        "The memo positions Garmin Pilot as the center of a broader flight-planning and cockpit workflow, encouraging new users to enter the Garmin ecosystem during the active 2026 flying season.",
+        "For a customer-facing blog draft, the dealer-only distribution language and internal pricing mechanics were omitted. The public-facing angle focuses instead on the operational benefit to pilots who want a modern planning, charting, and connected-flight-deck experience.",
+        "Roger Wilco Aviation Services can help customers tie Garmin Pilot into panel planning, Garmin avionics upgrades, and training-oriented use cases, especially where pilots want their planning tools to align with the equipment in the airplane.",
+        "If approved for publication, the article should sit under the Garmin or Promotions editorial bucket and can be paired with the memo artwork captured from the source PDF."
+      ],
+      "tags": [
+        "garmin",
+        "garmin-pilot",
+        "promotion",
+        "right-seat-rewards",
+        "dealer-memo"
+      ],
+      "social": {
+        "facebook": {
+          "text": "A newly released Garmin dealer memo highlights a limited-time Garmin Pilot promotion for new subscribers, paired with a Right Seat Rewards offer available during the same campaign window. The promotion is aimed at helping pilots adopt Garmin Pilot with added subscription value while supporting spring and summer flying activity.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Garminpilot #Promotion #Rightseatrewards #Dealermemo #GarminAvionics #RogerWilcoAviation #KYKN #FlyGA",
+          "status": "pending"
+        },
+        "instagram": {
+          "text": "A newly released Garmin dealer memo highlights a limited-time Garmin Pilot promotion for new subscribers, paired with a Right Seat Rewards...\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Garminpilot #Promotion #Rightseatrewards #Dealermemo #GarminAvionics #RogerWilcoAviation #KYKN #FlyGA #Avionics #PilotLife #GeneralAviation",
+          "status": "pending"
+        }
+      },
+      "image": "/blog-garmin-pilot-promo-20260408.png",
+      "image_alt": "Garmin Pilot promotion dealer memo artwork captured from the source PDF."
+    },
     {
       "id": "garmin-announces-new-garmin-pilot-promotions-20260408",
       "status": "draft",
