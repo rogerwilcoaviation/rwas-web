@@ -26,7 +26,8 @@
     var html = '';
     navLinks.forEach(function(link) {
       var isActive = (link.href === '/blog/' && currentPath.indexOf('/blog') === 0);
-      html += '<a' + (isActive ? ' class="active"' : '') + ' href="' + link.href + '">' + link.text + '</a>';
+      var cls = isActive ? ' class="active"' : (link.text === 'Ask Jerry' ? ' class="np-nav-jerry" style="background:#d4c47a;cursor:pointer"' : '');
+      html += '<a' + cls + ' href="' + link.href + '">' + link.text + '</a>';
     });
     el.innerHTML = html;
   }
