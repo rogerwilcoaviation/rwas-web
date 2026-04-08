@@ -1,6 +1,17 @@
 {
-  "last_updated": "2026-04-04",
+  "last_updated": "2026-04-08",
   "memos": [
+    {
+      "id": "garmin-announces-new-garmin-pilot-promotions",
+      "date": "2026-04-08",
+      "title": "Garmin Announces New Garmin Pilot Promotions",
+      "summary": "Garmin announced a new 15-for-12 Garmin Pilot promotion for new customers. Customers who purchase an annual Garmin Pilot subscription between April 7 and July 26, 2026 receive three additional months, for 15 months total at the price of 12. The offer applies to both Standard and Premium subscriptions, with the extra three months added within five business days.",
+      "products": [
+        "Garmin Pilot"
+      ],
+      "category": "promotion",
+      "source_pdf": "New Garmin Memo 2026-04-08 Garmin Announces New Garmin Pilot Promotions.pdf"
+    },
     {
       "id": "new-dual-g5-aihsi-promotion-save-over-600-through-june-15",
       "date": "2026-04-01",
