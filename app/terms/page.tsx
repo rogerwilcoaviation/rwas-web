@@ -332,15 +332,81 @@ export default function TermsPage() {
             <li>
               Avionics estimates require a 10 percent down payment to be
               scheduled on the calendar. Parts must be paid in full, and half of
-              labor must be paid before work begins. Once work is complete, the
-              remaining balance is due upon delivery of the aircraft.
+              labor must be paid before work begins. Final payment is due upon
+              delivery of the aircraft.
+            </li>
+            <li>
+              Roger Wilco Aviation Services accepts any form of payment,
+              including credit cards and wire transfers.
+            </li>
+            <li>
+              Credit card transactions include a 3.5 percent transaction fee.
+            </li>
+            <li>
+              Wire transfers include a $25 bank charge. Please use the wire
+              instructions below.
             </li>
           </ul>
+
+          <h3 className="text-base font-semibold mb-3">WIRE INSTRUCTIONS</h3>
+          <ul className="list-disc pl-6 space-y-3 mb-4">
+            <li>
+              For domestic wire transfers, the ABA or routing transit number is
+              <span className="font-bold"> 121000248</span>.
+            </li>
+            <li>
+              For international wire transfers, the SWIFT or BIC code is
+              <span className="font-bold"> WFBIUS6S</span>.
+            </li>
+            <li>
+              Bank name: <span className="font-bold">Wells Fargo Bank, N.A.</span>
+            </li>
+            <li>
+              Bank address:{' '}
+              <span className="font-bold">
+                420 Montgomery Street, San Francisco, CA 94104
+              </span>{' '}
+              (regardless of where the account is located)
+            </li>
+            <li>
+              Beneficiary account number:{' '}
+              <span className="font-bold">6542446213</span>
+            </li>
+            <li>
+              Beneficiary name and address:{' '}
+              <span className="font-bold">
+                Roger Wilco Aviation Services LLC, 700 E 31st Street, Yankton,
+                SD 57078
+              </span>
+            </li>
+          </ul>
+
+          <p className="mb-4">
+            Please note there is a $25 fee for wire transfers. SWIFT or BIC
+            routing generally routes wires correctly without the need for
+            intermediary bank details. In some instances, the sender may need
+            intermediary bank information to send the wire. If that happens,
+            please review the Foreign Currency Incoming Wires Instructions or
+            contact us for the correct intermediary bank details.
+          </p>
 
           <p className="mb-4">
             Thank you for giving us the opportunity to provide the safest, most
             affordable maintenance possible. We look forward to working with
             you.
+          </p>
+
+          <p className="mb-0">
+            Happy with our work?{' '}
+            <a
+              href="https://search.google.com/local/writereview?placeid=ChIJaciUulNp3WURsopwVblVMIo&source=g.page.m.ia._&laa=nmx-review-solicitation-ia2"
+              className="text-blue-600 underline"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Write a review on Google
+            </a>
+            .
           </p>
         </div>
 
