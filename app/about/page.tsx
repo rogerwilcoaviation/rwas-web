@@ -142,7 +142,7 @@ export default function AboutPage() {
               </p>
 
               <p className="np-body-text">
-                Halsted earned his Airframe &amp; Powerplant certificates early in his career and spent decades maintaining and flying aircraft of all types &mdash; from Piper Cherokees and Beechcraft Bonanzas to large transport-category jets on the Delta flight line. That dual perspective &mdash; as both a pilot who depends on the aircraft and a mechanic who maintains it &mdash; is the foundation of every job that comes through the RWAS shop.
+                Halsted earned his Airline Transport Pilot certificate at age 21.
               </p>
 
               <p className="np-body-text">
