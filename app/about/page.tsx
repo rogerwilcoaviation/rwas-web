@@ -138,15 +138,15 @@ export default function AboutPage() {
               <hr className="np-rule" />
 
               <p className="np-body-text">
-                RWAS was founded by John Halsted, a veteran Delta Air Lines captain with more than 40 years of hands-on aviation experience spanning airline operations, aircraft maintenance, avionics systems, and flight instruction. What began as a single-hangar maintenance operation at Chan Gurney Municipal Airport has grown into a full-service repair station serving owners and operators from across the upper Midwest and beyond.
+                RWAS was founded by John Halsted, a veteran Delta Air Lines captain with more than 40 years of aviation experience spanning airline operations, aircraft maintenance, avionics systems, and flight instruction. What started as a single-hangar maintenance shop at Chan Gurney Municipal Airport in Yankton, South Dakota, has evolved into a full-service FAA-certificated repair station serving aircraft owners and operators across the upper Midwest and beyond.
               </p>
 
               <p className="np-body-text">
-                Halsted earned his Airline Transport Pilot certificate at age 21.
+                Halsted earned his Airline Transport Pilot certificate at 21 and has spent the decades since building deep expertise on both sides of the cockpit, flying the line and turning wrenches. That dual perspective shapes everything RWAS does.
               </p>
 
               <p className="np-body-text">
-                In the early years, RWAS focused on annual inspections, airframe repair, and basic avionics troubleshooting for the local general aviation fleet at Yankton. As the Garmin glass cockpit revolution took hold, Halsted recognized the opportunity to bring modern avionics capability to the Northern Plains &mdash; a region where most owners previously had to ferry their aircraft hundreds of miles to major metro shops for panel upgrades. RWAS became a certified Garmin dealer and installation center, specializing in the G3X Touch, GTN Xi navigator series, and GFC 500 autopilot.
+                In its early years the shop focused on annual inspections, airframe repair, and basic avionics work for the local general-aviation fleet. When the Garmin glass-cockpit revolution reshaped the industry, Halsted saw an opportunity: bring modern avionics capability to the Northern Plains, a region where most owners had been forced to ferry their aircraft hundreds of miles to metro shops for panel upgrades. RWAS became a certified Garmin dealer and installation center, specializing in the G3X Touch suite, GTN Xi navigator series, and GFC 500 autopilot.
               </p>
 
               <div className="np-photo-box" style={{ margin: '12px 0' }}>
