@@ -6,7 +6,7 @@
 <title>Garmin Avionics — Roger Wilco Aviation Services</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
+body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 body::before {
   content: "";
   position: fixed;
@@ -23,7 +23,7 @@ body > * {
   position: relative;
   z-index: 1;
 }
-.page { position: relative; max-width: 960px; margin: 20px auto; background: #f7f4ef; border: 1px solid #1a1a1a; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+.page { position: relative; width: 960px; min-width: 960px; margin: 20px auto; background: #f7f4ef; border: 1px solid #1a1a1a; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
 .page::before { content: ""; position: absolute; inset: 0; background: #f7f4ef; z-index: 0; pointer-events: none; }
 .page > * { position: relative; z-index: 1; }
 
