@@ -107,10 +107,10 @@ export default function Home() {
               <div className="np-box">
                 <div className="np-box-title">Today&rsquo;s Edition</div>
                 <div className="np-box-row">
-                  <a href="/pages/garmin-avionics-accessories"><span>Latest From Garmin</span><span className="np-box-pg">A2 &rarr;</span></a>
+                  <a href="/garmin"><span>Latest From Garmin</span><span className="np-box-pg">A2 &rarr;</span></a>
                 </div>
                 <div className="np-box-row">
-                  <a href="/garmin"><span>Garmin Store</span><span className="np-box-pg">A3 &rarr;</span></a>
+                  <a href="/pages/garmin-avionics-accessories"><span>Garmin Store</span><span className="np-box-pg">A3 &rarr;</span></a>
                 </div>
                 <div className="np-box-row">
                   <a href="/collections/rigging-tools"><span>Tool Procurement</span><span className="np-box-pg">B1 &rarr;</span></a>
