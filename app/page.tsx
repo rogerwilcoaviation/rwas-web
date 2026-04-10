@@ -188,34 +188,7 @@ export default function Home() {
 
             {/* ── RIGHT COLUMN ── */}
             <div className="np-col">
-              <span className="np-kicker">Promotion</span>
-              <a href="/blog/article?id=garmin-gfc500-stc-expansion-2026" className="np-headline-link">
-                <h3 className="np-headline-md">New Dual G5 AI/HSI Kit &mdash; Save Over $600</h3>
-              </a>
-              <hr className="np-rule" />
-              <p className="np-body-text">
-                Garmin promotional Dual G5 Kit with combined attitude indicator and HSI, plus all installation accessories. Special pricing through June 15, 2026.
-              </p>
-
-              <hr className="np-rule-thick" />
-              <span className="np-kicker">Maintenance</span>
-              <a href="/shop-capabilities" className="np-headline-link">
-                <h3 className="np-headline-md">Annual Inspections &amp; A&amp;P Service</h3>
-              </a>
-              <hr className="np-rule" />
-              <p className="np-body-text">
-                Certified A&amp;P mechanics on staff. Scheduled maintenance, logbook entries, and return-to-service documentation.
-              </p>
-
-              <hr className="np-rule-thick" />
-              <span className="np-kicker">Special Capabilities</span>
-              <a href="/shop-capabilities" className="np-headline-link">
-                <h3 className="np-headline-md">NDT &amp; Sheet Metal Fabrication</h3>
-              </a>
-              <hr className="np-rule" />
-              <p className="np-body-text">
-                Eddy current, dye penetrant, and magnetic particle inspection. Custom fabrication and structural repair.
-              </p>
+              <div id="blog-articles-feed"></div>
 
               <hr className="np-rule-thick" />
 
@@ -351,6 +324,39 @@ export default function Home() {
 
       </div>
     </div>
+    <script dangerouslySetInnerHTML={{__html: `
+(function() {
+  var catLabels = {
+    'press-release': 'Press Release',
+    'service-bulletin': 'Service Bulletin',
+    'product-update': 'Product Update',
+    'memo': 'Dealer Memo',
+    'regulatory': 'Regulatory'
+  };
+  fetch('/blog-articles.json?t=' + Date.now())
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var articles = (data.articles || [])
+        .filter(function(a) { return a.status === 'published'; })
+        .sort(function(a, b) { return b.date.localeCompare(a.date); })
+        .slice(0, 3);
+      var el = document.getElementById('blog-articles-feed');
+      if (!el || !articles.length) return;
+      var html = '';
+      articles.forEach(function(a, i) {
+        var label = catLabels[a.category] || a.category;
+        var url = '/blog/article.html?id=' + a.id;
+        html += '<span class="np-kicker">' + label + '</span>';
+        html += '<a href="' + url + '" class="np-headline-link"><h3 class="np-headline-md">' + a.title + '</h3></a>';
+        html += '<hr class="np-rule" />';
+        html += '<p class="np-body-text">' + a.lead.substring(0, 200) + (a.lead.length > 200 ? '&hellip;' : '') + '</p>';
+        if (i < articles.length - 1) html += '<hr class="np-rule-thick" />';
+      });
+      el.innerHTML = html;
+    })
+    .catch(function() {});
+})();
+    `}} />
     </>
   );
 }
