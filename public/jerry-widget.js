@@ -177,6 +177,18 @@
       } else {
         msg.textContent = message.content;
       }
+      // Add escape hatch for listing conversations
+      if (message.role === 'assistant' && !message.content.includes('submitted for review')) {
+        var isListing = history.some(function(m) {
+          return /\b(list|sell|selling|for sale|tail number|N-number)\b/i.test(m.content);
+        });
+        if (isListing) {
+          var esc = document.createElement('div');
+          esc.style.cssText = 'margin-top:6px;font-family:Arial,sans-serif;font-size:9px;';
+          esc.innerHTML = '<a href="#sell" style="color:#888;text-decoration:underline" onclick="event.stopPropagation()">Prefer to fill out the form manually?</a>';
+          msg.appendChild(esc);
+        }
+      }
       row.appendChild(msg);
       chat.appendChild(row);
     });
