@@ -111,25 +111,45 @@ const LISTING_INTENT_RE = /\b(list|sell|selling|post|listing|for sale|aircraft|t
 function getListingPrompt(): string {
   return `AIRCRAFT LISTING INTAKE MODE — FOLLOW THESE INSTRUCTIONS EXACTLY:
 
-STEP 1 — LOGIN FIRST (mandatory):
-Your VERY FIRST response must ask the seller to log in. Say: "Before we get started, click the SELLER LOGIN button at the top of the page, enter your email, and verify the code. Let me know once you're logged in."
-Do NOT collect any listing details until the seller confirms they are logged in.
+The widget has already verified the seller is logged in. Do NOT ask about login. Proceed directly.
 
-STEP 2 — GET TAIL NUMBER:
-Once logged in, ask for the tail number first. When they give it, tell them: "Great, give me a moment to pull up your aircraft." Then ask them to confirm: make, model, year, and serial number. Also suggest they can verify their registration at https://registry.faa.gov/aircraftinquiry/Search/NNumberInquiry
+STEP 1 — GET TAIL NUMBER:
+Ask: "What's the tail number?"
+When they give it, the system will automatically look up the FAA registry and provide aircraft details (make, model, year, serial, engine). Present the FAA data and ask the seller to confirm: "I pulled up your aircraft from the FAA registry — looks like it's a [year] [make] [model], serial [s/n], [engine]. That correct?"
+If no FAA data comes back, ask them to provide: make, model, year, and serial number.
 
-STEP 3 — COLLECT DETAILS (2-3 at a time):
-REQUIRED: make, model, year, price, sellerName, sellerPhone, sellerLocation
-IMPORTANT: nNumber, serialNumber, totalTime, engineModel, engineTime, category, description
-OPTIONAL: propModel, propTime, annualDue, usefulLoad, fuelCapacity, cruiseSpeed, range, condition (used/new), damageHistory (none/minor/major), avionics, priceLabel, equipmentList
+STEP 2 — PRICING:
+"What are you asking for it?" and "Firm, negotiable, or best offer?"
+
+STEP 3 — TIMES:
+"Total time on the airframe?" then "Engine SMOH?" then "Prop model and time?" (optional)
+
+STEP 4 — DESCRIPTION:
+"Give me a description — condition, history, recent work, why you're selling."
+"Any damage history?" (none, minor, major)
+"What's the avionics stack?"
+
+STEP 5 — SELLER INFO:
+"Your name, phone number, and location (airport or city)?"
+"When's the next annual due?" (optional)
+
+STEP 6 — OPTIONAL SPECS (ask if seller wants to add):
+Useful load, fuel capacity, cruise speed, range, equipment list
+
+STEP 7 — PHOTOS AND DOCUMENTS:
+"Hit the paperclip icon next to the chat input to attach photos — left side, right side, front, panel, interior, engine. Logbook scans and equipment lists too. They'll link to your listing automatically."
+
+STEP 8 — CONFIRM AND SUBMIT:
+Summarize all collected fields. Ask seller to confirm.
 Categories: single-piston, multi-piston, turboprop, jet, helicopter, experimental, other
+condition: used or new. damageHistory: none, minor, major.
+Once confirmed, emit on its own line at the very end:
+LISTING_DRAFT:{"make":"...","model":"...","year":...,"price":"...","nNumber":"...","serialNumber":"...","totalTime":"...","engineModel":"...","engineTime":"...","propModel":"...","propTime":"...","annualDue":"...","usefulLoad":"...","fuelCapacity":"...","cruiseSpeed":"...","range":"...","category":"...","condition":"...","damageHistory":"...","description":"...","avionics":"...","priceLabel":"...","sellerName":"...","sellerPhone":"...","sellerLocation":"..."}
+Tell them: "Your listing is submitted for review. Once approved it goes Active. You can pause, mark sold, or delete anytime."
 
-STEP 4 — CONFIRM AND SUBMIT:
-Summarize all collected fields. Once confirmed, emit on its own line:
-LISTING_DRAFT:{"make":"...","model":"...","year":...,"price":"...", etc}
-Tell them: "Your listing is submitted for review. You can upload photos and logbook documents from My Listings once approved. You can pause, mark sold, or delete anytime."
+If seller says "save" or "continue later", emit: LISTING_SAVE:{"email":"...","collected fields so far"}
 
-If seller says "save" or "continue later", emit: LISTING_SAVE:{"email":"...","collected fields"}`;
+Keep answers under 120 words. Be conversational, not robotic.`;
 }
 
 
@@ -192,7 +212,7 @@ async function lookupFaaRegistry(nNumber: string): Promise<string> {
 async function buildAugmentedMessage(userMessage: string) {
   const faqContext = getFaqContext(userMessage);
   const manualContext = getGarminManualContext(userMessage);
-  const listingContext = LISTING_INTENT_RE.test(userMessage) ? await getListingPrompt() : "";
+  const listingContext = LISTING_INTENT_RE.test(userMessage) ? getListingPrompt() : "";
 
   let nNumberContext = "";
   const nMatch = userMessage.match(NNUMBER_RE);
@@ -242,7 +262,7 @@ export async function POST(req: NextRequest) {
 
     // If mid-intake but last message didn't trigger listing prompt, add it
     if (isIntakeConversation && !LISTING_INTENT_RE.test(lastUserMsg.content)) {
-      const listingPrompt = await getListingPrompt();
+      const listingPrompt = getListingPrompt();
       if (listingPrompt && !augmented.includes("LISTING INTAKE")) {
         augmented = listingPrompt + "\n\nCONVERSATION SO FAR:\n" + historyContext + "\n\nCustomer message:\n" + lastUserMsg.content;
         // If there's FAA data, prepend it
