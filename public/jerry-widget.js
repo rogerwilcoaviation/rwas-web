@@ -147,7 +147,7 @@
   var chat = panel.querySelector('.jerry-widget-chat');
   var errorBox = panel.querySelector('.jerry-widget-error');
   var input = panel.querySelector('input');
-  var send = panel.querySelector('.jerry-widget-input button');
+  var send = Array.from(panel.querySelectorAll('.jerry-widget-input button')).pop();
   var closeBtn = panel.querySelector('.jerry-widget-close');
 
   function formatMessage(text) {
