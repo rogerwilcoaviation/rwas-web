@@ -220,6 +220,20 @@ input,select,textarea,button{font-family:inherit}
   .np-dateline,.np-edition-bar{padding:4px 12px;font-size:9px}
   .np-nav a{padding:6px 8px;font-size:9px}
 }
+
+/* ═══ IFR WATERMARK ═══ */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url(https://rogerwilcoaviation.com/newspaper/images/enr_h05.png) center center / cover no-repeat;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: -1;
+}
+@media (max-width: 749px) {
+  body::before { display: none !important; }
+}
 </style>
 </head>
 <body>
@@ -508,7 +522,7 @@ async function showBrowse() {
         <div style="font-size:15px;font-weight:700;margin-bottom:2px">Want to list your aircraft?</div>
         <div style="font-family:Arial,sans-serif;font-size:11px;color:#555;line-height:1.5">Click the <strong>J</strong> bubble in the corner &mdash; Captain Jerry will walk you through every field, save your progress, and submit your listing when you&rsquo;re ready. Pick up where you left off anytime.</div>
       </div>
-      <button class="btn" onclick="if(window.jerryChat){window.jerryChat('I want to list my aircraft for sale')}else{alert('Jerry widget loading...')}">List with Jerry &rarr;</button>
+      <button class="btn" onclick="listWithJerry()">List with Jerry &rarr;</button>
     </div>
     <div class="search-bar">
       <input id="searchInput" placeholder="Search by make, model, N-number, avionics..." onkeydown="if(event.key==='Enter')doBrowseSearch()">
@@ -979,5 +993,37 @@ async function showMyListings() {
 
 </script>
 <script src="/jerry-widget.js" defer></script>
+<script>
+function listWithJerry() {
+  var msg = 'I want to list my aircraft for sale';
+  // Try the widget's exposed function
+  if (window.jerryChat) {
+    window.jerryChat(msg);
+    return;
+  }
+  // Try just opening the panel
+  if (window.openJerryChat) {
+    window.openJerryChat();
+    return;
+  }
+  // Direct DOM: find the J bubble and click it
+  var bubble = document.getElementById('jerry-bubble');
+  if (bubble) {
+    bubble.click();
+    // Try to fill input after panel opens
+    setTimeout(function() {
+      var input = document.getElementById('jerry-input');
+      if (input) {
+        input.value = msg;
+        var send = document.getElementById('jerry-send');
+        if (send) send.click();
+      }
+    }, 500);
+    return;
+  }
+  // Last resort
+  window.location.href = 'https://rogerwilcoaviation.com/#ask-jerry';
+}
+</script>
 </body>
 </html>
