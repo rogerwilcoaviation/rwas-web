@@ -156,8 +156,7 @@
     text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
     // Line breaks
     text = text.replace(/\n/g, '<br>');
-    text = text.replace(/
-/g, '<br>');
+    text = text.split('\n').join('<br>');
     return text;
   }
 
