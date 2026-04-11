@@ -80,6 +80,7 @@ export default function Home() {
           <a href="/collections/on-sale">On Sale</a>
           <a href="/collections/garmin-avionics">Garmin</a>
           <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
+          <a href="https://rwas-aircraft-sale.john-08c.workers.dev/page">Aircraft 4 Sale</a>
           <a href="/financing">Financing</a>
           <a href="/shop-capabilities">Shop Capabilities</a>
           <a href="/blog/">Blog Articles</a>
