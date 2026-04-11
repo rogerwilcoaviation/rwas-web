@@ -192,7 +192,7 @@ async function lookupFaaRegistry(nNumber: string): Promise<string> {
 async function buildAugmentedMessage(userMessage: string) {
   const faqContext = getFaqContext(userMessage);
   const manualContext = getGarminManualContext(userMessage);
-  const listingContext = LISTING_INTENT_RE.test(userMessage) ? getListingPrompt() : "";
+  const listingContext = LISTING_INTENT_RE.test(userMessage) ? await getListingPrompt() : "";
 
   let nNumberContext = "";
   const nMatch = userMessage.match(NNUMBER_RE);
@@ -242,7 +242,7 @@ export async function POST(req: NextRequest) {
 
     // If mid-intake but last message didn't trigger listing prompt, add it
     if (isIntakeConversation && !LISTING_INTENT_RE.test(lastUserMsg.content)) {
-      const listingPrompt = getListingPrompt();
+      const listingPrompt = await getListingPrompt();
       if (listingPrompt && !augmented.includes("LISTING INTAKE")) {
         augmented = listingPrompt + "\n\nCONVERSATION SO FAR:\n" + historyContext + "\n\nCustomer message:\n" + lastUserMsg.content;
         // If there's FAA data, prepend it
