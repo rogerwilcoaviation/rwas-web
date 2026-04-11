@@ -183,6 +183,17 @@ export default function Home() {
                 Under the direction of John Halsted &mdash; with more than 40 years of aviation experience &mdash; RWAS delivers sheet metal fabrication, structural repair, and complete Garmin avionics installations including the G3X Touch suite, GTN navigator series, and GFC 500 autopilot.
               </p>
 
+              {/* ── AIRCRAFT 4 SALE FEED ── */}
+              <hr className="np-rule-thick" style={{ marginTop: '20px' }} />
+              <div className="np-sec-label">Aircraft 4 Sale</div>
+              <div id="aircraft-sale-feed" style={{ minHeight: '120px' }}>
+                <div style={{ fontFamily: 'Arial,sans-serif', fontSize: '10px', color: '#888', fontStyle: 'italic' }}>Loading listings&hellip;</div>
+              </div>
+              <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                <a href="/aircraft-for-sale" className="np-ad-btn">Browse All Listings &rarr;</a>
+              </div>
+
+
             </div>
 
             <div className="np-col-divider" />
@@ -325,6 +336,31 @@ export default function Home() {
 
       </div>
     </div>
+        <script dangerouslySetInnerHTML={{__html: `
+(function(){
+  var feed = document.getElementById('aircraft-sale-feed');
+  if (!feed) return;
+  fetch('https://sale-api.rogerwilcoaviation.com/browse')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var listings = (data.listings || []).slice(0, 4);
+      if (!listings.length) {
+        feed.innerHTML = '<div style="font-style:italic;font-size:11.5px;color:#888;padding:8px 0">No aircraft currently listed. <a href=\\"/aircraft-for-sale#sell\\" style=\\"color:#1a1a1a;text-decoration:underline\\">List yours today.</a></div>';
+        return;
+      }
+      feed.innerHTML = listings.map(function(l){
+        var price = l.price ? '$' + parseInt(String(l.price).replace(/[^0-9]/g,'')).toLocaleString() : 'Call';
+        var lbCount = l.logbooks ? Object.values(l.logbooks).reduce(function(s,a){ return s + (a?a.length:0); }, 0) : 0;
+        var photo = l.photos && l.photos.length ? '<img src=\\"https://sale-api.rogerwilcoaviation.com/files/' + l.photos[0].key + '\\" alt=\\"' + l.make + ' ' + l.model + '\\" style=\\"width:100%;height:100%;object-fit:cover\\">' : '<div style=\\"display:flex;align-items:center;justify-content:center;height:100%;font-family:Arial,sans-serif;font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.1em\\">No Photo</div>';
+        return '<a href=\\"/aircraft-for-sale#listing/' + l.id + '\\" style=\\"display:grid;grid-template-columns:100px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid #1a1a1a;text-decoration:none;color:#1a1a1a\\"><div style=\\"width:100px;height:70px;background:#c8c4bc;border:1px solid #1a1a1a;overflow:hidden\\">' + photo + '</div><div style=\\"display:flex;flex-direction:column;justify-content:space-between\\"><div><div style=\\"font-family:Arial,sans-serif;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#555\\">' + (l.year||'') + ' \\u00b7 ' + (l.category||'').replace(/-/g,' ') + '</div><div style=\\"font-size:15px;font-weight:700;line-height:1.2;margin:2px 0\\">' + l.make + ' ' + l.model + '</div></div><div style=\\"display:flex;justify-content:space-between;align-items:flex-end\\"><div style=\\"font-family:Georgia,serif;font-size:16px;font-weight:700\\">' + price + '</div>' + (lbCount ? '<div style=\\"font-family:Arial,sans-serif;font-size:8px;color:#2d5016;text-transform:uppercase;letter-spacing:.06em\\">\\u2713 ' + lbCount + ' logbook doc' + (lbCount>1?'s':'') + '</div>' : '') + '</div></div></a>';
+      }).join('');
+    })
+    .catch(function(){
+      feed.innerHTML = '<div style=\\"font-style:italic;font-size:11.5px;color:#888\\">Could not load listings.</div>';
+    });
+})();
+    `}} />
+
     <script dangerouslySetInnerHTML={{__html: `
 (function() {
   var catLabels = {
