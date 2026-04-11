@@ -195,23 +195,32 @@
     }
   }
 
+  function removeThinkingIndicator() {
+    var existing = chat.querySelector('#jerry-thinking');
+    if (existing) existing.remove();
+  }
+
+  function showThinkingIndicator() {
+    removeThinkingIndicator();
+    var thinkRow = document.createElement('div');
+    thinkRow.className = 'jerry-widget-row assistant';
+    thinkRow.id = 'jerry-thinking';
+    var thinkMsg = document.createElement('div');
+    thinkMsg.className = 'jerry-widget-msg jerry-thinking-msg';
+    thinkMsg.innerHTML = '<span class="jerry-thinking-dots"><span>.</span><span>.</span><span>.</span></span> Jerry is thinking';
+    thinkRow.appendChild(thinkMsg);
+    chat.appendChild(thinkRow);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
   function setLoading(next) {
     loading = !!next;
     input.disabled = loading;
     send.disabled = loading;
-    // Show/remove thinking indicator
-    var existing = document.getElementById('jerry-thinking');
-    if (existing) existing.remove();
     if (loading) {
-      var thinkRow = document.createElement('div');
-      thinkRow.className = 'jerry-widget-row assistant';
-      thinkRow.id = 'jerry-thinking';
-      var thinkMsg = document.createElement('div');
-      thinkMsg.className = 'jerry-widget-msg jerry-thinking-msg';
-      thinkMsg.innerHTML = '<span class="jerry-thinking-dots"><span>.</span><span>.</span><span>.</span></span> Jerry is thinking';
-      thinkRow.appendChild(thinkMsg);
-      chat.appendChild(thinkRow);
-      chat.scrollTop = chat.scrollHeight;
+      showThinkingIndicator();
+    } else {
+      removeThinkingIndicator();
     }
   }
 
@@ -225,6 +234,11 @@
     render();
     input.value = '';
     setLoading(true);
+    await new Promise(function (resolve) {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(resolve);
+      });
+    });
 
     try {
       var response = await fetch(apiUrl, {
