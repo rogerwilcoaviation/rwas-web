@@ -232,6 +232,40 @@
     }
   }
 
+  function getPendingListing() {
+    try {
+      return JSON.parse(localStorage.getItem('rwas_pending_listing') || 'null');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function setPendingListing(data) {
+    try {
+      localStorage.setItem('rwas_pending_listing', JSON.stringify(data));
+    } catch (e) {}
+  }
+
+  function clearPendingListing() {
+    try {
+      localStorage.removeItem('rwas_pending_listing');
+    } catch (e) {}
+  }
+
+  function addAssistantMessage(text) {
+    history.push({ role: 'assistant', content: text });
+    saveHistory();
+    render();
+  }
+
+  function hasListingIntent(text) {
+    return /\b(list|sell|selling|for sale|list my aircraft|list my airplane|sell my aircraft|sell my airplane)\b/i.test(String(text || ''));
+  }
+
+  function wantsPendingSubmit(text) {
+    return /^\s*(submit( my listing)?|file it|send it)\s*$/i.test(String(text || ''));
+  }
+
   function extractTaggedJson(text, tag) {
     var re = new RegExp(tag + ':(\{[\s\S]*?\})');
     var match = String(text || '').match(re);
@@ -266,8 +300,14 @@
           });
           var createData = await createResponse.json().catch(function() { return {}; });
           if (!createResponse.ok) {
-            messages.push(createData.error || ('Listing submission failed: ' + createResponse.status));
+            if (createResponse.status === 401) {
+              setPendingListing(listingDraft);
+              messages.push('Almost there — you need to log in first. Click SELLER LOGIN above, verify your email, then say submit my listing and I will file it for you.');
+            } else {
+              messages.push(createData.error || ('Listing submission failed: ' + createResponse.status));
+            }
           } else {
+            clearPendingListing();
             messages.push('Your listing has been submitted for review! You can manage it from My Listings.');
           }
         } catch (e) {
@@ -313,6 +353,57 @@
     saveHistory();
     render();
     input.value = '';
+
+    var session = getSaleSession();
+    var pendingListing = getPendingListing();
+
+    if (wantsPendingSubmit(text) && pendingListing) {
+      if (!session || !session.token) {
+        addAssistantMessage('Almost there — you need to log in first. Click SELLER LOGIN above, verify your email, then say submit my listing and I will file it for you.');
+        input.focus();
+        return;
+      }
+      setLoading(true);
+      await new Promise(function (resolve) {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(resolve);
+        });
+      });
+      try {
+        var pendingResponse = await fetch('https://sale-api.rogerwilcoaviation.com/listings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + session.token
+          },
+          body: JSON.stringify(pendingListing)
+        });
+        var pendingData = await pendingResponse.json().catch(function() { return {}; });
+        if (!pendingResponse.ok) {
+          if (pendingResponse.status === 401) {
+            addAssistantMessage('Almost there — you need to log in first. Click SELLER LOGIN above, verify your email, then say submit my listing and I will file it for you.');
+          } else {
+            addAssistantMessage(pendingData.error || ('Listing submission failed: ' + pendingResponse.status));
+          }
+        } else {
+          clearPendingListing();
+          addAssistantMessage('Your listing has been submitted for review! You can manage it from My Listings.');
+        }
+      } catch (err) {
+        addAssistantMessage('Listing submission failed. Please try again in a moment.');
+      } finally {
+        setLoading(false);
+        input.focus();
+      }
+      return;
+    }
+
+    if (hasListingIntent(text) && (!session || !session.token)) {
+      addAssistantMessage('Before we get started, you need to log in. Click the SELLER LOGIN button above, verify your email, then come back and tell me you are ready.');
+      input.focus();
+      return;
+    }
+
     setLoading(true);
     await new Promise(function (resolve) {
       requestAnimationFrame(function () {
