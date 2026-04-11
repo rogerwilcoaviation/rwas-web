@@ -108,11 +108,21 @@ function getGarminManualContext(query: string) {
 }
 
 const LISTING_INTENT_RE = /\b(list|sell|selling|post|listing|for sale|aircraft.*(sale|sell|market)|want to (list|sell))\b/i;
-const LISTING_PROMPT_PATH = "/Users/rwas/projects/rwas-web/public/js/jerry-listing-prompt.txt";
+let _cachedListingPrompt: string | null = null;
 
-function getListingPrompt() {
-  if (!existsSync(LISTING_PROMPT_PATH)) return "";
-  return readFileSync(LISTING_PROMPT_PATH, "utf8");
+async function getListingPrompt(): Promise<string> {
+  if (_cachedListingPrompt !== null) return _cachedListingPrompt;
+  try {
+    const res = await fetch("https://www.rogerwilcoaviation.com/js/jerry-listing-prompt.txt", {
+      signal: (() => { const c = new AbortController(); setTimeout(() => c.abort(), 5000); return c.signal; })(),
+    });
+    if (res.ok) {
+      _cachedListingPrompt = await res.text();
+      return _cachedListingPrompt;
+    }
+  } catch {}
+  _cachedListingPrompt = "";
+  return "";
 }
 
 
@@ -179,7 +189,7 @@ async function lookupFaaRegistry(nNumber: string): Promise<string> {
 async function buildAugmentedMessage(userMessage: string) {
   const faqContext = getFaqContext(userMessage);
   const manualContext = getGarminManualContext(userMessage);
-  const listingContext = LISTING_INTENT_RE.test(userMessage) ? getListingPrompt() : "";
+  const listingContext = LISTING_INTENT_RE.test(userMessage) ? await getListingPrompt() : "";
 
   // FAA N-number lookup
   let faaContext = "";
