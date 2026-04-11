@@ -139,66 +139,55 @@ async function lookupFaaRegistry(nNumber: string): Promise<string> {
   const clean = nNumber.replace(/^[Nn]-?\s*/, "").toUpperCase();
   try {
     const url = `https://registry.faa.gov/aircraftinquiry/Search/NNumberResult?nNumberTxt=N${clean}`;
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), 8000);
     const res = await fetch(url, {
       headers: { "User-Agent": "RWAS-Jerry/1.0 (aircraft listing intake)" },
-      signal: (() => { const c = new AbortController(); setTimeout(() => c.abort(), 8000); return c.signal; })(),
+      signal: controller.signal,
     });
     if (!res.ok) return "";
     const html = await res.text();
 
-    const normalize = (value: string) => value.replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
-    const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-    const extract = (label: string): string => {
-      const safe = escape(label);
-      const patterns = [
-        new RegExp(`<td[^>]*data-label="${safe}"[^>]*>\\s*([^<]+?)\\s*</td>`, "i"),
-        new RegExp(`${safe}\\s*</td>\\s*<td[^>]*>\\s*([^<]+?)\\s*</td>`, "i"),
-        new RegExp(`${safe}\\s*:?\\s*</th>\\s*<td[^>]*>\\s*([^<]+?)\\s*</td>`, "i"),
-      ];
-      for (const re of patterns) {
-        const m = html.match(re);
-        if (m) return normalize(m[1]);
+    // FAA registry uses data-label attributes for field values
+    const fields: Record<string, string> = {};
+    const dataLabelPattern = /<td data-label="([^"]*)">([\s\S]*?)<\/td>/gi;
+    let match;
+    while ((match = dataLabelPattern.exec(html)) !== null) {
+      const label = match[1].trim();
+      const value = match[2].trim();
+      if (label && value && value !== "None") {
+        fields[label] = value;
       }
-      return "";
-    };
+    }
 
-    const deregisteredMatch = html.match(new RegExp(`N${clean} is ([^.\\n<]+)`, "i"));
-
-    const data = {
-      nNumber: "N" + clean,
-      serialNumber: extract("Serial Number"),
-      manufacturer: extract("Manufacturer Name") || extract("MFR Name"),
-      model: extract("Model"),
-      year: extract("Mfr Year") || extract("Year Manufacturer") || extract("Year MFR"),
-      engineManufacturer: extract("Engine Manufacturer") || extract("Eng MFR"),
-      engineModel: extract("Engine Model"),
-      type: extract("Aircraft Type") || extract("Type Aircraft"),
-      registrant: extract("Name"),
-      city: extract("City"),
-      state: extract("State"),
-      status: extract("Status") || normalize(deregisteredMatch?.[1] || ""),
-      certificateDate: extract("Certificate Issue Date"),
-      airworthiness: extract("A/W Date") || extract("Airworthiness Date"),
-    };
+    if (!Object.keys(fields).length) return "";
 
     const parts: string[] = [];
-    if (data.manufacturer || data.model) parts.push(`Aircraft: ${[data.year, data.manufacturer, data.model].filter(Boolean).join(" ")}`);
-    if (data.serialNumber) parts.push(`Serial: ${data.serialNumber}`);
-    if (data.engineManufacturer || data.engineModel) parts.push(`Engine: ${[data.engineManufacturer, data.engineModel].filter(Boolean).join(" ")}`);
-    if (data.type) parts.push(`Type: ${data.type}`);
-    if (data.registrant) parts.push(`Registrant: ${data.registrant}`);
-    if (data.city && data.state) parts.push(`Location: ${data.city}, ${data.state}`);
-    if (data.status) parts.push(`Status: ${data.status}`);
-    if (data.certificateDate) parts.push(`Certificate Issued: ${data.certificateDate}`);
-    if (data.airworthiness) parts.push(`Airworthiness: ${data.airworthiness}`);
+    const mfr = fields["Manufacturer Name"] || "";
+    const model = fields["Model"] || "";
+    const year = fields["Mfr Year"] || "";
+    const serial = fields["Serial Number"] || "";
+    const status = fields["Status"] || "";
+    const acType = fields["Aircraft Type"] || "";
+    const engMfr = fields["Engine Manufacturer"] || "";
+    const engModel = fields["Engine Model"] || "";
+    const city = fields["City"] || "";
+    const state = fields["State"] || "";
+
+    if (mfr || model) parts.push("Aircraft: " + (year ? year + " " : "") + mfr + " " + model);
+    if (serial) parts.push("Serial Number: " + serial);
+    if (acType) parts.push("Aircraft Type: " + acType);
+    if (engMfr && engMfr !== "Unknown") parts.push("Engine: " + engMfr + (engModel && engModel !== "Unknown" ? " " + engModel : ""));
+    if (status) parts.push("Registration Status: " + status);
+    if (city && state) parts.push("Registered Location: " + city + ", " + state);
 
     if (!parts.length) return "";
-    return "FAA REGISTRY LOOKUP for N" + clean + ":\n" + parts.join("\n") + "\nUse this data to pre-fill listing fields. Confirm with the seller.";
+    return "FAA REGISTRY LOOKUP for N" + clean + ":\n" + parts.join("\n") + "\nUse this data to pre-fill listing fields. Confirm details with the seller before proceeding.";
   } catch {
     return "";
   }
 }
+
 
 async function buildAugmentedMessage(userMessage: string) {
   const faqContext = getFaqContext(userMessage);
