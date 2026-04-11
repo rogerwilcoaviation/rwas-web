@@ -431,7 +431,30 @@
         };
       }
 
-      var response = await fetch(apiUrl, {
+      // FAA N-number lookup via our proxy
+    var nnMatch = text.match(/\bN\s?-?\s?(\d{1,5}[A-Za-z]{0,2})\b/i);
+    if (nnMatch) {
+      try {
+        var nClean = nnMatch[0].replace(/^[Nn]-?\s*/, '').toUpperCase();
+        var faaRes = await fetch('https://sale-api.rogerwilcoaviation.com/faa-lookup?n=' + nClean);
+        var faaData = await faaRes.json();
+        if (faaData.found) {
+          var faaParts = [];
+          var aircraft = (faaData.year ? faaData.year + ' ' : '') + faaData.manufacturer + ' ' + faaData.model;
+          if (aircraft.trim()) faaParts.push('Aircraft: ' + aircraft.trim());
+          if (faaData.serial) faaParts.push('Serial: ' + faaData.serial);
+          if (faaData.type) faaParts.push('Type: ' + faaData.type);
+          if (faaData.engineMfr) faaParts.push('Engine: ' + faaData.engineMfr + (faaData.engineModel ? ' ' + faaData.engineModel : ''));
+          if (faaData.status) faaParts.push('Status: ' + faaData.status);
+          if (faaData.city && faaData.state) faaParts.push('Location: ' + faaData.city + ', ' + faaData.state);
+          if (faaParts.length > 0) {
+            history[history.length - 1].content += '\n[System: FAA Registry for N' + nClean + ':\n' + faaParts.join('\n') + '\nConfirm these details with the seller.]';
+          }
+        }
+      } catch(e) { /* FAA lookup failed */ }
+    }
+
+    var response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: apiMessages })
