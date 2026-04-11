@@ -227,6 +227,7 @@
 
   // Expose global open function for nav links
   window.openJerryChat = function() { setOpen(true); };
+  window.jerryChat = function(msg) { setOpen(true); if(msg) { input.value = msg; setTimeout(submitMessage, 300); } };
 
   // Auto-intercept Ask Jerry links
   document.addEventListener("click", function(e) {
