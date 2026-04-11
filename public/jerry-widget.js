@@ -136,8 +136,8 @@
     '<div class="jerry-widget-input">' +
       '<button type="button" class="jerry-widget-attach" title="Attach photos or documents">📎</button>' +
       '<input type="file" class="jerry-file-input" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.tif,.tiff" style="display:none" />' +
-      '<input type="text" placeholder="Ask Jerry anything…" />' +
-      '<button type="button">Send</button>' +
+      '<input type="text" class="jerry-widget-text-input" placeholder="Ask Jerry anything…" />' +
+      '<button type="button" class="jerry-widget-send">Send</button>' +
     '</div>';
 
   document.body.appendChild(backdrop);
@@ -146,8 +146,8 @@
 
   var chat = panel.querySelector('.jerry-widget-chat');
   var errorBox = panel.querySelector('.jerry-widget-error');
-  var input = panel.querySelector('input');
-  var send = Array.from(panel.querySelectorAll('.jerry-widget-input button')).pop();
+  var input = panel.querySelector('.jerry-widget-text-input');
+  var send = panel.querySelector('.jerry-widget-send');
   var closeBtn = panel.querySelector('.jerry-widget-close');
 
   function formatMessage(text) {
