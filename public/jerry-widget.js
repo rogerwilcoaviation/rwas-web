@@ -421,10 +421,19 @@
     });
 
     try {
+      var apiMessages = history.map(function (m) { return { role: m.role, content: m.content }; });
+      if (hasListingIntent(text) && session && session.email) {
+        var lastIdx = apiMessages.length - 1;
+        apiMessages[lastIdx] = {
+          role: apiMessages[lastIdx].role,
+          content: apiMessages[lastIdx].content + '\n\n' + '[System context: Seller is authenticated as ' + session.email + '. Login is confirmed — skip any login instructions and proceed directly to collecting the tail number.]'
+        };
+      }
+
       var response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history.map(function (m) { return { role: m.role, content: m.content }; }) })
+        body: JSON.stringify({ messages: apiMessages })
       });
 
       if (!response.ok) {
