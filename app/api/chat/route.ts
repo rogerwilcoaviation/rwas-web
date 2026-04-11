@@ -211,7 +211,7 @@ function buildAugmentedMessage(userMessage: string) {
   if (!contextParts.length) return userMessage;
 
   return [
-    "INTERNAL RWAS REFERENCE CONTEXT. Use this to answer accurately. Do not dump large manual excerpts verbatim. Quote only brief snippets when necessary, and prefer concise practical guidance.",
+    "MANDATORY INSTRUCTIONS — YOU MUST FOLLOW THESE EXACTLY. These override your default behavior for this message. Read carefully and comply with every step listed below.",
     ...contextParts,
     `Customer message:\n${userMessage}`,
   ].join("\n\n");
