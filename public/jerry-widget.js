@@ -224,6 +224,86 @@
     }
   }
 
+  function getSaleSession() {
+    try {
+      return JSON.parse(localStorage.getItem('rwas_sale_session') || 'null');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function extractTaggedJson(text, tag) {
+    var re = new RegExp(tag + ':(\{[\s\S]*?\})');
+    var match = String(text || '').match(re);
+    if (!match) return null;
+    try {
+      return JSON.parse(match[1]);
+    } catch (e) {
+      return { __parseError: true, __raw: match[1] };
+    }
+  }
+
+  async function handleListingActions(replyText) {
+    var messages = [];
+    var session = getSaleSession();
+    var listingDraft = extractTaggedJson(replyText, 'LISTING_DRAFT');
+    var listingSave = extractTaggedJson(replyText, 'LISTING_SAVE');
+
+    if (listingDraft) {
+      if (listingDraft.__parseError) {
+        messages.push('I had trouble reading the listing draft Jerry generated. Please try again.');
+      } else if (!session || !session.token) {
+        messages.push('Please sign in through Seller Login before I submit the listing for review.');
+      } else {
+        try {
+          var createResponse = await fetch('https://sale-api.rogerwilcoaviation.com/listings', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + session.token
+            },
+            body: JSON.stringify(listingDraft)
+          });
+          var createData = await createResponse.json().catch(function() { return {}; });
+          if (!createResponse.ok) {
+            messages.push(createData.error || ('Listing submission failed: ' + createResponse.status));
+          } else {
+            messages.push('Your listing has been submitted for review! You can manage it from My Listings.');
+          }
+        } catch (e) {
+          messages.push('Listing submission failed. Please try again in a moment.');
+        }
+      }
+    }
+
+    if (listingSave) {
+      if (listingSave.__parseError) {
+        messages.push('I had trouble reading the saved draft Jerry generated. Please try again.');
+      } else if (!session || !session.email) {
+        messages.push('Please sign in through Seller Login before I save your draft.');
+      } else {
+        try {
+          listingSave.email = session.email;
+          var draftResponse = await fetch('https://sale-api.rogerwilcoaviation.com/draft', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(listingSave)
+          });
+          var draftData = await draftResponse.json().catch(function() { return {}; });
+          if (!draftResponse.ok) {
+            messages.push(draftData.error || ('Draft save failed: ' + draftResponse.status));
+          } else {
+            messages.push('Draft saved. Come back anytime and say continue my listing.');
+          }
+        } catch (e) {
+          messages.push('Draft save failed. Please try again in a moment.');
+        }
+      }
+    }
+
+    return messages;
+  }
+
   async function submitMessage() {
     var text = input.value.trim();
     if (!text || loading) return;
@@ -257,10 +337,15 @@
         throw new Error('No reply returned');
       }
 
-      var cleanReply = String(reply);
+      var rawReply = String(reply);
+      var actionMessages = await handleListingActions(rawReply);
+      var cleanReply = rawReply;
       cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
       cleanReply = cleanReply.replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '').trim();
       cleanReply = cleanReply.replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '').trim();
+      if (actionMessages.length) {
+        cleanReply = cleanReply ? (cleanReply + '\n\n' + actionMessages.join('\n')) : actionMessages.join('\n');
+      }
       history.push({ role: 'assistant', content: cleanReply });
       saveHistory();
       render();
