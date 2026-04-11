@@ -7,12 +7,12 @@
 <style>
 /* ═══ RESET & BASE ═══ */
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#ddd9d2;font-family:Georgia,'Times New Roman',serif;color:#1a1a1a}
+body{background:#ddd9d2;line-height:1.6;font-family:Georgia,'Times New Roman',serif;color:#1a1a1a}
 a{color:#1a1a1a}
 input,select,textarea,button{font-family:inherit}
 
 /* ═══ PAGE SHELL (newspaper broadsheet) ═══ */
-.page{max-width:980px;margin:20px auto;background:#f7f4ef;border:1px solid #1a1a1a;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.page{max-width:1200px;margin:20px auto;background:#f7f4ef;border:1px solid #1a1a1a;box-shadow:0 2px 12px rgba(0,0,0,.15)}
 .dateline{display:flex;justify-content:space-between;padding:5px 20px;border-bottom:1px solid #1a1a1a;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#444}
 .masthead{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:4px double #1a1a1a;gap:16px}
 .masthead-logo{width:60px;height:60px;object-fit:contain;filter:grayscale(100%);flex-shrink:0}
@@ -39,7 +39,7 @@ input,select,textarea,button{font-family:inherit}
 .sec-label{font-family:Arial,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px solid #1a1a1a;padding-bottom:4px;margin-bottom:12px}
 
 /* ═══ CONTENT AREA ═══ */
-.content{padding:16px 20px}
+.content{padding:20px 24px}
 
 /* ═══ TOOLBAR ═══ */
 .toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
@@ -66,10 +66,10 @@ input,select,textarea,button{font-family:inherit}
 
 /* ═══ LISTING CARDS (browse view) ═══ */
 .listings-grid{display:grid;grid-template-columns:1fr;gap:0}
-.listing-card{display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid #1a1a1a;padding:14px 0;gap:16px;cursor:pointer}
+.listing-card{display:grid;grid-template-columns:240px 1fr;border-bottom:1px solid #1a1a1a;padding:14px 0;gap:16px;cursor:pointer}
 .listing-card:hover{background:#ede9e2}
 .listing-card:last-child{border-bottom:none}
-.card-photo{width:200px;height:140px;background:#c8c4bc;border:1px solid #1a1a1a;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-photo{width:240px;height:160px;background:#c8c4bc;border:1px solid #1a1a1a;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .card-photo img{width:100%;height:100%;object-fit:cover}
 .card-photo .no-photo{font-family:Arial,sans-serif;font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.1em}
 .card-body{display:flex;flex-direction:column;justify-content:space-between}
