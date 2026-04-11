@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aircraft 4 Sale — Roger Wilco Aviation Services</title>
+<style>
+/* ═══ RESET & BASE ═══ */
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#ddd9d2;font-family:Georgia,'Times New Roman',serif;color:#1a1a1a}
+a{color:#1a1a1a}
+input,select,textarea,button{font-family:inherit}
+
+/* ═══ PAGE SHELL (newspaper broadsheet) ═══ */
+.page{max-width:980px;margin:20px auto;background:#f7f4ef;border:1px solid #1a1a1a;box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.dateline{display:flex;justify-content:space-between;padding:5px 20px;border-bottom:1px solid #1a1a1a;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#444}
+.masthead{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:4px double #1a1a1a;gap:16px}
+.masthead-logo{width:60px;height:60px;object-fit:contain;filter:grayscale(100%);flex-shrink:0}
+.masthead-center{text-align:center;flex:1}
+.masthead-name{font-size:30px;font-weight:700;letter-spacing:-.01em;line-height:1;color:#0a0a0a;margin-bottom:4px;white-space:nowrap}
+.masthead-rule{border:none;border-top:1px solid #1a1a1a;margin:5px 0}
+.masthead-tagline{font-family:Arial,sans-serif;font-size:9.5px;letter-spacing:.05em;color:#444;text-transform:uppercase;white-space:nowrap}
+.masthead-right{font-family:Arial,sans-serif;font-size:10px;color:#666;text-align:right;flex-shrink:0;width:100px;line-height:1.7}
+.edition-bar{display:flex;justify-content:space-between;padding:4px 20px;background:#1a1a1a;color:#f7f4ef;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.nav{display:flex;flex-wrap:wrap;border-bottom:2px solid #1a1a1a}
+.nav a{padding:7px 11px;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;color:#1a1a1a;border-right:1px solid #1a1a1a;cursor:pointer}
+.nav a:hover,.nav a.active{background:#1a1a1a;color:#f7f4ef}
+
+/* ═══ TYPOGRAPHY ═══ */
+.kicker{font-family:Arial,sans-serif;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#555;margin-bottom:5px;display:block}
+.headline-xl{font-size:32px;font-weight:700;line-height:1.08;color:#0a0a0a;margin-bottom:8px}
+.headline-lg{font-size:22px;font-weight:700;line-height:1.15;margin-bottom:6px}
+.headline-md{font-size:16px;font-weight:700;line-height:1.2;margin-bottom:5px}
+.headline-sm{font-size:13px;font-weight:700;line-height:1.3;margin-bottom:4px}
+.byline{font-family:Arial,sans-serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#666;margin-bottom:8px}
+.body-text{font-size:11.5px;line-height:1.58;color:#1c1c1c;text-align:justify}
+.rule{border:none;border-top:1px solid #1a1a1a;margin:12px 0}
+.rule-thick{border:none;border-top:2px solid #1a1a1a;margin:12px 0}
+.sec-label{font-family:Arial,sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;border-bottom:2px solid #1a1a1a;padding-bottom:4px;margin-bottom:12px}
+
+/* ═══ CONTENT AREA ═══ */
+.content{padding:16px 20px}
+
+/* ═══ TOOLBAR ═══ */
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.toolbar-left{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toolbar-right{display:flex;gap:8px;align-items:center}
+
+/* ═══ BUTTONS ═══ */
+.btn{display:inline-block;background:#1a1a1a;color:#f7f4ef;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border:1px solid #1a1a1a;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{background:#333}
+.btn-outline{background:transparent;color:#1a1a1a}
+.btn-outline:hover{background:#1a1a1a;color:#f7f4ef}
+.btn-sm{padding:4px 10px;font-size:9px}
+.btn-danger{background:#8b0000;border-color:#8b0000}
+.btn-danger:hover{background:#a00000}
+.btn-success{background:#2d5016;border-color:#2d5016}
+.btn-success:hover{background:#3a6b1c}
+
+/* ═══ SEARCH / FILTERS ═══ */
+.search-bar{display:flex;border:1px solid #1a1a1a;margin-bottom:14px}
+.search-bar input{flex:1;padding:8px 12px;border:none;background:#f7f4ef;font-size:12px;font-family:Georgia,serif;outline:none}
+.search-bar button{padding:8px 16px;background:#1a1a1a;color:#f7f4ef;border:none;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.filter-row select{padding:5px 8px;border:1px solid #1a1a1a;background:#f7f4ef;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.05em;text-transform:uppercase;cursor:pointer}
+
+/* ═══ LISTING CARDS (browse view) ═══ */
+.listings-grid{display:grid;grid-template-columns:1fr;gap:0}
+.listing-card{display:grid;grid-template-columns:200px 1fr;border-bottom:1px solid #1a1a1a;padding:14px 0;gap:16px;cursor:pointer}
+.listing-card:hover{background:#ede9e2}
+.listing-card:last-child{border-bottom:none}
+.card-photo{width:200px;height:140px;background:#c8c4bc;border:1px solid #1a1a1a;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-photo img{width:100%;height:100%;object-fit:cover}
+.card-photo .no-photo{font-family:Arial,sans-serif;font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.1em}
+.card-body{display:flex;flex-direction:column;justify-content:space-between}
+.card-title{font-size:18px;font-weight:700;line-height:1.2;margin-bottom:4px}
+.card-specs{font-family:Arial,sans-serif;font-size:10px;color:#555;letter-spacing:.04em;margin-bottom:6px;line-height:1.6}
+.card-specs span{margin-right:10px}
+.card-desc{font-size:11.5px;line-height:1.5;color:#444;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-footer{display:flex;justify-content:space-between;align-items:flex-end;margin-top:6px}
+.card-price{font-family:Georgia,serif;font-size:20px;font-weight:700;color:#0a0a0a}
+.card-seller{font-family:Arial,sans-serif;font-size:9px;color:#777;text-transform:uppercase;letter-spacing:.06em;text-align:right}
+.card-logbooks{font-family:Arial,sans-serif;font-size:9px;color:#2d5016;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+
+/* ═══ DETAIL VIEW ═══ */
+.detail-header{display:grid;grid-template-columns:1fr auto;gap:20px;padding-bottom:14px;border-bottom:2px solid #1a1a1a;margin-bottom:14px}
+.detail-gallery{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+.detail-gallery .main-photo{grid-column:1/-1;height:300px;background:#c8c4bc;border:1px solid #1a1a1a;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.detail-gallery .main-photo img{width:100%;height:100%;object-fit:cover}
+.detail-gallery .thumb{height:80px;background:#c8c4bc;border:1px solid #1a1a1a;overflow:hidden;cursor:pointer}
+.detail-gallery .thumb img{width:100%;height:100%;object-fit:cover}
+.detail-gallery .thumb:hover{border-color:#333;opacity:.85}
+
+.specs-table{width:100%;border-collapse:collapse;margin-bottom:14px}
+.specs-table td{padding:5px 10px;font-size:11.5px;border-bottom:1px dotted #bbb;vertical-align:top}
+.specs-table td:first-child{font-family:Arial,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#555;width:140px;white-space:nowrap}
+
+.detail-two-col{display:grid;grid-template-columns:1fr 280px;gap:20px}
+.detail-two-col .detail-main{}
+.detail-two-col .detail-sidebar{}
+
+/* ═══ LOGBOOK TABS ═══ */
+.logbook-section{border:1px solid #1a1a1a;margin-top:14px}
+.logbook-tabs{display:flex;background:#1a1a1a;flex-wrap:wrap}
+.logbook-tab{padding:6px 12px;font-family:Arial,sans-serif;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#999;cursor:pointer;border-right:1px solid #333}
+.logbook-tab:hover{color:#f7f4ef}
+.logbook-tab.active{color:#f7f4ef;background:#444}
+.logbook-panel{padding:12px;display:none}
+.logbook-panel.active{display:block}
+.logbook-file{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px dotted #bbb;font-size:11.5px}
+.logbook-file:last-child{border-bottom:none}
+.logbook-file a{color:#1a1a1a;text-decoration:underline}
+.logbook-file .file-size{font-family:Arial,sans-serif;font-size:9px;color:#888}
+.logbook-empty{font-style:italic;font-size:11.5px;color:#888;padding:8px 0}
+
+/* ═══ SELLER CONTACT BOX ═══ */
+.contact-box{border:2px solid #1a1a1a;padding:14px;background:#ede9e2}
+.contact-box .headline-sm{border-bottom:1px solid #1a1a1a;padding-bottom:4px;margin-bottom:10px}
+.contact-row{display:flex;justify-content:space-between;font-size:11.5px;padding:3px 0;border-bottom:1px dotted #bbb}
+.contact-row:last-child{border-bottom:none}
+.contact-row .label{font-family:Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#555}
+
+/* ═══ FORMS ═══ */
+.form-section{border:1px solid #1a1a1a;padding:16px;margin-bottom:14px;background:#faf8f4}
+.form-section .sec-label{margin-bottom:14px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-group{margin-bottom:10px}
+.form-group label{display:block;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#555;margin-bottom:3px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:7px 10px;border:1px solid #1a1a1a;background:#f7f4ef;font-size:12px;font-family:Georgia,serif}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:2px solid #555;outline-offset:-1px}
+.form-full{grid-column:1/-1}
+.form-hint{font-family:Arial,sans-serif;font-size:9px;color:#888;margin-top:2px}
+.required::after{content:' *';color:#8b0000}
+
+/* ═══ UPLOAD ZONE ═══ */
+.upload-zone{border:2px dashed #999;padding:24px;text-align:center;margin:8px 0;cursor:pointer;transition:border-color .2s,background .2s}
+.upload-zone:hover,.upload-zone.dragover{border-color:#1a1a1a;background:#ede9e2}
+.upload-zone p{font-family:Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#777}
+.upload-zone .icon{font-size:28px;margin-bottom:6px;color:#999}
+.upload-progress{margin-top:6px}
+.upload-progress .bar-track{height:4px;background:#ddd;border-radius:2px;overflow:hidden}
+.upload-progress .bar-fill{height:100%;background:#1a1a1a;transition:width .3s}
+.file-list{margin-top:8px}
+.file-item{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;background:#ede9e2;border:1px solid #ccc;margin-bottom:4px;font-size:11px}
+.file-item .remove{cursor:pointer;color:#8b0000;font-weight:700;padding:0 4px}
+
+/* ═══ AUTH MODAL ═══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:1000}
+.modal-overlay.show{display:flex}
+.modal{background:#f7f4ef;border:2px solid #1a1a1a;padding:28px;max-width:400px;width:90%;box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.modal h2{font-size:20px;margin-bottom:4px}
+.modal .subtitle{font-family:Arial,sans-serif;font-size:11px;color:#666;margin-bottom:16px}
+.modal .error{color:#8b0000;font-family:Arial,sans-serif;font-size:11px;margin-bottom:8px;min-height:16px}
+
+/* ═══ EMPTY STATE ═══ */
+.empty-state{text-align:center;padding:60px 20px}
+.empty-state .icon{font-size:48px;color:#bbb;margin-bottom:12px}
+.empty-state h3{font-size:20px;margin-bottom:6px}
+.empty-state p{font-size:12px;color:#777;max-width:400px;margin:0 auto 16px}
+
+/* ═══ STATUS BADGES ═══ */
+.badge{font-family:Arial,sans-serif;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border:1px solid;display:inline-block}
+.badge-pending{color:#8b6914;border-color:#8b6914;background:#fef9e7}
+.badge-approved{color:#2d5016;border-color:#2d5016;background:#edf5e6}
+.badge-rejected{color:#8b0000;border-color:#8b0000;background:#fde8e8}
+
+/* ═══ FOOTER ═══ */
+.footer{background:#1a1a1a;color:#c0bbb4;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.07em;text-transform:uppercase}
+.footer-name{font-family:Georgia,serif;font-size:18px;font-weight:700;color:#f7f4ef;letter-spacing:0;text-transform:none}
+
+/* ═══ LOADING ═══ */
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid #ccc;border-top-color:#1a1a1a;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-overlay{position:absolute;inset:0;background:rgba(247,244,239,.8);display:flex;align-items:center;justify-content:center;z-index:10}
+
+/* ═══ TOAST ═══ */
+.toast{position:fixed;bottom:20px;right:20px;background:#1a1a1a;color:#f7f4ef;padding:10px 18px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:.04em;z-index:2000;transform:translateY(80px);opacity:0;transition:all .3s ease}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:700px){
+  .page{margin:0;border:none;box-shadow:none}
+  .masthead{flex-direction:column;gap:8px;padding:8px 12px}
+  .masthead-name{font-size:22px;white-space:normal}
+  .masthead-logo,.masthead-right{display:none}
+  .dateline,.edition-bar{padding:4px 12px;font-size:9px}
+  .nav{flex-wrap:wrap}
+  .nav a{padding:6px 8px;font-size:9px}
+  .content{padding:12px}
+  .listing-card{grid-template-columns:1fr;gap:8px}
+  .card-photo{width:100%;height:180px}
+  .detail-two-col{grid-template-columns:1fr}
+  .detail-gallery{grid-template-columns:1fr}
+  .detail-gallery .main-photo{height:220px}
+  .form-grid{grid-template-columns:1fr}
+  .toolbar{flex-direction:column;align-items:stretch}
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- DATELINE -->
+  <div class="dateline">
+    <span>Spring 2026 Edition</span>
+    <span>Vol. XL &middot; No. 1</span>
+    <span>rogerwilcoaviation.com</span>
+  </div>
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <img class="masthead-logo" src="https://rogerwilcoaviation.com/newspaper/images/logo.png" alt="Roger Wilco Aviation Services">
+    <div class="masthead-center">
+      <div class="masthead-name">Roger Wilco Aviation Services</div>
+      <hr class="masthead-rule">
+      <div class="masthead-tagline">FAA Cert. Repair Station &nbsp;&middot;&nbsp; Avionics &nbsp;&middot;&nbsp; Airframe &amp; Powerplant &nbsp;&middot;&nbsp; NDT &nbsp;&middot;&nbsp; Fabrication</div>
+    </div>
+    <div class="masthead-right">
+      Cert. No. RWSR491E<br>
+      KYKN &middot; Yankton, SD
+    </div>
+  </div>
+
+  <!-- EDITION BAR -->
+  <div class="edition-bar">
+    <span>New website launch &mdash; meet Captain Jerry, your AI avionics expert</span>
+    <span>GFC 500 autopilot installations available</span>
+    <span>Now accepting spring scheduling</span>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <a href="https://rogerwilcoaviation.com/">Home</a>
+    <a href="https://rogerwilcoaviation.com/#ask-jerry" style="background:#d4c47a;cursor:pointer">Ask Jerry</a>
+    <a href="https://rogerwilcoaviation.com/collections/on-sale">On Sale</a>
+    <a href="https://rogerwilcoaviation.com/collections/garmin-avionics">Garmin</a>
+    <a href="https://rogerwilcoaviation.com/collections/rigging-tools">Papa-Alpha Tools</a>
+    <a class="active" href="/aircraft-for-sale">Aircraft 4 Sale</a>
+    <a href="https://rogerwilcoaviation.com/financing">Financing</a>
+    <a href="https://rogerwilcoaviation.com/shop-capabilities">Shop Capabilities</a>
+    <a href="https://rogerwilcoaviation.com/blog/">Blog Articles</a>
+    <a href="https://rogerwilcoaviation.com/about">About</a>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker-bar" style="display:flex;align-items:center;gap:10px;padding:5px 20px;background:#2d2d2d;color:#f7f4ef;overflow:hidden">
+    <span style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:#f7f4ef;color:#1a1a1a;padding:2px 7px;white-space:nowrap;flex-shrink:0">Bulletin</span>
+    <span style="font-family:Georgia,serif;font-style:italic;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Papa-Alpha rigging reference tools now shipping worldwide &nbsp;&bull;&nbsp; Garmin G3X Touch installations booking into summer 2026 &nbsp;&bull;&nbsp; Annual inspection slots available &mdash; call (605) 299-8178</span>
+  </div>
+
+  <!-- MAIN CONTENT (SPA views rendered here) -->
+  <div class="content" id="app">
+    <!-- JS renders views here -->
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span class="footer-name">Roger Wilco Aviation Services</span>
+    <span>&copy; 2026 RWAS &middot; All Rights Reserved</span>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Auth Modal -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <h2>Seller Login</h2>
+    <p class="subtitle">Verify your email to create or manage listings.</p>
+    <div class="error" id="authError"></div>
+
+    <!-- Step 1: Email -->
+    <div id="authStep1">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input id="authName" placeholder="John Smith">
+      </div>
+      <div class="form-group">
+        <label class="required">Email Address</label>
+        <input id="authEmail" type="email" placeholder="you@example.com" required>
+      </div>
+      <button class="btn" onclick="sendVerificationCode()" id="authSendBtn">Send Verification Code</button>
+    </div>
+
+    <!-- Step 2: Code -->
+    <div id="authStep2" style="display:none">
+      <p class="body-text" style="margin-bottom:12px">Enter the 6-digit code sent to <strong id="authEmailDisplay"></strong></p>
+      <div class="form-group">
+        <label>Verification Code</label>
+        <input id="authCode" maxlength="6" placeholder="000000" style="font-size:20px;letter-spacing:4px;text-align:center">
+      </div>
+      <button class="btn" onclick="checkVerificationCode()" id="authCheckBtn">Verify</button>
+      <button class="btn btn-outline" onclick="document.getElementById('authStep1').style.display='block';document.getElementById('authStep2').style.display='none'" style="margin-left:8px">Back</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ═══════════════════════════════════════════════
+   RWAS Aircraft 4 Sale — Frontend Application
+   ═══════════════════════════════════════════════ */
+
+// ── Config ──
+const API_BASE = 'https://rwas-aircraft-sale.john-08c.workers.dev'; // Set to your worker URL, e.g. https://rwas-aircraft-sale.your-subdomain.workers.dev
+const CATEGORIES = {
+  'single-piston': 'Single-Engine Piston',
+  'multi-piston': 'Multi-Engine Piston',
+  'turboprop': 'Turboprop',
+  'jet': 'Jet',
+  'helicopter': 'Helicopter',
+  'experimental': 'Experimental / Homebuilt',
+  'other': 'Other',
+};
+const LOGBOOK_CATS = {
+  airframe: 'Airframe',
+  powerplant: 'Powerplant',
+  propeller: 'Propeller',
+  adSbCompliance: 'AD & SB Compliance',
+  misc: 'Misc',
+};
+
+// ── State ──
+let session = JSON.parse(localStorage.getItem('rwas_sale_session') || 'null');
+let currentView = 'browse';
+let listings = [];
+let currentListing = null;
+let editingListing = null;
+
+// ── Init ──
+route();
+
+function route() {
+  const hash = window.location.hash.slice(1);
+  if (hash.startsWith('listing/')) {
+    showDetail(hash.replace('listing/', ''));
+  } else if (hash === 'sell') {
+    showSellForm();
+  } else if (hash === 'my-listings') {
+    showMyListings();
+  } else {
+    showBrowse();
+  }
+}
+window.addEventListener('hashchange', route);
+
+/* ═══ API HELPERS ═══ */
+async function api(path, opts = {}) {
+  const url = API_BASE + path;
+  const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
+  if (session) headers['Authorization'] = `Bearer ${session.token}`;
+  const res = await fetch(url, { ...opts, headers });
+  return res.json();
+}
+
+async function uploadFile(listingId, category, file) {
+  const url = `${API_BASE}/upload?listingId=${listingId}&category=${category}&filename=${encodeURIComponent(file.name)}`;
+  const headers = {};
+  if (session) headers['Authorization'] = `Bearer ${session.token}`;
+  const res = await fetch(url, { method: 'POST', headers, body: file });
+  return res.json();
+}
+
+/* ═══ TOAST ═══ */
+function toast(msg, duration = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
+
+/* ═══ AUTH ═══ */
+function showAuthModal() {
+  document.getElementById('authModal').classList.add('show');
+  document.getElementById('authError').textContent = '';
+  document.getElementById('authStep1').style.display = 'block';
+  document.getElementById('authStep2').style.display = 'none';
+}
+
+function hideAuthModal() {
+  document.getElementById('authModal').classList.remove('show');
+}
+
+async function sendVerificationCode() {
+  const email = document.getElementById('authEmail').value.trim();
+  const name = document.getElementById('authName').value.trim();
+  if (!email) { document.getElementById('authError').textContent = 'Email is required.'; return; }
+
+  const btn = document.getElementById('authSendBtn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  try {
+    const res = await api('/send-code', { method: 'POST', body: JSON.stringify({ email, name }) });
+    if (res.ok) {
+      document.getElementById('authEmailDisplay').textContent = email;
+      document.getElementById('authStep1').style.display = 'none';
+      document.getElementById('authStep2').style.display = 'block';
+      document.getElementById('authError').textContent = '';
+      if (!res.sent) {
+        document.getElementById('authError').textContent = 'Email delivery pending. Contact RWAS for your code.';
+      }
+    } else {
+      document.getElementById('authError').textContent = res.error || 'Failed to send code.';
+    }
+  } catch (e) {
+    document.getElementById('authError').textContent = 'Network error. Check your connection.';
+  }
+  btn.textContent = 'Send Verification Code';
+  btn.disabled = false;
+}
+
+async function checkVerificationCode() {
+  const email = document.getElementById('authEmail').value.trim();
+  const code = document.getElementById('authCode').value.trim();
+  if (!code) { document.getElementById('authError').textContent = 'Enter the code.'; return; }
+
+  const btn = document.getElementById('authCheckBtn');
+  btn.textContent = 'Verifying...';
+  btn.disabled = true;
+
+  try {
+    const res = await api('/check-code', { method: 'POST', body: JSON.stringify({ email, code }) });
+    if (res.verified) {
+      session = { token: res.session, email, name: res.name || document.getElementById('authName').value.trim() };
+      localStorage.setItem('rwas_sale_session', JSON.stringify(session));
+      hideAuthModal();
+      toast('Verified! You can now create listings.');
+      route(); // Re-render current view
+    } else {
+      document.getElementById('authError').textContent = res.error || 'Verification failed.';
+    }
+  } catch (e) {
+    document.getElementById('authError').textContent = 'Network error.';
+  }
+  btn.textContent = 'Verify';
+  btn.disabled = false;
+}
+
+function logout() {
+  session = null;
+  localStorage.removeItem('rwas_sale_session');
+  toast('Logged out.');
+  window.location.hash = '';
+}
+
+/* ═══ FORMAT HELPERS ═══ */
+function fmtPrice(p) {
+  if (!p || p === '0') return 'Call for Price';
+  const n = parseInt(String(p).replace(/[^0-9]/g, ''));
+  if (isNaN(n)) return p;
+  return '$' + n.toLocaleString();
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  return new Date(d).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+
+function fmtSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1048576) return (bytes/1024).toFixed(1) + ' KB';
+  return (bytes/1048576).toFixed(1) + ' MB';
+}
+
+function logbookCount(listing) {
+  if (!listing.logbooks) return 0;
+  return Object.values(listing.logbooks).reduce((s, arr) => s + (arr ? arr.length : 0), 0);
+}
+
+/* ═══ BROWSE VIEW ═══ */
+async function showBrowse() {
+  currentView = 'browse';
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <span class="sec-label" style="border:none;margin:0;padding:0">Aircraft Listings</span>
+      </div>
+      <div class="toolbar-right">
+        ${session ? `<button class="btn btn-outline btn-sm" onclick="window.location.hash='my-listings'">My Listings</button>
+        <button class="btn btn-sm" onclick="window.location.hash='sell'">+ List Aircraft</button>
+        <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>`
+        : `<button class="btn btn-sm" onclick="showAuthModal()">Seller Login</button>`}
+      </div>
+    </div>
+    <div class="search-bar">
+      <input id="searchInput" placeholder="Search by make, model, N-number, avionics..." onkeydown="if(event.key==='Enter')doBrowseSearch()">
+      <button onclick="doBrowseSearch()">Search</button>
+    </div>
+    <div class="filter-row">
+      <select id="filterCat" onchange="doBrowseSearch()">
+        <option value="">All Categories</option>
+        ${Object.entries(CATEGORIES).map(([k,v]) => `<option value="${k}">${v}</option>`).join('')}
+      </select>
+      <select id="filterSort" onchange="doBrowseSearch()">
+        <option value="newest">Newest First</option>
+        <option value="price-low">Price: Low to High</option>
+        <option value="price-high">Price: High to Low</option>
+      </select>
+    </div>
+    <div id="listingsArea"><div style="text-align:center;padding:40px"><div class="spinner"></div></div></div>
+  `;
+  await doBrowseSearch();
+}
+
+async function doBrowseSearch() {
+  const q = document.getElementById('searchInput')?.value || '';
+  const cat = document.getElementById('filterCat')?.value || '';
+  const sort = document.getElementById('filterSort')?.value || 'newest';
+
+  let url = '/browse?';
+  if (q) url += `q=${encodeURIComponent(q)}&`;
+  if (cat) url += `category=${cat}&`;
+
+  try {
+    const res = await api(url);
+    listings = res.listings || [];
+
+    if (sort === 'price-low') listings.sort((a,b) => parseInt(String(a.price).replace(/\D/g,''))||0 - parseInt(String(b.price).replace(/\D/g,''))||0);
+    if (sort === 'price-high') listings.sort((a,b) => (parseInt(String(b.price).replace(/\D/g,''))||0) - (parseInt(String(a.price).replace(/\D/g,''))||0));
+
+    renderListings(listings);
+  } catch (e) {
+    document.getElementById('listingsArea').innerHTML = `<div class="empty-state"><div class="icon">⚠</div><h3>Connection Error</h3><p>Could not reach the listings server. The API may not be deployed yet.</p></div>`;
+  }
+}
+
+function renderListings(list) {
+  const area = document.getElementById('listingsArea');
+  if (!list.length) {
+    area.innerHTML = `<div class="empty-state">
+      <div class="icon">✈</div>
+      <h3>No Aircraft Listed Yet</h3>
+      <p>Be the first to list your aircraft for sale with complete logbook documentation. Buyers love transparency.</p>
+      <button class="btn" onclick="${session ? "window.location.hash='sell'" : 'showAuthModal()'}">List Your Aircraft</button>
+    </div>`;
+    return;
+  }
+
+  area.innerHTML = `<div class="byline">${list.length} aircraft available</div>
+    <div class="listings-grid">
+      ${list.map(l => {
+        const photo = l.photos && l.photos.length ? `<img src="${API_BASE}/files/${l.photos[0].key}" alt="${l.make} ${l.model}">` : `<div class="no-photo">No Photo</div>`;
+        const lbCount = logbookCount(l);
+        return `<div class="listing-card" onclick="window.location.hash='listing/${l.id}'">
+          <div class="card-photo">${photo}</div>
+          <div class="card-body">
+            <div>
+              <span class="kicker">${CATEGORIES[l.category] || l.category} &middot; ${l.year}</span>
+              <div class="card-title">${l.make} ${l.model}</div>
+              <div class="card-specs">
+                ${l.nNumber ? `<span>N${l.nNumber.replace(/^N/i,'')}</span>` : ''}
+                ${l.totalTime ? `<span>TT: ${l.totalTime}</span>` : ''}
+                ${l.engineTime ? `<span>SMOH: ${l.engineTime}</span>` : ''}
+                ${l.serialNumber ? `<span>S/N: ${l.serialNumber}</span>` : ''}
+              </div>
+              <div class="card-desc">${l.description || ''}</div>
+            </div>
+            <div class="card-footer">
+              <div>
+                <div class="card-price">${fmtPrice(l.price)}</div>
+                ${lbCount ? `<div class="card-logbooks">✓ ${lbCount} logbook document${lbCount>1?'s':''} available</div>` : ''}
+              </div>
+              <div class="card-seller">${l.sellerLocation || ''}<br>${fmtDate(l.createdAt)}</div>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+/* ═══ DETAIL VIEW ═══ */
+async function showDetail(id) {
+  currentView = 'detail';
+  const app = document.getElementById('app');
+  app.innerHTML = `<div style="text-align:center;padding:40px"><div class="spinner"></div></div>`;
+
+  try {
+    const res = await api(`/listing/${id}`);
+    if (!res.listing) { app.innerHTML = `<div class="empty-state"><h3>Listing Not Found</h3><p>This listing may have been removed.</p><button class="btn" onclick="window.location.hash=''">Browse Listings</button></div>`; return; }
+    currentListing = res.listing;
+    renderDetail(currentListing);
+  } catch (e) {
+    app.innerHTML = `<div class="empty-state"><h3>Error Loading Listing</h3><p>${e.message}</p></div>`;
+  }
+}
+
+function renderDetail(l) {
+  const app = document.getElementById('app');
+  const photos = l.photos || [];
+  const mainPhoto = photos.length ? `<img src="${API_BASE}/files/${photos[0].key}" alt="${l.make} ${l.model}">` : `<div class="no-photo" style="font-size:14px">No Photos Uploaded</div>`;
+  const thumbs = photos.slice(1).map((p,i) => `<div class="thumb" onclick="swapMainPhoto('${API_BASE}/files/${p.key}')"><img src="${API_BASE}/files/${p.key}" alt="Photo ${i+2}"></div>`).join('');
+
+  const isOwner = session && session.email === l.sellerEmail;
+
+  app.innerHTML = `
+    <div style="margin-bottom:10px"><a href="#" style="font-family:Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.08em">&larr; Back to Listings</a></div>
+
+    <div class="detail-header">
+      <div>
+        <span class="kicker">${CATEGORIES[l.category] || l.category} &middot; ${l.year} ${l.condition === 'new' ? '&middot; NEW' : ''}</span>
+        <div class="headline-xl">${l.make} ${l.model}</div>
+        <div class="byline">Listed ${fmtDate(l.createdAt)} ${l.sellerLocation ? '&middot; ' + l.sellerLocation : ''}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:28px;font-weight:700">${fmtPrice(l.price)}</div>
+        ${l.priceLabel ? `<div style="font-family:Arial,sans-serif;font-size:10px;color:#666;text-transform:uppercase">${l.priceLabel}</div>` : ''}
+        ${isOwner ? `<div style="margin-top:8px"><span class="badge badge-${l.status}">${l.status}</span></div>` : ''}
+      </div>
+    </div>
+
+    <div class="detail-two-col">
+      <div class="detail-main">
+        <!-- Gallery -->
+        <div class="detail-gallery">
+          <div class="main-photo" id="mainPhotoBox">${mainPhoto}</div>
+          ${thumbs}
+        </div>
+
+        <!-- Description -->
+        ${l.description ? `<div class="sec-label">Description</div><div class="body-text" style="margin-bottom:14px">${l.description.split('\n').join('<br>')}</div>` : ''}
+
+        <!-- Avionics -->
+        ${l.avionics ? `<div class="sec-label">Avionics & Equipment</div><div class="body-text" style="margin-bottom:14px">${l.avionics.split('\n').join('<br>')}</div>` : ''}
+
+        <!-- Logbooks -->
+        <div class="sec-label">Aircraft Logbooks & Documentation</div>
+        <div class="logbook-section">
+          <div class="logbook-tabs">
+            ${Object.entries(LOGBOOK_CATS).map(([k,v], i) => `<div class="logbook-tab ${i===0?'active':''}" onclick="switchLogbookTab('${k}',this)">${v} ${l.logbooks && l.logbooks[k] && l.logbooks[k].length ? `(${l.logbooks[k].length})` : ''}</div>`).join('')}
+          </div>
+          ${Object.entries(LOGBOOK_CATS).map(([k,v], i) => {
+            const files = (l.logbooks && l.logbooks[k]) || [];
+            return `<div class="logbook-panel ${i===0?'active':''}" id="logbook-${k}">
+              ${files.length ? files.map(f => `<div class="logbook-file">
+                <a href="${API_BASE}/files/${f.key}" target="_blank">${f.name}</a>
+                <span class="file-size">${fmtSize(f.size)}</span>
+              </div>`).join('') : `<div class="logbook-empty">No ${v.toLowerCase()} documents uploaded.</div>`}
+            </div>`;
+          }).join('')}
+        </div>
+
+        ${isOwner ? `<div style="margin-top:14px"><button class="btn btn-sm" onclick="window.location.hash='sell&edit=${l.id}'">Edit Listing</button></div>` : ''}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="detail-sidebar">
+        <!-- Specs -->
+        <div class="sec-label">Aircraft Specifications</div>
+        <table class="specs-table">
+          <tr><td>Make</td><td>${l.make}</td></tr>
+          <tr><td>Model</td><td>${l.model}</td></tr>
+          <tr><td>Year</td><td>${l.year}</td></tr>
+          ${l.serialNumber ? `<tr><td>Serial #</td><td>${l.serialNumber}</td></tr>` : ''}
+          ${l.nNumber ? `<tr><td>Reg. #</td><td>N${l.nNumber.replace(/^N/i,'')}</td></tr>` : ''}
+          ${l.totalTime ? `<tr><td>Total Time</td><td>${l.totalTime} hrs</td></tr>` : ''}
+          ${l.engineModel ? `<tr><td>Engine</td><td>${l.engineModel}</td></tr>` : ''}
+          ${l.engineTime ? `<tr><td>Engine SMOH</td><td>${l.engineTime} hrs</td></tr>` : ''}
+          ${l.propModel ? `<tr><td>Propeller</td><td>${l.propModel}</td></tr>` : ''}
+          ${l.propTime ? `<tr><td>Prop SPOH</td><td>${l.propTime} hrs</td></tr>` : ''}
+          ${l.annualDue ? `<tr><td>Annual Due</td><td>${l.annualDue}</td></tr>` : ''}
+          ${l.usefulLoad ? `<tr><td>Useful Load</td><td>${l.usefulLoad} lbs</td></tr>` : ''}
+          ${l.fuelCapacity ? `<tr><td>Fuel Capacity</td><td>${l.fuelCapacity} gal</td></tr>` : ''}
+          ${l.cruiseSpeed ? `<tr><td>Cruise Speed</td><td>${l.cruiseSpeed} kts</td></tr>` : ''}
+          ${l.range ? `<tr><td>Range</td><td>${l.range} nm</td></tr>` : ''}
+          ${l.damageHistory && l.damageHistory !== 'none' ? `<tr><td>Damage Hx</td><td>${l.damageHistory}</td></tr>` : `<tr><td>Damage Hx</td><td>None reported</td></tr>`}
+        </table>
+
+        <!-- Contact -->
+        <div class="contact-box">
+          <div class="headline-sm">Contact Seller</div>
+          ${l.sellerName ? `<div class="contact-row"><span class="label">Name</span><span>${l.sellerName}</span></div>` : ''}
+          <div class="contact-row"><span class="label">Email</span><span><a href="mailto:${l.sellerEmail}">${l.sellerEmail}</a></span></div>
+          ${l.sellerPhone ? `<div class="contact-row"><span class="label">Phone</span><span><a href="tel:${l.sellerPhone}">${l.sellerPhone}</a></span></div>` : ''}
+          ${l.sellerLocation ? `<div class="contact-row"><span class="label">Location</span><span>${l.sellerLocation}</span></div>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function swapMainPhoto(src) {
+  document.querySelector('#mainPhotoBox').innerHTML = `<img src="${src}" alt="Aircraft photo">`;
+}
+
+function switchLogbookTab(cat, el) {
+  document.querySelectorAll('.logbook-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.logbook-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('logbook-' + cat).classList.add('active');
+}
+
+/* ═══ SELL / CREATE FORM ═══ */
+function showSellForm() {
+  currentView = 'sell';
+  if (!session) { showAuthModal(); return; }
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div style="margin-bottom:10px"><a href="#" style="font-family:Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.08em">&larr; Back to Listings</a></div>
+    <div class="headline-lg">List Your Aircraft for Sale</div>
+    <div class="byline">Logged in as ${session.email}</div>
+    <hr class="rule">
+
+    <!-- Aircraft Details -->
+    <div class="form-section">
+      <div class="sec-label">Aircraft Information</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="required">Make</label><input id="fMake" placeholder="Cessna, Piper, Beechcraft..."></div>
+        <div class="form-group"><label class="required">Model</label><input id="fModel" placeholder="172S, Cherokee 180..."></div>
+        <div class="form-group"><label class="required">Year</label><input id="fYear" type="number" min="1920" max="2030" placeholder="1975"></div>
+        <div class="form-group"><label>Category</label>
+          <select id="fCategory">${Object.entries(CATEGORIES).map(([k,v]) => `<option value="${k}">${v}</option>`).join('')}</select>
+        </div>
+        <div class="form-group"><label>Serial Number</label><input id="fSerial" placeholder="17266429"></div>
+        <div class="form-group"><label>N-Number</label><input id="fNNumber" placeholder="N12345"></div>
+        <div class="form-group"><label>Total Time (hrs)</label><input id="fTotalTime" placeholder="3250"></div>
+        <div class="form-group"><label>Engine Model</label><input id="fEngineModel" placeholder="O-360-A4M"></div>
+        <div class="form-group"><label>Engine SMOH (hrs)</label><input id="fEngineTime" placeholder="850"></div>
+        <div class="form-group"><label>Propeller Model</label><input id="fPropModel" placeholder="McCauley 1C160/DTM7557"></div>
+        <div class="form-group"><label>Propeller SPOH (hrs)</label><input id="fPropTime" placeholder="200"></div>
+        <div class="form-group"><label>Annual Due</label><input id="fAnnualDue" placeholder="March 2027"></div>
+        <div class="form-group"><label>Useful Load (lbs)</label><input id="fUsefulLoad" placeholder="820"></div>
+        <div class="form-group"><label>Fuel Capacity (gal)</label><input id="fFuelCap" placeholder="56"></div>
+        <div class="form-group"><label>Cruise Speed (kts)</label><input id="fCruise" placeholder="125"></div>
+        <div class="form-group"><label>Range (nm)</label><input id="fRange" placeholder="580"></div>
+        <div class="form-group"><label>Condition</label>
+          <select id="fCondition"><option value="used">Used</option><option value="new">New</option></select>
+        </div>
+        <div class="form-group"><label>Damage History</label>
+          <select id="fDamageHx"><option value="none">None</option><option value="minor">Minor — repaired</option><option value="major">Major — repaired per 43.13</option></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pricing & Description -->
+    <div class="form-section">
+      <div class="sec-label">Pricing & Description</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="required">Asking Price ($)</label><input id="fPrice" placeholder="89000"></div>
+        <div class="form-group"><label>Price Note</label><input id="fPriceLabel" placeholder="Or best offer, Make offer, etc."></div>
+        <div class="form-group form-full"><label>Description</label><textarea id="fDesc" rows="5" placeholder="Describe your aircraft — condition, history, recent upgrades, why you're selling..."></textarea></div>
+        <div class="form-group form-full"><label>Avionics & Equipment List</label><textarea id="fAvionics" rows="4" placeholder="Garmin GTN 750Xi, GI 275, GFC 500 AP, ADS-B In/Out, GDL 69A SiriusXM..."></textarea></div>
+      </div>
+    </div>
+
+    <!-- Seller Info -->
+    <div class="form-section">
+      <div class="sec-label">Seller Information</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Name</label><input id="fSellerName" value="${session.name || ''}"></div>
+        <div class="form-group"><label>Phone</label><input id="fSellerPhone" placeholder="(605) 555-1234"></div>
+        <div class="form-group form-full"><label>Location</label><input id="fSellerLoc" placeholder="Yankton, SD (KYKN)"></div>
+      </div>
+    </div>
+
+    <hr class="rule">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn" onclick="submitListing()" id="submitBtn">Submit Listing for Review</button>
+      <span class="body-text" style="color:#666;font-style:italic">Your listing will be reviewed before publishing. You can upload photos and logbooks after submission.</span>
+    </div>
+
+    <div id="postSubmitArea"></div>
+  `;
+}
+
+async function submitListing() {
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Submitting...';
+  btn.disabled = true;
+
+  const data = {
+    make: document.getElementById('fMake').value.trim(),
+    model: document.getElementById('fModel').value.trim(),
+    year: document.getElementById('fYear').value.trim(),
+    category: document.getElementById('fCategory').value,
+    serialNumber: document.getElementById('fSerial').value.trim(),
+    nNumber: document.getElementById('fNNumber').value.trim(),
+    totalTime: document.getElementById('fTotalTime').value.trim(),
+    engineModel: document.getElementById('fEngineModel').value.trim(),
+    engineTime: document.getElementById('fEngineTime').value.trim(),
+    propModel: document.getElementById('fPropModel').value.trim(),
+    propTime: document.getElementById('fPropTime').value.trim(),
+    annualDue: document.getElementById('fAnnualDue').value.trim(),
+    usefulLoad: document.getElementById('fUsefulLoad').value.trim(),
+    fuelCapacity: document.getElementById('fFuelCap').value.trim(),
+    cruiseSpeed: document.getElementById('fCruise').value.trim(),
+    range: document.getElementById('fRange').value.trim(),
+    condition: document.getElementById('fCondition').value,
+    damageHistory: document.getElementById('fDamageHx').value,
+    price: document.getElementById('fPrice').value.trim(),
+    priceLabel: document.getElementById('fPriceLabel').value.trim(),
+    description: document.getElementById('fDesc').value.trim(),
+    avionics: document.getElementById('fAvionics').value.trim(),
+    sellerName: document.getElementById('fSellerName').value.trim(),
+    sellerPhone: document.getElementById('fSellerPhone').value.trim(),
+    sellerLocation: document.getElementById('fSellerLoc').value.trim(),
+  };
+
+  if (!data.make || !data.model || !data.year || !data.price) {
+    toast('Fill in all required fields (Make, Model, Year, Price).');
+    btn.textContent = 'Submit Listing for Review';
+    btn.disabled = false;
+    return;
+  }
+
+  try {
+    const res = await api('/listings', { method: 'POST', body: JSON.stringify(data) });
+    if (res.ok) {
+      toast('Listing submitted! Now upload photos and logbooks.');
+      editingListing = res.listing;
+      showUploadSection(res.listing);
+    } else {
+      toast(res.error || 'Submission failed.');
+    }
+  } catch (e) {
+    toast('Network error: ' + e.message);
+  }
+
+  btn.textContent = 'Submit Listing for Review';
+  btn.disabled = false;
+}
+
+/* ═══ UPLOAD SECTION (shown after listing creation) ═══ */
+function showUploadSection(listing) {
+  const area = document.getElementById('postSubmitArea');
+  area.innerHTML = `
+    <hr class="rule-thick" style="margin-top:20px">
+    <div class="headline-lg" style="margin-bottom:4px">Upload Photos & Logbooks</div>
+    <div class="byline">Listing: ${listing.year} ${listing.make} ${listing.model} &middot; ID: ${listing.id}</div>
+
+    <!-- Photos -->
+    <div class="form-section">
+      <div class="sec-label">Aircraft Photos</div>
+      <div class="upload-zone" id="zone-photos"
+        ondragover="event.preventDefault();this.classList.add('dragover')"
+        ondragleave="this.classList.remove('dragover')"
+        ondrop="event.preventDefault();this.classList.remove('dragover');handleFileDrop(event,'photos','${listing.id}')"
+        onclick="document.getElementById('input-photos').click()">
+        <div class="icon">📷</div>
+        <p>Drop photos here or click to browse</p>
+        <p style="font-size:8px;margin-top:4px">JPG, PNG, WebP — up to 50MB each — up to 10 photos</p>
+      </div>
+      <input type="file" id="input-photos" multiple accept="image/*" style="display:none" onchange="handleFileSelect(this.files,'photos','${listing.id}')">
+      <div id="files-photos" class="file-list"></div>
+    </div>
+
+    <!-- Logbooks by category -->
+    ${Object.entries(LOGBOOK_CATS).map(([k,v]) => `
+    <div class="form-section">
+      <div class="sec-label">${v} Logbook Documents</div>
+      <div class="upload-zone" id="zone-${k}"
+        ondragover="event.preventDefault();this.classList.add('dragover')"
+        ondragleave="this.classList.remove('dragover')"
+        ondrop="event.preventDefault();this.classList.remove('dragover');handleFileDrop(event,'${k}','${listing.id}')"
+        onclick="document.getElementById('input-${k}').click()">
+        <div class="icon">📄</div>
+        <p>Drop ${v.toLowerCase()} documents here or click to browse</p>
+        <p style="font-size:8px;margin-top:4px">PDF, DOC, DOCX, XLS, XLSX, images — up to 50MB each</p>
+      </div>
+      <input type="file" id="input-${k}" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.tif,.tiff,.jpg,.jpeg,.png" style="display:none" onchange="handleFileSelect(this.files,'${k}','${listing.id}')">
+      <div id="files-${k}" class="file-list"></div>
+    </div>`).join('')}
+
+    <hr class="rule">
+    <button class="btn" onclick="window.location.hash='listing/${listing.id}'">View My Listing</button>
+    <button class="btn btn-outline" onclick="window.location.hash='my-listings'" style="margin-left:8px">My Listings</button>
+  `;
+}
+
+async function handleFileDrop(event, category, listingId) {
+  const files = event.dataTransfer.files;
+  await processUploads(files, category, listingId);
+}
+
+async function handleFileSelect(files, category, listingId) {
+  await processUploads(files, category, listingId);
+}
+
+async function processUploads(files, category, listingId) {
+  const listEl = document.getElementById('files-' + category);
+  for (const file of files) {
+    const itemId = 'up-' + Math.random().toString(36).slice(2,8);
+    listEl.insertAdjacentHTML('beforeend', `
+      <div class="file-item" id="${itemId}">
+        <span>${file.name} (${fmtSize(file.size)})</span>
+        <span><div class="spinner" style="width:12px;height:12px;border-width:1.5px"></div></span>
+      </div>
+    `);
+
+    try {
+      const res = await uploadFile(listingId, category, file);
+      const el = document.getElementById(itemId);
+      if (res.ok) {
+        el.querySelector('span:last-child').innerHTML = '✓';
+        el.style.borderColor = '#2d5016';
+      } else {
+        el.querySelector('span:last-child').innerHTML = `<span style="color:#8b0000">✗ ${res.error || 'Failed'}</span>`;
+      }
+    } catch (e) {
+      const el = document.getElementById(itemId);
+      if (el) el.querySelector('span:last-child').innerHTML = `<span style="color:#8b0000">✗ Network error</span>`;
+    }
+  }
+}
+
+/* ═══ MY LISTINGS VIEW ═══ */
+async function showMyListings() {
+  currentView = 'my-listings';
+  if (!session) { showAuthModal(); return; }
+
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div style="margin-bottom:10px"><a href="#" style="font-family:Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.08em">&larr; Back to Listings</a></div>
+    <div class="toolbar">
+      <div class="toolbar-left"><span class="sec-label" style="border:none;margin:0;padding:0">My Listings</span></div>
+      <div class="toolbar-right">
+        <button class="btn btn-sm" onclick="window.location.hash='sell'">+ New Listing</button>
+        <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+      </div>
+    </div>
+    <div id="myListingsArea"><div style="text-align:center;padding:40px"><div class="spinner"></div></div></div>
+  `;
+
+  try {
+    // Also show user's pending/rejected listings
+    const allRes = await api("/my-listings");
+    const myList = allRes.listings || [];
+
+    const area = document.getElementById('myListingsArea');
+    if (!myList.length) {
+      area.innerHTML = `<div class="empty-state"><h3>No Listings Yet</h3><p>You haven't listed any aircraft for sale.</p><button class="btn" onclick="window.location.hash='sell'">List Your First Aircraft</button></div>`;
+      return;
+    }
+
+    area.innerHTML = myList.map(l => `
+      <div style="border-bottom:1px solid #1a1a1a;padding:12px 0;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <span class="badge badge-${l.status}">${l.status}</span>
+          <strong style="margin-left:8px">${l.year} ${l.make} ${l.model}</strong>
+          <span style="margin-left:8px;color:#666">${fmtPrice(l.price)}</span>
+        </div>
+        <div>
+          <a href="#listing/${l.id}" class="btn btn-sm btn-outline">View</a>
+        </div>
+      </div>
+    `).join('');
+  } catch (e) {
+    document.getElementById('myListingsArea').innerHTML = `<div class="empty-state"><h3>Error</h3><p>${e.message}</p></div>`;
+  }
+}
+
+</script>
+<script src="/jerry-widget.js" defer></script>
+</body>
+</html>
