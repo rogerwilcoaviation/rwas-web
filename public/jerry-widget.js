@@ -318,7 +318,9 @@
             }
           } else {
             clearPendingListing();
-            messages.push('Your listing has been submitted for review! You can manage it from My Listings.');
+            messages.push('\u2705 Your listing has been submitted for review!\n\nStatus: PENDING — our team will review it shortly.\nOnce approved, it goes Active on the marketplace.\n\nView your listing: Click SELLER LOGIN > My Listings to see status and manage your listing.');
+            // Also show a toast notification on the page
+            if (typeof window.toast === 'function') window.toast('Listing submitted! Status: Pending Review');
           }
         } catch (e) {
           messages.push('Listing submission failed. Please try again in a moment.');
