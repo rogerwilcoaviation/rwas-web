@@ -146,6 +146,21 @@
   var send = panel.querySelector('.jerry-widget-input button');
   var closeBtn = panel.querySelector('.jerry-widget-close');
 
+  function formatMessage(text) {
+    // Strip INTAKE_COMPLETE, LISTING_DRAFT, LISTING_SAVE JSON blocks
+    text = text.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '');
+    text = text.replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '');
+    text = text.replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '');
+    text = text.trim();
+    // Basic markdown: **bold**
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    // Line breaks
+    text = text.replace(/\n/g, '<br>');
+    text = text.replace(/
+/g, '<br>');
+    return text;
+  }
+
   function render() {
     chat.innerHTML = '';
     history.forEach(function (message) {
@@ -153,7 +168,11 @@
       row.className = 'jerry-widget-row ' + message.role;
       var msg = document.createElement('div');
       msg.className = 'jerry-widget-msg';
-      msg.textContent = message.content;
+      if (message.role === 'assistant') {
+        msg.innerHTML = formatMessage(message.content);
+      } else {
+        msg.textContent = message.content;
+      }
       row.appendChild(msg);
       chat.appendChild(row);
     });
@@ -221,7 +240,11 @@
         throw new Error('No reply returned');
       }
 
-      history.push({ role: 'assistant', content: String(reply) });
+      var cleanReply = String(reply);
+      cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
+      cleanReply = cleanReply.replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '').trim();
+      cleanReply = cleanReply.replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '').trim();
+      history.push({ role: 'assistant', content: cleanReply });
       saveHistory();
       render();
     } catch (err) {
