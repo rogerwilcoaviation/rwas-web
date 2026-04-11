@@ -107,7 +107,7 @@ function getGarminManualContext(query: string) {
   ].join("\n\n");
 }
 
-const LISTING_INTENT_RE = /\b(list|sell|selling|post|listing|for sale|aircraft.*(sale|sell|market)|want to (list|sell)|tail number|n-number|logbook|asking price)\b/i;
+const LISTING_INTENT_RE = /\b(list|sell|selling|post|listing|for sale|aircraft|tail number|n-number|logbook|asking price)\b/i;
 function getListingPrompt(): string {
   return `AIRCRAFT LISTING INTAKE MODE — FOLLOW THESE INSTRUCTIONS EXACTLY:
 
