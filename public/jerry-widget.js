@@ -102,7 +102,9 @@
     '.jerry-thinking-dots span:nth-child(2){animation-delay:.2s}' +
     '.jerry-thinking-dots span:nth-child(3){animation-delay:.4s}' +
     '@keyframes jerryDots{0%,80%,100%{opacity:.2}40%{opacity:1}}' +
-    '@media (max-width:480px){.jerry-widget-panel{right:0;left:0;bottom:0;width:100%;max-width:100%;height:75vh}.jerry-widget-bubble{right:12px;bottom:12px;width:52px;height:52px}}';
+'.jerry-widget-attach{background:none;border:none;font-size:18px;cursor:pointer;padding:4px 6px;opacity:.5;flex-shrink:0;line-height:1}' +
+    '.jerry-widget-attach:hover{opacity:1}' +
+        '@media (max-width:480px){.jerry-widget-panel{right:0;left:0;bottom:0;width:100%;max-width:100%;height:75vh}.jerry-widget-bubble{right:12px;bottom:12px;width:52px;height:52px}}';
 
   var style = document.createElement('style');
   style.setAttribute('data-jerry-widget', 'true');
@@ -132,6 +134,8 @@
     '<div class="jerry-widget-chat"></div>' +
     '<div class="jerry-widget-error"></div>' +
     '<div class="jerry-widget-input">' +
+      '<button type="button" class="jerry-widget-attach" title="Attach photos or documents">📎</button>' +
+      '<input type="file" class="jerry-file-input" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.tif,.tiff" style="display:none" />' +
       '<input type="text" placeholder="Ask Jerry anything…" />' +
       '<button type="button">Send</button>' +
     '</div>';
@@ -259,6 +263,56 @@
   backdrop.addEventListener('click', function () { setOpen(false); });
   closeBtn.addEventListener('click', function () { setOpen(false); });
   send.addEventListener('click', submitMessage);
+
+  // File upload handler
+  var attachBtn = panel.querySelector('.jerry-widget-attach');
+  var fileInput = panel.querySelector('.jerry-file-input');
+  if (attachBtn && fileInput) {
+    attachBtn.addEventListener('click', function() { fileInput.click(); });
+    fileInput.addEventListener('change', async function() {
+      var files = Array.from(fileInput.files || []);
+      if (!files.length) return;
+      fileInput.value = '';
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var isImg = file.type.startsWith('image/');
+        var uid = 'up-' + Date.now() + '-' + i;
+        var row = document.createElement('div');
+        row.className = 'jerry-widget-row user';
+        row.id = uid;
+        var msg = document.createElement('div');
+        msg.className = 'jerry-widget-msg';
+        msg.style.fontSize = '12px';
+        msg.innerHTML = (isImg ? '&#128247; ' : '&#128196; ') + '<strong>' + file.name + '</strong> <em style="font-size:10px;color:#888">uploading...</em>';
+        row.appendChild(msg);
+        chat.appendChild(row);
+        chat.scrollTop = chat.scrollHeight;
+        try {
+          var url = 'https://sale-api.rogerwilcoaviation.com/chat-upload?filename=' + encodeURIComponent(file.name);
+          var sess = JSON.parse(localStorage.getItem('rwas_sale_session') || 'null');
+          var h = {};
+          if (sess && sess.token) h['Authorization'] = 'Bearer ' + sess.token;
+          var r = await fetch(url, { method: 'POST', headers: h, body: file });
+          var d = await r.json();
+          var el = document.getElementById(uid);
+          if (el) {
+            var m = el.querySelector('.jerry-widget-msg');
+            if (d.ok) {
+              var prev = isImg && d.url ? '<img src="' + d.url + '" style="max-width:180px;border:1px solid #ccc;margin:4px 0;display:block">' : '';
+              m.innerHTML = prev + (isImg ? '&#128247; ' : '&#128196; ') + '<strong>' + file.name + '</strong> <span style="font-size:10px;color:#2d5016">&#10003; uploaded</span>';
+              history.push({ role: 'user', content: '[Uploaded ' + (isImg ? 'photo' : 'document') + ': ' + file.name + ']' });
+              saveHistory();
+            } else {
+              m.innerHTML = '&#9888; <strong>' + file.name + '</strong> <span style="font-size:10px;color:#8b0000">' + (d.error || 'failed') + '</span>';
+            }
+          }
+        } catch(e) {
+          var el = document.getElementById(uid);
+          if (el) el.querySelector('.jerry-widget-msg').innerHTML = '&#9888; <strong>' + file.name + '</strong> <span style="font-size:10px;color:#8b0000">Network error</span>';
+        }
+      }
+    });
+  }
   input.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') submitMessage();
   });
