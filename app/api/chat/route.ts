@@ -213,7 +213,7 @@ async function buildAugmentedMessage(userMessage: string) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages } = await req.json();
+    const { messages, sessionId } = await req.json();
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json({ ok: false, error: "messages required" }, { status: 400 });
     }
@@ -223,6 +223,42 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "no user message" }, { status: 400 });
     }
 
+    // Build conversation context from history
+    const historyContext = messages
+      .slice(-10) // Last 10 messages for context
+      .map((m: { role: string; content: string }) => {
+        const prefix = m.role === "user" ? "SELLER" : "JERRY";
+        return prefix + ": " + m.content;
+      })
+      .join("\n");
+
+    // Check if any message in history has listing intent (means we're mid-intake)
+    const isIntakeConversation = messages.some(
+      (m: { role: string; content: string }) => LISTING_INTENT_RE.test(m.content)
+    );
+
+    // Augment the last message with context
+    let augmented = await buildAugmentedMessage(lastUserMsg.content);
+
+    // If mid-intake but last message didn't trigger listing prompt, add it
+    if (isIntakeConversation && !LISTING_INTENT_RE.test(lastUserMsg.content)) {
+      const listingPrompt = getListingPrompt();
+      if (listingPrompt && !augmented.includes("LISTING INTAKE")) {
+        augmented = listingPrompt + "\n\nCONVERSATION SO FAR:\n" + historyContext + "\n\nCustomer message:\n" + lastUserMsg.content;
+        // If there's FAA data, prepend it
+        const nMatch = lastUserMsg.content.match(NNUMBER_RE);
+        if (nMatch) {
+          const faaData = await lookupFaaRegistry(nMatch[0]);
+          if (faaData) {
+            augmented = listingPrompt + "\n\n" + faaData + "\n\nCONVERSATION SO FAR:\n" + historyContext + "\n\nCustomer message:\n" + lastUserMsg.content;
+          }
+        }
+      }
+    }
+
+    // Use stable session key so Jerry remembers the conversation
+    const stableSessionKey = sessionId || "web-" + messages[0]?.content?.slice(0, 20).replace(/[^a-z0-9]/gi, "") || Date.now();
+
     const resp = await fetch(`${JERRY_RELAY}/chat`, {
       method: "POST",
       headers: {
@@ -230,8 +266,8 @@ export async function POST(req: NextRequest) {
         "Authorization": `Bearer ${JERRY_TOKEN}`,
       },
       body: JSON.stringify({
-        message: await buildAugmentedMessage(lastUserMsg.content),
-        sessionKey: "web-" + Date.now() + "-" + Math.random().toString(36).slice(2,8),
+        message: augmented,
+        sessionKey: String(stableSessionKey),
         timeout: 30000,
       }),
     });
