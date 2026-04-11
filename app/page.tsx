@@ -334,7 +334,10 @@ export default function Home() {
         {/* ── Footer ── */}
         <div className="np-footer">
           <span className="np-footer-name">Roger Wilco Aviation Services</span>
-          <span>&copy; 2026 RWAS &middot; All Rights Reserved</span>
+          <span>
+            &copy; 2026 RWAS &middot; All Rights Reserved
+            <a href="https://sale-api.rogerwilcoaviation.com/admin" style={{color:'#666',textDecoration:'none',marginLeft:'8px'}}>Admin</a>
+          </span>
         </div>
 
       </div>
