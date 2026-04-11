@@ -191,6 +191,9 @@ export default function Home() {
               </div>
               <div style={{ marginTop: '10px', textAlign: 'center' }}>
                 <a href="/aircraft-for-sale" className="np-ad-btn">Browse All Listings &rarr;</a>
+                <div style={{ marginTop: '8px', fontFamily: 'Georgia,serif', fontSize: '11.5px', fontStyle: 'italic', color: '#444', textAlign: 'center' }}>
+                  <span style={{ fontWeight: 700 }}>Selling?</span> Click the <span style={{ display: 'inline-block', width: '20px', height: '20px', background: '#1a1a1a', color: '#f7f4ef', borderRadius: '50%', textAlign: 'center', lineHeight: '20px', fontSize: '11px', fontStyle: 'normal', fontFamily: 'Georgia,serif', fontWeight: 700 }}>J</span> bubble &mdash; Jerry will walk you through listing your aircraft step by step.
+                </div>
               </div>
 
 
