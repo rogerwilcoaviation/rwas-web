@@ -124,7 +124,7 @@ async function lookupFaaRegistry(nNumber: string): Promise<string> {
     const url = `https://registry.faa.gov/aircraftinquiry/Search/NNumberResult?nNumberTxt=N${clean}`;
     const res = await fetch(url, {
       headers: { "User-Agent": "RWAS-Jerry/1.0 (aircraft listing intake)" },
-      signal: AbortSignal.timeout(8000),
+      signal: (() => { const c = new AbortController(); setTimeout(() => c.abort(), 8000); return c.signal; })(),
     });
     if (!res.ok) return "";
     const html = await res.text();
@@ -160,7 +160,7 @@ async function lookupFaaRegistry(nNumber: string): Promise<string> {
       airworthiness: extract("Airworthiness Date"),
     };
 
-    const parts = [];
+    const parts: string[] = [];
     if (data.manufacturer || data.model) parts.push(`Aircraft: ${data.year || "?"} ${data.manufacturer} ${data.model}`);
     if (data.serialNumber) parts.push(`Serial: ${data.serialNumber}`);
     if (data.engineManufacturer || data.engineModel) parts.push(`Engine: ${data.engineManufacturer} ${data.engineModel}`);
