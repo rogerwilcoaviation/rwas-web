@@ -12,7 +12,7 @@ const collectionLinks = [
     label: 'Papa-Alpha',
   },
   {
-    href: 'https://rwas-aircraft-sale.john-08c.workers.dev/page',
+    href: '/aircraft-for-sale',
     label: 'Aircraft 4 Sale',
   },
   {

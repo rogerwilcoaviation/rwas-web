@@ -42,7 +42,7 @@ export default async function CollectionsPage() {
                 <Link href="/collections/rigging-tools">See Papa-Alpha tools</Link>
               </Button>
               <Button asChild variant="outlinePrimary" className="border-[#C49A2A] text-[#111111] hover:bg-[#C49A2A]/10">
-                <Link href="https://rwas-aircraft-sale.john-08c.workers.dev/page">Aircraft 4 Sale</Link>
+                <Link href="/aircraft-for-sale">Aircraft 4 Sale</Link>
               </Button>
             </div>
           </div>

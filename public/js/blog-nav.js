@@ -12,7 +12,7 @@
     { text: "On Sale", href: "/collections/on-sale" },
     { text: "Garmin", href: "/collections/garmin-avionics" },
     { text: "Papa-Alpha Tools", href: "/collections/rigging-tools" },
-    { text: "Aircraft 4 Sale", href: "https://rwas-aircraft-sale.john-08c.workers.dev/page" },
+    { text: "Aircraft 4 Sale", href: "/aircraft-for-sale" },
     { text: "Financing", href: "/financing" },
     { text: "Shop Capabilities", href: "/shop-capabilities" },
     { text: "Blog Articles", href: "/blog/" },
