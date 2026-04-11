@@ -146,44 +146,51 @@ async function lookupFaaRegistry(nNumber: string): Promise<string> {
     if (!res.ok) return "";
     const html = await res.text();
 
-    // Extract key fields from the FAA registry HTML
+    const normalize = (value: string) => value.replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
+    const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
     const extract = (label: string): string => {
+      const safe = escape(label);
       const patterns = [
-        new RegExp(label + '\\s*</td>\\s*<td[^>]*>\\s*([^<]+)', 'i'),
-        new RegExp(label + '\\s*:?\\s*</th>\\s*<td[^>]*>\\s*([^<]+)', 'i'),
-        new RegExp('>' + label + '\\s*</label>\\s*[^<]*<[^>]*>\\s*([^<]+)', 'i'),
+        new RegExp(`<td[^>]*data-label="${safe}"[^>]*>\\s*([^<]+?)\\s*</td>`, "i"),
+        new RegExp(`${safe}\\s*</td>\\s*<td[^>]*>\\s*([^<]+?)\\s*</td>`, "i"),
+        new RegExp(`${safe}\\s*:?\\s*</th>\\s*<td[^>]*>\\s*([^<]+?)\\s*</td>`, "i"),
       ];
       for (const re of patterns) {
         const m = html.match(re);
-        if (m) return m[1].trim();
+        if (m) return normalize(m[1]);
       }
       return "";
     };
+
+    const deregisteredMatch = html.match(new RegExp(`N${clean} is ([^.\\n<]+)`, "i"));
 
     const data = {
       nNumber: "N" + clean,
       serialNumber: extract("Serial Number"),
       manufacturer: extract("Manufacturer Name") || extract("MFR Name"),
       model: extract("Model"),
-      year: extract("Year Manufacturer") || extract("Year MFR"),
+      year: extract("Mfr Year") || extract("Year Manufacturer") || extract("Year MFR"),
       engineManufacturer: extract("Engine Manufacturer") || extract("Eng MFR"),
       engineModel: extract("Engine Model"),
-      type: extract("Type Aircraft"),
+      type: extract("Aircraft Type") || extract("Type Aircraft"),
       registrant: extract("Name"),
       city: extract("City"),
       state: extract("State"),
-      status: extract("Status"),
+      status: extract("Status") || normalize(deregisteredMatch?.[1] || ""),
       certificateDate: extract("Certificate Issue Date"),
-      airworthiness: extract("Airworthiness Date"),
+      airworthiness: extract("A/W Date") || extract("Airworthiness Date"),
     };
 
     const parts: string[] = [];
-    if (data.manufacturer || data.model) parts.push(`Aircraft: ${data.year || "?"} ${data.manufacturer} ${data.model}`);
+    if (data.manufacturer || data.model) parts.push(`Aircraft: ${[data.year, data.manufacturer, data.model].filter(Boolean).join(" ")}`);
     if (data.serialNumber) parts.push(`Serial: ${data.serialNumber}`);
-    if (data.engineManufacturer || data.engineModel) parts.push(`Engine: ${data.engineManufacturer} ${data.engineModel}`);
+    if (data.engineManufacturer || data.engineModel) parts.push(`Engine: ${[data.engineManufacturer, data.engineModel].filter(Boolean).join(" ")}`);
+    if (data.type) parts.push(`Type: ${data.type}`);
     if (data.registrant) parts.push(`Registrant: ${data.registrant}`);
     if (data.city && data.state) parts.push(`Location: ${data.city}, ${data.state}`);
     if (data.status) parts.push(`Status: ${data.status}`);
+    if (data.certificateDate) parts.push(`Certificate Issued: ${data.certificateDate}`);
     if (data.airworthiness) parts.push(`Airworthiness: ${data.airworthiness}`);
 
     if (!parts.length) return "";
@@ -193,17 +200,15 @@ async function lookupFaaRegistry(nNumber: string): Promise<string> {
   }
 }
 
-function buildAugmentedMessage(userMessage: string) {
+async function buildAugmentedMessage(userMessage: string) {
   const faqContext = getFaqContext(userMessage);
   const manualContext = getGarminManualContext(userMessage);
   const listingContext = LISTING_INTENT_RE.test(userMessage) ? getListingPrompt() : "";
 
-  // N-number detection — tell Jerry to guide seller to FAA registry
   let nNumberContext = "";
   const nMatch = userMessage.match(NNUMBER_RE);
   if (nMatch) {
-    const clean = nMatch[0].replace(/^[Nn]-?\s*/, "").toUpperCase();
-    nNumberContext = "The seller mentioned tail number N" + clean + ". Direct them to verify their aircraft details at https://registry.faa.gov/aircraftinquiry/Search/NNumberInquiry and confirm the make, model, year, and serial number with you.";
+    nNumberContext = await lookupFaaRegistry(nMatch[0]);
   }
 
   const contextParts = [listingContext, nNumberContext, faqContext, manualContext].filter(Boolean);
@@ -236,7 +241,7 @@ export async function POST(req: NextRequest) {
         "Authorization": `Bearer ${JERRY_TOKEN}`,
       },
       body: JSON.stringify({
-        message: buildAugmentedMessage(lastUserMsg.content),
+        message: await buildAugmentedMessage(lastUserMsg.content),
         sessionKey: "web-" + Date.now() + "-" + Math.random().toString(36).slice(2,8),
         timeout: 30000,
       }),
