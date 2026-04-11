@@ -354,6 +354,7 @@ const LOGBOOK_CATS = {
 
 // ── State ──
 let session = JSON.parse(localStorage.getItem('rwas_sale_session') || 'null');
+window.rwasSaleSession = session;
 let currentView = 'browse';
 let listings = [];
 let currentListing = null;
@@ -456,6 +457,7 @@ async function checkVerificationCode() {
     if (res.verified) {
       session = { token: res.session, email, name: res.name || document.getElementById('authName').value.trim() };
       localStorage.setItem('rwas_sale_session', JSON.stringify(session));
+      window.rwasSaleSession = session;
       hideAuthModal();
       toast('Verified! You can now create listings.');
       route(); // Re-render current view
@@ -472,6 +474,7 @@ async function checkVerificationCode() {
 function logout() {
   session = null;
   localStorage.removeItem('rwas_sale_session');
+  window.rwasSaleSession = null;
   toast('Logged out.');
   window.location.hash = '';
 }

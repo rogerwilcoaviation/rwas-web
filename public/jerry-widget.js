@@ -224,12 +224,21 @@
     }
   }
 
+  function normalizeSaleSession(raw) {
+    if (!raw || typeof raw !== 'object') return null;
+    var token = raw.token || raw.session || raw.authToken || null;
+    var email = raw.email || raw.userEmail || null;
+    var name = raw.name || raw.userName || '';
+    if (!token && !email) return null;
+    return { token: token, email: email, name: name };
+  }
+
   function getSaleSession() {
     try {
-      return JSON.parse(localStorage.getItem('rwas_sale_session') || 'null');
-    } catch (e) {
-      return null;
-    }
+      var stored = normalizeSaleSession(JSON.parse(localStorage.getItem('rwas_sale_session') || 'null'));
+      if (stored) return stored;
+    } catch (e) {}
+    return normalizeSaleSession(window.rwasSaleSession || null);
   }
 
   function getPendingListing() {
