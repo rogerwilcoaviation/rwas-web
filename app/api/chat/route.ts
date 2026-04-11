@@ -107,10 +107,19 @@ function getGarminManualContext(query: string) {
   ].join("\n\n");
 }
 
+const LISTING_INTENT_RE = /\b(list|sell|selling|post|listing|for sale|aircraft.*(sale|sell|market)|want to (list|sell))\b/i;
+const LISTING_PROMPT_PATH = "/Users/rwas/projects/rwas-web/public/js/jerry-listing-prompt.txt";
+
+function getListingPrompt() {
+  if (!existsSync(LISTING_PROMPT_PATH)) return "";
+  return readFileSync(LISTING_PROMPT_PATH, "utf8");
+}
+
 function buildAugmentedMessage(userMessage: string) {
   const faqContext = getFaqContext(userMessage);
   const manualContext = getGarminManualContext(userMessage);
-  const contextParts = [faqContext, manualContext].filter(Boolean);
+  const listingContext = LISTING_INTENT_RE.test(userMessage) ? getListingPrompt() : "";
+  const contextParts = [listingContext, faqContext, manualContext].filter(Boolean);
 
   if (!contextParts.length) return userMessage;
 
