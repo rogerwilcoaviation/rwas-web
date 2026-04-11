@@ -200,7 +200,7 @@ async function lookupFaaRegistry(nNumber: string): Promise<string> {
   }
 }
 
-async function buildAugmentedMessage(userMessage: string) {
+async async function buildAugmentedMessage(userMessage: string) {
   const faqContext = getFaqContext(userMessage);
   const manualContext = getGarminManualContext(userMessage);
   const listingContext = LISTING_INTENT_RE.test(userMessage) ? getListingPrompt() : "";
