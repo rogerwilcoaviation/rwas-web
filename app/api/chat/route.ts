@@ -115,11 +115,80 @@ function getListingPrompt() {
   return readFileSync(LISTING_PROMPT_PATH, "utf8");
 }
 
-function buildAugmentedMessage(userMessage: string) {
+
+const NNUMBER_RE = /\b[Nn]\s?-?\s?(\d{1,5}[A-Za-z]{0,2})\b/;
+
+async function lookupFaaRegistry(nNumber: string): Promise<string> {
+  const clean = nNumber.replace(/^[Nn]-?\s*/, "").toUpperCase();
+  try {
+    const url = `https://registry.faa.gov/aircraftinquiry/Search/NNumberResult?nNumberTxt=N${clean}`;
+    const res = await fetch(url, {
+      headers: { "User-Agent": "RWAS-Jerry/1.0 (aircraft listing intake)" },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) return "";
+    const html = await res.text();
+
+    // Extract key fields from the FAA registry HTML
+    const extract = (label: string): string => {
+      const patterns = [
+        new RegExp(label + '\\s*</td>\\s*<td[^>]*>\\s*([^<]+)', 'i'),
+        new RegExp(label + '\\s*:?\\s*</th>\\s*<td[^>]*>\\s*([^<]+)', 'i'),
+        new RegExp('>' + label + '\\s*</label>\\s*[^<]*<[^>]*>\\s*([^<]+)', 'i'),
+      ];
+      for (const re of patterns) {
+        const m = html.match(re);
+        if (m) return m[1].trim();
+      }
+      return "";
+    };
+
+    const data = {
+      nNumber: "N" + clean,
+      serialNumber: extract("Serial Number"),
+      manufacturer: extract("Manufacturer Name") || extract("MFR Name"),
+      model: extract("Model"),
+      year: extract("Year Manufacturer") || extract("Year MFR"),
+      engineManufacturer: extract("Engine Manufacturer") || extract("Eng MFR"),
+      engineModel: extract("Engine Model"),
+      type: extract("Type Aircraft"),
+      registrant: extract("Name"),
+      city: extract("City"),
+      state: extract("State"),
+      status: extract("Status"),
+      certificateDate: extract("Certificate Issue Date"),
+      airworthiness: extract("Airworthiness Date"),
+    };
+
+    const parts = [];
+    if (data.manufacturer || data.model) parts.push(`Aircraft: ${data.year || "?"} ${data.manufacturer} ${data.model}`);
+    if (data.serialNumber) parts.push(`Serial: ${data.serialNumber}`);
+    if (data.engineManufacturer || data.engineModel) parts.push(`Engine: ${data.engineManufacturer} ${data.engineModel}`);
+    if (data.registrant) parts.push(`Registrant: ${data.registrant}`);
+    if (data.city && data.state) parts.push(`Location: ${data.city}, ${data.state}`);
+    if (data.status) parts.push(`Status: ${data.status}`);
+    if (data.airworthiness) parts.push(`Airworthiness: ${data.airworthiness}`);
+
+    if (!parts.length) return "";
+    return "FAA REGISTRY LOOKUP for N" + clean + ":\n" + parts.join("\n") + "\nUse this data to pre-fill listing fields. Confirm with the seller.";
+  } catch {
+    return "";
+  }
+}
+
+async function buildAugmentedMessage(userMessage: string) {
   const faqContext = getFaqContext(userMessage);
   const manualContext = getGarminManualContext(userMessage);
   const listingContext = LISTING_INTENT_RE.test(userMessage) ? getListingPrompt() : "";
-  const contextParts = [listingContext, faqContext, manualContext].filter(Boolean);
+
+  // FAA N-number lookup
+  let faaContext = "";
+  const nMatch = userMessage.match(NNUMBER_RE);
+  if (nMatch) {
+    faaContext = await lookupFaaRegistry(nMatch[0]);
+  }
+
+  const contextParts = [listingContext, faaContext, faqContext, manualContext].filter(Boolean);
 
   if (!contextParts.length) return userMessage;
 
@@ -149,7 +218,7 @@ export async function POST(req: NextRequest) {
         "Authorization": `Bearer ${JERRY_TOKEN}`,
       },
       body: JSON.stringify({
-        message: buildAugmentedMessage(lastUserMsg.content),
+        message: await buildAugmentedMessage(lastUserMsg.content),
         sessionKey: "web-" + Date.now() + "-" + Math.random().toString(36).slice(2,8),
         timeout: 30000,
       }),

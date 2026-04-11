@@ -97,6 +97,11 @@
     '.jerry-widget-input input{flex:1;min-width:0;border:1px solid #1a1a1a;background:#fffdf9;padding:10px 12px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;color:#1a1a1a;outline:none}' +
     '.jerry-widget-input button{background:#1a1a1a;color:#f7f4ef;border:none;padding:10px 14px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;flex-shrink:0}' +
     '.jerry-widget-input button:disabled,.jerry-widget-input input:disabled{opacity:.5;cursor:default}' +
+    '.jerry-thinking-msg{opacity:.6;font-style:italic;font-size:11px}' +
+    '.jerry-thinking-dots span{animation:jerryDots 1.4s infinite;font-size:16px;font-weight:700;letter-spacing:2px}' +
+    '.jerry-thinking-dots span:nth-child(2){animation-delay:.2s}' +
+    '.jerry-thinking-dots span:nth-child(3){animation-delay:.4s}' +
+    '@keyframes jerryDots{0%,80%,100%{opacity:.2}40%{opacity:1}}' +
     '@media (max-width:480px){.jerry-widget-panel{right:0;left:0;bottom:0;width:100%;max-width:100%;height:75vh}.jerry-widget-bubble{right:12px;bottom:12px;width:52px;height:52px}}';
 
   var style = document.createElement('style');
@@ -172,6 +177,20 @@
     loading = !!next;
     input.disabled = loading;
     send.disabled = loading;
+    // Show/remove thinking indicator
+    var existing = document.getElementById('jerry-thinking');
+    if (existing) existing.remove();
+    if (loading) {
+      var thinkRow = document.createElement('div');
+      thinkRow.className = 'jerry-widget-row assistant';
+      thinkRow.id = 'jerry-thinking';
+      var thinkMsg = document.createElement('div');
+      thinkMsg.className = 'jerry-widget-msg jerry-thinking-msg';
+      thinkMsg.innerHTML = '<span class="jerry-thinking-dots"><span>.</span><span>.</span><span>.</span></span> Jerry is thinking';
+      thinkRow.appendChild(thinkMsg);
+      chat.appendChild(thinkRow);
+      chat.scrollTop = chat.scrollHeight;
+    }
   }
 
   async function submitMessage() {
