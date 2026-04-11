@@ -108,21 +108,28 @@ function getGarminManualContext(query: string) {
 }
 
 const LISTING_INTENT_RE = /\b(list|sell|selling|post|listing|for sale|aircraft.*(sale|sell|market)|want to (list|sell))\b/i;
-let _cachedListingPrompt: string | null = null;
+function getListingPrompt(): string {
+  return `AIRCRAFT LISTING INTAKE MODE — FOLLOW THESE INSTRUCTIONS EXACTLY:
 
-async function getListingPrompt(): Promise<string> {
-  if (_cachedListingPrompt !== null) return _cachedListingPrompt;
-  try {
-    const res = await fetch("https://www.rogerwilcoaviation.com/js/jerry-listing-prompt.txt", {
-      signal: (() => { const c = new AbortController(); setTimeout(() => c.abort(), 5000); return c.signal; })(),
-    });
-    if (res.ok) {
-      _cachedListingPrompt = await res.text();
-      return _cachedListingPrompt;
-    }
-  } catch {}
-  _cachedListingPrompt = "";
-  return "";
+STEP 1 — LOGIN FIRST (mandatory):
+Your VERY FIRST response must ask the seller to log in. Say: "Before we get started, click the SELLER LOGIN button at the top of the page, enter your email, and verify the code. Let me know once you're logged in."
+Do NOT collect any listing details until the seller confirms they are logged in.
+
+STEP 2 — GET TAIL NUMBER:
+Once logged in, ask for the tail number first. When they give it, tell them: "Great, give me a moment to pull up your aircraft." Then ask them to confirm: make, model, year, and serial number. Also suggest they can verify their registration at https://registry.faa.gov/aircraftinquiry/Search/NNumberInquiry
+
+STEP 3 — COLLECT DETAILS (2-3 at a time):
+REQUIRED: make, model, year, price, sellerName, sellerPhone, sellerLocation
+IMPORTANT: nNumber, serialNumber, totalTime, engineModel, engineTime, category, description
+OPTIONAL: propModel, propTime, annualDue, usefulLoad, fuelCapacity, cruiseSpeed, range, condition (used/new), damageHistory (none/minor/major), avionics, priceLabel, equipmentList
+Categories: single-piston, multi-piston, turboprop, jet, helicopter, experimental, other
+
+STEP 4 — CONFIRM AND SUBMIT:
+Summarize all collected fields. Once confirmed, emit on its own line:
+LISTING_DRAFT:{"make":"...","model":"...","year":...,"price":"...", etc}
+Tell them: "Your listing is submitted for review. You can upload photos and logbook documents from My Listings once approved. You can pause, mark sold, or delete anytime."
+
+If seller says "save" or "continue later", emit: LISTING_SAVE:{"email":"...","collected fields"}`;
 }
 
 
@@ -186,19 +193,20 @@ async function lookupFaaRegistry(nNumber: string): Promise<string> {
   }
 }
 
-async function buildAugmentedMessage(userMessage: string) {
+function buildAugmentedMessage(userMessage: string) {
   const faqContext = getFaqContext(userMessage);
   const manualContext = getGarminManualContext(userMessage);
-  const listingContext = LISTING_INTENT_RE.test(userMessage) ? await getListingPrompt() : "";
+  const listingContext = LISTING_INTENT_RE.test(userMessage) ? getListingPrompt() : "";
 
-  // FAA N-number lookup
-  let faaContext = "";
+  // N-number detection — tell Jerry to guide seller to FAA registry
+  let nNumberContext = "";
   const nMatch = userMessage.match(NNUMBER_RE);
   if (nMatch) {
-    faaContext = await lookupFaaRegistry(nMatch[0]);
+    const clean = nMatch[0].replace(/^[Nn]-?\s*/, "").toUpperCase();
+    nNumberContext = "The seller mentioned tail number N" + clean + ". Direct them to verify their aircraft details at https://registry.faa.gov/aircraftinquiry/Search/NNumberInquiry and confirm the make, model, year, and serial number with you.";
   }
 
-  const contextParts = [listingContext, faaContext, faqContext, manualContext].filter(Boolean);
+  const contextParts = [listingContext, nNumberContext, faqContext, manualContext].filter(Boolean);
 
   if (!contextParts.length) return userMessage;
 
@@ -228,7 +236,7 @@ export async function POST(req: NextRequest) {
         "Authorization": `Bearer ${JERRY_TOKEN}`,
       },
       body: JSON.stringify({
-        message: await buildAugmentedMessage(lastUserMsg.content),
+        message: buildAugmentedMessage(lastUserMsg.content),
         sessionKey: "web-" + Date.now() + "-" + Math.random().toString(36).slice(2,8),
         timeout: 30000,
       }),
