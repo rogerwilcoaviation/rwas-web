@@ -196,43 +196,60 @@ input,select,textarea,button{font-family:inherit}
   .form-grid{grid-template-columns:1fr}
   .toolbar{flex-direction:column;align-items:stretch}
 }
+
+/* ═══ NEWSPAPER HEADER (synced with main site) ═══ */
+.np-dateline{display:flex;justify-content:space-between;padding:5px 20px;border-bottom:1px solid #1a1a1a;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#444}
+.np-masthead{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:4px double #1a1a1a;gap:16px}
+.np-masthead-logo{width:60px;height:60px;object-fit:contain;flex-shrink:0}
+.np-masthead-center{text-align:center;flex:1}
+.np-masthead-name{font-size:30px;font-weight:700;letter-spacing:-.01em;line-height:1;color:#0a0a0a;margin-bottom:4px;white-space:nowrap}
+.np-masthead-rule{border:none;border-top:1px solid #1a1a1a;margin:5px 0}
+.np-masthead-tagline{font-family:Arial,sans-serif;font-size:9.5px;letter-spacing:.05em;color:#444;text-transform:uppercase;white-space:nowrap}
+.np-masthead-right{font-family:Arial,sans-serif;font-size:10px;color:#666;text-align:right;flex-shrink:0;width:100px;line-height:1.7}
+.np-edition-bar{display:flex;justify-content:space-between;padding:4px 20px;background:#1a1a1a;color:#f7f4ef;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.np-nav{display:flex;flex-wrap:wrap;border-bottom:2px solid #1a1a1a}
+.np-nav a{padding:7px 11px;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;color:#1a1a1a;border-right:1px solid #1a1a1a;cursor:pointer}
+.np-nav a:hover,.np-nav a.active{background:#1a1a1a;color:#f7f4ef}
+.np-ticker-bar{display:flex;align-items:center;gap:10px;padding:5px 20px;background:#2d2d2d;color:#f7f4ef;overflow:hidden}
+.np-ticker-label{font-family:Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:#f7f4ef;color:#1a1a1a;padding:2px 7px;white-space:nowrap;flex-shrink:0}
+.np-ticker-text{font-family:Georgia,serif;font-style:italic;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:700px){
+  .np-masthead{flex-direction:column;gap:8px;padding:8px 12px}
+  .np-masthead-name{font-size:22px;white-space:normal}
+  .np-masthead-logo,.np-masthead-right{display:none}
+  .np-dateline,.np-edition-bar{padding:4px 12px;font-size:9px}
+  .np-nav a{padding:6px 8px;font-size:9px}
+}
 </style>
 </head>
 <body>
 
 <div class="page">
   <!-- DATELINE -->
-  <div class="dateline">
-    <span>Spring 2026 Edition</span>
-    <span>Vol. XL &middot; No. 1</span>
-    <span>rogerwilcoaviation.com</span>
-  </div>
+  <div class="np-dateline"><span>Spring 2026 Edition</span><span>Vol. XL &middot; No. 1</span><span>rogerwilcoaviation.com</span></div>
 
   <!-- MASTHEAD -->
-  <div class="masthead">
-    <img class="masthead-logo" src="https://rogerwilcoaviation.com/newspaper/images/logo.png" alt="Roger Wilco Aviation Services">
-    <div class="masthead-center">
-      <div class="masthead-name">Roger Wilco Aviation Services</div>
-      <hr class="masthead-rule">
-      <div class="masthead-tagline">FAA Cert. Repair Station &nbsp;&middot;&nbsp; Avionics &nbsp;&middot;&nbsp; Airframe &amp; Powerplant &nbsp;&middot;&nbsp; NDT &nbsp;&middot;&nbsp; Fabrication</div>
+  <div class="np-masthead">
+    <img class="np-masthead-logo" src="https://rogerwilcoaviation.com/newspaper/images/logo.png" alt="Roger Wilco Aviation Services">
+    <div class="np-masthead-center">
+      <div class="np-masthead-name">Roger Wilco Aviation Services</div>
+      <hr class="np-masthead-rule">
+      <div class="np-masthead-tagline">FAA Cert. Repair Station &nbsp;&middot;&nbsp; Avionics &nbsp;&middot;&nbsp; Airframe &amp; Powerplant &nbsp;&middot;&nbsp; NDT &nbsp;&middot;&nbsp; Fabrication</div>
     </div>
-    <div class="masthead-right">
-      Cert. No. RWSR491E<br>
-      KYKN &middot; Yankton, SD
-    </div>
+    <div class="np-masthead-right">Cert. No. RWSR491E<br>KYKN &middot; Yankton, SD</div>
   </div>
 
   <!-- EDITION BAR -->
-  <div class="edition-bar">
+  <div class="np-edition-bar">
     <span>New website launch &mdash; meet Captain Jerry, your AI avionics expert</span>
     <span>GFC 500 autopilot installations available</span>
     <span>Now accepting spring scheduling</span>
   </div>
 
   <!-- NAV -->
-  <div class="nav">
+  <nav class="np-nav">
     <a href="https://rogerwilcoaviation.com/">Home</a>
-    <a href="https://rogerwilcoaviation.com/#ask-jerry" style="background:#d4c47a;cursor:pointer">Ask Jerry</a>
+    <a href="https://rogerwilcoaviation.com/#ask-jerry" style="background:#d4c47a;cursor:pointer" class="np-nav-jerry">Ask Jerry</a>
     <a href="https://rogerwilcoaviation.com/collections/on-sale">On Sale</a>
     <a href="https://rogerwilcoaviation.com/collections/garmin-avionics">Garmin</a>
     <a href="https://rogerwilcoaviation.com/collections/rigging-tools">Papa-Alpha Tools</a>
@@ -241,15 +258,14 @@ input,select,textarea,button{font-family:inherit}
     <a href="https://rogerwilcoaviation.com/shop-capabilities">Shop Capabilities</a>
     <a href="https://rogerwilcoaviation.com/blog/">Blog Articles</a>
     <a href="https://rogerwilcoaviation.com/about">About</a>
-  </div>
+  </nav>
 
   <!-- TICKER -->
-  <div class="ticker-bar" style="display:flex;align-items:center;gap:10px;padding:5px 20px;background:#2d2d2d;color:#f7f4ef;overflow:hidden">
-    <span style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:#f7f4ef;color:#1a1a1a;padding:2px 7px;white-space:nowrap;flex-shrink:0">Bulletin</span>
-    <span style="font-family:Georgia,serif;font-style:italic;font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Papa-Alpha rigging reference tools now shipping worldwide &nbsp;&bull;&nbsp; Garmin G3X Touch installations booking into summer 2026 &nbsp;&bull;&nbsp; Annual inspection slots available &mdash; call (605) 299-8178</span>
+  <div class="np-ticker-bar">
+    <span class="np-ticker-label">Bulletin</span>
+    <span class="np-ticker-text">Papa-Alpha rigging reference tools now shipping worldwide &nbsp;&bull;&nbsp; Garmin G3X Touch installations booking into summer 2026 &nbsp;&bull;&nbsp; Annual inspection slots available &mdash; call (605) 299-8178</span>
   </div>
 
-  <!-- MAIN CONTENT (SPA views rendered here) -->
   <div class="content" id="app">
     <!-- JS renders views here -->
   </div>
@@ -257,7 +273,7 @@ input,select,textarea,button{font-family:inherit}
   <!-- FOOTER -->
   <div class="footer">
     <span class="footer-name">Roger Wilco Aviation Services</span>
-    <span>&copy; 2026 RWAS &middot; All Rights Reserved</span>
+    <span>&copy; 2026 RWAS &middot; All Rights Reserved &middot; <a href="https://sale-api.rogerwilcoaviation.com/admin" style="color:#f7f4ef;text-decoration:underline;text-underline-offset:2px">Admin Portal</a></span>
   </div>
 </div>
 
@@ -485,6 +501,14 @@ async function showBrowse() {
         <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>`
         : `<button class="btn btn-sm" onclick="showAuthModal()">Seller Login</button>`}
       </div>
+    </div>
+    <div style="border:2px solid #1a1a1a;padding:14px 18px;margin-bottom:14px;background:#ede9e2;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="width:40px;height:40px;background:#1a1a1a;color:#f7f4ef;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:18px;font-weight:700;flex-shrink:0">J</div>
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:15px;font-weight:700;margin-bottom:2px">Want to list your aircraft?</div>
+        <div style="font-family:Arial,sans-serif;font-size:11px;color:#555;line-height:1.5">Click the <strong>J</strong> bubble in the corner &mdash; Captain Jerry will walk you through every field, save your progress, and submit your listing when you&rsquo;re ready. Pick up where you left off anytime.</div>
+      </div>
+      <button class="btn" onclick="if(window.jerryChat){window.jerryChat('I want to list my aircraft for sale')}else{alert('Jerry widget loading...')}">List with Jerry &rarr;</button>
     </div>
     <div class="search-bar">
       <input id="searchInput" placeholder="Search by make, model, N-number, avionics..." onkeydown="if(event.key==='Enter')doBrowseSearch()">
