@@ -460,6 +460,7 @@ async function checkVerificationCode() {
       window.rwasSaleSession = session;
       hideAuthModal();
       toast('Verified! You can now create listings.');
+      if (window._afterLoginAction === 'showListingOptions') { window._afterLoginAction = null; showListingOptions(session); }
       route(); // Re-render current view
     } else {
       document.getElementById('authError').textContent = res.error || 'Verification failed.';
@@ -523,25 +524,34 @@ async function showBrowse() {
       <div style="width:40px;height:40px;background:#1a1a1a;color:#f7f4ef;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:18px;font-weight:700;flex-shrink:0">J</div>
       <div style="flex:1;min-width:200px">
         <div style="border:2px solid #1a1a1a;padding:18px 20px;margin-bottom:14px;background:#ede9e2">
-      <div style="font-size:17px;font-weight:700;margin-bottom:10px">List Your Aircraft for Sale</div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:stretch">
-        <!-- Option 1: Jerry guided -->
-        <div style="flex:1;min-width:250px;border:1px solid #1a1a1a;padding:14px;background:#f7f4ef">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <div style="width:36px;height:36px;background:#1a1a1a;color:#f7f4ef;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:16px;font-weight:700;flex-shrink:0">J</div>
-            <div style="font-size:14px;font-weight:700">Guided by Captain Jerry</div>
+      <div id="listCta" style="border:2px solid #1a1a1a;padding:18px 20px;margin-bottom:14px;background:#ede9e2">
+      <!-- Before login: single button -->
+      <div id="listCtaLogin" style="text-align:center">
+        <div style="font-size:17px;font-weight:700;margin-bottom:6px">Ready to Sell Your Aircraft?</div>
+        <div style="font-family:Arial,sans-serif;font-size:11px;color:#555;margin-bottom:12px">List it on the RWAS Aircraft 4 Sale marketplace. Log in to get started.</div>
+        <button class="btn" onclick="startListingFlow()" style="padding:10px 32px">List Your Aircraft &rarr;</button>
+      </div>
+      <!-- After login: show options -->
+      <div id="listCtaOptions" style="display:none">
+        <div style="font-size:17px;font-weight:700;margin-bottom:4px">How Would You Like to List?</div>
+        <div style="font-family:Arial,sans-serif;font-size:11px;color:#555;margin-bottom:12px">Logged in as <strong id="listCtaEmail"></strong></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:stretch">
+          <div style="flex:1;min-width:240px;border:1px solid #1a1a1a;padding:14px;background:#f7f4ef">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <div style="width:32px;height:32px;background:#1a1a1a;color:#f7f4ef;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:15px;font-weight:700;flex-shrink:0">J</div>
+              <div style="font-size:13px;font-weight:700">Guided by Captain Jerry</div>
+            </div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;color:#555;line-height:1.5;margin-bottom:10px">Jerry walks you through each field, looks up your aircraft on the FAA registry, and submits your listing automatically.</div>
+            <button class="btn" onclick="listWithJerry()" style="width:100%">List with Jerry &rarr;</button>
           </div>
-          <div style="font-family:Arial,sans-serif;font-size:11px;color:#555;line-height:1.5;margin-bottom:10px">Jerry walks you through each field conversationally. He looks up your aircraft on the FAA registry, collects details, and submits your listing automatically. Pick up where you left off anytime.</div>
-          <button class="btn" onclick="listWithJerry()" style="width:100%">List with Jerry &rarr;</button>
-        </div>
-        <!-- Option 2: Manual form -->
-        <div style="flex:1;min-width:250px;border:1px solid #1a1a1a;padding:14px;background:#f7f4ef">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-            <div style="width:36px;height:36px;background:#1a1a1a;color:#f7f4ef;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;font-size:16px;flex-shrink:0">&#9998;</div>
-            <div style="font-size:14px;font-weight:700">Fill Out Form Manually</div>
+          <div style="flex:1;min-width:240px;border:1px solid #1a1a1a;padding:14px;background:#f7f4ef">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <div style="width:32px;height:32px;background:#1a1a1a;color:#f7f4ef;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;font-size:15px;flex-shrink:0">&#9998;</div>
+              <div style="font-size:13px;font-weight:700">Fill Out Form Manually</div>
+            </div>
+            <div style="font-family:Arial,sans-serif;font-size:11px;color:#555;line-height:1.5;margin-bottom:10px">Fill in the listing form at your own pace. All the same fields, no chat required.</div>
+            <button class="btn btn-outline" onclick="window.location.hash='sell'" style="width:100%">Open Listing Form &rarr;</button>
           </div>
-          <div style="font-family:Arial,sans-serif;font-size:11px;color:#555;line-height:1.5;margin-bottom:10px">Prefer to do it yourself? Fill in the listing form at your own pace. All the same fields, no chat required. Upload photos and documents directly.</div>
-          <button class="btn btn-outline" onclick="window.location.hash='sell'" style="width:100%">Open Listing Form &rarr;</button>
         </div>
       </div>
     </div>
@@ -1045,6 +1055,50 @@ function listWithJerry() {
   // Last resort
   window.location.href = 'https://rogerwilcoaviation.com/#ask-jerry';
 }
+
+function startListingFlow() {
+  var sess = null;
+  try { sess = JSON.parse(localStorage.getItem('rwas_sale_session') || 'null'); } catch(e) {}
+  if (sess && sess.token) {
+    showListingOptions(sess);
+  } else {
+    // Open login modal, then show options after login
+    window._afterLoginAction = 'showListingOptions';
+    showAuthModal();
+  }
+}
+
+function showListingOptions(sess) {
+  var login = document.getElementById('listCtaLogin');
+  var options = document.getElementById('listCtaOptions');
+  var email = document.getElementById('listCtaEmail');
+  if (login) login.style.display = 'none';
+  if (options) options.style.display = 'block';
+  if (email && sess) email.textContent = sess.email || '';
+}
+
+// Check login state on page load and after auth
+function updateListingCta() {
+  var sess = null;
+  try { sess = JSON.parse(localStorage.getItem('rwas_sale_session') || 'null'); } catch(e) {}
+  if (sess && sess.token) {
+    showListingOptions(sess);
+  } else {
+    var login = document.getElementById('listCtaLogin');
+    var options = document.getElementById('listCtaOptions');
+    if (login) login.style.display = 'block';
+    if (options) options.style.display = 'none';
+  }
+}
+
+// Poll for login state changes (after modal login completes)
+setInterval(updateListingCta, 2000);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', updateListingCta);
+} else {
+  updateListingCta();
+}
+
 </script>
 <script>
 // Show My Listings link when logged in
