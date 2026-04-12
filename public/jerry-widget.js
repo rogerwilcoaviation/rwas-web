@@ -447,7 +447,16 @@
 
       // ── Direct listing submission from widget ──
     var submitRe = /^\s*(list it|submit|post it|list as is|list it as is|submit my listing|file it|send it|that.?s it.* list|go ahead.* list|yes.* list)\b/i;
-    if (submitRe.test(text) && session && session.token) {
+    if (submitRe.test(text)) {
+      if (!session || !session.token) {
+        console.warn('[Jerry widget] list-it blocked, missing sale session token', session || null);
+        history.push({ role: 'assistant', content: 'You need to log in before I can submit the listing. Use Seller Login, then tell me to submit it again.\n\n\u2014 Capt. Jerry, RWAS' });
+        saveHistory();
+        render();
+        setLoading(false);
+        input.focus();
+        return;
+      }
       // Parse conversation history to extract listing fields
       var allText = history.map(function(m){ return m.content; }).join('\n');
       var extracted = {};
@@ -563,26 +572,51 @@
       // Submit to API
       setLoading(true);
       try {
+        extracted.year = parseInt(extracted.year, 10) || 0;
+        extracted.price = String(extracted.price || '0').replace(/[^\d]/g, '') || '0';
+        var payload = Object.assign({}, extracted, { uploadSessionId: SESSION_ID });
+        console.log('[Jerry widget] list-it extracted payload', payload);
+        console.log('[Jerry widget] list-it auth', {
+          email: session.email || null,
+          hasToken: !!session.token,
+          tokenPreview: session.token ? String(session.token).slice(0, 8) + '…' : null
+        });
         var subRes = await fetch('https://sale-api.rogerwilcoaviation.com/listings', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + session.token
           },
-          body: JSON.stringify(Object.assign({}, extracted, { uploadSessionId: SESSION_ID }))
+          body: JSON.stringify(payload)
         });
-        var subData = await subRes.json();
-        if (subRes.ok && subData.id) {
-          history.push({ role: 'assistant', content: '\u2705 Your listing has been submitted!\n\nStatus: PENDING \u2014 our team will review it shortly.\nOnce approved, it goes Active on the marketplace.\n\nListing ID: ' + subData.id + '\nView and update your listing anytime from My Listings.\n\n\u2014 Capt. Jerry, RWAS' });
+        var subText = await subRes.text();
+        var subData = null;
+        try {
+          subData = subText ? JSON.parse(subText) : null;
+        } catch (parseErr) {
+          console.warn('[Jerry widget] list-it response was not JSON', subText, parseErr);
+        }
+        console.log('[Jerry widget] list-it API response', {
+          status: subRes.status,
+          ok: subRes.ok,
+          body: subData || subText
+        });
+        var listingId = (subData && (subData.id || (subData.listing && subData.listing.id))) || '';
+        if (subRes.ok && listingId) {
+          history.push({ role: 'assistant', content: '\u2705 Your listing has been submitted!\n\nStatus: PENDING \u2014 our team will review it shortly.\nOnce approved, it goes Active on the marketplace.\n\nListing ID: ' + listingId + '\nView and update your listing anytime from My Listings.\n\n\u2014 Capt. Jerry, RWAS' });
           saveHistory();
           render();
           if (typeof window.toast === 'function') window.toast('Listing submitted! Status: Pending');
         } else {
-          history.push({ role: 'assistant', content: 'Listing submission failed: ' + (subData.error || 'Unknown error') + '. Please try again or use the manual form.\n\n\u2014 Capt. Jerry, RWAS' });
+          if (subRes.status === 401) {
+            setPendingListing(payload);
+          }
+          history.push({ role: 'assistant', content: 'Listing submission failed: ' + ((subData && subData.error) || subText || ('HTTP ' + subRes.status) || 'Unknown error') + '. Please try again or use the manual form.\n\n\u2014 Capt. Jerry, RWAS' });
           saveHistory();
           render();
         }
       } catch(e) {
+        console.error('[Jerry widget] list-it network error', e);
         history.push({ role: 'assistant', content: 'Network error submitting listing. Please try again.\n\n\u2014 Capt. Jerry, RWAS' });
         saveHistory();
         render();
