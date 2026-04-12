@@ -115,7 +115,7 @@ const HUMAN_ESCALATION_RE = /\b(talk to someone|speak to a person|real person|ca
 const EMAIL_RE = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
 const PHONE_RE = /(?:(?:\+?1[\s.-]?)?(?:\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}))/;
 const NAME_HINT_RE = /\b(?:my name is|i am|i'm|this is)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})\b/;
-const HUMAN_ESCALATION_REPLY = "Absolutely — you can reach us directly at (605) 299-8178, or email john@rogerwilcoaviation.com. Shop hours are Monday through Friday. I have flagged your request and someone will follow up.";
+const HUMAN_ESCALATION_REPLY = "Absolutely — you can reach us directly at (605) 299-8178, or email service@rwas.team. Shop hours are Monday through Friday. I have flagged your request and someone will follow up.";
 
 type NotificationCategory = "HUMAN ESCALATION" | "JERRY FAILURE" | "LISTING SUBMITTED" | "LEAD CAPTURED" | "SERVICE REQUEST";
 
