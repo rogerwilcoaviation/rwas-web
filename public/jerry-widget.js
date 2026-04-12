@@ -732,9 +732,10 @@
             body: JSON.stringify(listing)
           });
           var icData = await icRes.json();
-          if (icRes.ok && icData.id) {
+          var icListingId = (icData && (icData.id || (icData.listing && icData.listing.id))) || '';
+          if (icRes.ok && (icListingId || icData.ok)) {
             cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}/m, '');
-            cleanReply += '\n\n\u2705 Your listing has been submitted!\nStatus: PENDING \u2014 our team will review it shortly.\nListing ID: ' + icData.id + '\nView and update from My Listings.';
+            cleanReply += '\n\n\u2705 Your listing has been submitted!\nStatus: PENDING \u2014 our team will review it shortly.' + (icListingId ? '\nListing ID: ' + icListingId : '') + '\nView and update from My Listings.';
             if (typeof window.toast === 'function') window.toast('Listing submitted! Status: Pending');
           }
         } catch(e) { /* intake complete parse/submit failed */ }
