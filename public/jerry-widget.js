@@ -481,15 +481,28 @@
         });
       }
       
-      // Price — look for dollar amounts or large numbers (not N-numbers)
+      // Price — search user messages only, and avoid N-number false positives
+      var userText = history.filter(function(m) { return m.role === 'user'; }).map(function(m) { return m.content; }).join('\n');
       var pricePatterns = [
-        /\$([\d,]+)/,                          // $300,000
-        /(?:asking|price|want)[^\d]*\$?([\d,]{4,})/i,  // asking 300000
-        /^([\d,]{4,})\b/m                       // standalone large number on its own line
+        /\$\s*([\d,]{5,})\b/,                                   // $300,000
+        /(?:asking|price|priced?|want|take|listed?\s+at)[^\d\n]*\$?([\d,]{5,})\b/i,
+        /(^|[^A-Za-z0-9N])([1-9][\d,]{4,})\b/gm                  // 5+ digits not preceded by N
       ];
       for (var pi = 0; pi < pricePatterns.length; pi++) {
-        var pm = allText.match(pricePatterns[pi]);
-        if (pm) { extracted.price = pm[1].replace(/,/g, ''); break; }
+        if (pricePatterns[pi].global) {
+          var match;
+          while ((match = pricePatterns[pi].exec(userText)) !== null) {
+            extracted.price = (match[2] || match[1] || '').replace(/,/g, '');
+            if (extracted.price) break;
+          }
+          if (extracted.price) break;
+        } else {
+          var pm = userText.match(pricePatterns[pi]);
+          if (pm) {
+            extracted.price = (pm[2] || pm[1] || '').replace(/,/g, '');
+            break;
+          }
+        }
       }
       
       // Seller name
@@ -556,7 +569,7 @@
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + session.token
           },
-          body: JSON.stringify(extracted)
+          body: JSON.stringify(Object.assign({}, extracted, { uploadSessionId: SESSION_ID }))
         });
         var subData = await subRes.json();
         if (subRes.ok && subData.id) {
@@ -634,6 +647,7 @@
             model: intakeData.model || '',
             year: intakeData.year || 0,
             price: intakeData.price || '0',
+            uploadSessionId: SESSION_ID,
             nNumber: intakeData.n_number || intakeData.nNumber || '',
             serialNumber: intakeData.serial_number || intakeData.serialNumber || '',
             totalTime: intakeData.total_time || intakeData.totalTime || '',
@@ -736,9 +750,10 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
         chat.appendChild(row);
         chat.scrollTop = chat.scrollHeight;
         try {
-          var url = 'https://sale-api.rogerwilcoaviation.com/chat-upload?filename=' + encodeURIComponent(file.name);
+          var url = 'https://sale-api.rogerwilcoaviation.com/chat-upload?filename=' + encodeURIComponent(file.name) + '&sessionId=' + encodeURIComponent(SESSION_ID);
           var sess = JSON.parse(localStorage.getItem('rwas_sale_session') || 'null');
           var h = {};
+          var isHeic = /\.(heic|heif)$/i.test(file.name);
           if (sess && sess.token) h['Authorization'] = 'Bearer ' + sess.token;
           var r = await fetch(url, { method: 'POST', headers: h, body: file });
           var d = await r.json();
@@ -746,8 +761,9 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
           if (el) {
             var m = el.querySelector('.jerry-widget-msg');
             if (d.ok) {
-              var prev = isImg && d.url ? '<img src="' + d.url + '" style="max-width:180px;border:1px solid #ccc;margin:4px 0;display:block">' : '';
-              m.innerHTML = prev + (isImg ? '&#128247; ' : '&#128196; ') + '<strong>' + file.name + '</strong> <span style="font-size:10px;color:#2d5016">&#10003; uploaded</span>';
+              var heicNote = d.note || (isHeic ? ' HEIC format is stored, but it may not display in browser yet.' : '');
+              var prev = isImg && d.url && !isHeic ? '<img src="' + d.url + '" style="max-width:180px;border:1px solid #ccc;margin:4px 0;display:block">' : '';
+              m.innerHTML = prev + (isImg ? '&#128247; ' : '&#128196; ') + '<strong>' + file.name + '</strong> <span style="font-size:10px;color:#2d5016">&#10003; uploaded</span>' + (heicNote ? '<div style="font-size:10px;color:#666;margin-top:4px">' + heicNote + '</div>' : '');
               history.push({ role: 'user', content: '[Uploaded ' + (isImg ? 'photo' : 'document') + ': ' + file.name + ']' });
               saveHistory();
             } else {

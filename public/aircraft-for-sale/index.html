@@ -7,7 +7,8 @@
 <style>
 /* ═══ RESET & BASE ═══ */
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#ddd9d2;line-height:1.6;font-family:Georgia,'Times New Roman',serif;color:#1a1a1a}
+body,*{font-family:Arial,Helvetica,sans-serif !important}
+body{background:#ddd9d2;line-height:1.6;font-family:Arial,Helvetica,sans-serif !important;font-weight:700;color:#1a1a1a}
 a{color:#1a1a1a}
 input,select,textarea,button{font-family:inherit}
 
@@ -367,7 +368,7 @@ function route() {
   const hash = window.location.hash.slice(1);
   if (hash.startsWith('listing/')) {
     showDetail(hash.replace('listing/', ''));
-  } else if (hash === 'sell') {
+  } else if (hash.startsWith('sell')) {
     showSellForm();
   } else if (hash === 'my-listings') {
     showMyListings();
@@ -392,6 +393,26 @@ async function uploadFile(listingId, category, file) {
   if (session) headers['Authorization'] = `Bearer ${session.token}`;
   const res = await fetch(url, { method: 'POST', headers, body: file });
   return res.json();
+}
+
+function isHeicFile(file) {
+  const name = (file && file.name) || (typeof file === 'string' ? file : '');
+  const key = (file && file.key) || '';
+  return /\.(heic|heif)$/i.test(name) || /\.(heic|heif)$/i.test(key) || /image\/hei[cf]/i.test((file && (file.contentType || file.type)) || '');
+}
+
+function uniqueDisplayPhotos(files) {
+  return (files || []).filter(f => !isHeicFile(f));
+}
+
+function heicPlaceholder(name) {
+  return `<div class="thumb" style="display:flex;align-items:center;justify-content:center;padding:8px;text-align:center;cursor:default;background:#e3dfd8"><div style="font-family:Arial,sans-serif;font-size:10px;line-height:1.4;color:#555"><strong>${name || 'HEIC photo'}</strong><br>HEIC format, download to view</div></div>`;
+}
+
+function getEditListingId() {
+  const hash = window.location.hash.slice(1);
+  const match = hash.match(/^sell\?edit=([^&]+)/);
+  return match ? decodeURIComponent(match[1]) : '';
 }
 
 /* ═══ TOAST ═══ */
@@ -612,7 +633,8 @@ function renderListings(list) {
   area.innerHTML = `<div class="byline">${list.length} aircraft available</div>
     <div class="listings-grid">
       ${list.map(l => {
-        const photo = l.photos && l.photos.length ? `<img src="${API_BASE}/files/${l.photos[0].key}" alt="${l.make} ${l.model}">` : `<div class="no-photo">No Photo</div>`;
+        const displayPhotos = uniqueDisplayPhotos(l.photos || []);
+        const photo = displayPhotos.length ? `<img src="${API_BASE}/files/${displayPhotos[0].key}" alt="${l.make} ${l.model}">` : ((l.photos || []).length ? `<div class="no-photo">HEIC, DOWNLOAD TO VIEW</div>` : `<div class="no-photo">No Photo</div>`);
         const lbCount = logbookCount(l);
         return `<div class="listing-card" onclick="window.location.hash='listing/${l.id}'">
           <div class="card-photo">${photo}</div>
@@ -660,8 +682,10 @@ async function showDetail(id) {
 function renderDetail(l) {
   const app = document.getElementById('app');
   const photos = l.photos || [];
-  const mainPhoto = photos.length ? `<img src="${API_BASE}/files/${photos[0].key}" alt="${l.make} ${l.model}">` : `<div class="no-photo" style="font-size:14px">No Photos Uploaded</div>`;
-  const thumbs = photos.slice(1).map((p,i) => `<div class="thumb" onclick="swapMainPhoto('${API_BASE}/files/${p.key}')"><img src="${API_BASE}/files/${p.key}" alt="Photo ${i+2}"></div>`).join('');
+  const displayPhotos = uniqueDisplayPhotos(photos);
+  const heicPhotos = photos.filter(isHeicFile);
+  const mainPhoto = displayPhotos.length ? `<img src="${API_BASE}/files/${displayPhotos[0].key}" alt="${l.make} ${l.model}">` : (heicPhotos.length ? `<div class="no-photo" style="font-size:14px">HEIC format, download to view</div>` : `<div class="no-photo" style="font-size:14px">No Photos Uploaded</div>`);
+  const thumbs = displayPhotos.slice(1).map((p,i) => `<div class="thumb" onclick="swapMainPhoto('${API_BASE}/files/${p.key}')"><img src="${API_BASE}/files/${p.key}" alt="Photo ${i+2}"></div>`).join('') + heicPhotos.map((p) => heicPlaceholder(p.name)).join('');
 
   const isOwner = session && session.email === l.sellerEmail;
 
@@ -712,7 +736,7 @@ function renderDetail(l) {
           }).join('')}
         </div>
 
-        ${isOwner ? `<div style="margin-top:14px"><button class="btn btn-sm" onclick="window.location.hash='sell&edit=${l.id}'">Edit Listing</button></div>` : ''}
+        ${isOwner ? `<div style="margin-top:14px"><button class="btn btn-sm" onclick="window.location.hash='sell?edit=${l.id}'">Edit Listing</button></div>` : ''}
       </div>
 
       <!-- Sidebar -->
@@ -763,14 +787,23 @@ function switchLogbookTab(cat, el) {
 }
 
 /* ═══ SELL / CREATE FORM ═══ */
-function showSellForm() {
+async function showSellForm() {
   currentView = 'sell';
   if (!session) { showAuthModal(); return; }
+
+  const editId = getEditListingId();
+  editingListing = null;
+  if (editId) {
+    try {
+      const res = await api(`/listing/${editId}`);
+      if (res.listing) editingListing = res.listing;
+    } catch (e) {}
+  }
 
   const app = document.getElementById('app');
   app.innerHTML = `
     <div style="margin-bottom:10px"><a href="#" style="font-family:Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.08em">&larr; Back to Listings</a></div>
-    <div class="headline-lg">List Your Aircraft for Sale</div>
+    <div class="headline-lg">${editingListing ? 'Edit Your Aircraft Listing' : 'List Your Aircraft for Sale'}</div>
     <div class="byline">Logged in as ${session.email}</div>
     <hr class="rule">
 
@@ -778,29 +811,29 @@ function showSellForm() {
     <div class="form-section">
       <div class="sec-label">Aircraft Information</div>
       <div class="form-grid">
-        <div class="form-group"><label class="required">Make</label><input id="fMake" placeholder="Cessna, Piper, Beechcraft..."></div>
-        <div class="form-group"><label class="required">Model</label><input id="fModel" placeholder="172S, Cherokee 180..."></div>
-        <div class="form-group"><label class="required">Year</label><input id="fYear" type="number" min="1920" max="2030" placeholder="1975"></div>
+        <div class="form-group"><label class="required">Make</label><input id="fMake" placeholder="Cessna, Piper, Beechcraft..." value="${editingListing?.make || ''}"></div>
+        <div class="form-group"><label class="required">Model</label><input id="fModel" placeholder="172S, Cherokee 180..." value="${editingListing?.model || ''}"></div>
+        <div class="form-group"><label class="required">Year</label><input id="fYear" type="number" min="1920" max="2030" placeholder="1975" value="${editingListing?.year || ''}"></div>
         <div class="form-group"><label>Category</label>
-          <select id="fCategory">${Object.entries(CATEGORIES).map(([k,v]) => `<option value="${k}">${v}</option>`).join('')}</select>
+          <select id="fCategory">${Object.entries(CATEGORIES).map(([k,v]) => `<option value="${k}" ${(editingListing?.category || 'single-piston') === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
         </div>
-        <div class="form-group"><label>Serial Number</label><input id="fSerial" placeholder="17266429"></div>
-        <div class="form-group"><label>N-Number</label><input id="fNNumber" placeholder="N12345"></div>
-        <div class="form-group"><label>Total Time (hrs)</label><input id="fTotalTime" placeholder="3250"></div>
-        <div class="form-group"><label>Engine Model</label><input id="fEngineModel" placeholder="O-360-A4M"></div>
-        <div class="form-group"><label>Engine SMOH (hrs)</label><input id="fEngineTime" placeholder="850"></div>
-        <div class="form-group"><label>Propeller Model</label><input id="fPropModel" placeholder="McCauley 1C160/DTM7557"></div>
-        <div class="form-group"><label>Propeller SPOH (hrs)</label><input id="fPropTime" placeholder="200"></div>
-        <div class="form-group"><label>Annual Due</label><input id="fAnnualDue" placeholder="March 2027"></div>
-        <div class="form-group"><label>Useful Load (lbs)</label><input id="fUsefulLoad" placeholder="820"></div>
-        <div class="form-group"><label>Fuel Capacity (gal)</label><input id="fFuelCap" placeholder="56"></div>
-        <div class="form-group"><label>Cruise Speed (kts)</label><input id="fCruise" placeholder="125"></div>
-        <div class="form-group"><label>Range (nm)</label><input id="fRange" placeholder="580"></div>
+        <div class="form-group"><label>Serial Number</label><input id="fSerial" placeholder="17266429" value="${editingListing?.serialNumber || ''}"></div>
+        <div class="form-group"><label>N-Number</label><input id="fNNumber" placeholder="N12345" value="${editingListing?.nNumber || ''}"></div>
+        <div class="form-group"><label>Total Time (hrs)</label><input id="fTotalTime" placeholder="3250" value="${editingListing?.totalTime || ''}"></div>
+        <div class="form-group"><label>Engine Model</label><input id="fEngineModel" placeholder="O-360-A4M" value="${editingListing?.engineModel || ''}"></div>
+        <div class="form-group"><label>Engine SMOH (hrs)</label><input id="fEngineTime" placeholder="850" value="${editingListing?.engineTime || ''}"></div>
+        <div class="form-group"><label>Propeller Model</label><input id="fPropModel" placeholder="McCauley 1C160/DTM7557" value="${editingListing?.propModel || ''}"></div>
+        <div class="form-group"><label>Propeller SPOH (hrs)</label><input id="fPropTime" placeholder="200" value="${editingListing?.propTime || ''}"></div>
+        <div class="form-group"><label>Annual Due</label><input id="fAnnualDue" placeholder="March 2027" value="${editingListing?.annualDue || ''}"></div>
+        <div class="form-group"><label>Useful Load (lbs)</label><input id="fUsefulLoad" placeholder="820" value="${editingListing?.usefulLoad || ''}"></div>
+        <div class="form-group"><label>Fuel Capacity (gal)</label><input id="fFuelCap" placeholder="56" value="${editingListing?.fuelCapacity || ''}"></div>
+        <div class="form-group"><label>Cruise Speed (kts)</label><input id="fCruise" placeholder="125" value="${editingListing?.cruiseSpeed || ''}"></div>
+        <div class="form-group"><label>Range (nm)</label><input id="fRange" placeholder="580" value="${editingListing?.range || ''}"></div>
         <div class="form-group"><label>Condition</label>
-          <select id="fCondition"><option value="used">Used</option><option value="new">New</option></select>
+          <select id="fCondition"><option value="used" ${(editingListing?.condition || 'used') === 'used' ? 'selected' : ''}>Used</option><option value="new" ${editingListing?.condition === 'new' ? 'selected' : ''}>New</option></select>
         </div>
         <div class="form-group"><label>Damage History</label>
-          <select id="fDamageHx"><option value="none">None</option><option value="minor">Minor — repaired</option><option value="major">Major — repaired per 43.13</option></select>
+          <select id="fDamageHx"><option value="none" ${(editingListing?.damageHistory || 'none') === 'none' ? 'selected' : ''}>None</option><option value="minor" ${editingListing?.damageHistory === 'minor' ? 'selected' : ''}>Minor — repaired</option><option value="major" ${editingListing?.damageHistory === 'major' ? 'selected' : ''}>Major — repaired per 43.13</option></select>
         </div>
       </div>
     </div>
@@ -809,10 +842,10 @@ function showSellForm() {
     <div class="form-section">
       <div class="sec-label">Pricing & Description</div>
       <div class="form-grid">
-        <div class="form-group"><label class="required">Asking Price ($)</label><input id="fPrice" placeholder="89000"></div>
-        <div class="form-group"><label>Price Note</label><input id="fPriceLabel" placeholder="Or best offer, Make offer, etc."></div>
-        <div class="form-group form-full"><label>Description</label><textarea id="fDesc" rows="5" placeholder="Describe your aircraft — condition, history, recent upgrades, why you're selling..."></textarea></div>
-        <div class="form-group form-full"><label>Avionics & Equipment List</label><textarea id="fAvionics" rows="4" placeholder="Garmin GTN 750Xi, GI 275, GFC 500 AP, ADS-B In/Out, GDL 69A SiriusXM..."></textarea></div>
+        <div class="form-group"><label class="required">Asking Price ($)</label><input id="fPrice" placeholder="89000" value="${editingListing?.price || ''}"></div>
+        <div class="form-group"><label>Price Note</label><input id="fPriceLabel" placeholder="Or best offer, Make offer, etc." value="${editingListing?.priceLabel || ''}"></div>
+        <div class="form-group form-full"><label>Description</label><textarea id="fDesc" rows="5" placeholder="Describe your aircraft — condition, history, recent upgrades, why you're selling...">${editingListing?.description || ''}</textarea></div>
+        <div class="form-group form-full"><label>Avionics & Equipment List</label><textarea id="fAvionics" rows="4" placeholder="Garmin GTN 750Xi, GI 275, GFC 500 AP, ADS-B In/Out, GDL 69A SiriusXM...">${editingListing?.avionics || ''}</textarea></div>
       </div>
     </div>
 
@@ -820,16 +853,16 @@ function showSellForm() {
     <div class="form-section">
       <div class="sec-label">Seller Information</div>
       <div class="form-grid">
-        <div class="form-group"><label>Name</label><input id="fSellerName" value="${session.name || ''}"></div>
-        <div class="form-group"><label>Phone</label><input id="fSellerPhone" placeholder="(605) 555-1234"></div>
-        <div class="form-group form-full"><label>Location</label><input id="fSellerLoc" placeholder="Yankton, SD (KYKN)"></div>
+        <div class="form-group"><label>Name</label><input id="fSellerName" value="${editingListing?.sellerName || session.name || ''}"></div>
+        <div class="form-group"><label>Phone</label><input id="fSellerPhone" placeholder="(605) 555-1234" value="${editingListing?.sellerPhone || ''}"></div>
+        <div class="form-group form-full"><label>Location</label><input id="fSellerLoc" placeholder="Yankton, SD (KYKN)" value="${editingListing?.sellerLocation || ''}"></div>
       </div>
     </div>
 
     <hr class="rule">
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <button class="btn" onclick="submitListing()" id="submitBtn">Submit Listing for Review</button>
-      <span class="body-text" style="color:#666;font-style:italic">Your listing will be reviewed before publishing. You can upload photos and logbooks after submission.</span>
+      <button class="btn" onclick="submitListing()" id="submitBtn">${editingListing ? 'Save Listing Changes' : 'Submit Listing for Review'}</button>
+      <span class="body-text" style="color:#666;font-style:italic">${editingListing ? 'Save changes to update your listing.' : 'Your listing will be reviewed before publishing. You can upload photos and logbooks after submission.'}</span>
     </div>
 
     <div id="postSubmitArea"></div>
@@ -877,19 +910,26 @@ async function submitListing() {
   }
 
   try {
-    const res = await api('/listings', { method: 'POST', body: JSON.stringify(data) });
+    const isEdit = !!(editingListing && editingListing.id);
+    const res = await api(isEdit ? `/listings/${editingListing.id}` : '/listings', { method: isEdit ? 'PUT' : 'POST', body: JSON.stringify(data) });
     if (res.ok) {
-      toast('Listing submitted! Now upload photos and logbooks.');
-      editingListing = res.listing;
-      showUploadSection(res.listing);
+      if (isEdit) {
+        editingListing = res.listing;
+        toast('Listing updated.');
+        window.location.hash = 'listing/' + editingListing.id;
+      } else {
+        toast('Listing submitted! Now upload photos and logbooks.');
+        editingListing = res.listing;
+        showUploadSection(res.listing);
+      }
     } else {
-      toast(res.error || 'Submission failed.');
+      toast(res.error || (isEdit ? 'Update failed.' : 'Submission failed.'));
     }
   } catch (e) {
     toast('Network error: ' + e.message);
   }
 
-  btn.textContent = 'Submit Listing for Review';
+  btn.textContent = editingListing && editingListing.id ? 'Save Listing Changes' : 'Submit Listing for Review';
   btn.disabled = false;
 }
 
@@ -911,7 +951,8 @@ function showUploadSection(listing) {
         onclick="document.getElementById('input-photos').click()">
         <div class="icon">📷</div>
         <p>Drop photos here or click to browse</p>
-        <p style="font-size:8px;margin-top:4px">JPG, PNG, WebP — up to 50MB each — up to 10 photos</p>
+        <p style="font-size:8px;margin-top:4px">JPG, PNG, WebP, HEIC, HEIF — up to 50MB each — up to 10 photos</p>
+        <p style="font-size:8px;margin-top:4px">HEIC files are stored, but they may not display in browser yet.</p>
       </div>
       <input type="file" id="input-photos" multiple accept="image/*" style="display:none" onchange="handleFileSelect(this.files,'photos','${listing.id}')">
       <div id="files-photos" class="file-list"></div>
@@ -964,7 +1005,9 @@ async function processUploads(files, category, listingId) {
       const res = await uploadFile(listingId, category, file);
       const el = document.getElementById(itemId);
       if (res.ok) {
+        const note = res.note ? `<div style="font-size:10px;color:#666;margin-top:4px">${res.note}</div>` : '';
         el.querySelector('span:last-child').innerHTML = '✓';
+        if (note) el.insertAdjacentHTML('beforeend', note);
         el.style.borderColor = '#2d5016';
       } else {
         el.querySelector('span:last-child').innerHTML = `<span style="color:#8b0000">✗ ${res.error || 'Failed'}</span>`;
