@@ -748,6 +748,16 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
         cleanReply = cleanReply ? (cleanReply + '\n\n' + actionMessages.join('\n')) : actionMessages.join('\n');
       }
       history.push({ role: 'assistant', content: cleanReply });
+      // Append list-it notice during listing intake
+      var isListingConvo = history.some(function(m) {
+        return /\b(list|sell|selling|for sale|tail number)\b/i.test(m.content);
+      });
+      if (isListingConvo && !cleanReply.includes('submitted')) {
+        var lastMsg = history[history.length - 1];
+        if (lastMsg && lastMsg.role === 'assistant') {
+          lastMsg.content += '\n\n_If you would like to list before the end of the intake, simply say "list it" at any time._';
+        }
+      }
       saveHistory();
       render();
     } catch (err) {
