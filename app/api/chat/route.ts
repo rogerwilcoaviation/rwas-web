@@ -348,19 +348,32 @@ async function notifyTeams(category: NotificationCategory, userMsg: string, jerr
         }
       }]
     };
-    await fetch(TEAMS_WEBHOOK, {
+    const res = await fetch(TEAMS_WEBHOOK, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(card),
     });
-  } catch {
-    // Teams notification failure should never break chat
+    console.log("[notifyTeams] webhook status", res.status, res.statusText);
+    return { ok: res.ok, status: res.status, statusText: res.statusText };
+  } catch (error) {
+    console.error("[notifyTeams] webhook failed", error);
+    return { ok: false, status: 0, statusText: "fetch-failed" };
   }
 }
 
 export async function POST(req: NextRequest) {
   let lastUserContent = "";
   try {
+    if (req.nextUrl.searchParams.get("test-teams") === "1") {
+      const result = await notifyTeams(
+        "SERVICE REQUEST",
+        "Test message from /api/chat?test-teams=1",
+        "Captain Jerry Teams notification test.",
+        { name: "Test User", phone: "(605) 299-8178", email: "service@rwas.team" }
+      );
+      return NextResponse.json({ ok: result.ok, test: true, teams: result }, { status: result.ok ? 200 : 502 });
+    }
+
     const { messages, sessionId } = await req.json();
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json({ ok: false, error: "messages required" }, { status: 400 });
@@ -449,7 +462,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (category) {
-      await notifyTeams(category, lastUserMsg.content, reply, contactInfo);
+      void notifyTeams(category, lastUserMsg.content, reply, contactInfo);
     }
 
     return NextResponse.json({ ok: true, reply });
@@ -465,7 +478,7 @@ export async function POST(req: NextRequest) {
       jerryFailed: true,
     });
     if (category && fallbackUserMsg) {
-      await notifyTeams(category, fallbackUserMsg, fallbackReply, fallbackContactInfo);
+      void notifyTeams(category, fallbackUserMsg, fallbackReply, fallbackContactInfo);
     }
     return NextResponse.json(
       { ok: false, reply: fallbackReply },
