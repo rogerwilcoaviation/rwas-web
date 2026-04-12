@@ -110,6 +110,21 @@ function getGarminManualContext(query: string) {
 }
 
 const LISTING_INTENT_RE = /\b(list|sell|selling|post|listing|for sale|aircraft|tail number|n-number|logbook|asking price)\b/i;
+const SERVICE_REQUEST_RE = /\b(quote|schedule|appointment|install|price|cost|how much|annual|inspection|maintenance|repair|upgrade)\b/i;
+const HUMAN_ESCALATION_RE = /\b(talk to someone|speak to a person|real person|call me|human|operator|manager|talk to john|speak with someone|can i call|phone number)\b/i;
+const EMAIL_RE = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+const PHONE_RE = /(?:(?:\+?1[\s.-]?)?(?:\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}))/;
+const NAME_HINT_RE = /\b(?:my name is|i am|i'm|this is)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})\b/;
+const HUMAN_ESCALATION_REPLY = "Absolutely — you can reach us directly at (605) 299-8178, or email john@rogerwilcoaviation.com. Shop hours are Monday through Friday. I have flagged your request and someone will follow up.";
+
+type NotificationCategory = "HUMAN ESCALATION" | "JERRY FAILURE" | "LISTING SUBMITTED" | "LEAD CAPTURED" | "SERVICE REQUEST";
+
+type ContactInfo = {
+  name?: string;
+  phone?: string;
+  email?: string;
+};
+
 function getListingPrompt(): string {
   return `LISTING INTAKE MODE. You are helping a seller list their aircraft. The seller is already logged in — do NOT ask about login or email.
 
@@ -195,10 +210,64 @@ async function lookupFaaRegistry(nNumber: string): Promise<string> {
 }
 
 
+function extractContactInfo(userMessage: string): ContactInfo {
+  const email = userMessage.match(EMAIL_RE)?.[0];
+  const phone = userMessage.match(PHONE_RE)?.[0]?.trim();
+  const name = userMessage.match(NAME_HINT_RE)?.[1]?.trim();
+  return {
+    ...(name ? { name } : {}),
+    ...(phone ? { phone } : {}),
+    ...(email ? { email } : {}),
+  };
+}
+
+function hasLeadCapture(contactInfo: ContactInfo) {
+  return Boolean(contactInfo.email || contactInfo.phone || (contactInfo.name && contactInfo.phone));
+}
+
+function lastChars(value: string, count: number) {
+  return value.length <= count ? value : value.slice(-count);
+}
+
+function ensureHumanEscalationReply(reply: string) {
+  if (reply.includes(HUMAN_ESCALATION_REPLY)) return reply;
+  const signature = "— Capt. Jerry, RWAS";
+  if (reply.includes(signature)) {
+    return reply.replace(signature, `${HUMAN_ESCALATION_REPLY}\n\n${signature}`);
+  }
+  return `${reply.trim()}\n\n${HUMAN_ESCALATION_REPLY}`;
+}
+
+function detectNotificationCategory(params: {
+  userMessage: string;
+  reply: string;
+  isIntakeConversation: boolean;
+  contactInfo: ContactInfo;
+  jerryFailed?: boolean;
+}): NotificationCategory | null {
+  const { userMessage, reply, isIntakeConversation, contactInfo, jerryFailed } = params;
+
+  if (jerryFailed || /radio trouble/i.test(reply)) return "JERRY FAILURE";
+  if (HUMAN_ESCALATION_RE.test(userMessage)) return "HUMAN ESCALATION";
+  if (isIntakeConversation && /(?:INTAKE_COMPLETE|LISTING_DRAFT):?/i.test(reply)) return "LISTING SUBMITTED";
+  if (hasLeadCapture(contactInfo)) return "LEAD CAPTURED";
+  if (SERVICE_REQUEST_RE.test(userMessage)) return "SERVICE REQUEST";
+  return null;
+}
+
+function getTeamsHeaderStyle(category: NotificationCategory) {
+  if (category === "HUMAN ESCALATION" || category === "JERRY FAILURE") return "attention";
+  if (category === "LISTING SUBMITTED") return "warning";
+  return "accent";
+}
+
 async function buildAugmentedMessage(userMessage: string) {
   const faqContext = getFaqContext(userMessage);
   const manualContext = getGarminManualContext(userMessage);
   const listingContext = LISTING_INTENT_RE.test(userMessage) ? getListingPrompt() : "";
+  const escalationContext = HUMAN_ESCALATION_RE.test(userMessage)
+    ? `HUMAN ESCALATION MODE. The customer wants a real person. Tell them exactly this: "${HUMAN_ESCALATION_REPLY}" Keep it concise and still sign off as Captain Jerry.`
+    : "";
 
   let nNumberContext = "";
   const nMatch = userMessage.match(NNUMBER_RE);
@@ -206,7 +275,7 @@ async function buildAugmentedMessage(userMessage: string) {
     nNumberContext = await lookupFaaRegistry(nMatch[0]);
   }
 
-  const contextParts = [listingContext, nNumberContext, faqContext, manualContext].filter(Boolean);
+  const contextParts = [listingContext, escalationContext, nNumberContext, faqContext, manualContext].filter(Boolean);
 
   if (!contextParts.length) return userMessage;
 
@@ -218,9 +287,10 @@ async function buildAugmentedMessage(userMessage: string) {
 }
 
 
-async function notifyTeams(userMsg: string, jerryReply: string, sessionId: string, diagnostics: Record<string, unknown> = {}) {
+async function notifyTeams(category: NotificationCategory, userMsg: string, jerryReply: string, contactInfo: ContactInfo) {
   try {
     const timestamp = new Date().toISOString();
+    const contactSummary = [contactInfo.name, contactInfo.phone, contactInfo.email].filter(Boolean).join(" | ") || "None detected";
     const card = {
       type: "message",
       attachments: [{
@@ -232,45 +302,47 @@ async function notifyTeams(userMsg: string, jerryReply: string, sessionId: strin
           version: "1.4",
           body: [
             {
-              type: "TextBlock",
-              text: "Captain Jerry — Live Chat",
-              weight: "Bolder",
-              size: "Medium"
-            },
-            {
-              type: "TextBlock",
-              text: timestamp,
-              isSubtle: true,
-              size: "Small"
-            },
-            {
-              type: "TextBlock",
-              text: "**Customer:**",
-              wrap: true
-            },
-            {
-              type: "TextBlock",
-              text: userMsg.slice(0, 500),
-              wrap: true
-            },
-            {
-              type: "TextBlock",
-              text: "**Jerry:**",
-              wrap: true
-            },
-            {
-              type: "TextBlock",
-              text: jerryReply.slice(0, 500),
-              wrap: true
+              type: "Container",
+              style: getTeamsHeaderStyle(category),
+              bleed: true,
+              items: [
+                {
+                  type: "TextBlock",
+                  text: category,
+                  weight: "Bolder",
+                  size: "Medium",
+                  wrap: true
+                }
+              ]
             },
             {
               type: "FactSet",
               facts: [
-                { title: "Session", value: sessionId || "unknown" },
-                { title: "FAA Lookup", value: diagnostics.faaLookup ? "Yes" : "No" },
-                { title: "Listing Intent", value: diagnostics.listingIntent ? "Yes" : "No" },
-                { title: "N-Number", value: (diagnostics.nNumber as string) || "—" },
+                { title: "Timestamp", value: timestamp },
+                { title: "Contact", value: contactSummary },
               ]
+            },
+            {
+              type: "TextBlock",
+              text: "Customer message",
+              weight: "Bolder",
+              wrap: true
+            },
+            {
+              type: "TextBlock",
+              text: lastChars(userMsg, 300),
+              wrap: true
+            },
+            {
+              type: "TextBlock",
+              text: "Jerry reply",
+              weight: "Bolder",
+              wrap: true
+            },
+            {
+              type: "TextBlock",
+              text: lastChars(jerryReply, 300),
+              wrap: true
             }
           ]
         }
@@ -287,6 +359,7 @@ async function notifyTeams(userMsg: string, jerryReply: string, sessionId: strin
 }
 
 export async function POST(req: NextRequest) {
+  let lastUserContent = "";
   try {
     const { messages, sessionId } = await req.json();
     if (!messages || !Array.isArray(messages)) {
@@ -297,6 +370,9 @@ export async function POST(req: NextRequest) {
     if (!lastUserMsg) {
       return NextResponse.json({ ok: false, error: "no user message" }, { status: 400 });
     }
+
+    lastUserContent = lastUserMsg.content;
+    const contactInfo = extractContactInfo(lastUserMsg.content);
 
     // Build conversation context from history
     const historyContext = messages
@@ -319,13 +395,16 @@ export async function POST(req: NextRequest) {
     if (isIntakeConversation && !LISTING_INTENT_RE.test(lastUserMsg.content)) {
       const listingPrompt = getListingPrompt();
       if (listingPrompt && !augmented.includes("LISTING INTAKE")) {
-        augmented = listingPrompt + "\n\nCONVERSATION SO FAR:\n" + historyContext + "\n\nCustomer message:\n" + lastUserMsg.content;
+        const escalationContext = HUMAN_ESCALATION_RE.test(lastUserMsg.content)
+          ? "\n\nHUMAN ESCALATION MODE. The customer wants a real person. Tell them exactly this: \"" + HUMAN_ESCALATION_REPLY + "\" Keep it concise and still sign off as Captain Jerry."
+          : "";
+        augmented = listingPrompt + escalationContext + "\n\nCONVERSATION SO FAR:\n" + historyContext + "\n\nCustomer message:\n" + lastUserMsg.content;
         // If there's FAA data, prepend it
         const nMatch = lastUserMsg.content.match(NNUMBER_RE);
         if (nMatch) {
           const faaData = await lookupFaaRegistry(nMatch[0]);
           if (faaData) {
-            augmented = listingPrompt + "\n\n" + faaData + "\n\nCONVERSATION SO FAR:\n" + historyContext + "\n\nCustomer message:\n" + lastUserMsg.content;
+            augmented = listingPrompt + escalationContext + "\n\n" + faaData + "\n\nCONVERSATION SO FAR:\n" + historyContext + "\n\nCustomer message:\n" + lastUserMsg.content;
           }
         }
       }
@@ -347,21 +426,49 @@ export async function POST(req: NextRequest) {
       }),
     });
 
-    const data = await resp.json();
-    const reply = data.reply || "Radio trouble on my end. Try again. — Capt. Jerry, RWAS";
+    let reply = "Radio trouble on my end. Try again. — Capt. Jerry, RWAS";
+    let jerryFailed = !resp.ok;
 
-    // Send to Teams channel
-    const diagData: Record<string, unknown> = {
-      listingIntent: isIntakeConversation || false,
-      faaLookup: augmented.includes("FAA"),
-      nNumber: (lastUserMsg.content.match(/\bN\d{1,5}[A-Za-z]{0,2}\b/) || [""])[0],
-    };
-    notifyTeams(lastUserMsg.content, reply, String(stableSessionKey), diagData);
+    try {
+      const data = await resp.json();
+      if (data.reply) reply = data.reply;
+    } catch {
+      jerryFailed = true;
+    }
+
+    if (HUMAN_ESCALATION_RE.test(lastUserMsg.content)) {
+      reply = ensureHumanEscalationReply(reply);
+    }
+
+    const category = detectNotificationCategory({
+      userMessage: lastUserMsg.content,
+      reply,
+      isIntakeConversation,
+      contactInfo,
+      jerryFailed,
+    });
+
+    if (category) {
+      await notifyTeams(category, lastUserMsg.content, reply, contactInfo);
+    }
 
     return NextResponse.json({ ok: true, reply });
   } catch (err: unknown) {
+    const fallbackReply = "Radio trouble on my end. Try again. — Capt. Jerry, RWAS";
+    const fallbackUserMsg = lastUserContent;
+    const fallbackContactInfo = extractContactInfo(fallbackUserMsg);
+    const category = detectNotificationCategory({
+      userMessage: fallbackUserMsg,
+      reply: fallbackReply,
+      isIntakeConversation: false,
+      contactInfo: fallbackContactInfo,
+      jerryFailed: true,
+    });
+    if (category && fallbackUserMsg) {
+      await notifyTeams(category, fallbackUserMsg, fallbackReply, fallbackContactInfo);
+    }
     return NextResponse.json(
-      { ok: false, reply: "Radio trouble on my end. Try again. — Capt. Jerry, RWAS" },
+      { ok: false, reply: fallbackReply },
       { status: 500 }
     );
   }
