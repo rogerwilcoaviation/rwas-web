@@ -581,6 +581,8 @@
           hasToken: !!session.token,
           tokenPreview: session.token ? String(session.token).slice(0, 8) + '…' : null
         });
+        console.log('Submitting listing:', JSON.stringify(extracted));
+        console.log('Auth token:', session.token ? session.token.slice(0,8) + '...' : 'NONE');
         var subRes = await fetch('https://sale-api.rogerwilcoaviation.com/listings', {
           method: 'POST',
           headers: {
@@ -611,6 +613,7 @@
           if (subRes.status === 401) {
             setPendingListing(payload);
           }
+          console.error('List-it submission error:', subRes.status, JSON.stringify(subData));
           history.push({ role: 'assistant', content: 'Listing submission failed: ' + ((subData && subData.error) || subText || ('HTTP ' + subRes.status) || 'Unknown error') + '. Please try again or use the manual form.\n\n\u2014 Capt. Jerry, RWAS' });
           saveHistory();
           render();
