@@ -481,12 +481,16 @@
         });
       }
       
-      // Price
-      var price = allText.match(/\$?([\d,]+(?:\.\d{2})?)/);
-      if (price) extracted.price = price[1].replace(/,/g, '');
-      // More specific price from conversation
-      var priceCtx = allText.match(/(?:asking|price|want)[^\d]*\$?([\d,]+)/i);
-      if (priceCtx) extracted.price = priceCtx[1].replace(/,/g, '');
+      // Price — look for dollar amounts or large numbers (not N-numbers)
+      var pricePatterns = [
+        /\$([\d,]+)/,                          // $300,000
+        /(?:asking|price|want)[^\d]*\$?([\d,]{4,})/i,  // asking 300000
+        /^([\d,]{4,})\b/m                       // standalone large number on its own line
+      ];
+      for (var pi = 0; pi < pricePatterns.length; pi++) {
+        var pm = allText.match(pricePatterns[pi]);
+        if (pm) { extracted.price = pm[1].replace(/,/g, ''); break; }
+      }
       
       // Seller name
       var nameMatch = allText.match(/(?:name|Name)[^:]*:\s*([A-Z][a-z]+ [A-Z][a-z]+)/);
@@ -653,7 +657,7 @@
           // Fill from FAA data in conversation if available
           if (!listing.make || !listing.model) {
             var allText = history.map(function(m){return m.content}).join(' ');
-            var faaAircraft = allText.match(/Aircraft:\s*(?:(\d{4})\s+)?([A-Z]+)\s+(.+?)(?:\n|$)/);
+            var faaAircraft = allText.match(/Aircraft:\\s*(?:(\\d{4})\\s+)?([A-Z][A-Za-z\\s]*?)\\s+(\\S+?)\\s+(?:Serial|Type|Engine|Status|$)/m);
             if (faaAircraft) {
               if (!listing.year && faaAircraft[1]) listing.year = parseInt(faaAircraft[1]);
               if (!listing.make) listing.make = faaAircraft[2];
