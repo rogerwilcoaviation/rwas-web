@@ -136,7 +136,7 @@
     '<div class="jerry-widget-error"></div>' +
     '<div class="jerry-widget-input">' +
       '<button type="button" class="jerry-widget-attach" title="Attach photos or documents">📎</button>' +
-      '<input type="file" class="jerry-file-input" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.tif,.tiff" style="display:none" />' +
+      '<input type="file" class="jerry-file-input" multiple accept="image/*,.heic,.heif,.pdf,.doc,.docx,.xls,.xlsx,.tif,.tiff" style="display:none" />' +
       '<input type="text" class="jerry-widget-text-input" placeholder="Ask Jerry anything…" />' +
       '<button type="button" class="jerry-widget-send">Send</button>' +
     '</div>';
