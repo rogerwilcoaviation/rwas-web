@@ -618,7 +618,74 @@
       var rawReply = String(reply);
       var actionMessages = await handleListingActions(rawReply);
       var cleanReply = rawReply;
-      cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
+      
+      // Intercept INTAKE_COMPLETE from Jerry and submit as listing
+      var intakeMatch = cleanReply.match(/INTAKE_COMPLETE:(\{[\s\S]*?\})/);
+      if (intakeMatch && session && session.token) {
+        try {
+          var intakeData = JSON.parse(intakeMatch[1]);
+          // Map snake_case fields to API camelCase
+          var listing = {
+            make: intakeData.make || '',
+            model: intakeData.model || '',
+            year: intakeData.year || 0,
+            price: intakeData.price || '0',
+            nNumber: intakeData.n_number || intakeData.nNumber || '',
+            serialNumber: intakeData.serial_number || intakeData.serialNumber || '',
+            totalTime: intakeData.total_time || intakeData.totalTime || '',
+            engineModel: intakeData.engine_model || intakeData.engineModel || '',
+            engineTime: intakeData.engine_time || intakeData.engineTime || '',
+            propModel: intakeData.prop_model || intakeData.propModel || '',
+            propTime: intakeData.prop_time || intakeData.propTime || '',
+            category: intakeData.category || 'single-piston',
+            condition: intakeData.condition || 'used',
+            damageHistory: intakeData.damage_history || intakeData.damageHistory || '',
+            description: intakeData.description || intakeData.request || '',
+            avionics: intakeData.avionics || '',
+            priceLabel: intakeData.price_label || intakeData.priceLabel || 'negotiable',
+            sellerName: (intakeData.first_name || '') + ' ' + (intakeData.last_name || intakeData.sellerName || ''),
+            sellerPhone: intakeData.phone || intakeData.sellerPhone || '',
+            sellerLocation: (intakeData.city || '') + (intakeData.state ? ', ' + intakeData.state : '') || intakeData.sellerLocation || '',
+            sellerEmail: intakeData.email || session.email || ''
+          };
+          // Clean up sellerName
+          listing.sellerName = listing.sellerName.trim();
+          // Fill from FAA data in conversation if available
+          if (!listing.make || !listing.model) {
+            var allText = history.map(function(m){return m.content}).join(' ');
+            var faaAircraft = allText.match(/Aircraft:\s*(?:(\d{4})\s+)?([A-Z]+)\s+(.+?)(?:\n|$)/);
+            if (faaAircraft) {
+              if (!listing.year && faaAircraft[1]) listing.year = parseInt(faaAircraft[1]);
+              if (!listing.make) listing.make = faaAircraft[2];
+              if (!listing.model) listing.model = faaAircraft[3].trim();
+            }
+            var faaSerial = allText.match(/Serial:\s*(\S+)/);
+            if (faaSerial && !listing.serialNumber) listing.serialNumber = faaSerial[1];
+            var faaEngine = allText.match(/Engine:\s*(.+?)(?:\n|$)/);
+            if (faaEngine && !listing.engineModel) listing.engineModel = faaEngine[1].trim();
+          }
+          // Defaults for required fields
+          if (!listing.make) listing.make = 'Unknown';
+          if (!listing.model) listing.model = 'Unknown';
+          if (!listing.year) listing.year = 0;
+          if (!listing.price || listing.price === '0') listing.price = '0';
+          
+          // Submit
+          var icRes = await fetch('https://sale-api.rogerwilcoaviation.com/listings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + session.token },
+            body: JSON.stringify(listing)
+          });
+          var icData = await icRes.json();
+          if (icRes.ok && icData.id) {
+            cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}/m, '');
+            cleanReply += '\n\n\u2705 Your listing has been submitted!\nStatus: PENDING \u2014 our team will review it shortly.\nListing ID: ' + icData.id + '\nView and update from My Listings.';
+            if (typeof window.toast === 'function') window.toast('Listing submitted! Status: Pending');
+          }
+        } catch(e) { /* intake complete parse/submit failed */ }
+      }
+
+cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
       cleanReply = cleanReply.replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '').trim();
       cleanReply = cleanReply.replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '').trim();
       if (actionMessages.length) {
