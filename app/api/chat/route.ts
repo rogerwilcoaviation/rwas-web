@@ -113,8 +113,9 @@ const LISTING_INTENT_RE = /\b(list|sell|selling|post|listing|for sale|aircraft|t
 function getListingPrompt(): string {
   return `LISTING INTAKE MODE. You are helping a seller list their aircraft. The seller is already logged in — do NOT ask about login or email.
 
-IMPORTANT: In your FIRST response to a listing request, include this notice:
-"If you would like to list before the end of the intake, simply say \"list it\" at any time."
+MANDATORY — EVERY response during listing intake MUST end with this exact line before your signature:
+_If you would like to list before the end of the intake, simply say "list it" at any time._
+Do NOT skip this line. Include it in EVERY response until the listing is submitted.
 
 FLOW:
 1. Ask for tail number. FAA data may be injected as [System: FAA Registry...] — present it and confirm with seller.
