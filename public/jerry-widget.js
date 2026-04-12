@@ -445,7 +445,138 @@
         };
       }
 
-      // FAA N-number lookup via our proxy
+      // ── Direct listing submission from widget ──
+    var submitRe = /^\s*(list it|submit|post it|list as is|list it as is|submit my listing|file it|send it|that.?s it.* list|go ahead.* list|yes.* list)\b/i;
+    if (submitRe.test(text) && session && session.token) {
+      // Parse conversation history to extract listing fields
+      var allText = history.map(function(m){ return m.content; }).join('\n');
+      var extracted = {};
+      
+      // N-number
+      var nn = allText.match(/\bN(\d{1,5}[A-Za-z]{0,2})\b/);
+      if (nn) extracted.nNumber = 'N' + nn[1];
+      
+      // FAA data from system context
+      var faaMatch = allText.match(/FAA Registry[^:]*:\n([\s\S]*?)\nConfirm/);
+      if (faaMatch) {
+        var faaLines = faaMatch[1].split('\n');
+        faaLines.forEach(function(line) {
+          var aircraft = line.match(/Aircraft:\s*(?:(\d{4})\s+)?(.+?)\s+(\S+.*)$/);
+          if (aircraft) {
+            if (aircraft[1]) extracted.year = parseInt(aircraft[1]);
+            extracted.make = (aircraft[2] || '').trim();
+            extracted.model = (aircraft[3] || '').trim();
+          }
+          var serial = line.match(/Serial:\s*(.+)/);
+          if (serial) extracted.serialNumber = serial[1].trim();
+          var engine = line.match(/Engine:\s*(.+)/);
+          if (engine) extracted.engineModel = engine[1].trim();
+          var type = line.match(/Type:\s*(.+)/);
+          if (type) {
+            var t = type[1].toLowerCase();
+            if (t.includes('single')) extracted.category = 'single-piston';
+            else if (t.includes('multi')) extracted.category = 'multi-piston';
+            else if (t.includes('rotor')) extracted.category = 'helicopter';
+          }
+        });
+      }
+      
+      // Price
+      var price = allText.match(/\$?([\d,]+(?:\.\d{2})?)/);
+      if (price) extracted.price = price[1].replace(/,/g, '');
+      // More specific price from conversation
+      var priceCtx = allText.match(/(?:asking|price|want)[^\d]*\$?([\d,]+)/i);
+      if (priceCtx) extracted.price = priceCtx[1].replace(/,/g, '');
+      
+      // Seller name
+      var nameMatch = allText.match(/(?:name|Name)[^:]*:\s*([A-Z][a-z]+ [A-Z][a-z]+)/);
+      if (!nameMatch) {
+        // Try to find name from user messages (first message with first+last pattern)
+        history.forEach(function(m) {
+          if (m.role === 'user' && !nameMatch) {
+            var nm = m.content.match(/^([A-Z][a-z]+ [A-Z][a-z]+)/);
+            if (nm) nameMatch = nm;
+          }
+        });
+      }
+      if (nameMatch) extracted.sellerName = nameMatch[1] || nameMatch[0];
+      
+      // Phone
+      var phone = allText.match(/(\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4})/);
+      if (phone) extracted.sellerPhone = phone[1];
+      
+      // Location
+      var loc = allText.match(/(?:Yankton|yankton)[,\s]*(?:South Dakota|SD|south dakota)/i);
+      if (loc) extracted.sellerLocation = 'Yankton, SD';
+      if (!extracted.sellerLocation) {
+        var locMatch = allText.match(/([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)[,\s]+(?:SD|ND|MN|IA|NE|MT|WY|CO|KS|MO|WI|IL)/);
+        if (locMatch) extracted.sellerLocation = locMatch[0];
+      }
+      
+      // Total time
+      var tt = allText.match(/(?:total time|TT)[^\d]*(\d{3,5})/i);
+      if (tt) extracted.totalTime = tt[1];
+      
+      // Engine time  
+      var et = allText.match(/(?:SMOH|engine time|since overhaul)[^\d]*(\d{2,5})/i);
+      if (et) extracted.engineTime = et[1];
+      
+      // Avionics
+      var avMatch = allText.match(/(?:avionics|panel|stack)[:\s]*([^\n]+)/i);
+      if (avMatch) extracted.avionics = avMatch[1].trim();
+      
+      // Description
+      var descMatch = allText.match(/(?:description|condition)[:\s]*([^\n]{20,})/i);
+      if (descMatch) extracted.description = descMatch[1].trim();
+      
+      // Damage history
+      if (/no damage|damage.?none|clean history/i.test(allText)) extracted.damageHistory = 'none';
+      
+      // Set defaults
+      if (!extracted.make) extracted.make = 'Unknown';
+      if (!extracted.model) extracted.model = 'Unknown';
+      if (!extracted.year) extracted.year = 0;
+      if (!extracted.price) extracted.price = '0';
+      if (!extracted.category) extracted.category = 'single-piston';
+      if (!extracted.condition) extracted.condition = 'used';
+      if (!extracted.sellerName) extracted.sellerName = session.name || session.email || '';
+      if (!extracted.sellerLocation) extracted.sellerLocation = '';
+      if (!extracted.sellerPhone) extracted.sellerPhone = '';
+      
+      // Submit to API
+      setLoading(true);
+      try {
+        var subRes = await fetch('https://sale-api.rogerwilcoaviation.com/listings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + session.token
+          },
+          body: JSON.stringify(extracted)
+        });
+        var subData = await subRes.json();
+        if (subRes.ok && subData.id) {
+          history.push({ role: 'assistant', content: '\u2705 Your listing has been submitted!\n\nStatus: PENDING \u2014 our team will review it shortly.\nOnce approved, it goes Active on the marketplace.\n\nListing ID: ' + subData.id + '\nView and update your listing anytime from My Listings.\n\n\u2014 Capt. Jerry, RWAS' });
+          saveHistory();
+          render();
+          if (typeof window.toast === 'function') window.toast('Listing submitted! Status: Pending');
+        } else {
+          history.push({ role: 'assistant', content: 'Listing submission failed: ' + (subData.error || 'Unknown error') + '. Please try again or use the manual form.\n\n\u2014 Capt. Jerry, RWAS' });
+          saveHistory();
+          render();
+        }
+      } catch(e) {
+        history.push({ role: 'assistant', content: 'Network error submitting listing. Please try again.\n\n\u2014 Capt. Jerry, RWAS' });
+        saveHistory();
+        render();
+      } finally {
+        setLoading(false);
+        input.focus();
+      }
+      return;
+    }
+
+// FAA N-number lookup via our proxy
     var nnMatch = text.match(/\bN\s?-?\s?(\d{1,5}[A-Za-z]{0,2})\b/i);
     if (nnMatch) {
       try {
