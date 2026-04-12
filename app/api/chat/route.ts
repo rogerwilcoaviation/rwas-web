@@ -5,6 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const JERRY_RELAY = "https://jerry-api.rwas.team";
 const JERRY_TOKEN = "7786abd8bfa306d7cce405117bd39349586afc8cc7be62d59f1d70a422a228d8";
+
+const TEAMS_WEBHOOK = "https://default0ed1ffd35c5f47bfa84c67b907a1fc.8f.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/cee436c59073463ea85b0102ba822bb3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=dVy12Ll4q7-PENBM2Srj2hT1mGiSX9esL9PguynoP8w";
 const FAQ_PATH = "/Users/rwas/.openclaw/workspace/JERRY-FAQ-KB.md";
 const GARMIN_MANUALS_DIR = "/Users/rwas/Documents/garmin-manuals-text";
 const MAX_FAQ_CHARS = 2200;
@@ -214,6 +216,75 @@ async function buildAugmentedMessage(userMessage: string) {
   ].join("\n\n");
 }
 
+
+async function notifyTeams(userMsg: string, jerryReply: string, sessionId: string, diagnostics: Record<string, unknown> = {}) {
+  try {
+    const timestamp = new Date().toISOString();
+    const card = {
+      type: "message",
+      attachments: [{
+        contentType: "application/vnd.microsoft.card.adaptive",
+        contentUrl: null,
+        content: {
+          "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+          type: "AdaptiveCard",
+          version: "1.4",
+          body: [
+            {
+              type: "TextBlock",
+              text: "Captain Jerry — Live Chat",
+              weight: "Bolder",
+              size: "Medium"
+            },
+            {
+              type: "TextBlock",
+              text: timestamp,
+              isSubtle: true,
+              size: "Small"
+            },
+            {
+              type: "TextBlock",
+              text: "**Customer:**",
+              wrap: true
+            },
+            {
+              type: "TextBlock",
+              text: userMsg.slice(0, 500),
+              wrap: true
+            },
+            {
+              type: "TextBlock",
+              text: "**Jerry:**",
+              wrap: true
+            },
+            {
+              type: "TextBlock",
+              text: jerryReply.slice(0, 500),
+              wrap: true
+            },
+            {
+              type: "FactSet",
+              facts: [
+                { title: "Session", value: sessionId || "unknown" },
+                { title: "FAA Lookup", value: diagnostics.faaLookup ? "Yes" : "No" },
+                { title: "Listing Intent", value: diagnostics.listingIntent ? "Yes" : "No" },
+                { title: "N-Number", value: (diagnostics.nNumber as string) || "—" },
+              ]
+            }
+          ]
+        }
+      }]
+    };
+    await fetch(TEAMS_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(card),
+    });
+  } catch {
+    // Teams notification failure should never break chat
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { messages, sessionId } = await req.json();
@@ -277,6 +348,14 @@ export async function POST(req: NextRequest) {
 
     const data = await resp.json();
     const reply = data.reply || "Radio trouble on my end. Try again. — Capt. Jerry, RWAS";
+
+    // Send to Teams channel
+    const diagData: Record<string, unknown> = {
+      listingIntent: isIntakeConversation || false,
+      faaLookup: augmented.includes("FAA"),
+      nNumber: (lastUserMsg.content.match(/\bN\d{1,5}[A-Za-z]{0,2}\b/) || [""])[0],
+    };
+    notifyTeams(lastUserMsg.content, reply, String(stableSessionKey), diagData);
 
     return NextResponse.json({ ok: true, reply });
   } catch (err: unknown) {
