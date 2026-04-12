@@ -189,6 +189,20 @@ input,select,textarea,button{font-family:inherit}
 .toast{position:fixed;bottom:20px;right:20px;background:#1a1a1a;color:#f7f4ef;padding:10px 18px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:.04em;z-index:2000;transform:translateY(80px);opacity:0;transition:all .3s ease}
 .toast.show{transform:translateY(0);opacity:1}
 
+/* ═══ LIGHTBOX ═══ */
+.lightbox-overlay{position:fixed;inset:0;background:rgba(22,18,12,.88);display:none;align-items:center;justify-content:center;z-index:3000;padding:28px}
+.lightbox-overlay.show{display:flex}
+.lightbox-backdrop{position:absolute;inset:0}
+.lightbox-frame{position:relative;max-width:min(92vw,1400px);max-height:90vh;width:100%;display:flex;align-items:center;justify-content:center}
+.lightbox-image{max-width:100%;max-height:90vh;object-fit:contain;border:1px solid #c9bea9;background:#f7f4ef;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.lightbox-btn{position:absolute;background:rgba(247,244,239,.92);color:#1a1a1a;border:1px solid #1a1a1a;font-family:Arial,sans-serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.lightbox-close{top:-18px;right:0;padding:7px 12px}
+.lightbox-nav{top:50%;transform:translateY(-50%);width:42px;height:58px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700}
+.lightbox-prev{left:-18px}
+.lightbox-next{right:-18px}
+.lightbox-caption{position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);background:rgba(247,244,239,.92);border:1px solid #1a1a1a;padding:6px 10px;font-family:Arial,sans-serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#333;white-space:nowrap}
+.clickable-photo{cursor:zoom-in}
+
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:700px){
   .page{margin:0;border:none;box-shadow:none}
@@ -305,6 +319,18 @@ body::before {
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<!-- Photo Lightbox -->
+<div class="lightbox-overlay" id="photoLightbox" aria-hidden="true">
+  <div class="lightbox-backdrop" onclick="closeLightbox()"></div>
+  <div class="lightbox-frame">
+    <button type="button" class="lightbox-btn lightbox-close" onclick="closeLightbox()">Close ✕</button>
+    <button type="button" class="lightbox-btn lightbox-nav lightbox-prev" onclick="changeLightboxPhoto(-1)">‹</button>
+    <img id="lightboxImage" class="lightbox-image" alt="Aircraft photo">
+    <button type="button" class="lightbox-btn lightbox-nav lightbox-next" onclick="changeLightboxPhoto(1)">›</button>
+    <div id="lightboxCaption" class="lightbox-caption"></div>
+  </div>
+</div>
+
 <!-- Auth Modal -->
 <div class="modal-overlay" id="authModal">
   <div class="modal">
@@ -403,6 +429,29 @@ async function uploadFile(listingId, category, file) {
   if (session) headers['Authorization'] = `Bearer ${session.token}`;
   const res = await fetch(url, { method: 'POST', headers, body: file });
   return res.json();
+}
+
+const PHOTO_ACCEPT = '.jpg,.jpeg,.png,.gif,.webp';
+const DOC_ACCEPT = '.pdf,.doc,.docx,.xls,.xlsx';
+const PHOTO_EXTS = ['jpg','jpeg','png','gif','webp'];
+const DOC_EXTS = ['pdf','doc','docx','xls','xlsx'];
+
+function fileExt(name) {
+  const parts = String(name || '').toLowerCase().split('.');
+  return parts.length > 1 ? parts.pop() : '';
+}
+
+function validateUploadFile(file, category) {
+  const ext = fileExt(file && file.name);
+  if (['heic','heif','tif','tiff'].includes(ext)) {
+    return 'HEIC and TIFF files cannot be displayed in browsers. Please convert to JPG or PNG before uploading.';
+  }
+  if (category === 'photos') {
+    if (!PHOTO_EXTS.includes(ext)) return 'Photos must be JPG, PNG, GIF, or WebP.';
+    return '';
+  }
+  if (!DOC_EXTS.includes(ext)) return 'Documents must be PDF, DOC, DOCX, XLS, or XLSX.';
+  return '';
 }
 
 function isHeicFile(file) {
@@ -694,8 +743,10 @@ function renderDetail(l) {
   const photos = l.photos || [];
   const displayPhotos = uniqueDisplayPhotos(photos);
   const heicPhotos = photos.filter(isHeicFile);
-  const mainPhoto = displayPhotos.length ? `<img src="${API_BASE}/files/${displayPhotos[0].key}" alt="${l.make} ${l.model}">` : (heicPhotos.length ? `<div class="no-photo" style="font-size:14px">HEIC format, download to view</div>` : `<div class="no-photo" style="font-size:14px">No Photos Uploaded</div>`);
-  const thumbs = displayPhotos.slice(1).map((p,i) => `<div class="thumb" onclick="swapMainPhoto('${API_BASE}/files/${p.key}')"><img src="${API_BASE}/files/${p.key}" alt="Photo ${i+2}"></div>`).join('') + heicPhotos.map((p) => heicPlaceholder(p.name)).join('');
+  window.currentLightboxPhotos = displayPhotos.map((p, i) => ({ src: `${API_BASE}/files/${p.key}`, alt: `${l.make} ${l.model} photo ${i + 1}` }));
+  window.currentLightboxIndex = 0;
+  const mainPhoto = displayPhotos.length ? `<img src="${API_BASE}/files/${displayPhotos[0].key}" alt="${l.make} ${l.model}" class="clickable-photo" onclick="openLightboxAt(0)">` : (heicPhotos.length ? `<div class="no-photo" style="font-size:14px">HEIC format, download to view</div>` : `<div class="no-photo" style="font-size:14px">No Photos Uploaded</div>`);
+  const thumbs = displayPhotos.slice(1).map((p,i) => `<div class="thumb" onclick="swapMainPhoto('${API_BASE}/files/${p.key}', ${i + 1}, '${(l.make + ' ' + l.model + ' photo ' + (i + 2)).replace(/'/g, '&#39;')}')"><img src="${API_BASE}/files/${p.key}" alt="Photo ${i+2}"></div>`).join('') + heicPhotos.map((p) => heicPlaceholder(p.name)).join('');
 
   const isOwner = session && session.email === l.sellerEmail;
 
@@ -785,8 +836,47 @@ function renderDetail(l) {
   `;
 }
 
-function swapMainPhoto(src) {
-  document.querySelector('#mainPhotoBox').innerHTML = `<img src="${src}" alt="Aircraft photo">`;
+function swapMainPhoto(src, index = 0, alt = 'Aircraft photo') {
+  window.currentLightboxIndex = index;
+  document.querySelector('#mainPhotoBox').innerHTML = `<img src="${src}" alt="${alt}" class="clickable-photo" onclick="openLightboxAt(${index})">`;
+}
+
+function renderLightboxPhoto() {
+  const photos = window.currentLightboxPhotos || [];
+  const idx = window.currentLightboxIndex || 0;
+  const img = document.getElementById('lightboxImage');
+  const caption = document.getElementById('lightboxCaption');
+  const prev = document.querySelector('.lightbox-prev');
+  const next = document.querySelector('.lightbox-next');
+  if (!photos.length || !img || !caption) return;
+  img.src = photos[idx].src;
+  img.alt = photos[idx].alt || 'Aircraft photo';
+  caption.textContent = `Photo ${idx + 1} of ${photos.length}`;
+  if (prev) prev.style.display = photos.length > 1 ? 'flex' : 'none';
+  if (next) next.style.display = photos.length > 1 ? 'flex' : 'none';
+}
+
+function openLightboxAt(index) {
+  const photos = window.currentLightboxPhotos || [];
+  if (!photos.length) return;
+  window.currentLightboxIndex = Math.max(0, Math.min(index, photos.length - 1));
+  renderLightboxPhoto();
+  document.getElementById('photoLightbox').classList.add('show');
+  document.getElementById('photoLightbox').setAttribute('aria-hidden', 'false');
+}
+
+function closeLightbox() {
+  const overlay = document.getElementById('photoLightbox');
+  if (!overlay) return;
+  overlay.classList.remove('show');
+  overlay.setAttribute('aria-hidden', 'true');
+}
+
+function changeLightboxPhoto(delta) {
+  const photos = window.currentLightboxPhotos || [];
+  if (!photos.length) return;
+  window.currentLightboxIndex = (window.currentLightboxIndex + delta + photos.length) % photos.length;
+  renderLightboxPhoto();
 }
 
 function switchLogbookTab(cat, el) {
@@ -961,10 +1051,9 @@ function showUploadSection(listing) {
         onclick="document.getElementById('input-photos').click()">
         <div class="icon">📷</div>
         <p>Drop photos here or click to browse</p>
-        <p style="font-size:8px;margin-top:4px">JPG, PNG, WebP, HEIC, HEIF — up to 50MB each — up to 10 photos</p>
-        <p style="font-size:8px;margin-top:4px">HEIC files are stored, but they may not display in browser yet.</p>
+        <p style="font-size:8px;margin-top:4px">JPG, JPEG, PNG, GIF, WebP — up to 50MB each — up to 10 photos</p>
       </div>
-      <input type="file" id="input-photos" multiple accept="image/*" style="display:none" onchange="handleFileSelect(this.files,'photos','${listing.id}')">
+      <input type="file" id="input-photos" multiple accept=".jpg,.jpeg,.png,.gif,.webp" style="display:none" onchange="handleFileSelect(this.files,'photos','${listing.id}')">
       <div id="files-photos" class="file-list"></div>
     </div>
 
@@ -979,9 +1068,9 @@ function showUploadSection(listing) {
         onclick="document.getElementById('input-${k}').click()">
         <div class="icon">📄</div>
         <p>Drop ${v.toLowerCase()} documents here or click to browse</p>
-        <p style="font-size:8px;margin-top:4px">PDF, DOC, DOCX, XLS, XLSX, images — up to 50MB each</p>
+        <p style="font-size:8px;margin-top:4px">PDF, DOC, DOCX, XLS, XLSX — up to 50MB each</p>
       </div>
-      <input type="file" id="input-${k}" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.tif,.tiff,.jpg,.jpeg,.png" style="display:none" onchange="handleFileSelect(this.files,'${k}','${listing.id}')">
+      <input type="file" id="input-${k}" multiple accept=".pdf,.doc,.docx,.xls,.xlsx" style="display:none" onchange="handleFileSelect(this.files,'${k}','${listing.id}')">
       <div id="files-${k}" class="file-list"></div>
     </div>`).join('')}
 
@@ -1012,6 +1101,12 @@ async function processUploads(files, category, listingId) {
     `);
 
     try {
+      const validationError = validateUploadFile(file, category);
+      if (validationError) {
+        const el = document.getElementById(itemId);
+        el.querySelector('span:last-child').innerHTML = `<span style="color:#8b0000">✗ ${validationError}</span>`;
+        continue;
+      }
       const res = await uploadFile(listingId, category, file);
       const el = document.getElementById(itemId);
       if (res.ok) {
@@ -1172,6 +1267,14 @@ if (document.readyState === 'loading') {
   window.addEventListener('storage', updateAuthUI);
   setInterval(updateAuthUI, 3000);
 })();
+
+document.addEventListener('keydown', function(e) {
+  const overlay = document.getElementById('photoLightbox');
+  if (!overlay || !overlay.classList.contains('show')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') changeLightboxPhoto(-1);
+  if (e.key === 'ArrowRight') changeLightboxPhoto(1);
+});
 </script>
 </body>
 </html>

@@ -136,7 +136,7 @@
     '<div class="jerry-widget-error"></div>' +
     '<div class="jerry-widget-input">' +
       '<button type="button" class="jerry-widget-attach" title="Attach photos or documents">📎</button>' +
-      '<input type="file" class="jerry-file-input" multiple accept="image/*,.heic,.heif,.pdf,.doc,.docx,.xls,.xlsx,.tif,.tiff" style="display:none" />' +
+      '<input type="file" class="jerry-file-input" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx" style="display:none" />' +
       '<input type="text" class="jerry-widget-text-input" placeholder="Ask Jerry anything…" />' +
       '<button type="button" class="jerry-widget-send">Send</button>' +
     '</div>';
@@ -272,6 +272,22 @@
     try {
       localStorage.removeItem('rwas_pending_listing');
     } catch (e) {}
+  }
+
+  function fileExt(name) {
+    var parts = String(name || '').toLowerCase().split('.');
+    return parts.length > 1 ? parts.pop() : '';
+  }
+
+  function validateWidgetUpload(file) {
+    var ext = fileExt(file && file.name);
+    if (['heic', 'heif', 'tif', 'tiff'].includes(ext)) {
+      return 'HEIC and TIFF files cannot be displayed in browsers. Please convert to JPG or PNG before uploading.';
+    }
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx'].includes(ext)) {
+      return '';
+    }
+    return 'Only JPG, JPEG, PNG, GIF, WebP, PDF, DOC, DOCX, XLS, and XLSX files are allowed.';
   }
 
   function addAssistantMessage(text) {
@@ -785,7 +801,8 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
       fileInput.value = '';
       for (var i = 0; i < files.length; i++) {
         var file = files[i];
-        var isImg = file.type.startsWith('image/');
+        var ext = fileExt(file.name);
+        var isImg = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext) || file.type.startsWith('image/');
         var uid = 'up-' + Date.now() + '-' + i;
         var row = document.createElement('div');
         row.className = 'jerry-widget-row user';
@@ -798,10 +815,15 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
         chat.appendChild(row);
         chat.scrollTop = chat.scrollHeight;
         try {
+          var validationError = validateWidgetUpload(file);
+          if (validationError) {
+            var invalidEl = document.getElementById(uid);
+            if (invalidEl) invalidEl.querySelector('.jerry-widget-msg').innerHTML = '&#9888; <strong>' + file.name + '</strong> <span style="font-size:10px;color:#8b0000">' + validationError + '</span>';
+            continue;
+          }
           var url = 'https://sale-api.rogerwilcoaviation.com/chat-upload?filename=' + encodeURIComponent(file.name) + '&sessionId=' + encodeURIComponent(SESSION_ID);
           var sess = JSON.parse(localStorage.getItem('rwas_sale_session') || 'null');
           var h = {};
-          var isHeic = /\.(heic|heif)$/i.test(file.name);
           if (sess && sess.token) h['Authorization'] = 'Bearer ' + sess.token;
           var r = await fetch(url, { method: 'POST', headers: h, body: file });
           var d = await r.json();
@@ -809,9 +831,8 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
           if (el) {
             var m = el.querySelector('.jerry-widget-msg');
             if (d.ok) {
-              var heicNote = d.note || (isHeic ? ' HEIC format is stored, but it may not display in browser yet.' : '');
-              var prev = isImg && d.url && !isHeic ? '<img src="' + d.url + '" style="max-width:180px;border:1px solid #ccc;margin:4px 0;display:block">' : '';
-              m.innerHTML = prev + (isImg ? '&#128247; ' : '&#128196; ') + '<strong>' + file.name + '</strong> <span style="font-size:10px;color:#2d5016">&#10003; uploaded</span>' + (heicNote ? '<div style="font-size:10px;color:#666;margin-top:4px">' + heicNote + '</div>' : '');
+              var prev = isImg && d.url ? '<img src="' + d.url + '" style="max-width:180px;border:1px solid #ccc;margin:4px 0;display:block">' : '';
+              m.innerHTML = prev + (isImg ? '&#128247; ' : '&#128196; ') + '<strong>' + file.name + '</strong> <span style="font-size:10px;color:#2d5016">&#10003; uploaded</span>' + (d.note ? '<div style="font-size:10px;color:#666;margin-top:4px">' + d.note + '</div>' : '');
               history.push({ role: 'user', content: '[Uploaded ' + (isImg ? 'photo' : 'document') + ': ' + file.name + ']' });
               saveHistory();
             } else {
