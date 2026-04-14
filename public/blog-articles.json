@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-04-08T23:03:25.304337+00:00",
-    "total_articles": 7,
+    "last_updated": "2026-04-14T19:17:56.341963+00:00",
+    "total_articles": 8,
     "categories": [
       "press-release",
       "service-bulletin",
@@ -11,6 +11,39 @@
     ]
   },
   "articles": [
+    {
+      "id": "auto-flight-logging-now-available-for-g3x-touch-20260414",
+      "status": "draft",
+      "category": "product-update",
+      "title": "Auto Flight Logging Now Available for G3X Touch",
+      "subtitle": "Draft generated from Garmin dealer memo",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Desk",
+      "date": "2026-04-14",
+      "source": "Garmin Dealer Memo",
+      "source_url": "",
+      "lead": "Garmin announces auto flight logging capability for G3X Touch avionics, enabling automatic recording of flight data without pilot intervention.",
+      "body": [
+        "Garmin announces auto flight logging capability for G3X Touch avionics, enabling automatic recording of flight data without pilot intervention.",
+        "This draft was generated automatically from the Garmin dealer memo workflow. Review it before approving any live website or social publishing.",
+        "Contact Roger Wilco Aviation Services at (605) 299-8178 for Garmin avionics planning, scheduling, or installation support."
+      ],
+      "tags": [
+        "garmin",
+        "garmin-memo",
+        "G3X Touch"
+      ],
+      "social": {
+        "facebook": {
+          "text": "Garmin announces auto flight logging capability for G3X Touch avionics, enabling automatic recording of flight data without pilot intervention.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Garminmemo #G3X Touch #GarminAvionics #RogerWilcoAviation #KYKN #FlyGA",
+          "status": "pending"
+        },
+        "instagram": {
+          "text": "Garmin announces auto flight logging capability for G3X Touch avionics, enabling automatic recording of flight data without pilot...\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Garminmemo #G3X Touch #GarminAvionics #RogerWilcoAviation #KYKN #FlyGA #Avionics #PilotLife #GeneralAviation",
+          "status": "pending"
+        }
+      }
+    },
     {
       "id": "garmin-pilot-promotion-adds-value-for-new-subscribers-20260408",
       "status": "published",
