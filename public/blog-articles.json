@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-04-14T19:17:56.341963+00:00",
+    "last_updated": "2026-04-14T19:48:12.509038+00:00",
     "total_articles": 8,
     "categories": [
       "press-release",
@@ -13,7 +13,7 @@
   "articles": [
     {
       "id": "auto-flight-logging-now-available-for-g3x-touch-20260414",
-      "status": "draft",
+      "status": "published",
       "category": "product-update",
       "title": "Auto Flight Logging Now Available for G3X Touch",
       "subtitle": "What Garmin automatic flight logging means for G3X Touch owners, maintenance tracking, and smarter post-flight analysis",
@@ -37,15 +37,19 @@
       "social": {
         "facebook": {
           "text": "Garmin just made G3X Touch more useful after the flight, not just during it.\n\nAutomatic flight logging now lets G3X Touch owners push flight and engine data wirelessly through Connext to Garmin Pilot, with cloud storage on flyGarmin.com and analysis through partners including FlySto, Savvy Aviation, Navi AI, Jet-Care, and Brazos Safety Systems.\n\nThat means better access to engine trend insight, maintenance visibility, and post-flight analysis without the usual SD-card shuffle.\n\nRWAS is an authorized Garmin dealer, and we can help you set up a G3X Touch system so the panel, connectivity, and workflow all work together the way they should.\n\nRead the draft here: https://rogerwilcoaviation.com/blog/article.html?id=auto-flight-logging-now-available-for-g3x-touch-20260414\nCall us at (605) 299-8178.\n\n#Garmin #G3XTouch #GarminPilot #Connext #flyGarmin #SavvyAviation #Avionics #GeneralAviation #RogerWilcoAviation",
-          "status": "pending"
+          "status": "approved",
+          "approved_at": "2026-04-14T19:48:12.460277+00:00"
         },
         "instagram": {
           "text": "G3X Touch owners, this is a good one.\n\nGarmin's automatic flight logging now connects G3X Touch data to Garmin Pilot, flyGarmin.com, and integration partners like FlySto, Savvy Aviation, Navi AI, Jet-Care, and Brazos Safety Systems.\n\nLess manual handling, better engine and flight-data visibility, and a more useful post-flight workflow.\n\nRWAS is an authorized Garmin dealer, and we can help you build or upgrade a G3X Touch panel that works as a complete system, not just a pretty screen.\n\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #G3XTouch #GarminPilot #Connext #flyGarmin #Avionics #AircraftOwner #GeneralAviation #PilotLife #RogerWilcoAviation #SavvyAviation",
-          "status": "pending"
+          "status": "approved",
+          "approved_at": "2026-04-14T19:48:12.508878+00:00"
         }
       },
       "image": "/images/blog/g3x-touch-auto-flight-logging.jpg",
-      "image_alt": "Garmin G3X Touch automatic flight logging memo image."
+      "image_alt": "Garmin G3X Touch automatic flight logging memo image.",
+      "approved_at": "2026-04-14T19:47:51.968834+00:00",
+      "published_at": "2026-04-14T19:47:52.000071+00:00"
     },
     {
       "id": "garmin-pilot-promotion-adds-value-for-new-subscribers-20260408",
