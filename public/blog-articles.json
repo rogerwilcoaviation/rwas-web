@@ -16,17 +16,18 @@
       "status": "draft",
       "category": "product-update",
       "title": "Auto Flight Logging Now Available for G3X Touch",
-      "subtitle": "Draft generated from Garmin dealer memo",
+      "subtitle": "G3X Touch owners can now leverage automatic flight log integrations with FlySto, Savvy Aviation, Navi AI, and more",
       "author": "Roger Wilco Aviation Services",
       "byline": "RWAS Avionics Desk",
       "date": "2026-04-14",
       "source": "Garmin Dealer Memo",
       "source_url": "",
-      "lead": "Garmin announces auto flight logging capability for G3X Touch avionics, enabling automatic recording of flight data without pilot intervention.",
+      "lead": "Garmin announces that aircraft equipped with G3X Touch flight displays can now leverage automatic flight log integrations with FlySto, Savvy Aviation, and a growing list of analysis services. Flight and engine data upload wirelessly via Connext technology to the Garmin Pilot app, with automatic cloud storage to flyGarmin.com.",
       "body": [
-        "Garmin announces auto flight logging capability for G3X Touch avionics, enabling automatic recording of flight data without pilot intervention.",
-        "This draft was generated automatically from the Garmin dealer memo workflow. Review it before approving any live website or social publishing.",
-        "Contact Roger Wilco Aviation Services at (605) 299-8178 for Garmin avionics planning, scheduling, or installation support."
+        "Garmin is pleased to announce that aircraft equipped with G3X Touch flight displays can now leverage automatic flight log integrations with FlySto, Savvy Aviation, and more. Originally announced in July 2025, these integrations enable aircraft owners to automatically share flight logs from their Garmin avionics and receive customized reports on engine health, maintenance updates, flight analysis, and more.",
+        "Flight and engine data on G3X Touch flight displays upload wirelessly via Connext technology to a mobile device running the Garmin Pilot app, with automatic cloud storage to flyGarmin.com once an internet connection is established. Note that manual uploads through an SD card will not be automatically integrated with analysis services.",
+        "Since launch, Garmin has added three new analysis services. Navi AI, Jet-Care, and Brazos Safety Systems join the growing list of integrations available to aircraft owners. Additionally, some of these services offer free or discounted programs for flyGarmin.com users. A full list of integrated data analysis services and information about their offerings can be found at Garmin.com/FlightLogs.",
+        "Roger Wilco Aviation Services is an authorized Garmin dealer and FAA Certificated Repair Station specializing in Garmin avionics installation and service. Contact us at (605) 299-8178 for G3X Touch installation planning, upgrades, or support."
       ],
       "tags": [
         "garmin",
@@ -35,14 +36,16 @@
       ],
       "social": {
         "facebook": {
-          "text": "Garmin announces auto flight logging capability for G3X Touch avionics, enabling automatic recording of flight data without pilot intervention.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Garminmemo #G3X Touch #GarminAvionics #RogerWilcoAviation #KYKN #FlyGA",
+          "text": "NEW from Garmin: Auto Flight Logging is now available for G3X Touch!\n\nG3X Touch owners can now automatically share flight logs with FlySto, Savvy Aviation, Navi AI, Jet-Care, Brazos Safety Systems and more. Flight data uploads wirelessly via Connext to Garmin Pilot, then syncs to flyGarmin.com.\n\nSome services offer free or discounted programs for flyGarmin.com users.\n\nContact us at (605) 299-8178 for G3X Touch installation and support.\n\n#Garmin #G3XTouch #Avionics #AutoFlightLog #GarminPilot #FlyGA #RogerWilcoAviation #KYKN",
           "status": "pending"
         },
         "instagram": {
-          "text": "Garmin announces auto flight logging capability for G3X Touch avionics, enabling automatic recording of flight data without pilot...\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Garminmemo #G3X Touch #GarminAvionics #RogerWilcoAviation #KYKN #FlyGA #Avionics #PilotLife #GeneralAviation",
+          "text": "NEW: Auto Flight Logging now available for G3X Touch!\n\nAutomatically share flight logs with FlySto, Savvy Aviation, Navi AI & more. Wireless upload via Connext to Garmin Pilot app.\n\nAuthorized Garmin dealer & FAA repair station.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #G3XTouch #Avionics #AutoFlightLog #ConnextTechnology #GarminPilot #FlyGA #PilotLife #GeneralAviation #RogerWilcoAviation #KYKN",
           "status": "pending"
         }
-      }
+      },
+      "image": "/images/g3x_garmin.jpg",
+      "image_alt": "Garmin G3X Touch flight display panel in a general aviation cockpit."
     },
     {
       "id": "garmin-pilot-promotion-adds-value-for-new-subscribers-20260408",
