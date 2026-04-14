@@ -1,6 +1,17 @@
 {
-  "last_updated": "2026-04-08",
+  "last_updated": "2026-04-14",
   "memos": [
+    {
+      "id": "auto-flight-logging-now-available-for-g3x-touch",
+      "date": "2026-04-14",
+      "title": "Auto Flight Logging Now Available for G3X Touch",
+      "summary": "Garmin announces auto flight logging capability for G3X Touch avionics, enabling automatic recording of flight data without pilot intervention.",
+      "products": [
+        "G3X Touch"
+      ],
+      "category": "product",
+      "source_pdf": "2026_mktgmemo___g3x_autoflightlog.pdf"
+    },
     {
       "id": "garmin-announces-new-garmin-pilot-promotions",
       "date": "2026-04-08",
