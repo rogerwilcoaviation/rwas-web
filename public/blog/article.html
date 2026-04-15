@@ -181,6 +181,81 @@ function categoryLabel(cat) {
   return { 'press-release':'Press Release', 'service-bulletin':'Service Bulletin', 'product-update':'Product Update', 'memo':'Dealer Memo', 'regulatory':'Regulatory' }[cat] || cat;
 }
 
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatInlineMarkdown(text) {
+  var escaped = escapeHtml(text);
+  escaped = escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  escaped = escaped.replace(/\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  return escaped;
+}
+
+function renderMarkdownBody(markdown) {
+  var lines = String(markdown || '').replace(/\r\n/g, '\n').split('\n');
+  var html = '';
+  var paragraph = [];
+  var listItems = [];
+
+  function flushParagraph() {
+    if (!paragraph.length) return;
+    var cls = html.indexOf('class="body-text drop"') === -1 ? 'body-text drop' : 'body-text';
+    html += '<p class="' + cls + '">' + formatInlineMarkdown(paragraph.join(' ')) + '</p>';
+    paragraph = [];
+  }
+
+  function flushList() {
+    if (!listItems.length) return;
+    html += '<ul style="margin:10px 0 10px 22px;">';
+    listItems.forEach(function(item) {
+      html += '<li class="body-text" style="text-align:left; margin:4px 0;">' + formatInlineMarkdown(item) + '</li>';
+    });
+    html += '</ul>';
+    listItems = [];
+  }
+
+  lines.forEach(function(line) {
+    var trimmed = line.trim();
+    if (!trimmed) {
+      flushParagraph();
+      flushList();
+      return;
+    }
+
+    if (/^###\s+/.test(trimmed)) {
+      flushParagraph();
+      flushList();
+      html += '<h3 class="headline-md" style="margin-top:14px;">' + formatInlineMarkdown(trimmed.replace(/^###\s+/, '')) + '</h3>';
+      return;
+    }
+
+    if (/^##\s+/.test(trimmed)) {
+      flushParagraph();
+      flushList();
+      html += '<h2 class="headline-lg" style="font-size:22px; margin-top:14px;">' + formatInlineMarkdown(trimmed.replace(/^##\s+/, '')) + '</h2>';
+      return;
+    }
+
+    if (/^-\s+/.test(trimmed)) {
+      flushParagraph();
+      listItems.push(trimmed.replace(/^-\s+/, ''));
+      return;
+    }
+
+    paragraph.push(trimmed);
+  });
+
+  flushParagraph();
+  flushList();
+  return html;
+}
+
 var params = new URLSearchParams(window.location.search);
 var articleId = params.get('id');
 
@@ -208,10 +283,14 @@ fetch('/blog-articles.json')
       html += '<div class="article-hero" onclick="openLightbox(this.querySelector(\'img\').src, this.querySelector(\'img\').alt)"><img src="' + article.image + '" alt="' + (article.image_alt || article.title) + '" class="article-hero-img"></div>';
     }
     html += '<hr class="rule">';
-    html += '<p class="body-text drop">' + article.lead + '</p>';
-    (article.body || []).forEach(function(para) {
-      html += '<p class="body-text">' + para + '</p>';
-    });
+    if (article.body_markdown) {
+      html += renderMarkdownBody(article.body_markdown);
+    } else {
+      html += '<p class="body-text drop">' + article.lead + '</p>';
+      (article.body || []).forEach(function(para) {
+        html += '<p class="body-text">' + para + '</p>';
+      });
+    }
 
     // Source attribution
     if (article.source) {

@@ -4,6 +4,78 @@ import '../../newspaper.css';
 import blogData from '../../../public/blog-articles.json';
 import { notFound } from 'next/navigation';
 
+function escapeHtml(text: string) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatInlineMarkdown(text: string) {
+  return escapeHtml(text)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+}
+
+function renderMarkdownBody(markdown?: string) {
+  if (!markdown) return [] as string[];
+
+  const lines = markdown.replace(/\r\n/g, '\n').split('\n');
+  const blocks: string[] = [];
+  let paragraph: string[] = [];
+  let listItems: string[] = [];
+  let usedDrop = false;
+
+  const flushParagraph = () => {
+    if (!paragraph.length) return;
+    const cls = usedDrop ? 'np-body-text' : 'np-body-text np-drop';
+    usedDrop = true;
+    blocks.push(`<p class="${cls}">${formatInlineMarkdown(paragraph.join(' '))}</p>`);
+    paragraph = [];
+  };
+
+  const flushList = () => {
+    if (!listItems.length) return;
+    blocks.push(`<ul style="margin:10px 0 10px 22px;">${listItems
+      .map((item) => `<li class="np-body-text" style="text-align:left; margin:4px 0;">${formatInlineMarkdown(item)}</li>`)
+      .join('')}</ul>`);
+    listItems = [];
+  };
+
+  for (const raw of lines) {
+    const trimmed = raw.trim();
+    if (!trimmed) {
+      flushParagraph();
+      flushList();
+      continue;
+    }
+    if (/^###\s+/.test(trimmed)) {
+      flushParagraph();
+      flushList();
+      blocks.push(`<h3 class="np-headline-md" style="margin-top:14px;">${formatInlineMarkdown(trimmed.replace(/^###\s+/, ''))}</h3>`);
+      continue;
+    }
+    if (/^##\s+/.test(trimmed)) {
+      flushParagraph();
+      flushList();
+      blocks.push(`<h2 class="np-headline-xl" style="font-size:22px; margin-top:14px;">${formatInlineMarkdown(trimmed.replace(/^##\s+/, ''))}</h2>`);
+      continue;
+    }
+    if (/^-\s+/.test(trimmed)) {
+      flushParagraph();
+      listItems.push(trimmed.replace(/^-\s+/, ''));
+      continue;
+    }
+    paragraph.push(trimmed);
+  }
+
+  flushParagraph();
+  flushList();
+  return blocks;
+}
+
 const publishedArticles = blogData.articles.filter((article) => article.status === 'published');
 
 export async function generateStaticParams() {
@@ -41,6 +113,7 @@ export default async function BlogArticlePage({
   if (!article) notFound();
 
   const relatedArticles = publishedArticles.filter((entry) => entry.id !== article.id).slice(0, 4);
+  const markdownBlocks = renderMarkdownBody((article as { body_markdown?: string }).body_markdown);
 
   return (
     <div className="np-wrapper" style={{ background: '#ddd9d2', minHeight: '100vh', fontFamily: "Georgia, 'Times New Roman', serif" }}>
@@ -115,10 +188,18 @@ export default async function BlogArticlePage({
                 </p>
               ) : null}
 
-              <p className="np-body-text np-drop">{article.lead}</p>
-              {article.body.map((paragraph, index) => (
-                <p key={index} className="np-body-text">{paragraph}</p>
-              ))}
+              {markdownBlocks.length ? (
+                markdownBlocks.map((block, index) => (
+                  <div key={index} dangerouslySetInnerHTML={{ __html: block }} />
+                ))
+              ) : (
+                <>
+                  <p className="np-body-text np-drop">{article.lead}</p>
+                  {article.body.map((paragraph, index) => (
+                    <p key={index} className="np-body-text">{paragraph}</p>
+                  ))}
+                </>
+              )}
 
               <div className="np-pull-quote" style={{ marginTop: '18px' }}>
                 &ldquo;For current pricing or installation scheduling, call RWAS at (605) 299-8178.&rdquo;

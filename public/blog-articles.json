@@ -1,16 +1,38 @@
 {
   "meta": {
-    "last_updated": "2026-04-14T19:48:12.509038+00:00",
+    "last_updated": "2026-04-15T01:15:00+00:00",
     "total_articles": 8,
     "categories": [
-      "press-release",
-      "service-bulletin",
+      "regulatory",
       "product-update",
       "memo",
-      "regulatory"
+      "press-release"
     ]
   },
   "articles": [
+    {
+      "id": "repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414",
+      "status": "published",
+      "category": "regulatory",
+      "title": "Repair Station vs. A&P Mechanic \u2014 What Aircraft Owners Should Know",
+      "subtitle": "Why FAA Part 145 oversight changes the quality system, accountability, and long-term value behind aircraft maintenance.",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Maintenance Desk",
+      "date": "2026-04-14",
+      "source": "RWAS",
+      "source_url": "https://rogerwilcoaviation.com",
+      "lead": "Aircraft owners often hear about A&P mechanics, IAs, and repair stations as if they all mean the same thing. They do not. This article explains what a Part 145 Repair Station adds above ordinary maintenance authority, and why that extra structure matters for quality control, avionics work, documentation, and long-term ownership value.",
+      "body": [],
+      "body_markdown": "## Repair Station vs. A&P Mechanic \u2014 What Aircraft Owners Should Know\n\nIf you own an airplane, you have likely had work done by an A&P mechanic \u2014 maybe even one with Inspection Authorization. But have you ever considered what changes when that same work is performed under an FAA Part 145 Repair Station certificate? The differences are more significant than most aircraft owners realize, and they touch everything from regulatory authority and quality assurance to long-term cost and resale value.\n\nThis article breaks down the key differences between having your aircraft maintained by an individual A&P or A&P/IA versus an FAA-certificated repair station, and explains why Roger Wilco Aviation Services chose to operate under Part 145.\n\n### The Regulatory Framework\n\nAll aircraft maintenance in the United States is governed by 14 CFR Part 43 \u2014 the FAA regulation that defines who can perform maintenance, what standards apply, and how work must be documented. Every mechanic and every repair station must comply with Part 43. That much is the same.\n\nThe difference is in the organizational layer above it.\n\nAn individual A&P mechanic (certificated under 14 CFR Part 65) is authorized to perform maintenance and approve aircraft for return to service based on their personal certificate. An A&P with Inspection Authorization can perform and sign off annual inspections and approve major repairs and alterations. The quality of their work depends entirely on their individual training, experience, discipline, and integrity.\n\nA Part 145 Repair Station is an FAA-certificated organization. The FAA does not just certify the people \u2014 it certifies the entire operation: the facility, the quality system, the manuals, the training programs, the inspection processes, the parts and materials controls, and the tool calibration program. The repair station must maintain an FAA-approved Repair Station Manual and Quality Control Manual that document every procedure. The FAA conducts regular surveillance to verify ongoing compliance.\n\nIn short, Part 43 tells everyone how to do the work. Part 145 certifies that an organization has the systems in place to do it consistently and correctly.\n\n### Quality Assurance: Built Into the System\n\nThis is the single biggest difference, and it is the one most aircraft owners overlook.\n\nWhen an individual A&P performs maintenance, quality control rests on that one person. There is no regulatory requirement for a second set of eyes, no mandated internal audit, and no formal training program beyond the initial certification. Good mechanics absolutely maintain high standards \u2014 but the system does not require it structurally.\n\nA Part 145 Repair Station must operate under an FAA-approved quality control system. That means:\n\n- **Independent inspection** \u2014 work is checked by qualified inspectors, not just the person who performed it\n- **Documented procedures** \u2014 every process follows the repair station manual, ensuring consistency regardless of which technician is at the bench\n- **Personnel qualification and training** \u2014 the station must track qualifications, provide recurrent training, and document competency for every employee\n- **Parts and materials control** \u2014 incoming parts are inspected, tagged, and traced; shelf-life items are tracked; vendor qualification is maintained\n- **Tool control and calibration** \u2014 every precision tool is on a calibration schedule with NIST-traceable standards and documented audit trails\n- **Internal audits** \u2014 the station audits its own processes to catch problems before they reach the aircraft\n- **Corrective action tracking** \u2014 when issues are found, they are documented, corrected, and tracked to prevent recurrence\n\nNone of these are optional. The FAA requires them all, and verifies them through ongoing surveillance. This is not just paperwork \u2014 it is a fundamentally different approach to ensuring the work is done right.\n\n### Financial Considerations\n\nAircraft owners sometimes assume that a repair station will be more expensive than a solo A&P, and in some cases the hourly labor rate may be slightly higher. But the financial picture is more nuanced than a rate comparison.\n\nA repair station investment in quality systems, calibrated tooling, controlled technical data, and trained personnel reduces the likelihood of rework, warranty claims, and missed discrepancies. Work performed under a repair station certificate carries institutional accountability \u2014 the station stands behind the work, not just an individual.\n\nFor owners considering upgrades, especially avionics installations, the repair station structure matters. Complex modifications that involve STCs, engineering data, wiring, and system integration benefit from the controlled environment a repair station provides. A missed step in an avionics install can mean weeks of troubleshooting later.\n\nFrom a resale perspective, logbooks showing maintenance performed by a certificated repair station carry weight with buyers and pre-buy inspectors. It signals that the aircraft was maintained under a formal quality system, not just by whoever was available.\n\n### What Roger Wilco Aviation Services Brings to the Table\n\nRoger Wilco Aviation Services operates as FAA Part 145 Repair Station No. RWSR491E, located at Chan Gurney Municipal Airport in Yankton, South Dakota. Our repair station holds limited ratings in Airframe, Instrument, and Radio \u2014 meaning we are FAA-authorized to perform maintenance, inspection, and return-to-service in each of those categories under our approved capabilities list.\n\nHere is what that means in practice:\n\n- **Garmin Avionics Sales and Installation** \u2014 As an authorized Garmin dealer, we specialize in Garmin avionics upgrades including G3X Touch, GFC 500 autopilot, GTN series navigators, and full panel retrofits. Every installation is performed under our Part 145 quality system with controlled wiring, documented configurations, and proper return-to-service documentation.\n- **Custom Panel Fabrication** \u2014 Our in-house CAD design and CNC fabrication capability means your instrument panel is designed, cut, powder coated, and finished under one roof with full traceability.\n- **Level 3 Non-Destructive Testing (NDT)** \u2014 We perform ultrasonic testing, magnetic particle inspection, dye penetrant testing, eddy current testing, Rockwell hardness testing, and visual inspections. NDT findings are documented with FAA Form 8130-3 return-to-service tags and full AD compliance records.\n- **Annual, Condition, and Pre-Buy Inspections** \u2014 Thorough inspections backed by our repair station quality system, performed by experienced A&P/IA technicians.\n- **AOG Go-Van Service** \u2014 We bring the repair station to you when your aircraft cannot come to us.\n- **Certified Rotax Service Center** \u2014 Factory-authorized service for Rotax-powered light sport aircraft.\n- **Aircraft Weight Certification** \u2014 Precision weight and balance up to 30,000 lbs.\n- **Propeller Balancing** \u2014 Dynamic propeller balancing to reduce vibration and extend component life.\n- **Papa-Alpha Reference Tools** \u2014 Our own line of precision rigging reference tools, developed and fabricated in-house, now shipping worldwide.\n\nEvery one of these services operates under our Part 145 quality system. That means controlled processes, qualified personnel, calibrated tooling, and documented results \u2014 from a routine annual to a full Garmin panel upgrade.\n\n### The Bottom Line\n\nAn A&P mechanic can absolutely do good work. Many do exceptional work. But when you choose a Part 145 Repair Station, you are choosing an organization that the FAA has certified to deliver consistent, documented, quality-controlled maintenance. The regulatory framework is stricter, the accountability is institutional, and the traceability is built into every job.\n\nAt Roger Wilco Aviation Services, we chose to pursue Part 145 certification because we believe aircraft owners deserve that level of structure and assurance. Whether you are scheduling an annual, planning a Garmin upgrade, or need NDT services for an airworthiness directive, our repair station is built to deliver results you can trust \u2014 and documentation that proves it.\n\n**Ready to experience the repair station difference?** Contact us at (605) 299-8178 or visit [rogerwilcoaviation.com](https://rogerwilcoaviation.com) to schedule your next service.",
+      "tags": [
+        "regulatory",
+        "maintenance",
+        "repair-station"
+      ],
+      "image": "/images/blog/repair-station-vs-ap-mechanic-20260414.jpg",
+      "image_alt": "Aircraft mechanic working in a maintenance hangar beside an aircraft.",
+      "published_at": "2026-04-14T21:15:00Z"
+    },
     {
       "id": "auto-flight-logging-now-available-for-g3x-touch-20260414",
       "status": "published",
@@ -37,13 +59,17 @@
       "social": {
         "facebook": {
           "text": "Garmin just made G3X Touch more useful after the flight, not just during it.\n\nAutomatic flight logging now lets G3X Touch owners push flight and engine data wirelessly through Connext to Garmin Pilot, with cloud storage on flyGarmin.com and analysis through partners including FlySto, Savvy Aviation, Navi AI, Jet-Care, and Brazos Safety Systems.\n\nThat means better access to engine trend insight, maintenance visibility, and post-flight analysis without the usual SD-card shuffle.\n\nRWAS is an authorized Garmin dealer, and we can help you set up a G3X Touch system so the panel, connectivity, and workflow all work together the way they should.\n\nRead the draft here: https://rogerwilcoaviation.com/blog/article.html?id=auto-flight-logging-now-available-for-g3x-touch-20260414\nCall us at (605) 299-8178.\n\n#Garmin #G3XTouch #GarminPilot #Connext #flyGarmin #SavvyAviation #Avionics #GeneralAviation #RogerWilcoAviation",
-          "status": "approved",
-          "approved_at": "2026-04-14T19:48:12.460277+00:00"
+          "status": "published",
+          "approved_at": "2026-04-14T19:48:12.460277+00:00",
+          "published_at": "2026-04-14T19:50:08.299053+00:00",
+          "post_id": "106057782039473_946924124761460"
         },
         "instagram": {
           "text": "G3X Touch owners, this is a good one.\n\nGarmin's automatic flight logging now connects G3X Touch data to Garmin Pilot, flyGarmin.com, and integration partners like FlySto, Savvy Aviation, Navi AI, Jet-Care, and Brazos Safety Systems.\n\nLess manual handling, better engine and flight-data visibility, and a more useful post-flight workflow.\n\nRWAS is an authorized Garmin dealer, and we can help you build or upgrade a G3X Touch panel that works as a complete system, not just a pretty screen.\n\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #G3XTouch #GarminPilot #Connext #flyGarmin #Avionics #AircraftOwner #GeneralAviation #PilotLife #RogerWilcoAviation #SavvyAviation",
-          "status": "approved",
-          "approved_at": "2026-04-14T19:48:12.508878+00:00"
+          "status": "published",
+          "approved_at": "2026-04-14T19:48:12.508878+00:00",
+          "published_at": "2026-04-14T19:50:15.086496+00:00",
+          "media_id": "18085778657196997"
         }
       },
       "image": "/images/blog/g3x-touch-auto-flight-logging.jpg",
