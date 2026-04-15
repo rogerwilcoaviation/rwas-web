@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-04-15T09:21:08+00:00",
+    "last_updated": "2026-04-15T09:40:41.641923+00:00",
     "total_articles": 10,
     "categories": [
       "regulatory",
@@ -46,7 +46,21 @@
       ],
       "image": "/images/blog/mandatory-service-bulletins-cirrus-sr22.jpg",
       "image_alt": "Cirrus SR22 aircraft on the ramp.",
-      "published_at": "2026-04-15T09:20:37.615307+00:00"
+      "published_at": "2026-04-15T09:20:37.615307+00:00",
+      "social": {
+        "facebook": {
+          "status": "published",
+          "approved_at": "2026-04-15T09:42:13.782001+00:00",
+          "published_at": "2026-04-15T09:42:13.782114+00:00",
+          "post_id": "106057782039473_947345448052661"
+        },
+        "instagram": {
+          "status": "published",
+          "approved_at": "2026-04-15T09:42:13.782116+00:00",
+          "published_at": "2026-04-15T09:42:13.782116+00:00",
+          "media_id": "17882816481515381"
+        }
+      }
     },
     {
       "id": "repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414",
