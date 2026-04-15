@@ -198,6 +198,16 @@ export default async function BlogArticlePage({
                 </p>
               ) : null}
 
+              {article.image ? (
+                <div style={{ marginBottom: '12px' }}>
+                  <img
+                    src={article.image}
+                    alt={article.image_alt || article.title}
+                    style={{ width: '100%', border: '1px solid #1a1a1a', display: 'block' }}
+                  />
+                </div>
+              ) : null}
+
               {markdownBlocks.length ? (
                 markdownBlocks.map((block, index) => (
                   <div key={index} dangerouslySetInnerHTML={{ __html: block }} />
