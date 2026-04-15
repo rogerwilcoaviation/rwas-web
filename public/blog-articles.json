@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-04-15T01:28:00+00:00",
+    "last_updated": "2026-04-15T01:35:34.530767+00:00",
     "total_articles": 8,
     "categories": [
       "regulatory",
@@ -31,7 +31,23 @@
       ],
       "image": "/images/blog/repair-station-vs-ap-mechanic-corporate-hangar-1.jpg",
       "image_alt": "Corporate turboprop aircraft parked inside a spacious hangar.",
-      "published_at": "2026-04-14T21:15:00Z"
+      "published_at": "2026-04-14T21:15:00Z",
+      "social": {
+        "facebook": {
+          "text": "What is the real difference between a certificated A&P mechanic and an FAA Part 145 Repair Station?\n\nWe just published a straight-ahead look at the regulatory, financial, and quality differences, and why that matters when you are choosing who touches your aircraft.\n\nAt Roger Wilco Aviation Services, every avionics install, inspection, and return-to-service event is backed by our Part 145 quality system, FAA Repair Station #RWSR491E.\n\nRead the full article:",
+          "status": "published",
+          "approved_at": "2026-04-15T01:33:29.621450+00:00",
+          "published_at": "2026-04-15T01:33:59.592121+00:00",
+          "post_id": "106057782039473_947074024746470"
+        },
+        "instagram": {
+          "text": "Repair Station vs. A&P Mechanic, what changes for an aircraft owner?\n\nWe just published a new article breaking down the regulatory, financial, and quality differences between individual mechanic authority and FAA Part 145 repair station oversight.\n\nIf you are planning avionics work, inspections, or major maintenance, that difference matters. RWAS operates as FAA Repair Station #RWSR491E, and this piece explains why that structure protects quality, documentation, and long-term value.\n\nRead more: https://rogerwilcoaviation.com/blog/repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414\n\n#RogerWilcoAviation #FAARepairStation #Part145 #AircraftMaintenance #Avionics #GarminAvionics #KingAir #Citation #CorporateAviation #AircraftOwner",
+          "status": "published",
+          "approved_at": "2026-04-15T01:33:29.621599+00:00",
+          "published_at": "2026-04-15T01:35:34.530601+00:00",
+          "media_id": "18053939543499266"
+        }
+      }
     },
     {
       "id": "auto-flight-logging-now-available-for-g3x-touch-20260414",
