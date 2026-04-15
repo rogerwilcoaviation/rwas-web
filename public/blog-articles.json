@@ -1,15 +1,53 @@
 {
   "meta": {
-    "last_updated": "2026-04-15T01:40:00+00:00",
-    "total_articles": 8,
+    "last_updated": "2026-04-15T09:21:08+00:00",
+    "total_articles": 10,
     "categories": [
       "regulatory",
       "product-update",
       "memo",
-      "press-release"
+      "press-release",
+      "service-bulletins"
     ]
   },
   "articles": [
+    {
+      "id": "mandatory-service-bulletins-are-they-really-mandatory-20260415",
+      "status": "published",
+      "category": "service-bulletins",
+      "title": "Mandatory Service Bulletins: Are They Really Mandatory?",
+      "subtitle": "The regulatory, safety, and financial truth every aircraft owner needs to know.",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Maintenance Desk",
+      "date": "2026-04-15",
+      "source": "RWAS",
+      "source_url": "https://rogerwilcoaviation.com",
+      "lead": "If you own or operate an aircraft, you have almost certainly received a service bulletin from the manufacturer labeled mandatory. The word carries weight. But is a manufacturers mandatory service bulletin actually mandatory? The answer depends on who you are, how you operate, and what lens you are looking through: regulatory, safety, or financial.",
+      "body": [
+        "A service bulletin is a technical document issued by an original equipment manufacturer. It notifies owners and operators of recommended inspections, maintenance actions, part replacements, or product improvements. Manufacturers categorize their bulletins as informational, optional, recommended, alert, and mandatory. The terminology varies because there is no FAA-standardized classification system for service bulletin severity levels.",
+        "The critical distinction is that service bulletins are manufacturer documents, not FAA documents. The FAAs regulatory instrument for mandating corrective action is the Airworthiness Directive, governed under 14 CFR Part 39. That difference is the hinge on which this entire discussion turns.",
+        "For aircraft operating under 14 CFR Part 91, a manufacturers mandatory service bulletin is advisory in nature, not a regulatory requirement. The FAA has been consistent on this point. A Part 91 owner is not required to comply with a service bulletin simply because the manufacturer labels it mandatory.",
+        "There are important exceptions where a service bulletin does become regulatory for Part 91 operators. When an Airworthiness Directive references it, the bulletins instructions become legally enforceable and non-compliance renders the aircraft unairworthy. When the bulletin is incorporated into the Type Certificate Data Sheet or airworthiness limitations section, those requirements become regulatory. When the bulletin is part of your adopted inspection program under 14 CFR 91.409(f)(3), it becomes part of the inspection requirements you agreed to follow.",
+        "The picture changes significantly for commercial operators. Aircraft operating under 14 CFR Parts 121 or 135 are generally required to comply with mandatory service bulletins, regardless of whether an accompanying AD has been issued. Commercial operators are held to continuous airworthiness maintenance programs that incorporate manufacturer service information as part of their FAA-approved maintenance programs.",
+        "Regulatory compliance is the floor, not the ceiling. The manufacturer knows their product better than anyone else. When they issue a service bulletin labeled mandatory, alert, or emergency, they are communicating that their engineering analysis has identified a condition that could affect safe operation of your aircraft.",
+        "A compelling example comes from the rotorcraft world. An operator received a mandatory service bulletin calling for inspection and potential replacement of an engine through-bolt. The engine was running fine with no signs of trouble, and the maintenance cost was significant. The operator complied anyway. Upon removal, the bolt turned out to be defectively manufactured, a condition invisible during normal operation that could have led to catastrophic failure.",
+        "The FAA has stated that while compliance with service bulletins may or may not be mandatory, owners should never ignore them when it comes to safety. A service bulletin not tied to an AD today could become one tomorrow if incidents accumulate.",
+        "Even if you are a Part 91 operator with no regulatory obligation, ignoring a mandatory service bulletin can cost you more than compliance. Outstanding mandatory service bulletins are the first things a pre-purchase inspection team flags. Non-compliance significantly reduces marketability and appraised value of an aircraft. Sellers routinely see purchase offers reduced by 150 to 200 percent of estimated compliance cost.",
+        "Insurance underwriters are increasingly aware of service bulletin compliance status. Many manufacturers tie warranty coverage to compliance with mandatory service bulletins. A service bulletin without an AD today can become an AD tomorrow, with the compliance timeline set by the FAA, not your maintenance schedule. Emergency ADs can require compliance before the next flight.",
+        "The word mandatory on a service bulletin may not carry the force of law for every operator. But it carries the weight of engineering expertise, safety data, and market expectations. The smartest operators, whether flying under Part 91 or Part 135, treat that word with the seriousness it deserves."
+      ],
+      "tags": [
+        "service-bulletins",
+        "regulatory",
+        "maintenance",
+        "airworthiness-directives",
+        "part-91",
+        "part-135"
+      ],
+      "image": "/images/blog/mandatory-service-bulletins-cirrus-sr22.jpg",
+      "image_alt": "Cirrus SR22 aircraft on the ramp.",
+      "published_at": "2026-04-15T09:20:37.615307+00:00"
+    },
     {
       "id": "repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414",
       "status": "published",
