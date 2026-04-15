@@ -44,11 +44,21 @@ function renderMarkdownBody(markdown?: string) {
     listItems = [];
   };
 
+  const imageMatch = (line: string) => line.match(/^!\[([^\]]*)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)$/);
+
   for (const raw of lines) {
     const trimmed = raw.trim();
     if (!trimmed) {
       flushParagraph();
       flushList();
+      continue;
+    }
+    const image = imageMatch(trimmed);
+    if (image) {
+      flushParagraph();
+      flushList();
+      const [, alt, src] = image;
+      blocks.push(`<figure style="margin:18px 0;"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" style="width:100%;border:1px solid #1a1a1a;display:block;" /><figcaption class="np-kicker" style="margin-top:6px;">${escapeHtml(alt)}</figcaption></figure>`);
       continue;
     }
     if (/^###\s+/.test(trimmed)) {

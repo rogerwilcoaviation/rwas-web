@@ -203,6 +203,10 @@ function renderMarkdownBody(markdown) {
   var paragraph = [];
   var listItems = [];
 
+  function imageMatch(line) {
+    return line.match(/^!\[([^\]]*)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)$/);
+  }
+
   function flushParagraph() {
     if (!paragraph.length) return;
     var cls = html.indexOf('class="body-text drop"') === -1 ? 'body-text drop' : 'body-text';
@@ -225,6 +229,14 @@ function renderMarkdownBody(markdown) {
     if (!trimmed) {
       flushParagraph();
       flushList();
+      return;
+    }
+
+    var image = imageMatch(trimmed);
+    if (image) {
+      flushParagraph();
+      flushList();
+      html += '<figure style="margin:18px 0;"><img src="' + escapeHtml(image[2]) + '" alt="' + escapeHtml(image[1]) + '" style="width:100%;border:1px solid #1a1a1a;display:block;" onclick="openLightbox(this.src, this.alt)"><figcaption class="kicker" style="margin-top:6px; display:block;">' + escapeHtml(image[1]) + '</figcaption></figure>';
       return;
     }
 
