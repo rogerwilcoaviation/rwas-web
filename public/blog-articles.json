@@ -7,14 +7,14 @@
       "product-update",
       "memo",
       "press-release",
-      "service-bulletins"
+      "service-bulletin"
     ]
   },
   "articles": [
     {
       "id": "mandatory-service-bulletins-are-they-really-mandatory-20260415",
       "status": "published",
-      "category": "service-bulletins",
+      "category": "service-bulletin",
       "title": "Mandatory Service Bulletins: Are They Really Mandatory?",
       "subtitle": "The regulatory, safety, and financial truth every aircraft owner needs to know.",
       "author": "Roger Wilco Aviation Services",
