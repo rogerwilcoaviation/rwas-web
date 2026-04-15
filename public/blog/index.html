@@ -281,7 +281,10 @@ function renderArticles() {
   }
   html += '<p class="body-text drop">' + lead.lead + '</p>';
   if (lead.body && lead.body.length > 0) {
-    html += '<p class="body-text">' + lead.body[0] + '</p>';
+    var leadMax = Math.min(lead.body.length, 3);
+    for (var bi = 0; bi < leadMax; bi++) {
+      html += '<p class="body-text">' + lead.body[bi] + '</p>';
+    }
   }
   html += '<a class="read-more" href="/blog/article.html?id=' + lead.id + '">Continue reading &rarr;</a>';
   html += '</div>';
@@ -331,7 +334,10 @@ function renderArticles() {
         html += '<h3 class="headline-sm">' + art.title + '</h3>';
         html += '</a>';
         html += '<div class="byline">' + formatDateShort(art.date) + ' &middot; ' + art.byline + '</div>';
-        html += '<p class="body-text">' + art.lead.substring(0, 160) + '&hellip;</p>';
+        html += '<p class="body-text">' + art.lead + '</p>';
+        if (art.body && art.body.length > 0) {
+          html += '<p class="body-text">' + art.body[0] + '</p>';
+        }
         html += '<div class="source-line">Source: ' + art.source + '</div>';
         html += '</div>';
       });
