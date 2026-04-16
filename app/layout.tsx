@@ -115,7 +115,6 @@ export default function RootLayout({
           href="/static/favicons/safari-pinned-tab.svg"
           color="#5bbad5"
         />
-        <meta name="generator" content="Shipixen" />
         <meta name="msapplication-TileColor" content="#000000" />
         <meta
           name="theme-color"
@@ -128,6 +127,96 @@ export default function RootLayout({
           content="#000"
         />
         <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
+        {/* Schema.org LocalBusiness + Organization (P2.1) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': ['LocalBusiness', 'AutomotiveBusiness'],
+                  '@id': `${siteConfig.siteUrl}#organization`,
+                  name: 'Roger Wilco Aviation Services',
+                  alternateName: 'RWAS',
+                  url: siteConfig.siteUrl,
+                  logo: `${siteConfig.siteUrl}/newspaper/images/logo.png`,
+                  image: `${siteConfig.siteUrl}/newspaper/images/r182_panel.jpg`,
+                  description:
+                    'FAA Part 145 Repair Station (Certificate RWSR491E) in Yankton, South Dakota. Certified Garmin dealer specializing in G3X Touch, GFC 500, GTN navigators, annual inspections, NDT, sheet metal fabrication, and Papa-Alpha Piper rigging tools.',
+                  telephone: '+1-605-299-8178',
+                  email: 'avionics@rwas.team',
+                  priceRange: '$$',
+                  address: {
+                    '@type': 'PostalAddress',
+                    streetAddress: 'Chan Gurney Municipal Airport (KYKN)',
+                    addressLocality: 'Yankton',
+                    addressRegion: 'SD',
+                    postalCode: '57078',
+                    addressCountry: 'US',
+                  },
+                  geo: {
+                    '@type': 'GeoCoordinates',
+                    latitude: 42.9167,
+                    longitude: -97.3858,
+                  },
+                  openingHoursSpecification: [
+                    {
+                      '@type': 'OpeningHoursSpecification',
+                      dayOfWeek: [
+                        'Monday',
+                        'Tuesday',
+                        'Wednesday',
+                        'Thursday',
+                        'Friday',
+                      ],
+                      opens: '08:00',
+                      closes: '17:00',
+                    },
+                  ],
+                  areaServed: [
+                    { '@type': 'State', name: 'South Dakota' },
+                    { '@type': 'State', name: 'Nebraska' },
+                    { '@type': 'State', name: 'Iowa' },
+                    { '@type': 'State', name: 'Minnesota' },
+                    { '@type': 'State', name: 'North Dakota' },
+                    { '@type': 'State', name: 'Wyoming' },
+                    { '@type': 'State', name: 'Montana' },
+                  ],
+                  hasCredential: [
+                    {
+                      '@type': 'EducationalOccupationalCredential',
+                      credentialCategory:
+                        'FAA Part 145 Repair Station Certificate',
+                      recognizedBy: {
+                        '@type': 'Organization',
+                        name: 'Federal Aviation Administration',
+                      },
+                      identifier: 'RWSR491E',
+                    },
+                  ],
+                  memberOf: [
+                    { '@type': 'Organization', name: 'NBAA' },
+                    { '@type': 'Organization', name: 'AEA' },
+                  ],
+                  founder: {
+                    '@type': 'Person',
+                    name: 'John Halsted',
+                    jobTitle: 'Owner & Chief A&P / IA Mechanic',
+                  },
+                },
+                {
+                  '@type': 'WebSite',
+                  '@id': `${siteConfig.siteUrl}#website`,
+                  url: siteConfig.siteUrl,
+                  name: 'Roger Wilco Aviation Services',
+                  publisher: { '@id': `${siteConfig.siteUrl}#organization` },
+                  inLanguage: 'en-US',
+                },
+              ],
+            }),
+          }}
+        />
       </head>
 
       <body className="flex flex-col bg-white text-black antialiased dark:bg-gray-950 dark:text-white min-h-screen">
