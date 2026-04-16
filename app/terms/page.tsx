@@ -6,6 +6,12 @@ import { metadata } from '@/data/config/metadata';
 import Footer from '@/components/shared/Footer';
 import Header from '@/components/shared/Header';
 
+
+export const metadata = {
+  title: 'Terms of Service | Roger Wilco Aviation Services',
+  description: 'Terms of service for Roger Wilco Aviation Services (rogerwilcoaviation.com). FAA Part 145 Repair Station in Yankton, SD.',
+  alternates: { canonical: 'https://rogerwilcoaviation.com/terms' },
+};
 const policyConfig = {
   lastUpdated: 'April 8, 2026',
 };

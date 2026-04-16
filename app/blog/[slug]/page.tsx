@@ -113,12 +113,12 @@ export async function generateMetadata({
     : `${siteUrl}/newspaper/images/logo.png`;
 
   return {
-    title: `${article.title} | Blog Articles`,
-    description: article.lead,
+    title: article.title.length > 60 ? article.title : `${article.title} | RWAS`,
+    description: article.lead.length > 155 ? article.lead.slice(0, 152).trimEnd() + '…' : article.lead,
     alternates: { canonical: articleUrl },
     openGraph: {
       title: article.title,
-      description: article.lead,
+      description: article.lead.length > 155 ? article.lead.slice(0, 152).trimEnd() + '…' : article.lead,
       url: articleUrl,
       type: 'article',
       publishedTime: article.date,
@@ -128,7 +128,7 @@ export async function generateMetadata({
     twitter: {
       card: 'summary_large_image',
       title: article.title,
-      description: article.lead,
+      description: article.lead.length > 155 ? article.lead.slice(0, 152).trimEnd() + '…' : article.lead,
       images: [imageUrl],
     },
   };
@@ -157,7 +157,7 @@ export default async function BlogArticlePage({
     '@type': 'BlogPosting',
     '@id': `${articleUrl}#article`,
     headline: article.title,
-    description: article.lead,
+    description: article.lead.length > 155 ? article.lead.slice(0, 152).trimEnd() + '…' : article.lead,
     image: [imageUrl],
     datePublished: (article as { published_at?: string }).published_at || article.date,
     dateModified: (article as { published_at?: string }).published_at || article.date,

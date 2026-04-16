@@ -8,3 +8,11 @@
 /faq /about 301
 /features /shop-capabilities 301
 /pricing /financing 301
+
+# P3.2: trailing-slash variants for Mevolut deletions + contact consolidation
+/careers/ /about 301
+/press/ /blog/ 301
+/faq/ /about 301
+/features/ /shop-capabilities 301
+/pricing/ /financing 301
+/contact/ /about 301

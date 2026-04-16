@@ -1,6 +1,12 @@
 import Footer from '@/components/shared/Footer';
 import Header from '@/components/shared/Header';
 
+
+export const metadata = {
+  title: 'Cookie Policy | Roger Wilco Aviation Services',
+  description: 'Cookie policy for Roger Wilco Aviation Services (rogerwilcoaviation.com). How we use cookies and tracking.',
+  alternates: { canonical: 'https://rogerwilcoaviation.com/cookies' },
+};
 export default function Cookies() {
   return (
     <div className="flex flex-col w-full min-h-screen items-center justify-between fancy-overlay">
