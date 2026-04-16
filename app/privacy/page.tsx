@@ -3,7 +3,7 @@
  *
  * NB: This template is not legal advice, and you are solely responsible for ensuring that you meet your obligations under applicable laws. As privacy laws are constantly evolving, you should regularly review your privacy notice to ensure that it is compliant with updated laws and regulation and that it accurately reflects current data handling practices. We recommend that you consult a lawyer as needed.
  */
-import { metadata } from '@/data/config/metadata';
+import { metadata as siteMetadata } from '@/data/config/metadata';
 import Header from '@/components/shared/Header';
 import Footer from '@/components/shared/Footer';
 
@@ -34,10 +34,10 @@ export default function PrivacyPolicyPage() {
           <div className="mt-12 max-w-screen-md mx-auto bg-white dark:bg-black rounded shadow-md p-6 mb-8">
             <p>
               This Privacy Policy describes how{' '}
-              <span className="font-bold">{metadata.businessName}</span> (the
+              <span className="font-bold">{siteMetadata.businessName}</span> (the
               "Site," "we," "us," or "our") collects, uses, and discloses your
               personal information when you visit, use our services, or make a
-              purchase from <span className="font-bold">{metadata.domain}</span>{' '}
+              purchase from <span className="font-bold">{siteMetadata.domain}</span>{' '}
               (the "Site") or otherwise communicate with us (collectively, the
               "Services"). For purposes of this Privacy Policy, "you" and "your"
               means you as the user of the Services, whether you are a customer,
@@ -471,10 +471,10 @@ export default function PrivacyPolicyPage() {
               Privacy Policy, or if you would like to exercise any of the rights
               available to you, please contact us at{' '}
               <a
-                href={`mailto:${metadata.supportEmail}`}
+                href={`mailto:${siteMetadata.supportEmail}`}
                 className="text-blue-500"
               >
-                {metadata.supportEmail}
+                {siteMetadata.supportEmail}
               </a>
             </p>
 
