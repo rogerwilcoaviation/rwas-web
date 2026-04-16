@@ -113,8 +113,56 @@
   color: #666;
   text-align: right;
   flex-shrink: 0;
-  width: 100px;
-  line-height: 1.7;
+  width: 160px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+.np-masthead-right-meta {
+  line-height: 1.5;
+}
+.np-masthead-phone {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.np-masthead-phone:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.np-masthead-cta {
+  display: inline-block;
+  background: #1a1a1a;
+  color: #f7f4ef;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 6px 12px;
+  white-space: nowrap;
+  border: 1px solid #1a1a1a;
+  transition: background 0.15s, color 0.15s;
+}
+.np-masthead-cta:hover {
+  background: #b32828;
+  color: #f7f4ef;
+  border-color: #b32828;
+}
+@media (max-width: 749px) {
+  .np-masthead-right {
+    width: auto;
+    align-items: center;
+    text-align: center;
+  }
+  .np-masthead-phone { font-size: 18px; }
 }
 
 /* Edition bar */

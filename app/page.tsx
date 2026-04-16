@@ -61,8 +61,12 @@ export default function Home() {
             </div>
           </div>
           <div className="np-masthead-right">
-            Cert. No. RWSR491E<br />
-            KYKN &middot; Yankton, SD
+            <div className="np-masthead-right-meta">
+              Cert. No. RWSR491E<br />
+              KYKN &middot; Yankton, SD
+            </div>
+            <a href="tel:+16052998178" className="np-masthead-phone">(605) 299-8178</a>
+            <a href="/about#contact" className="np-masthead-cta">Book Service</a>
           </div>
         </div>
 
