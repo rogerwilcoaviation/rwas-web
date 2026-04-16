@@ -106,9 +106,31 @@ export async function generateMetadata({
     };
   }
 
+  const siteUrl = 'https://rogerwilcoaviation.com';
+  const articleUrl = `${siteUrl}/blog/${article.id}`;
+  const imageUrl = article.image
+    ? (article.image.startsWith('http') ? article.image : `${siteUrl}${article.image}`)
+    : `${siteUrl}/newspaper/images/logo.png`;
+
   return {
     title: `${article.title} | Blog Articles`,
     description: article.lead,
+    alternates: { canonical: articleUrl },
+    openGraph: {
+      title: article.title,
+      description: article.lead,
+      url: articleUrl,
+      type: 'article',
+      publishedTime: article.date,
+      authors: article.byline ? [article.byline] : undefined,
+      images: [{ url: imageUrl, alt: (article as { image_alt?: string }).image_alt || article.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.lead,
+      images: [imageUrl],
+    },
   };
 }
 
@@ -125,8 +147,47 @@ export default async function BlogArticlePage({
   const relatedArticles = publishedArticles.filter((entry) => entry.id !== article.id).slice(0, 4);
   const markdownBlocks = renderMarkdownBody((article as { body_markdown?: string }).body_markdown);
 
+  const siteUrl = 'https://rogerwilcoaviation.com';
+  const articleUrl = `${siteUrl}/blog/${article.id}`;
+  const imageUrl = article.image
+    ? (article.image.startsWith('http') ? article.image : `${siteUrl}${article.image}`)
+    : `${siteUrl}/newspaper/images/logo.png`;
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `${articleUrl}#article`,
+    headline: article.title,
+    description: article.lead,
+    image: [imageUrl],
+    datePublished: (article as { published_at?: string }).published_at || article.date,
+    dateModified: (article as { published_at?: string }).published_at || article.date,
+    author: {
+      '@type': 'Organization',
+      name: article.byline || 'Roger Wilco Aviation Services',
+      url: siteUrl,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Roger Wilco Aviation Services',
+      '@id': `${siteUrl}#organization`,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteUrl}/newspaper/images/logo.png`,
+      },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+    articleSection: article.category,
+    keywords: (article as { tags?: string[] }).tags ? (article as { tags: string[] }).tags.join(', ') : undefined,
+    isPartOf: { '@id': `${siteUrl}#website` },
+  };
+
   return (
     <div className="np-wrapper" style={{ background: '#ddd9d2', minHeight: '100vh', fontFamily: "Georgia, 'Times New Roman', serif" }}>
+      {/* Article schema.org JSON-LD (P2.4) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <div className="np-page">
         <div className="np-dateline">
           <span>Spring 2026 Edition</span>
