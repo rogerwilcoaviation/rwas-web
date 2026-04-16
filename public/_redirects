@@ -1,2 +1,10 @@
 # /contact consolidated to /about (see About > Contact & Info section)
 /contact /about 301
+
+# --- P1.1: deleted Shipixen template pages redirect to real content ---
+# P1.1: old Shipixen template page deleted
+/careers /about 301
+/press /blog/ 301
+/faq /about 301
+/features /shop-capabilities 301
+/pricing /financing 301
