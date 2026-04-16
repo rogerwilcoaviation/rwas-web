@@ -149,7 +149,7 @@ export default function RootLayout({
                   priceRange: '$$',
                   address: {
                     '@type': 'PostalAddress',
-                    streetAddress: 'Chan Gurney Municipal Airport (KYKN)',
+                    streetAddress: '700 E 31st Street',
                     addressLocality: 'Yankton',
                     addressRegion: 'SD',
                     postalCode: '57078',
@@ -170,7 +170,7 @@ export default function RootLayout({
                         'Thursday',
                         'Friday',
                       ],
-                      opens: '08:00',
+                      opens: '07:00',
                       closes: '17:00',
                     },
                   ],
@@ -198,6 +198,13 @@ export default function RootLayout({
                   memberOf: [
                     { '@type': 'Organization', name: 'NBAA' },
                     { '@type': 'Organization', name: 'AEA' },
+                  ],
+                  sameAs: [
+                    'https://www.facebook.com/rogerwilcoaviationservices/',
+                    'https://aea.net/memberdetails.asp?ID=3310',
+                    'https://www.aopa.org/destinations/business/39868',
+                    'https://www.bbb.org/us/sd/yankton/profile/aviation-services/roger-wilco-aviation-services-llc-0714-1000062719',
+                    'https://business.yanktonsd.com/list/member/roger-wilco-aviation-services-6940',
                   ],
                   founder: {
                     '@type': 'Person',
