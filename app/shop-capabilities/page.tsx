@@ -3,10 +3,9 @@
 import '../newspaper.css';
 
 export const metadata = {
-  title: 'Shop Capabilities | Roger Wilco Aviation Services',
-  description: 'FAA Part 145 Repair Station RWSR491E — Garmin avionics installations, NDT, sheet metal fabrication, CNC routing, annual inspections, and aircraft management.',
+  title: 'Shop Capabilities — Avionics, A&P, NDT',
+  description: 'Full-spectrum aircraft maintenance: Garmin installations, A&P airframe & powerplant, NDT inspection, sheet metal fabrication, fiber laser cutting. KYKN, SD.',
 };
-
 export default function ShopCapabilitiesPage() {
   return (
     <>

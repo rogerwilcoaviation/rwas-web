@@ -4,10 +4,9 @@ import '../newspaper.css';
 import LoanCalc from '../components/LoanCalc';
 
 export const metadata = {
-  title: 'Avionics Financing | Roger Wilco Aviation Services',
-  description: 'Affordable avionics financing for Garmin installations, upgrades, and aircraft maintenance. Payment estimator and flexible terms from RWAS.',
+  title: 'Avionics Financing — Flexible Terms',
+  description: 'Finance your Garmin avionics upgrade. Spread installation costs across flexible terms. Payment estimator and quick approval from RWAS.',
 };
-
 export default function FinancingPage() {
   return (
     <>

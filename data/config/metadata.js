@@ -1,7 +1,7 @@
 const metadata = {
-  title: 'Roger Wilco Aviation Services | Garmin avionics, NDT, fabrication, and aircraft support',
+  title: 'Roger Wilco Aviation Services',
   description:
-    'Roger Wilco Aviation Services delivers Garmin avionics sales and installation support, nondestructive testing, fabrication, and practical aircraft solutions backed by real shop experience.',
+    'FAA Part 145 Repair Station in Yankton, SD. Certified Garmin dealer offering G3X Touch, GFC 500, annual inspections, NDT, and fabrication. Call (605) 299-8178.',
   domain: 'rogerwilcoaviation.com',
   logoTitle: 'Roger Wilco Aviation Services',
   businessName: 'Roger Wilco Aviation Services',

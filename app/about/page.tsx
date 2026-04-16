@@ -3,10 +3,9 @@
 import '../newspaper.css';
 
 export const metadata = {
-  title: 'About | Roger Wilco Aviation Services',
-  description: 'About Roger Wilco Aviation Services — FAA Part 145 Repair Station in Yankton, South Dakota. Over 40 years of aviation experience. Contact information, history, and capabilities.',
+  title: 'About — 40 Years in Aviation',
+  description: 'Roger Wilco Aviation Services — FAA Certificate RWSR491E. Founded by veteran pilot John Halsted at Chan Gurney Municipal Airport (KYKN) in Yankton, SD.',
 };
-
 export default function AboutPage() {
   return (
     <>

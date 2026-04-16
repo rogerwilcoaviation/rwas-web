@@ -5,11 +5,9 @@
 import './newspaper.css';
 
 export const metadata = {
-  title: 'Roger Wilco Aviation Services | Garmin Avionics, NDT, Fabrication & Aircraft Support',
-  description:
-    'FAA-certificated repair station offering Garmin avionics installations, NDT, sheet metal fabrication, and aircraft maintenance in Yankton, South Dakota.',
+  title: 'Garmin Avionics & Aircraft Maintenance — Yankton, SD',
+  description: 'FAA Part 145 repair station in Yankton, SD. Certified Garmin dealer: G3X Touch, GFC 500, annual inspections, NDT. Call (605) 299-8178.',
 };
-
 export default function Home() {
   return (
     <>

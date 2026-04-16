@@ -10,11 +10,9 @@ const recentDispatches = publishedArticles.slice(0, 5);
 const topics = blogData.meta.categories;
 
 export const metadata = {
-  title: 'Blog Articles | Roger Wilco Aviation Services',
-  description:
-    'Dispatches, bulletins, Garmin product updates, service notes, and shop news from Roger Wilco Aviation Services.',
+  title: 'Aviation News, Garmin Bulletins & Memos',
+  description: 'Garmin press releases, service bulletins, product updates, dealer memos, and industry dispatches from Roger Wilco Aviation Services.',
 };
-
 export default function BlogPage() {
   return (
     <div className="np-wrapper" style={{ background: '#ddd9d2', minHeight: '100vh', fontFamily: "Georgia, 'Times New Roman', serif" }}>

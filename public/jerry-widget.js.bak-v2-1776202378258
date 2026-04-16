@@ -40,7 +40,7 @@
   var SESSION_ID = 'jerry-session-' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
   var apiUrl = isShopify
     ? 'https://rogerwilcoaviation.com/api/chat'
-    : 'https://rogerwilcoaviation.com/api/chat';
+    : '/api/chat';
 
   var defaultHistory = [
     {
@@ -180,7 +180,7 @@
       // Add escape hatch for listing conversations
       if (message.role === 'assistant' && !message.content.includes('submitted for review')) {
         var isListing = history.some(function(m) {
-          return /\b(list my|sell my|selling my|for sale|tail number|N-number)\b/i.test(m.content);
+          return /\b(list|sell|selling|for sale|tail number|N-number)\b/i.test(m.content);
         });
         if (isListing) {
           var esc = document.createElement('div');
@@ -297,7 +297,7 @@
   }
 
   function hasListingIntent(text) {
-    return /\b(list my|sell my|selling my|for sale|i want to (list|sell)|list my aircraft|list my airplane|sell my aircraft|sell my airplane)\b/i.test(String(text || ''));
+    return /\b(list|sell|selling|for sale|list my aircraft|list my airplane|sell my aircraft|sell my airplane)\b/i.test(String(text || ''));
   }
 
   function wantsPendingSubmit(text) {
@@ -366,7 +366,7 @@
           listingSave.email = session.email;
           var draftResponse = await fetch('https://sale-api.rogerwilcoaviation.com/draft', {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream, application/json' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(listingSave)
           });
           var draftData = await draftResponse.json().catch(function() { return {}; });
@@ -679,54 +679,10 @@
         throw new Error('Chat request failed: ' + response.status);
       }
 
-      var isStreaming = (response.headers.get('content-type') || '').includes('text/event-stream');
-
-      if (isStreaming) {
-        // ── Streaming mode: show words as they arrive ──
-        removeThinkingIndicator();
-        var streamRow = document.createElement('div');
-        streamRow.className = 'jerry-widget-row assistant';
-        var streamMsg = document.createElement('div');
-        streamMsg.className = 'jerry-widget-msg';
-        streamRow.appendChild(streamMsg);
-        chat.appendChild(streamRow);
-        chat.scrollTop = chat.scrollHeight;
-
-        reply = '';
-        var reader = response.body.getReader();
-        var decoder = new TextDecoder();
-        var sBuffer = '';
-
-        while (true) {
-          var chunk = await reader.read();
-          if (chunk.done) break;
-          sBuffer += decoder.decode(chunk.value, { stream: true });
-          var sLines = sBuffer.split('\n');
-          sBuffer = sLines.pop() || '';
-
-          for (var si = 0; si < sLines.length; si++) {
-            if (sLines[si].startsWith('data: ')) {
-              try {
-                var sEvt = JSON.parse(sLines[si].slice(6));
-                if (sEvt.token) {
-                  reply += sEvt.token;
-                  streamMsg.innerHTML = formatMarkdown(reply);
-                  chat.scrollTop = chat.scrollHeight;
-                }
-              } catch(spe) {}
-            }
-          }
-        }
-
-        if (!reply) throw new Error('Empty stream');
-        streamRow.remove(); // Will be re-added by normal message flow below
-      } else {
-        // ── Non-streaming fallback ──
-        var data = await response.json();
+      var data = await response.json();
       var reply = data && (data.reply || data.message || data.content || (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content));
       if (!reply) {
         throw new Error('No reply returned');
-      }
       }
 
       var rawReply = String(reply);
@@ -810,7 +766,7 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
       history.push({ role: 'assistant', content: cleanReply });
       // Append list-it notice during listing intake
       var isListingConvo = history.some(function(m) {
-        return /\b(list my|sell my|selling my|for sale|tail number)\b/i.test(m.content);
+        return /\b(list|sell|selling|for sale|tail number)\b/i.test(m.content);
       });
       if (isListingConvo && !cleanReply.includes('submitted')) {
         var lastMsg = history[history.length - 1];

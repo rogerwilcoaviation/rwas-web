@@ -7,6 +7,12 @@ import { metadata } from '@/data/config/metadata';
 import Header from '@/components/shared/Header';
 import Footer from '@/components/shared/Footer';
 
+
+export const metadata = {
+  title: 'Privacy Policy',
+  description: 'Privacy policy for Roger Wilco Aviation Services (rogerwilcoaviation.com). How we handle data from customers, the aircraft marketplace, and Captain Jerry.',
+};
+
 const policyConfig = {
   lastUpdated: 'March 1st, 2024',
 };
