@@ -102,7 +102,7 @@ export async function generateMetadata({
 
   if (!article) {
     return {
-      title: 'Article not found | Roger Wilco Aviation Services',
+      title: { absolute: 'Article not found | Roger Wilco Aviation Services' },
     };
   }
 
@@ -113,7 +113,7 @@ export async function generateMetadata({
     : `${siteUrl}/newspaper/images/logo.png`;
 
   return {
-    title: article.title.length > 60 ? article.title : `${article.title} | RWAS`,
+    title: { absolute: article.title.length <= 60 ? `${article.title} | RWAS` : article.title },
     description: article.lead.length > 155 ? article.lead.slice(0, 152).trimEnd() + '…' : article.lead,
     alternates: { canonical: articleUrl },
     openGraph: {

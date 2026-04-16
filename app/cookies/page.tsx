@@ -3,7 +3,7 @@ import Header from '@/components/shared/Header';
 
 
 export const metadata = {
-  title: 'Cookie Policy | Roger Wilco Aviation Services',
+  title: { absolute: 'Cookie Policy | Roger Wilco Aviation Services' },
   description: 'Cookie policy for Roger Wilco Aviation Services (rogerwilcoaviation.com). How we use cookies and tracking.',
   alternates: { canonical: 'https://rogerwilcoaviation.com/cookies' },
 };
