@@ -321,8 +321,12 @@ export default function Home() {
                 <div className="np-svc-desc">FAA Certificate RWSR491E. All work by certificated mechanics with full logbook documentation.</div>
               </div>
               <div className="np-ornament">&#9670; &nbsp; &#9670; &nbsp; &#9670;</div>
-              <div style={{ textAlign: 'center', fontFamily: 'Georgia, serif', fontStyle: 'italic', fontSize: '11.5px', color: '#666' }}>
-                Schedule your inspection today
+              <div className="np-schedule-cta">
+                <div className="np-schedule-cta-label">Schedule your inspection today</div>
+                <div className="np-schedule-cta-actions">
+                  <a href="tel:+16052998178" className="np-schedule-cta-btn np-schedule-cta-btn-primary">Call (605) 299-8178</a>
+                  <a href="/about#contact" className="np-schedule-cta-btn np-schedule-cta-btn-secondary">Request a Quote</a>
+                </div>
               </div>
             </div>
 
