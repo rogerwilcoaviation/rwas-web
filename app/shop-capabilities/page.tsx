@@ -9,6 +9,102 @@ export const metadata = {
 export default function ShopCapabilitiesPage() {
   return (
     <>
+      {/* Schema.org Service catalog (P2.3) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'Service',
+                '@id': 'https://rogerwilcoaviation.com/shop-capabilities#garmin',
+                name: 'Garmin Avionics Installation',
+                serviceType: 'Avionics Installation',
+                provider: { '@id': 'https://rogerwilcoaviation.com#organization' },
+                areaServed: [
+                  { '@type': 'State', name: 'South Dakota' },
+                  { '@type': 'State', name: 'Nebraska' },
+                  { '@type': 'State', name: 'Iowa' },
+                  { '@type': 'State', name: 'Minnesota' },
+                  { '@type': 'State', name: 'North Dakota' },
+                ],
+                hasOfferCatalog: {
+                  '@type': 'OfferCatalog',
+                  name: 'Garmin Avionics',
+                  itemListElement: [
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'G3X Touch Suite Installation' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'GTN 650Xi / 750Xi Navigator Installation' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'GFC 500 Autopilot Installation' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'ADS-B Out Compliance' } },
+                  ],
+                },
+              },
+              {
+                '@type': 'Service',
+                '@id': 'https://rogerwilcoaviation.com/shop-capabilities#airframe-powerplant',
+                name: 'Airframe & Powerplant Maintenance',
+                serviceType: 'Aircraft Maintenance',
+                provider: { '@id': 'https://rogerwilcoaviation.com#organization' },
+                description: 'Comprehensive airframe and powerplant services for GA, corporate, and commercial operators. All work performed by certificated mechanics with full logbook documentation.',
+                hasOfferCatalog: {
+                  '@type': 'OfferCatalog',
+                  name: 'Airframe & Powerplant',
+                  itemListElement: [
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Annual Inspections', description: 'Per FAR 43 with discrepancy reports' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Condition & Pre-Buy Inspections' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: '100-Hour Inspections', description: 'Part 91 and Part 135' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'AOG Go-Van Service' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Propeller Balancing' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Aircraft Weight Certification', description: 'Up to 30,000 lbs' } },
+                  ],
+                },
+              },
+              {
+                '@type': 'Service',
+                '@id': 'https://rogerwilcoaviation.com/shop-capabilities#ndt',
+                name: 'Non-Destructive Testing & Inspection',
+                serviceType: 'NDT Inspection',
+                provider: { '@id': 'https://rogerwilcoaviation.com#organization' },
+                description: 'Level 3 NDT services with FAA Form 8130-3 return to service and Airworthiness Directive compliance.',
+                hasOfferCatalog: {
+                  '@type': 'OfferCatalog',
+                  name: 'NDT Methods',
+                  itemListElement: [
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Eddy Current Testing' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dye Penetrant Testing', description: 'Per ASTM E1417' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Magnetic Particle Inspection' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Ultrasound Testing' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Visual Testing' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Rockwell Hardness Testing' } },
+                  ],
+                },
+              },
+              {
+                '@type': 'Service',
+                '@id': 'https://rogerwilcoaviation.com/shop-capabilities#fabrication',
+                name: 'Fabrication & Manufacturing',
+                serviceType: 'Aircraft Fabrication',
+                provider: { '@id': 'https://rogerwilcoaviation.com#organization' },
+                description: 'In-house CNC machining, fiber laser cutting, and fabrication capabilities for aircraft panels, structural components, and precision tooling.',
+                hasOfferCatalog: {
+                  '@type': 'OfferCatalog',
+                  name: 'Fabrication Capabilities',
+                  itemListElement: [
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'CNC Router Fabrication' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Fiber Laser Cutting & Welding' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Aircraft Panel Fabrication' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Sheet Metal Repair & Replacement' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Multi-Color Powder Coating' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'UV Printing' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'CO2 Laser Engraving' } },
+                  ],
+                },
+              },
+            ],
+          }),
+        }}
+      />
       <style>{`
         body::before {
           content: "";
