@@ -1,0 +1,77 @@
+# Roger Wilco Aviation Services (RWAS)
+
+> FAA Part 145 Repair Station (Certificate RWSR491E) in Yankton, South Dakota, specializing in Garmin avionics installation, aircraft maintenance, non-destructive testing, and sheet metal fabrication. Founded by John Halsted, a veteran pilot with 40+ years in aviation. Serving the Northern Plains: South Dakota, Nebraska, Iowa, Minnesota, North Dakota, Wyoming, and Montana.
+
+- **Phone:** (605) 299-8178
+- **Email:** avionics@rwas.team
+- **Location:** Chan Gurney Municipal Airport (KYKN), Yankton, SD
+- **Hours:** Monday–Friday, 8:00 AM – 5:00 PM CT
+- **Certifications:** FAA Part 145 Certificate RWSR491E, Certified Garmin Dealer, NBAA Member, AEA Member
+
+## Core Pages
+
+- [Home](https://www.rogerwilcoaviation.com/) — Overview of services and featured capabilities
+- [About](https://www.rogerwilcoaviation.com/about) — Company history, founder bio, contact details
+- [Shop Capabilities](https://www.rogerwilcoaviation.com/shop-capabilities) — Full catalog of services: Garmin installations, A&P maintenance, NDT, fabrication
+- [Garmin](https://www.rogerwilcoaviation.com/garmin) — Garmin product updates, bulletins, promotions
+- [Blog](https://www.rogerwilcoaviation.com/blog/) — Aviation news, service bulletins, Garmin memos, shop dispatches
+- [Aircraft for Sale](https://www.rogerwilcoaviation.com/aircraft-for-sale) — Aircraft marketplace powered by Captain Jerry's guided intake
+- [Financing](https://www.rogerwilcoaviation.com/financing) — Avionics upgrade financing options
+
+## Services
+
+### Garmin Avionics Installation
+Certified Garmin dealer offering full glass-cockpit upgrades and STC'd installations for single-engine piston aircraft.
+- G3X Touch Suite (glass cockpit with ADAHRS, EIS, synthetic vision)
+- GTN 650Xi / 750Xi GPS/NAV/COMM navigators with WAAS LPV approaches
+- GFC 500 Autopilot (retrofit digital autopilot)
+- ADS-B Out compliance (FAR 91.227)
+
+### Airframe & Powerplant Maintenance
+Full FAR 43 / Part 91 / Part 135 aircraft maintenance with logbook documentation.
+- Annual inspections
+- 100-hour inspections
+- Pre-buy & condition inspections
+- AOG "Go-Van" service
+- Propeller balancing
+- Aircraft weight certification (up to 30,000 lbs)
+
+### Non-Destructive Testing & Inspection
+Level 3 NDT services with FAA Form 8130-3 return to service.
+- Eddy current testing
+- Dye penetrant testing (ASTM E1417)
+- Magnetic particle inspection
+- Ultrasound testing
+- Visual testing
+- Rockwell hardness testing
+
+### Fabrication & Manufacturing
+In-house CNC and laser capabilities for aircraft panels, structural components, and precision tooling.
+- CNC router fabrication
+- Fiber laser cutting and welding
+- Aircraft panel fabrication
+- Sheet metal repair and replacement
+- Multi-color powder coating
+- UV printing
+- CO2 laser engraving
+
+## Papa-Alpha Rigging Tools
+
+Precision flight-control rigging reference tools for Piper aircraft, designed in-house and manufactured from CNC-machined aircraft-grade aluminum. Powder coated and UV printed with permanent reference markings.
+
+- Covers stabilator, rudder, aileron, flap, and bell crank rigging
+- Compatible with Piper PA-28, PA-30, PA-31, and PA-36 series
+- Complete rigging kit from $264
+- Individual tools from $59.99
+- Available at: rogerwilcoaviation.com, Aircraft Spruce, and Amazon (coming soon)
+- Shop collection: https://www.rogerwilcoaviation.com/collections/rigging-tools
+
+## Captain Jerry
+
+Captain Jerry is an AI avionics expert available 24/7 via the floating chat widget on every page. Jerry handles service inquiries, aircraft listing intake, technical questions about Garmin products, and general scheduling. Accessible from the homepage anchor [#ask-jerry](https://www.rogerwilcoaviation.com/#ask-jerry).
+
+## Optional
+
+- [Sitemap](https://www.rogerwilcoaviation.com/sitemap.xml)
+- [RSS Feed](https://www.rogerwilcoaviation.com/feed.xml)
+- [Privacy Policy](https://www.rogerwilcoaviation.com/privacy)
