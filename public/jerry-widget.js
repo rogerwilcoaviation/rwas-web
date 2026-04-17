@@ -711,7 +711,7 @@
                 var sEvt = JSON.parse(sLines[si].slice(6));
                 if (sEvt.token) {
                   reply += sEvt.token;
-                  streamMsg.innerHTML = formatMarkdown(reply);
+                  streamMsg.innerHTML = formatMessage(reply);
                   chat.scrollTop = chat.scrollHeight;
                 }
               } catch(spe) {}
