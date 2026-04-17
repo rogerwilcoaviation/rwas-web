@@ -875,7 +875,7 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
       if (isListingConvo && !cleanReply.includes('submitted')) {
         var lastMsg = history[history.length - 1];
         if (lastMsg && lastMsg.role === 'assistant') {
-          lastMsg.content += '\n\n_If you would like to list before the end of the intake, simply say "list it" at any time._';
+          lastMsg.content += '\n\n<em>If you would like to list before the end of the intake, simply say "list it" at any time.</em>';
         }
       }
       saveHistory();
