@@ -1,3 +1,4 @@
+// jerry-widget.js v3 — structured intake protocol (state/action out of reply text)
 (function () {
   if (window.__jerryWidgetLoaded) return;
   window.__jerryWidgetLoaded = true;
@@ -72,6 +73,11 @@
   var history = loadHistory();
   var open = false;
   var loading = false;
+  // Listing-intake state mirror (v3 structured protocol).
+  // null = no intake in progress; object = current step snapshot;
+  // sent verbatim as body.state on every /api/chat POST so the
+  // worker never has to scan message history for marker tokens.
+  var intakeState = null;
 
   var css = '' +
     '.jerry-widget-bubble{position:fixed;right:16px;bottom:16px;z-index:999999;width:56px;height:56px;border-radius:50%;border:2px solid #d1b074;background:#1a1a1a;box-shadow:0 4px 16px rgba(0,0,0,.35);padding:0;cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center}' +
@@ -690,7 +696,7 @@
     var response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: apiMessages })
+        body: JSON.stringify({ messages: apiMessages, state: intakeState })
       });
 
       if (!response.ok) {
@@ -731,6 +737,18 @@
                   streamMsg.innerHTML = formatMessage(reply);
                   chat.scrollTop = chat.scrollHeight;
                 }
+                // v3 protocol: final frame carries structured state/action.
+                // `undefined` = worker didn't touch it; `null` = clear; object = set.
+                if (sEvt.done) {
+                  if (Object.prototype.hasOwnProperty.call(sEvt, 'state')) {
+                    intakeState = sEvt.state;
+                  }
+                  if (sEvt.action) window.__lastStreamAction = sEvt.action;
+                  if (typeof sEvt.cleanReply === 'string' && sEvt.cleanReply) {
+                    // Prefer server-cleaned text over raw token buffer.
+                    reply = sEvt.cleanReply;
+                  }
+                }
               } catch(spe) {}
             }
           }
@@ -745,10 +763,32 @@
       if (!reply) {
         throw new Error('No reply returned');
       }
+      // v3 protocol: latch structured state/action and prefer cleanReply.
+      if (data && Object.prototype.hasOwnProperty.call(data, 'state')) {
+        intakeState = data.state;
+      }
+      if (data && data.action) window.__lastStreamAction = data.action;
+      if (data && typeof data.cleanReply === 'string' && data.cleanReply) {
+        reply = data.cleanReply;
+      }
       }
 
       var rawReply = String(reply);
-      var actionMessages = await handleListingActions(rawReply);
+      // v3 protocol short-circuit: if worker surfaced a structured action,
+      // synthesize the legacy marker text into a shim rawReply only for the
+      // existing handleListingActions() code path. This keeps the submission
+      // logic (fetch → /listings → status banner) untouched while letting
+      // the transport layer stop embedding structured data in text.
+      var _v3Action = window.__lastStreamAction || null;
+      window.__lastStreamAction = null; // one-shot
+      var actionReplyShim = rawReply;
+      if (_v3Action && _v3Action.type === 'listing_draft' && _v3Action.draft) {
+        // Append marker block so existing extractTaggedJson picks it up.
+        if (!/LISTING_DRAFT:/.test(actionReplyShim)) {
+          actionReplyShim = actionReplyShim + '\n\nLISTING_DRAFT:' + JSON.stringify(_v3Action.draft);
+        }
+      }
+      var actionMessages = await handleListingActions(actionReplyShim);
       var cleanReply = rawReply;
       
       // Intercept INTAKE_COMPLETE from Jerry and submit as listing
