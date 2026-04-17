@@ -156,6 +156,7 @@
     text = text.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '');
     text = text.replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '');
     text = text.replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '');
+    text = text.replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}/g, '');
     text = text.trim();
     // Basic markdown: **bold**
     text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
@@ -939,5 +940,39 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
     document.addEventListener('DOMContentLoaded', fixNav);
   } else {
     fixNav();
+  }
+})();
+
+// ---------------------------------------------------------------------------
+// data-jerry-intent button wiring (fix #4 companion)
+// Any button or anchor with data-jerry-intent="list-aircraft" opens Jerry and
+// seeds the first intake message. Keyed on the intent string so future pages
+// can add e.g. data-jerry-intent="pre-buy-inspection" without rewiring.
+// ---------------------------------------------------------------------------
+(function() {
+  var INTENT_SEEDS = {
+    'list-aircraft': 'I want to list my aircraft for sale.'
+  };
+  function onClick(e) {
+    var node = e.target;
+    while (node && node !== document) {
+      if (node.dataset && node.dataset.jerryIntent) {
+        var seed = INTENT_SEEDS[node.dataset.jerryIntent];
+        if (seed && typeof window.jerryChat === 'function') {
+          e.preventDefault();
+          e.stopPropagation();
+          window.jerryChat(seed);
+          return;
+        }
+      }
+      node = node.parentElement;
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('click', onClick, true);
+    });
+  } else {
+    document.addEventListener('click', onClick, true);
   }
 })();
