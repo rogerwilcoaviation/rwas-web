@@ -1,0 +1,68 @@
+name: Deploy rwas-web to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - '.github/workflows/intake-bridge-deploy.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (next-on-pages)
+        run: npm run pages:build
+        env:
+          NODE_VERSION: '22'
+
+      - name: Deploy to Cloudflare Pages
+        id: cf-deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: >-
+            pages deploy .vercel/output/static
+            --project-name=rwas-web
+            --branch=${{ github.ref == 'refs/heads/main' && 'main' || github.head_ref || github.ref_name }}
+
+      - name: Smoke-test production (main only)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          set -e
+          echo "Waiting 20s for edge propagation..."
+          sleep 20
+          echo "=== /aircraft-for-sale ==="
+          curl -sS -o /dev/null -w "HTTP %{http_code}\n" https://rogerwilcoaviation.com/aircraft-for-sale
+          echo "=== /aircraft-for-sale/mnvmpdlz-ng1n0 (detail page) ==="
+          curl -sS -o /dev/null -w "HTTP %{http_code}\n" https://rogerwilcoaviation.com/aircraft-for-sale/mnvmpdlz-ng1n0
+          echo "=== /api/chat POST (served by intake-bridge Worker) ==="
+          curl -sS -X POST https://rogerwilcoaviation.com/api/chat \
+            -H 'Content-Type: application/json' \
+            -H 'Origin: https://rogerwilcoaviation.com' \
+            -d '{"messages":[{"role":"user","content":"I want to list my aircraft"}]}' \
+            --max-time 10 | grep -q 'intercept/intake' || { echo "Listing-intake intercept failed"; exit 1; }
+          echo "All smoke tests passed."
