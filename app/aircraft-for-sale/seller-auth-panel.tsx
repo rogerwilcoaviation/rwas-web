@@ -25,6 +25,7 @@
 
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { PhotoManager } from './photo-manager';
+import { LogbookManager } from './logbook-manager';
 
 const API = 'https://sale-api.rogerwilcoaviation.com';
 const SESSION_KEY = 'rwas_sale_session';
@@ -66,6 +67,13 @@ type Listing = {
   condition?: string;
   damageHistory?: string;
   photos?: Array<{ key: string; name?: string }>;
+  logbooks?: {
+    airframe?: Array<{ key: string; name?: string; size?: number }>;
+    powerplant?: Array<{ key: string; name?: string; size?: number }>;
+    propeller?: Array<{ key: string; name?: string; size?: number }>;
+    adSbCompliance?: Array<{ key: string; name?: string; size?: number }>;
+    misc?: Array<{ key: string; name?: string; size?: number }>;
+  };
 };
 
 type ModalKind =
@@ -1379,6 +1387,12 @@ function EditListingModal({
           <PhotoManager
             listingId={listing.id}
             initialPhotos={(listing.photos || []) as { key: string; name?: string }[]}
+            sessionToken={session.token}
+          />
+
+          <LogbookManager
+            listingId={listing.id}
+            initialLogbooks={(listing.logbooks || {}) as import('./logbook-manager').Logbooks}
             sessionToken={session.token}
           />
 
