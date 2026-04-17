@@ -80,6 +80,13 @@ interface Listing {
   condition?: string;
   damageHistory?: string;
   photos?: Photo[];
+  logbooks?: {
+    airframe?: Array<{ key: string; name?: string; size?: number }>;
+    powerplant?: Array<{ key: string; name?: string; size?: number }>;
+    propeller?: Array<{ key: string; name?: string; size?: number }>;
+    adSbCompliance?: Array<{ key: string; name?: string; size?: number }>;
+    misc?: Array<{ key: string; name?: string; size?: number }>;
+  };
 }
 
 async function getListing(id: string): Promise<Listing | null> {
@@ -503,6 +510,52 @@ export default async function AircraftDetailPage({ params }: PageProps) {
                 <div className="a4s-prose">{listing.equipmentList}</div>
               </>
             ) : null}
+
+            {(() => {
+              const lb = listing.logbooks || {};
+              const sections: Array<{ key: string; label: string; files: Array<{ key: string; name?: string; size?: number }> }> = [
+                { key: 'airframe', label: 'Airframe Logbook', files: lb.airframe || [] },
+                { key: 'powerplant', label: 'Engine Logbook', files: lb.powerplant || [] },
+                { key: 'propeller', label: 'Propeller Logbook', files: lb.propeller || [] },
+                { key: 'adSbCompliance', label: 'AD / SB Compliance', files: lb.adSbCompliance || [] },
+                { key: 'misc', label: 'Other Documents', files: lb.misc || [] },
+              ].filter((s) => s.files.length > 0);
+              if (!sections.length) return null;
+              const fmtSize = (n?: number) => {
+                if (!n || n <= 0) return '';
+                if (n < 1024) return n + ' B';
+                if (n < 1048576) return Math.round(n / 1024) + ' KB';
+                return (n / 1048576).toFixed(1) + ' MB';
+              };
+              return (
+                <>
+                  <h2 className="a4s-block-title">Logbooks &amp; Documents</h2>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
+                    {sections.map((s) => (
+                      <div key={s.key} style={{ padding: 10, background: '#fafaf7', border: '1px solid #e5e5dc' }}>
+                        <div style={{ fontFamily: 'Georgia, serif', fontSize: 14, fontWeight: 700, marginBottom: 6, color: '#1a1a1a' }}>{s.label}</div>
+                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                          {s.files.map((f) => (
+                            <li key={f.key}>
+                              <a
+                                href={`https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(f.key)}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', background: '#fff', border: '1px solid #ddd', color: '#1a1a1a', textDecoration: 'none', fontSize: 12 }}
+                              >
+                                <span style={{ fontSize: 14 }}>📄</span>
+                                <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.name || f.key.split('/').pop()}</span>
+                                {f.size ? <span style={{ fontSize: 10, color: '#888' }}>{fmtSize(f.size)}</span> : null}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              );
+            })()}
 
             <h2 className="a4s-block-title">Seller</h2>
             <div className="a4s-seller-card">
