@@ -164,8 +164,10 @@
     text = text.replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '');
     text = text.replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}\s*$/m, '');
     text = text.trim();
-    // Basic markdown: **bold**
+    // Basic markdown: **bold**, __bold__, _italic_
     text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/__([^_\n]+)__/g, '<strong>$1</strong>');
+    text = text.replace(/(^|[^_\w*])_([^_\n*]+)_(?=[^_\w*]|$)/g, '$1<em>$2</em>');
     // Line breaks
     text = text.replace(/\n/g, '<br>');
     text = text.split('\n').join('<br>');
