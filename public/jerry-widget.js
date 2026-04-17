@@ -156,7 +156,7 @@
     text = text.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '');
     text = text.replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '');
     text = text.replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '');
-    text = text.replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}/g, '');
+    text = text.replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}\s*$/m, '');
     text = text.trim();
     // Basic markdown: **bold**
     text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
