@@ -186,7 +186,7 @@
         if (isListing) {
           var esc = document.createElement('div');
           esc.style.cssText = 'margin-top:6px;font-family:Arial,sans-serif;font-size:9px;';
-          esc.innerHTML = '<a href="#sell" style="color:#888;text-decoration:underline" onclick="event.stopPropagation()">Prefer to fill out the form manually?</a>';
+          esc.innerHTML = '<a href="#sell" style="color:#888;text-decoration:underline;cursor:pointer" onclick="event.preventDefault();event.stopPropagation();document.dispatchEvent(new CustomEvent(&quot;rwas:open-manual-form&quot;));">Prefer to fill out the form manually?</a>';
           msg.appendChild(esc);
         }
       }
@@ -235,6 +235,23 @@
       showThinkingIndicator();
     } else {
       removeThinkingIndicator();
+    }
+  }
+
+
+  // __rwas_auth_helpers__
+  function openSellerLoginModal() {
+    try {
+      document.dispatchEvent(new CustomEvent('rwas:open-seller-login'));
+    } catch (e) {
+      console.warn('[Jerry widget] could not dispatch rwas:open-seller-login', e);
+    }
+  }
+  function openManualFormModal() {
+    try {
+      document.dispatchEvent(new CustomEvent('rwas:open-manual-form'));
+    } catch (e) {
+      console.warn('[Jerry widget] could not dispatch rwas:open-manual-form', e);
     }
   }
 
@@ -326,7 +343,7 @@
       if (listingDraft.__parseError) {
         messages.push('I had trouble reading the listing draft Jerry generated. Please try again.');
       } else if (!session || !session.token) {
-        messages.push('Please sign in through Seller Login before I submit the listing for review.');
+        messages.push((function(){ openSellerLoginModal(); return 'Please sign in through Seller Login — I just opened the login box for you — then say submit again.'; })());
       } else {
         try {
           var createResponse = await fetch('https://sale-api.rogerwilcoaviation.com/listings', {
@@ -341,13 +358,13 @@
           if (!createResponse.ok) {
             if (createResponse.status === 401) {
               setPendingListing(listingDraft);
-              messages.push('Almost there — you need to log in first. Click SELLER LOGIN above, verify your email, then say submit my listing and I will file it for you.');
+              messages.push((function(){ openSellerLoginModal(); return 'Almost there — I just opened the Seller Login. Enter your email, check for the 6-digit code, then come back and say submit my listing.'; })());
             } else {
               messages.push(createData.error || ('Listing submission failed: ' + createResponse.status));
             }
           } else {
             clearPendingListing();
-            messages.push('\u2705 Your listing has been submitted for review!\n\nStatus: PENDING — our team will review it shortly.\nOnce approved, it goes Active on the marketplace.\n\nView your listing: Click SELLER LOGIN > My Listings to see status and manage your listing.');
+            messages.push('\u2705 Your listing has been submitted for review!\n\nStatus: PENDING — our team will review it shortly.\nOnce approved, it goes Active on the marketplace.\n\nView your listing: click My Listings at the top of the page to see status and manage your listing.');
             // Also show a toast notification on the page
             if (typeof window.toast === 'function') window.toast('Listing submitted! Status: Pending Review');
           }
@@ -361,7 +378,7 @@
       if (listingSave.__parseError) {
         messages.push('I had trouble reading the saved draft Jerry generated. Please try again.');
       } else if (!session || !session.email) {
-        messages.push('Please sign in through Seller Login before I save your draft.');
+        messages.push((function(){ openSellerLoginModal(); return 'Please sign in through Seller Login — I just opened the login box for you — then say save draft again.'; })());
       } else {
         try {
           listingSave.email = session.email;
@@ -400,7 +417,7 @@
 
     if (wantsPendingSubmit(text) && pendingListing) {
       if (!session || !session.token) {
-        addAssistantMessage('Almost there — you need to log in first. Click SELLER LOGIN above, verify your email, then say submit my listing and I will file it for you.');
+        addAssistantMessage((function(){ openSellerLoginModal(); return 'Almost there — I just opened the Seller Login. Enter your email, check for the 6-digit code, then come back and say submit my listing.'; })());
         input.focus();
         return;
       }
@@ -422,7 +439,7 @@
         var pendingData = await pendingResponse.json().catch(function() { return {}; });
         if (!pendingResponse.ok) {
           if (pendingResponse.status === 401) {
-            addAssistantMessage('Almost there — you need to log in first. Click SELLER LOGIN above, verify your email, then say submit my listing and I will file it for you.');
+            addAssistantMessage((function(){ openSellerLoginModal(); return 'Almost there — I just opened the Seller Login. Enter your email, check for the 6-digit code, then come back and say submit my listing.'; })());
           } else {
             addAssistantMessage(pendingData.error || ('Listing submission failed: ' + pendingResponse.status));
           }
@@ -440,7 +457,7 @@
     }
 
     if (hasListingIntent(text) && (!session || !session.token)) {
-      addAssistantMessage('Before we get started, you need to log in. Click the SELLER LOGIN button above, verify your email, then come back and tell me you are ready.');
+      addAssistantMessage((function(){ openSellerLoginModal(); return 'Before we get started, I need to verify your email. I just opened the Seller Login — enter your email, check for the 6-digit code, and come back and say ready.'; })());
       input.focus();
       return;
     }
@@ -467,7 +484,7 @@
     if (submitRe.test(text)) {
       if (!session || !session.token) {
         console.warn('[Jerry widget] list-it blocked, missing sale session token', session || null);
-        history.push({ role: 'assistant', content: 'You need to log in before I can submit the listing. Use Seller Login, then tell me to submit it again.\n\n\u2014 Capt. Jerry, RWAS' });
+        history.push({ role: 'assistant', content: (function(){ openSellerLoginModal(); return 'You need to log in before I can submit the listing — I just opened the login box. Verify your email, then tell me to submit it again.\n\n\u2014 Capt. Jerry, RWAS'; })() });
         saveHistory();
         render();
         setLoading(false);

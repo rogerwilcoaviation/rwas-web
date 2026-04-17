@@ -3,6 +3,7 @@
 import type { Metadata } from 'next';
 import '../newspaper.css';
 import { ListingCard, type Listing } from './listing-card';
+import SellerAuthPanel from './seller-auth-panel';
 
 // ISR — re-render at most every 60 seconds.
 export const revalidate = 60;
@@ -210,13 +211,7 @@ export default async function AircraftForSalePage() {
                 >
                   Browse Aircraft
                 </a>
-                <button
-                  className="a4s-cta-btn secondary"
-                  data-jerry-intent="list-aircraft"
-                  type="button"
-                >
-                  List Your Aircraft
-                </button>
+                <SellerAuthPanel />
               </div>
             </section>
 
