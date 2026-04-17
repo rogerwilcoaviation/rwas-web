@@ -287,6 +287,24 @@ export default async function AircraftForSalePage() {
               Yankton, SD 57078 &middot; (605) 299-8178 &middot;
               service@rwas.team
             </div>
+
+            <div
+              style={{
+                textAlign: 'center',
+                fontSize: 10,
+                color: '#888',
+                fontFamily: 'Arial, sans-serif',
+                marginTop: 6,
+                letterSpacing: '0.05em',
+              }}
+            >
+              <a
+                href="https://sale-api.rogerwilcoaviation.com/admin"
+                style={{ color: '#888', textDecoration: 'none' }}
+              >
+                Admin
+              </a>
+            </div>
           </div>
         </div>
       </div>
