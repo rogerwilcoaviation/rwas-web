@@ -24,6 +24,7 @@
  */
 
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { PhotoManager } from './photo-manager';
 
 const API = 'https://sale-api.rogerwilcoaviation.com';
 const SESSION_KEY = 'rwas_sale_session';
@@ -1373,6 +1374,12 @@ function EditListingModal({
           <ListingFormFields
             value={form}
             onChange={(patch) => setForm((f) => ({ ...f, ...patch }))}
+          />
+
+          <PhotoManager
+            listingId={listing.id}
+            initialPhotos={(listing.photos || []) as { key: string; name?: string }[]}
+            sessionToken={session.token}
           />
 
           {error && <div style={errorStyle}>{error}</div>}
