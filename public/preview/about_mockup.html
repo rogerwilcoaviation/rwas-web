@@ -254,70 +254,97 @@
 </div>
 
 
-<main>
-  <style>
-    .abt-wrap { max-width: 1100px; margin: 0 auto; padding: 28px 24px 64px; font-family: 'EB Garamond', 'Source Serif Pro', serif; color: #1a1a1a; }
-    .abt-breadcrumb { font-size: 14px; color: #6c5a3a; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
-    .abt-breadcrumb a { color: inherit; text-decoration: none; border-bottom: 1px solid #c9b27a; }
-    .abt-title { font-family: 'Playfair Display', 'EB Garamond', serif; font-weight: 900; font-size: 58px; line-height: 1.02; margin: 0 0 10px; color: #141414; }
-    .abt-deck { font-style: italic; font-size: 24px; color: #4a4a4a; border-bottom: 2px solid #c9b27a; padding-bottom: 22px; margin: 0 0 28px; max-width: 780px; }
-    .abt-body { display: grid; grid-template-columns: 2fr 1fr; gap: 44px; font-size: 19px; line-height: 1.65; }
-    .abt-body p { margin: 0 0 1em; }
-    .abt-body p::first-letter { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 3.4em; float: left; line-height: 0.9; margin: 6px 10px 0 0; color: #8a6d30; }
-    .abt-body p + p::first-letter { font-size: 1em; float: none; margin: 0; color: inherit; font-weight: inherit; }
-    .abt-side { border-left: 2px solid #c9b27a; padding-left: 28px; }
-    .abt-side h3 { font-family: 'Playfair Display', serif; font-size: 15px; text-transform: uppercase; letter-spacing: 0.12em; color: #8a6d30; margin: 0 0 8px; }
-    .abt-side dl { margin: 0 0 24px; }
-    .abt-side dt { font-family: 'Source Sans 3', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #6c5a3a; margin-top: 10px; }
-    .abt-side dd { margin: 0 0 4px; font-size: 17px; }
-    .abt-certs { display: flex; flex-direction: column; gap: 6px; font-size: 16px; }
-    .abt-certs span { padding: 8px 10px; border: 1px solid #c9b27a; background: #fefaf0; font-family: 'Source Sans 3', sans-serif; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; }
-    .abt-cta-row { margin-top: 28px; }
-    .abt-cta { display: inline-block; padding: 12px 18px; background: #141414; color: #fffaee; text-decoration: none; font-family: 'Source Sans 3', sans-serif; text-transform: uppercase; letter-spacing: 0.12em; font-size: 13px; font-weight: 700; margin-right: 8px; }
-    .abt-cta.outline { background: transparent; color: #141414; border: 2px solid #141414; }
-    @media (max-width: 820px){ .abt-body { grid-template-columns: 1fr; } .abt-side { border-left: 0; border-top: 2px solid #c9b27a; padding: 24px 0 0; } }
-  </style>
+<style>
+.np-bulletin-bar {
+  background: #141414;
+  color: #fefaf0;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  padding: 0.55rem 1.25rem;
+  border-top: 1px solid #8a6d30;
+  border-bottom: 1px solid #8a6d30;
+}
+.np-bulletin-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1rem;
+  line-height: 1.3;
+}
+.np-bulletin-kicker {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid #fefaf0;
+  color: #fefaf0;
+  flex-shrink: 0;
+}
+.np-bulletin-item {
+  color: #fefaf0;
+  opacity: 0.95;
+}
+.np-bulletin-pip {
+  color: #c9b27a;
+  opacity: 0.9;
+  user-select: none;
+}
+@media (max-width: 720px) {
+  .np-bulletin-bar { font-size: 0.78rem; padding: 0.5rem 0.9rem; }
+  .np-bulletin-kicker { font-size: 0.72rem; }
+}
+</style>
+<aside class="np-bulletin-bar" role="complementary" aria-label="Shop bulletin">
+  <div class="np-bulletin-inner">
+    <span class="np-bulletin-kicker">Bulletin</span>
+    <span class="np-bulletin-item">Now booking May Garmin install slots &mdash; schedule early</span>
+    <span class="np-bulletin-pip">&#9632;</span>
+    <span class="np-bulletin-item">GFC 500 installs: Bonanza, Mooney, Cessna &mdash; same-day quote</span>
+    <span class="np-bulletin-pip">&#9632;</span>
+    <span class="np-bulletin-item">Papa-Alpha tools ship same day from Yankton</span>
+    <span class="np-bulletin-pip">&#9632;</span>
+    <span class="np-bulletin-item">Avionics desk: (605) 299-8178 &middot; avionics@rwas.team</span>
+  </div>
+</aside>
+<main class="np-main" style="max-width:1200px;margin:0 auto;padding:2rem 1.5rem 4rem;">
+  <header style="border-bottom:3px double #141414;padding-bottom:1rem;margin-bottom:2rem;">
+    <p style="font-family:'Source Sans 3',sans-serif;text-transform:uppercase;letter-spacing:0.22em;font-size:0.78rem;color:#6b5a2a;margin:0 0 0.4rem;">The Shop</p>
+    <h1 style="font-family:'Playfair Display',serif;font-size:3.2rem;margin:0 0 0.3rem;color:#141414;line-height:1;">About Roger Wilco</h1>
+    <p style="font-family:'EB Garamond',serif;font-style:italic;font-size:1.15rem;color:#3b3b3b;margin:0;">Yankton's avionics shop &mdash; wheels-up since 2022.</p>
+  </header>
 
-  <section class="abt-wrap">
-    <div class="abt-breadcrumb"><a href="/">Home</a> &rsaquo; About</div>
-    <h1 class="abt-title">About Roger Wilco Aviation Services</h1>
-    <p class="abt-deck">A small-town repair station in Yankton, South Dakota &mdash; wheels-up since 2022, putting avionics, airframe, and powerplant work into general-aviation and light-turbine aircraft the old way: careful, certificated, and on the phone with you the whole time.</p>
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:2.5rem;">
+    <section style="font-family:'EB Garamond',serif;font-size:1.1rem;line-height:1.65;color:#1a1a1a;">
+      <p style="margin-top:0;">Roger Wilco Aviation Services opened its doors at KYKN in 2022. We are a FAA Part 145 certified repair station (Cert. <strong>RWSR491E</strong>), an authorized Garmin dealer, and a member in good standing of both the Aircraft Electronics Association and the National Business Aviation Association.</p>
+      <p>Our bench covers avionics installs, panel rebuilds, ADS-B upgrades, autopilot retrofits, and the day-to-day squawks that keep general-aviation airplanes airworthy. We stock a tight set of Papa-Alpha tools on the shelf for same-day dispatch; Garmin units are ordered to spec once a quote is approved.</p>
+      <p>We do not claim decades of heritage we don't have. What we bring is a tidy shop, straight quotes, and a commitment to finishing jobs on the date we promised. If you'd like a quote, a ferry-flight recommendation, or just want to talk about an install, pick up the phone.</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;margin:2rem 0 0.6rem;color:#141414;">What we do</h2>
+      <ul style="list-style:square;padding-left:1.4rem;">
+        <li>Avionics installs &mdash; Garmin G5, GI 275, GTN 650Xi/750Xi, GFC 500</li>
+        <li>ADS-B Out/In upgrades with WAAS GPS</li>
+        <li>Autopilot retrofits for Part 23 singles and light twins</li>
+        <li>Papa-Alpha tool sales &mdash; shipped same day from Yankton</li>
+        <li>Aircraft for sale &mdash; curated listings, inspection records included</li>
+        <li>Financing referrals for install projects and airframe purchases</li>
+      </ul>
+    </section>
 
-    <div class="abt-body">
-      <div>
-        <p>Roger Wilco Aviation Services opened its hangar doors at Chan Gurney Municipal Airport (KYKN) in 2022. We&rsquo;re an FAA Part 145 Certificated Repair Station (Certificate No. RWSR491E), an authorized Garmin dealer, and members of both the Aircraft Electronics Association and the National Business Aviation Association.</p>
-        <p>We don&rsquo;t pretend to be old. The airplanes are old &mdash; the shop is new, the tooling is current, and the standards are exactly what the FAA inspectors expect to see when they walk through the door. That&rsquo;s the point.</p>
-        <p>Our bread and butter is avionics install and airframe / powerplant work on certified piston singles and twins, with a growing book of light turbine work. If you need an ADS-B install, a radio swap, a gear-rig tool, an annual, or a panel rebuild, that&rsquo;s what this shop is built for.</p>
-        <p>Papa-Alpha Tools is our in-house line of rigging and service tooling &mdash; the stuff our mechanics wanted but couldn&rsquo;t buy off a shelf, now available to other shops and owner-operators.</p>
-        <p>Jerry is our shop dog, unofficial FOD inspector, and the one member of the crew who never takes a weekend off.</p>
-      </div>
-      <aside class="abt-side">
-        <h3>At a Glance</h3>
-        <dl>
-          <dt>Based</dt><dd>KYKN &middot; Yankton, South Dakota</dd>
-          <dt>Address</dt><dd>700 E 31st St<br>Yankton, SD 57078</dd>
-          <dt>Phone</dt><dd><a href="tel:+16052998178" style="color:#141414">(605) 299-8178</a></dd>
-          <dt>Email</dt><dd><a href="mailto:avionics@rwas.team" style="color:#141414">avionics@rwas.team</a></dd>
-          <dt>Founded</dt><dd>2022 &mdash; wheels-up since</dd>
-        </dl>
-
-        <h3>Credentials</h3>
-        <div class="abt-certs">
-          <span>FAA Part 145 Repair Station &middot; Cert. No. RWSR491E</span>
-          <span>Authorized Garmin Dealer</span>
-          <span>AEA Member</span>
-          <span>NBAA Member</span>
-        </div>
-
-        <div class="abt-cta-row">
-          <a href="/about#contact" class="abt-cta">Book Service</a>
-          <a href="/shop-capabilities" class="abt-cta outline">Shop Capabilities</a>
-        </div>
-      </aside>
-    </div>
-  </section>
+    <aside style="border:1px solid #d9c98a;background:#fefaf0;padding:1.4rem 1.3rem;font-family:'Source Sans 3',sans-serif;font-size:0.95rem;color:#1a1a1a;align-self:start;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.25rem;margin:0 0 0.8rem;color:#141414;border-bottom:1px solid #8a6d30;padding-bottom:0.4rem;">At a Glance</h2>
+      <p style="margin:0 0 0.7rem;"><strong style="letter-spacing:0.08em;text-transform:uppercase;font-size:0.78rem;color:#6b5a2a;">Address</strong><br>700 E 31st St<br>Yankton, SD 57078</p>
+      <p style="margin:0 0 0.7rem;"><strong style="letter-spacing:0.08em;text-transform:uppercase;font-size:0.78rem;color:#6b5a2a;">Airport</strong><br>KYKN &mdash; Chan Gurney Municipal</p>
+      <p style="margin:0 0 0.7rem;"><strong style="letter-spacing:0.08em;text-transform:uppercase;font-size:0.78rem;color:#6b5a2a;">Phone</strong><br>(605) 299-8178</p>
+      <p style="margin:0 0 0.7rem;"><strong style="letter-spacing:0.08em;text-transform:uppercase;font-size:0.78rem;color:#6b5a2a;">Email</strong><br>avionics@rwas.team</p>
+      <p style="margin:0 0 0.7rem;"><strong style="letter-spacing:0.08em;text-transform:uppercase;font-size:0.78rem;color:#6b5a2a;">Certification</strong><br>FAA Part 145 &middot; RWSR491E</p>
+      <p style="margin:0;"><strong style="letter-spacing:0.08em;text-transform:uppercase;font-size:0.78rem;color:#6b5a2a;">Memberships</strong><br>Authorized Garmin Dealer<br>AEA member &middot; NBAA member</p>
+    </aside>
+  </div>
 </main>
-
 
 <!-- FOOTER — real facts, real links, real cert -->
 <footer class="np-colophon-footer">

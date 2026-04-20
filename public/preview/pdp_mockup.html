@@ -253,6 +253,64 @@
   </div>
 </div>
 
+
+<style>
+.np-bulletin-bar {
+  background: #141414;
+  color: #fefaf0;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  padding: 0.55rem 1.25rem;
+  border-top: 1px solid #8a6d30;
+  border-bottom: 1px solid #8a6d30;
+}
+.np-bulletin-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1rem;
+  line-height: 1.3;
+}
+.np-bulletin-kicker {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid #fefaf0;
+  color: #fefaf0;
+  flex-shrink: 0;
+}
+.np-bulletin-item {
+  color: #fefaf0;
+  opacity: 0.95;
+}
+.np-bulletin-pip {
+  color: #c9b27a;
+  opacity: 0.9;
+  user-select: none;
+}
+@media (max-width: 720px) {
+  .np-bulletin-bar { font-size: 0.78rem; padding: 0.5rem 0.9rem; }
+  .np-bulletin-kicker { font-size: 0.72rem; }
+}
+</style>
+<aside class="np-bulletin-bar" role="complementary" aria-label="Shop bulletin">
+  <div class="np-bulletin-inner">
+    <span class="np-bulletin-kicker">Bulletin</span>
+    <span class="np-bulletin-item">Now booking May Garmin install slots &mdash; schedule early</span>
+    <span class="np-bulletin-pip">&#9632;</span>
+    <span class="np-bulletin-item">GFC 500 installs: Bonanza, Mooney, Cessna &mdash; same-day quote</span>
+    <span class="np-bulletin-pip">&#9632;</span>
+    <span class="np-bulletin-item">Papa-Alpha tools ship same day from Yankton</span>
+    <span class="np-bulletin-pip">&#9632;</span>
+    <span class="np-bulletin-item">Avionics desk: (605) 299-8178 &middot; avionics@rwas.team</span>
+  </div>
+</aside>
 <main class="np-stage">
   <section class="np-hero">
     <figure class="np-photo-box">
