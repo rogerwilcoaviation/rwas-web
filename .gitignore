@@ -43,3 +43,7 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Next.js route handler for /feed.xml (directory ends in .xml but is source code)
+!app/feed.xml
+!app/feed.xml/**
