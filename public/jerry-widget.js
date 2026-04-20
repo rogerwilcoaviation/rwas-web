@@ -39,6 +39,7 @@
 
   var STORAGE_KEY = 'jerry-chat-history';
   var SESSION_ID = 'jerry-session-' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
+  var LISTING_UI_ENABLED = /^\/aircraft-for-sale(?:\/|$)/.test(window.location.pathname || '');
   // Cloudflare Worker routes are bound on the apex host, not www.
   // Keep the website on www, but send chat traffic to the apex /api/chat route.
   var apiUrl = isShopify
@@ -188,8 +189,8 @@
       } else {
         msg.textContent = message.content;
       }
-      // Add escape hatch only for real seller/listing conversations.
-      if (message.role === 'assistant' && !message.content.includes('submitted for review')) {
+      // Seller/listing escape hatch is only valid on aircraft-for-sale pages.
+      if (LISTING_UI_ENABLED && message.role === 'assistant' && !message.content.includes('submitted for review')) {
         var isListing = history.some(function(m) {
           return m.role === 'user' && hasListingIntent(m.content);
         });
@@ -873,8 +874,8 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
         cleanReply = cleanReply ? (cleanReply + '\n\n' + actionMessages.join('\n')) : actionMessages.join('\n');
       }
       history.push({ role: 'assistant', content: cleanReply });
-      // Append listing-only guidance only in actual seller-intake conversations.
-      var isListingConvo = history.some(function(m) {
+      // Append listing-only guidance only on aircraft-for-sale pages.
+      var isListingConvo = LISTING_UI_ENABLED && history.some(function(m) {
         return m.role === 'user' && hasListingIntent(m.content);
       });
       if (isListingConvo && !cleanReply.includes('submitted')) {
