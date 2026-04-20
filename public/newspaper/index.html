@@ -260,7 +260,7 @@ body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
             document.getElementById('jerry-send').disabled = true;
 
             try {
-              var res = await fetch('/api/chat', {
+              var res = await fetch('https://rogerwilcoaviation.com/api/chat', {
                 method: 'POST',
                 headers: {'Content-Type':'application/json'},
                 body: JSON.stringify({messages: history.slice(-8)})
@@ -282,7 +282,7 @@ body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
                 try {
                   var intake = JSON.parse(match[1]);
                   intake._secret = 'rwas-intake-2026';
-                  var ir = await fetch('/api/intake', {
+                  var ir = await fetch('https://rogerwilcoaviation.com/api/intake', {
                     method:'POST',
                     headers:{'Content-Type':'application/json'},
                     body:JSON.stringify(intake)

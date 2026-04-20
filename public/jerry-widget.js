@@ -39,9 +39,11 @@
 
   var STORAGE_KEY = 'jerry-chat-history';
   var SESSION_ID = 'jerry-session-' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
+  // Cloudflare Worker routes are bound on the apex host, not www.
+  // Keep the website on www, but send chat traffic to the apex /api/chat route.
   var apiUrl = isShopify
-    ? 'https://www.rogerwilcoaviation.com/api/chat'
-    : 'https://www.rogerwilcoaviation.com/api/chat';
+    ? 'https://rogerwilcoaviation.com/api/chat'
+    : 'https://rogerwilcoaviation.com/api/chat';
 
   var defaultHistory = [
     {
