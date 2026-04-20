@@ -18,10 +18,10 @@ export default function ShopCapabilitiesPage() {
             '@graph': [
               {
                 '@type': 'Service',
-                '@id': 'https://rogerwilcoaviation.com/shop-capabilities#garmin',
+                '@id': 'https://www.rogerwilcoaviation.com/shop-capabilities#garmin',
                 name: 'Garmin Avionics Installation',
                 serviceType: 'Avionics Installation',
-                provider: { '@id': 'https://rogerwilcoaviation.com#organization' },
+                provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
                 areaServed: [
                   { '@type': 'State', name: 'South Dakota' },
                   { '@type': 'State', name: 'Nebraska' },
@@ -42,10 +42,10 @@ export default function ShopCapabilitiesPage() {
               },
               {
                 '@type': 'Service',
-                '@id': 'https://rogerwilcoaviation.com/shop-capabilities#airframe-powerplant',
+                '@id': 'https://www.rogerwilcoaviation.com/shop-capabilities#airframe-powerplant',
                 name: 'Airframe & Powerplant Maintenance',
                 serviceType: 'Aircraft Maintenance',
-                provider: { '@id': 'https://rogerwilcoaviation.com#organization' },
+                provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
                 description: 'Comprehensive airframe and powerplant services for GA, corporate, and commercial operators. All work performed by certificated mechanics with full logbook documentation.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
@@ -62,10 +62,10 @@ export default function ShopCapabilitiesPage() {
               },
               {
                 '@type': 'Service',
-                '@id': 'https://rogerwilcoaviation.com/shop-capabilities#ndt',
+                '@id': 'https://www.rogerwilcoaviation.com/shop-capabilities#ndt',
                 name: 'Non-Destructive Testing & Inspection',
                 serviceType: 'NDT Inspection',
-                provider: { '@id': 'https://rogerwilcoaviation.com#organization' },
+                provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
                 description: 'Level 3 NDT services with FAA Form 8130-3 return to service and Airworthiness Directive compliance.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
@@ -82,10 +82,10 @@ export default function ShopCapabilitiesPage() {
               },
               {
                 '@type': 'Service',
-                '@id': 'https://rogerwilcoaviation.com/shop-capabilities#fabrication',
+                '@id': 'https://www.rogerwilcoaviation.com/shop-capabilities#fabrication',
                 name: 'Fabrication & Manufacturing',
                 serviceType: 'Aircraft Fabrication',
-                provider: { '@id': 'https://rogerwilcoaviation.com#organization' },
+                provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
                 description: 'In-house CNC machining, fiber laser cutting, and fabrication capabilities for aircraft panels, structural components, and precision tooling.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',

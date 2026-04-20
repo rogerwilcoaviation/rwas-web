@@ -106,7 +106,7 @@ export async function generateMetadata({
     };
   }
 
-  const siteUrl = 'https://rogerwilcoaviation.com';
+  const siteUrl = 'https://www.rogerwilcoaviation.com';
   const articleUrl = `${siteUrl}/blog/${article.id}`;
   const imageUrl = article.image
     ? (article.image.startsWith('http') ? article.image : `${siteUrl}${article.image}`)
@@ -147,7 +147,7 @@ export default async function BlogArticlePage({
   const relatedArticles = publishedArticles.filter((entry) => entry.id !== article.id).slice(0, 4);
   const markdownBlocks = renderMarkdownBody((article as { body_markdown?: string }).body_markdown);
 
-  const siteUrl = 'https://rogerwilcoaviation.com';
+  const siteUrl = 'https://www.rogerwilcoaviation.com';
   const articleUrl = `${siteUrl}/blog/${article.id}`;
   const imageUrl = article.image
     ? (article.image.startsWith('http') ? article.image : `${siteUrl}${article.image}`)

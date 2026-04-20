@@ -62,22 +62,22 @@ export const Footer = ({ className }: { className?: string }) => {
         ))}
       </LandingFooterColumn>
       <LandingFooterColumn title="Company">
-        <LandingFooterLink href="https://rogerwilcoaviation.com/pages/about">
+        <LandingFooterLink href="https://www.rogerwilcoaviation.com/pages/about">
           About
         </LandingFooterLink>
-        <LandingFooterLink href="https://rogerwilcoaviation.com/pages/shop-capabilities">
+        <LandingFooterLink href="https://www.rogerwilcoaviation.com/pages/shop-capabilities">
           Shop capabilities
         </LandingFooterLink>
-        <LandingFooterLink href="https://rogerwilcoaviation.com/pages/contact">
+        <LandingFooterLink href="https://www.rogerwilcoaviation.com/pages/contact">
           Contact
         </LandingFooterLink>
       </LandingFooterColumn>
       <LandingFooterColumn title="Commerce">
         <LandingFooterLink href="/collections">Browse collections</LandingFooterLink>
-        <LandingFooterLink href="https://rogerwilcoaviation.com/cart">
+        <LandingFooterLink href="https://www.rogerwilcoaviation.com/cart">
           View Shopify cart
         </LandingFooterLink>
-        <LandingFooterLink href="https://rogerwilcoaviation.com/pages/contact">
+        <LandingFooterLink href="https://www.rogerwilcoaviation.com/pages/contact">
           Request a quote
         </LandingFooterLink>
       </LandingFooterColumn>

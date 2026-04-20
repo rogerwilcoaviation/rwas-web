@@ -14,17 +14,17 @@ export const metadata: Metadata = {
   description:
     'Aircraft listings from RWAS in Yankton, SD. Cessna, Piper, Beechcraft, and more. Verified logbooks, trusted sellers, FAA Cert. Repair Station support.',
   alternates: {
-    canonical: 'https://rogerwilcoaviation.com/aircraft-for-sale',
+    canonical: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
   },
   openGraph: {
     type: 'website',
-    url: 'https://rogerwilcoaviation.com/aircraft-for-sale',
+    url: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
     title: 'Aircraft for Sale — Roger Wilco Aviation Services',
     description:
       'Browse aircraft listings backed by a FAA Part 145 repair station in Yankton, SD.',
     images: [
       {
-        url: 'https://rogerwilcoaviation.com/newspaper/images/r182_panel.jpg',
+        url: 'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg',
         width: 1200,
         height: 630,
         alt: 'Cessna 182RG avionics panel — Roger Wilco Aviation Services',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: 'Aircraft for Sale — Roger Wilco Aviation Services',
     description:
       'Browse aircraft listings backed by a FAA Part 145 repair station in Yankton, SD.',
-    images: ['https://rogerwilcoaviation.com/newspaper/images/r182_panel.jpg'],
+    images: ['https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg'],
   },
 };
 

@@ -135,11 +135,11 @@ export async function generateMetadata({
   const description =
     (l.description && l.description.slice(0, 160)) ||
     `${headline(l)} for sale at Roger Wilco Aviation Services, Yankton, SD. Tail ${l.nNumber || 'n/a'}.`;
-  const url = `https://rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(l.id)}`;
+  const url = `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(l.id)}`;
   const firstPhoto = (l.photos || [])[0];
   const imageUrl = firstPhoto
     ? `https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(firstPhoto.key)}`
-    : 'https://rogerwilcoaviation.com/newspaper/images/r182_panel.jpg';
+    : 'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg';
   return {
     title,
     description,
@@ -176,7 +176,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
     (p) =>
       `https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(p.key)}`,
   );
-  const canonicalUrl = `https://rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(listing.id)}`;
+  const canonicalUrl = `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(listing.id)}`;
 
   // JSON-LD for Product schema
   const jsonLd: Record<string, unknown> = {

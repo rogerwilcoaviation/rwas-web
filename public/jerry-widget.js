@@ -40,8 +40,8 @@
   var STORAGE_KEY = 'jerry-chat-history';
   var SESSION_ID = 'jerry-session-' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
   var apiUrl = isShopify
-    ? 'https://rogerwilcoaviation.com/api/chat'
-    : 'https://rogerwilcoaviation.com/api/chat';
+    ? 'https://www.rogerwilcoaviation.com/api/chat'
+    : 'https://www.rogerwilcoaviation.com/api/chat';
 
   var defaultHistory = [
     {
