@@ -188,10 +188,10 @@
       } else {
         msg.textContent = message.content;
       }
-      // Add escape hatch for listing conversations
+      // Add escape hatch only for real seller/listing conversations.
       if (message.role === 'assistant' && !message.content.includes('submitted for review')) {
         var isListing = history.some(function(m) {
-          return /\b(list my|sell my|selling my|for sale|tail number|N-number)\b/i.test(m.content);
+          return m.role === 'user' && hasListingIntent(m.content);
         });
         if (isListing) {
           var esc = document.createElement('div');
@@ -873,9 +873,9 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
         cleanReply = cleanReply ? (cleanReply + '\n\n' + actionMessages.join('\n')) : actionMessages.join('\n');
       }
       history.push({ role: 'assistant', content: cleanReply });
-      // Append list-it notice during listing intake
+      // Append listing-only guidance only in actual seller-intake conversations.
       var isListingConvo = history.some(function(m) {
-        return /\b(list my|sell my|selling my|for sale|tail number)\b/i.test(m.content);
+        return m.role === 'user' && hasListingIntent(m.content);
       });
       if (isListingConvo && !cleanReply.includes('submitted')) {
         var lastMsg = history[history.length - 1];
