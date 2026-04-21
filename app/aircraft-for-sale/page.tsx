@@ -1,8 +1,30 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
+/*
+ * /aircraft-for-sale — Ship 3 Tranche C
+ *
+ * Migrated to the shared broadsheet chrome (BroadsheetLayout → Dateline →
+ * Masthead → BroadsheetNav → CredentialsBar → BulletinBar → <main.bs-stage>
+ * → BroadsheetFooter). Watermark + tokens now inherit from
+ * broadsheet-tokens.css via the `.broadsheet` wrapper — no more local
+ * body::before overlay, no `np-*` ink classes.
+ *
+ * Hero, How-It-Works steps, and the Admin footnote are wrapped in Specimen
+ * cards for the letterpress lift over the enr_h05 watermark. Listings
+ * fetch logic is unchanged (ISR, sale-api.rogerwilcoaviation.com).
+ */
 import type { Metadata } from 'next';
-import '../newspaper.css';
-import { ListingCard, type Listing } from './listing-card';
+import {
+  BroadsheetLayout,
+  Dateline,
+  Masthead,
+  BroadsheetNav,
+  CredentialsBar,
+  BulletinBar,
+  BroadsheetFooter,
+  Specimen,
+} from '@/components/shared/broadsheet';
+import { type Listing } from './listing-card';
 import { ListingsGrid } from './listings-grid';
 import SellerAuthPanel from './seller-auth-panel';
 
@@ -60,30 +82,11 @@ export default async function AircraftForSalePage() {
   const listings = await getListings();
 
   return (
-    <>
+    <BroadsheetLayout>
+      {/* Page-scoped a4s styles. Only rules not already covered by
+          broadsheet-tokens.css live here. */}
       <style>{`
-        body::before {
-          content: "";
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background: url(/newspaper/images/enr_h05.png) center center / cover no-repeat;
-          opacity: 0.25;
-          z-index: 0;
-          pointer-events: none;
-        }
-        body > * { position: relative; z-index: 1; }
-        @media (max-width: 749px) { body::before { display: none !important; } }
-
-        .a4s-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin: 24px 0; }
-        .a4s-empty { text-align: center; padding: 64px 16px; font-style: italic; color: #555; }
-        .a4s-hero { text-align: center; padding: 24px 16px 8px; }
-        .a4s-hero h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 42px; font-weight: 700; line-height: 1.1; margin: 8px 0; }
-        .a4s-hero h1 em { font-style: italic; }
-        .a4s-hero p { font-size: 14px; color: #333; max-width: 620px; margin: 12px auto 0; line-height: 1.5; }
-        .a4s-cta-row { display: flex; justify-content: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+        .a4s-cta-row { display: flex; justify-content: center; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
         .a4s-cta-btn {
           display: inline-block;
           padding: 10px 22px;
@@ -99,204 +102,120 @@ export default async function AircraftForSalePage() {
         }
         .a4s-cta-btn.secondary { background: transparent; color: #111; }
         .a4s-cta-btn:hover { background: #a88422; }
-        .a4s-section-title {
-          font-family: Georgia, 'Times New Roman', serif;
-          font-size: 22px;
-          font-weight: 700;
-          text-align: center;
-          margin: 32px 0 8px;
-          letter-spacing: 0.02em;
-        }
         .a4s-how {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 16px;
-          margin: 20px 0 40px;
-        }
-        .a4s-how-step {
-          border: 1px solid #1a1a1a;
-          padding: 16px;
-          background: rgba(245, 243, 239, 0.75);
+          gap: 14px;
+          margin: 8px 0 4px;
         }
         .a4s-how-step h3 {
-          font-family: Georgia, serif;
+          font-family: Georgia, 'Times New Roman', serif;
           font-size: 14px;
           font-weight: 700;
           margin: 0 0 6px;
+          letter-spacing: 0.01em;
         }
-        .a4s-how-step p { font-size: 12px; line-height: 1.55; margin: 0; color: #333; }
+        .a4s-how-step p {
+          font-size: 12px;
+          line-height: 1.55;
+          margin: 0;
+          color: #1a1a1a;
+        }
+        .a4s-admin-link {
+          text-align: center;
+          font-size: 10px;
+          color: #888;
+          font-family: Arial, sans-serif;
+          margin-top: 20px;
+          letter-spacing: 0.05em;
+        }
+        .a4s-admin-link a { color: #888; text-decoration: none; }
       `}</style>
-      <div
-        className="np-wrapper"
-        style={{
-          background: '#ddd9d2',
-          minHeight: '100vh',
-          fontFamily: "Georgia, 'Times New Roman', serif",
-        }}
-      >
-        <div className="np-page">
-          {/* Dateline */}
-          <div className="np-dateline">
-            <span>Spring 2026 Edition</span>
-            <span>Vol. XL &middot; No. 1</span>
-            <span>rogerwilcoaviation.com</span>
+
+      <Dateline />
+      <Masthead />
+      <BroadsheetNav activeHref="/aircraft-for-sale" />
+      <CredentialsBar />
+      <BulletinBar />
+
+      <main className="bs-stage">
+        {/* ── HERO HEADLINE ─────────────────────────────────────────── */}
+        <section className="hero-headline-group" aria-labelledby="a4s-hero">
+          <span className="bs-kicker">RWAS Marketplace</span>
+          <span className="bs-script-accent">&mdash; vetted by a Part 145 shop &mdash;</span>
+          <h1 id="a4s-hero" className="bs-headline bs-headline--hero">
+            Aircraft for Sale.
+          </h1>
+          <p className="bs-subhead">
+            Pre-owned aircraft listings vetted by a FAA Part 145 repair station. Every listing comes with the option of a pre-buy inspection by the RWAS team.
+          </p>
+          <div className="bs-byline">
+            Call <strong>(605) 299-8178</strong> &nbsp;&middot;&nbsp; Ask Captain Jerry &nbsp;&middot;&nbsp; Chan Gurney Municipal Airport (KYKN)
           </div>
-
-          {/* Masthead */}
-          <div className="np-masthead">
-            <img
-              className="np-masthead-logo"
-              src="/newspaper/images/logo.png"
-              alt="Roger Wilco Aviation Services"
-            />
-            <div className="np-masthead-center">
-              <div className="np-masthead-name">
-                Roger Wilco Aviation Services
-              </div>
-              <hr className="np-masthead-rule" />
-              <div className="np-masthead-tagline">
-                FAA Cert. Repair Station &nbsp;&middot;&nbsp; Avionics &nbsp;&middot;&nbsp;
-                Airframe &amp; Powerplant &nbsp;&middot;&nbsp; NDT &nbsp;&middot;&nbsp; Fabrication
-              </div>
-            </div>
-            <div className="np-masthead-right">
-              <div className="np-masthead-right-meta">
-                Cert. No. RWSR491E
-                <br />
-                KYKN &middot; Yankton, SD
-              </div>
-              <a href="tel:+16052998178" className="np-masthead-phone">
-                (605) 299-8178
-              </a>
-              <a href="/about#contact" className="np-masthead-cta">
-                Book Service
-              </a>
-            </div>
+          <div className="a4s-cta-row">
+            <a className="a4s-cta-btn" href="#listings">
+              Browse Aircraft
+            </a>
+            <SellerAuthPanel />
           </div>
+        </section>
 
-          {/* Navigation */}
-          <nav className="np-nav">
-            <a href="/">Home</a>
-            <a href="/#ask-jerry" style={{ background: '#d4c47a' }} className="np-nav-jerry">
-              Ask Jerry
-            </a>
-            <a href="/collections/on-sale">On Sale</a>
-            <a href="/collections/garmin-avionics">Garmin</a>
-            <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
-            <a className="active" href="/aircraft-for-sale">
-              Aircraft 4 Sale
-            </a>
-            <a href="/financing">Financing</a>
-            <a href="/shop-capabilities">Shop Capabilities</a>
-            <a href="/blog/">Blog Articles</a>
-            <a href="/about">About</a>
-          </nav>
+        {/* ── CURRENT LISTINGS ──────────────────────────────────────── */}
+        <section id="listings" aria-labelledby="a4s-listings">
+          <span className="bs-kicker">Section B1</span>
+          <h2 id="a4s-listings" className="bs-headline bs-headline--section">
+            Current Listings
+          </h2>
+          <hr className="section-rule" />
+          <ListingsGrid initialListings={listings} />
+        </section>
 
-          {/* Body */}
-          <div className="np-body">
-            <section className="a4s-hero">
-              <span className="np-kicker">RWAS Marketplace</span>
-              <h1>
-                Aircraft <em>for Sale</em>
-              </h1>
+        {/* ── HOW IT WORKS ──────────────────────────────────────────── */}
+        <Specimen variant="hero" as="section" className="a4s-how-section">
+          <span className="bs-kicker">How It Works</span>
+          <h2 className="bs-headline bs-headline--section">
+            Four Steps From Listing to Sale
+          </h2>
+          <hr className="section-rule" />
+          <div className="a4s-how">
+            <div className="a4s-how-step">
+              <h3>1. Tell Captain Jerry</h3>
               <p>
-                Pre-owned aircraft listings vetted by a FAA Part 145 repair
-                station. Every listing comes with the option of a pre-buy
-                inspection by the RWAS team — call <strong>(605) 299-8178</strong>{' '}
-                or use the chat in the corner to ask Captain Jerry.
+                Click <em>List Your Aircraft</em> and walk through a short 13-question intake. Takes about five minutes.
               </p>
-              <div className="a4s-cta-row">
-                <a
-                  className="a4s-cta-btn"
-                  href="#listings"
-                >
-                  Browse Aircraft
-                </a>
-                <SellerAuthPanel />
-              </div>
-            </section>
-
-            <hr className="np-rule-thick" />
-
-            <h2 className="a4s-section-title" id="listings">
-              Current Listings
-            </h2>
-
-            <ListingsGrid initialListings={listings} />
-
-            <hr className="np-rule-thick" />
-
-            <h2 className="a4s-section-title">How It Works</h2>
-            <div className="a4s-how">
-              <div className="a4s-how-step">
-                <h3>1. Tell Captain Jerry</h3>
-                <p>
-                  Click <em>List Your Aircraft</em> and walk through a short
-                  13-question intake. Takes about five minutes.
-                </p>
-              </div>
-              <div className="a4s-how-step">
-                <h3>2. Add photos &amp; logs</h3>
-                <p>
-                  You&rsquo;ll get an email link to upload photos and logbook
-                  PDFs. Logbooks are optional but help buyers take you
-                  seriously.
-                </p>
-              </div>
-              <div className="a4s-how-step">
-                <h3>3. RWAS reviews</h3>
-                <p>
-                  We review every listing before it goes live to catch obvious
-                  data problems or safety concerns.
-                </p>
-              </div>
-              <div className="a4s-how-step">
-                <h3>4. Buyers contact you</h3>
-                <p>
-                  Interested buyers reach out directly. Pre-buy inspections by
-                  RWAS available — ask the buyer, not us; you decide.
-                </p>
-              </div>
             </div>
-
-            {/* Footer line */}
-            <div
-              style={{
-                borderTop: '2px solid #1a1a1a',
-                marginTop: 40,
-                padding: '16px 0',
-                textAlign: 'center',
-                fontSize: 11,
-                color: '#333',
-                fontFamily: 'Arial, sans-serif',
-                letterSpacing: '0.04em',
-              }}
-            >
-              Roger Wilco Aviation Services &middot; 700 E 31st Street,
-              Yankton, SD 57078 &middot; (605) 299-8178 &middot;
-              service@rwas.team
+            <div className="a4s-how-step">
+              <h3>2. Add photos &amp; logs</h3>
+              <p>
+                You&rsquo;ll get an email link to upload photos and logbook PDFs. Logbooks are optional but help buyers take you seriously.
+              </p>
             </div>
-
-            <div
-              style={{
-                textAlign: 'center',
-                fontSize: 10,
-                color: '#888',
-                fontFamily: 'Arial, sans-serif',
-                marginTop: 6,
-                letterSpacing: '0.05em',
-              }}
-            >
-              <a
-                href="https://sale-api.rogerwilcoaviation.com/admin"
-                style={{ color: '#888', textDecoration: 'none' }}
-              >
-                Admin
-              </a>
+            <div className="a4s-how-step">
+              <h3>3. RWAS reviews</h3>
+              <p>
+                We review every listing before it goes live to catch obvious data problems or safety concerns.
+              </p>
+            </div>
+            <div className="a4s-how-step">
+              <h3>4. Buyers contact you</h3>
+              <p>
+                Interested buyers reach out directly. Pre-buy inspections by RWAS available &mdash; ask the buyer, not us; you decide.
+              </p>
             </div>
           </div>
+        </Specimen>
+
+        <div className="a4s-admin-link">
+          <a
+            href="https://sale-api.rogerwilcoaviation.com/admin"
+            rel="noreferrer"
+          >
+            Admin
+          </a>
         </div>
-      </div>
-    </>
+      </main>
+
+      <BroadsheetFooter />
+    </BroadsheetLayout>
   );
 }
