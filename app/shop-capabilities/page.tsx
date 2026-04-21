@@ -341,11 +341,11 @@ export default function ShopCapabilitiesPage() {
             <Specimen variant="hero" as="figure" className="about-fig about-fig--rail">
               <Specimen.Image
                 src="/newspaper/images/r182_panel.jpg"
-                alt="Full Garmin G3X Touch installation in a Cessna 182RG"
+                alt="Full Garmin G500TXi Suite installation in a Cessna 182RG"
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 02">
-                Cessna 182RG &mdash; full Garmin G3X Touch installation by RWAS.
+                Cessna 182RG &mdash; full Garmin G500TXi Suite installation by RWAS.
               </Specimen.Caption>
             </Specimen>
 
