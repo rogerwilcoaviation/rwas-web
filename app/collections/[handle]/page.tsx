@@ -18,6 +18,7 @@ const FALLBACK_COLLECTION_HANDLES = [
   'garmin-avionics-accessories',
   'garmin-watches',
   'retail-experimental',
+  'papa-alpha-tools',
 ];
 
 export async function generateStaticParams() {

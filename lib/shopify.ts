@@ -118,6 +118,14 @@ const FEATURED_COLLECTION_HANDLES = [
   'on-sale',
 ] as const;
 
+const PAPA_ALPHA_SYNTHETIC: ShopifyCollectionSummary = {
+  id: 'synthetic:papa-alpha-tools',
+  handle: 'papa-alpha-tools',
+  title: 'Papa-Alpha Tools',
+  description: 'RWAS-built rigging tools for Piper Papa-Alpha airframes. Priced OTC — ships same day.',
+  image: null,
+};
+
 export async function shopifyFetch<T>(query: string, variables?: Record<string, unknown>) {
   if (!STOREFRONT_TOKEN) {
     throw new Error('SHOPIFY_STOREFRONT_ACCESS_TOKEN is not configured.');
@@ -229,12 +237,23 @@ export async function getFeaturedCollections(): Promise<ShopifyCollectionSummary
     data.collections.edges.map((edge) => [edge.node.handle, edge.node])
   );
 
-  return FEATURED_COLLECTION_HANDLES.map((handle) => collectionsByHandle.get(handle)).filter(
-    Boolean
-  ) as ShopifyCollectionSummary[];
+  const shopifyFeatured = FEATURED_COLLECTION_HANDLES.map((handle) =>
+    collectionsByHandle.get(handle)
+  ).filter(Boolean) as ShopifyCollectionSummary[];
+
+  // Papa-Alpha Tools isn't a real Shopify collection; synthesize from tag=papa-alpha.
+  return [...shopifyFeatured, PAPA_ALPHA_SYNTHETIC];
 }
 
 export async function getCollectionByHandle(handle: string): Promise<ShopifyCollectionDetail | null> {
+  if (handle === 'papa-alpha-tools') {
+    const products = await getProductsByTag('papa-alpha');
+    return {
+      ...PAPA_ALPHA_SYNTHETIC,
+      products,
+    };
+  }
+
   const data = await shopifyFetch<{
     collection: {
       id: string;
@@ -324,6 +343,78 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
       variants: mapVariants(edge.node.variants.edges),
     })),
   };
+}
+
+export async function getProductsByTag(tag: string, limit = 48): Promise<ShopifyCollectionProduct[]> {
+  const data = await shopifyFetch<{
+    products: {
+      edges: Array<{
+        node: ShopifyCollectionProduct & {
+          variants: { edges: Array<{ node: ShopifyVariant }> };
+        };
+      }>;
+    };
+  }>(
+    `#graphql
+      query ProductsByTag($first: Int!, $query: String!) {
+        products(first: $first, query: $query, sortKey: TITLE) {
+          edges {
+            node {
+              id
+              title
+              handle
+              description
+              availableForSale
+              tags
+              featuredImage {
+                url
+                altText
+              }
+              priceRange {
+                minVariantPrice {
+                  amount
+                  currencyCode
+                }
+              }
+              variants(first: 20) {
+                edges {
+                  node {
+                    id
+                    title
+                    availableForSale
+                    quantityAvailable
+                    sku
+                    selectedOptions {
+                      name
+                      value
+                    }
+                    price {
+                      amount
+                      currencyCode
+                    }
+                    compareAtPrice {
+                      amount
+                      currencyCode
+                    }
+                    image {
+                      url
+                      altText
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+    { first: limit, query: `tag:${tag}` }
+  );
+
+  return data.products.edges.map((edge) => ({
+    ...edge.node,
+    variants: mapVariants(edge.node.variants.edges),
+  }));
 }
 
 export async function getProductByHandle(handle: string): Promise<ShopifyProductDetail | null> {
