@@ -1,0 +1,327 @@
+/* ========================================================================
+   broadsheet-chrome.css  —  shared page chrome matching approved D2 PDP mockup
+   All rules scoped under .broadsheet so legacy .np-wrapper pages are unaffected.
+   Single source of truth for colors, rules, and typography is
+   broadsheet-tokens.css (imported separately in app/layout.tsx).
+   ======================================================================== */
+
+html, body {
+  background: var(--cream);
+  margin: 0;
+}
+
+/* ---------- Dateline (top ink strip) ---------- */
+.broadsheet .bs-dateline {
+  background: var(--ink-900);
+  color: var(--cream);
+  border-bottom: 2px solid var(--gold-700);
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.broadsheet .bs-dateline__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.broadsheet .bs-dateline__left,
+.broadsheet .bs-dateline__right {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.broadsheet .bs-dateline__kicker {
+  font-family: "Caveat", cursive;
+  text-transform: none;
+  font-size: 18px;
+  letter-spacing: 0;
+  color: var(--gold-light);
+}
+.broadsheet .bs-dateline a {
+  color: var(--cream);
+  text-decoration: none;
+  opacity: 0.95;
+}
+.broadsheet .bs-dateline a:hover {
+  opacity: 1;
+  border-bottom: 1px solid var(--gold-light);
+}
+.broadsheet .bs-dateline__phone {
+  color: var(--gold-light);
+}
+.broadsheet .bs-dateline__cta {
+  color: var(--gold-light);
+  background: transparent;
+  padding: 0;
+  letter-spacing: 0.18em;
+}
+.broadsheet .bs-dateline__cta:hover {
+  color: #fff;
+  background: transparent;
+  border-bottom: 0;
+}
+
+/* ---------- Masthead (bone, gold double rule) ---------- */
+.broadsheet .bs-masthead {
+  background: var(--bone);
+  border-top: 1px solid var(--gold-700);
+  border-bottom: 6px double var(--gold-700);
+  padding: 22px 28px 18px;
+}
+.broadsheet .bs-masthead__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  align-items: center;
+}
+.broadsheet .bs-masthead__logo {
+  height: 84px;
+  width: auto;
+}
+.broadsheet .bs-masthead__titles {
+  text-align: center;
+}
+.broadsheet .bs-masthead__brand {
+  font-family: "Playfair Display", serif;
+  font-weight: 900;
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  margin: 0;
+  color: var(--ink-900);
+}
+.broadsheet .bs-masthead__tagline {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-700);
+  margin-top: 8px;
+}
+.broadsheet .bs-masthead__cert {
+  text-align: right;
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+.broadsheet .bs-masthead__cert-main {
+  color: var(--ink-900);
+  font-weight: 700;
+}
+.broadsheet .bs-masthead__cert-location {
+  color: var(--ink-700);
+}
+@media (max-width: 900px) {
+  .broadsheet .bs-masthead__inner { grid-template-columns: 1fr; text-align: center; }
+  .broadsheet .bs-masthead__cert { text-align: center; }
+}
+
+/* ---------- Primary Nav (single row) ---------- */
+.broadsheet .bs-nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 28px 0;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--rule-soft);
+}
+.broadsheet .bs-nav a {
+  color: var(--ink-800);
+  text-decoration: none;
+  padding-top: 8px;
+}
+.broadsheet .bs-nav a:hover {
+  color: var(--gold-800);
+  border-bottom: 1px solid var(--gold-700);
+}
+.broadsheet .bs-nav a.bs-nav__accent {
+  background: var(--gold-light);
+  padding: 4px 10px;
+  color: var(--ink-900);
+}
+.broadsheet .bs-nav a.bs-nav__accent:hover {
+  background: var(--gold-600);
+  border-bottom: 0;
+}
+
+/* ---------- Credentials bar (below nav) ---------- */
+.broadsheet .bs-credentials {
+  background: var(--bone);
+  border-bottom: 1px solid var(--rule-soft);
+  padding: 10px 28px;
+  margin-top: 10px;
+}
+.broadsheet .bs-credentials__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-700);
+}
+.broadsheet .bs-credentials__pip {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold-700);
+  display: inline-block;
+}
+.broadsheet .bs-dealer-plate {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px;
+  border: 1px solid var(--rule);
+  background: var(--bone);
+}
+.broadsheet .bs-dealer-plate__label {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-800);
+}
+.broadsheet .bs-dealer-plate img {
+  height: 18px;
+  width: auto;
+  display: block;
+}
+
+/* ---------- Bulletin bar (ink strip, outlined pill) ---------- */
+.broadsheet .bs-bulletin {
+  background: var(--ink-900);
+  color: var(--cream);
+  font-family: "Inter", "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  padding: 0.55rem 1.25rem;
+  border-top: 1px solid var(--gold-700);
+  border-bottom: 1px solid var(--gold-700);
+}
+.broadsheet .bs-bulletin__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem 1rem;
+  line-height: 1.3;
+}
+.broadsheet .bs-bulletin__kicker {
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--cream);
+  color: var(--cream);
+  flex-shrink: 0;
+}
+.broadsheet .bs-bulletin__item {
+  color: var(--cream);
+  opacity: 0.95;
+}
+.broadsheet .bs-bulletin__pip {
+  color: var(--gold-light);
+  opacity: 0.9;
+  user-select: none;
+}
+@media (max-width: 720px) {
+  .broadsheet .bs-bulletin { font-size: 0.78rem; padding: 0.5rem 0.9rem; }
+  .broadsheet .bs-bulletin__kicker { font-size: 0.72rem; }
+}
+
+/* ---------- Stage (content container beneath chrome) ---------- */
+.broadsheet .bs-stage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 28px 48px;
+}
+
+/* ---------- Footer ---------- */
+.broadsheet .bs-footer {
+  background: var(--ink-900);
+  color: var(--cream);
+  border-top: 6px double var(--gold-700);
+  margin-top: 48px;
+  padding: 22px 28px;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.broadsheet .bs-footer__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.broadsheet .bs-footer__brand {
+  color: var(--gold-light);
+  letter-spacing: 0.18em;
+}
+.broadsheet .bs-footer__copy {
+  opacity: 0.85;
+}
+
+/* ---------- Specimen (document-on-chart card) ---------- */
+.broadsheet .specimen {
+  background: var(--cream);
+  border: 1px solid var(--ink-700);
+  padding: 20px;
+  position: relative;
+}
+.broadsheet .specimen--hero {
+  box-shadow: 4px 4px 0 var(--ink-900);
+}
+.broadsheet .specimen--flat {
+  box-shadow: none;
+}
+.broadsheet .specimen__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.broadsheet .specimen__caption-rule {
+  border: 0;
+  border-top: 1px solid var(--rule-soft);
+  margin: 12px 0;
+}
+.broadsheet .specimen__caption {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-700);
+}
+
+
+/* ---------- Body cream helper (applied via body className) ---------- */
+.bs-body-cream { background: var(--cream); }
