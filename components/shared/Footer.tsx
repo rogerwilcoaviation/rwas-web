@@ -14,7 +14,7 @@ const collectionLinks = [
     label: 'Garmin accessories',
   },
   {
-    href: '/collections/retail-experimental',
+    href: '/collections/papa-alpha-tools',
     label: 'Experimental avionics',
   },
   {

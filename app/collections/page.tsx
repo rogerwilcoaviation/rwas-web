@@ -46,7 +46,7 @@ export default async function CollectionsPage() {
             <Link href="/collections/garmin-avionics-certified-retail" className="bs-cta-primary">
               Start with Garmin
             </Link>
-            <Link href="/collections/retail-experimental" className="bs-cta-secondary">
+            <Link href="/collections/papa-alpha-tools" className="bs-cta-secondary">
               See Papa-Alpha tools
             </Link>
             <Link href="/aircraft-for-sale" className="bs-cta-secondary">
