@@ -11,7 +11,7 @@
  *
  * What changed:
  *   - Outer `.np-wrapper` + inline `background:#ddd9d2` + inline Georgia font
- *     swapped for <BroadsheetLayout narrow> (the `.broadsheet` scope applies
+ *     swapped for <BroadsheetLayout> (the `.broadsheet` scope applies
  *     cream/ink/Source Serif 4 + the enr_h05 watermark).
  *   - Dateline, masthead, edition bar, nav, bulletin, credentials, and
  *     footer now come from shared broadsheet components.
@@ -217,7 +217,7 @@ export default async function BlogArticlePage({
   };
 
   return (
-    <BroadsheetLayout narrow>
+    <BroadsheetLayout>
       {/* Article schema.org JSON-LD (P2.4) */}
       <script
         type="application/ld+json"
