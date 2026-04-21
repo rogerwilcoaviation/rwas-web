@@ -71,13 +71,12 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
   const otcEligible = otc === 'eligible';
   const isNonOtcGarmin = isGarmin && !otcEligible;
 
-  const stockPill = stockCheckRequired
-    ? 'Check stock with RWAS before ordering'
-    : otcEligible
-      ? 'In stock — ships direct from Garmin or Yankton'
-      : isGarmin
-        ? 'Check stock with RWAS before ordering'
-        : null;
+  // Stock pill: only show the positive OTC in-stock message. The old
+  // "Check stock with RWAS before ordering" messaging was removed per
+  // product direction (2026-04-21).
+  const stockPill = otcEligible
+    ? 'In stock — ships direct from Garmin or Yankton'
+    : null;
 
   const displayPrice = selected?.price
     ? formatPrice(selected.price.amount, selected.price.currencyCode)
@@ -171,22 +170,17 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
           >
             {loading ? 'Adding…' : selected?.availableForSale ? 'Add to Cart' : 'Unavailable'}
           </button>
-        ) : (
+        ) : isNonOtcGarmin ? (
           <Link className="bs-cta-primary" href={contactHref}>
-            {isNonOtcGarmin ? 'Call for component & installation quote' : 'Check availability'}
+            Call for component & installation quote
           </Link>
-        )}
+        ) : null}
       </div>
 
       {error ? <div className="bs-cta-error">{error}</div> : null}
 
-      {stockCheckRequired || (isGarmin && !otcEligible) ? (
-        <div className="bs-otc">
-          Garmin items are ordered to your request — RWAS does not hold Garmin stock. Call{' '}
-          <a href="tel:+16052998178" style={{ color: 'var(--ink-900)' }}>(605) 299-8178</a> or
-          message us to confirm availability and lead time before placing an order.
-        </div>
-      ) : null}
+      {/* bs-otc "RWAS does not hold Garmin stock" notice removed per product
+          direction (2026-04-21). */}
     </div>
   );
 }

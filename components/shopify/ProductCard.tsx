@@ -46,20 +46,16 @@ export default function ProductCard({
   const addToCartHref =
     otcEligible && !quoteOnly ? cartPermalink(primaryVariant?.id, 1) : null;
 
-  // Label: collection-level quote always wins, then product-level OTC gate.
-  let ctaLabel: string;
-  let ctaHref: string;
+  // Secondary CTA: only render when we have a concrete action (quote or
+  // add-to-cart). Non-OTC fallback shows NO secondary button — the card itself
+  // still links to the PDP via the image and "View product" CTA. The old
+  // "Check stock" / "check availability" CTA has been removed per product
+  // direction (2026-04-21).
+  let secondaryCta: { label: string; href: string } | null = null;
   if (quoteOnly) {
-    ctaLabel = 'Request quote';
-    ctaHref = quoteUrl;
+    secondaryCta = { label: 'Request quote', href: quoteUrl };
   } else if (addToCartHref) {
-    ctaLabel = 'Add to cart';
-    ctaHref = addToCartHref;
-  } else {
-    // Non-OTC product (e.g., Garmin stock-check-required) — route to PDP so
-    // the user can see the "Check with RWAS for stock" messaging.
-    ctaLabel = 'Check stock';
-    ctaHref = productUrl;
+    secondaryCta = { label: 'Add to cart', href: addToCartHref };
   }
 
   const badgeLabel = quoteOnly
@@ -98,13 +94,15 @@ export default function ProductCard({
           <Button asChild className="bg-[#111111] text-[#f5f3ef] hover:bg-black">
             <Link href={productUrl}>View product</Link>
           </Button>
-          <Button
-            asChild
-            variant="outlinePrimary"
-            className="border-[#C49A2A] text-[#111111] hover:bg-[#C49A2A]/10"
-          >
-            <Link href={ctaHref}>{ctaLabel}</Link>
-          </Button>
+          {secondaryCta ? (
+            <Button
+              asChild
+              variant="outlinePrimary"
+              className="border-[#C49A2A] text-[#111111] hover:bg-[#C49A2A]/10"
+            >
+              <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
+            </Button>
+          ) : null}
         </div>
       </div>
     </div>

@@ -721,7 +721,9 @@ export async function getCart(cartId: string) {
  * quote-only even when a product would otherwise be OTC).
  */
 export function isOtcCollection(handle: string): boolean {
-  return handle === 'garmin-watches';
+  // garmin-watches: MAP-locked, ships direct from Garmin.
+  // retail-experimental: Garmin experimental-aircraft avionics sold OTC.
+  return handle === 'garmin-watches' || handle === 'retail-experimental';
 }
 
 export function isOtcEligible(product: { tags?: string[] } | null | undefined): boolean {
