@@ -73,7 +73,7 @@
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   gap: 24px;
   align-items: center;
 }
@@ -101,22 +101,8 @@
   color: var(--ink-700);
   margin-top: 8px;
 }
-.broadsheet .bs-masthead__cert {
-  text-align: right;
-  font-family: "Inter", sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ink-700);
-  line-height: 1.6;
-}
-.broadsheet .bs-masthead__cert strong {
-  color: var(--ink-900);
-  font-weight: 700;
-}
 @media (max-width: 900px) {
   .broadsheet .bs-masthead__inner { grid-template-columns: 1fr; text-align: center; }
-  .broadsheet .bs-masthead__cert { text-align: center; }
 }
 
 /* ---------- Primary Nav (single row) ---------- */
