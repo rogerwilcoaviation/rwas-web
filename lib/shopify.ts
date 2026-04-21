@@ -697,6 +697,21 @@ export async function getCart(cartId: string) {
  * Papa-Alpha Tools collection products all carry `otc-eligible`, so the whole
  * collection lights up the Add to cart button.
  */
+/**
+ * Collection-level OTC allowlist.
+ *
+ * Some collections are entirely OTC-eligible regardless of per-product tags
+ * (e.g., Garmin Watches are MAP-priced and ship direct from Garmin, so the
+ * whole collection gets Add-to-cart). Products in these collections still
+ * respect an explicit `otc-disabled` opt-out tag.
+ *
+ * Keep separate from `isQuoteCollection` (which does the opposite — forces
+ * quote-only even when a product would otherwise be OTC).
+ */
+export function isOtcCollection(handle: string): boolean {
+  return handle === 'garmin-watches';
+}
+
 export function isOtcEligible(product: { tags?: string[] } | null | undefined): boolean {
   const tags = product?.tags ?? [];
   if (tags.includes('otc-disabled')) return false;

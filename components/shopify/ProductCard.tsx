@@ -1,6 +1,7 @@
 import { Button } from '@/components/shared/ui/button';
 import {
   ShopifyCollectionProduct,
+  isOtcCollection,
   isOtcEligible,
   isQuoteCollection,
   cartPermalink,
@@ -24,7 +25,12 @@ export default function ProductCard({
   collectionHandle: string;
 }) {
   const quoteOnly = isQuoteCollection(collectionHandle);
-  const otcEligible = isOtcEligible(product);
+  // Collection-level OTC (e.g., Garmin Watches — MAP-locked, direct-ship) WINS
+  // over per-product `otc-disabled` / `stock-check-required` tags. Outside an
+  // OTC collection, per-product OTC gating applies.
+  const otcEligible = isOtcCollection(collectionHandle)
+    ? true
+    : isOtcEligible(product);
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
     product.priceRange.minVariantPrice.currencyCode
