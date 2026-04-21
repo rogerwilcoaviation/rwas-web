@@ -68,6 +68,9 @@ export type ShopifyProductDetail = {
   images: ShopifyImage[];
   options: Array<{ name: string; values: string[] }>;
   variants: ShopifyVariant[];
+  /** Handles of every collection this product belongs to — used by PDP gating
+   *  to apply collection-level OTC overrides (see isOtcCollection). */
+  collections: string[];
 };
 
 export type ShopifyCartLine = {
@@ -433,6 +436,7 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
       images: { edges: Array<{ node: ShopifyImage }> };
       options: Array<{ name: string; values: string[] }>;
       variants: { edges: Array<{ node: ShopifyVariant }> };
+      collections: { edges: Array<{ node: { handle: string } }> };
     } | null;
   }>(
     `#graphql
@@ -490,6 +494,13 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
               }
             }
           }
+          collections(first: 20) {
+            edges {
+              node {
+                handle
+              }
+            }
+          }
         }
       }
     `,
@@ -512,6 +523,7 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
     images: data.product.images.edges.map((edge) => edge.node),
     options: data.product.options,
     variants: mapVariants(data.product.variants.edges),
+    collections: data.product.collections.edges.map((edge) => edge.node.handle),
   };
 }
 

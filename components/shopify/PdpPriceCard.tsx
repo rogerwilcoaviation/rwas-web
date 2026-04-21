@@ -71,12 +71,11 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
   const otcEligible = otc === 'eligible';
   const isNonOtcGarmin = isGarmin && !otcEligible;
 
-  const stockPill =
-    isGarmin || stockCheckRequired
+  const stockPill = otcEligible
+    ? 'In stock — ships direct from Garmin or Yankton'
+    : isGarmin || stockCheckRequired
       ? 'Check stock with RWAS before ordering'
-      : otcEligible
-        ? 'In stock — ships same day from Yankton'
-        : null;
+      : null;
 
   const displayPrice = selected?.price
     ? formatPrice(selected.price.amount, selected.price.currencyCode)
@@ -179,7 +178,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
 
       {error ? <div className="bs-cta-error">{error}</div> : null}
 
-      {isGarmin || stockCheckRequired ? (
+      {!otcEligible && (isGarmin || stockCheckRequired) ? (
         <div className="bs-otc">
           Garmin items are ordered to your request — RWAS does not hold Garmin stock. Call{' '}
           <a href="tel:+16052998178" style={{ color: 'var(--ink-900)' }}>(605) 299-8178</a> or

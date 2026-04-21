@@ -21,7 +21,11 @@
  */
 import Link from 'next/link';
 import PdpPriceCard, { type PdpVariant } from '@/components/shopify/PdpPriceCard';
-import { getProductByHandle, getProductHandles } from '@/lib/shopify';
+import {
+  getProductByHandle,
+  getProductHandles,
+  isOtcCollection,
+} from '@/lib/shopify';
 import {
   BroadsheetLayout,
   Dateline,
@@ -103,17 +107,34 @@ type Gating = {
   isGarmin: boolean;
 };
 
-function gateFromTags(tags: string[], vendor?: string): Gating {
+function gateFromProduct(
+  tags: string[],
+  vendor: string | undefined,
+  collections: string[],
+): Gating {
   const lower = tags.map((t) => t.toLowerCase());
   const isGarmin =
     (vendor || '').toLowerCase().includes('garmin') ||
     lower.some((t) => t.startsWith('garmin'));
-  const otcEligible = lower.includes('otc-eligible');
-  const otcDisabled = lower.includes('otc-disabled');
-  const stockCheckRequired =
-    lower.includes('stock-check-required') || (isGarmin && !otcEligible);
+  const perProductOtcEligible = lower.includes('otc-eligible');
+  const perProductOtcDisabled = lower.includes('otc-disabled');
   const mapLocked = lower.includes('garmin-map-locked');
-  const otc: Gating['otc'] = otcEligible ? 'eligible' : otcDisabled ? 'disabled' : 'unknown';
+
+  // Collection-level OTC override (e.g., Garmin Watches — MAP-locked,
+  // direct-ship from Garmin) WINS over per-product `otc-disabled` /
+  // `stock-check-required` tags, mirroring the rule used by ProductCard on
+  // collection grids (see project_rwas_otc_add_to_cart memory).
+  const collectionOtc = collections.some((handle) => isOtcCollection(handle));
+
+  const otcEligible = collectionOtc || perProductOtcEligible;
+  const stockCheckRequired = otcEligible
+    ? false
+    : lower.includes('stock-check-required') || (isGarmin && !perProductOtcEligible);
+  const otc: Gating['otc'] = otcEligible
+    ? 'eligible'
+    : perProductOtcDisabled
+      ? 'disabled'
+      : 'unknown';
   return { otc, stockCheckRequired, mapLocked, isGarmin };
 }
 
@@ -159,7 +180,7 @@ export default async function ProductDetailPage({
     );
   }
 
-  const gating = gateFromTags(product.tags || [], product.vendor);
+  const gating = gateFromProduct(product.tags || [], product.vendor, product.collections || []);
   const heroImg = product.images[0];
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
@@ -269,7 +290,12 @@ export default async function ProductDetailPage({
             <div className="bs-trust-strip">
               <div className="cell">
                 <span className="lab">Order &amp; fulfillment</span>
-                {gating.isGarmin ? (
+                {gating.isGarmin && gating.otc === 'eligible' ? (
+                  <>
+                    Garmin watches and direct-ship accessories are sold at Garmin List Price (MAP)
+                    and ship direct from Garmin. RWAS processes the order and handles warranty claims.
+                  </>
+                ) : gating.isGarmin ? (
                   <>
                     Garmin components are ordered directly from Garmin in Kansas, shipped to our facility,
                     then shipped directly to you. Turn-around time can vary.{' '}
