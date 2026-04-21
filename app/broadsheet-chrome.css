@@ -57,13 +57,14 @@ html, body {
   color: var(--gold-light);
 }
 .broadsheet .bs-dateline__cta {
-  color: var(--ink-900);
-  background: var(--gold-light);
-  padding: 4px 10px;
-  letter-spacing: 0.14em;
+  color: var(--gold-light);
+  background: transparent;
+  padding: 0;
+  letter-spacing: 0.18em;
 }
 .broadsheet .bs-dateline__cta:hover {
-  background: var(--gold-600);
+  color: #fff;
+  background: transparent;
   border-bottom: 0;
 }
 
@@ -320,3 +321,7 @@ html, body {
   text-transform: uppercase;
   color: var(--ink-700);
 }
+
+
+/* ---------- Body cream helper (applied via body className) ---------- */
+.bs-body-cream { background: var(--cream); }

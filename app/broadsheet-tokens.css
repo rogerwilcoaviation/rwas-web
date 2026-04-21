@@ -103,6 +103,7 @@
  * ───────────────────────────────────────────────────────────────────────── */
 .broadsheet {
   background: var(--cream);
+  width: 100%;
   color: var(--ink-900);
   font-family: var(--font-body);
   font-size: var(--fs-body);
