@@ -252,18 +252,15 @@ export default async function ProductDetailPage({
             <div className="bs-trust-strip">
               <div className="cell">
                 <span className="lab">Order &amp; fulfillment</span>
-                {gating.otc === 'eligible' ? (
+                {gating.isGarmin ? (
                   <>
-                    Ships same day from Yankton, SD when ordered by 2pm CT.
-                    {gating.isGarmin
-                      ? ' Garmin stock held for this item at KYKN.'
-                      : ' Most Papa-Alpha tools ship FedEx Ground; overnight available on request.'}
+                    Garmin components are ordered directly from Garmin in Kansas, shipped to our facility,
+                    then shipped directly to you. Turn-around time can vary.{' '}
+                    <strong>The best course of action is to call us to confirm availability.</strong>
                   </>
-                ) : gating.isGarmin ? (
+                ) : gating.otc === 'eligible' ? (
                   <>
-                    Ordered direct from Garmin to your build — we do not hold Garmin stock at KYKN.{' '}
-                    <strong>Check with RWAS for stock before ordering.</strong> Typical lead time:
-                    2&ndash;5 business days from confirmation.
+                    Based on inventory, Papa-Alpha parts can be shipped same day if ordered before 2pm local.
                   </>
                 ) : (
                   <>
@@ -276,8 +273,8 @@ export default async function ProductDetailPage({
                 <span className="lab">Warranty &amp; service</span>
                 {gating.isGarmin ? (
                   <>
-                    Full Garmin warranty — warranty service performed in-house at our Part 145 repair
-                    station, not shipped out.
+                    Warranty for Garmin product is shipped back to Garmin for repair or replacement.
+                    Warranty for labor of installation is life-time (conditions apply).
                   </>
                 ) : (
                   <>Manufacturer warranty. Service and support from our Part 145 repair station, KYKN.</>
