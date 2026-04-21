@@ -687,6 +687,44 @@ export async function getCart(cartId: string) {
   return mapCart(data.cart);
 }
 
+/**
+ * OTC (Over-The-Counter) add-to-cart gating.
+ *
+ * Design rule (MEMORY.md :: RWAS OTC gating 2026-04-20):
+ *   - `otc-eligible` tag  => add-to-cart allowed (Papa-Alpha rigging tools).
+ *   - `otc-disabled` or `stock-check-required` tag => quote/call for stock (Garmin).
+ *
+ * Papa-Alpha Tools collection products all carry `otc-eligible`, so the whole
+ * collection lights up the Add to cart button.
+ */
+export function isOtcEligible(product: { tags?: string[] } | null | undefined): boolean {
+  const tags = product?.tags ?? [];
+  if (tags.includes('otc-disabled')) return false;
+  if (tags.includes('stock-check-required')) return false;
+  return tags.includes('otc-eligible');
+}
+
+/**
+ * Extract the numeric variant ID from a Storefront GID like
+ * `gid://shopify/ProductVariant/50123456789`, for use in Shopify's classic
+ * cart permalink: `/cart/<variantId>:<qty>`.
+ *
+ * The /cart* route is still proxied to Shopify via the shopify-proxy Worker,
+ * so a cart permalink GET is the simplest zero-JS add-to-cart that works
+ * today (before a Next.js cart context is built out for headless).
+ */
+export function variantNumericId(gid?: string | null): string | null {
+  if (!gid) return null;
+  const m = gid.match(/(\d+)$/);
+  return m ? m[1] : null;
+}
+
+export function cartPermalink(variantGid?: string | null, quantity = 1): string | null {
+  const id = variantNumericId(variantGid);
+  if (!id) return null;
+  return `/cart/${id}:${Math.max(1, Math.floor(quantity))}`;
+}
+
 export function isQuoteCollection(handle: string) {
   return handle === 'garmin-avionics';
 }

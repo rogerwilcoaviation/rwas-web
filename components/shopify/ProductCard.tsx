@@ -1,5 +1,10 @@
 import { Button } from '@/components/shared/ui/button';
-import { ShopifyCollectionProduct, isQuoteCollection } from '@/lib/shopify';
+import {
+  ShopifyCollectionProduct,
+  isOtcEligible,
+  isQuoteCollection,
+  cartPermalink,
+} from '@/lib/shopify';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -19,12 +24,43 @@ export default function ProductCard({
   collectionHandle: string;
 }) {
   const quoteOnly = isQuoteCollection(collectionHandle);
+  const otcEligible = isOtcEligible(product);
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
     product.priceRange.minVariantPrice.currencyCode
   );
   const productUrl = `/products/${encodeURIComponent(product.handle)}`;
-  const quoteUrl = `https://www.rogerwilcoaviation.com/pages/contact?product=${encodeURIComponent(product.title)}`;
+  const quoteUrl = `https://www.rogerwilcoaviation.com/pages/contact?product=${encodeURIComponent(
+    product.title
+  )}`;
+
+  // First available variant drives the cart permalink; fall back to first variant.
+  const primaryVariant =
+    product.variants?.find((v) => v.availableForSale) ?? product.variants?.[0];
+  const addToCartHref =
+    otcEligible && !quoteOnly ? cartPermalink(primaryVariant?.id, 1) : null;
+
+  // Label: collection-level quote always wins, then product-level OTC gate.
+  let ctaLabel: string;
+  let ctaHref: string;
+  if (quoteOnly) {
+    ctaLabel = 'Request quote';
+    ctaHref = quoteUrl;
+  } else if (addToCartHref) {
+    ctaLabel = 'Add to cart';
+    ctaHref = addToCartHref;
+  } else {
+    // Non-OTC product (e.g., Garmin stock-check-required) — route to PDP so
+    // the user can see the "Check with RWAS for stock" messaging.
+    ctaLabel = 'Check stock';
+    ctaHref = productUrl;
+  }
+
+  const badgeLabel = quoteOnly
+    ? 'Quote-request item'
+    : otcEligible
+    ? 'In stock \u00b7 OTC'
+    : 'Shopify product';
 
   return (
     <div className="overflow-hidden rounded-[1.75rem] border border-black/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
@@ -44,7 +80,7 @@ export default function ProductCard({
       <div className="space-y-4 p-6">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-700">
-            {quoteOnly ? 'Quote-request item' : 'Shopify product'}
+            {badgeLabel}
           </p>
           <h3 className="mt-2 line-clamp-3 text-xl font-bold leading-snug text-[#111111]">
             {product.title}
@@ -61,9 +97,7 @@ export default function ProductCard({
             variant="outlinePrimary"
             className="border-[#C49A2A] text-[#111111] hover:bg-[#C49A2A]/10"
           >
-            <Link href={quoteOnly ? quoteUrl : productUrl}>
-              {quoteOnly ? 'Request quote' : 'Add to cart'}
-            </Link>
+            <Link href={ctaHref}>{ctaLabel}</Link>
           </Button>
         </div>
       </div>
