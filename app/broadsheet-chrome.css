@@ -683,3 +683,75 @@ html, body {
   text-transform: uppercase;
   color: var(--ink-700);
 }
+
+/* ==== Ship 2 follow-ups (2026-04-21) ===================================
+ * Additions to app/broadsheet-chrome.css, appended at end of file.
+ * - Single-CTA price-card layout ("Check availability" or "Add to Cart")
+ * - Native <select> variant dropdown styled in broadsheet
+ * - <button>-variant of .bs-cta-primary (price-card uses a button, not an <a>)
+ * - Error feedback below CTA
+ * =================================================================== */
+
+/* Variant dropdown inside the price card */
+.broadsheet .bs-variant-row {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 12px;
+}
+.broadsheet .bs-variant-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-600);
+}
+.broadsheet .bs-variant-select {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink-900);
+  background: #fff;
+  border: 1px solid var(--ink-700);
+  padding: 8px 12px;
+  width: 100%;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-700) 50%),
+                    linear-gradient(135deg, var(--ink-700) 50%, transparent 50%);
+  background-position: calc(100% - 16px) 50%, calc(100% - 10px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 32px;
+}
+.broadsheet .bs-variant-select:focus {
+  outline: 2px solid var(--gold-700);
+  outline-offset: 1px;
+}
+
+/* Single-CTA layout — use full-width instead of 2fr/1fr grid */
+.broadsheet .bs-cta-row--single {
+  grid-template-columns: 1fr;
+}
+
+/* Allow .bs-cta-primary to be rendered as <button> without the default UA chrome */
+.broadsheet button.bs-cta-primary {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--ink-900);
+  text-align: center;
+}
+.broadsheet button.bs-cta-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Error row beneath CTA */
+.broadsheet .bs-cta-error {
+  margin-top: 8px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #8a2020;
+  border-left: 3px solid #8a2020;
+  padding-left: 8px;
+}

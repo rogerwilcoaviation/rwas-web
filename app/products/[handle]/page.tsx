@@ -1,21 +1,26 @@
 /* eslint-disable @next/next/no-img-element */
 /*
- * Product detail template — Ship 2 refactor (2026-04-21)
+ * Product detail template — Ship 2 refactor (2026-04-21).
  *
  * Chrome matches the approved D2 PDP mockup at /preview/pdp_mockup.html.
  * Each content card (photo box, price card, spec card, trust cells, options)
  * carries the 3D specimen lift (4px 4px 0 ink-900) over the enr_h05 chart.
  *
  * Business rules (driven by Shopify product tags):
- *   otc-eligible       → Papa-Alpha path: Add to Cart + "ships same day"
+ *   otc-eligible       → Add to Cart (Papa-Alpha OR Garmin — brand-agnostic)
  *   otc-disabled +
- *   stock-check-required → Garmin path: Confirm stock first + OTC notice
+ *   stock-check-required → "Check availability" CTA + OTC notice
  *   garmin-map-locked  → adds "Garmin List Price — Sold at MAP" line
  *
- * Never render "in stock" or "ships same day" for any Garmin product.
+ * Never render "in stock" or "ships same day" for any Garmin product that
+ * is not explicitly tagged `otc-eligible`.
+ *
+ * CTAs merged 2026-04-21: "Confirm stock first" + "Talk to a pilot" collapsed
+ * into a single "Check availability" CTA. Live-pilot contact remains in the
+ * trust strip's third cell.
  */
 import Link from 'next/link';
-import ProductVariantSelector from '@/components/shopify/ProductVariantSelector';
+import PdpPriceCard, { type PdpVariant } from '@/components/shopify/PdpPriceCard';
 import { getProductByHandle, getProductHandles } from '@/lib/shopify';
 import {
   BroadsheetLayout,
@@ -26,14 +31,6 @@ import {
   BulletinBar,
   BroadsheetFooter,
 } from '@/components/shared/broadsheet';
-
-function formatPrice(amount: string, currencyCode: string) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currencyCode,
-    maximumFractionDigits: 0,
-  }).format(Number(amount));
-}
 
 const FALLBACK_PRODUCT_HANDLES = [
   'garmin-g5-dg-hsi-stcd-for-certified-aircraft-with-lpm',
@@ -70,8 +67,17 @@ export async function generateMetadata({
   }
 }
 
+function formatPrice(amount: string, currencyCode: string) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currencyCode,
+    maximumFractionDigits: 0,
+  }).format(Number(amount));
+}
+
 /* ──────────────────────────────────────────────────────────────────────────
- * Tag-based gating
+ * Tag-based gating — brand-agnostic. A Garmin product tagged `otc-eligible`
+ * takes the add-to-cart path just like a Papa-Alpha tool.
  * ────────────────────────────────────────────────────────────────────────── */
 type Gating = {
   otc: 'eligible' | 'disabled' | 'unknown';
@@ -87,7 +93,8 @@ function gateFromTags(tags: string[], vendor?: string): Gating {
     lower.some((t) => t.startsWith('garmin'));
   const otcEligible = lower.includes('otc-eligible');
   const otcDisabled = lower.includes('otc-disabled');
-  const stockCheckRequired = lower.includes('stock-check-required') || (isGarmin && !otcEligible);
+  const stockCheckRequired =
+    lower.includes('stock-check-required') || (isGarmin && !otcEligible);
   const mapLocked = lower.includes('garmin-map-locked');
   const otc: Gating['otc'] = otcEligible ? 'eligible' : otcDisabled ? 'disabled' : 'unknown';
   return { otc, stockCheckRequired, mapLocked, isGarmin };
@@ -123,9 +130,8 @@ export default async function ProductDetailPage({
                 We could not load this product from Shopify right now. Please try again shortly, or call
                 (605) 299-8178.
               </p>
-              <div className="bs-cta-row">
+              <div className="bs-cta-row bs-cta-row--single">
                 <Link className="bs-cta-primary" href="/collections">Back to collections</Link>
-                <Link className="bs-cta-secondary" href="/contact">Contact us</Link>
               </div>
             </div>
           </section>
@@ -136,24 +142,24 @@ export default async function ProductDetailPage({
   }
 
   const gating = gateFromTags(product.tags || [], product.vendor);
-  const primaryPrice = product.variants[0]?.price;
   const heroImg = product.images[0];
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
-
-  // Stock pill + CTA copy
-  const stockPill = gating.isGarmin || gating.stockCheckRequired
-    ? 'Check stock with RWAS before ordering'
-    : gating.otc === 'eligible'
-      ? 'In stock — ships same day from Yankton'
-      : null;
-
-  const primaryCtaLabel = gating.otc === 'eligible' ? 'Add to Cart' : 'Confirm stock first';
-  const primaryCtaHref = gating.otc === 'eligible' ? '/cart' : '/contact';
+  const primaryPrice = product.variants[0]?.price;
 
   // Breadcrumb dateline
   const productTypeLabel = product.productType || (gating.isGarmin ? 'Garmin' : 'Shop');
   const breadcrumbs = ['Pilot Shop', productTypeLabel, vendor].filter(Boolean);
+
+  // Variant payload for the client component — keep only what we need.
+  const variantPayload: PdpVariant[] = product.variants.map((v) => ({
+    id: v.id,
+    title: v.title,
+    sku: v.sku,
+    price: v.price,
+    availableForSale: v.availableForSale,
+    selectedOptions: v.selectedOptions,
+  }));
 
   return (
     <BroadsheetLayout>
@@ -168,12 +174,17 @@ export default async function ProductDetailPage({
         <section className="bs-hero">
           <figure className="bs-photo-box">
             {heroImg ? (
-              <img
-                src={heroImg.url}
-                alt={heroImg.altText || product.title}
-              />
+              <img src={heroImg.url} alt={heroImg.altText || product.title} />
             ) : (
-              <div style={{ aspectRatio: '4/3', background: '#fff', display: 'grid', placeItems: 'center', color: 'var(--ink-500)' }}>
+              <div
+                style={{
+                  aspectRatio: '4/3',
+                  background: '#fff',
+                  display: 'grid',
+                  placeItems: 'center',
+                  color: 'var(--ink-500)',
+                }}
+              >
                 Image coming soon
               </div>
             )}
@@ -212,40 +223,15 @@ export default async function ProductDetailPage({
               ) : null}
             </div>
 
-            {/* Price card — the buy box */}
-            <div className="bs-price-card">
-              <div className="label">Price</div>
-              <div className="price-row">
-                <div className="price">
-                  {primaryPrice ? formatPrice(primaryPrice.amount, primaryPrice.currencyCode) : 'Contact for pricing'}
-                </div>
-                {stockPill ? (
-                  <span className={`stock${gating.otc === 'eligible' ? ' stock--ok' : ''}`}>{stockPill}</span>
-                ) : null}
-              </div>
-
-              {gating.mapLocked ? (
-                <div className="map-line">
-                  <span className="seal">Garmin List Price</span>
-                  Sold at MAP — no markup, no markdown.
-                </div>
-              ) : null}
-
-              <div className="bs-cta-row">
-                <Link className="bs-cta-primary" href={primaryCtaHref}>{primaryCtaLabel}</Link>
-                <Link className="bs-cta-secondary" href="/contact">
-                  {gating.otc === 'eligible' ? 'Ask about install' : 'Talk to a pilot'}
-                </Link>
-              </div>
-
-              {gating.isGarmin || gating.stockCheckRequired ? (
-                <div className="bs-otc">
-                  Garmin items are ordered to your request — RWAS does not hold Garmin stock. Call{' '}
-                  <a href="tel:+16052998178" style={{ color: 'var(--ink-900)' }}>(605) 299-8178</a>{' '}
-                  or message us to confirm availability and lead time before placing an order.
-                </div>
-              ) : null}
-            </div>
+            {/* Price card — variant dropdown + single CTA live inside this client component */}
+            <PdpPriceCard
+              productTitle={product.title}
+              variants={variantPayload}
+              otc={gating.otc}
+              stockCheckRequired={gating.stockCheckRequired}
+              isGarmin={gating.isGarmin}
+              mapLocked={gating.mapLocked}
+            />
           </div>
         </section>
 
@@ -253,34 +239,49 @@ export default async function ProductDetailPage({
         <section className="bs-detail">
           <article>
             <div className="bs-body">
-              {(product.description || '').split('\n\n').slice(0, 6).filter(Boolean).map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
+              {(product.description || '')
+                .split('\n\n')
+                .slice(0, 6)
+                .filter(Boolean)
+                .map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
             </div>
-
-            {/* Variant selector (preserved unchanged) */}
-            {product.options.length > 0 ? (
-              <div className="bs-options-card">
-                <h3>Options</h3>
-                <ProductVariantSelector product={product} />
-              </div>
-            ) : null}
 
             {/* Trust strip */}
             <div className="bs-trust-strip">
               <div className="cell">
                 <span className="lab">Order &amp; fulfillment</span>
-                {gating.isGarmin
-                  ? <>Ordered direct from Garmin to your build — we do not hold Garmin stock at KYKN. <strong>Check with RWAS for stock before ordering.</strong> Typical lead time: 2&ndash;5 business days from confirmation.</>
-                  : gating.otc === 'eligible'
-                    ? <>Ships same day from Yankton, SD when ordered by 2pm CT. Most Papa-Alpha tools ship FedEx Ground; overnight available on request.</>
-                    : <>Call (605) 299-8178 or email avionics@rwas.team to confirm availability and lead time before placing an order.</>}
+                {gating.otc === 'eligible' ? (
+                  <>
+                    Ships same day from Yankton, SD when ordered by 2pm CT.
+                    {gating.isGarmin
+                      ? ' Garmin stock held for this item at KYKN.'
+                      : ' Most Papa-Alpha tools ship FedEx Ground; overnight available on request.'}
+                  </>
+                ) : gating.isGarmin ? (
+                  <>
+                    Ordered direct from Garmin to your build — we do not hold Garmin stock at KYKN.{' '}
+                    <strong>Check with RWAS for stock before ordering.</strong> Typical lead time:
+                    2&ndash;5 business days from confirmation.
+                  </>
+                ) : (
+                  <>
+                    Call (605) 299-8178 or email avionics@rwas.team to confirm availability and
+                    lead time before placing an order.
+                  </>
+                )}
               </div>
               <div className="cell">
                 <span className="lab">Warranty &amp; service</span>
-                {gating.isGarmin
-                  ? <>Full Garmin warranty — warranty service performed in-house at our Part 145 repair station, not shipped out.</>
-                  : <>Manufacturer warranty. Service and support from our Part 145 repair station, KYKN.</>}
+                {gating.isGarmin ? (
+                  <>
+                    Full Garmin warranty — warranty service performed in-house at our Part 145 repair
+                    station, not shipped out.
+                  </>
+                ) : (
+                  <>Manufacturer warranty. Service and support from our Part 145 repair station, KYKN.</>
+                )}
               </div>
               <div className="cell">
                 <span className="lab">Talk to a pilot</span>
@@ -305,7 +306,10 @@ export default async function ProductDetailPage({
                     <tr><th>SKU</th><td>{firstSku}</td></tr>
                   ) : null}
                   {primaryPrice ? (
-                    <tr><th>Price</th><td>{formatPrice(primaryPrice.amount, primaryPrice.currencyCode)}</td></tr>
+                    <tr>
+                      <th>Price</th>
+                      <td>{formatPrice(primaryPrice.amount, primaryPrice.currencyCode)}</td>
+                    </tr>
                   ) : null}
                   {product.options.map((opt) => (
                     <tr key={opt.name}>
