@@ -63,8 +63,7 @@ module.exports = () => {
     eslint: {
       dirs: ['app', 'components', 'layouts', 'scripts'],
     },
-    images: {
-      remotePatterns: [
+    images: { unoptimized: true, remotePatterns: [
         {
           protocol: 'https',
           hostname: 'picsum.photos',
