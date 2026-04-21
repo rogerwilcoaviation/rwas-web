@@ -69,6 +69,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
   );
 
   const otcEligible = otc === 'eligible';
+  const isNonOtcGarmin = isGarmin && !otcEligible;
 
   const stockPill =
     isGarmin || stockCheckRequired
@@ -118,22 +119,26 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
 
   return (
     <div className="bs-price-card">
-      <div className="label">Price</div>
-      <div className="price-row">
-        <div className="price">{displayPrice}</div>
-        {stockPill ? (
-          <span className={`stock${otcEligible ? ' stock--ok' : ''}`}>{stockPill}</span>
-        ) : null}
-      </div>
+      {!isNonOtcGarmin ? (
+        <>
+          <div className="label">Price</div>
+          <div className="price-row">
+            <div className="price">{displayPrice}</div>
+            {stockPill ? (
+              <span className={`stock${otcEligible ? ' stock--ok' : ''}`}>{stockPill}</span>
+            ) : null}
+          </div>
+        </>
+      ) : null}
 
-      {mapLocked ? (
+      {mapLocked && !isNonOtcGarmin ? (
         <div className="map-line">
           <span className="seal">Garmin List Price</span>
           Sold at MAP — no markup, no markdown.
         </div>
       ) : null}
 
-      {multiVariant ? (
+      {multiVariant && !isNonOtcGarmin ? (
         <div className="bs-variant-row">
           <label className="bs-variant-label" htmlFor="pdp-variant-select">
             Configuration
@@ -167,7 +172,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
           </button>
         ) : (
           <Link className="bs-cta-primary" href={contactHref}>
-            Check availability
+            {isNonOtcGarmin ? 'Call for component & installation quote' : 'Check availability'}
           </Link>
         )}
       </div>
