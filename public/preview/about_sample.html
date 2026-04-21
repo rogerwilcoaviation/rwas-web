@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>About — Roger Wilco Aviation Services · Broadsheet Sample</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* ==================================================================
+   Inlined from app/broadsheet-tokens.css + app/broadsheet-chrome.css
+   This mockup is a standalone preview — tokens + chrome match the
+   shipped rwas-web codebase verbatim.
+   ================================================================== */
+:root{
+  --ink-900:#0F1418; --ink-800:#1A2128; --ink-700:#2A333C; --ink-600:#3F4A55; --ink-500:#5C6873;
+  --gold-900:#5C4416; --gold-800:#7A5A1E; --gold-700:#9E7826; --gold-600:#C19A3F; --gold-500:#D4B86A; --gold-light:#E6CF8F;
+  --cream:#F4EFE3; --bone:#FBF7EC; --parchment:#EFE7D2;
+  --rule:#2A333C; --rule-soft:#C8BFA8;
+  --specimen-shadow:4px 4px 0 var(--ink-900);
+  --font-display:"Playfair Display",Georgia,serif;
+  --font-body:"Source Serif 4",Georgia,serif;
+  --font-ui:"Inter",system-ui,sans-serif;
+  --font-script:"Caveat",cursive;
+  --watermark-opacity:.22;
+}
+html,body{background:var(--cream);margin:0}
+body{font-family:var(--font-body);color:var(--ink-900);font-size:15px;line-height:1.55}
+a{color:inherit}
+
+.broadsheet{background:var(--cream);min-height:100vh;position:relative;isolation:isolate}
+.broadsheet::before{
+  content:"";position:fixed;inset:0;
+  background:url('https://rogerwilcoaviation.com/newspaper/images/enr_h05.png') center center/cover no-repeat;
+  opacity:var(--watermark-opacity);z-index:0;pointer-events:none;
+}
+.broadsheet > *{position:relative;z-index:1}
+
+/* Dateline */
+.bs-dateline{background:var(--ink-900);color:var(--cream);border-bottom:2px solid var(--gold-700);font-family:"Inter",sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+.bs-dateline__inner{max-width:1200px;margin:0 auto;padding:8px 28px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.bs-dateline__left,.bs-dateline__right{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.bs-dateline__kicker{font-family:"Caveat",cursive;text-transform:none;font-size:18px;letter-spacing:0;color:var(--gold-light)}
+.bs-dateline a{color:var(--cream);text-decoration:none;opacity:.95}
+.bs-dateline__phone,.bs-dateline__cta{color:var(--gold-light)}
+
+/* Masthead */
+.bs-masthead{background:var(--bone);border-top:1px solid var(--gold-700);border-bottom:6px double var(--gold-700);padding:22px 28px 18px}
+.bs-masthead__inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center}
+.bs-masthead__logo{height:84px;width:auto}
+.bs-masthead__titles{text-align:center}
+.bs-masthead__brand{font-family:var(--font-display);font-weight:900;font-size:40px;line-height:1;letter-spacing:.01em;margin:0;color:var(--ink-900)}
+.bs-masthead__tagline{font-family:"Inter",sans-serif;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-700);margin-top:8px}
+.bs-masthead__cert{text-align:right;font-family:"Inter",sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;line-height:1.6}
+.bs-masthead__cert-main{color:var(--ink-900);font-weight:700}
+.bs-masthead__cert-location{color:var(--ink-700)}
+@media(max-width:900px){.bs-masthead__inner{grid-template-columns:1fr;text-align:center}.bs-masthead__cert{text-align:center}}
+
+/* Primary Nav */
+.bs-nav{max-width:1200px;margin:0 auto;padding:12px 28px 0;font-family:"Inter",sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:center;gap:22px;flex-wrap:wrap;border-top:1px solid var(--rule-soft)}
+.bs-nav a{color:var(--ink-800);text-decoration:none;padding-top:8px}
+.bs-nav a:hover{color:var(--gold-800);border-bottom:1px solid var(--gold-700)}
+.bs-nav a.bs-nav__accent{background:var(--gold-light);padding:4px 10px;color:var(--ink-900)}
+.bs-nav a.bs-nav__active{color:var(--gold-800);border-bottom:1px solid var(--gold-700)}
+
+/* Credentials */
+.bs-credentials{background:var(--bone);border-bottom:1px solid var(--rule-soft);padding:10px 28px;margin-top:10px}
+.bs-credentials__inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;font-family:"Inter",sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-700)}
+.bs-credentials__pip{width:5px;height:5px;border-radius:50%;background:var(--gold-700);display:inline-block}
+.bs-dealer-plate{display:inline-flex;align-items:center;gap:10px;padding:4px 10px;border:1px solid var(--rule);background:var(--bone)}
+.bs-dealer-plate__label{font-family:"Inter",sans-serif;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-800)}
+
+/* Bulletin */
+.bs-bulletin{background:var(--ink-900);color:var(--cream);font-family:"Inter",sans-serif;font-size:.82rem;letter-spacing:.04em;padding:.55rem 1.25rem;border-top:1px solid var(--gold-700);border-bottom:1px solid var(--gold-700)}
+.bs-bulletin__inner{max-width:1400px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:.9rem 1rem;line-height:1.3}
+.bs-bulletin__kicker{font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:.18em;font-size:.78rem;padding:.15rem .55rem;border:1px solid var(--cream);color:var(--cream);flex-shrink:0}
+.bs-bulletin__item{color:var(--cream);opacity:.95}
+.bs-bulletin__pip{color:var(--gold-light);opacity:.9;user-select:none}
+
+/* Stage + Footer */
+.bs-stage{max-width:1200px;margin:0 auto;padding:36px 28px 48px}
+.bs-footer{background:var(--ink-900);color:var(--cream);border-top:6px double var(--gold-700);margin-top:48px;padding:22px 28px;font-family:"Inter",sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.bs-footer__inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.bs-footer__brand{color:var(--gold-light);letter-spacing:.18em}
+.bs-footer__copy{opacity:.85}
+
+/* Specimen */
+.specimen{background:var(--bone);border:1px solid var(--ink-700);padding:22px 24px;position:relative}
+.specimen--hero{box-shadow:var(--specimen-shadow);padding:18px 18px 14px}
+.specimen__image{display:block;width:100%;height:auto;background:#fff}
+.specimen__caption-rule{border:0;border-top:1px dashed var(--rule-soft);margin:12px 0 8px}
+.specimen__caption-row{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.specimen__figure-numeral{font-family:var(--font-display);font-weight:900;font-size:34px;color:var(--gold-700);line-height:1}
+.specimen__caption{font-family:var(--font-script);font-size:18px;color:var(--ink-800);line-height:1.3;margin:0}
+
+/* Typography helpers */
+.bs-kicker{font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-800);display:block;margin-bottom:6px}
+.bs-headline{font-family:var(--font-display);font-weight:700;color:var(--ink-900);line-height:1.1;margin:0}
+.bs-headline--hero{font-size:44px;font-weight:900;letter-spacing:-.005em}
+.bs-headline--section{font-size:26px;font-weight:900;margin:0 0 8px}
+.bs-subhead{font-family:var(--font-body);font-weight:600;font-size:17px;line-height:1.45;color:var(--ink-700);margin:6px 0 14px}
+.bs-byline{font-family:var(--font-ui);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-600);padding:8px 0 12px;border-top:1px solid var(--rule-soft);border-bottom:1px solid var(--rule-soft);margin-bottom:22px}
+.bs-body p{margin:0 0 12px}
+.bs-body p:last-child{margin-bottom:0}
+.bs-script-accent{font-family:var(--font-script);font-size:22px;color:var(--gold-800);display:block;margin-bottom:2px}
+
+/* Pull quote */
+.bs-pullquote{font-family:var(--font-display);font-weight:700;font-size:22px;line-height:1.3;color:var(--ink-900);padding:14px 0;margin:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);font-style:italic;text-align:center}
+.bs-pullquote::before{content:"\201C";color:var(--gold-700);font-size:40px;line-height:0;position:relative;top:12px;margin-right:4px}
+.bs-pullquote::after{content:"\201D";color:var(--gold-700);font-size:40px;line-height:0;position:relative;top:18px;margin-left:4px}
+
+/* Two-column page body */
+.about-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:32px;align-items:start}
+@media(max-width:960px){.about-grid{grid-template-columns:1fr}}
+.about-main > .specimen{margin-bottom:22px}
+.about-rail > .specimen{margin-bottom:18px;padding:16px 18px}
+.about-rail .bs-kicker{margin-bottom:4px}
+.about-rail h3{font-family:var(--font-display);font-weight:700;font-size:18px;margin:0 0 10px;color:var(--ink-900)}
+.about-rail p{font-family:var(--font-body);font-size:14px;line-height:1.5;margin:0}
+.about-rail ul{margin:0;padding:0;list-style:none}
+.about-rail li{font-family:var(--font-body);font-size:14px;line-height:1.6;border-bottom:1px dashed var(--rule-soft);padding:6px 0;display:flex;justify-content:space-between;align-items:center}
+.about-rail li:last-child{border-bottom:0}
+.about-rail li a{text-decoration:none;color:var(--ink-800);flex:1}
+.about-rail li .arr{color:var(--gold-700);font-weight:700}
+
+/* Jerry card */
+.jerry-card{background:var(--parchment);border:1px solid var(--rule);padding:18px 20px;box-shadow:var(--specimen-shadow);text-align:center;margin-bottom:18px}
+.jerry-card .bs-script-accent{color:var(--gold-800);font-size:24px}
+.jerry-card h4{font-family:var(--font-display);font-weight:900;font-size:22px;margin:2px 0 4px;color:var(--ink-900)}
+.jerry-card p{font-family:var(--font-body);font-size:13px;color:var(--ink-700);margin:0 0 12px;font-style:italic}
+.jerry-card .cta{display:inline-block;padding:10px 18px;background:var(--gold-700);color:var(--ink-900);font-family:var(--font-ui);font-weight:700;font-size:12px;letter-spacing:.22em;text-transform:uppercase;text-decoration:none}
+.jerry-card .cta:hover{background:var(--gold-800);color:var(--cream)}
+.jerry-card .footnote{font-family:"Inter",sans-serif;font-size:10px;color:var(--ink-600);letter-spacing:.08em;margin-top:8px}
+
+/* Hero row */
+.hero-row{display:grid;grid-template-columns:1fr;gap:24px;margin-bottom:28px}
+.hero-headline-group{background:var(--bone);border:1px solid var(--rule);padding:30px 32px;box-shadow:var(--specimen-shadow)}
+.hero-headline-group .bs-script-accent{color:var(--gold-800);font-size:28px;font-weight:700}
+
+/* Utility */
+.section-rule{border:0;border-top:1px solid var(--rule-soft);margin:0 0 14px}
+</style>
+</head>
+<body>
+<div class="broadsheet">
+
+  <!-- ─── DATELINE ─── -->
+  <div class="bs-dateline">
+    <div class="bs-dateline__inner">
+      <div class="bs-dateline__left">
+        <span>Spring 2026 Edition</span>
+        <span>Vol. XL &middot; No. 1</span>
+        <span>rogerwilcoaviation.com</span>
+        <span class="bs-dateline__kicker">wheels-up since 2022</span>
+      </div>
+      <div class="bs-dateline__right">
+        <a class="bs-dateline__phone" href="tel:+16052998178">(605) 299-8178</a>
+        <a class="bs-dateline__cta" href="#contact">Book Service</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── MASTHEAD ─── -->
+  <header class="bs-masthead">
+    <div class="bs-masthead__inner">
+      <img class="bs-masthead__logo" src="https://rogerwilcoaviation.com/newspaper/images/logo.png" alt="Roger Wilco Aviation Services">
+      <div class="bs-masthead__titles">
+        <h1 class="bs-masthead__brand">Roger Wilco Aviation Services</h1>
+        <div class="bs-masthead__tagline">FAA CERT. REPAIR STATION &middot; AVIONICS &middot; AIRFRAME &amp; POWERPLANT &middot; NDT &middot; FABRICATION</div>
+      </div>
+      <div class="bs-masthead__cert">
+        <div class="bs-masthead__cert-main">Cert. No. RWSR491E</div>
+        <div class="bs-masthead__cert-location">KYKN &middot; Yankton, SD</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── PRIMARY NAV ─── -->
+  <nav class="bs-nav" aria-label="Primary">
+    <a href="/">Home</a>
+    <a href="#ask-jerry" class="bs-nav__accent">Ask Jerry</a>
+    <a href="/collections/on-sale">On Sale</a>
+    <a href="/collections/garmin-avionics">Garmin</a>
+    <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
+    <a href="/aircraft-for-sale">Aircraft 4 Sale</a>
+    <a href="/financing">Financing</a>
+    <a href="/shop-capabilities">Shop Capabilities</a>
+    <a href="/blog/">Blog Articles</a>
+    <a href="/about" class="bs-nav__active">About</a>
+  </nav>
+
+  <!-- ─── CREDENTIALS ─── -->
+  <div class="bs-credentials">
+    <div class="bs-credentials__inner">
+      <span>FAA Part 145 Repair Station &middot; Cert. RWSR491E</span>
+      <span class="bs-credentials__pip"></span>
+      <span class="bs-dealer-plate">
+        <span class="bs-dealer-plate__label">Authorized</span>
+        <span class="bs-dealer-plate__label" style="font-weight:700;color:var(--ink-900);letter-spacing:.22em">Garmin</span>
+        <span class="bs-dealer-plate__label">Dealer</span>
+      </span>
+      <span class="bs-credentials__pip"></span>
+      <span>AEA Member</span>
+      <span class="bs-credentials__pip"></span>
+      <span>NBAA Member</span>
+    </div>
+  </div>
+
+  <!-- ─── BULLETIN ─── -->
+  <aside class="bs-bulletin" role="complementary" aria-label="Shop bulletin">
+    <div class="bs-bulletin__inner">
+      <span class="bs-bulletin__kicker">Bulletin</span>
+      <span class="bs-bulletin__item">Papa-Alpha rigging tools now shipping worldwide</span>
+      <span class="bs-bulletin__pip">&#9632;</span>
+      <span class="bs-bulletin__item">Garmin G3X Touch installs booking into summer 2026</span>
+      <span class="bs-bulletin__pip">&#9632;</span>
+      <span class="bs-bulletin__item">Annual inspection slots available &mdash; call (605) 299-8178</span>
+    </div>
+  </aside>
+
+  <!-- ─── STAGE ─── -->
+  <main class="bs-stage">
+
+    <!-- HERO HEADLINE BLOCK -->
+    <div class="hero-row">
+      <section class="hero-headline-group">
+        <span class="bs-kicker">About the Shop</span>
+        <span class="bs-script-accent">&mdash; wheels-up since 2022 &mdash;</span>
+        <h1 class="bs-headline bs-headline--hero">Full-spectrum aviation services,<br>built on the Northern Plains.</h1>
+        <p class="bs-subhead">FAA Part 145 Repair Station &middot; Certificate No. RWSR491E &middot; Chan Gurney Municipal Airport (KYKN) &middot; Yankton, South Dakota</p>
+        <div class="bs-byline">Founded 2022 &nbsp;&middot;&nbsp; Avionics &middot; Airframe &middot; Powerplant &middot; NDT &middot; Fabrication &nbsp;&middot;&nbsp; Authorized Garmin Dealer</div>
+        <div class="bs-body">
+          <p>Roger Wilco Aviation Services is an FAA-certificated repair station providing full-spectrum airframe, powerplant, avionics, and non-destructive testing services to general aviation, corporate, and commercial operators across the Northern Plains. Operating from Chan Gurney Municipal Airport (KYKN) in Yankton, South Dakota, the station is authorized under Certificate No. RWSR491E for a complete range of maintenance, repair, and alteration work.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- TWO-COLUMN GRID -->
+    <div class="about-grid">
+
+      <!-- ─── MAIN COLUMN ─── -->
+      <div class="about-main">
+
+        <!-- Four Decades -->
+        <section class="specimen specimen--hero">
+          <span class="bs-kicker">Our Founder</span>
+          <h2 class="bs-headline bs-headline--section">Four Decades in Aviation</h2>
+          <hr class="section-rule">
+          <div class="bs-body">
+            <p>RWAS was founded by John Halsted, a veteran Delta Air Lines captain with more than 40 years of aviation experience spanning airline operations, aircraft maintenance, avionics systems, and flight instruction. What started as a single-hangar maintenance shop at Chan Gurney Municipal Airport in Yankton, South Dakota, has evolved into a full-service FAA-certificated repair station serving aircraft owners and operators across the upper Midwest and beyond.</p>
+            <p>Halsted earned his Airline Transport Pilot certificate at 21 and has spent the decades since building deep expertise on both sides of the cockpit, flying the line and turning wrenches. That dual perspective shapes everything RWAS does.</p>
+            <p>In its early years the shop focused on annual inspections, airframe repair, and basic avionics work for the local general-aviation fleet. When the Garmin glass-cockpit revolution reshaped the industry, Halsted saw an opportunity: bring modern avionics capability to the Northern Plains, a region where most owners had been forced to ferry their aircraft hundreds of miles to metro shops for panel upgrades. RWAS became a certified Garmin dealer and installation center, specializing in the G3X Touch suite, GTN Xi navigator series, and GFC 500 autopilot.</p>
+          </div>
+        </section>
+
+        <!-- Hero Photo Specimen -->
+        <figure class="specimen specimen--hero" style="margin:0 0 22px">
+          <img class="specimen__image" src="https://rogerwilcoaviation.com/newspaper/images/n5171s_panel.jpg" alt="N5171S instrument panel">
+          <hr class="specimen__caption-rule">
+          <div class="specimen__caption-row">
+            <span class="specimen__figure-numeral">FIG. 01</span>
+            <p class="specimen__caption">N5171S &mdash; custom laser-cut instrument panel fabricated &amp; installed in-house at RWAS.</p>
+          </div>
+        </figure>
+
+        <!-- Papa-Alpha -->
+        <section class="specimen specimen--hero">
+          <span class="bs-kicker">Papa-Alpha Tools</span>
+          <h2 class="bs-headline bs-headline--section">Precision Rigging, Built In-House</h2>
+          <hr class="section-rule">
+          <div class="bs-body">
+            <p>One of the unique capabilities to come out of the RWAS shop is the Papa-Alpha line of precision rigging reference tools for Piper aircraft. Designed by Halsted after years of frustration with imprecise field methods for flight control rigging, the Papa-Alpha tools are CNC-machined from aircraft-grade aluminum, powder coated, and UV printed with permanent reference markings.</p>
+            <p>The tools cover stabilator, rudder, aileron, flap, and bell crank rigging for the PA-28, PA-30, PA-31, and PA-36 series &mdash; replacing the guesswork and tribal knowledge that has plagued Piper rigging for decades. Papa-Alpha tools are now shipped worldwide to maintenance shops, flight schools, and individual owners, and are available through rogerwilcoaviation.com, Aircraft Spruce, and Amazon.</p>
+          </div>
+        </section>
+
+        <!-- Special Capabilities -->
+        <section class="specimen specimen--hero">
+          <span class="bs-kicker">Special Capabilities</span>
+          <h2 class="bs-headline bs-headline--section">NDT, Fabrication &amp; Laser Cutting</h2>
+          <hr class="section-rule">
+          <div class="bs-body">
+            <p>Beyond avionics and airframe maintenance, RWAS operates non-destructive testing services including eddy current, dye penetrant, and magnetic particle inspection. The shop also maintains a sheet metal fabrication capability for structural repairs, custom cowlings, and bracket fabrication in aircraft-grade aluminum alloys.</p>
+            <p>Recent additions include a fiber laser cutting and welding system, enabling precision work on thin-gauge metals that was previously outsourced. This technology supports both aircraft work and the manufacturing of Papa-Alpha tools in-house.</p>
+          </div>
+        </section>
+
+        <!-- Our Mission + Pull Quote -->
+        <section class="specimen specimen--hero">
+          <span class="bs-kicker">Our Mission</span>
+          <h2 class="bs-headline bs-headline--section">Honest Work, Documented Right.</h2>
+          <hr class="section-rule">
+          <div class="bs-body">
+            <p>To deliver honest, professional aircraft maintenance and avionics work &mdash; on time, documented correctly, and built to last. Every aircraft that leaves this shop is one we'd fly ourselves.</p>
+          </div>
+          <div class="bs-pullquote">We don't just fix aircraft &mdash; we keep them flying safely.</div>
+        </section>
+
+      </div>
+
+      <!-- ─── RAIL ─── -->
+      <aside class="about-rail">
+
+        <section class="specimen">
+          <span class="bs-kicker">Location</span>
+          <p>Chan Gurney Municipal Airport<br>700 E 31st St<br>Yankton, South Dakota 57078<br>Airport ID: KYKN</p>
+        </section>
+
+        <section class="specimen">
+          <span class="bs-kicker">Phone</span>
+          <p><a href="tel:+16052998178" style="color:var(--ink-900);text-decoration:underline;text-underline-offset:2px">(605) 299-8178</a></p>
+        </section>
+
+        <section class="specimen">
+          <span class="bs-kicker">Email</span>
+          <p><a href="mailto:avionics@rwas.team" style="color:var(--ink-900);text-decoration:underline;text-underline-offset:2px">avionics@rwas.team</a></p>
+        </section>
+
+        <section class="specimen">
+          <span class="bs-kicker">Hours</span>
+          <p>Monday &ndash; Friday<br>8:00 AM &ndash; 5:00 PM CT</p>
+        </section>
+
+        <section class="specimen">
+          <span class="bs-kicker">Credentials &amp; Memberships</span>
+          <p>FAA Repair Station RWSR491E<br>Authorized Garmin Dealer<br>NBAA Member<br>AEA Member<br>American Bonanza Society Trained</p>
+        </section>
+
+        <section class="specimen">
+          <span class="bs-kicker">Services</span>
+          <ul>
+            <li><a href="/collections/garmin-avionics">Garmin Avionics</a><span class="arr">&rarr;</span></li>
+            <li><a href="/collections/rigging-tools">Papa-Alpha Tools</a><span class="arr">&rarr;</span></li>
+            <li><a href="/shop-capabilities">A&amp;P Maintenance</a><span class="arr">&rarr;</span></li>
+            <li><a href="/shop-capabilities">NDT Inspection</a><span class="arr">&rarr;</span></li>
+            <li><a href="/shop-capabilities">Sheet Metal &amp; Fabrication</a><span class="arr">&rarr;</span></li>
+            <li><a href="/financing">Financing</a><span class="arr">&rarr;</span></li>
+          </ul>
+        </section>
+
+        <!-- Ask Jerry CTA -->
+        <div class="jerry-card">
+          <span class="bs-script-accent">&mdash; on duty 24/7 &mdash;</span>
+          <h4>Talk to Captain Jerry</h4>
+          <p>Service inquiries &amp; scheduling</p>
+          <a class="cta" href="#ask-jerry">Ask Jerry</a>
+          <div class="footnote">AI-powered intake &middot; Available 24/7</div>
+        </div>
+
+        <!-- Laser cutter specimen -->
+        <figure class="specimen specimen--hero" style="margin:0">
+          <img class="specimen__image" src="https://rogerwilcoaviation.com/newspaper/images/laser_cutter.jpg" alt="Fiber laser cutting">
+          <hr class="specimen__caption-rule">
+          <div class="specimen__caption-row">
+            <span class="specimen__figure-numeral">FIG. 02</span>
+            <p class="specimen__caption">Fiber laser &mdash; precision cutting &amp; welding, in-house.</p>
+          </div>
+        </figure>
+
+      </aside>
+    </div>
+  </main>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="bs-footer">
+    <div class="bs-footer__inner">
+      <span class="bs-footer__brand">Roger Wilco Aviation Services</span>
+      <span class="bs-footer__copy">&copy; 2026 RWAS &middot; Yankton, SD &middot; All Rights Reserved</span>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
