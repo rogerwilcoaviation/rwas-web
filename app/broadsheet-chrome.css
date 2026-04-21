@@ -1152,3 +1152,215 @@ html, body {
   color: var(--ink-800);
   margin: 0;
 }
+
+/* ==================================================================
+   Ship 3 Tranche B — Home page helpers
+   Appended to app/broadsheet-chrome.css. All selectors scoped under
+   .broadsheet so they only apply inside BroadsheetLayout.
+   ================================================================== */
+
+/* ── 3-column above-fold grid (left rail | hero center | right rail) ── */
+
+.broadsheet .bs-3col {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 1fr;
+  gap: 22px;
+  align-items: start;
+  position: relative;
+  margin-bottom: 28px;
+}
+.broadsheet .bs-3col::before,
+.broadsheet .bs-3col::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--rule-soft);
+}
+.broadsheet .bs-3col::before { left: calc((100% - 44px) / 3.6 + 11px); }
+.broadsheet .bs-3col::after  { right: calc((100% - 44px) / 3.6 + 11px); }
+@media (max-width: 900px) {
+  .broadsheet .bs-3col { grid-template-columns: 1fr; gap: 16px; }
+  .broadsheet .bs-3col::before,
+  .broadsheet .bs-3col::after { display: none; }
+}
+
+/* ── 4-column service band ────────────────────────────────────────── */
+
+.broadsheet .bs-4col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+  margin-top: 24px;
+}
+@media (max-width: 1024px) {
+  .broadsheet .bs-4col { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .broadsheet .bs-4col { grid-template-columns: 1fr; }
+}
+
+/* ── "Today's Edition" TOC card (tabled contents) ─────────────────── */
+
+.broadsheet .bs-toc { margin: 0; padding: 0; list-style: none; }
+.broadsheet .bs-toc__title {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-800);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 4px;
+}
+.broadsheet .bs-toc__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 7px 0;
+  border-bottom: 1px dotted var(--rule-soft);
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink-900);
+}
+.broadsheet .bs-toc__row:last-child { border-bottom: 0; }
+.broadsheet .bs-toc__row a {
+  color: var(--ink-900);
+  text-decoration: none;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.broadsheet .bs-toc__row a:hover { color: var(--gold-800); }
+.broadsheet .bs-toc__pg {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--ink-500);
+}
+
+/* ── Small boxed ad (Papa-Alpha Depot etc.) ───────────────────────── */
+
+.broadsheet .bs-ad {
+  background: var(--parchment);
+  border: 1px solid var(--rule);
+  box-shadow: var(--specimen-shadow);
+  padding: 14px 16px;
+  text-align: center;
+}
+.broadsheet .bs-ad__kicker {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-800);
+  margin-bottom: 4px;
+}
+.broadsheet .bs-ad__title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1.15;
+  color: var(--ink-900);
+  margin: 0 0 4px;
+}
+.broadsheet .bs-ad__sub {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-700);
+  margin-bottom: 10px;
+}
+.broadsheet .bs-ad__cta {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bone);
+  background: var(--ink-900);
+  border: 1px solid var(--ink-900);
+  padding: 8px 16px;
+  text-decoration: none;
+}
+.broadsheet .bs-ad__cta:hover { background: var(--gold-800); border-color: var(--gold-800); }
+
+/* ── Drop cap for hero lede paragraph ─────────────────────────────── */
+
+.broadsheet .bs-drop::first-letter {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 3.2em;
+  line-height: 0.9;
+  float: left;
+  color: var(--gold-800);
+  padding: 2px 6px 0 0;
+}
+
+/* ── Stubbed "Aircraft 4 Sale" listing rows (mockup data) ─────────── */
+
+.broadsheet .bs-listing {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  text-decoration: none;
+  color: var(--ink-900);
+}
+.broadsheet .bs-listing:last-child { border-bottom: 0; }
+.broadsheet .bs-listing__img {
+  width: 110px;
+  height: 78px;
+  background: var(--parchment);
+  border: 1px solid var(--rule);
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-500);
+}
+.broadsheet .bs-listing__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.broadsheet .bs-listing__body {
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.broadsheet .bs-listing__meta {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-800);
+}
+.broadsheet .bs-listing__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.15;
+  color: var(--ink-900);
+  margin: 2px 0 0;
+}
+.broadsheet .bs-listing__foot {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-top: 6px;
+}
+.broadsheet .bs-listing__price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink-900);
+}
+.broadsheet .bs-listing__logs {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-800);
+}
