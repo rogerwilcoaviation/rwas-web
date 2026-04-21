@@ -70,10 +70,13 @@ export async function generateMetadata({
   try {
     const product = await getProductByHandle(handle);
     if (!product) return { title: 'Product not found' };
+    const cleanDesc = (product.description || '')
+      .replace(/Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi, '')
+      .trim();
     return {
       title: `${product.title} — Roger Wilco Aviation Services`,
       description:
-        product.description || `View ${product.title} from Roger Wilco Aviation Services.`,
+        cleanDesc || `View ${product.title} from Roger Wilco Aviation Services.`,
     };
   } catch {
     return { title: 'Product not found' };
@@ -162,6 +165,10 @@ export default async function ProductDetailPage({
 
   // Breadcrumb dateline
   const productTypeLabel = product.productType || (gating.isGarmin ? 'Garmin' : 'Shop');
+    const cleanDescText = (product.description || '')
+    .replace(/^[^\n]*Buy\s*&\s*Save rebate form\.?\s*\n*/i, '')
+    .replace(/Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi, '')
+    .trim();
   const breadcrumbs = ['Pilot Shop', productTypeLabel, vendor].filter(Boolean);
 
   // Variant payload for the client component — keep only what we need.
@@ -218,9 +225,9 @@ export default async function ProductDetailPage({
             </div>
             <p className="bs-product-kicker">From the workbench</p>
             <h1 className="bs-product-headline">{product.title}</h1>
-            {product.description ? (
+            {cleanDescText ? (
               <p className="bs-product-subhead">
-                {product.description.split('\n')[0].slice(0, 220)}
+                {cleanDescText.split('\n')[0].slice(0, 220)}
               </p>
             ) : null}
 
