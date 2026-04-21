@@ -66,7 +66,8 @@ export async function generateMetadata({
 }: {
   params: Promise<{ handle: string }>;
 }) {
-  const { handle } = await params;
+  const { handle: rawHandle } = await params;
+  const handle = decodeURIComponent(rawHandle);
   try {
     const product = await getProductByHandle(handle);
     if (!product) return { title: 'Product not found' };
@@ -121,7 +122,8 @@ export default async function ProductDetailPage({
 }: {
   params: Promise<{ handle: string }>;
 }) {
-  const { handle } = await params;
+  const { handle: rawHandle } = await params;
+  const handle = decodeURIComponent(rawHandle);
   let product: Awaited<ReturnType<typeof getProductByHandle>> = null;
   try {
     product = await getProductByHandle(handle);
