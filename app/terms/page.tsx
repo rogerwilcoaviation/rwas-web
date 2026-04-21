@@ -3,37 +3,49 @@
  */
 import Link from 'next/link';
 import { metadata as siteMetadata } from '@/data/config/metadata';
-import Footer from '@/components/shared/Footer';
-import Header from '@/components/shared/Header';
-
+import {
+  BroadsheetLayout,
+  Dateline,
+  Masthead,
+  BroadsheetNav,
+  CredentialsBar,
+  BulletinBar,
+  BroadsheetFooter,
+} from '@/components/shared/broadsheet';
 
 export const metadata = {
   title: { absolute: 'Terms of Service | Roger Wilco Aviation Services' },
-  description: 'Terms of service for Roger Wilco Aviation Services (rogerwilcoaviation.com). FAA Part 145 Repair Station in Yankton, SD.',
+  description:
+    'Terms of service for Roger Wilco Aviation Services (rogerwilcoaviation.com). FAA Part 145 Repair Station in Yankton, SD.',
   alternates: { canonical: 'https://www.rogerwilcoaviation.com/terms' },
 };
+
 const policyConfig = {
   lastUpdated: 'April 8, 2026',
 };
 
 export default function TermsPage() {
   return (
-    <div className="flex flex-col w-full items-center fancy-overlay">
-      <Header />
+    <BroadsheetLayout>
+      <Dateline />
+      <Masthead />
+      <BroadsheetNav activeHref="/terms" />
+      <CredentialsBar />
+      <BulletinBar />
 
-      <div className="w-full flex flex-col items-center my-24">
-        <div className="mx-auto max-w-7xl px-6 xl:px-8">
-          <div className="mx-auto max-w-2xl sm:text-center">
-            <h1 className="text-4xl font-semibold leading-tight md:leading-tight max-w-xs sm:max-w-none md:text-6xl fancy-heading">
-              Terms of Service
-            </h1>
-            <p className="mt-6 md:text-xl">
-              We're committed to providing you with the best experience
-              possible.
-            </p>
-            <p className="mt-6">Last updated: {policyConfig.lastUpdated}</p>
-          </div>
-        </div>
+      <main className="bs-stage">
+        {/* ── HERO HEADLINE ────────────────────────── */}
+        <section className="hero-headline-group" aria-labelledby="terms-hero">
+          <span className="bs-kicker">Policies &amp; Notices</span>
+          <span className="bs-script-accent">&mdash; the rules of the road &mdash;</span>
+          <h1 id="terms-hero" className="bs-headline bs-headline--hero">
+            Terms of Service
+          </h1>
+          <p className="bs-subhead">
+            We&rsquo;re committed to providing you with the best experience possible.
+          </p>
+          <div className="bs-byline">Last updated {policyConfig.lastUpdated}</div>
+        </section>
 
         <div className="mt-20 max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">OVERVIEW</h2>
@@ -855,9 +867,9 @@ export default function TermsPage() {
             <br />
           </p> */}
         </div>
-      </div>
+      </main>
 
-      <Footer />
-    </div>
+      <BroadsheetFooter />
+    </BroadsheetLayout>
   );
 }
