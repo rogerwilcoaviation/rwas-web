@@ -1374,3 +1374,35 @@ html, body {
   text-transform: uppercase;
   color: var(--gold-800);
 }
+/* Footer policy links row */
+.broadsheet .bs-footer__policies {
+  max-width: 1200px;
+  margin: 0 auto 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.28);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.broadsheet .bs-footer__policy-link {
+  color: var(--cream);
+  text-decoration: none;
+  opacity: 0.88;
+  transition: opacity 0.15s, color 0.15s;
+}
+.broadsheet .bs-footer__policy-link:hover,
+.broadsheet .bs-footer__policy-link:focus {
+  color: var(--gold-light);
+  opacity: 1;
+  text-decoration: underline;
+}
+.broadsheet .bs-footer__sep {
+  color: var(--gold-700);
+  opacity: 0.7;
+}
