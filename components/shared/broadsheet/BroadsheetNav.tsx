@@ -15,7 +15,7 @@ const DEFAULT_ITEMS: NavItem[] = [
   { href: "/", label: "Home" },
   { href: "#ask-jerry", label: "Ask Jerry", accent: true },
   { href: "/collections/on-sale", label: "On Sale" },
-  { href: "/collections/garmin-avionics-certified-retail", label: "Garmin" },
+  { href: "/collections", label: "Garmin" },
   { href: "/collections/retail-experimental", label: "Papa-Alpha Tools" },
   { href: "/aircraft-for-sale", label: "Aircraft 4 Sale" },
   { href: "/financing", label: "Financing" },
