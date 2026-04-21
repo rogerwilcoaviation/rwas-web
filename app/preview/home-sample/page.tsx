@@ -12,19 +12,19 @@ import {
 } from '@/components/shared/broadsheet';
 
 export const metadata = {
-  title: 'Garmin Avionics & Aircraft Maintenance — Yankton, SD',
+  title: 'Home Mockup (Ship 3 Tranche B) — Roger Wilco Aviation Services',
   description:
-    'FAA Part 145 repair station in Yankton, SD. Certified Garmin dealer: G3X Touch, GFC 500, annual inspections, NDT. Call (605) 299-8178.',
+    'Preview of the shared-broadsheet Home page. Not linked from production navigation.',
 };
 
 /*
- * / (Home) — Ship 3 Tranche B production migration.
- * Mirrors the approved /preview/home-sample layout. Dynamic feeds
- * (#aircraft-sale-feed and #blog-articles-feed) are hydrated
- * client-side from the legacy JSON/API endpoints, rendered with the
- * bs-* broadsheet chrome classes.
+ * /preview/home-sample — Ship 3 Tranche B mockup for the Home page.
+ * Uses the shared broadsheet chrome kit and the bs-* helpers added in
+ * broadsheet-chrome.css. Content mirrors app/page.tsx verbatim, with
+ * dynamic feeds (aircraft-for-sale, blog articles) stubbed to sample
+ * rows so John can sign off on the layout without waiting for data.
  */
-export default function Home() {
+export default function HomeSamplePage() {
   return (
     <BroadsheetLayout>
       <Dateline />
@@ -137,17 +137,51 @@ export default function Home() {
               </div>
             </Specimen>
 
-            {/* Aircraft 4 Sale feed (hydrated client-side) */}
+            {/* Aircraft 4 Sale feed (stubbed for mockup) */}
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Classifieds</span>
               <h2 className="bs-headline bs-headline--section">Aircraft 4 Sale</h2>
               <hr className="section-rule" />
 
-              <div id="aircraft-sale-feed">
-                <div style={{ fontStyle: 'italic', fontSize: '12px', color: '#888', padding: '8px 0' }}>
-                  Loading listings&hellip;
+              <a href="/aircraft-for-sale#listing/sample-001" className="bs-listing">
+                <div className="bs-listing__img">Photo</div>
+                <div className="bs-listing__body">
+                  <div>
+                    <div className="bs-listing__meta">1979 &middot; Single Engine Piston</div>
+                    <h3 className="bs-listing__title">Cessna 182RG Skylane</h3>
+                  </div>
+                  <div className="bs-listing__foot">
+                    <span className="bs-listing__price">$189,500</span>
+                    <span className="bs-listing__logs">&#10003; 3 logbook docs</span>
+                  </div>
                 </div>
-              </div>
+              </a>
+              <a href="/aircraft-for-sale#listing/sample-002" className="bs-listing">
+                <div className="bs-listing__img">Photo</div>
+                <div className="bs-listing__body">
+                  <div>
+                    <div className="bs-listing__meta">1968 &middot; Twin Engine Piston</div>
+                    <h3 className="bs-listing__title">Piper PA-30 Twin Comanche</h3>
+                  </div>
+                  <div className="bs-listing__foot">
+                    <span className="bs-listing__price">$112,000</span>
+                    <span className="bs-listing__logs">&#10003; 2 logbook docs</span>
+                  </div>
+                </div>
+              </a>
+              <a href="/aircraft-for-sale#listing/sample-003" className="bs-listing">
+                <div className="bs-listing__img">Photo</div>
+                <div className="bs-listing__body">
+                  <div>
+                    <div className="bs-listing__meta">1976 &middot; Single Engine Piston</div>
+                    <h3 className="bs-listing__title">Piper PA-28R-200 Arrow</h3>
+                  </div>
+                  <div className="bs-listing__foot">
+                    <span className="bs-listing__price">$94,900</span>
+                    <span className="bs-listing__logs">&#10003; 4 logbook docs</span>
+                  </div>
+                </div>
+              </a>
 
               <div style={{ marginTop: '12px', textAlign: 'center' }}>
                 <a href="/aircraft-for-sale" className="bs-ad__cta">
@@ -165,11 +199,44 @@ export default function Home() {
 
           {/* RIGHT RAIL ------------------------------------------------ */}
           <div>
-            {/* Blog articles feed (hydrated client-side) */}
+            {/* Blog articles feed (stubbed) */}
             <Specimen variant="flat" as="aside">
-              <div id="blog-articles-feed">
-                <span className="bs-kicker">Loading&hellip;</span>
-              </div>
+              <span className="bs-kicker">Press Release</span>
+              <a href="/blog/article.html?id=spring-2026">
+                <h3 className="bs-headline bs-headline--section">
+                  Spring 2026 Scheduling &mdash; Now Booking Annual Inspections
+                </h3>
+              </a>
+              <hr className="section-rule" />
+              <p className="bs-body">
+                RWAS is now accepting spring scheduling for annual inspections, 100-hour inspections, and ADS-B Out compliance installations. Call the shop for available slots and lead times.
+              </p>
+
+              <hr className="section-rule" style={{ marginTop: '18px' }} />
+
+              <span className="bs-kicker">Service Bulletin</span>
+              <a href="/blog/article.html?id=gfc-500-installs">
+                <h3 className="bs-headline bs-headline--section">
+                  GFC 500 Autopilot Installations Open Into Summer 2026
+                </h3>
+              </a>
+              <hr className="section-rule" />
+              <p className="bs-body">
+                Demand for the GFC 500 retrofit continues to climb. Book early &mdash; installation slots are being reserved through summer on a first-call, first-scheduled basis.
+              </p>
+
+              <hr className="section-rule" style={{ marginTop: '18px' }} />
+
+              <span className="bs-kicker">Product Update</span>
+              <a href="/blog/article.html?id=papa-alpha-worldwide">
+                <h3 className="bs-headline bs-headline--section">
+                  Papa-Alpha Rigging Tools Now Shipping Worldwide
+                </h3>
+              </a>
+              <hr className="section-rule" />
+              <p className="bs-body">
+                The full Papa-Alpha Piper rigging kit &mdash; stabilator, rudder, aileron, flap, and bell crank tools &mdash; is available directly from RWAS and through Aircraft Spruce.
+              </p>
             </Specimen>
 
             {/* Laser cutter new-capability figure */}
@@ -368,94 +435,6 @@ export default function Home() {
       </main>
 
       <BroadsheetFooter />
-
-      {/* Aircraft-for-sale feed hydration */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-(function(){
-  var feed = document.getElementById('aircraft-sale-feed');
-  if (!feed) return;
-  fetch('https://sale-api.rogerwilcoaviation.com/browse')
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      var listings = (data.listings || []).slice(0, 4);
-      if (!listings.length) {
-        feed.innerHTML = '<div style="font-style:italic;font-size:12px;color:#888;padding:8px 0">No aircraft currently listed. <a href="/aircraft-for-sale#sell" style="color:#1a1a1a;text-decoration:underline">List yours today.</a></div>';
-        return;
-      }
-      feed.innerHTML = listings.map(function(l){
-        var priceRaw = l.price ? String(l.price).replace(/[^0-9]/g,'') : '';
-        var price = priceRaw ? '$' + parseInt(priceRaw).toLocaleString() : 'Call';
-        var lbCount = l.logbooks ? Object.values(l.logbooks).reduce(function(s,a){ return s + (a?a.length:0); }, 0) : 0;
-        var photo = l.photos && l.photos.length
-          ? '<img src="https://sale-api.rogerwilcoaviation.com/files/' + l.photos[0].key + '" alt="' + l.make + ' ' + l.model + '" style="width:100%;height:100%;object-fit:cover" />'
-          : 'Photo';
-        var cat = (l.category||'').replace(/-/g,' ');
-        var meta = (l.year||'') + (cat ? ' \\u00b7 ' + cat : '');
-        return '<a href="/aircraft-for-sale#listing/' + l.id + '" class="bs-listing">'
-          + '<div class="bs-listing__img">' + photo + '</div>'
-          + '<div class="bs-listing__body">'
-          + '<div>'
-          + '<div class="bs-listing__meta">' + meta + '</div>'
-          + '<h3 class="bs-listing__title">' + l.make + ' ' + l.model + '</h3>'
-          + '</div>'
-          + '<div class="bs-listing__foot">'
-          + '<span class="bs-listing__price">' + price + '</span>'
-          + (lbCount ? '<span class="bs-listing__logs">\\u2713 ' + lbCount + ' logbook doc' + (lbCount>1?'s':'') + '</span>' : '')
-          + '</div>'
-          + '</div>'
-          + '</a>';
-      }).join('');
-    })
-    .catch(function(){
-      feed.innerHTML = '<div style="font-style:italic;font-size:12px;color:#888">Could not load listings.</div>';
-    });
-})();
-`,
-        }}
-      />
-
-      {/* Blog-articles feed hydration */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-(function() {
-  var catLabels = {
-    'press-release': 'Press Release',
-    'service-bulletin': 'Service Bulletin',
-    'product-update': 'Product Update',
-    'memo': 'Dealer Memo',
-    'regulatory': 'Regulatory'
-  };
-  fetch('/blog-articles.json?t=' + Date.now())
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var articles = (data.articles || [])
-        .filter(function(a) { return a.status === 'published'; })
-        .sort(function(a, b) { return b.date.localeCompare(a.date); })
-        .slice(0, 3);
-      var el = document.getElementById('blog-articles-feed');
-      if (!el || !articles.length) return;
-      var html = '';
-      articles.forEach(function(a, i) {
-        var label = catLabels[a.category] || a.category;
-        var url = '/blog/article.html?id=' + a.id;
-        html += '<span class="bs-kicker">' + label + '</span>';
-        html += '<a href="' + url + '"><h3 class="bs-headline bs-headline--section">' + a.title + '</h3></a>';
-        html += '<hr class="section-rule" />';
-        html += '<p class="bs-body">' + a.lead.substring(0, 200) + (a.lead.length > 200 ? '&hellip;' : '') + '</p>';
-        if (i < articles.length - 1) {
-          html += '<hr class="section-rule" style="margin-top:18px" />';
-        }
-      });
-      el.innerHTML = html;
-    })
-    .catch(function() {});
-})();
-`,
-        }}
-      />
     </BroadsheetLayout>
   );
 }

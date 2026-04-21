@@ -1,196 +1,214 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
-import '../newspaper.css';
+import {
+  BroadsheetLayout,
+  Dateline,
+  Masthead,
+  BroadsheetNav,
+  CredentialsBar,
+  BulletinBar,
+  BroadsheetFooter,
+  Specimen,
+} from '@/components/shared/broadsheet';
 import LoanCalc from '../components/LoanCalc';
 
 export const metadata = {
-  title: 'Avionics Financing — Flexible Terms',
-  description: 'Finance your Garmin avionics upgrade. Spread installation costs across flexible terms. Payment estimator and quick approval from RWAS.',
+  title: 'Avionics Financing — Roger Wilco Aviation Services',
+  description:
+    'Finance your Garmin avionics upgrade or major maintenance project. Payment estimator and flexible terms. FAA Part 145 Repair Station RWSR491E at Chan Gurney Municipal (KYKN), Yankton, SD.',
 };
+
 export default function FinancingPage() {
   return (
-    <>
-      <style>{`
-        body::before {
-          content: "";
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background: url(/newspaper/images/enr_h05.png) center center / cover no-repeat;
-          opacity: 0.25;
-          z-index: 0;
-          pointer-events: none;
-        }
-        body > * {
-          position: relative;
-          z-index: 1;
-        }
-      `}</style>
-      <div className="np-wrapper" style={{ background: '#ddd9d2', minHeight: '100vh', fontFamily: "Georgia, 'Times New Roman', serif" }}>
-      <div className="np-page">
+    <BroadsheetLayout>
+      <Dateline />
+      <Masthead />
+      <BroadsheetNav activeHref="/financing" />
+      <CredentialsBar />
+      <BulletinBar />
 
-        <div className="np-dateline">
-          <span>Spring 2026 Edition</span>
-          <span>Vol. XL &middot; No. 1</span>
-          <span>rogerwilcoaviation.com</span>
-        </div>
-
-        <div className="np-masthead">
-          <a href="/"><img className="np-masthead-logo" src="/newspaper/images/logo.png" alt="RWAS" /></a>
-          <div className="np-masthead-center">
-            <div className="np-masthead-name">Roger Wilco Aviation Services</div>
-            <hr className="np-masthead-rule" />
-            <div className="np-masthead-tagline">
-              FAA Cert. Repair Station &nbsp;&middot;&nbsp; Avionics &nbsp;&middot;&nbsp; Airframe &amp; Powerplant &nbsp;&middot;&nbsp; NDT &nbsp;&middot;&nbsp; Fabrication
-            </div>
+      <main className="bs-stage">
+        {/* ── HERO HEADLINE ─────────────────────────────────────────── */}
+        <section className="hero-headline-group" aria-labelledby="financing-hero">
+          <span className="bs-kicker">Avionics &amp; Maintenance Financing</span>
+          <span className="bs-script-accent">&mdash; keep your capital flying &mdash;</span>
+          <h1 id="financing-hero" className="bs-headline bs-headline--hero">
+            Don&rsquo;t tie up your capital&nbsp;&mdash;
+            <br />
+            <em>finance your upgrade.</em>
+          </h1>
+          <p className="bs-subhead">
+            Affordable lending with reasonable terms &middot; Spread avionics and maintenance project costs across flexible monthly payments.
+          </p>
+          <div className="bs-byline">
+            Garmin upgrades &middot; Panel fabrication &middot; Major maintenance &middot; AOG &amp; pre-buy work
           </div>
-          <div className="np-masthead-right">Cert. No. RWSR491E<br />KYKN &middot; Yankton, SD</div>
-        </div>
+        </section>
 
-        <div className="np-edition-bar">
-          <span>Garmin Spring 2026 pricing now active</span>
-          <span>GFC 500 autopilot installations available</span>
-          <span>Now accepting spring scheduling</span>
-        </div>
-
-        <nav className="np-nav">
-          <a href="/">Home</a>
-          <a href="#ask-jerry" style={{ background: '#d4c47a', cursor: 'pointer' }} className="np-nav-jerry">Ask Jerry</a>
-          <a href="/collections/on-sale">On Sale</a>
-          <a href="/collections/garmin-avionics">Garmin</a>
-          <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
-          <a href="/aircraft-for-sale">Aircraft 4 Sale</a>
-          <a className="active" href="/financing">Financing</a>
-          <a href="/shop-capabilities">Shop Capabilities</a>
-          <a href="/blog/">Blog Articles</a>
-          <a href="/about">About</a>
-        </nav>
-        {/* Ticker */}
-        <div className="np-ticker-bar">
-          <span className="np-ticker-label">Bulletin</span>
-          <span className="np-ticker-text">
-            Papa-Alpha rigging reference tools now shipping worldwide &nbsp;&bull;&nbsp;
-            Garmin G3X Touch installations booking into summer 2026 &nbsp;&bull;&nbsp;
-            Annual inspection slots available &mdash; call (605) 299-8178
-          </span>
-        </div>
-
-        <div className="np-body">
-
-          {/* Header */}
-          <div style={{ borderBottom: '2px solid #1a1a1a', padding: '14px 0' }}>
-            <span className="np-kicker">Avionics &amp; Maintenance Financing</span>
-            <h1 className="np-headline-xl" style={{ fontSize: '28px', marginBottom: '6px' }}>
-              Don&rsquo;t Tie Up Your Capital &mdash;<br />
-              <em>Finance Your Upgrade</em>
-            </h1>
-            <div className="np-byline">Affordable lending with reasonable terms &middot; Keep your capital available</div>
-          </div>
-
-          {/* Two-column */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 320px', padding: '14px 0', borderBottom: '2px solid #1a1a1a', alignItems: 'start' }}>
-
-            {/* LEFT — Calculator + Info */}
-            <div style={{ padding: '0 2px' }}>
-
-              <div className="np-sec-label">Payment Estimator</div>
-              <p className="np-body-text" style={{ marginBottom: '12px' }}>
-                Use the calculator below to estimate monthly payments for your avionics installation or maintenance project. Adjust the loan amount, interest rate, and term to find a payment plan that works for your budget.
-              </p>
-
-              <LoanCalc />
-
-              <hr className="np-rule-thick" />
-
-              <div className="np-sec-label">What Can Be Financed?</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 14px', marginBottom: '14px' }}>
-                <div>
-                  <div className="np-svc"><div className="np-svc-name">Garmin G3X Touch Suite</div><div className="np-svc-desc">Full glass cockpit with ADAHRS, EIS, and synthetic vision</div></div>
-                  <div className="np-svc"><div className="np-svc-name">GTN 650Xi / 750Xi</div><div className="np-svc-desc">GPS/NAV/COMM with WAAS LPV approaches</div></div>
-                  <div className="np-svc"><div className="np-svc-name">GFC 500 Autopilot</div><div className="np-svc-desc">Retrofit digital autopilot with GPSS steering</div></div>
-                </div>
-                <div>
-                  <div className="np-svc"><div className="np-svc-name">ADS-B Out Upgrades</div><div className="np-svc-desc">FAR 91.227 compliant installations</div></div>
-                  <div className="np-svc"><div className="np-svc-name">Panel Upgrades</div><div className="np-svc-desc">Custom fabrication and installation</div></div>
-                  <div className="np-svc"><div className="np-svc-name">Major Maintenance</div><div className="np-svc-desc">Annuals, overhauls, and structural work</div></div>
-                </div>
-              </div>
-
-              <hr className="np-rule-thick" />
-
-              <div className="np-sec-label">How It Works</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px', marginBottom: '14px' }}>
-                <div className="np-box">
-                  <div className="np-box-title">Step 1</div>
-                  <p className="np-body-text">Talk to Captain Jerry or call us to scope your project and get a quote.</p>
-                </div>
-                <div className="np-box">
-                  <div className="np-box-title">Step 2</div>
-                  <p className="np-body-text">We connect you with our lending partners for approval and terms.</p>
-                </div>
-                <div className="np-box">
-                  <div className="np-box-title">Step 3</div>
-                  <p className="np-body-text">Work begins. You fly with new avionics while making affordable payments.</p>
-                </div>
-              </div>
-
-              <div className="np-pull-quote">
-                &ldquo;Upgrade now, pay over time &mdash; keep your aircraft and your capital working.&rdquo;
-              </div>
-
-            </div>
-
-            <div className="np-col-divider" />
-
-            {/* RIGHT — Contact */}
-            <div style={{ padding: '0 2px' }}>
-              <span className="np-kicker">Get a Quote</span>
-              <h3 className="np-headline-md" style={{ textDecoration: 'none' }}>Contact RWAS</h3>
-              <hr className="np-rule" />
-              <p className="np-body-text" style={{ marginBottom: '10px' }}>
-                Use the Jerry popup in the navigation for financing questions, or contact us directly and we&rsquo;ll help scope the project and connect you with our team for a formal quote.
-              </p>
-
-              <div className="np-box" style={{ marginBottom: '10px' }}>
-                <div className="np-box-title">Call Us</div>
-                <p className="np-body-text">
-                  <a href="tel:+16052998178" style={{ color: '#1a1a1a', textDecoration: 'underline', textUnderlineOffset: '2px' }}>(605) 299-8178</a>
+        {/* ── TWO-COLUMN GRID ───────────────────────────────────────── */}
+        <div className="about-grid">
+          {/* MAIN COLUMN ---------------------------------------------- */}
+          <div className="about-main">
+            {/* Payment Estimator */}
+            <Specimen variant="hero" as="section">
+              <span className="bs-kicker">Payment Estimator</span>
+              <h2 className="bs-headline bs-headline--section">Run the Numbers</h2>
+              <hr className="section-rule" />
+              <div className="bs-body">
+                <p>
+                  Use the calculator below to estimate monthly payments for your avionics installation or maintenance project. Adjust the loan amount, interest rate, and term to find a payment plan that works for your budget.
                 </p>
               </div>
+              <LoanCalc />
+            </Specimen>
 
-              <div className="np-box" style={{ marginBottom: '10px' }}>
-                <div className="np-box-title">Browse Products</div>
-                <div className="np-box-row"><a href="/collections/garmin-avionics"><span>Garmin Avionics</span><span className="np-box-pg">&rarr;</span></a></div>
-                <div className="np-box-row"><a href="/collections/rigging-tools"><span>Papa-Alpha Tools</span><span className="np-box-pg">&rarr;</span></a></div>
-                <div className="np-box-row"><a href="/collections/on-sale"><span>On Sale</span><span className="np-box-pg">&rarr;</span></a></div>
+            {/* What Can Be Financed */}
+            <Specimen variant="hero" as="section">
+              <span className="bs-kicker">What We&rsquo;ll Finance</span>
+              <h2 className="bs-headline bs-headline--section">Eligible Projects</h2>
+              <hr className="section-rule" />
+              <div className="bs-split">
+                <ul className="bs-svc-list">
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">Garmin G3X Touch Suite</p>
+                    <p className="bs-svc-desc">Full glass cockpit with ADAHRS, EIS, and synthetic vision</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">GTN 650Xi / 750Xi</p>
+                    <p className="bs-svc-desc">GPS/NAV/COMM with WAAS LPV approaches</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">GFC 500 Autopilot</p>
+                    <p className="bs-svc-desc">Retrofit digital autopilot with GPSS steering</p>
+                  </li>
+                </ul>
+                <ul className="bs-svc-list">
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">ADS-B Out Upgrades</p>
+                    <p className="bs-svc-desc">FAR 91.227 compliant installations</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">Panel Upgrades</p>
+                    <p className="bs-svc-desc">Custom fabrication and installation</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">Major Maintenance</p>
+                    <p className="bs-svc-desc">Annuals, overhauls, and structural work</p>
+                  </li>
+                </ul>
               </div>
+            </Specimen>
 
-              <div className="np-photo-box" style={{ marginTop: '10px' }}>
-                <div className="np-photo-area">
-                  <img src="/newspaper/images/r182_panel.jpg" alt="Garmin G3X cockpit" />
+            {/* How It Works */}
+            <Specimen variant="hero" as="section">
+              <span className="bs-kicker">How It Works</span>
+              <h2 className="bs-headline bs-headline--section">Three Steps to Upgrade</h2>
+              <hr className="section-rule" />
+              <div className="bs-steps">
+                <div className="bs-step">
+                  <div className="bs-step__label">Step 1</div>
+                  <div className="bs-step__n">01</div>
+                  <p>Talk to Captain Jerry or call us to scope your project and get a quote.</p>
                 </div>
-                <div className="np-photo-cap">
-                  Finance a full glass cockpit upgrade &mdash; Garmin G3X Touch installation by RWAS.
+                <div className="bs-step">
+                  <div className="bs-step__label">Step 2</div>
+                  <div className="bs-step__n">02</div>
+                  <p>We connect you with our lending partners for approval and terms.</p>
+                </div>
+                <div className="bs-step">
+                  <div className="bs-step__label">Step 3</div>
+                  <div className="bs-step__n">03</div>
+                  <p>Work begins. You fly with new avionics while making affordable payments.</p>
                 </div>
               </div>
+              <div className="bs-pullquote">
+                Upgrade now, pay over time &mdash; keep your aircraft and your capital working.
+              </div>
+            </Specimen>
+          </div>
+
+          {/* RAIL ----------------------------------------------------- */}
+          <aside className="about-rail" aria-label="Get a quote &amp; contact">
+            <Specimen as="section">
+              <span className="bs-kicker">Get a Quote</span>
+              <p>
+                Use the Jerry popup in the navigation for financing questions, or contact us directly and we&rsquo;ll help scope the project and connect you with our lending partners for a formal quote.
+              </p>
+            </Specimen>
+
+            <Specimen as="section">
+              <span className="bs-kicker">Call Us</span>
+              <p>
+                <a
+                  href="tel:+16052998178"
+                  style={{ color: 'var(--ink-900)', textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                >
+                  (605) 299-8178
+                </a>
+              </p>
+            </Specimen>
+
+            <Specimen as="section">
+              <span className="bs-kicker">Email</span>
+              <p>
+                <a
+                  href="mailto:avionics@rwas.team"
+                  style={{ color: 'var(--ink-900)', textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                >
+                  avionics@rwas.team
+                </a>
+              </p>
+            </Specimen>
+
+            <Specimen as="section">
+              <span className="bs-kicker">Browse Products</span>
+              <ul>
+                <li>
+                  <a href="/collections/garmin-avionics">Garmin Avionics</a>
+                  <span className="arr">&rarr;</span>
+                </li>
+                <li>
+                  <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
+                  <span className="arr">&rarr;</span>
+                </li>
+                <li>
+                  <a href="/collections/on-sale">On Sale</a>
+                  <span className="arr">&rarr;</span>
+                </li>
+                <li>
+                  <a href="/shop-capabilities">Shop Capabilities</a>
+                  <span className="arr">&rarr;</span>
+                </li>
+              </ul>
+            </Specimen>
+
+            {/* Ask Jerry CTA */}
+            <div className="jerry-card">
+              <span className="bs-script-accent">&mdash; on duty 24/7 &mdash;</span>
+              <h4>Talk to Captain Jerry</h4>
+              <p>Financing questions &amp; project scoping</p>
+              <a className="cta" href="#ask-jerry">
+                Ask Jerry
+              </a>
+              <div className="footnote">AI-powered intake &middot; Available 24/7</div>
             </div>
 
-          </div>
+            {/* Hero panel photo */}
+            <Specimen variant="hero" as="figure" className="about-fig about-fig--rail">
+              <Specimen.Image
+                src="/newspaper/images/r182_panel.jpg"
+                alt="Full Garmin G500TXi Suite installation in a Cessna 182RG"
+              />
+              <Specimen.CaptionRule />
+              <Specimen.Caption numeral="FIG. 01">
+                Cessna 182RG &mdash; full Garmin G500TXi Suite installation by RWAS.
+              </Specimen.Caption>
+            </Specimen>
+          </aside>
         </div>
+      </main>
 
-                <div className="np-credentials-bar">
-          NBAA Member &nbsp;&middot;&nbsp; AEA Member &nbsp;&middot;&nbsp; Certified &amp; Trained
-        </div>
-
-        <div className="np-footer">
-          <span className="np-footer-name">Roger Wilco Aviation Services</span>
-          <span>&copy; 2026 RWAS &middot; All Rights Reserved</span>
-        </div>
-
-      </div>
-    </div>
-    </>
+      <BroadsheetFooter />
+    </BroadsheetLayout>
   );
 }
