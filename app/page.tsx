@@ -393,7 +393,7 @@ export default function Home() {
           : 'Photo';
         var cat = (l.category||'').replace(/-/g,' ');
         var meta = (l.year||'') + (cat ? ' \\u00b7 ' + cat : '');
-        return '<a href="/aircraft-for-sale#listing/' + l.id + '" class="bs-listing">'
+        return '<a href="/aircraft-for-sale/' + l.id + '" class="bs-listing">'
           + '<div class="bs-listing__img">' + photo + '</div>'
           + '<div class="bs-listing__body">'
           + '<div>'

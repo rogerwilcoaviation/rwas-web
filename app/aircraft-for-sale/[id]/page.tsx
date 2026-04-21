@@ -1,23 +1,42 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
-// ============================================================================
-// Fix #6 / MEDIUM #1 — /aircraft-for-sale/[id]/page.tsx
-// Server component. Renders the full detail for a single listing and includes
-// JSON-LD Product markup for search/shopping previews.
-// ============================================================================
+/*
+ * /aircraft-for-sale/[id] — Ship 3 Tranche C migration
+ *
+ * Server component. Renders the full detail for a single listing and
+ * includes JSON-LD Product markup for search/shopping previews.
+ *
+ * Chrome now matches the rest of Ship 2/3: BroadsheetLayout → Dateline →
+ * Masthead → BroadsheetNav → CredentialsBar → BulletinBar → <main.bs-stage>
+ * → BroadsheetFooter. Content blocks are wrapped in Specimen cards for the
+ * letterpress lift over the enr_h05 watermark.
+ *
+ * ISR, generateStaticParams, and the sale-api fetch logic are unchanged.
+ */
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import '../../newspaper.css';
+import {
+  BroadsheetLayout,
+  Dateline,
+  Masthead,
+  BroadsheetNav,
+  CredentialsBar,
+  BulletinBar,
+  BroadsheetFooter,
+  Specimen,
+} from '@/components/shared/broadsheet';
 import { PhotoCarousel } from './photo-carousel';
 
 export const revalidate = 60;
 
-// Required because the site is configured with `output: 'export'` (static
-// export). At build time we enumerate every active listing and pre-render its
-// detail page. New listings added after deploy won't have a detail page until
-// the next build — an acceptable tradeoff given the review-before-live
-// workflow (fix pack #2). If generateStaticParams() fails (sale-api down at
-// build time), we return an empty array so the build still succeeds.
+/*
+ * Required because the site is configured with `output: 'export'` (static
+ * export). At build time we enumerate every active listing and pre-render
+ * its detail page. New listings added after deploy won't have a detail page
+ * until the next build — an acceptable tradeoff given the review-before-live
+ * workflow. If generateStaticParams() fails (sale-api down at build time),
+ * we return an empty array so the build still succeeds.
+ */
 export async function generateStaticParams(): Promise<{ id: string }[]> {
   try {
     const resp = await fetch(
@@ -36,8 +55,8 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
   }
 }
 
-// With `output: 'export'`, only the IDs returned above can render at runtime —
-// dynamicParams: false makes unknown IDs 404 at build time rather than
+// With `output: 'export'`, only the IDs returned above can render at runtime
+// — dynamicParams: false makes unknown IDs 404 at build time rather than
 // attempting a runtime render that would fail silently in a static host.
 export const dynamicParams = false;
 
@@ -228,59 +247,53 @@ export default async function AircraftDetailPage({ params }: PageProps) {
   );
 
   return (
-    <>
+    <BroadsheetLayout>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <style>{`
-        body::before {
-          content: "";
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          background: url(/newspaper/images/enr_h05.png) center center / cover no-repeat;
-          opacity: 0.18;
-          z-index: 0;
-          pointer-events: none;
+        .a4s-back {
+          font-family: Arial, sans-serif;
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #6a6a6a;
+          text-decoration: none;
+          display: inline-block;
+          margin-bottom: 12px;
         }
-        body > * { position: relative; z-index: 1; }
-        @media (max-width: 749px) { body::before { display: none !important; } }
-
-        .a4s-detail-header { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; margin: 20px 0; }
+        .a4s-detail-header { display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; }
         .a4s-detail-gallery { flex: 1 1 420px; min-width: 280px; }
         .a4s-detail-summary { flex: 1 1 320px; min-width: 260px; }
-        .a4s-detail-title {
-          font-family: Georgia, 'Times New Roman', serif;
-          font-size: 34px;
-          font-weight: 700;
-          line-height: 1.1;
-          margin: 0 0 8px;
-        }
         .a4s-detail-subtitle {
           font-family: Arial, sans-serif;
           font-size: 12px;
           text-transform: uppercase;
           letter-spacing: 0.12em;
           color: #6a6a6a;
-          margin: 0 0 12px;
+          margin: 0 0 6px;
         }
         .a4s-detail-price {
           font-family: Georgia, serif;
-          font-size: 28px;
+          font-size: 26px;
           font-weight: 700;
           color: #1a1a1a;
-          margin: 12px 0;
+          margin: 10px 0 4px;
+        }
+        .a4s-detail-location {
+          font-family: Arial, sans-serif;
+          font-size: 12px;
+          color: #333;
+          margin-bottom: 4px;
         }
         .a4s-detail-cta {
           display: flex;
           gap: 10px;
           flex-wrap: wrap;
-          margin: 18px 0 10px;
+          margin: 14px 0 4px;
         }
-        .a4s-detail-cta a, .a4s-detail-cta button {
+        .a4s-detail-cta a {
           display: inline-block;
           padding: 10px 18px;
           background: #C49A2A;
@@ -292,7 +305,6 @@ export default async function AircraftDetailPage({ params }: PageProps) {
           letter-spacing: 0.12em;
           text-decoration: none;
           border: 1px solid #111;
-          cursor: pointer;
         }
         .a4s-detail-cta .secondary { background: transparent; }
 
@@ -300,12 +312,12 @@ export default async function AircraftDetailPage({ params }: PageProps) {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 0;
-          border: 1px solid #1a1a1a;
-          background: rgba(245, 243, 239, 0.95);
-          margin: 24px 0;
+          border-top: 1px solid #e0ddd5;
+          border-left: 1px solid #e0ddd5;
+          margin: 4px 0;
         }
         .a4s-spec {
-          padding: 12px 16px;
+          padding: 10px 14px;
           border-bottom: 1px solid #e0ddd5;
           border-right: 1px solid #e0ddd5;
         }
@@ -324,311 +336,283 @@ export default async function AircraftDetailPage({ params }: PageProps) {
           margin: 0;
         }
 
-        .a4s-block-title {
-          font-family: Georgia, 'Times New Roman', serif;
-          font-size: 22px;
-          font-weight: 700;
-          margin: 32px 0 10px;
-          letter-spacing: 0.02em;
-          border-bottom: 2px solid #1a1a1a;
-          padding-bottom: 4px;
-        }
         .a4s-prose {
           font-family: Georgia, serif;
           font-size: 15px;
           line-height: 1.65;
           color: #1a1a1a;
           white-space: pre-line;
+          margin: 0;
         }
-        .a4s-seller-card {
-          border: 1px solid #1a1a1a;
-          padding: 18px 20px;
-          background: rgba(245, 243, 239, 0.95);
-          margin: 20px 0;
+        .a4s-logbooks { display: flex; flex-direction: column; gap: 12px; }
+        .a4s-logbook-section {
+          padding: 10px 12px;
+          background: rgba(250, 250, 247, 0.85);
+          border: 1px solid #e5e5dc;
         }
-        .a4s-seller-card dl { margin: 8px 0 0; display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; }
-        .a4s-seller-card dt { font-family: Arial, sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #6a6a6a; }
-        .a4s-seller-card dd { margin: 0; font-family: Georgia, serif; font-size: 15px; }
+        .a4s-logbook-section h3 {
+          font-family: Georgia, serif;
+          font-size: 14px;
+          font-weight: 700;
+          margin: 0 0 6px;
+          color: #1a1a1a;
+        }
+        .a4s-logbook-section ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        .a4s-logbook-section a {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 8px;
+          background: #fff;
+          border: 1px solid #ddd;
+          color: #1a1a1a;
+          text-decoration: none;
+          font-size: 12px;
+        }
+        .a4s-logbook-name {
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .a4s-logbook-size { font-size: 10px; color: #888; }
+
+        .a4s-seller-card dl {
+          margin: 8px 0 0;
+          display: grid;
+          grid-template-columns: 110px 1fr;
+          gap: 6px 12px;
+        }
+        .a4s-seller-card dt {
+          font-family: Arial, sans-serif;
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #6a6a6a;
+        }
+        .a4s-seller-card dd {
+          margin: 0;
+          font-family: Georgia, serif;
+          font-size: 15px;
+        }
         .a4s-seller-card a { color: #1a1a1a; text-decoration: underline; }
+        .a4s-seller-disclaimer {
+          margin-top: 14px;
+          font-family: Arial, sans-serif;
+          font-size: 11px;
+          color: #555;
+          line-height: 1.55;
+        }
       `}</style>
-      <div
-        className="np-wrapper"
-        style={{
-          background: '#ddd9d2',
-          minHeight: '100vh',
-          fontFamily: "Georgia, 'Times New Roman', serif",
-        }}
-      >
-        <div className="np-page">
-          {/* Dateline */}
-          <div className="np-dateline">
-            <span>Spring 2026 Edition</span>
-            <span>Vol. XL &middot; No. 1</span>
-            <span>rogerwilcoaviation.com</span>
-          </div>
 
-          {/* Masthead */}
-          <div className="np-masthead">
-            <img
-              className="np-masthead-logo"
-              src="/newspaper/images/logo.png"
-              alt="Roger Wilco Aviation Services"
-            />
-            <div className="np-masthead-center">
-              <div className="np-masthead-name">
-                Roger Wilco Aviation Services
-              </div>
-              <hr className="np-masthead-rule" />
-              <div className="np-masthead-tagline">
-                FAA Cert. Repair Station &nbsp;&middot;&nbsp; Avionics &nbsp;&middot;&nbsp;
-                Airframe &amp; Powerplant &nbsp;&middot;&nbsp; NDT &nbsp;&middot;&nbsp; Fabrication
-              </div>
+      <Dateline />
+      <Masthead />
+      <BroadsheetNav activeHref="/aircraft-for-sale" />
+      <CredentialsBar />
+      <BulletinBar />
+
+      <main className="bs-stage">
+        <a href="/aircraft-for-sale" className="a4s-back">
+          &larr; Back to listings
+        </a>
+
+        {/* ── HERO: Gallery + Summary ────────────────────────────────── */}
+        <Specimen variant="hero" as="section" className="a4s-detail-hero">
+          <div className="a4s-detail-header">
+            <div className="a4s-detail-gallery">
+              <PhotoCarousel photoUrls={photoUrls} alt={h} />
             </div>
-            <div className="np-masthead-right">
-              <div className="np-masthead-right-meta">
-                Cert. No. RWSR491E
-                <br />
-                KYKN &middot; Yankton, SD
+            <div className="a4s-detail-summary">
+              <div className="a4s-detail-subtitle">
+                {listing.nNumber ? `Tail ${listing.nNumber}` : 'Aircraft listing'}
               </div>
-              <a href="tel:+16052998178" className="np-masthead-phone">
-                (605) 299-8178
-              </a>
-              <a href="/about#contact" className="np-masthead-cta">
-                Book Service
-              </a>
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <nav className="np-nav">
-            <a href="/">Home</a>
-            <a href="/#ask-jerry" style={{ background: '#d4c47a' }} className="np-nav-jerry">
-              Ask Jerry
-            </a>
-            <a href="/collections/on-sale">On Sale</a>
-            <a href="/collections/garmin-avionics">Garmin</a>
-            <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
-            <a className="active" href="/aircraft-for-sale">
-              Aircraft 4 Sale
-            </a>
-            <a href="/financing">Financing</a>
-            <a href="/shop-capabilities">Shop Capabilities</a>
-            <a href="/blog/">Blog Articles</a>
-            <a href="/about">About</a>
-          </nav>
-
-          {/* Body */}
-          <div className="np-body">
-            <div style={{ padding: '10px 0 0' }}>
-              <a
-                href="/aircraft-for-sale"
-                style={{
-                  fontFamily: 'Arial, sans-serif',
-                  fontSize: 11,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  color: '#6a6a6a',
-                  textDecoration: 'none',
-                }}
-              >
-                &larr; Back to listings
-              </a>
-            </div>
-
-            <div className="a4s-detail-header">
-              <div className="a4s-detail-gallery">
-                <PhotoCarousel photoUrls={photoUrls} alt={h} />
-              </div>
-              <div className="a4s-detail-summary">
-                <div className="a4s-detail-subtitle">
-                  {listing.nNumber ? `Tail ${listing.nNumber}` : 'Aircraft listing'}
+              <h1 className="bs-headline bs-headline--section" style={{ margin: '0 0 6px' }}>
+                {h}
+              </h1>
+              <div className="a4s-detail-price">{priceStr}</div>
+              {listing.sellerLocation ? (
+                <div className="a4s-detail-location">
+                  Located in {listing.sellerLocation}
                 </div>
-                <h1 className="a4s-detail-title">{h}</h1>
-                <div className="a4s-detail-price">{priceStr}</div>
-                {listing.sellerLocation ? (
-                  <div
-                    style={{
-                      fontFamily: 'Arial, sans-serif',
-                      fontSize: 12,
-                      color: '#333',
-                      marginBottom: 8,
-                    }}
-                  >
-                    Located in {listing.sellerLocation}
-                  </div>
-                ) : null}
-                <div className="a4s-detail-cta">
-                  <a
-                    href={`mailto:${listing.sellerEmail || 'service@rwas.team'}?subject=${encodeURIComponent('Inquiry: ' + h + (listing.nNumber ? ' (' + listing.nNumber + ')' : ''))}`}
-                  >
-                    Contact Seller
-                  </a>
-                  <a
-                    href="tel:+16052998178"
-                    className="secondary"
-                  >
-                    Call RWAS for Pre-Buy
-                  </a>
-                </div>
+              ) : null}
+              <div className="a4s-detail-cta">
+                <a
+                  href={`mailto:${listing.sellerEmail || 'service@rwas.team'}?subject=${encodeURIComponent('Inquiry: ' + h + (listing.nNumber ? ' (' + listing.nNumber + ')' : ''))}`}
+                >
+                  Contact Seller
+                </a>
+                <a href="tel:+16052998178" className="secondary">
+                  Call RWAS for Pre-Buy
+                </a>
               </div>
             </div>
-
-            {specs.length ? (
-              <>
-                <h2 className="a4s-block-title">Specifications</h2>
-                <dl className="a4s-specs-grid">
-                  {specs.map((s) => (
-                    <div className="a4s-spec" key={s.label}>
-                      <dt>{s.label}</dt>
-                      <dd>
-                        {s.value}
-                        {s.suffix ? <span> {s.suffix}</span> : null}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </>
-            ) : null}
-
-            {listing.description ? (
-              <>
-                <h2 className="a4s-block-title">Description</h2>
-                <div className="a4s-prose">{listing.description}</div>
-              </>
-            ) : null}
-
-            {listing.avionics ? (
-              <>
-                <h2 className="a4s-block-title">Avionics</h2>
-                <div className="a4s-prose">{listing.avionics}</div>
-              </>
-            ) : null}
-
-            {listing.equipmentList ? (
-              <>
-                <h2 className="a4s-block-title">Equipment</h2>
-                <div className="a4s-prose">{listing.equipmentList}</div>
-              </>
-            ) : null}
-
-            {(() => {
-              const lb = listing.logbooks || {};
-              const sections: Array<{ key: string; label: string; files: Array<{ key: string; name?: string; size?: number }> }> = [
-                { key: 'airframe', label: 'Airframe Logbook', files: lb.airframe || [] },
-                { key: 'powerplant', label: 'Engine Logbook', files: lb.powerplant || [] },
-                { key: 'propeller', label: 'Propeller Logbook', files: lb.propeller || [] },
-                { key: 'adSbCompliance', label: 'AD / SB Compliance', files: lb.adSbCompliance || [] },
-                { key: 'misc', label: 'Other Documents', files: lb.misc || [] },
-              ].filter((s) => s.files.length > 0);
-              if (!sections.length) return null;
-              const fmtSize = (n?: number) => {
-                if (!n || n <= 0) return '';
-                if (n < 1024) return n + ' B';
-                if (n < 1048576) return Math.round(n / 1024) + ' KB';
-                return (n / 1048576).toFixed(1) + ' MB';
-              };
-              return (
-                <>
-                  <h2 className="a4s-block-title">Logbooks &amp; Documents</h2>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
-                    {sections.map((s) => (
-                      <div key={s.key} style={{ padding: 10, background: '#fafaf7', border: '1px solid #e5e5dc' }}>
-                        <div style={{ fontFamily: 'Georgia, serif', fontSize: 14, fontWeight: 700, marginBottom: 6, color: '#1a1a1a' }}>{s.label}</div>
-                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                          {s.files.map((f) => (
-                            <li key={f.key}>
-                              <a
-                                href={`https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(f.key)}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', background: '#fff', border: '1px solid #ddd', color: '#1a1a1a', textDecoration: 'none', fontSize: 12 }}
-                              >
-                                <span style={{ fontSize: 14 }}>📄</span>
-                                <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.name || f.key.split('/').pop()}</span>
-                                {f.size ? <span style={{ fontSize: 10, color: '#888' }}>{fmtSize(f.size)}</span> : null}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              );
-            })()}
-
-            <h2 className="a4s-block-title">Seller</h2>
-            <div className="a4s-seller-card">
-              <dl>
-                {listing.sellerName ? (
-                  <>
-                    <dt>Name</dt>
-                    <dd>{listing.sellerName}</dd>
-                  </>
-                ) : null}
-                {listing.sellerLocation ? (
-                  <>
-                    <dt>Location</dt>
-                    <dd>{listing.sellerLocation}</dd>
-                  </>
-                ) : null}
-                {listing.sellerEmail ? (
-                  <>
-                    <dt>Email</dt>
-                    <dd>
-                      <a href={`mailto:${listing.sellerEmail}`}>
-                        {listing.sellerEmail}
-                      </a>
-                    </dd>
-                  </>
-                ) : null}
-                {listing.sellerPhone ? (
-                  <>
-                    <dt>Phone</dt>
-                    <dd>
-                      <a href={`tel:${listing.sellerPhone.replace(/[^0-9+]/g, '')}`}>
-                        {listing.sellerPhone}
-                      </a>
-                    </dd>
-                  </>
-                ) : null}
-              </dl>
-              <p
-                style={{
-                  marginTop: 14,
-                  fontFamily: 'Arial, sans-serif',
-                  fontSize: 11,
-                  color: '#555',
-                  lineHeight: 1.55,
-                }}
-              >
-                RWAS introduces buyers and sellers. We are not the seller of
-                record unless explicitly noted. Pre-buy inspection by our
-                FAA Part 145 repair station is available on request — call
-                (605) 299-8178.
-              </p>
-            </div>
-
-            {/* Footer line */}
-            <div
-              style={{
-                borderTop: '2px solid #1a1a1a',
-                marginTop: 40,
-                padding: '16px 0',
-                textAlign: 'center',
-                fontSize: 11,
-                color: '#333',
-                fontFamily: 'Arial, sans-serif',
-                letterSpacing: '0.04em',
-              }}
-            >
-              Roger Wilco Aviation Services &middot; 700 E 31st Street,
-              Yankton, SD 57078 &middot; (605) 299-8178 &middot;
-              service@rwas.team
-            </div>
           </div>
-        </div>
-      </div>
-    </>
+        </Specimen>
+
+        {/* ── SPECIFICATIONS ─────────────────────────────────────────── */}
+        {specs.length ? (
+          <Specimen variant="flat" as="section">
+            <span className="bs-kicker">Section B2</span>
+            <h2 className="bs-headline bs-headline--section">Specifications</h2>
+            <hr className="section-rule" />
+            <dl className="a4s-specs-grid">
+              {specs.map((s) => (
+                <div className="a4s-spec" key={s.label}>
+                  <dt>{s.label}</dt>
+                  <dd>
+                    {s.value}
+                    {s.suffix ? <span> {s.suffix}</span> : null}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Specimen>
+        ) : null}
+
+        {/* ── DESCRIPTION ────────────────────────────────────────────── */}
+        {listing.description ? (
+          <Specimen variant="flat" as="section">
+            <span className="bs-kicker">Section B3</span>
+            <h2 className="bs-headline bs-headline--section">Description</h2>
+            <hr className="section-rule" />
+            <p className="a4s-prose">{listing.description}</p>
+          </Specimen>
+        ) : null}
+
+        {/* ── AVIONICS ───────────────────────────────────────────────── */}
+        {listing.avionics ? (
+          <Specimen variant="flat" as="section">
+            <span className="bs-kicker">Section B4</span>
+            <h2 className="bs-headline bs-headline--section">Avionics</h2>
+            <hr className="section-rule" />
+            <p className="a4s-prose">{listing.avionics}</p>
+          </Specimen>
+        ) : null}
+
+        {/* ── EQUIPMENT ──────────────────────────────────────────────── */}
+        {listing.equipmentList ? (
+          <Specimen variant="flat" as="section">
+            <span className="bs-kicker">Section B5</span>
+            <h2 className="bs-headline bs-headline--section">Equipment</h2>
+            <hr className="section-rule" />
+            <p className="a4s-prose">{listing.equipmentList}</p>
+          </Specimen>
+        ) : null}
+
+        {/* ── LOGBOOKS & DOCUMENTS ───────────────────────────────────── */}
+        {(() => {
+          const lb = listing.logbooks || {};
+          const sections: Array<{
+            key: string;
+            label: string;
+            files: Array<{ key: string; name?: string; size?: number }>;
+          }> = [
+            { key: 'airframe', label: 'Airframe Logbook', files: lb.airframe || [] },
+            { key: 'powerplant', label: 'Engine Logbook', files: lb.powerplant || [] },
+            { key: 'propeller', label: 'Propeller Logbook', files: lb.propeller || [] },
+            { key: 'adSbCompliance', label: 'AD / SB Compliance', files: lb.adSbCompliance || [] },
+            { key: 'misc', label: 'Other Documents', files: lb.misc || [] },
+          ].filter((s) => s.files.length > 0);
+          if (!sections.length) return null;
+          const fmtSize = (n?: number) => {
+            if (!n || n <= 0) return '';
+            if (n < 1024) return n + ' B';
+            if (n < 1048576) return Math.round(n / 1024) + ' KB';
+            return (n / 1048576).toFixed(1) + ' MB';
+          };
+          return (
+            <Specimen variant="flat" as="section">
+              <span className="bs-kicker">Section B6</span>
+              <h2 className="bs-headline bs-headline--section">
+                Logbooks &amp; Documents
+              </h2>
+              <hr className="section-rule" />
+              <div className="a4s-logbooks">
+                {sections.map((s) => (
+                  <div key={s.key} className="a4s-logbook-section">
+                    <h3>{s.label}</h3>
+                    <ul>
+                      {s.files.map((f) => (
+                        <li key={f.key}>
+                          <a
+                            href={`https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(f.key)}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <span style={{ fontSize: 14 }}>📄</span>
+                            <span className="a4s-logbook-name">
+                              {f.name || f.key.split('/').pop()}
+                            </span>
+                            {f.size ? (
+                              <span className="a4s-logbook-size">
+                                {fmtSize(f.size)}
+                              </span>
+                            ) : null}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </Specimen>
+          );
+        })()}
+
+        {/* ── SELLER ─────────────────────────────────────────────────── */}
+        <Specimen variant="flat" as="section" className="a4s-seller-card">
+          <span className="bs-kicker">Section B7</span>
+          <h2 className="bs-headline bs-headline--section">Seller</h2>
+          <hr className="section-rule" />
+          <dl>
+            {listing.sellerName ? (
+              <>
+                <dt>Name</dt>
+                <dd>{listing.sellerName}</dd>
+              </>
+            ) : null}
+            {listing.sellerLocation ? (
+              <>
+                <dt>Location</dt>
+                <dd>{listing.sellerLocation}</dd>
+              </>
+            ) : null}
+            {listing.sellerEmail ? (
+              <>
+                <dt>Email</dt>
+                <dd>
+                  <a href={`mailto:${listing.sellerEmail}`}>
+                    {listing.sellerEmail}
+                  </a>
+                </dd>
+              </>
+            ) : null}
+            {listing.sellerPhone ? (
+              <>
+                <dt>Phone</dt>
+                <dd>
+                  <a href={`tel:${listing.sellerPhone.replace(/[^0-9+]/g, '')}`}>
+                    {listing.sellerPhone}
+                  </a>
+                </dd>
+              </>
+            ) : null}
+          </dl>
+          <p className="a4s-seller-disclaimer">
+            RWAS introduces buyers and sellers. We are not the seller of record unless explicitly noted. Pre-buy inspection by our FAA Part 145 repair station is available on request &mdash; call (605) 299-8178.
+          </p>
+        </Specimen>
+      </main>
+
+      <BroadsheetFooter />
+    </BroadsheetLayout>
   );
 }
