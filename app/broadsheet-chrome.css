@@ -852,3 +852,207 @@ html, body {
 .broadsheet .bs-body--rich .app__overview {
   display: block;
 }
+/* ==================================================================
+   Ship 3 — About / narrative-page typography helpers + About layout
+   Appended to app/broadsheet-chrome.css. All selectors scoped under
+   .broadsheet so they only apply inside BroadsheetLayout.
+   ================================================================== */
+
+/* ── Narrative typography helpers (reusable across Ship 3 pages) ── */
+
+.broadsheet .bs-subhead {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--ink-700);
+  margin: 6px 0 14px;
+}
+
+.broadsheet .bs-script-accent {
+  font-family: var(--font-script);
+  font-size: 22px;
+  color: var(--gold-800);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.broadsheet .bs-pullquote {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--ink-900);
+  padding: 14px 0;
+  margin: 14px 0 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  font-style: italic;
+  text-align: center;
+}
+.broadsheet .bs-pullquote::before {
+  content: "\201C";
+  color: var(--gold-700);
+  font-size: 40px;
+  line-height: 0;
+  position: relative;
+  top: 12px;
+  margin-right: 4px;
+}
+.broadsheet .bs-pullquote::after {
+  content: "\201D";
+  color: var(--gold-700);
+  font-size: 40px;
+  line-height: 0;
+  position: relative;
+  top: 18px;
+  margin-left: 4px;
+}
+
+.broadsheet .section-rule {
+  border: 0;
+  border-top: 1px solid var(--rule-soft);
+  margin: 0 0 14px;
+}
+
+/* ── Hero headline group (bone specimen-card style, used at top of
+      narrative pages: About, Financing, Help, Shop Capabilities) ── */
+
+.broadsheet .hero-headline-group {
+  background: var(--bone);
+  border: 1px solid var(--rule);
+  padding: 30px 32px;
+  box-shadow: var(--specimen-shadow);
+  margin-bottom: 28px;
+}
+.broadsheet .hero-headline-group .bs-script-accent {
+  color: var(--gold-800);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* ── Jerry CTA card (parchment-grounded, reusable rail element) ── */
+
+.broadsheet .jerry-card {
+  background: var(--parchment);
+  border: 1px solid var(--rule);
+  padding: 18px 20px;
+  box-shadow: var(--specimen-shadow);
+  text-align: center;
+  margin-bottom: 18px;
+}
+.broadsheet .jerry-card .bs-script-accent {
+  color: var(--gold-800);
+  font-size: 24px;
+}
+.broadsheet .jerry-card h4 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 22px;
+  margin: 2px 0 4px;
+  color: var(--ink-900);
+}
+.broadsheet .jerry-card p {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--ink-700);
+  margin: 0 0 12px;
+  font-style: italic;
+}
+.broadsheet .jerry-card .cta {
+  display: inline-block;
+  padding: 10px 18px;
+  background: var(--gold-700);
+  color: var(--ink-900);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.broadsheet .jerry-card .cta:hover {
+  background: var(--gold-800);
+  color: var(--cream);
+}
+.broadsheet .jerry-card .footnote {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  color: var(--ink-600);
+  letter-spacing: 0.08em;
+  margin-top: 8px;
+}
+
+/* ── About-page two-column grid (re-usable for other narrative pages
+      that want the same rail pattern: Financing, Help, etc.) ── */
+
+.broadsheet .about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 32px;
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .broadsheet .about-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.broadsheet .about-main > .specimen {
+  margin-bottom: 22px;
+}
+.broadsheet .about-rail > .specimen {
+  margin-bottom: 18px;
+  padding: 16px 18px;
+}
+.broadsheet .about-rail .bs-kicker {
+  margin-bottom: 4px;
+}
+.broadsheet .about-rail h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0 0 10px;
+  color: var(--ink-900);
+}
+.broadsheet .about-rail p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+.broadsheet .about-rail ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.broadsheet .about-rail li {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  border-bottom: 1px dashed var(--rule-soft);
+  padding: 6px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.broadsheet .about-rail li:last-child {
+  border-bottom: 0;
+}
+.broadsheet .about-rail li a {
+  text-decoration: none;
+  color: var(--ink-800);
+  flex: 1;
+}
+.broadsheet .about-rail li .arr {
+  color: var(--gold-700);
+  font-weight: 700;
+}
+
+/* Figure Specimen used inside about-main column — no default margin reset */
+.broadsheet .about-fig {
+  margin: 0 0 22px;
+}
+.broadsheet .about-fig--rail {
+  margin: 0;
+}
