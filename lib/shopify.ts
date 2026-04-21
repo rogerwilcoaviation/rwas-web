@@ -59,6 +59,7 @@ export type ShopifyProductDetail = {
   title: string;
   handle: string;
   description: string;
+  descriptionHtml: string;
   availableForSale: boolean;
   tags: string[];
   vendor?: string;
@@ -332,6 +333,7 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
       title: string;
       handle: string;
       description: string;
+      descriptionHtml: string;
       availableForSale: boolean;
       tags: string[];
       vendor?: string;
@@ -349,6 +351,7 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
           title
           handle
           description
+          descriptionHtml
           availableForSale
           tags
           vendor
@@ -409,6 +412,7 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
     title: data.product.title,
     handle: data.product.handle,
     description: data.product.description,
+    descriptionHtml: data.product.descriptionHtml,
     availableForSale: data.product.availableForSale,
     tags: data.product.tags,
     vendor: data.product.vendor,

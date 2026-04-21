@@ -32,6 +32,19 @@ import {
   BroadsheetFooter,
 } from '@/components/shared/broadsheet';
 
+
+// Strip Garmin "Buy & Save rebate form" paragraph from Shopify descriptionHtml.
+// John (2026-04-21): on Garmin PDPs, remove "Click here for Garmin's Buy & Save rebate form."
+function sanitizeProductHtml(html: string): string {
+  if (!html) return '';
+  let out = html;
+  // Remove <p>-wrapped rebate link
+  out = out.replace(/<p>\s*<a[^>]*BuyAndSaveRebateForm[^>]*>[\s\S]*?<\/a>\s*<\/p>/gi, '');
+  // Remove bare rebate anchor
+  out = out.replace(/<a[^>]*BuyAndSaveRebateForm[^>]*>[\s\S]*?<\/a>/gi, '');
+  return out;
+}
+
 const FALLBACK_PRODUCT_HANDLES = [
   'garmin-g5-dg-hsi-stcd-for-certified-aircraft-with-lpm',
   'garmin-g5-primary-electronic-attitude-display-stcd-for-certified-aircraft-with-lpm',
@@ -238,15 +251,10 @@ export default async function ProductDetailPage({
         {/* Detail — article + spec aside */}
         <section className="bs-detail">
           <article>
-            <div className="bs-body">
-              {(product.description || '')
-                .split('\n\n')
-                .slice(0, 6)
-                .filter(Boolean)
-                .map((para, i) => (
-                  <p key={i}>{para}</p>
-                ))}
-            </div>
+            <div
+              className="bs-body bs-body--rich"
+              dangerouslySetInnerHTML={{ __html: sanitizeProductHtml(product.descriptionHtml || product.description || '') }}
+            />
 
             {/* Trust strip */}
             <div className="bs-trust-strip">

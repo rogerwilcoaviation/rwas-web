@@ -755,3 +755,100 @@ html, body {
   border-left: 3px solid #8a2020;
   padding-left: 8px;
 }
+
+
+/* ---------------------------------------------------------------- */
+/* Rich HTML inside .bs-body (PDP descriptionHtml — tables, h2, iframes)
+   Added 2026-04-21 for Ship 2 Task #10. Styles echo broadsheet specimen-card
+   aesthetic so Shopify rich-text content reads continuous with the paper. */
+/* ---------------------------------------------------------------- */
+.broadsheet .bs-body--rich h2,
+.broadsheet .bs-body--rich h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--ink-900);
+  margin: 18px 0 8px;
+  letter-spacing: 0.01em;
+}
+.broadsheet .bs-body--rich h2 {
+  font-size: 22px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.broadsheet .bs-body--rich h3 { font-size: 18px; }
+
+.broadsheet .bs-body--rich p { margin: 0 0 12px; }
+.broadsheet .bs-body--rich strong { font-weight: 700; color: var(--ink-900); }
+.broadsheet .bs-body--rich em { font-style: italic; color: var(--ink-800); }
+
+.broadsheet .bs-body--rich ul,
+.broadsheet .bs-body--rich ol {
+  margin: 0 0 14px 0;
+  padding-left: 22px;
+}
+.broadsheet .bs-body--rich li { margin-bottom: 6px; }
+
+.broadsheet .bs-body--rich a {
+  color: var(--gold-800);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.broadsheet .bs-body--rich a:hover { color: var(--ink-900); }
+
+/* Applicability tables / spec tables — specimen-card style */
+.broadsheet .bs-body--rich table {
+  width: 100%;
+  margin: 16px 0 18px;
+  border-collapse: collapse;
+  background: var(--cream);
+  border: 1px solid var(--ink-900);
+  box-shadow: 3px 3px 0 var(--ink-900);
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+.broadsheet .bs-body--rich table td,
+.broadsheet .bs-body--rich table th {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule-soft);
+  border-right: 1px solid var(--rule-soft);
+  vertical-align: top;
+  text-align: left;
+}
+.broadsheet .bs-body--rich table tr:last-child td { border-bottom: none; }
+.broadsheet .bs-body--rich table td:last-child,
+.broadsheet .bs-body--rich table th:last-child { border-right: none; }
+.broadsheet .bs-body--rich table tr:first-child td,
+.broadsheet .bs-body--rich table th {
+  background: var(--parchment);
+  font-weight: 700;
+  border-bottom: 2px solid var(--ink-900);
+}
+
+/* Embedded YouTube / Vimeo iframes — responsive 16:9 */
+.broadsheet .bs-body--rich iframe {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  margin: 18px auto;
+  border: 1px solid var(--ink-900);
+  box-shadow: 4px 4px 0 var(--ink-900);
+  background: var(--ink-900);
+}
+
+/* Images inside description */
+.broadsheet .bs-body--rich img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 14px auto;
+  border: 1px solid var(--rule-soft);
+}
+
+/* Collapse redundant Shopify wrapper divs */
+.broadsheet .bs-body--rich .app__overview__intro__description,
+.broadsheet .bs-body--rich .app__overview__intro,
+.broadsheet .bs-body--rich .app__overview {
+  display: block;
+}
