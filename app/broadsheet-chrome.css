@@ -1406,3 +1406,16 @@ html, body {
   color: var(--gold-700);
   opacity: 0.7;
 }
+
+/* Policy-page content cards (Terms, Privacy) — cream specimen look */
+.broadsheet .policy-card {
+  background: var(--cream) !important;
+  border: 1px solid var(--ink-700);
+  color: var(--ink-900);
+  box-shadow: 2px 3px 0 rgba(30,36,46,0.12), 0 1px 2px rgba(30,36,46,0.08);
+}
+.broadsheet .policy-card h2,
+.broadsheet .policy-card h3,
+.broadsheet .policy-card h4 {
+  color: var(--ink-900);
+}

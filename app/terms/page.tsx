@@ -47,7 +47,7 @@ export default function TermsPage() {
           <div className="bs-byline">Last updated {policyConfig.lastUpdated}</div>
         </section>
 
-        <div className="mt-20 max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="mt-20 max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">OVERVIEW</h2>
           <p className="mb-4">
             This website is operated by{' '}
@@ -100,7 +100,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 1 - ONLINE TERMS
           </h2>
@@ -129,7 +129,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 2 - GENERAL CONDITIONS
           </h2>
@@ -160,7 +160,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 3 - ACCURACY, COMPLETENESS AND TIMELINESS OF INFORMATION
           </h2>
@@ -184,7 +184,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 4 - MODIFICATIONS TO THE SERVICE AND PRICES
           </h2>
@@ -204,7 +204,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 5 - PRODUCTS OR SERVICES (if applicable)
           </h2>
@@ -252,7 +252,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             PLEASE READ BEFORE SIGNING - VERNACULAR
           </h2>
@@ -276,7 +276,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             RWAS SERVICE AGREEMENT TERMS
           </h2>
@@ -337,7 +337,7 @@ export default function TermsPage() {
           </ul>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             RWAS PAYMENT TERMS
           </h2>
@@ -428,7 +428,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 6 - ACCURACY OF BILLING AND ACCOUNT INFORMATION
           </h2>
@@ -464,7 +464,7 @@ export default function TermsPage() {
           </p> */}
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 7 - OPTIONAL TOOLS
           </h2>
@@ -496,7 +496,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 8 - THIRD-PARTY LINKS
           </h2>
@@ -525,7 +525,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 9 - USER COMMENTS, FEEDBACK, AND OTHER SUBMISSIONS
           </h2>
@@ -566,7 +566,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 10 - PERSONAL INFORMATION
           </h2>
@@ -581,7 +581,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 11 - ERRORS, INACCURACIES, AND OMISSIONS
           </h2>
@@ -607,7 +607,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 12 - PROHIBITED USES
           </h2>
@@ -656,7 +656,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 13 - DISCLAIMER OF WARRANTIES; LIMITATION OF LIABILITY
           </h2>
@@ -713,7 +713,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 14 - INDEMNIFICATION
           </h2>
@@ -730,7 +730,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 15 - SEVERABILITY
           </h2>
@@ -745,7 +745,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 16 - TERMINATION
           </h2>
@@ -772,7 +772,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 17 - ENTIRE AGREEMENT
           </h2>
@@ -798,7 +798,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 18 - GOVERNING LAW
           </h2>
@@ -816,7 +816,7 @@ export default function TermsPage() {
           </p> */}
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 19 - CHANGES TO TERMS OF SERVICE
           </h2>
@@ -835,7 +835,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black w-full rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             SECTION 20 - CONTACT INFORMATION
           </h2>

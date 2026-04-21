@@ -48,7 +48,7 @@ export default function PrivacyPolicyPage() {
           <div className="bs-byline">Last updated {policyConfig.lastUpdated}</div>
         </section>
 
-        <div className="mt-12 max-w-screen-md mx-auto bg-white dark:bg-black rounded shadow-md p-6 mb-8">
+        <div className="mt-12 max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">
           <p>
             This Privacy Policy describes how{' '}
             <span className="font-bold">{siteMetadata.businessName}</span> (the
@@ -79,7 +79,7 @@ export default function PrivacyPolicyPage() {
             required by applicable law.
           </p>
         </div>
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">
           <h2 className="text-lg font-semibold mb-4">
             HOW WE COLLECT AND USE YOUR PERSONAL INFORMATION
           </h2>
@@ -232,7 +232,7 @@ export default function PrivacyPolicyPage() {
             relationship with you.
           </p>
         </div>
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">
           <h3 className="text-lg font-semibold mt-4 mb-2">Cookies</h3>
           <p>
             Like many websites, we use Cookies on our Site. We use Cookies to
@@ -299,7 +299,7 @@ export default function PrivacyPolicyPage() {
             purposes of inferring characteristics about you.
           </p>
         </div>
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">
           <h3 className="text-lg font-semibold mt-4 mb-2">
             User Generated Content
           </h3>
@@ -338,7 +338,7 @@ export default function PrivacyPolicyPage() {
             operators, except as disclosed on the Services.
           </p>
         </div>
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">
           <h3 className="text-lg font-semibold mt-4 mb-2">Children's Data</h3>
           <p>
             The Services are not intended to be used by children, and we do
@@ -354,7 +354,7 @@ export default function PrivacyPolicyPage() {
             under 16 years of age.
           </p>
         </div>
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">
           <h3 className="text-lg font-semibold mt-4 mb-2">
             Security and Retention of Your Information
           </h3>
@@ -373,7 +373,7 @@ export default function PrivacyPolicyPage() {
             policies.
           </p>
         </div>
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">
           <h3 className="text-lg font-semibold mt-4 mb-2">
             Your Rights and Choices
           </h3>
@@ -452,7 +452,7 @@ export default function PrivacyPolicyPage() {
             required under applicable law.
           </p>
         </div>
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">
           <h3 className="text-lg font-semibold mt-4 mb-2">Complaints</h3>
           <p>
             If you have complaints about how we process your personal
@@ -464,7 +464,7 @@ export default function PrivacyPolicyPage() {
             authority.
           </p>
         </div>
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">
           <h3 className="text-lg font-semibold mt-4 mb-2">
             International Users
           </h3>
@@ -481,7 +481,7 @@ export default function PrivacyPolicyPage() {
             provide an adequate level of protection.
           </p>
         </div>
-        <div className="max-w-screen-md mx-auto bg-white dark:bg-black rounded shadow-md p-6 mb-8">
+        <div className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">
           <h3 className="text-lg font-semibold mt-4 mb-2">Contact</h3>
           <p>
             Should you have any questions about our privacy practices or this
