@@ -16,8 +16,8 @@ const FALLBACK_COLLECTION_HANDLES = [
   'on-sale',
   'garmin-avionics-certified-retail',
   'garmin-avionics-accessories',
+  'garmin-watches',
   'retail-experimental',
-  'rigging-tools',
 ];
 
 export async function generateStaticParams() {

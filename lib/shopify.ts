@@ -113,8 +113,8 @@ const FEATURED_COLLECTION_HANDLES = [
   'garmin-avionics',
   'garmin-avionics-certified-retail',
   'garmin-avionics-accessories',
+  'garmin-watches',
   'retail-experimental',
-  'rigging-tools',
   'on-sale',
 ] as const;
 
