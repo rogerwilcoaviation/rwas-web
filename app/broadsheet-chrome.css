@@ -1204,7 +1204,7 @@ html, body {
 
 /* ── "Today's Edition" TOC card (tabled contents) ─────────────────── */
 
-.broadsheet .bs-toc { margin: 0; padding: 0; list-style: none; }
+.broadsheet .bs-toc { margin: 0; padding: 0 14px; list-style: none; }
 .broadsheet .bs-toc__title {
   font-family: var(--font-ui);
   font-weight: 700;

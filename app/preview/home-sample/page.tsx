@@ -34,25 +34,6 @@ export default function HomeSamplePage() {
       <BulletinBar />
 
       <main className="bs-stage">
-        {/* ── HERO HEADLINE ─────────────────────────────────────────── */}
-        <section className="hero-headline-group" aria-labelledby="home-hero">
-          <span className="bs-kicker">General Aviation Maintenance &amp; Avionics</span>
-          <span className="bs-script-accent">&mdash; wheels-up since 2022 &mdash;</span>
-          <h1 id="home-hero" className="bs-headline bs-headline--hero">
-            Premier Avionics &amp;
-            <br />
-            <em>Maintenance Services</em>
-            <br />
-            in the Northern Plains
-          </h1>
-          <p className="bs-subhead">
-            Roger Wilco Aviation Services &middot; FAA Cert. RWSR491E &middot; KYKN &middot; Yankton, SD
-          </p>
-          <div className="bs-byline">
-            Avionics &middot; Airframe &amp; Powerplant &middot; NDT &middot; Fabrication &middot; Aircraft 4 Sale
-          </div>
-        </section>
-
         {/* ── ABOVE-FOLD 3-COL GRID (LEFT RAIL | HERO | RIGHT RAIL) ── */}
         <div className="bs-3col">
           {/* LEFT RAIL -------------------------------------------------- */}
@@ -269,6 +250,22 @@ export default function HomeSamplePage() {
                 New capability &mdash; fiber laser cutting, welding, and scaling.
               </Specimen.Caption>
             </Specimen>
+
+            {/* Schedule your inspection CTA (relocated from services band per John) */}
+            <p
+              className="bs-kicker"
+              style={{ marginTop: '18px', textAlign: 'center', display: 'block' }}
+            >
+              Schedule your inspection today
+            </p>
+            <div className="bs-cta-row">
+              <a href="tel:+16052998178" className="bs-cta-primary">
+                Call (605) 299-8178
+              </a>
+              <a href="/about#contact" className="bs-cta-secondary">
+                Request a Quote
+              </a>
+            </div>
           </div>
         </div>
 
@@ -432,21 +429,6 @@ export default function HomeSamplePage() {
                   </p>
                 </li>
               </ul>
-
-              <p
-                className="bs-kicker"
-                style={{ marginTop: '18px', textAlign: 'center', display: 'block' }}
-              >
-                Schedule your inspection today
-              </p>
-              <div className="bs-cta-row">
-                <a href="tel:+16052998178" className="bs-cta-primary">
-                  Call (605) 299-8178
-                </a>
-                <a href="/about#contact" className="bs-cta-secondary">
-                  Request a Quote
-                </a>
-              </div>
             </Specimen>
           </div>
         </section>
