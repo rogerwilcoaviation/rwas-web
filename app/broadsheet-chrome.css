@@ -5,6 +5,11 @@
    broadsheet-tokens.css (imported separately in app/layout.tsx).
    ======================================================================== */
 
+html, body {
+  background: var(--cream);
+  margin: 0;
+}
+
 /* ---------- Dateline (top ink strip) ---------- */
 .broadsheet .bs-dateline {
   background: var(--ink-900);
@@ -73,7 +78,7 @@
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr auto;
   gap: 24px;
   align-items: center;
 }
@@ -101,8 +106,24 @@
   color: var(--ink-700);
   margin-top: 8px;
 }
+.broadsheet .bs-masthead__cert {
+  text-align: right;
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+.broadsheet .bs-masthead__cert-main {
+  color: var(--ink-900);
+  font-weight: 700;
+}
+.broadsheet .bs-masthead__cert-location {
+  color: var(--ink-700);
+}
 @media (max-width: 900px) {
   .broadsheet .bs-masthead__inner { grid-template-columns: 1fr; text-align: center; }
+  .broadsheet .bs-masthead__cert { text-align: center; }
 }
 
 /* ---------- Primary Nav (single row) ---------- */
