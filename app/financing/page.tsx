@@ -197,11 +197,11 @@ export default function FinancingPage() {
             <Specimen variant="hero" as="figure" className="about-fig about-fig--rail">
               <Specimen.Image
                 src="/newspaper/images/r182_panel.jpg"
-                alt="Garmin G3X Touch installation by RWAS"
+                alt="Full Garmin G500TXi Suite installation in a Cessna 182RG"
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
-                Cessna 182RG &mdash; full Garmin G3X Touch installation by RWAS.
+                Cessna 182RG &mdash; full Garmin G500TXi Suite installation by RWAS.
               </Specimen.Caption>
             </Specimen>
           </aside>
