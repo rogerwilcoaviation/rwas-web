@@ -3,22 +3,26 @@ import React from "react";
 export type BulletinBarProps = {
   kicker?: string;
   items?: string[];
+  footer?: string | null;
 };
 
 const DEFAULT_ITEMS: string[] = [
   "Now booking May Garmin install slots \u2014 schedule early",
   "GFC 500 installs: Bonanza, Mooney, Cessna \u2014 same-day quote",
   "Papa-Alpha tools ship same day from Yankton",
-  "Avionics desk: (605) 299-8178 \u00b7 avionics@rwas.team",
 ];
 
+const DEFAULT_FOOTER = "Avionics desk: (605) 299-8178 \u00b7 avionics@rwas.team";
+
 /**
- * BulletinBar — ink-900 strip with outlined cream "Bulletin" pill and
+ * BulletinBar \u2014 ink-900 strip with outlined cream "Bulletin" pill and
  * gold-tone pip separators. Matches the approved D2 PDP mockup (.np-bulletin-bar).
+ * The `footer` slot renders on its own centered line below the items row.
  */
 export default function BulletinBar({
   kicker = "Bulletin",
   items = DEFAULT_ITEMS,
+  footer = DEFAULT_FOOTER,
 }: BulletinBarProps) {
   return (
     <aside className="bs-bulletin" role="complementary" aria-label="Shop bulletin">
@@ -35,6 +39,7 @@ export default function BulletinBar({
           </React.Fragment>
         ))}
       </div>
+      {footer ? <div className="bs-bulletin__footer">{footer}</div> : null}
     </aside>
   );
 }

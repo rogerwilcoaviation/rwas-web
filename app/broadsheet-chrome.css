@@ -250,6 +250,16 @@ html, body {
   opacity: 0.9;
   user-select: none;
 }
+
+.broadsheet .bs-bulletin__footer {
+  max-width: 1400px;
+  margin: 0.4rem auto 0;
+  text-align: center;
+  color: var(--cream);
+  opacity: 0.95;
+  line-height: 1.3;
+}
+
 @media (max-width: 720px) {
   .broadsheet .bs-bulletin { font-size: 0.78rem; padding: 0.5rem 0.9rem; }
   .broadsheet .bs-bulletin__kicker { font-size: 0.72rem; }
