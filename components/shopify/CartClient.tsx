@@ -95,7 +95,7 @@ export default function CartClient() {
               ) : null}
             </div>
             <div className="flex-1">
-              <Link href={`/products/${line.merchandise.product.handle}`} className="text-lg font-semibold text-[#111111] hover:text-primary-700">
+              <Link href={`/products/${encodeURIComponent(line.merchandise.product.handle)}`} className="text-lg font-semibold text-[#111111] hover:text-primary-700">
                 {line.merchandise.product.title}
               </Link>
               <p className="mt-2 text-sm text-black/60">Variant: {line.merchandise.title}</p>
