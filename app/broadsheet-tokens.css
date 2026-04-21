@@ -1,0 +1,279 @@
+/*
+ * broadsheet-tokens.css
+ * Design tokens for the RWAS broadsheet — sampled 2026-04-21 from the approved
+ * Garmin D2 Mach 1 Pro 51mm PDP at /preview/products. These tokens are John's
+ * visual contract: every color, type scale, border, and spacing value comes
+ * from the approved design.
+ *
+ * Ship 1 introduces these globally via app/layout.tsx. Legacy `newspaper.css`
+ * continues to render pages with hardcoded values until those pages migrate
+ * over to the tokens one ship at a time.
+ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Typography — Google Fonts import
+ * Playfair Display: display serif (masthead brand, headlines, figure numerals)
+ * Source Serif 4:   body serif (paragraphs, bylines, subheads, disclaimers)
+ * Inter:            UI sans (kickers, labels, nav, buttons, badges)
+ * Caveat:           script (photo captions, pull-quote attribution, signoffs)
+ * ───────────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;700&display=swap');
+
+:root {
+  /* ─────────────────────────── Ink ramp (the dark surface — never navy) */
+  --ink-900: #0F1418;   /* primary text, strong borders, specimen hard shadow */
+  --ink-800: #1A2128;   /* secondary text, footer surface */
+  --ink-700: #2A333C;   /* = --rule; hairline borders, tertiary text */
+  --ink-600: #3F4A55;   /* quiet labels */
+  --ink-500: #5C6873;   /* faintest ink */
+
+  /* ─────────────────────────── Gold ramp (never on ink except --gold-light) */
+  --gold-900: #5C4416;
+  --gold-800: #7A5A1E;  /* section kickers, accent text on light grounds */
+  --gold-700: #9E7826;  /* rules, double-rules, CTA fill, pips */
+  --gold-600: #C19A3F;  /* CTA hover */
+  --gold-500: #D4B86A;
+  --gold-light: #E6CF8F; /* only gold permitted on --ink-900 surfaces */
+
+  /* ─────────────────────────── Grounds */
+  --cream:     #F4EFE3;  /* page body background — mid cream */
+  --bone:      #FBF7EC;  /* Specimen card fill, masthead fill, trust strip cells */
+  --parchment: #EFE7D2;  /* callout blocks, OTC-style notice backgrounds */
+
+  /* ─────────────────────────── Rules */
+  --rule:      #2A333C;  /* = ink-700; Specimen borders, primary hairlines */
+  --rule-soft: #C8BFA8;  /* column rules, dashed separators, byline divisions */
+
+  /* ─────────────────────────── Specimen card (the 3D lift) */
+  --specimen-bg: var(--bone);
+  --specimen-border: var(--rule);
+  --specimen-shadow: 4px 4px 0 var(--ink-900); /* hard offset, ZERO blur, letterpress */
+  --specimen-pad-hero: 18px 18px 14px;
+  --specimen-pad-flat: 18px 20px;
+
+  /* ─────────────────────────── Typography stack tokens */
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body:    "Source Serif 4", Georgia, serif;
+  --font-ui:      "Inter", system-ui, -apple-system, sans-serif;
+  --font-script:  "Caveat", cursive;
+
+  /* ─────────────────────────── Type scale (sampled from D2 PDP) */
+  --fs-brand:       40px;   /* masthead brand (Playfair 900) */
+  --fs-hero:        34px;   /* product/page hero headline */
+  --fs-headline:    22px;   /* section headline */
+  --fs-subhead:     18px;   /* subheads, captions */
+  --fs-body:        15px;   /* body copy */
+  --fs-small:       13px;   /* disclaimers, micro copy */
+  --fs-label:       12px;   /* uppercase UI labels, CTAs */
+  --fs-micro:       11px;   /* credentials, timestamps */
+
+  /* UI tracking (Inter is used with wide letterspacing for label/kicker work) */
+  --tracking-ui:    .22em;
+  --tracking-kicker: .18em;
+
+  /* ─────────────────────────── Borders & hairlines */
+  --hairline:      1px solid var(--rule);
+  --hairline-soft: 1px solid var(--rule-soft);
+  --rule-double:   6px double var(--gold-700);
+  --rule-top-accent: 2px solid var(--gold-700);
+
+  /* ─────────────────────────── Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 18px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* ─────────────────────────── Watermark opacity */
+  --watermark-opacity: .25;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Broadsheet scope wrapper — applied via className="broadsheet" on a page-
+ * level <div> or <body>. Scoping to a class (rather than body) lets Ship 1
+ * opt-in page-by-page without disturbing legacy routes still using
+ * newspaper.css and its hardcoded values.
+ *
+ * The watermark is MANDATORY ground for every page that opts in —
+ * Specimen hard shadows need the chart imagery underneath to shift against.
+ * Pages already using `.np-wrapper::before` should switch to `.broadsheet`
+ * when they migrate (same asset, same opacity, no double-watermark).
+ * ───────────────────────────────────────────────────────────────────────── */
+.broadsheet {
+  background: var(--cream);
+  color: var(--ink-900);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate; /* creates a stacking context so the ::before layer stays put */
+}
+
+.broadsheet::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url('/newspaper/images/enr_h05.png') center center / cover no-repeat;
+  opacity: var(--watermark-opacity);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.broadsheet > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Specimen card — the signature content-block pattern
+ * Two variants: hero (with hard offset shadow), flat (no shadow)
+ * ───────────────────────────────────────────────────────────────────────── */
+.specimen {
+  background: var(--specimen-bg);
+  border: var(--hairline);
+  padding: var(--specimen-pad-flat);
+}
+
+.specimen--hero {
+  padding: var(--specimen-pad-hero);
+  box-shadow: var(--specimen-shadow); /* hard offset, no blur */
+}
+
+.specimen--flat {
+  /* same as .specimen default — provided for explicit intent */
+  padding: var(--specimen-pad-flat);
+  box-shadow: none;
+}
+
+/* Composite hero-specimen content: image + dashed rule + caption (D2 PDP pattern) */
+.specimen__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+}
+
+.specimen__caption-rule {
+  border: none;
+  border-top: 1px dashed var(--rule-soft);
+  margin: 12px 0 8px;
+}
+
+.specimen__figure-numeral {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 34px;
+  color: var(--gold-700);
+  line-height: 1;
+}
+
+.specimen__caption {
+  font-family: var(--font-script);
+  font-size: 18px;
+  color: var(--ink-800);
+  line-height: 1.3;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Utility classes shared across chrome components
+ * (masthead, nav, edition bar, footer, etc. — used by the Next.js components
+ * being extracted in Task #3)
+ * ───────────────────────────────────────────────────────────────────────── */
+
+/* Kicker — uppercase UI label, wide tracking */
+.bs-kicker {
+  font-family: var(--font-ui);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: var(--tracking-kicker);
+  text-transform: uppercase;
+  color: var(--gold-800);
+}
+
+/* Display headlines */
+.bs-headline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--ink-900);
+  line-height: 1.1;
+}
+.bs-headline--hero    { font-size: var(--fs-hero); font-weight: 900; }
+.bs-headline--section { font-size: var(--fs-headline); }
+
+/* Body copy */
+.bs-body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--ink-900);
+}
+
+/* Two-column broadsheet body (optional on long-form pages) */
+.bs-body--columns {
+  column-count: 2;
+  column-gap: 28px;
+  column-rule: 1px solid var(--rule-soft);
+}
+
+/* Script caption / signoff */
+.bs-script {
+  font-family: var(--font-script);
+  font-size: var(--fs-subhead);
+  color: var(--ink-800);
+}
+
+/* Primary CTA */
+.bs-cta-primary {
+  display: inline-block;
+  padding: 14px 18px;
+  background: var(--gold-700);
+  color: var(--ink-900);
+  border: none;
+  font-family: var(--font-ui);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-ui);
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.bs-cta-primary:hover {
+  background: var(--gold-800);
+  color: var(--cream);
+}
+
+/* Secondary CTA */
+.bs-cta-secondary {
+  display: inline-block;
+  padding: 12px 18px;
+  background: var(--bone);
+  color: var(--ink-900);
+  border: 1px solid var(--ink-900);
+  font-family: var(--font-ui);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-ui);
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.bs-cta-secondary:hover {
+  background: var(--ink-900);
+  color: var(--cream);
+}
+
+/* OTC / stock-check notice (used on Garmin PDPs + other gated items) */
+.bs-otc-notice {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--parchment);
+  border-left: 3px solid var(--gold-700);
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  color: var(--ink-800);
+}

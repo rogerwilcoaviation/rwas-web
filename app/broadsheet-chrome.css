@@ -1,0 +1,308 @@
+/*
+ * broadsheet-chrome.css
+ * Class rules for the shared broadsheet chrome components. Every rule is
+ * scoped inside `.broadsheet` so none of these leak onto legacy `.np-wrapper`
+ * pages still using newspaper.css.
+ *
+ * Source of truth for the visual values: rwas-design-tokens.md (approved
+ * 2026-04-20) and the Garmin D2 Mach 1 Pro 51mm PDP at /preview/products.
+ *
+ * Load order in app/layout.tsx:
+ *   1. broadsheet-tokens.css   (defines --ink-*, --gold-*, fonts, etc.)
+ *   2. broadsheet-chrome.css   (this file — consumes those tokens)
+ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Page shell inside the .broadsheet scope
+ * ───────────────────────────────────────────────────────────────────────── */
+.broadsheet .bs-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-5) var(--space-7);
+}
+.broadsheet .bs-page--narrow {
+  max-width: 880px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Dateline (thin pre-masthead strip)
+ * ───────────────────────────────────────────────────────────────────────── */
+.broadsheet .bs-dateline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) 0;
+  border-bottom: var(--hairline);
+  font-family: var(--font-ui);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ink-800);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Masthead
+ * ───────────────────────────────────────────────────────────────────────── */
+.broadsheet .bs-masthead {
+  display: grid;
+  grid-template-columns: 88px 1fr 180px;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-5) 0 var(--space-4);
+  border-bottom: var(--rule-double);
+}
+.broadsheet .bs-masthead__logo {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  display: block;
+}
+.broadsheet .bs-masthead__center {
+  text-align: center;
+}
+.broadsheet .bs-masthead__brand {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: var(--fs-brand);
+  line-height: 1;
+  color: var(--ink-900);
+}
+.broadsheet .bs-masthead__rule {
+  border: none;
+  border-top: 1px solid var(--ink-900);
+  margin: 10px auto;
+  width: 60%;
+}
+.broadsheet .bs-masthead__tagline {
+  font-family: var(--font-ui);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ink-700);
+}
+.broadsheet .bs-masthead__meta {
+  text-align: right;
+  font-family: var(--font-ui);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-800);
+  line-height: 1.5;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Edition bar
+ * ───────────────────────────────────────────────────────────────────────── */
+.broadsheet .bs-edition-bar {
+  background: var(--ink-900);
+  color: var(--gold-light);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: var(--space-5);
+  padding: 10px var(--space-4);
+  font-family: var(--font-script);
+  font-size: 17px;
+  border-top: 2px solid var(--gold-700);
+  border-bottom: 2px solid var(--gold-700);
+}
+.broadsheet .bs-edition-bar > span {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Nav row
+ * ───────────────────────────────────────────────────────────────────────── */
+.broadsheet .bs-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  border-bottom: var(--hairline);
+}
+.broadsheet .bs-nav a {
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 12px 14px;
+  font-family: var(--font-ui);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-ui);
+  text-transform: uppercase;
+  color: var(--ink-900);
+  text-decoration: none;
+  border-right: 1px solid var(--rule-soft);
+  transition: background .15s, color .15s;
+}
+.broadsheet .bs-nav a:last-child {
+  border-right: none;
+}
+.broadsheet .bs-nav a:hover {
+  background: var(--ink-900);
+  color: var(--cream);
+}
+.broadsheet .bs-nav a.bs-nav__item--accent {
+  background: var(--gold-700);
+  color: var(--ink-900);
+}
+.broadsheet .bs-nav a.bs-nav__item--accent:hover {
+  background: var(--gold-800);
+  color: var(--cream);
+}
+.broadsheet .bs-nav a.bs-nav__item--active {
+  background: var(--ink-900);
+  color: var(--cream);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Bulletin ticker
+ * ───────────────────────────────────────────────────────────────────────── */
+.broadsheet .bs-bulletin {
+  display: flex;
+  align-items: stretch;
+  background: var(--bone);
+  border-bottom: var(--hairline);
+  overflow: hidden;
+}
+.broadsheet .bs-bulletin__label {
+  flex: 0 0 auto;
+  background: var(--gold-700);
+  color: var(--ink-900);
+  padding: 8px var(--space-4);
+  font-family: var(--font-ui);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-ui);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+}
+.broadsheet .bs-bulletin__text {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  padding: 8px var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  color: var(--ink-800);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.broadsheet .bs-bulletin__item {
+  margin-right: 4px;
+}
+.broadsheet .bs-bulletin__sep {
+  color: var(--gold-700);
+  font-weight: 700;
+  margin: 0 6px;
+}
+.broadsheet .bs-bulletin__text--marquee {
+  overflow: hidden;
+}
+.broadsheet .bs-bulletin__text--marquee .bs-bulletin__item {
+  display: inline-block;
+  animation: bs-bulletin-scroll 28s linear infinite;
+}
+@keyframes bs-bulletin-scroll {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(-100%); }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Credentials bar
+ * ───────────────────────────────────────────────────────────────────────── */
+.broadsheet .bs-credentials {
+  text-align: center;
+  padding: 10px var(--space-4);
+  border-top: var(--hairline-soft);
+  border-bottom: var(--hairline-soft);
+  background: var(--bone);
+  font-family: var(--font-ui);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: var(--tracking-kicker);
+  text-transform: uppercase;
+  color: var(--ink-800);
+}
+.broadsheet .bs-credentials__pip {
+  color: var(--gold-700);
+  margin: 0 10px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Footer colophon
+ * ───────────────────────────────────────────────────────────────────────── */
+.broadsheet .bs-footer {
+  background: var(--ink-900);
+  color: var(--gold-light);
+  padding: var(--space-4) var(--space-5);
+  margin-top: var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: var(--rule-double);
+  font-family: var(--font-ui);
+  font-size: var(--fs-small);
+}
+.broadsheet .bs-footer__brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-subhead);
+  color: var(--gold-light);
+}
+.broadsheet .bs-footer__copy {
+  font-family: var(--font-ui);
+  font-size: var(--fs-micro);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Specimen caption row (numeral + script caption side-by-side)
+ * ───────────────────────────────────────────────────────────────────────── */
+.broadsheet .specimen__caption-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+.broadsheet .specimen__caption-row .specimen__caption {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Small-screen reflow
+ * ───────────────────────────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .broadsheet .bs-masthead {
+    grid-template-columns: 64px 1fr;
+    gap: var(--space-3);
+  }
+  .broadsheet .bs-masthead__logo {
+    width: 64px;
+    height: 64px;
+  }
+  .broadsheet .bs-masthead__meta {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+  .broadsheet .bs-edition-bar {
+    flex-wrap: wrap;
+    font-size: 15px;
+  }
+  .broadsheet .bs-nav a {
+    flex: 1 0 33%;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .broadsheet .bs-footer {
+    flex-direction: column;
+    gap: var(--space-2);
+    text-align: center;
+  }
+}

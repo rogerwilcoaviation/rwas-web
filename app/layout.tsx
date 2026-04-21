@@ -7,6 +7,8 @@ import Script from 'next/script';
 import { colors } from '@/data/config/colors.js';
 
 import '@/css/globals.css';
+import './broadsheet-tokens.css';
+import './broadsheet-chrome.css';
 import { SearchProvider } from '@/components/shared/SearchProvider';
 import { AnalyticsWrapper } from '@/components/shared/Analytics';
 
