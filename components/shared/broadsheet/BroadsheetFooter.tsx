@@ -1,26 +1,23 @@
-/*
- * BroadsheetFooter
- * Ink-900 surface with 6px gold-700 double-rule top border (the colophon
- * signature). Brand name on the left, copyright on the right. Use this
- * instead of the site's LandingFooter on broadsheet-styled pages.
- */
-import { ReactNode } from 'react';
+import React from "react";
 
-type Props = {
+export type BroadsheetFooterProps = {
   brand?: string;
-  copyright?: ReactNode;
+  copyright?: string;
 };
 
-export const BroadsheetFooter = ({
-  brand = 'Roger Wilco Aviation Services',
-  copyright = <>© {new Date().getFullYear()} RWAS · All Rights Reserved</>,
-}: Props) => {
+/**
+ * BroadsheetFooter — ink-900 footer with gold double top rule.
+ */
+export default function BroadsheetFooter({
+  brand = "Roger Wilco Aviation Services",
+  copyright = `\u00a9 ${new Date().getFullYear()} Roger Wilco Aviation Services \u00b7 Yankton, SD`,
+}: BroadsheetFooterProps) {
   return (
-    <div className="bs-footer">
-      <span className="bs-footer__brand">{brand}</span>
-      <span className="bs-footer__copy">{copyright}</span>
-    </div>
+    <footer className="bs-footer">
+      <div className="bs-footer__inner">
+        <span className="bs-footer__brand">{brand}</span>
+        <span className="bs-footer__copy">{copyright}</span>
+      </div>
+    </footer>
   );
-};
-
-export default BroadsheetFooter;
+}

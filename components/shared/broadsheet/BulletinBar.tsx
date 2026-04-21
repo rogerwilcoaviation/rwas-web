@@ -1,44 +1,40 @@
-/*
- * BulletinBar
- * The "Bulletin" ticker strip under the nav — left-anchored pill labeled
- * BULLETIN in Inter, followed by a single horizontally-scrolling line of
- * rotating announcements in Source Serif 4. Non-animated by default; add
- * the `marquee` prop to enable scroll animation.
- */
-import { ReactNode } from 'react';
+import React from "react";
 
-type Props = {
-  label?: string;
-  /** Array of bulletin items. Joined with bullets. */
-  items?: ReactNode[];
-  /** Enable CSS marquee scroll. Default false (static). */
-  marquee?: boolean;
+export type BulletinBarProps = {
+  kicker?: string;
+  items?: string[];
 };
 
-const defaultItems: ReactNode[] = [
-  'Papa-Alpha rigging reference tools now shipping worldwide',
-  'Garmin G3X Touch installations booking into summer 2026',
-  'Annual inspection slots available — call (605) 299-8178',
+const DEFAULT_ITEMS: string[] = [
+  "Now booking May Garmin install slots \u2014 schedule early",
+  "GFC 500 installs: Bonanza, Mooney, Cessna \u2014 same-day quote",
+  "Papa-Alpha tools ship same day from Yankton",
+  "Avionics desk: (605) 299-8178 \u00b7 avionics@rwas.team",
 ];
 
-export const BulletinBar = ({
-  label = 'Bulletin',
-  items = defaultItems,
-  marquee = false,
-}: Props) => {
+/**
+ * BulletinBar — ink-900 strip with outlined cream "Bulletin" pill and
+ * gold-tone pip separators. Matches the approved D2 PDP mockup (.np-bulletin-bar).
+ */
+export default function BulletinBar({
+  kicker = "Bulletin",
+  items = DEFAULT_ITEMS,
+}: BulletinBarProps) {
   return (
-    <div className="bs-bulletin">
-      <span className="bs-bulletin__label">{label}</span>
-      <span className={`bs-bulletin__text${marquee ? ' bs-bulletin__text--marquee' : ''}`}>
-        {items.map((item, i) => (
-          <span key={i} className="bs-bulletin__item">
-            {item}
-            {i < items.length - 1 ? <span className="bs-bulletin__sep"> • </span> : null}
-          </span>
+    <aside className="bs-bulletin" role="complementary" aria-label="Shop bulletin">
+      <div className="bs-bulletin__inner">
+        <span className="bs-bulletin__kicker">{kicker}</span>
+        {items.map((item, idx) => (
+          <React.Fragment key={idx}>
+            <span className="bs-bulletin__item">{item}</span>
+            {idx < items.length - 1 ? (
+              <span className="bs-bulletin__pip" aria-hidden="true">
+                {"\u25A0"}
+              </span>
+            ) : null}
+          </React.Fragment>
         ))}
-      </span>
-    </div>
+      </div>
+    </aside>
   );
-};
-
-export default BulletinBar;
+}

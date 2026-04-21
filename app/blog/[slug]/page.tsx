@@ -1,28 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
 /*
- * Blog Article template — Ship 1 refactor (2026-04-21)
+ * Blog Article template — Ship 1 refactor (2026-04-21, revised)
  *
- * Content is preserved verbatim vs. the pre-refactor template:
- *   - generateMetadata / generateStaticParams
- *   - renderMarkdownBody (same function, same classes emitted)
- *   - article title / subtitle / byline / date / source / image / body_markdown / body[] / pull quote
- *   - "Article File", "Topics", "Recent Dispatches" sidebars
- *   - Article schema.org JSON-LD
+ * Chrome now matches the approved D2 PDP mockup at /preview/pdp_mockup.html:
+ *   Dateline (ink strip) -> Masthead (bone, gold double rule)
+ *   -> primary Nav (single row) -> CredentialsBar (bone, below nav)
+ *   -> BulletinBar (ink strip, outlined pill) -> <main.bs-stage> -> Footer
  *
- * What changed:
- *   - Outer `.np-wrapper` + inline `background:#ddd9d2` + inline Georgia font
- *     swapped for <BroadsheetLayout> (the `.broadsheet` scope applies
- *     cream/ink/Source Serif 4 + the enr_h05 watermark).
- *   - Dateline, masthead, edition bar, nav, bulletin, credentials, and
- *     footer now come from shared broadsheet components.
- *   - Article body and sidebar boxes wrapped in <Specimen> cards so they
- *     lift above the watermark the same way the Garmin D2 PDP does.
+ * Article content is preserved verbatim (title, byline, body, sidebars,
+ * schema.org JSON-LD). The hero image is wrapped in a Specimen card for
+ * the letterpress lift; body prose and sidebars flow on the watermark
+ * (no outer hero Specimen card).
  *
- * We still import newspaper.css because the body-text classes emitted by
- * renderMarkdownBody (`np-body-text`, `np-headline-xl`, `np-kicker`,
- * `np-byline`, `np-drop`, `np-pull-quote`, `np-box`, `np-ad-btn`, etc.) are
- * defined there. Bringing those under the broadsheet token system is a
- * separate follow-on ship; Ship 1 is chrome-only.
+ * newspaper.css is still imported because renderMarkdownBody emits
+ * np-body-text / np-headline-xl / np-kicker / np-byline / np-drop /
+ * np-pull-quote / np-box / np-ad-btn classes defined there. Porting
+ * those into the broadsheet token system is a follow-on ship.
  */
 import '../../newspaper.css';
 import blogData from '../../../public/blog-articles.json';
@@ -31,10 +24,9 @@ import {
   BroadsheetLayout,
   Dateline,
   Masthead,
-  EditionBar,
   BroadsheetNav,
-  BulletinBar,
   CredentialsBar,
+  BulletinBar,
   BroadsheetFooter,
   Specimen,
 } from '@/components/shared/broadsheet';
@@ -226,48 +218,52 @@ export default async function BlogArticlePage({
 
       <Dateline />
       <Masthead />
-      <EditionBar />
       <BroadsheetNav activeHref="/blog/" />
+      <CredentialsBar />
       <BulletinBar />
 
-      {/* Article hero + body + sidebar — lifted as a Specimen card over the watermark */}
-      <Specimen variant="hero" as="article" className="bs-article">
-        <div style={{ borderBottom: '2px solid var(--ink-900)', padding: '14px 0' }}>
+      <main className="bs-stage">
+        {/* Article header — kicker, title, byline. Flows directly on watermark. */}
+        <header style={{ borderBottom: '2px solid var(--ink-900)', padding: '4px 0 18px' }}>
           <span className="np-kicker">{article.category.replace(/-/g, ' ')}</span>
-          <h1 className="np-headline-xl" style={{ fontSize: '30px', marginBottom: '6px' }}>
+          <h1 className="np-headline-xl" style={{ fontSize: '34px', margin: '6px 0' }}>
             {article.title}
           </h1>
-          <div className="np-byline">{article.byline} &middot; {article.date} &middot; {article.source}</div>
-        </div>
+          <div className="np-byline">
+            {article.byline} &middot; {article.date} &middot; {article.source}
+          </div>
+        </header>
 
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: '1.6fr 1px 0.9fr',
             gap: 0,
-            padding: '14px 0',
-            borderBottom: '2px solid var(--ink-900)',
+            padding: '22px 0',
             alignItems: 'start',
           }}
         >
-          <div style={{ padding: '0 16px 0 0' }}>
+          {/* Body column */}
+          <div style={{ padding: '0 22px 0 0' }}>
             {article.subtitle ? (
               <p
                 className="np-body-text"
-                style={{ fontStyle: 'italic', fontSize: '18px', lineHeight: 1.5, marginBottom: '12px' }}
+                style={{ fontStyle: 'italic', fontSize: '18px', lineHeight: 1.5, marginBottom: '14px' }}
               >
                 {article.subtitle}
               </p>
             ) : null}
 
             {article.image ? (
-              <div style={{ marginBottom: '12px' }}>
-                <img
-                  src={article.image}
-                  alt={article.image_alt || article.title}
-                  style={{ width: '100%', border: '1px solid var(--ink-900)', display: 'block' }}
-                />
-              </div>
+              <figure style={{ margin: '0 0 18px' }}>
+                <Specimen variant="hero">
+                  <img
+                    src={article.image}
+                    alt={article.image_alt || article.title}
+                    style={{ width: '100%', display: 'block' }}
+                  />
+                </Specimen>
+              </figure>
             ) : null}
 
             {markdownBlocks.length ? (
@@ -290,7 +286,8 @@ export default async function BlogArticlePage({
 
           <div className="np-col-divider" />
 
-          <div style={{ padding: '0 0 0 16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {/* Sidebar column — flat specimens filed inside the stage */}
+          <div style={{ padding: '0 0 0 22px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <Specimen variant="flat" as="aside">
               <div className="np-box-title">Article File</div>
               <p className="np-body-text" style={{ marginBottom: '8px' }}>
@@ -328,9 +325,8 @@ export default async function BlogArticlePage({
             </Specimen>
           </div>
         </div>
-      </Specimen>
+      </main>
 
-      <CredentialsBar />
       <BroadsheetFooter />
     </BroadsheetLayout>
   );

@@ -1,39 +1,43 @@
-/*
- * Masthead
- * Roundel logo on the left, brand name + hairline + tagline centered,
- * certification + home airport meta on the right. Anchored with the
- * 6px gold-700 double rule at the bottom (the "broadsheet signature").
- */
 /* eslint-disable @next/next/no-img-element */
-type Props = {
+import React from "react";
+
+export type MastheadProps = {
   logoSrc?: string;
   logoAlt?: string;
   brand?: string;
   tagline?: string;
-  meta?: { certNo?: string; airport?: string; city?: string };
+  certLine1?: string;
+  certLine2?: string;
+  certLine3?: string;
 };
 
-export const Masthead = ({
-  logoSrc = '/newspaper/images/logo.png',
-  logoAlt = 'Roger Wilco Aviation Services',
-  brand = 'Roger Wilco Aviation Services',
-  tagline = 'FAA Cert. Repair Station · Avionics · Airframe & Powerplant · NDT · Fabrication',
-  meta = { certNo: 'RWSR491E', airport: 'KYKN', city: 'Yankton, SD' },
-}: Props) => {
+/**
+ * Masthead — bone ground, gold top hairline + 6px gold double bottom rule.
+ * Matches the approved D2 PDP mockup (.np-masthead).
+ */
+export default function Masthead({
+  logoSrc = "/newspaper/images/logo.png",
+  logoAlt = "Roger Wilco Aviation Services",
+  brand = "Roger Wilco Aviation Services",
+  tagline = "Avionics \u00b7 Aircraft Brokerage \u00b7 Pilot Supplies",
+  certLine1 = "FAA Part 145",
+  certLine2 = "Repair Station",
+  certLine3 = "Cert. RWSR491E",
+}: MastheadProps) {
   return (
-    <div className="bs-masthead">
-      <img className="bs-masthead__logo" src={logoSrc} alt={logoAlt} />
-      <div className="bs-masthead__center">
-        <div className="bs-masthead__brand">{brand}</div>
-        <hr className="bs-masthead__rule" />
-        <div className="bs-masthead__tagline">{tagline}</div>
+    <header className="bs-masthead">
+      <div className="bs-masthead__inner">
+        <img className="bs-masthead__logo" src={logoSrc} alt={logoAlt} />
+        <div className="bs-masthead__titles">
+          <h1 className="bs-masthead__brand">{brand}</h1>
+          {tagline ? <div className="bs-masthead__tagline">{tagline}</div> : null}
+        </div>
+        <div className="bs-masthead__cert">
+          <div>{certLine1}</div>
+          <div>{certLine2}</div>
+          <div><strong>{certLine3}</strong></div>
+        </div>
       </div>
-      <div className="bs-masthead__meta">
-        {meta.certNo ? <>Cert. No. {meta.certNo}<br /></> : null}
-        {meta.airport ? <>{meta.airport}{meta.city ? ` · ${meta.city}` : null}</> : null}
-      </div>
-    </div>
+    </header>
   );
-};
-
-export default Masthead;
+}
