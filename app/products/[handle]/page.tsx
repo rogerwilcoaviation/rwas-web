@@ -127,7 +127,11 @@ function gateFromProduct(
   const collectionOtc = collections.some((handle) => isOtcCollection(handle));
 
   const otcEligible = collectionOtc || perProductOtcEligible;
-  const stockCheckRequired = otcEligible
+  // Only a collection-level OTC override (e.g. garmin-watches) clears the
+  // stock-check-required rule. A per-product `otc-eligible` tag on its own
+  // (e.g., Garmin G5 kits that also carry `stock-check-required`) keeps the
+  // Check-stock pill and the 'RWAS does not hold Garmin stock' notice.
+  const stockCheckRequired = collectionOtc
     ? false
     : lower.includes('stock-check-required') || (isGarmin && !perProductOtcEligible);
   const otc: Gating['otc'] = otcEligible
@@ -290,7 +294,7 @@ export default async function ProductDetailPage({
             <div className="bs-trust-strip">
               <div className="cell">
                 <span className="lab">Order &amp; fulfillment</span>
-                {gating.isGarmin && gating.otc === 'eligible' ? (
+                {gating.isGarmin && gating.otc === 'eligible' && !gating.stockCheckRequired ? (
                   <>
                     Garmin watches and direct-ship accessories are sold at Garmin List Price (MAP)
                     and ship direct from Garmin. RWAS processes the order and handles warranty claims.
