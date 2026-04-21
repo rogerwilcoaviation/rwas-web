@@ -325,3 +325,361 @@ html, body {
 
 /* ---------- Body cream helper (applied via body className) ---------- */
 .bs-body-cream { background: var(--cream); }
+
+/* ═════════════════════════════════════════════════════════════════════════
+ * PDP block styles — Ship 2 (2026-04-21)
+ * Source of truth: public/preview/pdp_mockup.html (Garmin D2 Mach 1 Pro 51mm)
+ *
+ * Design principle: each "ad" (photo box, price card, spec card, trust cell)
+ * gets the 3D letterpress lift — hard-offset shadow `4px 4px 0 var(--ink-900)`
+ * on a `--bone` card over the enr_h05 chart watermark.
+ * ═════════════════════════════════════════════════════════════════════════ */
+
+/* Stage container scoped inside .broadsheet */
+.broadsheet .bs-stage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 28px 48px;
+}
+
+/* Hero grid — photo on left, product summary on right */
+.broadsheet .bs-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .broadsheet .bs-hero {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* Photo box — figure + img + figcaption. Gets the 3D lift. */
+.broadsheet .bs-photo-box {
+  background: var(--bone);
+  border: 1px solid var(--rule);
+  padding: 18px 18px 14px;
+  box-shadow: var(--specimen-shadow);
+  margin: 0;
+}
+.broadsheet .bs-photo-box img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+}
+.broadsheet .bs-photo-caption {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--rule-soft);
+  align-items: start;
+}
+.broadsheet .bs-photo-caption .num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 34px;
+  color: var(--gold-700);
+  line-height: 1;
+}
+.broadsheet .bs-photo-caption .cap {
+  font-family: var(--font-script);
+  font-size: 18px;
+  color: var(--ink-800);
+  line-height: 1.3;
+}
+
+/* Product summary column */
+.broadsheet .bs-product-dateline {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-600);
+  margin-bottom: 8px;
+}
+.broadsheet .bs-product-dateline .gilded { color: var(--gold-800); }
+
+.broadsheet .bs-product-kicker {
+  font-family: var(--font-script);
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--gold-800);
+  margin: 0 0 10px;
+}
+
+.broadsheet .bs-product-headline {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 44px;
+  line-height: 1.05;
+  letter-spacing: -.005em;
+  margin: 0 0 8px;
+  color: var(--ink-900);
+}
+@media (max-width: 860px) {
+  .broadsheet .bs-product-headline { font-size: 34px; }
+}
+
+.broadsheet .bs-product-subhead {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--ink-700);
+  margin: 0 0 14px;
+}
+
+.broadsheet .bs-byline {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-600);
+  padding: 8px 0 12px;
+  border-top: 1px solid var(--rule-soft);
+  border-bottom: 1px solid var(--rule-soft);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.broadsheet .bs-byline .vendor-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.broadsheet .bs-byline .vendor-row img {
+  height: 14px;
+  width: auto;
+  display: block;
+  opacity: .9;
+}
+.broadsheet .bs-byline .sep { color: var(--rule-soft); }
+
+/* Price card — the buy box. Gets the 3D lift. */
+.broadsheet .bs-price-card {
+  background: var(--bone);
+  border: 1px solid var(--rule);
+  padding: 18px 20px;
+  box-shadow: var(--specimen-shadow);
+}
+.broadsheet .bs-price-card .label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-600);
+}
+.broadsheet .bs-price-card .price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+.broadsheet .bs-price-card .price {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 42px;
+  line-height: 1;
+  color: var(--ink-900);
+}
+.broadsheet .bs-price-card .stock {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold-800);
+  padding: 4px 8px;
+  border: 1px solid var(--gold-700);
+  background: var(--parchment);
+}
+.broadsheet .bs-price-card .stock--ok {
+  color: var(--ink-900);
+  border-color: var(--ink-900);
+  background: var(--bone);
+}
+.broadsheet .bs-price-card .map-line {
+  margin-top: 10px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--ink-700);
+}
+.broadsheet .bs-price-card .map-line .seal {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 2px 6px;
+  border: 1px solid var(--gold-700);
+  color: var(--gold-800);
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.broadsheet .bs-cta-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+@media (max-width: 520px) {
+  .broadsheet .bs-cta-row { grid-template-columns: 1fr; }
+}
+.broadsheet .bs-otc {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--parchment);
+  border-left: 3px solid var(--gold-700);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--ink-800);
+}
+
+/* Detail grid — article + spec aside */
+.broadsheet .bs-detail {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 48px;
+  align-items: start;
+  margin-top: 40px;
+}
+@media (max-width: 860px) {
+  .broadsheet .bs-detail {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* Article body paragraphs */
+.broadsheet .bs-detail article .bs-body p {
+  margin: 0 0 12px;
+}
+
+/* Pull quote — typographic treatment, no card shadow */
+.broadsheet .bs-pull {
+  margin: 24px 0;
+  padding: 18px 22px;
+  border-top: 3px double var(--gold-700);
+  border-bottom: 3px double var(--gold-700);
+  text-align: center;
+}
+.broadsheet .bs-pull blockquote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 24px;
+  line-height: 1.3;
+  color: var(--ink-900);
+}
+.broadsheet .bs-pull .attrib {
+  margin-top: 10px;
+  font-family: var(--font-script);
+  font-size: 18px;
+  color: var(--gold-800);
+}
+
+/* Trust strip — 3 cells. Each cell gets the 3D lift. */
+.broadsheet .bs-trust-strip {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+@media (max-width: 860px) {
+  .broadsheet .bs-trust-strip { grid-template-columns: 1fr; }
+}
+.broadsheet .bs-trust-strip .cell {
+  background: var(--bone);
+  border: 1px solid var(--rule);
+  padding: 14px 14px 14px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--ink-800);
+  box-shadow: var(--specimen-shadow);
+}
+.broadsheet .bs-trust-strip .cell .lab {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold-800);
+  display: block;
+  margin-bottom: 6px;
+}
+.broadsheet .bs-trust-strip .cell .dealer-plate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.broadsheet .bs-trust-strip .cell .dealer-plate img {
+  height: 18px;
+  width: auto;
+  display: block;
+}
+
+/* Spec card — right aside. Gets the 3D lift. */
+.broadsheet .bs-spec-card {
+  background: var(--bone);
+  border: 1px solid var(--rule);
+  padding: 20px;
+  box-shadow: var(--specimen-shadow);
+}
+.broadsheet .bs-spec-card h3 {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--ink-900);
+  border-bottom: 2px solid var(--gold-700);
+  padding-bottom: 8px;
+}
+.broadsheet .bs-spec-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.broadsheet .bs-spec-card th,
+.broadsheet .bs-spec-card td {
+  text-align: left;
+  padding: 8px 4px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--rule-soft);
+  font-family: var(--font-body);
+  color: var(--ink-800);
+  vertical-align: top;
+}
+.broadsheet .bs-spec-card th {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-700);
+  width: 42%;
+  font-weight: 600;
+}
+
+/* Options (variant swatches block) — also a card, also lifts */
+.broadsheet .bs-options-card {
+  background: var(--bone);
+  border: 1px solid var(--rule);
+  padding: 16px 20px;
+  box-shadow: var(--specimen-shadow);
+  margin-top: 18px;
+}
+.broadsheet .bs-options-card h3 {
+  margin: 0 0 10px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-700);
+}
