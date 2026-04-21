@@ -14,6 +14,7 @@
  *
  * Never render "in stock" or "ships same day" for any Garmin product.
  */
+import Link from 'next/link';
 import ProductVariantSelector from '@/components/shopify/ProductVariantSelector';
 import { getProductByHandle, getProductHandles } from '@/lib/shopify';
 import {
@@ -123,8 +124,8 @@ export default async function ProductDetailPage({
                 (605) 299-8178.
               </p>
               <div className="bs-cta-row">
-                <a className="bs-cta-primary" href="/collections">Back to collections</a>
-                <a className="bs-cta-secondary" href="/contact">Contact us</a>
+                <Link className="bs-cta-primary" href="/collections">Back to collections</Link>
+                <Link className="bs-cta-secondary" href="/contact">Contact us</Link>
               </div>
             </div>
           </section>
@@ -231,10 +232,10 @@ export default async function ProductDetailPage({
               ) : null}
 
               <div className="bs-cta-row">
-                <a className="bs-cta-primary" href={primaryCtaHref}>{primaryCtaLabel}</a>
-                <a className="bs-cta-secondary" href="/contact">
+                <Link className="bs-cta-primary" href={primaryCtaHref}>{primaryCtaLabel}</Link>
+                <Link className="bs-cta-secondary" href="/contact">
                   {gating.otc === 'eligible' ? 'Ask about install' : 'Talk to a pilot'}
-                </a>
+                </Link>
               </div>
 
               {gating.isGarmin || gating.stockCheckRequired ? (
