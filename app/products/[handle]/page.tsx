@@ -317,7 +317,7 @@ export default async function ProductDetailPage({
                   {firstSku ? (
                     <tr><th>SKU</th><td>{firstSku}</td></tr>
                   ) : null}
-                  {primaryPrice ? (
+                  {primaryPrice && !(gating.isGarmin && gating.otc !== 'eligible') ? (
                     <tr>
                       <th>Price</th>
                       <td>{formatPrice(primaryPrice.amount, primaryPrice.currencyCode)}</td>
