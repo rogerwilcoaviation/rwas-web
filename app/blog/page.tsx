@@ -1,7 +1,21 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
-/* eslint-disable @next/next/no-img-element */
-import '../newspaper.css';
+import {
+  BroadsheetLayout,
+  Dateline,
+  Masthead,
+  BroadsheetNav,
+  CredentialsBar,
+  BulletinBar,
+  BroadsheetFooter,
+  Specimen,
+} from '@/components/shared/broadsheet';
 import blogData from '../../public/blog-articles.json';
+import Link from 'next/link';
+
+export const metadata = {
+  title: 'Aviation News, Garmin Bulletins & Memos',
+  description:
+    'Garmin press releases, service bulletins, product updates, dealer memos, and industry dispatches from Roger Wilco Aviation Services.',
+};
 
 const publishedArticles = blogData.articles.filter((article) => article.status === 'published');
 const leadArticle = publishedArticles[0];
@@ -9,158 +23,129 @@ const secondaryArticles = publishedArticles.slice(1);
 const recentDispatches = publishedArticles.slice(0, 5);
 const topics = blogData.meta.categories;
 
-export const metadata = {
-  title: 'Aviation News, Garmin Bulletins & Memos',
-  description: 'Garmin press releases, service bulletins, product updates, dealer memos, and industry dispatches from Roger Wilco Aviation Services.',
-};
 export default function BlogPage() {
   return (
-    <div className="np-wrapper" style={{ background: '#ddd9d2', minHeight: '100vh', fontFamily: "Georgia, 'Times New Roman', serif" }}>
-      <div className="np-page">
-        <div className="np-dateline">
-          <span>Spring 2026 Edition</span>
-          <span>Vol. XL &middot; No. 1</span>
-          <span>rogerwilcoaviation.com</span>
-        </div>
+    <BroadsheetLayout>
+      <Dateline />
+      <Masthead />
+      <BroadsheetNav activeHref="/blog" />
+      <CredentialsBar />
+      <BulletinBar />
+      <main className="bs-stage">
+        <section className="hero-headline-group">
+          <p className="bs-kicker">Dispatches &amp; Bulletins</p>
+          <p className="bs-script-accent">&mdash; from the RWAS avionics desk &mdash;</p>
+          <h1 className="bs-headline bs-headline--hero">
+            Blog Articles, Product Updates, and Shop Dispatches
+          </h1>
+          <p className="bs-subhead">
+            Garmin updates, service bulletins, shop notes, and industry memos &mdash; current
+            as of {blogData.meta.last_updated.slice(0, 10)}.
+          </p>
+          <p className="bs-byline">
+            {blogData.meta.total_articles} published dispatches &middot; Topics: {topics.join(' / ')}
+          </p>
+        </section>
 
-        <div className="np-masthead">
-          <img
-            className="np-masthead-logo"
-            src="/newspaper/images/logo.png"
-            alt="Roger Wilco Aviation Services"
-          />
-          <div className="np-masthead-center">
-            <div className="np-masthead-name">Roger Wilco Aviation Services</div>
-            <hr className="np-masthead-rule" />
-            <div className="np-masthead-tagline">
-              FAA Cert. Repair Station &nbsp;&middot;&nbsp; Avionics &nbsp;&middot;&nbsp; Airframe &amp; Powerplant &nbsp;&middot;&nbsp; NDT &nbsp;&middot;&nbsp; Fabrication
+        {leadArticle && (
+          <Specimen variant="hero">
+            <p className="bs-kicker">Lead Article</p>
+            <Link href={`/blog/${leadArticle.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <h2 className="bs-headline" style={{ marginTop: 6 }}>{leadArticle.title}</h2>
+            </Link>
+            <p className="bs-byline" style={{ marginTop: 8 }}>
+              {leadArticle.byline} &middot; {leadArticle.date} &middot; {leadArticle.source}
+            </p>
+            <p className="bs-body" style={{ marginTop: 14 }}>{leadArticle.lead}</p>
+            {leadArticle.body.slice(0, 2).map((paragraph, index) => (
+              <p key={index} className="bs-body" style={{ marginTop: 10 }}>{paragraph}</p>
+            ))}
+            <p className="bs-kicker" style={{ marginTop: 18 }}>Filed Under</p>
+            <p className="bs-body" style={{ marginTop: 4 }}>{leadArticle.tags.join(' · ')}</p>
+            <div style={{ marginTop: 16 }}>
+              <Link href={`/blog/${leadArticle.id}`} className="bs-cta-primary">
+                Read the full dispatch
+              </Link>
             </div>
-          </div>
-          <div className="np-masthead-right">
-            Cert. No. RWSR491E<br />
-            KYKN &middot; Yankton, SD
-          </div>
-        </div>
+          </Specimen>
+        )}
 
-        <div className="np-edition-bar">
-          <span>Garmin Spring 2026 pricing now active</span>
-          <span>GFC 500 autopilot installations available</span>
-          <span>Now accepting spring scheduling</span>
-        </div>
-
-        <nav className="np-nav">
-          <a href="/">Home</a>
-          <a href="#ask-jerry" style={{ background: '#d4c47a', cursor: 'pointer' }} className="np-nav-jerry">Ask Jerry</a>
-          <a href="/collections/on-sale">On Sale</a>
-          <a href="/collections/garmin-avionics">Garmin</a>
-          <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
-          <a href="/aircraft-for-sale">Aircraft 4 Sale</a>
-          <a href="/financing">Financing</a>
-          <a href="/shop-capabilities">Shop Capabilities</a>
-          <a className="active" href="/blog/">Blog Articles</a>
-          <a href="/contact">Contact</a>
-        </nav>
-
-        <div className="np-ticker-bar">
-          <span className="np-ticker-label">Bulletin</span>
-          <span className="np-ticker-text">
-            Papa-Alpha rigging reference tools now shipping worldwide &nbsp;&bull;&nbsp;
-            Garmin G3X Touch installations booking into summer 2026 &nbsp;&bull;&nbsp;
-            Annual inspection slots available &mdash; call (605) 299-8178
-          </span>
-        </div>
-
-        <div className="np-body">
-          <div style={{ borderBottom: '2px solid #1a1a1a', padding: '14px 0' }}>
-            <span className="np-kicker">Dispatches &amp; Bulletins</span>
-            <h1 className="np-headline-xl" style={{ fontSize: '30px', marginBottom: '6px' }}>
-              Blog Articles, Product Updates,<br />
-              <em>and Shop Dispatches</em>
-            </h1>
-            <div className="np-byline">RWAS Avionics Desk &middot; Garmin updates &middot; service bulletins &middot; shop notes</div>
-          </div>
-
-          <div className="np-edition-bar" style={{ marginTop: '0', borderTop: 'none' }}>
-            <span>{blogData.meta.total_articles} published dispatches</span>
-            <span>Last updated {blogData.meta.last_updated.slice(0, 10)}</span>
-            <span>Topics: {topics.join(' / ')}</span>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1.55fr 1px 0.95fr', gap: '0', padding: '14px 0', borderBottom: '2px solid #1a1a1a', alignItems: 'start' }}>
-            <div style={{ padding: '0 16px 0 0' }}>
-              {leadArticle && (
-                <>
-                  <span className="np-kicker">Lead Article</span>
-                  <a href={`/blog/${leadArticle.id}`} className="np-headline-link">
-                    <h2 className="np-headline-xl np-headline-xl-link" style={{ fontSize: '28px', marginTop: '4px' }}>
-                      {leadArticle.title}
-                    </h2>
-                  </a>
-                  <div className="np-byline">{leadArticle.byline} &middot; {leadArticle.date} &middot; {leadArticle.source}</div>
-                  <hr className="np-rule" />
-                  <p className="np-body-text np-drop">{leadArticle.lead}</p>
-                  {leadArticle.body.slice(0, 2).map((paragraph, index) => (
-                    <p key={index} className="np-body-text">{paragraph}</p>
-                  ))}
-                  <div className="np-box" style={{ marginTop: '12px' }}>
-                    <div className="np-box-title">Filed Under</div>
-                    <p className="np-body-text" style={{ marginBottom: 0 }}>{leadArticle.tags.join(' &middot; ')}</p>
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div className="np-col-divider" />
-
-            <div style={{ padding: '0 0 0 16px' }}>
-              <span className="np-kicker">Recent Dispatches</span>
-              {recentDispatches.map((article) => (
-                <div key={article.id} style={{ marginBottom: '14px' }}>
-                  <a href={`/blog/${article.id}`} className="np-headline-link">
-                    <h3 className="np-headline-md" style={{ marginBottom: '4px' }}>{article.title}</h3>
-                  </a>
-                  <div className="np-byline">{article.date} &middot; {article.category}</div>
-                  <p className="np-body-text" style={{ marginTop: '6px' }}>{article.subtitle}</p>
-                  <hr className="np-rule-thick" />
-                </div>
-              ))}
-
-              <div className="np-box">
-                <div className="np-box-title">Topics</div>
-                {topics.map((topic) => (
-                  <div className="np-box-row" key={topic}>
-                    <span style={{ textTransform: 'capitalize' }}>{topic.replace(/-/g, ' ')}</span>
-                    <span className="np-box-pg">&sect;</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="np-lower">
-            {secondaryArticles.map((article) => (
-              <div className="np-lower-col" key={article.id}>
-                <span className="np-kicker" style={{ display: 'block' }}>{article.category.replace(/-/g, ' ')}</span>
-                <a href={`/blog/${article.id}`} className="np-headline-link">
-                  <h3 className="np-headline-md">{article.title}</h3>
-                </a>
-                <hr className="np-rule" />
-                <p className="np-body-text">{article.lead}</p>
-                <div className="np-byline">{article.author} &middot; {article.date}</div>
+        <Specimen variant="flat">
+          <p className="bs-kicker">Recent Dispatches</p>
+          <div style={{ marginTop: 12, display: 'grid', gap: 20 }}>
+            {recentDispatches.map((article) => (
+              <div key={article.id}>
+                <Link href={`/blog/${article.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <h3 className="bs-headline" style={{ fontSize: '1.4rem' }}>{article.title}</h3>
+                </Link>
+                <p className="bs-byline" style={{ marginTop: 4 }}>
+                  {article.date} &middot; {article.category}
+                </p>
+                <p className="bs-body" style={{ marginTop: 6 }}>{article.subtitle}</p>
               </div>
             ))}
           </div>
-        </div>
+        </Specimen>
 
-        <div className="np-credentials-bar">
-          NBAA Member &nbsp;&middot;&nbsp; AEA Member &nbsp;&middot;&nbsp; Certified &amp; Trained
-        </div>
+        {secondaryArticles.length > 0 && (
+          <Specimen variant="flat">
+            <p className="bs-kicker">More From The Desk</p>
+            <div
+              style={{
+                marginTop: 16,
+                display: 'grid',
+                gap: 24,
+                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              }}
+            >
+              {secondaryArticles.map((article) => (
+                <div key={article.id}>
+                  <p className="bs-kicker" style={{ textTransform: 'capitalize' }}>
+                    {article.category.replace(/-/g, ' ')}
+                  </p>
+                  <Link href={`/blog/${article.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <h3 className="bs-headline" style={{ fontSize: '1.3rem', marginTop: 4 }}>
+                      {article.title}
+                    </h3>
+                  </Link>
+                  <p className="bs-body" style={{ marginTop: 8 }}>{article.lead}</p>
+                  <p className="bs-byline" style={{ marginTop: 8 }}>
+                    {article.author} &middot; {article.date}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </Specimen>
+        )}
 
-        <div className="np-footer">
-          <span className="np-footer-name">Roger Wilco Aviation Services</span>
-          <span>&copy; 2026 RWAS &middot; All Rights Reserved</span>
-        </div>
-      </div>
-    </div>
+        <Specimen variant="flat">
+          <p className="bs-kicker">Topics</p>
+          <div
+            style={{
+              marginTop: 12,
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 10,
+            }}
+          >
+            {topics.map((topic) => (
+              <span
+                key={topic}
+                className="bs-body"
+                style={{
+                  textTransform: 'capitalize',
+                  padding: '6px 12px',
+                  border: '1px solid var(--ink-700)',
+                  borderRadius: 4,
+                }}
+              >
+                {topic.replace(/-/g, ' ')}
+              </span>
+            ))}
+          </div>
+        </Specimen>
+      </main>
+      <BroadsheetFooter />
+    </BroadsheetLayout>
   );
 }

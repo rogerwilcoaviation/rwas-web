@@ -1,7 +1,14 @@
-import Footer from '@/components/shared/Footer';
-import Header from '@/components/shared/Header';
 import CollectionCard from '@/components/shopify/CollectionCard';
-import { Button } from '@/components/shared/ui/button';
+import {
+  BroadsheetLayout,
+  Dateline,
+  Masthead,
+  BroadsheetNav,
+  CredentialsBar,
+  BulletinBar,
+  BroadsheetFooter,
+  Specimen,
+} from '@/components/shared/broadsheet';
 import { getFeaturedCollections } from '@/lib/shopify';
 import Link from 'next/link';
 
@@ -20,35 +27,42 @@ export default async function CollectionsPage() {
   }
 
   return (
-    <>
-      <Header />
-      <main className="bg-[#f5f3ef] pt-28 text-[#111111]">
-        <section className="border-b border-black/10">
-          <div className="container-wide px-6 py-16 lg:px-10 lg:py-20">
-            <p className="text-sm font-semibold uppercase tracking-[0.32em] text-primary-700">
-              Live collections
-            </p>
-            <h1 className="mt-4 max-w-4xl text-5xl font-black tracking-tight sm:text-6xl">
-              Browse RWAS collections pulled directly from Shopify.
-            </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-black/70">
-              Garmin certified and experimental avionics, accessories, Papa-Alpha tools, and sale inventory all live here with real product data behind them.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Button asChild className="bg-[#111111] text-[#f5f3ef] hover:bg-black">
-                <Link href="/collections/garmin-avionics">Start with Garmin</Link>
-              </Button>
-              <Button asChild variant="outlinePrimary" className="border-[#C49A2A] text-[#111111] hover:bg-[#C49A2A]/10">
-                <Link href="/collections/rigging-tools">See Papa-Alpha tools</Link>
-              </Button>
-              <Button asChild variant="outlinePrimary" className="border-[#C49A2A] text-[#111111] hover:bg-[#C49A2A]/10">
-                <Link href="/aircraft-for-sale">Aircraft 4 Sale</Link>
-              </Button>
-            </div>
+    <BroadsheetLayout>
+      <Dateline />
+      <Masthead />
+      <BroadsheetNav activeHref="/collections" />
+      <CredentialsBar />
+      <BulletinBar />
+      <main className="bs-stage">
+        <section className="hero-headline-group">
+          <p className="bs-kicker">Live collections</p>
+          <p className="bs-script-accent">&mdash; pulled straight from Shopify &mdash;</p>
+          <h1 className="bs-headline bs-headline--hero">Browse every RWAS collection in one place.</h1>
+          <p className="bs-subhead">
+            Garmin certified and experimental avionics, accessories, Papa-Alpha tools, and sale inventory &mdash; all live with real product data behind them.
+          </p>
+          <p className="bs-byline">RWAS Avionics Desk &middot; Yankton, SD &middot; KYKN</p>
+          <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Link href="/collections/garmin-avionics-certified-retail" className="bs-cta-primary">
+              Start with Garmin
+            </Link>
+            <Link href="/collections/retail-experimental" className="bs-cta-secondary">
+              See Papa-Alpha tools
+            </Link>
+            <Link href="/aircraft-for-sale" className="bs-cta-secondary">
+              Aircraft 4 Sale
+            </Link>
           </div>
         </section>
 
-        <section className="container-wide px-6 py-16 lg:px-10">
+        <Specimen variant="flat">
+          <div style={{ marginBottom: 20 }}>
+            <p className="bs-kicker">Featured collections</p>
+            <p className="bs-body" style={{ marginTop: 4 }}>
+              Each card links into a live collection page. Prices, availability, and inventory mirror Shopify.
+            </p>
+          </div>
+
           {collections.length ? (
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {collections.map((collection) => (
@@ -56,24 +70,21 @@ export default async function CollectionsPage() {
               ))}
             </div>
           ) : (
-            <div className="rounded-[1.5rem] border border-black/10 bg-white p-8 shadow-sm">
-              <h2 className="text-2xl font-bold">Collections temporarily unavailable</h2>
-              <p className="mt-4 max-w-3xl text-lg leading-8 text-black/70">
-                Shopify collection data could not be loaded right now. Please try again shortly or contact us if you need help finding a product.
+            <div>
+              <p className="bs-kicker">Temporarily unavailable</p>
+              <h2 className="bs-headline" style={{ marginTop: 4 }}>Collections could not load</h2>
+              <p className="bs-body" style={{ marginTop: 8 }}>
+                Shopify collection data did not return just now. Try again shortly, or reach out and we can pull a part by number.
               </p>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Button asChild className="bg-[#111111] text-[#f5f3ef] hover:bg-black">
-                  <Link href="/contact">Contact us</Link>
-                </Button>
-                <Button asChild variant="outlinePrimary" className="border-[#C49A2A] text-[#111111] hover:bg-[#C49A2A]/10">
-                  <Link href="/shop-capabilities">Shop capabilities</Link>
-                </Button>
+              <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <Link href="/shop-capabilities" className="bs-cta-primary">Shop capabilities</Link>
+                <Link href="/about" className="bs-cta-secondary">Contact RWAS</Link>
               </div>
             </div>
           )}
-        </section>
+        </Specimen>
       </main>
-      <Footer />
-    </>
+      <BroadsheetFooter />
+    </BroadsheetLayout>
   );
 }
