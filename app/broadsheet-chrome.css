@@ -1056,3 +1056,99 @@ html, body {
 .broadsheet .about-fig--rail {
   margin: 0;
 }
+
+/* ==================================================================
+   Ship 3 Tranche A — Financing + Shop Capabilities helpers
+   Appended to app/broadsheet-chrome.css. All selectors scoped under
+   .broadsheet so they only apply inside BroadsheetLayout.
+   ================================================================== */
+
+/* ── Two-column split inside a Specimen card (prose | services) ──── */
+
+.broadsheet .bs-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+@media (max-width: 700px) {
+  .broadsheet .bs-split { grid-template-columns: 1fr; gap: 10px; }
+}
+
+/* ── Service / capability list (broadsheet replacement for np-svc) ── */
+
+.broadsheet .bs-svc-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.broadsheet .bs-svc {
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--rule-soft);
+}
+.broadsheet .bs-svc:last-child { border-bottom: 0; }
+.broadsheet .bs-svc-name {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink-900);
+  margin: 0;
+  line-height: 1.35;
+}
+.broadsheet .bs-svc-name a {
+  color: var(--ink-900);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.broadsheet .bs-svc-name a:hover { color: var(--gold-800); }
+.broadsheet .bs-svc-desc {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  color: var(--ink-700);
+  font-style: italic;
+  margin: 2px 0 0;
+  line-height: 1.45;
+}
+
+/* ── Numbered step boxes (Financing "How It Works") ────────────── */
+
+.broadsheet .bs-steps {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+  margin-bottom: 14px;
+}
+@media (max-width: 700px) {
+  .broadsheet .bs-steps { grid-template-columns: 1fr; }
+}
+.broadsheet .bs-step {
+  background: var(--bone);
+  border: 1px solid var(--rule);
+  padding: 14px 16px;
+  box-shadow: var(--specimen-shadow);
+}
+.broadsheet .bs-step__label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-800);
+  margin-bottom: 4px;
+}
+.broadsheet .bs-step__n {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 28px;
+  color: var(--ink-900);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.broadsheet .bs-step p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-800);
+  margin: 0;
+}
