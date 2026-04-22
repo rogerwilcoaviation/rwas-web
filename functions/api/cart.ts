@@ -178,9 +178,23 @@ export const onRequestGet = async ({ request, env }: { request: Request; env: En
 
   try {
     const data = (await shopify(env, CART_QUERY, { cartId })) as
-      | { cart: unknown | null }
+      | { cart: any | null }
       | undefined;
-    return Response.json({ cart: data?.cart ?? null });
+    const c = data?.cart ?? null;
+    // Flatten the Storefront GraphQL shape into what CartClient expects:
+    // lines: { edges: [{ node }] }  ->  lines: [ ... ]
+    const flat = c
+      ? {
+          id: c.id,
+          checkoutUrl: c.checkoutUrl,
+          totalQuantity: c.totalQuantity,
+          cost: c.cost,
+          lines: Array.isArray(c?.lines?.edges)
+            ? c.lines.edges.map((e: any) => e?.node).filter(Boolean)
+            : [],
+        }
+      : null;
+    return Response.json({ cart: flat });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     return Response.json({ error: msg }, { status: 502 });
