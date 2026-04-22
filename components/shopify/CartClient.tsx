@@ -219,7 +219,7 @@ export default function CartClient() {
               <div
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: '120px 1fr',
+                  gridTemplateColumns: '120px minmax(0, 1fr)',
                   gap: 20,
                   padding: '18px 20px',
                   alignItems: 'flex-start',
@@ -252,7 +252,7 @@ export default function CartClient() {
                   ) : null}
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
                   <Link
                     href={`/products/${encodeURIComponent(line.merchandise.product.handle)}`}
                     className="bs-product-headline"
@@ -260,6 +260,8 @@ export default function CartClient() {
                       fontSize: '1.15rem',
                       lineHeight: 1.2,
                       textDecoration: 'none',
+                      overflowWrap: 'anywhere',
+                      wordBreak: 'break-word',
                     }}
                   >
                     {line.merchandise.product.title}
@@ -283,10 +285,12 @@ export default function CartClient() {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
+                      justifyContent: 'flex-start',
                       marginTop: 10,
                       gap: 12,
+                      rowGap: 10,
                       flexWrap: 'wrap',
+                      minWidth: 0,
                     }}
                   >
                     <div
@@ -384,6 +388,8 @@ export default function CartClient() {
                         fontSize: '0.92rem',
                         padding: 0,
                         letterSpacing: '0.02em',
+                        marginLeft: 'auto',
+                        flexShrink: 0,
                       }}
                     >
                       {isBusy ? 'Removing\u2026' : 'Remove'}
