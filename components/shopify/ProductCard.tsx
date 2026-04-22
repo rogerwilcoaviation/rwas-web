@@ -47,15 +47,16 @@ export default function ProductCard({
   const addToCartHref =
     otcEligible && !quoteOnly ? cartPermalink(primaryVariant?.id, 1) : null;
 
-  // Secondary CTA: only render when we have a concrete action (quote or
-  // add-to-cart). Non-OTC fallback shows NO secondary button — the card itself
-  // still links to the PDP via the image and "View product" CTA. The old
-  // "Check stock" / "check availability" CTA has been removed per product
-  // direction (2026-04-21).
+  // Secondary CTA: collection grid cards intentionally show NO secondary
+  // button. Quote-only (`garmin-avionics`, the Dealer-Only collection) used
+  // to surface a 'Request quote' button — removed per user direction
+  // 2026-04-21 PM ("Remove 'request a quote' from the front facing page").
+  // Add-to-cart is gated off site-wide via the hardcoded `otcEligible = false`
+  // above. Both fallthroughs are retained as no-ops so re-enabling either
+  // is a one-line change.
+  void quoteUrl;
   let secondaryCta: { label: string; href: string } | null = null;
-  if (quoteOnly) {
-    secondaryCta = { label: 'Request quote', href: quoteUrl };
-  } else if (addToCartHref) {
+  if (addToCartHref) {
     secondaryCta = { label: 'Add to cart', href: addToCartHref };
   }
 
