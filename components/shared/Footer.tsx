@@ -68,7 +68,7 @@ export const Footer = ({ className }: { className?: string }) => {
         <LandingFooterLink href="https://www.rogerwilcoaviation.com/pages/shop-capabilities">
           Shop capabilities
         </LandingFooterLink>
-        <LandingFooterLink href="https://www.rogerwilcoaviation.com/pages/contact">
+        <LandingFooterLink href="/contact">
           Contact
         </LandingFooterLink>
       </LandingFooterColumn>
@@ -77,7 +77,7 @@ export const Footer = ({ className }: { className?: string }) => {
         <LandingFooterLink href="https://www.rogerwilcoaviation.com/cart">
           View Shopify cart
         </LandingFooterLink>
-        <LandingFooterLink href="https://www.rogerwilcoaviation.com/pages/contact">
+        <LandingFooterLink href="/contact?reason=quote">
           Request a quote
         </LandingFooterLink>
       </LandingFooterColumn>

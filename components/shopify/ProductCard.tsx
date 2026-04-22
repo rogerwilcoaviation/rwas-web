@@ -37,7 +37,7 @@ export default function ProductCard({
     product.priceRange.minVariantPrice.currencyCode
   );
   const productUrl = `/products/${encodeURIComponent(product.handle)}`;
-  const quoteUrl = `https://www.rogerwilcoaviation.com/pages/contact?product=${encodeURIComponent(
+  const quoteUrl = `/contact?reason=quote&product=${encodeURIComponent(
     product.title
   )}`;
 

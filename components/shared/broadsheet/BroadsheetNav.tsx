@@ -22,6 +22,7 @@ const DEFAULT_ITEMS: NavItem[] = [
   { href: "/shop-capabilities", label: "Shop Capabilities" },
   { href: "/blog", label: "Blog Articles" },
   { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ];
 
 /**
