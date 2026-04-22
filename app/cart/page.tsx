@@ -1,5 +1,12 @@
-import Footer from '@/components/shared/Footer';
-import Header from '@/components/shared/Header';
+import {
+  BroadsheetLayout,
+  Dateline,
+  Masthead,
+  BroadsheetNav,
+  CredentialsBar,
+  BulletinBar,
+  BroadsheetFooter,
+} from '@/components/shared/broadsheet';
 import CartClient from '@/components/shopify/CartClient';
 
 export const metadata = {
@@ -9,28 +16,28 @@ export const metadata = {
 
 export default function CartPage() {
   return (
-    <>
-      <Header />
-      <main className="bg-[#f5f3ef] pt-28 text-[#111111]">
-        <section className="border-b border-black/10">
-          <div className="container-wide px-6 py-16 lg:px-10 lg:py-20">
-            <p className="text-sm font-semibold uppercase tracking-[0.32em] text-primary-700">
-              Cart
-            </p>
-            <h1 className="mt-4 text-5xl font-black tracking-tight sm:text-6xl">
-              Review your selected products.
-            </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-black/70">
-              This lightweight cart uses Shopify&apos;s cart API and hands off cleanly to Shopify checkout.
-            </p>
-          </div>
+    <BroadsheetLayout>
+      <Dateline />
+      <Masthead />
+      <BroadsheetNav activeHref="/cart" />
+      <CredentialsBar />
+      <BulletinBar />
+      <main className="bs-stage">
+        <section className="hero-headline-group">
+          <p className="bs-kicker">The Order Desk</p>
+          <p className="bs-script-accent">&mdash; review &amp; complete your selection &mdash;</p>
+          <h1 className="bs-headline bs-headline--hero">Your cart.</h1>
+          <p className="bs-subhead">
+            Adjust quantities, remove items, then hand off to Shopify checkout when ready.
+          </p>
+          <p className="bs-byline">
+            RWAS Avionics Desk &middot; Yankton, SD &middot; KYKN
+          </p>
         </section>
 
-        <section className="container-wide px-6 py-16 lg:px-10">
-          <CartClient />
-        </section>
+        <CartClient />
       </main>
-      <Footer />
-    </>
+      <BroadsheetFooter />
+    </BroadsheetLayout>
   );
 }

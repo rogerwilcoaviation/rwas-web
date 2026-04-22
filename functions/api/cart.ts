@@ -1,14 +1,23 @@
 /*
- * Cloudflare Pages Function — POST /api/cart
+ * Cloudflare Pages Function — /api/cart
  *
- * Create or append to a Shopify Storefront cart. Reads env vars from the
- * Pages project (set via Cloudflare API in `project_rwas_task44_deploy`):
+ * Verbs:
+ *   GET    ?cartId=…                     -> hydrate existing cart
+ *   POST   { cartId?, merchandiseId, quantity? } -> create or add line
+ *   PATCH  { cartId,  lineId, quantity }         -> update line qty (qty=0 removes)
+ *   DELETE { cartId,  lineIds: string[] }        -> remove one or more lines
+ *
+ * All responses share the same flattened cart shape consumed by
+ * components/shopify/CartClient.tsx:
+ *   { cart: { id, checkoutUrl, totalQuantity, cost, lines: [...] } | null }
+ *
+ * `lines` is a flat array (Storefront's edges/node wrapper is unwrapped
+ * server-side), and merchandise fields are denormalized to the variant.
+ *
+ * Env vars (set on the Cloudflare Pages project):
  *   SHOPIFY_STORE_DOMAIN
  *   SHOPIFY_STOREFRONT_ACCESS_TOKEN
  *   SHOPIFY_STOREFRONT_API_VERSION (defaults to 2025-10)
- *
- * Request body: { cartId?: string, merchandiseId: string, quantity?: number }
- * Response:     { cart: { id, checkoutUrl, totalQuantity } }
  */
 
 type Env = {
@@ -17,10 +26,43 @@ type Env = {
   SHOPIFY_STOREFRONT_API_VERSION?: string;
 };
 
+const CART_FIELDS = `
+  id
+  checkoutUrl
+  totalQuantity
+  cost {
+    subtotalAmount { amount currencyCode }
+    totalAmount { amount currencyCode }
+  }
+  lines(first: 100) {
+    edges {
+      node {
+        id
+        quantity
+        merchandise {
+          ... on ProductVariant {
+            id
+            title
+            price { amount currencyCode }
+            product {
+              title
+              handle
+              featuredImage { url altText }
+            }
+            selectedOptions { name value }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const CART_QUERY = `query Cart($cartId: ID!) { cart(id: $cartId) { ${CART_FIELDS} } }`;
+
 const CART_CREATE = `
   mutation CartCreate($merchandiseId: ID!, $quantity: Int!) {
     cartCreate(input: { lines: [{ merchandiseId: $merchandiseId, quantity: $quantity }] }) {
-      cart { id checkoutUrl totalQuantity }
+      cart { ${CART_FIELDS} }
       userErrors { message }
     }
   }
@@ -29,22 +71,40 @@ const CART_CREATE = `
 const CART_LINES_ADD = `
   mutation CartLinesAdd($cartId: ID!, $merchandiseId: ID!, $quantity: Int!) {
     cartLinesAdd(cartId: $cartId, lines: [{ merchandiseId: $merchandiseId, quantity: $quantity }]) {
-      cart { id checkoutUrl totalQuantity }
+      cart { ${CART_FIELDS} }
+      userErrors { message }
+    }
+  }
+`;
+
+const CART_LINES_UPDATE = `
+  mutation CartLinesUpdate($cartId: ID!, $lineId: ID!, $quantity: Int!) {
+    cartLinesUpdate(cartId: $cartId, lines: [{ id: $lineId, quantity: $quantity }]) {
+      cart { ${CART_FIELDS} }
+      userErrors { message }
+    }
+  }
+`;
+
+const CART_LINES_REMOVE = `
+  mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+    cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+      cart { ${CART_FIELDS} }
       userErrors { message }
     }
   }
 `;
 
 async function shopify(env: Env, query: string, variables: Record<string, unknown>) {
-  const domain = env.SHOPIFY_STORE_DOMAIN || 'm06wpv-na.myshopify.com';
-  const token = env.SHOPIFY_STOREFRONT_ACCESS_TOKEN || '';
-  const version = env.SHOPIFY_STOREFRONT_API_VERSION || '2025-10';
-  if (!token) throw new Error('Storefront token not configured');
+  const domain = env.SHOPIFY_STORE_DOMAIN || "m06wpv-na.myshopify.com";
+  const token = env.SHOPIFY_STOREFRONT_ACCESS_TOKEN || "";
+  const version = env.SHOPIFY_STOREFRONT_API_VERSION || "2025-10";
+  if (!token) throw new Error("Storefront token not configured");
   const res = await fetch(`https://${domain}/api/${version}/graphql.json`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'X-Shopify-Storefront-Access-Token': token,
+      "Content-Type": "application/json",
+      "X-Shopify-Storefront-Access-Token": token,
     },
     body: JSON.stringify({ query, variables }),
   });
@@ -53,15 +113,49 @@ async function shopify(env: Env, query: string, variables: Record<string, unknow
     errors?: Array<{ message: string }>;
   };
   if (json.errors?.length) {
-    throw new Error(json.errors.map((e) => e.message).join('; '));
+    throw new Error(json.errors.map((e) => e.message).join("; "));
   }
   return json.data;
 }
 
-type CtxPost = { request: Request; env: Env };
+function flattenCart(c: any) {
+  if (!c) return null;
+  return {
+    id: c.id,
+    checkoutUrl: c.checkoutUrl,
+    totalQuantity: c.totalQuantity,
+    cost: c.cost,
+    lines: Array.isArray(c?.lines?.edges)
+      ? c.lines.edges.map((e: any) => e?.node).filter(Boolean)
+      : [],
+  };
+}
 
-export const onRequestPost = async (ctx: CtxPost) => {
-  const { request, env } = ctx;
+function jsonResponse(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+type Ctx = { request: Request; env: Env };
+
+export const onRequestGet = async ({ request, env }: Ctx) => {
+  const url = new URL(request.url);
+  const cartId = url.searchParams.get("cartId");
+  if (!cartId) return jsonResponse({ error: "cartId required" }, 400);
+  try {
+    const data = (await shopify(env, CART_QUERY, { cartId })) as
+      | { cart: any | null }
+      | undefined;
+    return jsonResponse({ cart: flattenCart(data?.cart ?? null) });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return jsonResponse({ error: msg }, 502);
+  }
+};
+
+export const onRequestPost = async ({ request, env }: Ctx) => {
   try {
     const body = (await request.json()) as {
       cartId?: string | null;
@@ -71,18 +165,14 @@ export const onRequestPost = async (ctx: CtxPost) => {
     const merchandiseId = body.merchandiseId;
     const quantity = body.quantity ?? 1;
     if (!merchandiseId) {
-      return new Response(JSON.stringify({ error: 'merchandiseId is required' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return jsonResponse({ error: "merchandiseId is required" }, 400);
     }
 
-    type CartShape = { id: string; checkoutUrl?: string; totalQuantity?: number };
     type CartPayload = {
-      cartCreate?: { cart?: CartShape; userErrors?: Array<{ message: string }> };
-      cartLinesAdd?: { cart?: CartShape; userErrors?: Array<{ message: string }> };
+      cartCreate?: { cart?: any; userErrors?: Array<{ message: string }> };
+      cartLinesAdd?: { cart?: any; userErrors?: Array<{ message: string }> };
     };
-    let cart: CartShape | undefined;
+    let cart: any | undefined;
     if (body.cartId) {
       const data = (await shopify(env, CART_LINES_ADD, {
         cartId: body.cartId,
@@ -106,97 +196,80 @@ export const onRequestPost = async (ctx: CtxPost) => {
       cart = data?.cartCreate?.cart;
     }
 
-    if (!cart) {
-      return new Response(JSON.stringify({ error: 'Cart operation failed' }), {
-        status: 502,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response(JSON.stringify({ cart }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    if (!cart) return jsonResponse({ error: "Cart operation failed" }, 502);
+    return jsonResponse({ cart: flattenCart(cart) });
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Cart request failed';
-    return new Response(JSON.stringify({ error: message }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const message = err instanceof Error ? err.message : "Cart request failed";
+    return jsonResponse({ error: message }, 500);
   }
 };
 
-
-/* -----------------------------------------------------------------------
- * GET /api/cart?cartId=<id>
- * Load an existing Storefront cart by id.
- * Returns: { cart: { id, checkoutUrl, totalQuantity, cost, lines } | null }
- *   - cart=null when missing / expired (Shopify returns null for unknown ids).
- *   - 400 if no cartId; 502 on Storefront errors.
- * --------------------------------------------------------------------- */
-export const onRequestGet = async ({ request, env }: { request: Request; env: Env }) => {
-  const url = new URL(request.url);
-  const cartId = url.searchParams.get("cartId");
-  if (!cartId) {
-    return Response.json({ error: "cartId required" }, { status: 400 });
-  }
-
-  const CART_QUERY = `
-    query Cart($cartId: ID!) {
-      cart(id: $cartId) {
-        id
-        checkoutUrl
-        totalQuantity
-        cost {
-          subtotalAmount { amount currencyCode }
-          totalAmount { amount currencyCode }
-        }
-        lines(first: 50) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                  title
-                  price { amount currencyCode }
-                  product {
-                    title
-                    handle
-                    featuredImage { url altText }
-                  }
-                  selectedOptions { name value }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-
+export const onRequestPatch = async ({ request, env }: Ctx) => {
   try {
-    const data = (await shopify(env, CART_QUERY, { cartId })) as
-      | { cart: any | null }
+    const body = (await request.json()) as {
+      cartId?: string;
+      lineId?: string;
+      quantity?: number;
+    };
+    if (!body.cartId || !body.lineId || typeof body.quantity !== "number") {
+      return jsonResponse(
+        { error: "cartId, lineId, and quantity are required" },
+        400,
+      );
+    }
+    // quantity:0 is interpreted by Storefront as a remove.
+    const data = (await shopify(env, CART_LINES_UPDATE, {
+      cartId: body.cartId,
+      lineId: body.lineId,
+      quantity: Math.max(0, Math.floor(body.quantity)),
+    })) as
+      | { cartLinesUpdate?: { cart?: any; userErrors?: Array<{ message: string }> } }
       | undefined;
-    const c = data?.cart ?? null;
-    // Flatten the Storefront GraphQL shape into what CartClient expects:
-    // lines: { edges: [{ node }] }  ->  lines: [ ... ]
-    const flat = c
-      ? {
-          id: c.id,
-          checkoutUrl: c.checkoutUrl,
-          totalQuantity: c.totalQuantity,
-          cost: c.cost,
-          lines: Array.isArray(c?.lines?.edges)
-            ? c.lines.edges.map((e: any) => e?.node).filter(Boolean)
-            : [],
-        }
-      : null;
-    return Response.json({ cart: flat });
+    const errs = data?.cartLinesUpdate?.userErrors;
+    if (errs && errs.length) {
+      return jsonResponse(
+        { error: errs.map((e) => e.message).join("; ") },
+        422,
+      );
+    }
+    return jsonResponse({ cart: flattenCart(data?.cartLinesUpdate?.cart ?? null) });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    return Response.json({ error: msg }, { status: 502 });
+    return jsonResponse({ error: msg }, 502);
+  }
+};
+
+export const onRequestDelete = async ({ request, env }: Ctx) => {
+  try {
+    const body = (await request.json()) as {
+      cartId?: string;
+      lineId?: string;
+      lineIds?: string[];
+    };
+    const lineIds = body.lineIds && body.lineIds.length
+      ? body.lineIds
+      : body.lineId
+        ? [body.lineId]
+        : [];
+    if (!body.cartId || lineIds.length === 0) {
+      return jsonResponse({ error: "cartId and lineId(s) are required" }, 400);
+    }
+    const data = (await shopify(env, CART_LINES_REMOVE, {
+      cartId: body.cartId,
+      lineIds,
+    })) as
+      | { cartLinesRemove?: { cart?: any; userErrors?: Array<{ message: string }> } }
+      | undefined;
+    const errs = data?.cartLinesRemove?.userErrors;
+    if (errs && errs.length) {
+      return jsonResponse(
+        { error: errs.map((e) => e.message).join("; ") },
+        422,
+      );
+    }
+    return jsonResponse({ cart: flattenCart(data?.cartLinesRemove?.cart ?? null) });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return jsonResponse({ error: msg }, 502);
   }
 };
