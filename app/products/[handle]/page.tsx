@@ -25,6 +25,7 @@ import {
   getProductByHandle,
   getProductHandles,
   isOtcCollection,
+  isOtcEligible,
 } from '@/lib/shopify';
 import {
   BroadsheetLayout,
@@ -116,7 +117,10 @@ function gateFromProduct(
   const isGarmin =
     (vendor || '').toLowerCase().includes('garmin') ||
     lower.some((t) => t.startsWith('garmin'));
-  const perProductOtcEligible = lower.includes('otc-eligible');
+  // Route through isOtcEligible so the global OTC kill switch (in lib/shopify.ts)
+  // applies to PDPs too. When OTC is re-enabled, this delegates back to the
+  // tag-based logic without further changes here.
+  const perProductOtcEligible = isOtcEligible({ tags: lower });
   const perProductOtcDisabled = lower.includes('otc-disabled');
   const mapLocked = lower.includes('garmin-map-locked');
 
