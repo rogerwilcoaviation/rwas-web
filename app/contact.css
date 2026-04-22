@@ -1,0 +1,277 @@
+/* =====================================================================
+ * /contact page — Correspondence Desk
+ * ---------------------------------------------------------------------
+ * Adds form-specific styles on top of broadsheet-chrome.css and the
+ * existing .bs-* tokens. Imported by app/contact/page.tsx via an
+ * `import './contact.css'` at the top (or, more conventionally, added
+ * via app/layout.tsx — we do it at the page to keep layout.tsx clean).
+ *
+ * Design goals:
+ *   - Matches Specimen card aesthetic (cream card, ink hairline)
+ *   - Fields look typed, not UI-kit-y (cream fill, ink border, subtle
+ *     focus ring in gold)
+ *   - Two-column responsive grid collapses to one column on mobile
+ *   - Confirmation state reads like a torn ticket stub
+ * ================================================================== */
+
+.broadsheet .contact-specimen {
+  padding: clamp(24px, 4vw, 48px);
+  margin-top: clamp(16px, 3vw, 32px);
+}
+
+.broadsheet .rwas-contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2.5vw, 28px);
+}
+
+.broadsheet .rwas-contact-form__intro {
+  border-bottom: 1px solid var(--rule-soft);
+  padding-bottom: 16px;
+}
+
+.broadsheet .rwas-contact-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 22px);
+}
+
+@media (max-width: 640px) {
+  .broadsheet .rwas-contact-form__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Field cell --- */
+.broadsheet .rwas-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.broadsheet .rwas-field--full {
+  grid-column: 1 / -1;
+}
+
+.broadsheet .rwas-field label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-600);
+}
+
+.broadsheet .rwas-field input,
+.broadsheet .rwas-field select,
+.broadsheet .rwas-field textarea {
+  font-family: var(--font-body, "Source Serif 4", Georgia, serif);
+  font-size: 15px;
+  color: var(--ink-900);
+  background: var(--bone);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 10px 12px;
+  outline: none;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease;
+}
+
+.broadsheet .rwas-field textarea {
+  resize: vertical;
+  min-height: 140px;
+  line-height: 1.55;
+}
+
+.broadsheet .rwas-field input::placeholder,
+.broadsheet .rwas-field textarea::placeholder {
+  color: var(--ink-500);
+  font-style: italic;
+}
+
+.broadsheet .rwas-field input:focus,
+.broadsheet .rwas-field select:focus,
+.broadsheet .rwas-field textarea:focus {
+  border-color: var(--gold-700);
+  box-shadow: 0 0 0 2px rgba(193, 154, 63, 0.25);
+  background: #ffffff;
+}
+
+.broadsheet .rwas-field input[aria-invalid='true'],
+.broadsheet .rwas-field textarea[aria-invalid='true'] {
+  border-color: #8a2020;
+  background: #fbf4f2;
+}
+
+.broadsheet .rwas-field__error {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #8a2020;
+  margin: 0;
+}
+
+/* --- Prefilled product-context hint --- */
+.broadsheet .rwas-field--product-context {
+  grid-column: 1 / -1;
+  padding: 12px 14px;
+  background: var(--parchment);
+  border-left: 3px solid var(--gold-700);
+  border-radius: 2px;
+}
+.broadsheet .rwas-field--product-context label::after {
+  content: ' — edit if needed';
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink-500);
+  font-style: italic;
+}
+
+/* --- Honeypot (visually hidden, still in DOM) --- */
+.broadsheet .rwas-hp {
+  position: absolute !important;
+  left: -10000px !important;
+  top: auto !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+/* --- Turnstile placement --- */
+.broadsheet .rwas-turnstile {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* --- Actions row --- */
+.broadsheet .rwas-contact-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.broadsheet .rwas-contact-form__fineprint {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--ink-600);
+}
+
+/* --- Success / ticket stub --- */
+.broadsheet .rwas-contact-confirm {
+  padding: clamp(24px, 4vw, 48px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.broadsheet .rwas-contact-confirm__kicker {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold-800);
+  margin: 0;
+}
+
+.broadsheet .rwas-contact-confirm__head {
+  font-family: var(--font-display, "Playfair Display", Georgia, serif);
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.broadsheet .rwas-contact-confirm__body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 60ch;
+}
+
+.broadsheet .rwas-contact-confirm__stub {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 18px;
+  row-gap: 4px;
+  padding: 14px 18px;
+  border: 1px dashed var(--rule-soft);
+  background: var(--bone);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.broadsheet .rwas-contact-confirm__stub dt {
+  color: var(--ink-600);
+}
+.broadsheet .rwas-contact-confirm__stub dd {
+  color: var(--ink-900);
+  margin: 0;
+  font-weight: 600;
+}
+
+/* --- Alternate channels block below the form --- */
+.broadsheet .contact-alt-channels {
+  margin-top: clamp(32px, 5vw, 56px);
+}
+
+.broadsheet .contact-alt-channels .bs-section-head {
+  margin-bottom: 20px;
+}
+
+.broadsheet .contact-alt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin: 0;
+}
+
+.broadsheet .contact-alt-grid > div {
+  border-top: 2px solid var(--ink-900);
+  padding-top: 12px;
+}
+
+.broadsheet .contact-alt-grid dt {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-600);
+  margin-bottom: 6px;
+}
+
+.broadsheet .contact-alt-grid dd {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink-900);
+  margin: 0;
+}
+
+.broadsheet .contact-alt-grid .contact-hours {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--ink-600);
+  text-transform: none;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+.broadsheet .contact-alt-grid a {
+  color: var(--ink-900);
+  text-decoration: underline;
+  text-decoration-color: var(--gold-700);
+  text-underline-offset: 3px;
+}
+.broadsheet .contact-alt-grid a:hover {
+  color: var(--gold-800);
+}
