@@ -231,7 +231,7 @@ export async function getFeaturedCollections(): Promise<ShopifyCollectionSummary
       }
     `,
     {
-      first: FEATURED_COLLECTION_HANDLES.length,
+      first: 20, // safety margin: Shopify `handle:` query prefix-matches
       query: FEATURED_COLLECTION_HANDLES.map((handle) => `handle:${handle}`).join(' OR '),
     }
   );
@@ -240,9 +240,12 @@ export async function getFeaturedCollections(): Promise<ShopifyCollectionSummary
     data.collections.edges.map((edge) => [edge.node.handle, edge.node])
   );
 
-  const shopifyFeatured = FEATURED_COLLECTION_HANDLES.map((handle) =>
+  const shopifyFeatured = (FEATURED_COLLECTION_HANDLES.map((handle) =>
     collectionsByHandle.get(handle)
-  ).filter(Boolean) as ShopifyCollectionSummary[];
+  ).filter(Boolean) as ShopifyCollectionSummary[]).map((node) => ({
+    ...node,
+    title: displayTitleForCollection(node.handle, node.title),
+  }));
 
   // Papa-Alpha Tools isn't a real Shopify collection; synthesize from tag=papa-alpha.
   return [...shopifyFeatured, PAPA_ALPHA_SYNTHETIC];
@@ -337,7 +340,7 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
 
   return {
     id: data.collection.id,
-    title: data.collection.title,
+    title: displayTitleForCollection(data.collection.handle, data.collection.title),
     handle: data.collection.handle,
     description: data.collection.description,
     image: data.collection.image,
@@ -765,6 +768,21 @@ export function cartPermalink(variantGid?: string | null, quantity = 1): string 
   const id = variantNumericId(variantGid);
   if (!id) return null;
   return `/cart/${id}:${Math.max(1, Math.floor(quantity))}`;
+}
+
+/**
+ * Display-title override for Shopify collections. Lets rwas-web present
+ * a cleaner name to customers without touching Shopify's collection title.
+ *
+ * Current overrides:
+ *   - garmin-avionics: Shopify has "Garmin Avionics for Certified Aircraft
+ *     (RWAS Install Only)". Rendered as "Garmin Avionics — Dealer Only".
+ *     Rationale: shorter, clearer positioning — this collection is
+ *     dealer-only (quote-only, no Add-to-cart) per 2026-04-21 PM direction.
+ */
+export function displayTitleForCollection(handle: string, shopifyTitle: string): string {
+  if (handle === 'garmin-avionics') return 'Garmin Avionics \u2014 Dealer Only';
+  return shopifyTitle;
 }
 
 export function isQuoteCollection(handle: string) {

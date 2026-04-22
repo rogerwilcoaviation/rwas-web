@@ -172,7 +172,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
           </button>
         ) : isNonOtcGarmin ? (
           <Link className="bs-cta-primary" href={contactHref}>
-            Call for component & installation quote
+            Call RWAS for Pricing and Installation
           </Link>
         ) : null}
       </div>
