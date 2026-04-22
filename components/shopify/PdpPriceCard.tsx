@@ -110,7 +110,8 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
       if (payload.cart?.id && typeof window !== 'undefined') {
         window.localStorage.setItem(CART_STORAGE_KEY, payload.cart.id);
       }
-      window.location.href = '/cart';
+      window.dispatchEvent(new Event("rwas-cart-updated"));
+      window.location.href = "/cart";
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to add item to cart.');
       setLoading(false);

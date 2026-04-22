@@ -1419,3 +1419,43 @@ html, body {
 .broadsheet .policy-card h4 {
   color: var(--ink-900);
 }
+
+/* ---------- Floating Cart link (fixed top-right, every page) ---------- */
+.rwas-cart-floater {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 100;
+  padding: 6px 14px;
+  background: var(--bone, #FBF7EC);
+  color: var(--ink-900, #0F1418);
+  border: 1px solid var(--ink-900, #0F1418);
+  border-radius: 2px;
+  font-family: var(--font-ui, Inter, system-ui, sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 2px 2px 0 var(--ink-900, #0F1418);
+  transition: background .12s ease, color .12s ease, transform .12s ease;
+}
+.rwas-cart-floater:hover {
+  background: var(--ink-900, #0F1418);
+  color: var(--cream, #F4EFE3);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--gold-700, #9E7826);
+}
+.rwas-cart-floater:focus-visible {
+  outline: 2px solid var(--gold-700, #9E7826);
+  outline-offset: 2px;
+}
+@media (max-width: 640px) {
+  .rwas-cart-floater {
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    font-size: 11px;
+    letter-spacing: .1em;
+  }
+}

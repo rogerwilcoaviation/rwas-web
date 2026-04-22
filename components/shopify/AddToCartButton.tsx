@@ -43,7 +43,8 @@ export default function AddToCartButton({
         window.localStorage.setItem(CART_STORAGE_KEY, payload.cart.id);
       }
 
-      router.push('/cart');
+      window.dispatchEvent(new Event("rwas-cart-updated"));
+      router.push("/cart");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to add item to cart.');

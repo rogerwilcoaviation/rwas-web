@@ -105,6 +105,8 @@ export default function CartClient() {
         if (!res.ok) throw new Error(`remove failed: ${res.status}`);
         const payload = await res.json();
         setCart(payload.cart || null);
+
+        window.dispatchEvent(new Event("rwas-cart-updated"));
         if (!payload.cart || (payload.cart.lines || []).length === 0) {
           window.localStorage.removeItem(CART_STORAGE_KEY);
         }
@@ -134,6 +136,8 @@ export default function CartClient() {
         if (!res.ok) throw new Error(`update failed: ${res.status}`);
         const payload = await res.json();
         setCart(payload.cart || null);
+
+        window.dispatchEvent(new Event("rwas-cart-updated"));
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {

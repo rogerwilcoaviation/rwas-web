@@ -3,6 +3,7 @@ import { siteConfig } from '@/data/config/site.settings';
 import { ThemeProviders } from './theme-providers';
 import { Metadata } from 'next';
 import Script from 'next/script';
+import CartFloater from "@/components/shared/CartFloater";
 
 import { colors } from '@/data/config/colors.js';
 
@@ -233,6 +234,7 @@ export default function RootLayout({
 
       <body className="flex flex-col text-black antialiased dark:bg-gray-950 dark:text-white min-h-screen bs-body-cream">
         <Script src="/jerry-widget.js" strategy="afterInteractive" />
+        <CartFloater />
         <ThemeProviders>
           <AnalyticsWrapper />
 
