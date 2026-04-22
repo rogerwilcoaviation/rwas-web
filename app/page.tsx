@@ -80,7 +80,7 @@ export default function Home() {
             </Specimen>
 
             <p className="bs-pullquote">
-              &ldquo;We don&rsquo;t just fix aircraft &mdash; we keep them flying safely.&rdquo;
+              &ldquo;Don&rsquo;t fly single-pilot, Roger Wilco is your trusted copilot&rdquo;
             </p>
 
             {/* Papa-Alpha Depot boxed ad */}
