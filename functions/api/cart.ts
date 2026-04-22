@@ -134,7 +134,7 @@ export const onRequestPost = async (ctx: CtxPost) => {
  *   - cart=null when missing / expired (Shopify returns null for unknown ids).
  *   - 400 if no cartId; 502 on Storefront errors.
  * --------------------------------------------------------------------- */
-export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
+export const onRequestGet = async ({ request, env }: { request: Request; env: Env }) => {
   const url = new URL(request.url);
   const cartId = url.searchParams.get("cartId");
   if (!cartId) {
@@ -177,10 +177,10 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   `;
 
   try {
-    const data = await shopify<{
-      cart: unknown | null;
-    }>(env, CART_QUERY, { cartId });
-    return Response.json({ cart: data.cart ?? null });
+    const data = (await shopify(env, CART_QUERY, { cartId })) as
+      | { cart: unknown | null }
+      | undefined;
+    return Response.json({ cart: data?.cart ?? null });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     return Response.json({ error: msg }, { status: 502 });
