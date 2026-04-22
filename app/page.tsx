@@ -72,7 +72,7 @@ export default function Home() {
                 </a>
               </div>
               <div className="bs-toc__row">
-                <a href="/about#contact">
+                <a href="/contact?topic=scheduling&source=home-toc">
                   <span>Scheduling</span>
                   <span className="bs-toc__pg">D1 &rarr;</span>
                 </a>
@@ -195,7 +195,7 @@ export default function Home() {
               <a href="tel:+16052998178" className="bs-cta-primary">
                 Call (605) 299-8178
               </a>
-              <a href="/about#contact" className="bs-cta-secondary">
+              <a href="/contact?topic=quote&source=home-cta" className="bs-cta-secondary">
                 Request a Quote
               </a>
             </div>
