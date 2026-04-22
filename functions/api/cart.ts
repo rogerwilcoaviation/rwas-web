@@ -118,20 +118,11 @@ async function shopify(env: Env, query: string, variables: Record<string, unknow
   return json.data;
 }
 
-
-// ---- Checkout host rewrite (2026-04-22) ----
-// See lib/shopify.ts for rationale. Mirrored here because this Pages Function
-// calls the Storefront API directly (not through lib/shopify.ts).
-function rewriteCheckoutHost(url: string | null | undefined): string {
-  if (!url) return '';
-  return url.replace('www.rogerwilcoaviation.com', 'm06wpv-na.myshopify.com');
-}
-
 function flattenCart(c: any) {
   if (!c) return null;
   return {
     id: c.id,
-    checkoutUrl: rewriteCheckoutHost(c.checkoutUrl),
+    checkoutUrl: c.checkoutUrl,
     totalQuantity: c.totalQuantity,
     cost: c.cost,
     lines: Array.isArray(c?.lines?.edges)

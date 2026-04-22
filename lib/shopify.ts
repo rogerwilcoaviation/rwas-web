@@ -164,23 +164,10 @@ function mapVariants(edges: Array<{ node: ShopifyVariant }>) {
   return edges.map((edge) => edge.node);
 }
 
-
-// ---- Checkout host rewrite (2026-04-22) ----
-// Shopify stamps `shop.primaryDomain` into `checkoutUrl`. After the 2026-04-22
-// primary-domain flip to www.rogerwilcoaviation.com, the raw URL points at
-// Cloudflare Pages (Next.js), which has no /cart/c/<token> route and 404s.
-// Rewrite to the myshopify host so the hosted checkout session resolves.
-// The "Return to store" link inside the hosted checkout still reads primary
-// domain (www), so no continuity loss for the shopper.
-function rewriteCheckoutHost(url: string | null | undefined): string {
-  if (!url) return '';
-  return url.replace('www.rogerwilcoaviation.com', 'm06wpv-na.myshopify.com');
-}
-
 function mapCart(cart: any): ShopifyCart {
   return {
     id: cart.id,
-    checkoutUrl: rewriteCheckoutHost(cart.checkoutUrl),
+    checkoutUrl: cart.checkoutUrl,
     totalQuantity: cart.totalQuantity,
     cost: cart.cost,
     lines: cart.lines.edges.map((edge: any) => edge.node),
