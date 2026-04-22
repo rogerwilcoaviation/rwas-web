@@ -720,17 +720,25 @@ export async function getCart(cartId: string) {
  * Keep separate from `isQuoteCollection` (which does the opposite — forces
  * quote-only even when a product would otherwise be OTC).
  */
-export function isOtcCollection(handle: string): boolean {
-  // garmin-watches: MAP-locked, ships direct from Garmin.
-  // retail-experimental: Garmin experimental-aircraft avionics sold OTC.
-  return handle === 'garmin-watches' || handle === 'retail-experimental';
+export function isOtcCollection(_handle: string): boolean {
+  // OTC collection-level override DISABLED (2026-04-21 PM).
+  // Per user direction, garmin-watches, retail-experimental, and
+  // papa-alpha-tools are all reverted from OTC. No collection currently
+  // qualifies for Add-to-cart via collection-level override.
+  // To re-enable a specific collection, return handle === 'some-handle'.
+  return false;
 }
 
-export function isOtcEligible(product: { tags?: string[] } | null | undefined): boolean {
-  const tags = product?.tags ?? [];
-  if (tags.includes('otc-disabled')) return false;
-  if (tags.includes('stock-check-required')) return false;
-  return tags.includes('otc-eligible');
+export function isOtcEligible(_product: { tags?: string[] } | null | undefined): boolean {
+  // Per-product OTC gating DISABLED (2026-04-21 PM). Papa-Alpha Tools
+  // products still carry the `otc-eligible` tag in Shopify, but per
+  // user direction Add-to-cart is OFF site-wide. To re-enable, restore
+  // the original body:
+  //   const tags = product?.tags ?? [];
+  //   if (tags.includes('otc-disabled')) return false;
+  //   if (tags.includes('stock-check-required')) return false;
+  //   return tags.includes('otc-eligible');
+  return false;
 }
 
 /**
