@@ -44,6 +44,7 @@ type ContactPayload = {
   reason?: string;
   product?: string;
   sku?: string;
+  source?: string;
   message?: string;
   website?: string; // honeypot
   turnstileToken?: string;
@@ -150,10 +151,11 @@ function validate(payload: ContactPayload): string | null {
 function buildSubject(p: ContactPayload, ticketId: string): string {
   const reasonLabel = REASON_LABELS[p.reason || 'general'] || 'Inquiry';
   const who = p.name || 'someone';
+  const srcSuffix = p.source ? ` [src:${p.source}]` : '';
   if (p.reason === 'quote' && p.product) {
-    return `[${ticketId}] Quote: ${p.product} — from ${who}`;
+    return `[${ticketId}] Quote: ${p.product} — from ${who}${srcSuffix}`;
   }
-  return `[${ticketId}] ${reasonLabel} — from ${who}`;
+  return `[${ticketId}] ${reasonLabel} — from ${who}${srcSuffix}`;
 }
 
 function buildPlainTextBody(p: ContactPayload, ticketId: string): string {
@@ -164,6 +166,7 @@ function buildPlainTextBody(p: ContactPayload, ticketId: string): string {
   lines.push(`Reason:    ${REASON_LABELS[p.reason || 'general'] || 'General'}`);
   if (p.product) lines.push(`Product:   ${p.product}`);
   if (p.sku) lines.push(`SKU:       ${p.sku}`);
+  if (p.source) lines.push(`Source:    ${p.source}`);
   lines.push('');
   lines.push('--- Contact ---');
   lines.push(`Name:      ${p.name || ''}`);
@@ -225,6 +228,7 @@ function buildHtmlBody(p: ContactPayload, ticketId: string): string {
             ${row('Best time', p.bestTimeToCall)}
             ${row('Aircraft', p.aircraftMakeModel)}
             ${row('N-Number', p.nNumber)}
+            ${row('Source', p.source)}
           </table>
         </td></tr>
         <tr><td style="padding:16px 32px 8px 32px">
@@ -265,6 +269,9 @@ async function sendViaResend(
     tags: [
       { name: 'source', value: 'rwas-contact-form' },
       { name: 'reason', value: p.reason || 'general' },
+      ...(p.source
+        ? [{ name: 'lead_source', value: p.source.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 64) }]
+        : []),
     ],
   };
 

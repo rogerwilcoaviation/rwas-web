@@ -72,6 +72,8 @@ const contactSchema = z.object({
   reason: z.enum(['quote', 'general', 'service', 'papa-alpha', 'aircraft-sales']).default('general'),
   product: z.string().max(240).optional().or(z.literal('')),
   sku: z.string().max(120).optional().or(z.literal('')),
+  // Lead-source attribution (e.g. "home-cta", "pdp-quote"). Never shown to user.
+  source: z.string().max(120).optional().or(z.literal('')),
   message: z.string().min(10, 'A sentence or two helps us reply faster.').max(4000),
   // honeypot: bots fill this; real humans never see it
   website: z.string().max(0).optional(),
@@ -135,6 +137,8 @@ export default function ContactForm() {
     if (reasonParam && reasonParam in REASON_LABELS) {
       setValue('reason', reasonParam);
     }
+    const source = params.get('source');
+    if (source) setValue('source', source);
   }, [setValue]);
 
   // --- Render Turnstile once the script loads ----------------------------
@@ -372,6 +376,8 @@ export default function ContactForm() {
             <input type="hidden" {...register('sku')} />
           </>
         )}
+        {/* Lead-source attribution — always hidden, populated from ?source= */}
+        <input type="hidden" {...register('source')} />
 
         <div className="rwas-field rwas-field--full">
           <label htmlFor="message">Message *</label>
