@@ -129,17 +129,18 @@ html, body {
 
 /* ---------- Primary Nav (single row) ---------- */
 .broadsheet .bs-nav {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 12px 28px 0;
+  padding: 12px 24px 0;
   font-family: "Inter", sans-serif;
   font-size: 12px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
   display: flex;
   justify-content: center;
-  gap: 22px;
+  gap: 18px;
   flex-wrap: wrap;
+  white-space: nowrap;
   border-top: 1px solid var(--rule-soft);
 }
 .broadsheet .bs-nav a {
