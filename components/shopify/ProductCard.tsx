@@ -25,12 +25,13 @@ export default function ProductCard({
   collectionHandle: string;
 }) {
   const quoteOnly = isQuoteCollection(collectionHandle);
-  // Collection-level OTC (e.g., Garmin Watches — MAP-locked, direct-ship) WINS
-  // over per-product `otc-disabled` / `stock-check-required` tags. Outside an
-  // OTC collection, per-product OTC gating applies.
-  const otcEligible = isOtcCollection(collectionHandle)
-    ? true
-    : isOtcEligible(product);
+  // Collection grids NEVER show Add-to-cart per product direction
+  // (2026-04-21 PM). The buy button lives only on the PDP, where the gate
+  // in app/products/[handle]/page.tsx still consults isOtcCollection /
+  // isOtcEligible. Keeping the imports here so re-enabling on the grid is
+  // a one-line change if the policy reverses.
+  void isOtcCollection; void isOtcEligible;
+  const otcEligible = false;
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
     product.priceRange.minVariantPrice.currencyCode

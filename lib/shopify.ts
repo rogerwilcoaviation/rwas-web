@@ -720,25 +720,30 @@ export async function getCart(cartId: string) {
  * Keep separate from `isQuoteCollection` (which does the opposite — forces
  * quote-only even when a product would otherwise be OTC).
  */
-export function isOtcCollection(_handle: string): boolean {
-  // OTC collection-level override DISABLED (2026-04-21 PM).
-  // Per user direction, garmin-watches, retail-experimental, and
-  // papa-alpha-tools are all reverted from OTC. No collection currently
-  // qualifies for Add-to-cart via collection-level override.
-  // To re-enable a specific collection, return handle === 'some-handle'.
-  return false;
+export function isOtcCollection(handle: string): boolean {
+  // Collection-level OTC for the PDP buy box (2026-04-21 PM revision).
+  // Every catalog collection EXCEPT the quote-only "Garmin Avionics for
+  // Certified Aircraft (RWAS Install Only)" (handle: garmin-avionics) gets
+  // an Add-to-Cart button on the PDP. Collection grids do NOT render
+  // Add-to-cart — that's enforced separately in ProductCard.
+  return (
+    handle === 'garmin-avionics-certified-retail' ||
+    handle === 'retail-experimental' ||
+    handle === 'garmin-avionics-accessories' ||
+    handle === 'garmin-watches' ||
+    handle === 'papa-alpha-tools'
+  );
 }
 
-export function isOtcEligible(_product: { tags?: string[] } | null | undefined): boolean {
-  // Per-product OTC gating DISABLED (2026-04-21 PM). Papa-Alpha Tools
-  // products still carry the `otc-eligible` tag in Shopify, but per
-  // user direction Add-to-cart is OFF site-wide. To re-enable, restore
-  // the original body:
-  //   const tags = product?.tags ?? [];
-  //   if (tags.includes('otc-disabled')) return false;
-  //   if (tags.includes('stock-check-required')) return false;
-  //   return tags.includes('otc-eligible');
-  return false;
+export function isOtcEligible(product: { tags?: string[] } | null | undefined): boolean {
+  // Per-product OTC gate (re-enabled 2026-04-21 PM). Used by the PDP gate
+  // for products that don't sit in an isOtcCollection (e.g., Papa-Alpha
+  // Tools, since the papa-alpha-tools collection is synthetic in rwas-web
+  // and won't appear in a product's Shopify collections list).
+  const tags = product?.tags ?? [];
+  if (tags.includes('otc-disabled')) return false;
+  if (tags.includes('stock-check-required')) return false;
+  return tags.includes('otc-eligible');
 }
 
 /**
