@@ -982,32 +982,6 @@ cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
   }, true);
 })();
 
-// Runtime nav fix: ensure last nav tab says "About" not "Contact"
-(function() {
-  function fixNav() {
-    var navs = document.querySelectorAll('.np-nav, nav');
-    navs.forEach(function(nav) {
-      var links = nav.querySelectorAll('a');
-      links.forEach(function(a) {
-        var text = a.textContent.trim();
-        if (text === 'Contact' && a.href && a.href.indexOf('/contact') !== -1) {
-          // Check if this is the last nav item (should be About)
-          var nextSibling = a.nextElementSibling;
-          if (!nextSibling || nextSibling.tagName !== 'A') {
-            a.textContent = 'About';
-            a.href = '/about';
-          }
-        }
-      });
-    });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fixNav);
-  } else {
-    fixNav();
-  }
-})();
-
 // ---------------------------------------------------------------------------
 // data-jerry-intent button wiring (fix #4 companion)
 // Any button or anchor with data-jerry-intent="list-aircraft" opens Jerry and
