@@ -470,7 +470,7 @@
       return;
     }
 
-    if (hasListingIntent(text) && (!session || !session.token)) {
+    if (LISTING_UI_ENABLED && hasListingIntent(text) && (!session || !session.token)) {
       addAssistantMessage((function(){ openSellerLoginModal(); return 'Before we get started, I need to verify your email. I just opened the Seller Login — enter your email, check for the 6-digit code, and come back and say ready.'; })());
       input.focus();
       return;
@@ -485,7 +485,7 @@
 
     try {
       var apiMessages = history.map(function (m) { return { role: m.role, content: m.content }; });
-      if (hasListingIntent(text) && session && session.email) {
+      if (LISTING_UI_ENABLED && hasListingIntent(text) && session && session.email) {
         var lastIdx = apiMessages.length - 1;
         apiMessages[lastIdx] = {
           role: apiMessages[lastIdx].role,
@@ -495,7 +495,7 @@
 
       // ── Direct listing submission from widget ──
     var submitRe = /^\s*(list it|submit|post it|list as is|list it as is|submit my listing|file it|send it|that.?s it.* list|go ahead.* list|yes.* list)\b/i;
-    if (submitRe.test(text)) {
+    if (LISTING_UI_ENABLED && submitRe.test(text)) {
       if (!session || !session.token) {
         console.warn('[Jerry widget] list-it blocked, missing sale session token', session || null);
         history.push({ role: 'assistant', content: (function(){ openSellerLoginModal(); return 'You need to log in before I can submit the listing — I just opened the login box. Verify your email, then tell me to submit it again.\n\n\u2014 Capt. Jerry, RWAS'; })() });
@@ -704,7 +704,7 @@
     var response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: apiMessages, state: intakeState })
+        body: JSON.stringify({ messages: apiMessages, state: intakeState, listingUi: LISTING_UI_ENABLED })
       });
 
       if (!response.ok) {
