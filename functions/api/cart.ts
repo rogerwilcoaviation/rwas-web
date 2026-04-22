@@ -125,3 +125,64 @@ export const onRequestPost = async (ctx: CtxPost) => {
     });
   }
 };
+
+
+/* -----------------------------------------------------------------------
+ * GET /api/cart?cartId=<id>
+ * Load an existing Storefront cart by id.
+ * Returns: { cart: { id, checkoutUrl, totalQuantity, cost, lines } | null }
+ *   - cart=null when missing / expired (Shopify returns null for unknown ids).
+ *   - 400 if no cartId; 502 on Storefront errors.
+ * --------------------------------------------------------------------- */
+export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
+  const url = new URL(request.url);
+  const cartId = url.searchParams.get("cartId");
+  if (!cartId) {
+    return Response.json({ error: "cartId required" }, { status: 400 });
+  }
+
+  const CART_QUERY = `
+    query Cart($cartId: ID!) {
+      cart(id: $cartId) {
+        id
+        checkoutUrl
+        totalQuantity
+        cost {
+          subtotalAmount { amount currencyCode }
+          totalAmount { amount currencyCode }
+        }
+        lines(first: 50) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  price { amount currencyCode }
+                  product {
+                    title
+                    handle
+                    featuredImage { url altText }
+                  }
+                  selectedOptions { name value }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const data = await shopify<{
+      cart: unknown | null;
+    }>(env, CART_QUERY, { cartId });
+    return Response.json({ cart: data.cart ?? null });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return Response.json({ error: msg }, { status: 502 });
+  }
+};

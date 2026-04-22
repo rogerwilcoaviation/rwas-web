@@ -42,21 +42,43 @@ function formatPrice(amount: string, currencyCode: string) {
 export default function CartClient() {
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadCart() {
-      const cartId = window.localStorage.getItem(CART_STORAGE_KEY);
-      if (!cartId) {
+      // PATCHED-CART-LOADER: try/catch/finally so a failed fetch or
+      // bad JSON never strands the UI on "Loading cart...".
+      try {
+        const cartId = window.localStorage.getItem(CART_STORAGE_KEY);
+        if (!cartId) {
+          setCart(null);
+          return;
+        }
+        const response = await fetch(
+          `/api/cart?cartId=${encodeURIComponent(cartId)}`,
+          { headers: { Accept: "application/json" } },
+        );
+        if (!response.ok) {
+          // 404 / 502 etc. — clear the stored id if the cart is gone.
+          if (response.status === 400 || response.status === 404) {
+            window.localStorage.removeItem(CART_STORAGE_KEY);
+          }
+          throw new Error(`cart fetch failed: ${response.status}`);
+        }
+        const payload = await response.json();
+        setCart(payload.cart || null);
+        // If Shopify returned null (expired cart), drop the stale id.
+        if (!payload.cart) {
+          window.localStorage.removeItem(CART_STORAGE_KEY);
+        }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(msg);
+        setCart(null);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      const response = await fetch(`/api/cart?cartId=${encodeURIComponent(cartId)}`);
-      const payload = await response.json();
-      setCart(payload.cart || null);
-      setLoading(false);
     }
-
     loadCart();
   }, []);
 
