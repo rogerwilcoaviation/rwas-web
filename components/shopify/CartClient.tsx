@@ -166,7 +166,7 @@ export default function CartClient() {
           <p className="bs-kicker">Your cart is empty</p>
           <p className="bs-script-accent">&mdash; nothing on order yet &mdash;</p>
           <h2 className="bs-headline bs-headline--section" style={{ marginTop: 8 }}>
-            Pick something from the broadsheet.
+            Don’t fly single-pilot, Roger Wilco is your trusted copilot
           </h2>
           <p
             className="bs-body"
