@@ -11,6 +11,7 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import BlogArticlesFeed from '@/components/home/BlogArticlesFeed';
+import AircraftSaleFeed from '@/components/home/AircraftSaleFeed';
 
 export const metadata = {
   title: 'Garmin Avionics & Aircraft Maintenance — Yankton, SD',
@@ -144,11 +145,7 @@ export default function Home() {
               <h2 className="bs-headline bs-headline--section">Aircraft 4 Sale</h2>
               <hr className="section-rule" />
 
-              <div id="aircraft-sale-feed">
-                <div style={{ fontStyle: 'italic', fontSize: '12px', color: '#888', padding: '8px 0' }}>
-                  Loading listings&hellip;
-                </div>
-              </div>
+              <AircraftSaleFeed />
 
               <div style={{ marginTop: '12px', textAlign: 'center' }}>
                 <a href="/aircraft-for-sale" className="bs-ad__cta">
@@ -368,52 +365,6 @@ export default function Home() {
 
       <BroadsheetFooter />
 
-      {/* Aircraft-for-sale feed hydration */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-(function(){
-  var feed = document.getElementById('aircraft-sale-feed');
-  if (!feed) return;
-  fetch('https://sale-api.rogerwilcoaviation.com/browse')
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      var listings = (data.listings || []).slice(0, 4);
-      if (!listings.length) {
-        feed.innerHTML = '<div style="font-style:italic;font-size:12px;color:#888;padding:8px 0">No aircraft currently listed. <a href="/aircraft-for-sale#sell" style="color:#1a1a1a;text-decoration:underline">List yours today.</a></div>';
-        return;
-      }
-      feed.innerHTML = listings.map(function(l){
-        var priceRaw = l.price ? String(l.price).replace(/[^0-9]/g,'') : '';
-        var price = priceRaw ? '$' + parseInt(priceRaw).toLocaleString() : 'Call';
-        var lbCount = l.logbooks ? Object.values(l.logbooks).reduce(function(s,a){ return s + (a?a.length:0); }, 0) : 0;
-        var photo = l.photos && l.photos.length
-          ? '<img src="https://sale-api.rogerwilcoaviation.com/files/' + l.photos[0].key + '" alt="' + l.make + ' ' + l.model + '" style="width:100%;height:100%;object-fit:cover" />'
-          : 'Photo';
-        var cat = (l.category||'').replace(/-/g,' ');
-        var meta = (l.year||'') + (cat ? ' \\u00b7 ' + cat : '');
-        return '<a href="/aircraft-for-sale/' + l.id + '" class="bs-listing">'
-          + '<div class="bs-listing__img">' + photo + '</div>'
-          + '<div class="bs-listing__body">'
-          + '<div>'
-          + '<div class="bs-listing__meta">' + meta + '</div>'
-          + '<h3 class="bs-listing__title">' + l.make + ' ' + l.model + '</h3>'
-          + '</div>'
-          + '<div class="bs-listing__foot">'
-          + '<span class="bs-listing__price">' + price + '</span>'
-          + (lbCount ? '<span class="bs-listing__logs">\\u2713 ' + lbCount + ' logbook doc' + (lbCount>1?'s':'') + '</span>' : '')
-          + '</div>'
-          + '</div>'
-          + '</a>';
-      }).join('');
-    })
-    .catch(function(){
-      feed.innerHTML = '<div style="font-style:italic;font-size:12px;color:#888">Could not load listings.</div>';
-    });
-})();
-`,
-        }}
-      />
 
     </BroadsheetLayout>
   );
