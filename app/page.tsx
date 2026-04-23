@@ -10,6 +10,7 @@ import {
   BroadsheetFooter,
   Specimen,
 } from '@/components/shared/broadsheet';
+import BlogArticlesFeed from '@/components/home/BlogArticlesFeed';
 
 export const metadata = {
   title: 'Garmin Avionics & Aircraft Maintenance — Yankton, SD',
@@ -167,9 +168,7 @@ export default function Home() {
           <div>
             {/* Blog articles feed (hydrated client-side) */}
             <Specimen variant="flat" as="aside">
-              <div id="blog-articles-feed">
-                <span className="bs-kicker">Loading&hellip;</span>
-              </div>
+              <BlogArticlesFeed />
             </Specimen>
 
             {/* Laser cutter new-capability figure */}
@@ -416,46 +415,6 @@ export default function Home() {
         }}
       />
 
-      {/* Blog-articles feed hydration */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-(function() {
-  var catLabels = {
-    'press-release': 'Press Release',
-    'service-bulletin': 'Service Bulletin',
-    'product-update': 'Product Update',
-    'memo': 'Dealer Memo',
-    'regulatory': 'Regulatory'
-  };
-  fetch('/blog-articles.json?t=' + Date.now())
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var articles = (data.articles || [])
-        .filter(function(a) { return a.status === 'published'; })
-        .sort(function(a, b) { return b.date.localeCompare(a.date); })
-        .slice(0, 3);
-      var el = document.getElementById('blog-articles-feed');
-      if (!el || !articles.length) return;
-      var html = '';
-      articles.forEach(function(a, i) {
-        var label = catLabels[a.category] || a.category;
-        var url = '/blog/article.html?id=' + a.id;
-        html += '<span class="bs-kicker">' + label + '</span>';
-        html += '<a href="' + url + '"><h3 class="bs-headline bs-headline--section">' + a.title + '</h3></a>';
-        html += '<hr class="section-rule" />';
-        html += '<p class="bs-body">' + a.lead.substring(0, 200) + (a.lead.length > 200 ? '&hellip;' : '') + '</p>';
-        if (i < articles.length - 1) {
-          html += '<hr class="section-rule" style="margin-top:18px" />';
-        }
-      });
-      el.innerHTML = html;
-    })
-    .catch(function() {});
-})();
-`,
-        }}
-      />
     </BroadsheetLayout>
   );
 }
