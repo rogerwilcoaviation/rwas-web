@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 type Listing = {
   id: string;
@@ -66,12 +67,12 @@ export default function AircraftSaleFeed() {
     return (
       <div style={LOADING_STYLE}>
         No aircraft currently listed.{' '}
-        <a
+        <Link
           href="/aircraft-for-sale#sell"
           style={{ color: '#1a1a1a', textDecoration: 'underline' }}
         >
           List yours today.
-        </a>
+        </Link>
       </div>
     );
   }
@@ -94,7 +95,7 @@ export default function AircraftSaleFeed() {
         const year = l.year != null ? String(l.year) : '';
         const meta = year + (cat ? ' \u00b7 ' + cat : '');
         return (
-          <a
+          <Link
             key={l.id}
             href={`/aircraft-for-sale/${l.id}`}
             className="bs-listing"
@@ -128,7 +129,7 @@ export default function AircraftSaleFeed() {
                 )}
               </div>
             </div>
-          </a>
+          </Link>
         );
       })}
     </>
