@@ -125,6 +125,23 @@ export default async function CollectionDetailPage({
           </div>
         </section>
 
+        {collection.handle === 'papa-alpha-tools' && (
+          <Specimen variant="flat">
+            <p className="bs-kicker">Worldwide delivery</p>
+            <p className="bs-script-accent">&mdash; from Yankton to wherever you fly &mdash;</p>
+            <h2 className="bs-headline" style={{ marginTop: 6, marginBottom: 12 }}>
+              We sell internationally all over the world.
+            </h2>
+            <p className="bs-body">
+              Crafted with CAD, CNC routing, and fiber laser cutting of aircraft-grade aluminum,
+              powder coated, and UV printed for reduced weight, durability, and precision.
+            </p>
+            <p className="bs-byline" style={{ marginTop: 16, fontStyle: 'italic' }}>
+              Made by professional mechanics for professional mechanics.
+            </p>
+          </Specimen>
+        )}
+
         <Specimen variant="flat">
           <div style={{ marginBottom: 20 }}>
             <p className="bs-kicker">Products</p>
