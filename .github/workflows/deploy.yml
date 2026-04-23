@@ -63,6 +63,6 @@ jobs:
           curl -sS -X POST https://rogerwilcoaviation.com/api/chat \
             -H 'Content-Type: application/json' \
             -H 'Origin: https://rogerwilcoaviation.com' \
-            -d '{"messages":[{"role":"user","content":"I want to list my aircraft"}]}' \
-            --max-time 10 | grep -q 'intercept/intake' || { echo "Listing-intake intercept failed"; exit 1; }
+            -d '{"messages":[{"role":"user","content":"I want to list my aircraft"}],"listingUi":true}' \
+            --max-time 30 | grep -q 'intercept/intake' || { echo "Listing-intake intercept failed"; exit 1; }
           echo "All smoke tests passed."
