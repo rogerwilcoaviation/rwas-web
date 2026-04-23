@@ -127,7 +127,7 @@ const PAPA_ALPHA_SYNTHETIC: ShopifyCollectionSummary = {
   title: 'Papa-Alpha Tools',
   description: 'RWAS-built rigging tools for Piper Papa-Alpha airframes. Priced OTC — ships same day.',
   image: {
-    url: '/newspaper/images/papa_alpha_kit_collection.png',
+    url: '/newspaper/images/papa_alpha_kit_collection.jpg',
     altText: 'Papa-Alpha precision rigging tool kit for Piper airframes',
   },
 };
