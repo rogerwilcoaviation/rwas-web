@@ -48,13 +48,13 @@ export default function Home() {
                 </a>
               </div>
               <div className="bs-toc__row">
-                <a href="/collections/garmin-avionics">
+                <a href="/collections">
                   <span>Garmin Store</span>
                   <span className="bs-toc__pg">A3 &rarr;</span>
                 </a>
               </div>
               <div className="bs-toc__row">
-                <a href="/collections/rigging-tools">
+                <a href="/collections/papa-alpha-tools">
                   <span>Tool Procurement</span>
                   <span className="bs-toc__pg">B1 &rarr;</span>
                 </a>
@@ -88,7 +88,7 @@ export default function Home() {
               <div className="bs-ad__kicker">Advertisement</div>
               <h3 className="bs-ad__title">Papa-Alpha Depot</h3>
               <p className="bs-ad__sub">Precision Piper rigging tools &middot; Tiered pricing</p>
-              <a className="bs-ad__cta" href="/collections/rigging-tools">
+              <a className="bs-ad__cta" href="/collections/papa-alpha-tools">
                 Order Papa-Alpha
               </a>
             </aside>
@@ -221,7 +221,7 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/collections/rigging-tools">Piper Rigging Reference Tools</a>
+                    <a href="/collections/papa-alpha-tools">Piper Rigging Reference Tools</a>
                   </p>
                   <p className="bs-svc-desc">
                     Precision flight-control rigging for PA-28, PA-30, PA-31, PA-36. CNC-machined aluminum, powder coated, UV printed. Sold worldwide.
@@ -237,7 +237,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/collections/rigging-tools">Individual Tools</a>
+                    <a href="/collections/papa-alpha-tools">Individual Tools</a>
                   </p>
                   <p className="bs-svc-desc">
                     Stabilator, rudder, aileron &amp; flap, bell crank, PA-31/PA-36 specifics. From $59.99.

@@ -18,7 +18,7 @@ const collectionLinks = [
     label: 'Experimental avionics',
   },
   {
-    href: '/collections/rigging-tools',
+    href: '/collections/papa-alpha-tools',
     label: 'Papa-Alpha tools',
   },
   {

@@ -262,7 +262,7 @@ export default function ShopCapabilitiesPage() {
                   <li className="bs-svc"><p className="bs-svc-name">CO2 Laser Engraving</p></li>
                   <li className="bs-svc"><p className="bs-svc-name">Computer Aided Design (CAD)</p></li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/collections/rigging-tools">Papa-Alpha Reference Tools</a></p>
+                    <p className="bs-svc-name"><a href="/collections/papa-alpha-tools">Papa-Alpha Reference Tools</a></p>
                     <p className="bs-svc-desc">Precision Piper rigging tools &mdash; designed and manufactured in-house</p>
                   </li>
                 </ul>

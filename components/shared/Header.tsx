@@ -8,7 +8,7 @@ const collectionLinks = [
     label: 'Garmin',
   },
   {
-    href: '/collections/rigging-tools',
+    href: '/collections/papa-alpha-tools',
     label: 'Papa-Alpha',
   },
   {

@@ -168,7 +168,7 @@ export default function FinancingPage() {
                   <span className="arr">&rarr;</span>
                 </li>
                 <li>
-                  <a href="/collections/rigging-tools">Papa-Alpha Tools</a>
+                  <a href="/collections/papa-alpha-tools">Papa-Alpha Tools</a>
                   <span className="arr">&rarr;</span>
                 </li>
                 <li>
