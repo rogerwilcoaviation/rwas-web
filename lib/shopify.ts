@@ -126,7 +126,10 @@ const PAPA_ALPHA_SYNTHETIC: ShopifyCollectionSummary = {
   handle: 'papa-alpha-tools',
   title: 'Papa-Alpha Tools',
   description: 'RWAS-built rigging tools for Piper Papa-Alpha airframes. Priced OTC — ships same day.',
-  image: null,
+  image: {
+    url: '/newspaper/images/papa_alpha_kit_collection.png',
+    altText: 'Papa-Alpha precision rigging tool kit for Piper airframes',
+  },
 };
 
 export async function shopifyFetch<T>(query: string, variables?: Record<string, unknown>) {
