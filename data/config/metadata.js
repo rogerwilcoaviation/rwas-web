@@ -7,7 +7,7 @@ const metadata = {
   businessName: 'Roger Wilco Aviation Services',
   siteUrl: 'https://www.rogerwilcoaviation.com',
   siteRepo: 'https://github.com/rogerwilcoaviation/rwas-web',
-  socialBanner: '/api/og',
+  socialBanner: '/og-default.jpg',
   supportEmail: 'service@rwas.team',
   email: 'service@rwas.team',
   twitter: '',

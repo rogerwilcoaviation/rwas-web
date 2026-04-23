@@ -13,6 +13,7 @@ import { getCollectionByHandle, getFeaturedCollections, isQuoteCollection } from
 import Link from 'next/link';
 
 const FALLBACK_COLLECTION_HANDLES = [
+  'rigging-tools',
   'on-sale',
   'garmin-avionics-certified-retail',
   'garmin-avionics-accessories',
