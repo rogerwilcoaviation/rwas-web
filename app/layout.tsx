@@ -1,9 +1,11 @@
+import { Suspense } from 'react';
 import { Nunito_Sans } from 'next/font/google';
 import { siteConfig } from '@/data/config/site.settings';
 import { ThemeProviders } from './theme-providers';
 import { Metadata } from 'next';
 import Script from 'next/script';
 import CartFloater from "@/components/shared/CartFloater";
+import SeasonalTheme from './seasonal-theme';
 
 import { colors } from '@/data/config/colors.js';
 
@@ -240,6 +242,9 @@ export default function RootLayout({
 
           <div className="w-full flex flex-col justify-between items-center font-sans">
             <SearchProvider>
+              <Suspense fallback={null}>
+                <SeasonalTheme />
+              </Suspense>
               <main className="w-full flex flex-col items-stretch mb-auto">
                 {children}
               </main>

@@ -278,3 +278,85 @@
   font-size: var(--fs-small);
   color: var(--ink-800);
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Seasonal color previews — color-token overrides only.
+ * Use /?season=spring|summer|fall|winter to view; structure/data/functionality
+ * stay unchanged. Live default remains the existing Spring palette until
+ * John approves a specific seasonal rollout.
+ * ───────────────────────────────────────────────────────────────────────── */
+.season-spring .broadsheet {
+  --ink-900: #102018;
+  --ink-800: #20352a;
+  --ink-700: #365546;
+  --ink-600: #547063;
+  --ink-500: #74897f;
+  --gold-900: #5c4217;
+  --gold-800: #7b6324;
+  --gold-700: #b89a3a;
+  --gold-600: #cfb657;
+  --gold-500: #dfcc7d;
+  --gold-light: #eadfa8;
+  --cream: #f7f2df;
+  --bone: #fff9e8;
+  --parchment: #eef0cf;
+  --rule: #365546;
+  --rule-soft: #c8c5a1;
+}
+
+.season-summer .broadsheet {
+  --ink-900: #0b1f28;
+  --ink-800: #123241;
+  --ink-700: #244d5e;
+  --ink-600: #426a78;
+  --ink-500: #668894;
+  --gold-900: #6a4117;
+  --gold-800: #91601f;
+  --gold-700: #d2932e;
+  --gold-600: #e0ad45;
+  --gold-500: #efc36a;
+  --gold-light: #ffe0a0;
+  --cream: #f7efd6;
+  --bone: #fff6df;
+  --parchment: #efe3bb;
+  --rule: #244d5e;
+  --rule-soft: #cdbb8e;
+}
+
+.season-fall .broadsheet {
+  --ink-900: #21130d;
+  --ink-800: #3a2317;
+  --ink-700: #5a3824;
+  --ink-600: #765239;
+  --ink-500: #987052;
+  --gold-900: #5b250d;
+  --gold-800: #7e3513;
+  --gold-700: #b45f24;
+  --gold-600: #cc7a32;
+  --gold-500: #df9c58;
+  --gold-light: #f1c57d;
+  --cream: #f1e4ca;
+  --bone: #f9edda;
+  --parchment: #ead3ad;
+  --rule: #5a3824;
+  --rule-soft: #c4a37e;
+}
+
+.season-winter .broadsheet {
+  --ink-900: #0b1722;
+  --ink-800: #17283a;
+  --ink-700: #294158;
+  --ink-600: #486175;
+  --ink-500: #708696;
+  --gold-900: #40505d;
+  --gold-800: #5b7180;
+  --gold-700: #7d99aa;
+  --gold-600: #9cb5c3;
+  --gold-500: #bed0d9;
+  --gold-light: #e4eff3;
+  --cream: #edf2f2;
+  --bone: #f7fbfa;
+  --parchment: #dfe9e8;
+  --rule: #294158;
+  --rule-soft: #aab9bd;
+}
