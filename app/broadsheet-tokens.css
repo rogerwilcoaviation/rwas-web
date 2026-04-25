@@ -646,3 +646,180 @@
 .theme-christmas .broadsheet .specimen--hero {
   box-shadow: 4px 4px 0 #7c111b;
 }
+
+/* Holiday-specific action effects. */
+.weather-flag,
+.weather-firework,
+.weather-sparkle,
+.weather-leaves,
+.weather-easter {
+  position: absolute;
+  pointer-events: none;
+}
+
+.weather-flag--stripes {
+  inset: 0;
+  opacity: .105;
+  background: repeating-linear-gradient(
+    180deg,
+    #b31942 0 7.69%,
+    #fff 7.69% 15.38%
+  );
+  mix-blend-mode: multiply;
+}
+
+.weather-flag--canton {
+  top: 0;
+  left: 0;
+  width: min(44vw, 520px);
+  height: min(31vw, 360px);
+  opacity: .16;
+  background: #0a3161;
+  clip-path: polygon(0 0, 100% 0, 82% 100%, 0 100%);
+}
+
+.weather-flag--stars {
+  top: 14px;
+  left: 18px;
+  width: min(36vw, 430px);
+  height: min(24vw, 280px);
+  opacity: .22;
+  background-image: radial-gradient(circle, #fff 0 1.3px, transparent 1.8px);
+  background-size: 26px 22px;
+  transform: skewX(-6deg);
+}
+
+.weather-firework {
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  opacity: 0;
+  background:
+    radial-gradient(circle, rgba(255,255,255,.95) 0 2px, transparent 3px),
+    conic-gradient(from 0deg, transparent 0 8deg, rgba(255,255,255,.9) 8deg 10deg, transparent 10deg 28deg, #b31942 28deg 31deg, transparent 31deg 52deg, #f6d66f 52deg 55deg, transparent 55deg 82deg, #0a3161 82deg 85deg, transparent 85deg 360deg);
+  filter: drop-shadow(0 0 10px rgba(255,255,255,.35));
+  animation: holiday-firework-bloom 5.5s ease-out infinite;
+}
+
+.weather-firework--one { top: 9%; left: 60%; animation-delay: .2s; }
+.weather-firework--two { top: 24%; left: 14%; transform: scale(.82); animation-delay: 1.7s; }
+.weather-firework--three { top: 38%; right: 10%; transform: scale(.68); animation-delay: 3.1s; }
+
+.weather-sparkle--patriotic {
+  inset: 0;
+  opacity: .42;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.95) 0 1px, transparent 2px),
+    radial-gradient(circle, rgba(179,25,66,.75) 0 1.2px, transparent 2.2px),
+    radial-gradient(circle, rgba(10,49,97,.75) 0 1.2px, transparent 2.2px);
+  background-size: 96px 96px, 134px 134px, 176px 176px;
+  animation: holiday-sparkle-drift 24s linear infinite;
+}
+
+.weather-leaves--near,
+.weather-leaves--far {
+  inset: -20%;
+  background-repeat: repeat;
+  background-image:
+    radial-gradient(ellipse at 30% 35%, #b85f24 0 4px, transparent 5px),
+    radial-gradient(ellipse at 70% 65%, #df8a3d 0 3px, transparent 4px),
+    radial-gradient(ellipse at 40% 70%, #74320f 0 3px, transparent 4px);
+  background-size: 110px 130px, 170px 150px, 210px 190px;
+  animation: holiday-leaves-fall 28s linear infinite;
+  opacity: .42;
+}
+
+.weather-leaves--far {
+  opacity: .25;
+  animation-duration: 42s;
+  transform: scale(.85);
+}
+
+.weather-easter--pastels {
+  inset: 0;
+  opacity: .20;
+  background:
+    radial-gradient(circle at 18% 18%, #ddb6e2, transparent 17%),
+    radial-gradient(circle at 78% 22%, #e8efd6, transparent 18%),
+    radial-gradient(circle at 60% 76%, #f5e3f6, transparent 22%);
+}
+
+.weather-easter--eggs {
+  inset: -15%;
+  opacity: .30;
+  background-image:
+    radial-gradient(ellipse 8px 12px at center, #c99bd0 0 58%, transparent 62%),
+    radial-gradient(ellipse 7px 11px at center, #e8efd6 0 58%, transparent 62%),
+    radial-gradient(ellipse 7px 11px at center, #f5e3f6 0 58%, transparent 62%);
+  background-size: 130px 150px, 180px 170px, 230px 210px;
+  background-position: 10px 20px, 80px 60px, 140px 30px;
+  animation: holiday-easter-float 36s linear infinite;
+}
+
+.theme-july-4 .broadsheet .bs-dateline,
+.theme-memorial-day .broadsheet .bs-dateline,
+.theme-veterans-day .broadsheet .bs-dateline {
+  background: linear-gradient(90deg, #0a3161 0%, #07152c 48%, #b31942 100%);
+  border-bottom-color: #fff;
+}
+
+.theme-july-4 .broadsheet .bs-masthead,
+.theme-memorial-day .broadsheet .bs-masthead,
+.theme-veterans-day .broadsheet .bs-masthead {
+  background:
+    linear-gradient(180deg, rgba(255,253,243,.96), rgba(243,241,232,.97)),
+    repeating-linear-gradient(180deg, rgba(179,25,66,.10) 0 10px, rgba(255,255,255,.10) 10px 20px),
+    linear-gradient(90deg, rgba(10,49,97,.16), transparent 38%);
+  border-bottom-color: #b31942;
+}
+
+.theme-july-4 .broadsheet .bs-masthead__brand {
+  color: #0a3161;
+  text-shadow: 1px 1px 0 rgba(179,25,66,.22);
+}
+
+.theme-thanksgiving .broadsheet .bs-dateline {
+  background: linear-gradient(90deg, #21140c, #74320f 52%, #9b4619);
+  border-bottom-color: #f7cf91;
+}
+
+.theme-thanksgiving .broadsheet .bs-masthead {
+  background:
+    linear-gradient(180deg, rgba(251,239,217,.96), rgba(241,223,197,.97)),
+    repeating-linear-gradient(35deg, rgba(199,110,44,.12) 0 18px, rgba(116,50,15,.08) 18px 36px);
+  border-bottom-color: #c76e2c;
+}
+
+.theme-easter .broadsheet .bs-dateline {
+  background: linear-gradient(90deg, #595a80, #9a6aa2 52%, #e8efd6);
+  border-bottom-color: #c99bd0;
+}
+
+.theme-easter .broadsheet .bs-masthead {
+  background:
+    linear-gradient(180deg, rgba(255,249,237,.96), rgba(245,240,223,.97)),
+    radial-gradient(circle at 18% 22%, rgba(201,155,208,.18), transparent 18%),
+    radial-gradient(circle at 74% 18%, rgba(232,239,214,.28), transparent 20%);
+  border-bottom-color: #c99bd0;
+}
+
+@keyframes holiday-firework-bloom {
+  0%, 72%, 100% { opacity: 0; transform: scale(.08) rotate(0deg); }
+  77% { opacity: .95; transform: scale(.82) rotate(12deg); }
+  88% { opacity: .22; transform: scale(1.18) rotate(28deg); }
+}
+
+@keyframes holiday-sparkle-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(6%, 4%, 0); }
+}
+
+@keyframes holiday-leaves-fall {
+  from { transform: translate3d(-2%, -10%, 0) rotate(0deg); }
+  to { transform: translate3d(7%, 24%, 0) rotate(12deg); }
+}
+
+@keyframes holiday-easter-float {
+  from { transform: translate3d(0, 8%, 0); }
+  to { transform: translate3d(-5%, -6%, 0); }
+}

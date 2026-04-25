@@ -3,7 +3,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-type WeatherEffect = 'none' | 'snow' | 'thunderstorm' | 'icing';
+type WeatherEffect =
+  | 'none'
+  | 'snow'
+  | 'thunderstorm'
+  | 'icing'
+  | 'fireworks'
+  | 'flag'
+  | 'leaves'
+  | 'easter';
 
 const AIRPORT = 'KYKN';
 const MAX_AGE_HOURS = 12;
@@ -39,16 +47,31 @@ export default function WeatherEffects() {
   const [autoEffect, setAutoEffect] = useState<WeatherEffect>('none');
 
   const effect = useMemo<WeatherEffect>(() => {
-    if (manualEffect && ['none', 'snow', 'thunderstorm', 'icing'].includes(manualEffect)) {
+    if (
+      manualEffect &&
+      ['none', 'snow', 'thunderstorm', 'icing', 'fireworks', 'flag', 'leaves', 'easter'].includes(
+        manualEffect,
+      )
+    ) {
       return manualEffect as WeatherEffect;
     }
     if (theme === 'winter-storm') return 'snow';
     if (theme === 'christmas') return 'snow';
+    if (theme === 'july-4') return 'fireworks';
+    if (theme === 'memorial-day' || theme === 'veterans-day') return 'flag';
+    if (theme === 'thanksgiving') return 'leaves';
+    if (theme === 'easter') return 'easter';
     return autoEffect;
   }, [autoEffect, manualEffect, theme]);
 
   useEffect(() => {
-    if (manualEffect || theme === 'winter-storm' || theme === 'christmas') return;
+    if (
+      manualEffect ||
+      ['winter-storm', 'christmas', 'july-4', 'memorial-day', 'veterans-day', 'thanksgiving', 'easter'].includes(
+        theme || '',
+      )
+    )
+      return;
 
     let cancelled = false;
     const params = `ids=${AIRPORT}&format=json&hours=${MAX_AGE_HOURS}`;
@@ -85,6 +108,10 @@ export default function WeatherEffects() {
       {effect === 'snow' && <Snow />}
       {effect === 'icing' && <Icing />}
       {effect === 'thunderstorm' && <Thunderstorm />}
+      {effect === 'fireworks' && <Fireworks />}
+      {effect === 'flag' && <Flag />}
+      {effect === 'leaves' && <Leaves />}
+      {effect === 'easter' && <Easter />}
     </div>
   );
 }
@@ -113,6 +140,47 @@ function Thunderstorm() {
       <div className="weather-rain weather-rain--near" />
       <div className="weather-rain weather-rain--far" />
       <div className="weather-lightning" />
+    </>
+  );
+}
+
+
+function Fireworks() {
+  return (
+    <>
+      <Flag />
+      <div className="weather-firework weather-firework--one" />
+      <div className="weather-firework weather-firework--two" />
+      <div className="weather-firework weather-firework--three" />
+      <div className="weather-sparkle weather-sparkle--patriotic" />
+    </>
+  );
+}
+
+function Flag() {
+  return (
+    <>
+      <div className="weather-flag weather-flag--stripes" />
+      <div className="weather-flag weather-flag--canton" />
+      <div className="weather-flag weather-flag--stars" />
+    </>
+  );
+}
+
+function Leaves() {
+  return (
+    <>
+      <div className="weather-leaves weather-leaves--near" />
+      <div className="weather-leaves weather-leaves--far" />
+    </>
+  );
+}
+
+function Easter() {
+  return (
+    <>
+      <div className="weather-easter weather-easter--pastels" />
+      <div className="weather-easter weather-easter--eggs" />
     </>
   );
 }
