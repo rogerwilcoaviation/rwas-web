@@ -204,7 +204,7 @@ export const LandingShapesCtaBg = ({
       ...shape,
       colorIndex: index % 3,
     }));
-  }, [shapeCount]); // Remove gradientColors from dependencies
+  }, [shapeCount, shapeType]); // Remove gradientColors from dependencies
 
   const generateNewColors = useCallback(() => {
     if (!domRef.current) return;
