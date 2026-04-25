@@ -461,22 +461,22 @@
 }
 
 .theme-christmas .broadsheet {
-  --ink-900: #081b14;
-  --ink-800: #123322;
-  --ink-700: #245137;
-  --ink-600: #3f704f;
-  --ink-500: #69906f;
-  --gold-900: #6a1118;
-  --gold-800: #8f1c24;
-  --gold-700: #b92b35;
-  --gold-600: #d54f55;
-  --gold-500: #e78588;
-  --gold-light: #f3c9c7;
-  --cream: #f1eddd;
-  --bone: #fffaf0;
-  --parchment: #e1dbc4;
-  --rule: #245137;
-  --rule-soft: #b7aa90;
+  --ink-900: #062015;
+  --ink-800: #0f3a26;
+  --ink-700: #17613d;
+  --ink-600: #2f7a4f;
+  --ink-500: #649b72;
+  --gold-900: #7c111b;
+  --gold-800: #a41625;
+  --gold-700: #c8202e;
+  --gold-600: #d94b3f;
+  --gold-500: #e7b23a;
+  --gold-light: #f6d66f;
+  --cream: #f6eedb;
+  --bone: #fff9e8;
+  --parchment: #ead9b6;
+  --rule: #17613d;
+  --rule-soft: #c9b078;
 }
 
 /* Weather-driven action layer — decorative only, reduced-motion safe.
@@ -603,4 +603,46 @@
 
 @media (prefers-reduced-motion: reduce) {
   .weather-effects { display: none; }
+}
+
+
+/* More festive Christmas presentation — still decorative/color-only chrome. */
+.theme-christmas .broadsheet .bs-dateline {
+  background: linear-gradient(90deg, #062015 0%, #0f3a26 42%, #7c111b 100%);
+  border-bottom-color: #f6d66f;
+}
+
+.theme-christmas .broadsheet .bs-masthead {
+  background:
+    linear-gradient(180deg, rgba(255,249,232,.96), rgba(246,238,219,.98)),
+    repeating-linear-gradient(45deg, rgba(200,32,46,.10) 0 12px, rgba(6,32,21,.08) 12px 24px);
+  border-top-color: #c8202e;
+  border-bottom-color: #e7b23a;
+}
+
+.theme-christmas .broadsheet .bs-masthead__brand {
+  color: #062015;
+  text-shadow: 0 1px 0 #f6d66f;
+}
+
+.theme-christmas .broadsheet .bs-masthead__tagline,
+.theme-christmas .broadsheet .bs-kicker,
+.theme-christmas .broadsheet .bs-bulletin__kicker {
+  color: #a41625;
+}
+
+.theme-christmas .broadsheet .bs-nav a.bs-nav__accent,
+.theme-christmas .broadsheet .bs-dateline__cta {
+  background: #c8202e;
+  color: #fff9e8;
+}
+
+.theme-christmas .broadsheet .bs-nav a:hover,
+.theme-christmas .broadsheet .bs-dateline__phone,
+.theme-christmas .broadsheet .bs-dateline__kicker {
+  color: #f6d66f;
+}
+
+.theme-christmas .broadsheet .specimen--hero {
+  box-shadow: 4px 4px 0 #7c111b;
 }
