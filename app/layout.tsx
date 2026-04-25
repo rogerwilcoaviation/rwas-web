@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import Script from 'next/script';
 import CartFloater from "@/components/shared/CartFloater";
 import SeasonalTheme from './seasonal-theme';
+import WeatherEffects from './weather-effects';
 
 import { colors } from '@/data/config/colors.js';
 
@@ -244,6 +245,7 @@ export default function RootLayout({
             <SearchProvider>
               <Suspense fallback={null}>
                 <SeasonalTheme />
+                <WeatherEffects />
               </Suspense>
               <main className="w-full flex flex-col items-stretch mb-auto">
                 {children}
