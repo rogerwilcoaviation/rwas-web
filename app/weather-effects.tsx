@@ -11,6 +11,8 @@ type WeatherEffect =
   | 'fireworks'
   | 'flag'
   | 'leaves'
+  | 'turkeys'
+  | 'branch-flags'
   | 'easter';
 
 const AIRPORT = 'KYKN';
@@ -49,7 +51,18 @@ export default function WeatherEffects() {
   const effect = useMemo<WeatherEffect>(() => {
     if (
       manualEffect &&
-      ['none', 'snow', 'thunderstorm', 'icing', 'fireworks', 'flag', 'leaves', 'easter'].includes(
+      [
+        'none',
+        'snow',
+        'thunderstorm',
+        'icing',
+        'fireworks',
+        'flag',
+        'leaves',
+        'turkeys',
+        'branch-flags',
+        'easter',
+      ].includes(
         manualEffect,
       )
     ) {
@@ -58,8 +71,9 @@ export default function WeatherEffects() {
     if (theme === 'winter-storm') return 'snow';
     if (theme === 'christmas') return 'snow';
     if (theme === 'july-4') return 'fireworks';
-    if (theme === 'memorial-day' || theme === 'veterans-day') return 'flag';
-    if (theme === 'thanksgiving') return 'leaves';
+    if (theme === 'memorial-day') return 'flag';
+    if (theme === 'veterans-day') return 'branch-flags';
+    if (theme === 'thanksgiving') return 'turkeys';
     if (theme === 'easter') return 'easter';
     return autoEffect;
   }, [autoEffect, manualEffect, theme]);
@@ -111,6 +125,8 @@ export default function WeatherEffects() {
       {effect === 'fireworks' && <Fireworks />}
       {effect === 'flag' && <Flag />}
       {effect === 'leaves' && <Leaves />}
+      {effect === 'turkeys' && <Turkeys />}
+      {effect === 'branch-flags' && <BranchFlags />}
       {effect === 'easter' && <Easter />}
     </div>
   );
@@ -172,6 +188,35 @@ function Leaves() {
     <>
       <div className="weather-leaves weather-leaves--near" />
       <div className="weather-leaves weather-leaves--far" />
+    </>
+  );
+}
+
+function Turkeys() {
+  return (
+    <div className="weather-turkeys">
+      {Array.from({ length: 16 }).map((_, index) => (
+        <span key={index} className={`weather-turkey weather-turkey--${index + 1}`}>
+          🦃
+        </span>
+      ))}
+    </div>
+  );
+}
+
+const BRANCHES = ['Army', 'Navy', 'Air Force', 'Marines', 'Coast Guard', 'Space Force'];
+
+function BranchFlags() {
+  return (
+    <>
+      <Flag />
+      <div className="weather-branch-flags">
+        {BRANCHES.map((branch, index) => (
+          <span key={branch} className={`weather-branch-flag weather-branch-flag--${index + 1}`}>
+            {branch}
+          </span>
+        ))}
+      </div>
     </>
   );
 }

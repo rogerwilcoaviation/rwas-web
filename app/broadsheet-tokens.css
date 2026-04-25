@@ -823,3 +823,99 @@
   from { transform: translate3d(0, 8%, 0); }
   to { transform: translate3d(-5%, -6%, 0); }
 }
+
+/* Thanksgiving turkeys + Veterans Day branch flags. */
+.weather-turkeys,
+.weather-branch-flags {
+  position: absolute;
+  inset: -15% 0 0;
+  pointer-events: none;
+}
+
+.weather-turkey {
+  position: absolute;
+  top: -12%;
+  display: inline-block;
+  font-size: clamp(22px, 3.3vw, 44px);
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px rgba(33,20,12,.28));
+  opacity: .78;
+  animation: holiday-turkey-fall 18s linear infinite;
+}
+
+.weather-turkey--1 { left: 4%; animation-delay: 0s; animation-duration: 19s; }
+.weather-turkey--2 { left: 11%; animation-delay: -7s; animation-duration: 24s; }
+.weather-turkey--3 { left: 18%; animation-delay: -13s; animation-duration: 21s; }
+.weather-turkey--4 { left: 26%; animation-delay: -4s; animation-duration: 27s; }
+.weather-turkey--5 { left: 33%; animation-delay: -16s; animation-duration: 20s; }
+.weather-turkey--6 { left: 41%; animation-delay: -10s; animation-duration: 25s; }
+.weather-turkey--7 { left: 48%; animation-delay: -2s; animation-duration: 22s; }
+.weather-turkey--8 { left: 56%; animation-delay: -15s; animation-duration: 26s; }
+.weather-turkey--9 { left: 63%; animation-delay: -8s; animation-duration: 19s; }
+.weather-turkey--10 { left: 70%; animation-delay: -1s; animation-duration: 28s; }
+.weather-turkey--11 { left: 78%; animation-delay: -12s; animation-duration: 23s; }
+.weather-turkey--12 { left: 86%; animation-delay: -5s; animation-duration: 21s; }
+.weather-turkey--13 { left: 92%; animation-delay: -18s; animation-duration: 29s; }
+.weather-turkey--14 { left: 6%; animation-delay: -21s; animation-duration: 31s; }
+.weather-turkey--15 { left: 52%; animation-delay: -24s; animation-duration: 30s; }
+.weather-turkey--16 { left: 82%; animation-delay: -27s; animation-duration: 32s; }
+
+.weather-branch-flag {
+  position: absolute;
+  top: -10%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 104px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,.75);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(7,21,44,.18);
+  opacity: .70;
+  animation: holiday-branch-flag-fall 24s linear infinite;
+}
+
+.weather-branch-flag::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  margin-right: 7px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.92);
+}
+
+.weather-branch-flag--1 { left: 4%; background: #2d5a27; animation-delay: 0s; }
+.weather-branch-flag--2 { left: 19%; background: #00205b; animation-delay: -5s; }
+.weather-branch-flag--3 { left: 35%; background: #00308f; animation-delay: -10s; }
+.weather-branch-flag--4 { left: 52%; background: #b31942; animation-delay: -15s; }
+.weather-branch-flag--5 { left: 68%; background: #005ea8; animation-delay: -20s; }
+.weather-branch-flag--6 { left: 82%; background: #1f2937; animation-delay: -12s; }
+
+.theme-veterans-day .broadsheet .bs-masthead {
+  background:
+    linear-gradient(180deg, rgba(255,250,240,.97), rgba(242,239,229,.97)),
+    repeating-linear-gradient(90deg, rgba(10,49,97,.13) 0 20px, rgba(179,25,66,.10) 20px 40px, rgba(255,255,255,.08) 40px 60px);
+  border-bottom-color: #0a3161;
+}
+
+.theme-veterans-day .broadsheet .bs-masthead__brand {
+  color: #0a3161;
+  text-shadow: 1px 1px 0 rgba(179,25,66,.18);
+}
+
+@keyframes holiday-turkey-fall {
+  0% { transform: translate3d(0, -10vh, 0) rotate(-10deg); }
+  45% { transform: translate3d(26px, 48vh, 0) rotate(11deg); }
+  100% { transform: translate3d(-18px, 124vh, 0) rotate(-8deg); }
+}
+
+@keyframes holiday-branch-flag-fall {
+  0% { transform: translate3d(0, -12vh, 0) rotate(-3deg); }
+  50% { transform: translate3d(16px, 52vh, 0) rotate(3deg); }
+  100% { transform: translate3d(-12px, 124vh, 0) rotate(-2deg); }
+}
