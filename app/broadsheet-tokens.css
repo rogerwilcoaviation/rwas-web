@@ -919,3 +919,36 @@
   50% { transform: translate3d(16px, 52vh, 0) rotate(3deg); }
   100% { transform: translate3d(-12px, 124vh, 0) rotate(-2deg); }
 }
+
+/* Preview/admin theme badge. Hidden with ?themeBadge=0. */
+.theme-preview-badge {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2147482100;
+  display: grid;
+  gap: 2px;
+  max-width: min(280px, calc(100vw - 28px));
+  padding: 10px 12px;
+  border: 1px solid var(--rule, #2A333C);
+  background: color-mix(in srgb, var(--bone, #FBF7EC) 92%, white 8%);
+  color: var(--ink-900, #0F1418);
+  box-shadow: 3px 3px 0 var(--ink-900, #0F1418);
+  font-family: var(--font-ui, Inter, system-ui, sans-serif);
+  pointer-events: none;
+}
+
+.theme-preview-badge span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.theme-preview-badge small {
+  color: var(--gold-800, #7A5A1E);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
