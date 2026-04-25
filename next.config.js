@@ -11,7 +11,6 @@ module.exports = () => {
   const plugins = [withBundleAnalyzer];
   return plugins.reduce((acc, next) => next(acc), {
     reactStrictMode: true,
-    output: 'export',
     outputFileTracingRoot: path.join(__dirname),
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     eslint: {
