@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 // ============================================================================
 // LogbookManager — client component for seller logbook uploads
 // Target: ~/projects/rwas-web/app/aircraft-for-sale/logbook-manager.tsx (NEW)

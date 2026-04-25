@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-/* eslint-disable @next/next/no-img-element */
 /*
  * /aircraft-for-sale/[id] — Ship 3 Tranche C migration
  *

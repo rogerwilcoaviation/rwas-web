@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 // ============================================================================
 // ListingsGrid — client component that fetches fresh listings on every visit
 // Target: ~/projects/rwas-web/app/aircraft-for-sale/listings-grid.tsx (NEW)

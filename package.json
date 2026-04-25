@@ -14,7 +14,8 @@
     "pages:build": "npm run build:cloudflare",
     "pages:deploy:preview": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview",
     "build:cloudflare": "npm run appinfo && npx @cloudflare/next-on-pages",
-    "deploy:preview": "npm run build:cloudflare && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview"
+    "deploy:preview": "npm run build:cloudflare && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview",
+    "seo:smoke": "node scripts/seo-smoke-check.mjs"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.4.0",

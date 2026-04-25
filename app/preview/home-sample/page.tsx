@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-/* eslint-disable @next/next/no-img-element */
 import {
   BroadsheetLayout,
   Dateline,

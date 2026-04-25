@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-/* eslint-disable @next/next/no-img-element */
 import {
   BroadsheetLayout,
   Dateline,
@@ -112,9 +111,9 @@ export default function Home() {
           <div>
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Lead Story</span>
-              <h2 className="bs-headline bs-headline--section">
+              <h1 className="bs-headline bs-headline--section">
                 Full-Spectrum Repair Station, Northern Plains
-              </h2>
+              </h1>
               <hr className="section-rule" />
 
               {/* Hero photo — Cessna 182RG G500TXi install */}

@@ -32,7 +32,7 @@ export default function Masthead({
       <div className="bs-masthead__inner">
         <img className="bs-masthead__logo" src={logoSrc} alt={logoAlt} />
         <div className="bs-masthead__titles">
-          <h1 className="bs-masthead__brand">{brand}</h1>
+          <div className="bs-masthead__brand" aria-label={brand}>{brand}</div>
           {tagline ? <div className="bs-masthead__tagline">{tagline}</div> : null}
         </div>
         <div className="bs-masthead__cert">
