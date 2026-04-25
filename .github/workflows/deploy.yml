@@ -14,6 +14,9 @@ concurrency:
   group: pages-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
   contents: read
   deployments: write
@@ -23,9 +26,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: 'npm'
@@ -55,6 +58,8 @@ jobs:
           set -e
           echo "Waiting 20s for edge propagation..."
           sleep 20
+          echo "=== SEO smoke ==="
+          npm run seo:smoke
           echo "=== /aircraft-for-sale ==="
           curl -sS -o /dev/null -w "HTTP %{http_code}\n" https://rogerwilcoaviation.com/aircraft-for-sale
           echo "=== /aircraft-for-sale/mnvmpdlz-ng1n0 (detail page) ==="
