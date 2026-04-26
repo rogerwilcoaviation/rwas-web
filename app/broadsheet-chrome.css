@@ -1459,3 +1459,111 @@ html, body {
     letter-spacing: .1em;
   }
 }
+
+/* ==================================================================
+   Mobile polish pass — homepage + Aircraft 4 Sale (2026-04-25)
+   Keeps the broadsheet look but makes phone layout read in buyer-first order.
+   ================================================================== */
+@media (max-width: 640px) {
+  .broadsheet .bs-dateline__inner {
+    padding: 7px 12px;
+    justify-content: center;
+    gap: 7px 10px;
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+  .broadsheet .bs-dateline__left,
+  .broadsheet .bs-dateline__right {
+    justify-content: center;
+    gap: 8px 12px;
+  }
+  .broadsheet .bs-dateline__kicker { font-size: 15px; }
+
+  .broadsheet .bs-masthead {
+    padding: 18px 14px 14px;
+  }
+  .broadsheet .bs-masthead__inner { gap: 12px; }
+  .broadsheet .bs-masthead__logo { height: 64px; }
+  .broadsheet .bs-masthead__brand {
+    font-size: clamp(30px, 9vw, 36px);
+    letter-spacing: -0.01em;
+  }
+  .broadsheet .bs-masthead__tagline,
+  .broadsheet .bs-masthead__cert {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+  }
+
+  .broadsheet .bs-nav {
+    padding: 9px 10px 0;
+    gap: 8px 10px;
+    font-size: 9px;
+    letter-spacing: 0.11em;
+  }
+  .broadsheet .bs-nav a { padding-top: 5px; }
+  .broadsheet .bs-credentials { padding: 8px 12px; }
+  .broadsheet .bs-credentials__inner {
+    gap: 8px 12px;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  .broadsheet .bs-stage {
+    padding: 22px 14px 36px;
+  }
+  .broadsheet .specimen,
+  .broadsheet .hero-headline-group {
+    padding: 16px 14px;
+    box-shadow: 3px 3px 0 var(--ink-900);
+  }
+  .broadsheet .bs-headline--hero { font-size: clamp(30px, 11vw, 40px); }
+  .broadsheet .bs-headline--section { font-size: clamp(22px, 8vw, 30px); }
+  .broadsheet .bs-subhead,
+  .broadsheet .bs-body { font-size: 15px; line-height: 1.5; }
+  .broadsheet .section-rule { margin-bottom: 12px; }
+
+  /* On phones, lead with the actual story/classifieds instead of the left rail. */
+  .broadsheet .bs-3col > div:nth-child(2) { order: 1; }
+  .broadsheet .bs-3col > div:nth-child(1) { order: 2; }
+  .broadsheet .bs-3col > div:nth-child(3) { order: 3; }
+
+  .broadsheet .bs-listing {
+    grid-template-columns: 96px 1fr;
+    gap: 10px;
+    padding: 10px 0;
+  }
+  .broadsheet .bs-listing__img {
+    width: 96px;
+    height: 72px;
+  }
+  .broadsheet .bs-listing__foot {
+    display: block;
+  }
+  .broadsheet .bs-listing__logs {
+    display: block;
+    margin-top: 3px;
+  }
+
+  .broadsheet .a4s-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .broadsheet .a4s-empty {
+    padding: 16px 14px;
+    border: 1px solid var(--rule);
+    background: var(--bone);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+}
+
+@media (min-width: 641px) {
+  .broadsheet .a4s-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+  }
+}

@@ -156,6 +156,29 @@ export function ListingCard({ listing }: { listing: Listing }) {
           text-align: right;
           font-weight: 600;
         }
+        @media (max-width: 640px) {
+          .a4s-card-body {
+            padding: 12px 13px 14px;
+          }
+          .a4s-card-head {
+            align-items: flex-start;
+            gap: 6px;
+          }
+          .a4s-card-title {
+            font-size: 17px;
+            min-width: 0;
+          }
+          .a4s-card-price {
+            font-size: 15px;
+          }
+          .a4s-card-specs {
+            font-size: 11px;
+            gap: 4px 8px;
+          }
+          .a4s-card-specs dt {
+            font-size: 9px;
+          }
+        }
       `}</style>
 
       <div className="a4s-card-photo">
