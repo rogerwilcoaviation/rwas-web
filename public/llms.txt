@@ -13,7 +13,7 @@
 - [Home](https://www.rogerwilcoaviation.com/) — Overview of services and featured capabilities
 - [About](https://www.rogerwilcoaviation.com/about) — Company history, founder bio, contact details
 - [Shop Capabilities](https://www.rogerwilcoaviation.com/shop-capabilities) — Full catalog of services: Garmin installations, A&P maintenance, NDT, fabrication
-- [Garmin](https://www.rogerwilcoaviation.com/garmin) — Garmin product updates, bulletins, promotions
+- [Garmin](https://www.rogerwilcoaviation.com/garmin/) — Garmin product updates, bulletins, promotions
 - [Blog](https://www.rogerwilcoaviation.com/blog/) — Aviation news, service bulletins, Garmin memos, shop dispatches
 - [Aircraft for Sale](https://www.rogerwilcoaviation.com/aircraft-for-sale) — Aircraft marketplace powered by Captain Jerry's guided intake
 - [Financing](https://www.rogerwilcoaviation.com/financing) — Avionics upgrade financing options

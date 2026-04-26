@@ -43,7 +43,7 @@ export default function Home() {
             <Specimen variant="flat" as="aside" className="bs-toc">
               <div className="bs-toc__title">Today&rsquo;s Edition</div>
               <div className="bs-toc__row">
-                <a href="/garmin">
+                <a href="/garmin/">
                   <span>Latest From Garmin</span>
                   <span className="bs-toc__pg">A2 &rarr;</span>
                 </a>
