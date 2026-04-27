@@ -152,13 +152,10 @@ def publish_facebook(article_id):
 def publish_instagram(article_id):
     account_id = os.environ.get("IG_BUSINESS_ACCOUNT_ID", "")
     token = os.environ.get("IG_ACCESS_TOKEN", "")
-    image_url = os.environ.get("IG_DEFAULT_IMAGE", "")
+    fallback_image_url = os.environ.get("IG_DEFAULT_IMAGE", "")
 
     if not account_id or not token:
         print("ERROR: IG_BUSINESS_ACCOUNT_ID and IG_ACCESS_TOKEN required.")
-        return False
-    if not image_url:
-        print("ERROR: IG_DEFAULT_IMAGE required (URL to brand image for post).")
         return False
 
     data = load_data()
@@ -169,6 +166,15 @@ def publish_instagram(article_id):
     post = art.get("social", {}).get("instagram", {})
     if post.get("status") not in ("approved", "pending"):
         print(f"ERROR: Instagram post status is '{post.get('status')}', expected 'approved'")
+        return False
+
+    article_image = art.get("image", "")
+    if article_image:
+        image_url = article_image if article_image.startswith(("http://", "https://")) else f"https://www.rogerwilcoaviation.com{article_image}"
+    else:
+        image_url = fallback_image_url
+    if not image_url:
+        print("ERROR: Article image or IG_DEFAULT_IMAGE required (URL to image for post).")
         return False
 
     caption = post["text"]

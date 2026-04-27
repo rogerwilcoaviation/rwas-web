@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-04-23T20:00:47.462928+00:00",
-    "total_articles": 11,
+    "last_updated": "2026-04-27T21:35:47.763519+00:00",
+    "total_articles": 12,
     "categories": [
       "regulatory",
       "product-update",
@@ -11,6 +11,55 @@
     ]
   },
   "articles": [
+    {
+      "id": "rwas-customer-panel-planner-now-live-20260427",
+      "status": "published",
+      "category": "product-update",
+      "title": "Build Your Garmin Panel Concept with the New RWAS Panel Planner",
+      "subtitle": "A new customer-facing planning tool lets aircraft owners sketch avionics layouts, preview panel finishes, and send concepts to RWAS for professional review.",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Desk",
+      "date": "2026-04-27",
+      "source": "RWAS",
+      "source_url": "https://www.rogerwilcoaviation.com/panel-planner",
+      "lead": "Roger Wilco Aviation Services has launched a customer-facing Panel Planner that gives aircraft owners a simple way to sketch a Garmin avionics panel concept before the formal design and quote process begins.",
+      "body": [
+        "Planning an avionics upgrade is exciting, but it can also be hard to visualize. A new display, navigator, audio panel, transponder, engine monitor, autopilot controller, or standby instrument may look simple on a quote sheet, but the real question is always the same: how will it actually fit in the airplane?",
+        "That is why RWAS has added a public customer version of its Panel Planner. The new tool lets aircraft owners choose an available aircraft panel template, place common Garmin avionics, preview panel finish ideas, and submit the concept directly to RWAS for review.",
+        "The goal is not to replace engineering. It is to make the first conversation better. Instead of starting with a blank page or a rough napkin sketch, owners can send RWAS a visual concept that shows the direction they have in mind: the equipment they are considering, the layout they prefer, and the look they want for the finished panel.",
+        "The customer Panel Planner includes a simplified interface built for owner use. Customers can search equipment, add items to a panel, select aircraft templates where available, choose finish concepts such as satin, carbon fiber, wood grain, brushed aluminum, or a custom color, and submit the design with notes for the RWAS avionics team.",
+        "That last step matters. A customer concept is only the beginning. RWAS still has to review STC and AML eligibility, panel structure, instrument clearances, behind-panel depth, electrical load, wiring, antenna considerations, placards, finish process, fabrication requirements, and final quote details before any aircraft work begins. In plain English: the planner helps define the dream, but RWAS still does the grown-up airplane work before metal gets cut.",
+        "For Garmin upgrades, this can make a big difference. Owners considering systems such as G3X Touch, G500 TXi, GTN Xi navigators, GFC 500 autopilots, GMA audio panels, GTX transponders, GI 275 instruments, and related accessories can now explore layout ideas early, then hand RWAS a much clearer starting point.",
+        "The tool is especially useful for aircraft owners who know they want a modern panel but are still deciding how far to go. Maybe the mission calls for a full glass-panel transformation. Maybe the smarter move is a phased upgrade that preserves useful existing equipment. Maybe the panel needs to support IFR flying, engine monitoring, autopilot integration, or long-term resale value. A visual concept helps bring those tradeoffs into focus.",
+        "RWAS has made the customer Panel Planner available from the main website under \u201cBuild My Panel.\u201d Owners can open the planner, sketch their idea, and send it in for review. From there, the RWAS team can turn the concept into a real avionics discussion backed by repair-station process, Garmin dealer experience, and installation judgment.",
+        "A good panel starts with imagination. A safe, legal, install-ready panel takes engineering, documentation, and careful shop work. The new RWAS Panel Planner is designed to connect those two worlds."
+      ],
+      "body_markdown": "Planning an avionics upgrade is exciting, but it can also be hard to visualize. A new display, navigator, audio panel, transponder, engine monitor, autopilot controller, or standby instrument may look simple on a quote sheet, but the real question is always the same: **how will it actually fit in the airplane?**\n\nThat is why RWAS has added a public customer version of its Panel Planner. The new tool lets aircraft owners choose an available aircraft panel template, place common Garmin avionics, preview panel finish ideas, and submit the concept directly to RWAS for review.\n\nThe goal is not to replace engineering. It is to make the first conversation better. Instead of starting with a blank page or a rough napkin sketch, owners can send RWAS a visual concept that shows the direction they have in mind: the equipment they are considering, the layout they prefer, and the look they want for the finished panel.\n\nThe customer Panel Planner includes a simplified interface built for owner use. Customers can search equipment, add items to a panel, select aircraft templates where available, choose finish concepts such as satin, carbon fiber, wood grain, brushed aluminum, or a custom color, and submit the design with notes for the RWAS avionics team.\n\nThat last step matters. A customer concept is only the beginning. RWAS still has to review STC and AML eligibility, panel structure, instrument clearances, behind-panel depth, electrical load, wiring, antenna considerations, placards, finish process, fabrication requirements, and final quote details before any aircraft work begins. In plain English: the planner helps define the dream, but RWAS still does the grown-up airplane work before metal gets cut.\n\nFor Garmin upgrades, this can make a big difference. Owners considering systems such as G3X Touch, G500 TXi, GTN Xi navigators, GFC 500 autopilots, GMA audio panels, GTX transponders, GI 275 instruments, and related accessories can now explore layout ideas early, then hand RWAS a much clearer starting point.\n\nThe tool is especially useful for aircraft owners who know they want a modern panel but are still deciding how far to go. Maybe the mission calls for a full glass-panel transformation. Maybe the smarter move is a phased upgrade that preserves useful existing equipment. Maybe the panel needs to support IFR flying, engine monitoring, autopilot integration, or long-term resale value. A visual concept helps bring those tradeoffs into focus.\n\nRWAS has made the customer Panel Planner available from the main website under **Build My Panel**. Owners can open the planner, sketch their idea, and send it in for review. From there, the RWAS team can turn the concept into a real avionics discussion backed by repair-station process, Garmin dealer experience, and installation judgment.\n\nA good panel starts with imagination. A safe, legal, install-ready panel takes engineering, documentation, and careful shop work. The new RWAS Panel Planner is designed to connect those two worlds.\n\n[Start your panel concept here](https://www.rogerwilcoaviation.com/panel-planner).",
+      "tags": [
+        "garmin",
+        "avionics",
+        "panel-planner",
+        "aircraft-upgrades",
+        "g3x-touch",
+        "g500-txi",
+        "rwas"
+      ],
+      "image": "/images/blog/panel-planner-r182-concept-tool.png",
+      "image_alt": "RWAS customer Panel Planner showing the Cessna R182 panel outline and avionics planning interface.",
+      "published_at": "2026-04-27T21:35:47.763362+00:00",
+      "social": {
+        "facebook": {
+          "text": "We just launched the new RWAS customer Panel Planner.\n\nAircraft owners can now sketch a Garmin avionics panel concept, choose an aircraft panel template where available, place equipment, preview finish ideas, and send the concept to RWAS for review.\n\nIt is not a substitute for engineering, STC eligibility review, clearance checks, wiring, fabrication planning, or final quote work \u2014 that still happens through RWAS. But it gives owners a much better way to start the conversation than a blank page or a napkin sketch.\n\n#RogerWilcoAviation #GarminAvionics #AircraftMaintenance #Avionics #G3XTouch #G500TXi #GeneralAviation #AircraftOwner",
+          "status": "approved",
+          "approved_at": "2026-04-27T21:35:47.763512+00:00"
+        },
+        "instagram": {
+          "text": "Dream panel, meet first draft.\n\nRWAS just launched a customer-facing Panel Planner so aircraft owners can sketch Garmin avionics layouts, preview panel finish ideas, and submit concepts to our avionics team for review.\n\nThe planner helps define the idea. RWAS still handles the real airplane work: eligibility, clearances, structure, wiring, fabrication, documentation, and quote review.\n\nStart at rogerwilcoaviation.com/panel-planner\n\n#RogerWilcoAviation #GarminAvionics #Avionics #G3XTouch #G500TXi #GeneralAviation #AircraftOwner #PilotLife #AircraftMaintenance",
+          "status": "approved",
+          "approved_at": "2026-04-27T21:35:47.763514+00:00"
+        }
+      }
+    },
     {
       "id": "lead-times-as-of-42326-20260423",
       "status": "draft",
