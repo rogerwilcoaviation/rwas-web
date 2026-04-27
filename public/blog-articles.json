@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-04-27T21:35:47.763519+00:00",
+    "last_updated": "2026-04-27T21:44:28.812181+00:00",
     "total_articles": 12,
     "categories": [
       "regulatory",
@@ -50,13 +50,17 @@
       "social": {
         "facebook": {
           "text": "We just launched the new RWAS customer Panel Planner.\n\nAircraft owners can now sketch a Garmin avionics panel concept, choose an aircraft panel template where available, place equipment, preview finish ideas, and send the concept to RWAS for review.\n\nIt is not a substitute for engineering, STC eligibility review, clearance checks, wiring, fabrication planning, or final quote work \u2014 that still happens through RWAS. But it gives owners a much better way to start the conversation than a blank page or a napkin sketch.\n\n#RogerWilcoAviation #GarminAvionics #AircraftMaintenance #Avionics #G3XTouch #G500TXi #GeneralAviation #AircraftOwner",
-          "status": "approved",
-          "approved_at": "2026-04-27T21:35:47.763512+00:00"
+          "status": "published",
+          "approved_at": "2026-04-27T21:35:47.763512+00:00",
+          "published_at": "2026-04-27T21:44:15.317807+00:00",
+          "post_id": "106057782039473_957548613699011"
         },
         "instagram": {
           "text": "Dream panel, meet first draft.\n\nRWAS just launched a customer-facing Panel Planner so aircraft owners can sketch Garmin avionics layouts, preview panel finish ideas, and submit concepts to our avionics team for review.\n\nThe planner helps define the idea. RWAS still handles the real airplane work: eligibility, clearances, structure, wiring, fabrication, documentation, and quote review.\n\nStart at rogerwilcoaviation.com/panel-planner\n\n#RogerWilcoAviation #GarminAvionics #Avionics #G3XTouch #G500TXi #GeneralAviation #AircraftOwner #PilotLife #AircraftMaintenance",
-          "status": "approved",
-          "approved_at": "2026-04-27T21:35:47.763514+00:00"
+          "status": "published",
+          "approved_at": "2026-04-27T21:35:47.763514+00:00",
+          "published_at": "2026-04-27T21:44:28.812141+00:00",
+          "media_id": "18007257086905436"
         }
       }
     },
