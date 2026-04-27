@@ -54,10 +54,10 @@ export default function PanelPlannerPage() {
               </p>
             </div>
             <div className="bs-cta-row panel-planner-cta-row">
-              <a href={PANEL_PLANNER_URL} className="bs-cta-primary">
+              <a href={PANEL_PLANNER_URL} className="bs-cta-primary" target="_blank" rel="noopener noreferrer">
                 Open Panel Planner
               </a>
-              <a href="/contact?reason=quote&source=panel-planner-page" className="bs-cta-secondary">
+              <a href="/contact?reason=quote&source=panel-planner-page" className="bs-cta-secondary" target="_blank" rel="noopener noreferrer">
                 Ask RWAS First
               </a>
             </div>
