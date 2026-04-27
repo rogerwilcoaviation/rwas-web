@@ -1567,3 +1567,45 @@ html, body {
     gap: 18px;
   }
 }
+
+
+.broadsheet .home-panel-cta-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 720px) {
+  .broadsheet .home-panel-cta-row { grid-template-columns: 1fr; }
+}
+
+/* ---------- Customer Panel Planner landing page ---------- */
+.broadsheet .panel-planner-cta-row {
+  grid-template-columns: 1.4fr 1fr;
+  margin-top: 18px;
+}
+.broadsheet .panel-planner-note {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  background: var(--parchment);
+  border-left: 3px solid var(--gold-700);
+  color: var(--ink-800);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+.broadsheet .panel-planner-brief {
+  align-self: stretch;
+}
+.broadsheet .panel-planner-disclaimer {
+  margin-top: 28px;
+}
+.broadsheet .panel-planner-disclaimer p {
+  margin: 8px 0 0;
+  color: var(--ink-800);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+}
+@media (max-width: 520px) {
+  .broadsheet .panel-planner-cta-row { grid-template-columns: 1fr; }
+}

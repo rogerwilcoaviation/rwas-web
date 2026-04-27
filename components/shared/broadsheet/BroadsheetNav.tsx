@@ -14,6 +14,7 @@ export type BroadsheetNavProps = {
 const DEFAULT_ITEMS: NavItem[] = [
   { href: "/", label: "Home" },
   { href: "#ask-jerry", label: "Ask Jerry", accent: true },
+  { href: "/panel-planner", label: "Build My Panel", accent: true },
   { href: "/collections/on-sale", label: "On Sale" },
   { href: "/collections", label: "Garmin" },
   { href: "/collections/papa-alpha-tools", label: "Papa-Alpha Tools" },

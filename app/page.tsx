@@ -49,9 +49,15 @@ export default function Home() {
                 </a>
               </div>
               <div className="bs-toc__row">
+                <a href="/panel-planner">
+                  <span>Build My Panel</span>
+                  <span className="bs-toc__pg">A3 &rarr;</span>
+                </a>
+              </div>
+              <div className="bs-toc__row">
                 <a href="/collections">
                   <span>Garmin Store</span>
-                  <span className="bs-toc__pg">A3 &rarr;</span>
+                  <span className="bs-toc__pg">A4 &rarr;</span>
                 </a>
               </div>
               <div className="bs-toc__row">
@@ -186,12 +192,15 @@ export default function Home() {
             >
               Schedule your inspection today
             </p>
-            <div className="bs-cta-row">
+            <div className="bs-cta-row home-panel-cta-row">
               <a href="tel:+16052998178" className="bs-cta-primary">
                 Call (605) 299-8178
               </a>
               <a href="/contact?reason=quote&source=home-cta" className="bs-cta-secondary">
                 Request a Quote
+              </a>
+              <a href="/panel-planner" className="bs-cta-secondary">
+                Build My Panel
               </a>
             </div>
           </div>
@@ -254,10 +263,10 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/collections/garmin-avionics">G3X Touch Suite</a>
+                    <a href="/panel-planner">Build a Garmin Panel Concept</a>
                   </p>
                   <p className="bs-svc-desc">
-                    Full glass cockpit with ADAHRS, EIS, and synthetic vision. STC&rsquo;d for most single-engine piston aircraft.
+                    Choose equipment, preview panel finishes, and submit a concept sketch to RWAS for avionics review.
                   </p>
                 </li>
                 <li className="bs-svc">
