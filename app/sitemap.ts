@@ -22,7 +22,7 @@ const STATIC_ROUTES: StaticRoute[] = [
   { path: 'shop-capabilities', priority: 0.9, changeFrequency: 'monthly' },
   { path: 'panel-planner',     priority: 0.9, changeFrequency: 'monthly' },
   { path: 'aircraft-for-sale', priority: 0.8, changeFrequency: 'daily'   },
-  { path: 'garmin/',            priority: 0.8, changeFrequency: 'weekly'  },
+  { path: 'garmin',             priority: 0.8, changeFrequency: 'weekly'  },
   { path: 'financing',         priority: 0.7, changeFrequency: 'monthly' },
   { path: 'blog',              priority: 0.7, changeFrequency: 'weekly'  },
   { path: 'privacy',           priority: 0.3, changeFrequency: 'yearly'  },
