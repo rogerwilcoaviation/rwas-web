@@ -12,9 +12,9 @@ import {
 import LoanCalc from '../components/LoanCalc';
 
 export const metadata = {
-  title: 'Avionics Financing — Roger Wilco Aviation Services',
+  title: { absolute: 'Avionics Financing — RWAS' },
   description:
-    'Finance your Garmin avionics upgrade or major maintenance project. Payment estimator and flexible terms. FAA Part 145 Repair Station RWSR491E at Chan Gurney Municipal (KYKN), Yankton, SD.',
+    'Finance a Garmin avionics upgrade or major maintenance project with RWAS. Estimate payments and discuss flexible terms with our KYKN repair station team.',
 };
 
 export default function FinancingPage() {

@@ -5,7 +5,7 @@ const siteConfig = {
   ...metadata,
 
   // Configure analytics
-  disableAnalytics: false, // Disable all analytics on the site
+  disableAnalytics: true, // Cloudflare Pages does not serve Vercel Analytics endpoints; keep disabled to avoid 404/MIME console noise.
   analytics: {
     // By default Vercel analytics is enabled.
     //

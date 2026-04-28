@@ -11,9 +11,9 @@ import {
 } from '@/components/shared/broadsheet';
 
 export const metadata = {
-  title: 'Shop Capabilities — Avionics, A&P, NDT',
+  title: { absolute: 'RWAS Shop Capabilities — Avionics, A&P, NDT' },
   description:
-    'Full-spectrum aircraft maintenance: Garmin installations, A&P airframe & powerplant, NDT inspection, sheet metal fabrication, fiber laser cutting. FAA Part 145 Repair Station RWSR491E at Chan Gurney Municipal (KYKN), Yankton, SD.',
+    'Garmin avionics, A&P maintenance, NDT inspection, sheet metal, fiber laser, and fabrication support from FAA Part 145 repair station RWSR491E at KYKN.',
 };
 
 export default function ShopCapabilitiesPage() {

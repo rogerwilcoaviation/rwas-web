@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import ProductCard from '@/components/shopify/ProductCard';
 import {
   BroadsheetLayout,
@@ -11,6 +12,7 @@ import {
 } from '@/components/shared/broadsheet';
 import { getCollectionByHandle, getFeaturedCollections, isQuoteCollection } from '@/lib/shopify';
 import Link from 'next/link';
+import { collectionSeoTitle, truncateMeta } from '@/lib/seo';
 
 const FALLBACK_COLLECTION_HANDLES = [
   'on-sale',
@@ -34,7 +36,7 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ handle: string }>;
-}) {
+}): Promise<Metadata> {
   const { handle } = await params;
 
   try {
@@ -44,9 +46,28 @@ export async function generateMetadata({
       return { title: 'Collection not found' };
     }
 
+    const title = collectionSeoTitle(collection.title);
+    const description = truncateMeta(
+      collection.description || `Browse ${collection.title} at Roger Wilco Aviation Services.`,
+    );
+    const url = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
     return {
-      title: `${collection.title} | RWAS Collections`,
-      description: collection.description || `Browse ${collection.title} at Roger Wilco Aviation Services.`,
+      title: { absolute: title },
+      description,
+      alternates: { canonical: url },
+      openGraph: {
+        type: 'website',
+        url,
+        title,
+        description,
+        images: collection.image?.url ? [{ url: collection.image.url, alt: collection.image.altText || collection.title }] : undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: collection.image?.url ? [collection.image.url] : undefined,
+      },
     };
   } catch {
     return { title: 'Collection not found' };
@@ -97,9 +118,29 @@ export default async function CollectionDetailPage({
   }
 
   const quoteOnly = isQuoteCollection(collection.handle);
+  const canonicalUrl = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': `${canonicalUrl}#itemlist`,
+    name: collection.title,
+    description: truncateMeta(collection.description || collection.title, 500),
+    url: canonicalUrl,
+    numberOfItems: collection.products.length,
+    itemListElement: collection.products.map((product, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`,
+      name: product.title,
+    })),
+  };
 
   return (
     <BroadsheetLayout>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
       <Dateline />
       <Masthead />
       <BroadsheetNav activeHref={`/collections/${collection.handle}`} />

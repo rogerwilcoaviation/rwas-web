@@ -67,10 +67,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
   const et = formatHours(listing.engineTime);
 
   return (
-    <a
-      className="a4s-card"
-      href={`/aircraft-for-sale/${encodeURIComponent(listing.id)}`}
-    >
+    <>
       <style>{`
         .a4s-card {
           display: block;
@@ -181,7 +178,12 @@ export function ListingCard({ listing }: { listing: Listing }) {
         }
       `}</style>
 
-      <div className="a4s-card-photo">
+      <a
+        className="a4s-card"
+        href={`/aircraft-for-sale/${encodeURIComponent(listing.id)}`}
+        aria-label={`${headline}, ${priceLabel}${listing.nNumber ? `, tail ${listing.nNumber}` : ''}`}
+      >
+        <div className="a4s-card-photo">
         {imageUrl && !imageBroken ? (
           <img
             src={imageUrl}
@@ -194,7 +196,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
         )}
       </div>
 
-      <div className="a4s-card-body">
+        <div className="a4s-card-body">
         <div className="a4s-card-head">
           <h3 className="a4s-card-title">{headline}</h3>
           <span className="a4s-card-price">{priceLabel}</span>
@@ -226,7 +228,8 @@ export function ListingCard({ listing }: { listing: Listing }) {
             </>
           ) : null}
         </dl>
-      </div>
-    </a>
+        </div>
+      </a>
+    </>
   );
 }

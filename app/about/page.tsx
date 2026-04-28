@@ -12,9 +12,9 @@ import {
 } from '@/components/shared/broadsheet';
 
 export const metadata = {
-  title: 'About — Roger Wilco Aviation Services',
+  title: { absolute: 'About RWAS — FAA Part 145 Repair Station' },
   description:
-    'Roger Wilco Aviation Services — FAA Part 145 Repair Station RWSR491E at Chan Gurney Municipal Airport (KYKN), Yankton, South Dakota. Full-spectrum airframe, powerplant, avionics, NDT, and fabrication.',
+    'FAA Part 145 repair station RWSR491E at KYKN in Yankton, SD, providing avionics, airframe, powerplant, NDT, and fabrication support.',
 };
 
 export default function AboutPage() {

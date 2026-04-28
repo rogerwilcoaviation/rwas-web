@@ -12,7 +12,7 @@ import blogData from '../../public/blog-articles.json';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Aviation News, Garmin Bulletins & Memos',
+  title: { absolute: 'Aviation News, Garmin Bulletins & Memos | RWAS' },
   description:
     'Garmin press releases, service bulletins, product updates, dealer memos, and industry dispatches from Roger Wilco Aviation Services.',
 };

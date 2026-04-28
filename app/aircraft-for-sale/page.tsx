@@ -30,7 +30,7 @@ import SellerAuthPanel from './seller-auth-panel';
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: 'Aircraft for Sale — Roger Wilco Aviation Services',
+  title: { absolute: 'Aircraft for Sale — RWAS Marketplace' },
   description:
     'Aircraft listings from RWAS in Yankton, SD. Cessna, Piper, Beechcraft, and more. Verified logbooks, trusted sellers, FAA Cert. Repair Station support.',
   alternates: {
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
-    title: 'Aircraft for Sale — Roger Wilco Aviation Services',
+    title: 'Aircraft for Sale — RWAS Marketplace',
     description:
       'Browse aircraft listings backed by a FAA Part 145 repair station in Yankton, SD.',
     images: [
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Aircraft for Sale — Roger Wilco Aviation Services',
+    title: 'Aircraft for Sale — RWAS Marketplace',
     description:
       'Browse aircraft listings backed by a FAA Part 145 repair station in Yankton, SD.',
     images: ['https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg'],
@@ -78,9 +78,27 @@ async function getListings(): Promise<Listing[]> {
 
 export default async function AircraftForSalePage() {
   const listings = await getListings();
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': 'https://www.rogerwilcoaviation.com/aircraft-for-sale#itemlist',
+    name: 'Aircraft for Sale at Roger Wilco Aviation Services',
+    url: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+    numberOfItems: listings.length,
+    itemListElement: listings.map((listing, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(listing.id)}`,
+      name: [listing.year, listing.make, listing.model].filter(Boolean).join(' ') || 'Aircraft listing',
+    })),
+  };
 
   return (
     <BroadsheetLayout>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
       {/* Page-scoped a4s styles. Only rules not already covered by
           broadsheet-tokens.css live here. */}
       <style>{`

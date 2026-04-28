@@ -30,6 +30,7 @@ import {
   BroadsheetFooter,
   Specimen,
 } from '@/components/shared/broadsheet';
+import { truncateMeta } from '@/lib/seo';
 
 function escapeHtml(text: string) {
   return text
@@ -139,13 +140,16 @@ export async function generateMetadata({
     ? (article.image.startsWith('http') ? article.image : `${siteUrl}${article.image}`)
     : `${siteUrl}/newspaper/images/logo.png`;
 
+  const seoTitle = truncateMeta(`${article.title} | RWAS`, 60);
+  const seoDescription = truncateMeta(article.lead, 155);
+
   return {
-    title: { absolute: article.title.length <= 60 ? `${article.title} | RWAS` : article.title },
-    description: article.lead.length > 155 ? article.lead.slice(0, 152).trimEnd() + '…' : article.lead,
+    title: { absolute: seoTitle },
+    description: seoDescription,
     alternates: { canonical: articleUrl },
     openGraph: {
       title: article.title,
-      description: article.lead.length > 155 ? article.lead.slice(0, 152).trimEnd() + '…' : article.lead,
+      description: seoDescription,
       url: articleUrl,
       type: 'article',
       publishedTime: article.date,
@@ -155,7 +159,7 @@ export async function generateMetadata({
     twitter: {
       card: 'summary_large_image',
       title: article.title,
-      description: article.lead.length > 155 ? article.lead.slice(0, 152).trimEnd() + '…' : article.lead,
+      description: seoDescription,
       images: [imageUrl],
     },
   };
@@ -179,12 +183,13 @@ export default async function BlogArticlePage({
   const imageUrl = article.image
     ? (article.image.startsWith('http') ? article.image : `${siteUrl}${article.image}`)
     : `${siteUrl}/newspaper/images/logo.png`;
+  const seoDescription = truncateMeta(article.lead, 155);
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     '@id': `${articleUrl}#article`,
     headline: article.title,
-    description: article.lead.length > 155 ? article.lead.slice(0, 152).trimEnd() + '…' : article.lead,
+    description: seoDescription,
     image: [imageUrl],
     datePublished: (article as { published_at?: string }).published_at || article.date,
     dateModified: (article as { published_at?: string }).published_at || article.date,

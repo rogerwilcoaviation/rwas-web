@@ -196,18 +196,37 @@ export default async function AircraftDetailPage({ params }: PageProps) {
   );
   const canonicalUrl = `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(listing.id)}`;
 
-  // JSON-LD for Product schema
-  const jsonLd: Record<string, unknown> = {
+  // JSON-LD for Product + vehicle properties, plus breadcrumbs.
+  const additionalProperty = [
+    { name: 'Tail number', value: listing.nNumber },
+    { name: 'Year', value: listing.year },
+    { name: 'Make', value: listing.make },
+    { name: 'Model', value: listing.model },
+    { name: 'Serial number', value: listing.serialNumber },
+    { name: 'Airframe total time', value: listing.totalTime ? `${listing.totalTime} hours` : undefined },
+    { name: 'Engine time', value: listing.engineTime ? `${listing.engineTime} hours` : undefined },
+    { name: 'Engine model', value: listing.engineModel },
+  ].filter((property) => property.value);
+  const productJsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Product',
+    '@id': `${canonicalUrl}#aircraft`,
     name: h,
     description: listing.description || h,
     url: canonicalUrl,
+    identifier: listing.nNumber || listing.serialNumber,
+    model: listing.model,
+    productionDate: listing.year,
+    additionalProperty: additionalProperty.map((property) => ({
+      '@type': 'PropertyValue',
+      name: property.name,
+      value: property.value,
+    })),
   };
-  if (listing.make) jsonLd.brand = { '@type': 'Brand', name: listing.make };
-  if (photoUrls.length) jsonLd.image = photoUrls;
+  if (listing.make) productJsonLd.brand = { '@type': 'Brand', name: listing.make };
+  if (photoUrls.length) productJsonLd.image = photoUrls;
   if (listing.price && Number(listing.price) > 0) {
-    jsonLd.offers = {
+    productJsonLd.offers = {
       '@type': 'Offer',
       price: String(listing.price),
       priceCurrency: 'USD',
@@ -216,8 +235,18 @@ export default async function AircraftDetailPage({ params }: PageProps) {
           ? 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',
       url: canonicalUrl,
+      seller: { '@type': 'Organization', name: 'Roger Wilco Aviation Services' },
     };
   }
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Aircraft for Sale', item: 'https://www.rogerwilcoaviation.com/aircraft-for-sale' },
+      { '@type': 'ListItem', position: 3, name: h, item: canonicalUrl },
+    ],
+  };
 
   // Spec fields in order
   const SPECS: Array<{ label: string; value?: string; suffix?: string }> = [
@@ -249,7 +278,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
     <BroadsheetLayout>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([productJsonLd, breadcrumbJsonLd]) }}
       />
       <style>{`
         .a4s-back {

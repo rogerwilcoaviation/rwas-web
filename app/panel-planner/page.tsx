@@ -12,7 +12,7 @@ import {
 const PANEL_PLANNER_URL = 'https://panelplanner.rwas.team/customer';
 
 export const metadata = {
-  title: 'Build My Panel — Garmin Panel Planner by RWAS',
+  title: { absolute: 'Build My Panel — RWAS Garmin Panel Planner' },
   description:
     'Sketch a Garmin avionics panel concept with the RWAS customer Panel Planner. Submit your concept for RWAS review before fabrication or installation.',
   alternates: {

@@ -15,33 +15,6 @@ type WeatherEffect =
   | 'branch-flags'
   | 'easter';
 
-const AIRPORT = 'KYKN';
-const MAX_AGE_HOURS = 12;
-
-function classify(raw: string): WeatherEffect {
-  const text = raw.toUpperCase();
-
-  // Thunderstorms first — TS usually matters more visually than precip type.
-  if (/\b(?:TS|VCTS|TSRA|TSGR|TSGS|CB)\b/.test(text)) return 'thunderstorm';
-
-  // Surface freezing/frozen precip signals. True in-flight icing needs AIRMETs/
-  // icing products, but John asked for METAR/TAF-driven events, so keep this
-  // conservative and obvious.
-  if (/\b(?:FZRA|FZDZ|FZFG|PL|SG|IC|UP)\b/.test(text)) return 'icing';
-
-  // Snow/flurries/blowing snow.
-  if (/\b(?:SN|SHSN|BLSN|DRSN)\b/.test(text)) return 'snow';
-
-  return 'none';
-}
-
-async function fetchText(url: string): Promise<string> {
-  const res = await fetch(url, { cache: 'no-store' });
-  if (!res.ok) throw new Error(`Weather fetch failed: ${res.status}`);
-  const data = await res.json();
-  return JSON.stringify(data);
-}
-
 export default function WeatherEffects() {
   const searchParams = useSearchParams();
   const manualEffect = searchParams.get('effect')?.toLowerCase();
@@ -87,24 +60,11 @@ export default function WeatherEffects() {
     )
       return;
 
-    let cancelled = false;
-    const params = `ids=${AIRPORT}&format=json&hours=${MAX_AGE_HOURS}`;
-
-    Promise.allSettled([
-      fetchText(`https://aviationweather.gov/api/data/metar?${params}`),
-      fetchText(`https://aviationweather.gov/api/data/taf?${params}`),
-    ]).then((results) => {
-      if (cancelled) return;
-      const raw = results
-        .filter((r): r is PromiseFulfilledResult<string> => r.status === 'fulfilled')
-        .map((r) => r.value)
-        .join('\n');
-      setAutoEffect(classify(raw));
-    });
-
-    return () => {
-      cancelled = true;
-    };
+    // Avoid browser-side aviationweather.gov requests: the public API can reject
+    // cross-origin browser fetches, creating noisy console errors on SEO crawls.
+    // Seasonal/manual effects still work through ?effect= and ?theme=.
+    setAutoEffect('none');
+    return undefined;
   }, [manualEffect, theme]);
 
   useEffect(() => {

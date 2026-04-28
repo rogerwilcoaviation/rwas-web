@@ -19,6 +19,7 @@
  * into a single "Check availability" CTA. Live-pilot contact remains in the
  * trust strip's third cell.
  */
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import PdpPriceCard, { type PdpVariant } from '@/components/shopify/PdpPriceCard';
 import {
@@ -27,6 +28,7 @@ import {
   isOtcCollection,
   isOtcEligible,
 } from '@/lib/shopify';
+import { productSeoTitle, truncateMeta } from '@/lib/seo';
 import {
   BroadsheetLayout,
   Dateline,
@@ -70,19 +72,35 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ handle: string }>;
-}) {
+}): Promise<Metadata> {
   const { handle: rawHandle } = await params;
   const handle = decodeURIComponent(rawHandle);
   try {
     const product = await getProductByHandle(handle);
     if (!product) return { title: 'Product not found' };
-    const cleanDesc = (product.description || '')
-      .replace(/Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi, '')
-      .trim();
+    const description = truncateMeta(
+      product.description || `View ${product.title} from Roger Wilco Aviation Services.`,
+    );
+    const url = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
+    const imageUrl = product.featuredImage?.url || product.images[0]?.url;
+    const title = productSeoTitle(product.title);
     return {
-      title: `${product.title} — Roger Wilco Aviation Services`,
-      description:
-        cleanDesc || `View ${product.title} from Roger Wilco Aviation Services.`,
+      title: { absolute: title },
+      description,
+      alternates: { canonical: url },
+      openGraph: {
+        type: 'website',
+        url,
+        title,
+        description,
+        images: imageUrl ? [{ url: imageUrl, alt: product.featuredImage?.altText || product.title }] : undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: imageUrl ? [imageUrl] : undefined,
+      },
     };
   } catch {
     return { title: 'Product not found' };
@@ -211,9 +229,35 @@ export default async function ProductDetailPage({
     availableForSale: v.availableForSale,
     selectedOptions: v.selectedOptions,
   }));
+  const canonicalUrl = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
+  const imageUrls = product.images.map((img) => img.url).filter(Boolean);
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    '@id': `${canonicalUrl}#product`,
+    name: product.title,
+    description: truncateMeta(cleanDescText || product.title, 500),
+    sku: firstSku || undefined,
+    brand: product.vendor ? { '@type': 'Brand', name: product.vendor } : undefined,
+    category: product.productType || undefined,
+    image: imageUrls.length ? imageUrls : undefined,
+    url: canonicalUrl,
+    offers: primaryPrice && !(gating.isGarmin && gating.otc !== 'eligible') ? {
+      '@type': 'Offer',
+      price: primaryPrice.amount,
+      priceCurrency: primaryPrice.currencyCode,
+      availability: product.availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      url: canonicalUrl,
+      seller: { '@type': 'Organization', name: 'Roger Wilco Aviation Services' },
+    } : undefined,
+  };
 
   return (
     <BroadsheetLayout>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
       <Dateline />
       <Masthead />
       <BroadsheetNav activeHref="/collections" />

@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { siteConfig } from '@/data/config/site.settings';
 import blogData from '../public/blog-articles.json';
+import { getFeaturedCollections, getProductHandles } from '@/lib/shopify';
 
 export const dynamic = 'force-static';
 
@@ -14,8 +15,7 @@ interface StaticRoute {
 }
 
 // Only indexable, user-facing pages. Excludes internal tools (dashboard,
-// status, help, security), Shopify proxy paths (cart/products/collections
-// are handled by Shopify's own sitemap), and utility pages.
+// status, help, security), cart/checkout paths, and utility pages.
 const STATIC_ROUTES: StaticRoute[] = [
   { path: '',                  priority: 1.0, changeFrequency: 'weekly'  },
   { path: 'about',             priority: 0.9, changeFrequency: 'monthly' },
@@ -36,7 +36,79 @@ interface Article {
   date?: string;
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+interface SaleListing {
+  id?: string;
+  status?: string;
+  updatedAt?: string;
+  createdAt?: string;
+}
+
+async function getAircraftListingEntries(siteUrl: string, today: string): Promise<MetadataRoute.Sitemap> {
+  try {
+    const response = await fetch('https://sale-api.rogerwilcoaviation.com/browse', {
+      next: { revalidate: 300 },
+    });
+    if (!response.ok) return [];
+    const data = (await response.json()) as { listings?: SaleListing[] };
+    return (data.listings || [])
+      .filter((listing) => listing.id && (!listing.status || listing.status === 'active'))
+      .map((listing) => ({
+        url: `${siteUrl}/aircraft-for-sale/${encodeURIComponent(listing.id as string)}`,
+        lastModified: listing.updatedAt || listing.createdAt || today,
+        changeFrequency: 'daily' as Freq,
+        priority: 0.7 as Priority,
+      }));
+  } catch {
+    return [];
+  }
+}
+
+async function getShopEntries(siteUrl: string, today: string): Promise<MetadataRoute.Sitemap> {
+  const entries: MetadataRoute.Sitemap = [];
+
+  try {
+    const collections = await getFeaturedCollections();
+    entries.push(
+      {
+        url: `${siteUrl}/collections`,
+        lastModified: today,
+        changeFrequency: 'weekly' as Freq,
+        priority: 0.7 as Priority,
+      },
+      ...collections.map((collection) => ({
+        url: `${siteUrl}/collections/${collection.handle}`,
+        lastModified: today,
+        changeFrequency: 'weekly' as Freq,
+        priority: 0.7 as Priority,
+      })),
+    );
+  } catch {
+    entries.push({
+      url: `${siteUrl}/collections`,
+      lastModified: today,
+      changeFrequency: 'weekly' as Freq,
+      priority: 0.7 as Priority,
+    });
+  }
+
+  try {
+    const productHandles = await getProductHandles(150);
+    entries.push(
+      ...productHandles.map((handle) => ({
+        url: `${siteUrl}/products/${handle}`,
+        lastModified: today,
+        changeFrequency: 'weekly' as Freq,
+        priority: 0.6 as Priority,
+      })),
+    );
+  } catch {
+    // Keep sitemap generation resilient if Shopify is temporarily unavailable.
+  }
+
+  return entries;
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = siteConfig.siteUrl.replace(/\/$/, '');
   const today = new Date().toISOString().split('T')[0];
 
@@ -59,5 +131,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6 as Priority,
     }));
 
-  return [...staticEntries, ...articleEntries];
+  const [aircraftEntries, shopEntries] = await Promise.all([
+    getAircraftListingEntries(siteUrl, today),
+    getShopEntries(siteUrl, today),
+  ]);
+
+  return [...staticEntries, ...articleEntries, ...aircraftEntries, ...shopEntries];
 }
