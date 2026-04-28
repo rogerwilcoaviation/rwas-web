@@ -54,7 +54,7 @@ export default function BlogArticlesFeed() {
     <>
       {articles.map((a, i) => {
         const label = CATEGORY_LABELS[a.category] || a.category;
-        const url = '/blog/article.html?id=' + a.id;
+        const url = '/blog/' + encodeURIComponent(a.id);
         const lead =
           a.lead.length > 200 ? a.lead.substring(0, 200) + '\u2026' : a.lead;
         return (

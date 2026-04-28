@@ -201,7 +201,7 @@ export default function HomeSamplePage() {
             {/* Blog articles feed (stubbed) */}
             <Specimen variant="flat" as="aside">
               <span className="bs-kicker">Press Release</span>
-              <a href="/blog/article.html?id=spring-2026">
+              <a href="/blog/spring-2026">
                 <h3 className="bs-headline bs-headline--section">
                   Spring 2026 Scheduling &mdash; Now Booking Annual Inspections
                 </h3>
@@ -214,7 +214,7 @@ export default function HomeSamplePage() {
               <hr className="section-rule" style={{ marginTop: '18px' }} />
 
               <span className="bs-kicker">Service Bulletin</span>
-              <a href="/blog/article.html?id=gfc-500-installs">
+              <a href="/blog/gfc-500-installs">
                 <h3 className="bs-headline bs-headline--section">
                   GFC 500 Autopilot Installations Open Into Summer 2026
                 </h3>
@@ -227,7 +227,7 @@ export default function HomeSamplePage() {
               <hr className="section-rule" style={{ marginTop: '18px' }} />
 
               <span className="bs-kicker">Product Update</span>
-              <a href="/blog/article.html?id=papa-alpha-worldwide">
+              <a href="/blog/papa-alpha-worldwide">
                 <h3 className="bs-headline bs-headline--section">
                   Papa-Alpha Rigging Tools Now Shipping Worldwide
                 </h3>
