@@ -1450,9 +1450,15 @@ html, body {
   outline: 2px solid var(--gold-700, #9E7826);
   outline-offset: 2px;
 }
+@media (max-width: 1200px) {
+  .rwas-cart-floater {
+    top: 54px;
+    right: 14px;
+  }
+}
 @media (max-width: 640px) {
   .rwas-cart-floater {
-    top: 10px;
+    top: 58px;
     right: 10px;
     padding: 5px 10px;
     font-size: 11px;
