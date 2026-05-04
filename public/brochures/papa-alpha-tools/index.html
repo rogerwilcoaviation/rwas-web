@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Papa-Alpha Tools Bi-Fold Brochure | RWAS</title>
-  <meta name="description" content="Printable double-sided bi-fold brochure for Papa-Alpha Piper rigging tools by Roger Wilco Aviation Services." />
+  <title>Papa-Alpha Tools Tri-Fold Brochure | RWAS</title>
+  <meta name="description" content="Printable double-sided tri-fold brochure for Papa-Alpha Piper rigging tools by Roger Wilco Aviation Services." />
   <style>
     :root {
       --paper: #f7f1e4;
@@ -16,191 +16,129 @@
       --rule: rgba(23, 19, 13, 0.28);
       --red: #8e251f;
     }
-
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; background: #dfd7c8; color: var(--ink); }
-    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.28; }
-
+    body { font-family: Arial, Helvetica, sans-serif; line-height: 1.22; }
     .toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      gap: .75rem;
-      justify-content: center;
-      align-items: center;
-      padding: .75rem;
-      background: rgba(17, 17, 17, .92);
-      color: white;
-      font-size: 14px;
+      position: sticky; top: 0; z-index: 20;
+      display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; align-items: center;
+      padding: .75rem; background: rgba(17, 17, 17, .92); color: white; font-size: 14px;
     }
     .toolbar a, .toolbar button {
-      border: 1px solid rgba(255,255,255,.35);
-      border-radius: 999px;
-      color: white;
-      background: transparent;
-      padding: .55rem .9rem;
-      text-decoration: none;
-      cursor: pointer;
-      font-weight: 700;
+      border: 1px solid rgba(255,255,255,.35); border-radius: 999px; color: white; background: transparent;
+      padding: .55rem .9rem; text-decoration: none; cursor: pointer; font-weight: 700;
     }
     .toolbar a.primary { background: var(--gold); color: #111; border-color: var(--gold); }
-
     .sheet {
-      width: 11in;
-      height: 8.5in;
-      margin: 24px auto;
-      background: var(--paper);
-      border: 1px solid rgba(0,0,0,.18);
-      box-shadow: 0 18px 50px rgba(0,0,0,.22);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      position: relative;
-      overflow: hidden;
-      page-break-after: always;
+      width: 11in; height: 8.5in; margin: 24px auto; background: var(--paper);
+      border: 1px solid rgba(0,0,0,.18); box-shadow: 0 18px 50px rgba(0,0,0,.22);
+      display: grid; grid-template-columns: repeat(3, 1fr); position: relative; overflow: hidden; page-break-after: always;
     }
-    .sheet::before {
-      content: "";
-      position: absolute;
-      top: 0; bottom: 0; left: 50%;
-      border-left: 1px dashed rgba(23,19,13,.22);
-      z-index: 5;
-      pointer-events: none;
-    }
-    .panel { padding: .42in .46in; position: relative; overflow: hidden; }
+    .sheet::before, .sheet::after { content: ""; position: absolute; top: 0; bottom: 0; border-left: 1px dashed rgba(23,19,13,.22); z-index: 5; pointer-events: none; }
+    .sheet::before { left: 33.333%; }
+    .sheet::after { left: 66.666%; }
+    .panel { padding: .30in .29in; position: relative; overflow: hidden; }
     .panel + .panel { border-left: 1px solid rgba(23,19,13,.10); }
-    .panel::after {
-      content: "";
-      position: absolute;
-      inset: .18in;
-      border: 1px solid rgba(23,19,13,.12);
-      pointer-events: none;
-    }
-
-    .kicker {
-      text-transform: uppercase;
-      letter-spacing: .18em;
-      font-size: 10px;
-      font-weight: 800;
-      color: var(--gold-dark);
-    }
+    .panel::after { content: ""; position: absolute; inset: .13in; border: 1px solid rgba(23,19,13,.12); pointer-events: none; }
+    .panel > * { position: relative; z-index: 2; }
+    .kicker { text-transform: uppercase; letter-spacing: .16em; font-size: 9px; font-weight: 900; color: var(--gold-dark); }
     h1, h2, h3 { margin: 0; font-family: Georgia, 'Times New Roman', serif; }
-    h1 { font-size: 48px; line-height: .95; letter-spacing: -.035em; }
-    h2 { font-size: 30px; line-height: 1; letter-spacing: -.02em; }
-    h3 { font-size: 17px; line-height: 1.05; }
+    h1 { font-size: 38px; line-height: .94; letter-spacing: -.035em; }
+    h2 { font-size: 24px; line-height: 1; letter-spacing: -.02em; }
+    h3 { font-size: 15px; line-height: 1.05; }
     p { margin: 0; }
-    .rule { border-top: 2px solid var(--ink); border-bottom: 1px solid var(--ink); height: 5px; margin: 12px 0; }
-    .thin-rule { border-top: 1px solid var(--rule); margin: 10px 0; }
+    .rule { border-top: 2px solid var(--ink); border-bottom: 1px solid var(--ink); height: 5px; margin: 9px 0; }
+    .thin-rule { border-top: 1px solid var(--rule); margin: 8px 0; }
     .muted { color: var(--muted); }
-    .small { font-size: 10.5px; }
-    .body { font-size: 13px; }
-    .lead { font-size: 17px; font-family: Georgia, 'Times New Roman', serif; line-height: 1.25; }
-    .brand-row { display: flex; align-items: center; gap: 12px; }
-    .brand-row img { width: 58px; height: 58px; object-fit: contain; }
-    .brand-name { font-family: Georgia, 'Times New Roman', serif; font-weight: 800; font-size: 22px; line-height: .9; }
-    .brand-sub { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); font-weight: 800; margin-top: 4px; }
-
-    .cover {
-      background: linear-gradient(145deg, rgba(255,250,240,.9), rgba(240,224,189,.92));
-    }
-    .hero-img {
-      display: block;
-      width: 100%;
-      height: 2.7in;
-      object-fit: cover;
-      margin: 16px 0 10px;
-      border: 4px solid #fff8e7;
-      outline: 1px solid rgba(0,0,0,.2);
-      filter: contrast(1.03) saturate(.95);
-    }
-    .cover .badge {
-      display: inline-block;
-      background: var(--ink);
-      color: var(--paper-2);
-      padding: 7px 10px;
-      border-radius: 999px;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      margin: 10px 0 14px;
-    }
-    .cover .cta { margin-top: 12px; padding: 12px; background: #17130d; color: #fff5df; border-radius: 14px; }
-    .cover .cta strong { color: #f2cc66; }
-
+    .small { font-size: 8.6px; }
+    .body { font-size: 10.7px; }
+    .lead { font-size: 14px; font-family: Georgia, 'Times New Roman', serif; line-height: 1.2; }
+    .brand-row { display: flex; align-items: center; gap: 9px; }
+    .brand-row img { width: 45px; height: 45px; object-fit: contain; }
+    .brand-name { font-family: Georgia, 'Times New Roman', serif; font-weight: 900; font-size: 17px; line-height: .9; }
+    .brand-sub { font-size: 7.8px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); font-weight: 900; margin-top: 4px; }
+    .hero-img { display: block; width: 100%; height: 2.05in; object-fit: cover; margin: 11px 0 9px; border: 4px solid #fff8e7; outline: 1px solid rgba(0,0,0,.2); filter: contrast(1.03) saturate(.95); }
+    .badge { display: inline-block; background: var(--ink); color: var(--paper-2); padding: 6px 8px; border-radius: 999px; font-size: 8px; font-weight: 900; letter-spacing: .10em; text-transform: uppercase; margin: 8px 0 9px; }
+    .cta { margin-top: 9px; padding: 9px; background: #17130d; color: #fff5df; border-radius: 12px; }
+    .cta strong { color: #f2cc66; }
+    .cover { background: linear-gradient(145deg, rgba(255,250,240,.9), rgba(240,224,189,.92)); }
     .back { background: #eee2c7; }
-    .contact-card { margin-top: 18px; padding: 16px; background: rgba(255,255,255,.55); border: 1px solid rgba(0,0,0,.14); border-radius: 16px; }
-    .contact-card .line { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dotted rgba(0,0,0,.25); padding: 6px 0; font-size: 12px; }
+    .flap { background: #f5ead1; }
+    .contact-card { margin-top: 10px; padding: 10px; background: rgba(255,255,255,.55); border: 1px solid rgba(0,0,0,.14); border-radius: 12px; }
+    .contact-card .line { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px dotted rgba(0,0,0,.25); padding: 4px 0; font-size: 9.6px; }
     .contact-card .line:last-child { border-bottom: 0; }
-    .url-box { margin-top: 14px; padding: 12px; border: 2px solid var(--ink); background: var(--paper-2); text-align: center; font-weight: 900; font-size: 14px; }
-    .fine-print { position: absolute; left: .46in; right: .46in; bottom: .38in; font-size: 8.8px; color: var(--muted); }
-
-    .inside-head { grid-column: 1 / -1; position: absolute; top: .22in; left: .46in; right: .46in; display: flex; justify-content: space-between; align-items: center; z-index: 4; }
-    .inside-head .title { font-family: Georgia, 'Times New Roman', serif; font-size: 18px; font-weight: 800; }
-    .inside .panel { padding-top: .78in; }
-
-    .feature-list { display: grid; gap: 9px; margin-top: 12px; }
-    .feature { display: grid; grid-template-columns: 28px 1fr; gap: 9px; align-items: start; }
-    .feature .num { width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-family: Georgia, serif; font-weight: 900; font-size: 13px; }
-    .feature strong { display: block; font-size: 13px; margin-bottom: 2px; }
-    .feature span { font-size: 11px; color: var(--muted); }
-
-    .products { margin-top: 10px; display: grid; gap: 7px; }
-    .product { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 7px 0; border-bottom: 1px dotted rgba(0,0,0,.24); font-size: 11px; }
-    .product strong { font-size: 11.5px; }
+    .url-box { margin-top: 10px; padding: 9px 6px; border: 2px solid var(--ink); background: var(--paper-2); text-align: center; font-weight: 900; font-size: 10.5px; word-break: break-word; }
+    .fine-print { position: absolute; left: .29in; right: .29in; bottom: .23in; font-size: 7.1px; color: var(--muted); z-index: 2; }
+    .panel-list { display: grid; gap: 6px; margin-top: 9px; }
+    .mini-feature { display: grid; grid-template-columns: 22px 1fr; gap: 7px; align-items: start; }
+    .mini-feature .num { width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-family: Georgia, serif; font-weight: 900; font-size: 10px; }
+    .mini-feature strong { display: block; font-size: 10.5px; margin-bottom: 1px; }
+    .mini-feature span { font-size: 9px; color: var(--muted); }
+    .product-grid { margin-top: 8px; display: grid; gap: 4px; }
+    .product { display: grid; grid-template-columns: 1fr auto; gap: 6px; padding: 4.7px 0; border-bottom: 1px dotted rgba(0,0,0,.24); font-size: 8.8px; }
+    .product strong { font-size: 9.3px; }
     .price { font-weight: 900; color: var(--gold-dark); white-space: nowrap; }
-    .kit-box { margin-top: 12px; padding: 12px; border-left: 6px solid var(--gold); background: rgba(255,255,255,.55); }
-    .kit-box strong { font-family: Georgia, serif; font-size: 18px; }
-
-    .airframes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0; }
-    .airframes span { border: 1px solid rgba(0,0,0,.18); background: rgba(255,255,255,.45); padding: 6px; text-align: center; font-size: 10.5px; font-weight: 800; }
-    .quote { margin-top: 12px; padding: 12px; background: var(--ink); color: var(--paper); font-family: Georgia, serif; font-size: 18px; line-height: 1.18; }
-    .shop-made { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .shop-made div { padding: 9px; border: 1px solid rgba(0,0,0,.15); background: rgba(255,255,255,.4); font-size: 10.5px; }
-    .shop-made strong { display: block; font-size: 11px; margin-bottom: 3px; }
-
+    .kit-box { margin-top: 8px; padding: 9px; border-left: 5px solid var(--gold); background: rgba(255,255,255,.55); }
+    .kit-box strong { font-family: Georgia, serif; font-size: 14px; }
+    .airframes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 8px 0; }
+    .airframes span { border: 1px solid rgba(0,0,0,.18); background: rgba(255,255,255,.45); padding: 5px 2px; text-align: center; font-size: 8.4px; font-weight: 900; }
+    .quote { margin-top: 8px; padding: 10px; background: var(--ink); color: var(--paper); font-family: Georgia, serif; font-size: 14px; line-height: 1.14; }
+    .shop-made { margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .shop-made div { padding: 7px; border: 1px solid rgba(0,0,0,.15); background: rgba(255,255,255,.4); font-size: 8.2px; }
+    .shop-made strong { display: block; font-size: 8.7px; margin-bottom: 2px; }
+    .callout { padding: 10px; background: rgba(255,255,255,.52); border: 1px solid rgba(0,0,0,.16); border-radius: 12px; margin-top: 8px; }
     .download-note { text-align: center; margin: -12px auto 24px; max-width: 11in; color: #3d372c; font-size: 13px; }
-
     @page { size: Letter landscape; margin: 0; }
     @media print {
       html, body { background: white; }
       .toolbar, .download-note { display: none !important; }
       .sheet { margin: 0; border: 0; box-shadow: none; width: 11in; height: 8.5in; }
-      .panel { break-inside: avoid; }
-      .fine-print { bottom: .32in; }
     }
   </style>
 </head>
 <body>
   <div class="toolbar">
-    <span>Double-sided bi-fold brochure</span>
+    <span>Double-sided tri-fold brochure</span>
     <button onclick="window.print()">Print / Save PDF</button>
-    <a class="primary" href="./papa-alpha-tools-bifold.pdf">Download PDF</a>
+    <a class="primary" href="./papa-alpha-tools-trifold.pdf">Download PDF</a>
     <a href="/collections/papa-alpha-tools">Live products</a>
   </div>
 
-  <section class="sheet outside" aria-label="Outside spread">
+  <section class="sheet outside" aria-label="Outside tri-fold spread">
+    <article class="panel flap">
+      <p class="kicker">Inside flap</p>
+      <h2>What makes these different?</h2>
+      <div class="panel-list">
+        <div class="mini-feature"><div class="num">1</div><div><strong>Designed in a real shop</strong><span>RWAS builds these with the same practical mindset used on Part 145 avionics, A&P, NDT, and fabrication work.</span></div></div>
+        <div class="mini-feature"><div class="num">2</div><div><strong>Purpose-built Piper references</strong><span>Repeatable fixtures for Piper control-surface rigging tasks, not improvised hangar-floor geometry.</span></div></div>
+        <div class="mini-feature"><div class="num">3</div><div><strong>Readable and durable</strong><span>Powder-coated and UV-printed aluminum keeps markings crisp and tools lighter than typical steel shop fixtures.</span></div></div>
+        <div class="mini-feature"><div class="num">4</div><div><strong>Easy ordering</strong><span>The live RWAS collection is OTC checkout and ships from Yankton when inventory allows.</span></div></div>
+      </div>
+      <div class="quote">“Made by professional mechanics for professional mechanics.”</div>
+      <p class="small muted" style="margin-top:8px;">Use only with the applicable maintenance data and verify aircraft model / serial applicability before use. A good tool is still only as good as the mechanic holding it.</p>
+    </article>
+
     <article class="panel back">
       <div class="brand-row">
         <img src="/newspaper/images/logo.png" alt="RWAS logo" />
         <div>
           <div class="brand-name">Roger Wilco<br/>Aviation Services</div>
-          <div class="brand-sub">FAA Part 145 · KYKN · Yankton, SD</div>
+          <div class="brand-sub">FAA Part 145 · Cert. RWSR491E</div>
         </div>
       </div>
       <div class="rule"></div>
       <p class="kicker">Order direct</p>
-      <h2>Rigging tools from a working aircraft shop.</h2>
-      <p class="body muted" style="margin-top:10px;">Papa-Alpha Tools are built by RWAS for mechanics who need repeatable Piper control-surface rigging references without improvising fixtures on the hangar floor.</p>
+      <h2>Live inventory, current pricing, direct checkout.</h2>
+      <p class="body muted" style="margin-top:8px;">Papa-Alpha Tools are RWAS-built rigging tools for Piper Papa-Alpha airframes. Browse the live Shopify collection for current inventory, model applicability, and ordering.</p>
       <div class="contact-card">
         <div class="line"><strong>Web</strong><span>rogerwilcoaviation.com</span></div>
         <div class="line"><strong>Collection</strong><span>/collections/papa-alpha-tools</span></div>
         <div class="line"><strong>Phone</strong><span>(605) 299-8178</span></div>
         <div class="line"><strong>Email</strong><span>avionics@rwas.team</span></div>
-        <div class="line"><strong>Ships from</strong><span>Yankton, South Dakota</span></div>
+        <div class="line"><strong>Ships from</strong><span>Yankton, SD · KYKN</span></div>
       </div>
       <div class="url-box">rogerwilcoaviation.com/collections/papa-alpha-tools</div>
-      <p class="fine-print">For aircraft maintenance use by qualified personnel. Verify applicability to aircraft model and serial number before use. Product availability, pricing, and kit contents may change; live Shopify collection controls current order information.</p>
+      <p class="fine-print">For aircraft maintenance use by qualified personnel. Product availability, pricing, and kit contents may change; live Shopify collection controls current order information.</p>
     </article>
 
     <article class="panel cover">
@@ -208,53 +146,56 @@
       <h1>Piper rigging tools, made by mechanics.</h1>
       <span class="badge">CNC · Fiber laser · Powder coat · UV print</span>
       <img class="hero-img" src="/newspaper/images/papa_alpha_kit_collection.jpg" alt="Papa-Alpha rigging tool kit" />
-      <p class="lead">Aircraft-grade aluminum tools for Piper Papa-Alpha airframes — precise, durable, lighter than shop-made steel fixtures, and ready for real hangar work.</p>
-      <div class="cta body"><strong>OTC checkout.</strong> Browse the live collection, select the correct tool or kit, and ship direct from RWAS.</div>
+      <p class="lead">Aircraft-grade aluminum rigging reference tools for Piper airframes — precise, durable, lightweight, and ready for real hangar work.</p>
+      <div class="cta body"><strong>OTC checkout.</strong> Pick the correct tool or kit and ship direct from RWAS.</div>
     </article>
   </section>
-  <p class="download-note">Outside spread: left panel is the back cover, right panel is the front cover. Print duplex, flip on short edge, then fold down the center.</p>
+  <p class="download-note">Outside spread: left = fold-in flap, middle = back cover, right = front cover. Print duplex, flip on short edge.</p>
 
-  <section class="sheet inside" aria-label="Inside spread">
-    <div class="inside-head">
-      <span class="title">PAPA-ALPHA RIGGING REFERENCE TOOLS</span>
-      <span class="kicker">Professional Piper maintenance support</span>
-    </div>
+  <section class="sheet inside" aria-label="Inside tri-fold spread">
     <article class="panel">
-      <p class="kicker">Why shops buy them</p>
-      <h2>Less guesswork. Better repeatability.</h2>
-      <div class="feature-list">
-        <div class="feature"><div class="num">1</div><div><strong>Purpose-built references</strong><span>Designed around Piper control-surface rigging tasks so the mechanic has a repeatable fixture instead of a one-off shop workaround.</span></div></div>
-        <div class="feature"><div class="num">2</div><div><strong>Modern shop construction</strong><span>CAD-modeled, CNC-routed or fiber-laser cut from aircraft-grade aluminum, then powder coated and UV printed for durability.</span></div></div>
-        <div class="feature"><div class="num">3</div><div><strong>Built with usability in mind</strong><span>Weight-reducing design, clean markings, and protractor-friendly details where applicable make the tools easier to handle on the aircraft.</span></div></div>
-        <div class="feature"><div class="num">4</div><div><strong>Made by a working Part 145 shop</strong><span>RWAS uses the same practical maintenance mindset on these tools that it brings to avionics, A&P, NDT, and fabrication work.</span></div></div>
+      <p class="kicker">Examples from the live collection</p>
+      <h2>Individual tools</h2>
+      <div class="product-grid">
+        <div class="product"><strong>PA-28/32/34/44 Aileron & Flap Rigging Tool</strong><span class="price">$279</span></div>
+        <div class="product"><strong>Papa-Alpha Bell Crank Rigging Tool</strong><span class="price">$287</span></div>
+        <div class="product"><strong>PA-30/39 Aileron Rigging Tool</strong><span class="price">$213</span></div>
+        <div class="product"><strong>PA-31 Aileron & Elevator Rigging Tool</strong><span class="price">$255</span></div>
+        <div class="product"><strong>PA-31 Rudder Trim Rigging Tool</strong><span class="price">$350</span></div>
+        <div class="product"><strong>PA-36 Flap Rigging Tool</strong><span class="price">$60</span></div>
+        <div class="product"><strong>Rudder Rigging Tool</strong><span class="price">$90</span></div>
+        <div class="product"><strong>Stabilator Rigging Tool</strong><span class="price">$236</span></div>
       </div>
-      <div class="quote">“Made by professional mechanics for professional mechanics.”</div>
-      <div class="shop-made">
-        <div><strong>Same-day focus</strong>Built and fulfilled from Yankton when inventory allows.</div>
-        <div><strong>Worldwide delivery</strong>We sell internationally all over the world.</div>
-      </div>
+      <p class="small muted" style="margin-top:8px;">Prices are brochure snapshots from the site. Always confirm live pricing and applicability before ordering.</p>
     </article>
 
     <article class="panel">
-      <p class="kicker">Live collection</p>
-      <h2>Tools and kits</h2>
-      <div class="products">
-        <div class="product"><strong>Aileron & Flap Rigging Tool</strong><span class="price">from $279</span></div>
-        <div class="product"><strong>Bell Crank Rigging Tool</strong><span class="price">from $60</span></div>
-        <div class="product"><strong>PA-30/39 Aileron Rigging Tool</strong><span class="price">from $213</span></div>
-        <div class="product"><strong>PA-31 Aileron & Elevator Tool</strong><span class="price">from $255</span></div>
-        <div class="product"><strong>PA-31 Rudder Trim Tool</strong><span class="price">from $303</span></div>
-        <div class="product"><strong>PA-36 Flap Rigging Tool</strong><span class="price">from $60</span></div>
-        <div class="product"><strong>Rudder Rigging Tool</strong><span class="price">from $90</span></div>
-        <div class="product"><strong>Stabilator Rigging Tool</strong><span class="price">from $218</span></div>
-      </div>
-      <div class="kit-box body"><strong>Complete rigging kits</strong><br/>Airframe-specific Papa-Alpha kits combine applicable aileron bellcrank, rudder alignment, stabilator, rudder trim, elevator trim, and related fixtures where required by model applicability.</div>
+      <p class="kicker">Kits and aircraft families</p>
+      <h2>Build around the airframe.</h2>
+      <div class="kit-box body"><strong>Papa-Alpha Rigging Kit</strong><br/>The live site lists the rigging kit at <b>$579</b>. Kits combine airframe-specific tools so a shop can keep the common Piper references together instead of hunting fixtures one task at a time.</div>
       <div class="airframes" aria-label="Example supported Piper families">
-        <span>PA-23</span><span>PA-24</span><span>PA-28</span><span>PA-30/39</span><span>PA-31</span><span>PA-32</span><span>PA-34</span><span>PA-36</span><span>PA-44</span>
+        <span>PA-23</span><span>PA-24</span><span>PA-28</span><span>PA-30</span><span>PA-31</span><span>PA-32</span><span>PA-34</span><span>PA-36</span><span>PA-39</span><span>PA-44</span><span>Cherokee</span><span>Navajo</span>
       </div>
-      <p class="small muted">Prices shown are brochure snapshots from the live RWAS product collection. Always confirm current pricing, aircraft model, serial applicability, and kit contents on the live product page before ordering.</p>
+      <div class="callout body"><strong>Why the kit matters:</strong> a controlled, repeatable tool set saves time during setup and keeps the shop from relying on fragile, one-off references. That is the sort of small discipline that keeps a maintenance day from turning into a goat rope.</div>
+      <div class="shop-made">
+        <div><strong>Worldwide delivery</strong>We sell internationally all over the world.</div>
+        <div><strong>Same-day focus</strong>Ships from Yankton when inventory allows.</div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <p class="kicker">How they’re built</p>
+      <h2>Modern fabrication, old-school utility.</h2>
+      <p class="lead">Crafted with CAD, CNC routing, and fiber laser cutting of aircraft-grade aluminum, then powder coated and UV printed for reduced weight, durability, and precision.</p>
+      <div class="thin-rule"></div>
+      <div class="panel-list">
+        <div class="mini-feature"><div class="num">A</div><div><strong>Aircraft-grade aluminum</strong><span>Light enough to handle easily, robust enough for shop use.</span></div></div>
+        <div class="mini-feature"><div class="num">B</div><div><strong>Printed reference markings</strong><span>Readable tool markings reduce confusion during rigging setup.</span></div></div>
+        <div class="mini-feature"><div class="num">C</div><div><strong>From a shop that uses tools</strong><span>RWAS is an FAA Part 145 repair station and Garmin dealer, not a catalog house pretending to know airplanes.</span></div></div>
+      </div>
+      <div class="cta body"><strong>Browse the live collection:</strong><br/>rogerwilcoaviation.com/collections/papa-alpha-tools</div>
     </article>
   </section>
-  <p class="download-note">Inside spread: open the brochure to see the two interior panels.</p>
+  <p class="download-note">Inside spread: three interior panels. Fold into thirds after duplex printing.</p>
 </body>
 </html>
