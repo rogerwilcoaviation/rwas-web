@@ -57,7 +57,16 @@
     .brand-row img { width: 45px; height: 45px; object-fit: contain; }
     .brand-name { font-family: Georgia, 'Times New Roman', serif; font-weight: 900; font-size: 17px; line-height: .9; }
     .brand-sub { font-size: 7.8px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); font-weight: 900; margin-top: 4px; }
-    .hero-img { display: block; width: 100%; height: 2.05in; object-fit: cover; margin: 11px 0 9px; border: 4px solid #fff8e7; outline: 1px solid rgba(0,0,0,.2); filter: contrast(1.03) saturate(.95); }
+    .hero-img { display: block; width: 100%; height: 1.72in; object-fit: cover; margin: 9px 0 7px; border: 4px solid #fff8e7; outline: 1px solid rgba(0,0,0,.2); filter: contrast(1.03) saturate(.95); }
+    .photo-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+    .photo-strip figure, .photo-card { margin: 0; border: 1px solid rgba(0,0,0,.18); background: rgba(255,255,255,.55); padding: 4px; }
+    .photo-strip img, .photo-card img { width: 100%; height: .70in; object-fit: cover; display: block; }
+    .photo-strip figcaption, .photo-card figcaption { font-size: 7.5px; font-weight: 800; color: var(--muted); margin-top: 3px; line-height: 1.05; }
+    .photo-mosaic { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+    .photo-mosaic .photo-card img { height: .82in; }
+    .big-photo { margin: 8px 0 7px; border: 1px solid rgba(0,0,0,.2); background: rgba(255,255,255,.6); padding: 5px; }
+    .big-photo img { width: 100%; height: 1.18in; object-fit: cover; display: block; }
+    .big-photo figcaption { font-size: 7.8px; font-weight: 900; color: var(--muted); margin-top: 3px; }
     .badge { display: inline-block; background: var(--ink); color: var(--paper-2); padding: 6px 8px; border-radius: 999px; font-size: 8px; font-weight: 900; letter-spacing: .10em; text-transform: uppercase; margin: 8px 0 9px; }
     .cta { margin-top: 9px; padding: 9px; background: #17130d; color: #fff5df; border-radius: 12px; }
     .cta strong { color: #f2cc66; }
@@ -115,7 +124,11 @@
         <div class="mini-feature"><div class="num">4</div><div><strong>Easy ordering</strong><span>The live RWAS collection is OTC checkout and ships from Yankton when inventory allows.</span></div></div>
       </div>
       <div class="quote">“Made by professional mechanics for professional mechanics.”</div>
-      <p class="small muted" style="margin-top:8px;">Use only with the applicable maintenance data and verify aircraft model / serial applicability before use. A good tool is still only as good as the mechanic holding it.</p>
+      <div class="photo-strip">
+        <figure><img src="/brochures/papa-alpha-tools/images/stabilator.jpg" alt="Papa-Alpha stabilator rigging tool" /><figcaption>Stabilator reference</figcaption></figure>
+        <figure><img src="/brochures/papa-alpha-tools/images/pa31-rudder-trim.jpg" alt="PA-31 rudder trim rigging tool" /><figcaption>PA-31 rudder trim</figcaption></figure>
+      </div>
+      <p class="small muted" style="margin-top:7px;">Use only with applicable maintenance data and verify model / serial applicability before use.</p>
     </article>
 
     <article class="panel back">
@@ -145,7 +158,11 @@
       <p class="kicker">Papa-Alpha Tools</p>
       <h1>Piper rigging tools, made by mechanics.</h1>
       <span class="badge">CNC · Fiber laser · Powder coat · UV print</span>
-      <img class="hero-img" src="/newspaper/images/papa_alpha_kit_collection.jpg" alt="Papa-Alpha rigging tool kit" />
+      <img class="hero-img" src="/brochures/papa-alpha-tools/images/kit-aileron-flap.jpg" alt="Papa-Alpha aileron and flap rigging tool" />
+      <div class="photo-strip">
+        <figure><img src="/brochures/papa-alpha-tools/images/bellcrank.jpg" alt="Papa-Alpha bell crank rigging tool" /><figcaption>Bell crank tool</figcaption></figure>
+        <figure><img src="/brochures/papa-alpha-tools/images/rudder-tool.jpg" alt="Papa-Alpha rudder rigging tool" /><figcaption>Rudder tool</figcaption></figure>
+      </div>
       <p class="lead">Aircraft-grade aluminum rigging reference tools for Piper airframes — precise, durable, lightweight, and ready for real hangar work.</p>
       <div class="cta body"><strong>OTC checkout.</strong> Pick the correct tool or kit and ship direct from RWAS.</div>
     </article>
@@ -166,17 +183,22 @@
         <div class="product"><strong>Rudder Rigging Tool</strong><span class="price">$90</span></div>
         <div class="product"><strong>Stabilator Rigging Tool</strong><span class="price">$236</span></div>
       </div>
-      <p class="small muted" style="margin-top:8px;">Prices are brochure snapshots from the site. Always confirm live pricing and applicability before ordering.</p>
+      <div class="photo-mosaic">
+        <figure class="photo-card"><img src="/brochures/papa-alpha-tools/images/af-013.jpg" alt="PA-30/39 aileron rigging tool detail" /><figcaption>PA-30/39 detail</figcaption></figure>
+        <figure class="photo-card"><img src="/brochures/papa-alpha-tools/images/pa31-ae.jpg" alt="PA-31 aileron and elevator rigging tool" /><figcaption>PA-31 aileron/elevator</figcaption></figure>
+      </div>
+      <p class="small muted" style="margin-top:6px;">Prices are brochure snapshots from the site. Confirm live pricing and applicability before ordering.</p>
     </article>
 
     <article class="panel">
       <p class="kicker">Kits and aircraft families</p>
       <h2>Build around the airframe.</h2>
-      <div class="kit-box body"><strong>Papa-Alpha Rigging Kit</strong><br/>The live site lists the rigging kit at <b>$579</b>. Kits combine airframe-specific tools so a shop can keep the common Piper references together instead of hunting fixtures one task at a time.</div>
+      <figure class="big-photo"><img src="/brochures/papa-alpha-tools/images/pa3039-aileron.jpg" alt="PA-30/39 aileron rigging tool" /><figcaption>PA-30/39 aileron rigging tool</figcaption></figure>
+      <div class="kit-box body"><strong>Papa-Alpha Rigging Kit</strong><br/>The live site lists the rigging kit at <b>$579</b>. Kits combine airframe-specific tools so a shop can keep common Piper references together.</div>
       <div class="airframes" aria-label="Example supported Piper families">
         <span>PA-23</span><span>PA-24</span><span>PA-28</span><span>PA-30</span><span>PA-31</span><span>PA-32</span><span>PA-34</span><span>PA-36</span><span>PA-39</span><span>PA-44</span><span>Cherokee</span><span>Navajo</span>
       </div>
-      <div class="callout body"><strong>Why the kit matters:</strong> a controlled, repeatable tool set saves time during setup and keeps the shop from relying on fragile, one-off references. That is the sort of small discipline that keeps a maintenance day from turning into a goat rope.</div>
+      <div class="callout body"><strong>Why the kit matters:</strong> a controlled, repeatable tool set saves time during setup and keeps the shop from relying on fragile one-off references.</div>
       <div class="shop-made">
         <div><strong>Worldwide delivery</strong>We sell internationally all over the world.</div>
         <div><strong>Same-day focus</strong>Ships from Yankton when inventory allows.</div>
