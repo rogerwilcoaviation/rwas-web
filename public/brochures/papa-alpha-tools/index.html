@@ -62,6 +62,7 @@
     .photo-strip figure, .photo-card, .big-photo { margin: 0; border: 1px solid rgba(0,0,0,.18); background: rgba(255,255,255,.55); padding: 4px; }
     .photo-strip img, .photo-card img { width: 100%; height: .90in; object-fit: cover; display: block; }
     .photo-strip figcaption, .photo-card figcaption, .big-photo figcaption { font-size: 7.5px; font-weight: 800; color: var(--muted); margin-top: 3px; line-height: 1.05; }
+    .photo-strip .relight img { filter: brightness(1.14) contrast(1.06) saturate(1.05); }
     .photo-mosaic { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
     .photo-mosaic .photo-card img { height: 1.05in; }
     .big-photo { margin: 8px 0 7px; }
@@ -95,7 +96,7 @@
     .price { font-weight: 900; color: var(--gold-dark); white-space: nowrap; }
     .kit-box { margin-top: 8px; padding: 9px; border-left: 5px solid var(--gold); background: rgba(255,255,255,.55); }
     .kit-box strong { font-family: Georgia, serif; font-size: 14px; }
-    .airframes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 8px 0; }
+    .airframes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin: 8px 0; }
     .airframes span { border: 1px solid rgba(0,0,0,.18); background: rgba(255,255,255,.45); padding: 5px 2px; text-align: center; font-size: 8.4px; font-weight: 900; }
     .quote { margin-top: 8px; padding: 10px; background: var(--ink); color: var(--paper); font-family: Georgia, serif; font-size: 14px; line-height: 1.14; }
     .shop-made { margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
@@ -103,6 +104,41 @@
     .shop-made strong { display: block; font-size: 8.7px; margin-bottom: 2px; }
     .callout { padding: 10px; background: rgba(255,255,255,.52); border: 1px solid rgba(0,0,0,.16); border-radius: 12px; margin-top: 8px; }
     .download-note { text-align: center; margin: -12px auto 24px; max-width: 11in; color: #3d372c; font-size: 13px; }
+
+    /* New: trust strip on cover and badge rows */
+    .trust-strip { margin: 6px 0 4px; font-size: 8.2px; font-weight: 900; letter-spacing: .11em; text-transform: uppercase; color: var(--ink); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 5px 0; text-align: center; }
+    .trust-strip span { white-space: nowrap; }
+    .trust-strip .dot { color: var(--gold-dark); margin: 0 4px; font-weight: 900; }
+    .price-tag { display:inline-block; margin-top: 6px; font-size: 9.5px; font-weight: 900; letter-spacing: .08em; color: var(--gold-dark); text-transform: uppercase; }
+
+    /* New: trust badges grid (replaces CAD/CNC/UV/SD repetition) */
+    .trust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+    .trust-grid div { background: rgba(255,255,255,.55); border: 1px solid rgba(0,0,0,.16); padding: 7px; font-size: 7.8px; font-weight: 800; line-height: 1.18; color: var(--muted); }
+    .trust-grid strong { display:block; font-family: Georgia, serif; font-size: 11.5px; color: var(--gold-dark); margin-bottom: 1px; letter-spacing: 0; text-transform: none; }
+
+    /* New: QR block (used on back panel and individual-tools panel) */
+    .qr-block { margin-top: 9px; padding: 9px; background: var(--paper-2); border: 1px solid rgba(0,0,0,.16); border-radius: 10px; display: grid; grid-template-columns: 1.05in 1fr; gap: 9px; align-items: center; }
+    .qr-block .qr { width: 1.05in; height: 1.05in; padding: 4px; background: #fff; border: 1px solid rgba(0,0,0,.2); }
+    .qr-block .qr svg { width: 100%; height: 100%; display: block; color: var(--ink); }
+    .qr-block .qr-label { font-family: Georgia, serif; font-size: 12.5px; line-height: 1.1; }
+    .qr-block .qr-label strong { display: block; font-size: 13.5px; }
+    .qr-block .qr-label span { display: block; font-size: 8.3px; color: var(--muted); margin-top: 4px; font-family: Arial, Helvetica, sans-serif; letter-spacing: .04em; }
+
+    /* Smaller QR for cover panel */
+    .qr-mini { display: grid; grid-template-columns: .85in 1fr; gap: 8px; align-items: center; }
+    .qr-mini .qr { width: .85in; height: .85in; padding: 3px; background: #fff; border: 1px solid rgba(0,0,0,.2); }
+    .qr-mini .qr svg { width: 100%; height: 100%; display: block; color: var(--ink); }
+    .qr-mini .lbl { font-size: 9.6px; font-weight: 900; line-height: 1.18; }
+    .qr-mini .lbl span { display: block; font-weight: 400; color: var(--muted); font-size: 8.4px; margin-top: 3px; letter-spacing: .04em; }
+
+    /* New: how-to-order numbered steps */
+    .order-steps { margin-top: 8px; display: grid; gap: 5px; }
+    .order-steps .step { display: grid; grid-template-columns: 18px 1fr; gap: 7px; align-items: start; font-size: 8.8px; }
+    .order-steps .step .n { width: 18px; height: 18px; border-radius: 50%; background: var(--gold); color: var(--ink); display: grid; place-items: center; font-family: Georgia, serif; font-weight: 900; font-size: 9.5px; }
+
+    /* Revision marker, ultra-quiet */
+    .rev-mark { font-size: 6.4px; color: var(--muted); letter-spacing: .14em; text-transform: uppercase; opacity: .8; margin-top: 4px; }
+
     @page { size: Letter landscape; margin: 0; }
     @media print {
       html, body { background: white; }
@@ -112,6 +148,14 @@
   </style>
 </head>
 <body>
+
+  <!-- Reusable QR symbol (one definition, two refs) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="qr-papa-alpha" viewBox="0 0 41 41">
+      <path d="M2,2H3V3H2zM3,2H4V3H3zM4,2H5V3H4zM5,2H6V3H5zM6,2H7V3H6zM7,2H8V3H7zM8,2H9V3H8zM10,2H11V3H10zM12,2H13V3H12zM14,2H15V3H14zM19,2H20V3H19zM20,2H21V3H20zM21,2H22V3H21zM23,2H24V3H23zM24,2H25V3H24zM26,2H27V3H26zM27,2H28V3H27zM29,2H30V3H29zM30,2H31V3H30zM32,2H33V3H32zM33,2H34V3H33zM34,2H35V3H34zM35,2H36V3H35zM36,2H37V3H36zM37,2H38V3H37zM38,2H39V3H38zM2,3H3V4H2zM8,3H9V4H8zM15,3H16V4H15zM18,3H19V4H18zM22,3H23V4H22zM27,3H28V4H27zM30,3H31V4H30zM32,3H33V4H32zM38,3H39V4H38zM2,4H3V5H2zM4,4H5V5H4zM5,4H6V5H5zM6,4H7V5H6zM8,4H9V5H8zM11,4H12V5H11zM12,4H13V5H12zM17,4H18V5H17zM19,4H20V5H19zM20,4H21V5H20zM21,4H22V5H21zM22,4H23V5H22zM23,4H24V5H23zM25,4H26V5H25zM28,4H29V5H28zM29,4H30V5H29zM32,4H33V5H32zM34,4H35V5H34zM35,4H36V5H35zM36,4H37V5H36zM38,4H39V5H38zM2,5H3V6H2zM4,5H5V6H4zM5,5H6V6H5zM6,5H7V6H6zM8,5H9V6H8zM10,5H11V6H10zM11,5H12V6H11zM13,5H14V6H13zM16,5H17V6H16zM18,5H19V6H18zM21,5H22V6H21zM25,5H26V6H25zM27,5H28V6H27zM28,5H29V6H28zM30,5H31V6H30zM32,5H33V6H32zM34,5H35V6H34zM35,5H36V6H35zM36,5H37V6H36zM38,5H39V6H38zM2,6H3V7H2zM4,6H5V7H4zM5,6H6V7H5zM6,6H7V7H6zM8,6H9V7H8zM10,6H11V7H10zM12,6H13V7H12zM15,6H16V7H15zM16,6H17V7H16zM18,6H19V7H18zM20,6H21V7H20zM23,6H24V7H23zM25,6H26V7H25zM27,6H28V7H27zM29,6H30V7H29zM30,6H31V7H30zM32,6H33V7H32zM34,6H35V7H34zM35,6H36V7H35zM36,6H37V7H36zM38,6H39V7H38zM2,7H3V8H2zM8,7H9V8H8zM10,7H11V8H10zM11,7H12V8H11zM12,7H13V8H12zM15,7H16V8H15zM16,7H17V8H16zM17,7H18V8H17zM20,7H21V8H20zM21,7H22V8H21zM23,7H24V8H23zM24,7H25V8H24zM26,7H27V8H26zM27,7H28V8H27zM30,7H31V8H30zM32,7H33V8H32zM38,7H39V8H38zM2,8H3V9H2zM3,8H4V9H3zM4,8H5V9H4zM5,8H6V9H5zM6,8H7V9H6zM7,8H8V9H7zM8,8H9V9H8zM10,8H11V9H10zM12,8H13V9H12zM14,8H15V9H14zM16,8H17V9H16zM18,8H19V9H18zM20,8H21V9H20zM22,8H23V9H22zM24,8H25V9H24zM26,8H27V9H26zM28,8H29V9H28zM30,8H31V9H30zM32,8H33V9H32zM33,8H34V9H33zM34,8H35V9H34zM35,8H36V9H35zM36,8H37V9H36zM37,8H38V9H37zM38,8H39V9H38zM10,9H11V10H10zM17,9H18V10H17zM18,9H19V10H18zM19,9H20V10H19zM20,9H21V10H20zM21,9H22V10H21zM22,9H23V10H22zM24,9H25V10H24zM26,9H27V10H26zM2,10H3V11H2zM6,10H7V11H6zM8,10H9V11H8zM9,10H10V11H9zM10,10H11V11H10zM12,10H13V11H12zM13,10H14V11H13zM15,10H16V11H15zM17,10H18V11H17zM20,10H21V11H20zM24,10H25V11H24zM26,10H27V11H26zM31,10H32V11H31zM32,10H33V11H32zM33,10H34V11H33zM34,10H35V11H34zM35,10H36V11H35zM38,10H39V11H38zM4,11H5V12H4zM5,11H6V12H5zM6,11H7V12H6zM7,11H8V12H7zM10,11H11V12H10zM12,11H13V12H12zM13,11H14V12H13zM15,11H16V12H15zM16,11H17V12H16zM18,11H19V12H18zM19,11H20V12H19zM21,11H22V12H21zM22,11H23V12H22zM27,11H28V12H27zM28,11H29V12H28zM29,11H30V12H29zM33,11H34V12H33zM34,11H35V12H34zM35,11H36V12H35zM36,11H37V12H36zM37,11H38V12H37zM2,12H3V13H2zM4,12H5V13H4zM6,12H7V13H6zM7,12H8V13H7zM8,12H9V13H8zM10,12H11V13H10zM13,12H14V13H13zM14,12H15V13H14zM15,12H16V13H15zM16,12H17V13H16zM18,12H19V13H18zM20,12H21V13H20zM22,12H23V13H22zM23,12H24V13H23zM24,12H25V13H24zM27,12H28V13H27zM29,12H30V13H29zM33,12H34V13H33zM35,12H36V13H35zM2,13H3V14H2zM4,13H5V14H4zM5,13H6V14H5zM12,13H13V14H12zM13,13H14V14H13zM14,13H15V14H14zM16,13H17V14H16zM19,13H20V14H19zM20,13H21V14H20zM23,13H24V14H23zM26,13H27V14H26zM29,13H30V14H29zM30,13H31V14H30zM32,13H33V14H32zM36,13H37V14H36zM37,13H38V14H37zM2,14H3V15H2zM3,14H4V15H3zM5,14H6V15H5zM6,14H7V15H6zM7,14H8V15H7zM8,14H9V15H8zM10,14H11V15H10zM11,14H12V15H11zM13,14H14V15H13zM14,14H15V15H14zM15,14H16V15H15zM17,14H18V15H17zM18,14H19V15H18zM19,14H20V15H19zM21,14H22V15H21zM22,14H23V15H22zM23,14H24V15H23zM24,14H25V15H24zM25,14H26V15H25zM31,14H32V15H31zM32,14H33V15H32zM35,14H36V15H35zM36,14H37V15H36zM37,14H38V15H37zM38,14H39V15H38zM3,15H4V16H3zM4,15H5V16H4zM6,15H7V16H6zM7,15H8V16H7zM10,15H11V16H10zM14,15H15V16H14zM16,15H17V16H16zM17,15H18V16H17zM18,15H19V16H18zM19,15H20V16H19zM20,15H21V16H20zM24,15H25V16H24zM25,15H26V16H25zM29,15H30V16H29zM30,15H31V16H30zM31,15H32V16H31zM34,15H35V16H34zM35,15H36V16H35zM2,16H3V17H2zM4,16H5V17H4zM5,16H6V17H5zM8,16H9V17H8zM12,16H13V17H12zM15,16H16V17H15zM16,16H17V17H16zM17,16H18V17H17zM20,16H21V17H20zM22,16H23V17H22zM23,16H24V17H23zM24,16H25V17H24zM25,16H26V17H25zM26,16H27V17H26zM27,16H28V17H27zM28,16H29V17H28zM29,16H30V17H29zM32,16H33V17H32zM33,16H34V17H33zM34,16H35V17H34zM35,16H36V17H35zM36,16H37V17H36zM3,17H4V18H3zM4,17H5V18H4zM5,17H6V18H5zM12,17H13V18H12zM15,17H16V18H15zM18,17H19V18H18zM21,17H22V18H21zM23,17H24V18H23zM25,17H26V18H25zM28,17H29V18H28zM33,17H34V18H33zM34,17H35V18H34zM36,17H37V18H36zM38,17H39V18H38zM2,18H3V19H2zM3,18H4V19H3zM4,18H5V19H4zM5,18H6V19H5zM6,18H7V19H6zM7,18H8V19H7zM8,18H9V19H8zM10,18H11V19H10zM14,18H15V19H14zM15,18H16V19H15zM16,18H17V19H16zM18,18H19V19H18zM21,18H22V19H21zM22,18H23V19H22zM29,18H30V19H29zM31,18H32V19H31zM32,18H33V19H32zM33,18H34V19H33zM35,18H36V19H35zM36,18H37V19H36zM37,18H38V19H37zM2,19H3V20H2zM4,19H5V20H4zM6,19H7V20H6zM7,19H8V20H7zM11,19H12V20H11zM12,19H13V20H12zM16,19H17V20H16zM20,19H21V20H20zM21,19H22V20H21zM24,19H25V20H24zM26,19H27V20H26zM27,19H28V20H27zM28,19H29V20H28zM29,19H30V20H29zM30,19H31V20H30zM34,19H35V20H34zM37,19H38V20H37zM2,20H3V21H2zM7,20H8V21H7zM8,20H9V21H8zM10,20H11V21H10zM13,20H14V21H13zM14,20H15V21H14zM17,20H18V21H17zM21,20H22V21H21zM23,20H24V21H23zM25,20H26V21H25zM26,20H27V21H26zM27,20H28V21H27zM28,20H29V21H28zM29,20H30V21H29zM30,20H31V21H30zM2,21H3V22H2zM5,21H6V22H5zM6,21H7V22H6zM7,21H8V22H7zM9,21H10V22H9zM10,21H11V22H10zM14,21H15V22H14zM17,21H18V22H17zM18,21H19V22H18zM19,21H20V22H19zM20,21H21V22H20zM21,21H22V22H21zM22,21H23V22H22zM23,21H24V22H23zM24,21H25V22H24zM25,21H26V22H25zM28,21H29V22H28zM29,21H30V22H29zM30,21H31V22H30zM32,21H33V22H32zM35,21H36V22H35zM36,21H37V22H36zM37,21H38V22H37zM4,22H5V23H4zM5,22H6V23H5zM7,22H8V23H7zM8,22H9V23H8zM9,22H10V23H9zM10,22H11V23H10zM11,22H12V23H11zM13,22H14V23H13zM15,22H16V23H15zM19,22H20V23H19zM22,22H23V23H22zM23,22H24V23H23zM24,22H25V23H24zM26,22H27V23H26zM29,22H30V23H29zM31,22H32V23H31zM32,22H33V23H32zM33,22H34V23H33zM36,22H37V23H36zM2,23H3V24H2zM3,23H4V24H3zM4,23H5V24H4zM9,23H10V24H9zM10,23H11V24H10zM13,23H14V24H13zM17,23H18V24H17zM18,23H19V24H18zM20,23H21V24H20zM23,23H24V24H23zM25,23H26V24H25zM28,23H29V24H28zM29,23H30V24H29zM30,23H31V24H30zM31,23H32V24H31zM33,23H34V24H33zM34,23H35V24H34zM2,24H3V25H2zM3,24H4V25H3zM4,24H5V25H4zM5,24H6V25H5zM6,24H7V25H6zM7,24H8V25H7zM8,24H9V25H8zM9,24H10V25H9zM11,24H12V25H11zM12,24H13V25H12zM13,24H14V25H13zM15,24H16V25H15zM16,24H17V25H16zM17,24H18V25H17zM19,24H20V25H19zM25,24H26V25H25zM26,24H27V25H26zM27,24H28V25H27zM28,24H29V25H28zM29,24H30V25H29zM30,24H31V25H30zM31,24H32V25H31zM33,24H34V25H33zM34,24H35V25H34zM35,24H36V25H35zM36,24H37V25H36zM2,25H3V26H2zM3,25H4V26H3zM4,25H5V26H4zM5,25H6V26H5zM6,25H7V26H6zM11,25H12V26H11zM12,25H13V26H12zM13,25H14V26H13zM16,25H17V26H16zM17,25H18V26H17zM19,25H20V26H19zM20,25H21V26H20zM21,25H22V26H21zM22,25H23V26H22zM24,25H25V26H24zM26,25H27V26H26zM28,25H29V26H28zM30,25H31V26H30zM33,25H34V26H33zM34,25H35V26H34zM36,25H37V26H36zM2,26H3V27H2zM3,26H4V27H3zM5,26H6V27H5zM6,26H7V27H6zM8,26H9V27H8zM9,26H10V27H9zM10,26H11V27H10zM14,26H15V27H14zM20,26H21V27H20zM24,26H25V27H24zM25,26H26V27H25zM26,26H27V27H26zM31,26H32V27H31zM32,26H33V27H32zM35,26H36V27H35zM36,26H37V27H36zM2,27H3V28H2zM3,27H4V28H3zM10,27H11V28H10zM11,27H12V28H11zM13,27H14V28H13zM14,27H15V28H14zM15,27H16V28H15zM16,27H17V28H16zM18,27H19V28H18zM19,27H20V28H19zM21,27H22V28H21zM22,27H23V28H22zM23,27H24V28H23zM28,27H29V28H28zM29,27H30V28H29zM30,27H31V28H30zM34,27H35V28H34zM35,27H36V28H35zM36,27H37V28H36zM5,28H6V29H5zM8,28H9V29H8zM9,28H10V29H9zM10,28H11V29H10zM12,28H13V29H12zM13,28H14V29H13zM14,28H15V29H14zM15,28H16V29H15zM18,28H19V29H18zM20,28H21V29H20zM22,28H23V29H22zM23,28H24V29H23zM24,28H25V29H24zM29,28H30V29H29zM30,28H31V29H30zM33,28H34V29H33zM4,29H5V30H4zM7,29H8V30H7zM10,29H11V30H10zM11,29H12V30H11zM12,29H13V30H12zM13,29H14V30H13zM14,29H15V30H14zM15,29H16V30H15zM19,29H20V30H19zM20,29H21V30H20zM23,29H24V30H23zM26,29H27V30H26zM28,29H29V30H28zM29,29H30V30H29zM30,29H31V30H30zM32,29H33V30H32zM36,29H37V30H36zM38,29H39V30H38zM2,30H3V31H2zM3,30H4V31H3zM4,30H5V31H4zM6,30H7V31H6zM7,30H8V31H7zM8,30H9V31H8zM12,30H13V31H12zM13,30H14V31H13zM14,30H15V31H14zM15,30H16V31H15zM16,30H17V31H16zM17,30H18V31H17zM19,30H20V31H19zM21,30H22V31H21zM22,30H23V31H22zM23,30H24V31H23zM24,30H25V31H24zM25,30H26V31H25zM26,30H27V31H26zM30,30H31V31H30zM31,30H32V31H31zM32,30H33V31H32zM33,30H34V31H33zM34,30H35V31H34zM35,30H36V31H35zM36,30H37V31H36zM37,30H38V31H37zM10,31H11V32H10zM14,31H15V32H14zM15,31H16V32H15zM16,31H17V32H16zM17,31H18V32H17zM18,31H19V32H18zM19,31H20V32H19zM20,31H21V32H20zM22,31H23V32H22zM25,31H26V32H25zM28,31H29V32H28zM29,31H30V32H29zM30,31H31V32H30zM34,31H35V32H34zM2,32H3V33H2zM3,32H4V33H3zM4,32H5V33H4zM5,32H6V33H5zM6,32H7V33H6zM7,32H8V33H7zM8,32H9V33H8zM10,32H11V33H10zM12,32H13V33H12zM14,32H15V33H14zM15,32H16V33H15zM16,32H17V33H16zM17,32H18V33H17zM18,32H19V33H18zM20,32H21V33H20zM23,32H24V33H23zM24,32H25V33H24zM25,32H26V33H25zM26,32H27V33H26zM28,32H29V33H28zM30,32H31V33H30zM32,32H33V33H32zM34,32H35V33H34zM2,33H3V34H2zM8,33H9V34H8zM13,33H14V34H13zM15,33H16V34H15zM17,33H18V34H17zM21,33H22V34H21zM22,33H23V34H22zM23,33H24V34H23zM30,33H31V34H30zM34,33H35V34H34zM35,33H36V34H35zM36,33H37V34H36zM37,33H38V34H37zM2,34H3V35H2zM4,34H5V35H4zM5,34H6V35H5zM6,34H7V35H6zM8,34H9V35H8zM10,34H11V35H10zM11,34H12V35H11zM14,34H15V35H14zM16,34H17V35H16zM17,34H18V35H17zM18,34H19V35H18zM22,34H23V35H22zM26,34H27V35H26zM30,34H31V35H30zM31,34H32V35H31zM32,34H33V35H32zM33,34H34V35H33zM34,34H35V35H34zM35,34H36V35H35zM36,34H37V35H36zM37,34H38V35H37zM38,34H39V35H38zM2,35H3V36H2zM4,35H5V36H4zM5,35H6V36H5zM6,35H7V36H6zM8,35H9V36H8zM11,35H12V36H11zM12,35H13V36H12zM16,35H17V36H16zM19,35H20V36H19zM20,35H21V36H20zM21,35H22V36H21zM23,35H24V36H23zM24,35H25V36H24zM26,35H27V36H26zM30,35H31V36H30zM32,35H33V36H32zM33,35H34V36H33zM37,35H38V36H37zM2,36H3V37H2zM4,36H5V37H4zM5,36H6V37H5zM6,36H7V37H6zM8,36H9V37H8zM11,36H12V37H11zM13,36H14V37H13zM15,36H16V37H15zM17,36H18V37H17zM19,36H20V37H19zM20,36H21V37H20zM21,36H22V37H21zM25,36H26V37H25zM26,36H27V37H26zM28,36H29V37H28zM31,36H32V37H31zM32,36H33V37H32zM35,36H36V37H35zM36,36H37V37H36zM37,36H38V37H37zM2,37H3V38H2zM8,37H9V38H8zM11,37H12V38H11zM12,37H13V38H12zM13,37H14V38H13zM14,37H15V38H14zM15,37H16V38H15zM17,37H18V38H17zM18,37H19V38H18zM19,37H20V38H19zM21,37H22V38H21zM22,37H23V38H22zM23,37H24V38H23zM32,37H33V38H32zM34,37H35V38H34zM36,37H37V38H36zM37,37H38V38H37zM2,38H3V39H2zM3,38H4V39H3zM4,38H5V39H4zM5,38H6V39H5zM6,38H7V39H6zM7,38H8V39H7zM8,38H9V39H8zM10,38H11V39H10zM12,38H13V39H12zM13,38H14V39H13zM14,38H15V39H14zM15,38H16V39H15zM19,38H20V39H19zM22,38H23V39H22zM23,38H24V39H23zM24,38H25V39H24zM26,38H27V39H26zM29,38H30V39H29zM32,38H33V39H32zM33,38H34V39H33zM36,38H37V39H36zM37,38H38V39H37zM38,38H39V39H38z" fill="currentColor"/>
+    </symbol>
+  </svg>
+
   <div class="toolbar">
     <span>Double-sided tri-fold brochure</span>
     <button onclick="window.print()">Print / Save PDF</button>
@@ -124,17 +168,23 @@
       <p class="kicker">Inside flap</p>
       <h2>What makes these different?</h2>
       <div class="panel-list">
-        <div class="mini-feature"><div class="num">1</div><div><strong>Designed in a real shop</strong><span>RWAS builds these with the same practical mindset used on Part 145 avionics, A&P, NDT, and fabrication work.</span></div></div>
+        <div class="mini-feature"><div class="num">1</div><div><strong>Designed in a real shop</strong><span>RWAS builds these with the same practical mindset used on Part 145 avionics, A&amp;P, NDT, and fabrication work.</span></div></div>
         <div class="mini-feature"><div class="num">2</div><div><strong>Purpose-built Piper references</strong><span>Repeatable fixtures for Piper control-surface rigging tasks, not improvised hangar-floor geometry.</span></div></div>
         <div class="mini-feature"><div class="num">3</div><div><strong>Readable and durable</strong><span>Powder-coated and UV-printed aluminum keeps markings crisp and tools lighter than typical steel shop fixtures.</span></div></div>
-        <div class="mini-feature"><div class="num">4</div><div><strong>Easy ordering</strong><span>The live RWAS collection is OTC checkout and ships from Yankton when inventory allows.</span></div></div>
+        <div class="mini-feature"><div class="num">4</div><div><strong>Easy ordering</strong><span>Live RWAS collection ships direct from Yankton, SD &mdash; in-stock orders dispatch the next business day.</span></div></div>
       </div>
-      <div class="quote">“Made by professional mechanics for professional mechanics.”</div>
+      <div class="quote">&ldquo;Made by professional mechanics for professional mechanics.&rdquo;</div>
       <div class="photo-strip">
-        <figure><img src="/brochures/papa-alpha-tools/images/stabilator.jpg" alt="Papa-Alpha stabilator rigging tool" /><figcaption>Stabilator reference</figcaption></figure>
+        <figure class="relight"><img src="/brochures/papa-alpha-tools/images/stabilator.jpg" alt="Papa-Alpha stabilator rigging tool" /><figcaption>Stabilator reference</figcaption></figure>
         <figure><img src="/brochures/papa-alpha-tools/images/pa31-rudder-trim.jpg" alt="PA-31 rudder trim rigging tool" /><figcaption>PA-31 rudder trim</figcaption></figure>
       </div>
-      <p class="small muted" style="margin-top:7px;">Use only with applicable maintenance data and verify model / serial applicability before use.</p>
+      <div class="trust-grid" aria-label="Shop credentials">
+        <div><strong>FAA Part 145</strong>Repair Station<br/>Cert. RWSR491E</div>
+        <div><strong>Garmin Dealer</strong>Authorized avionics dealer</div>
+        <div><strong>NBAA Member</strong>Business Aviation</div>
+        <div><strong>AEA Member</strong>Aircraft Electronics Assn.</div>
+      </div>
+      <p class="small muted" style="margin-top:6px;">Use only with applicable maintenance data and verify model / serial applicability before use.</p>
     </article>
 
     <article class="panel back">
@@ -142,7 +192,7 @@
         <img src="/newspaper/images/logo.png" alt="RWAS logo" />
         <div>
           <div class="brand-name">Roger Wilco<br/>Aviation Services</div>
-          <div class="brand-sub">FAA Part 145 · Cert. RWSR491E</div>
+          <div class="brand-sub">FAA Part 145 &middot; Cert. RWSR491E</div>
         </div>
       </div>
       <div class="rule"></div>
@@ -154,24 +204,33 @@
         <div class="line"><strong>Collection</strong><span>/collections/papa-alpha-tools</span></div>
         <div class="line"><strong>Phone</strong><span>(605) 299-8178</span></div>
         <div class="line"><strong>Email</strong><span>avionics@rwas.team</span></div>
-        <div class="line"><strong>Ships from</strong><span>Yankton, SD · KYKN</span></div>
+        <div class="line"><strong>Hours</strong><span>Mon&ndash;Fri 7:00&nbsp;AM&ndash;5:00&nbsp;PM CT</span></div>
+        <div class="line"><strong>Ships from</strong><span>Yankton, SD &middot; KYKN</span></div>
       </div>
-      <div class="url-box">rogerwilcoaviation.com/collections/papa-alpha-tools</div>
-      <figure class="big-photo wide-photo"><img src="/brochures/papa-alpha-tools/images/bellcrank.jpg" alt="Papa-Alpha bell crank tool close-up" /><figcaption>RWAS-built aluminum rigging reference tools, ordered direct.</figcaption></figure>
+      <div class="qr-block">
+        <div class="qr" aria-label="QR code linking to the Papa-Alpha Tools collection"><svg><use href="#qr-papa-alpha"/></svg></div>
+        <div class="qr-label"><strong>Scan to order.</strong>Live inventory and pricing<span>rogerwilcoaviation.com<br/>/collections/papa-alpha-tools</span></div>
+      </div>
       <p class="fine-print">For aircraft maintenance use by qualified personnel. Product availability, pricing, and kit contents may change; live Shopify collection controls current order information.</p>
+      <p class="rev-mark">Rev. 2026.05 &middot; RWAS</p>
     </article>
 
     <article class="panel cover">
       <p class="kicker">Papa-Alpha Tools</p>
       <h1>Piper rigging tools, made by mechanics.</h1>
-      <span class="badge">CNC · Fiber laser · Powder coat · UV print</span>
+      <div class="trust-strip"><span>FAA Part 145</span><span class="dot">&middot;</span><span>Garmin Dealer</span><span class="dot">&middot;</span><span>NBAA</span><span class="dot">&middot;</span><span>AEA</span></div>
+      <span class="badge">CNC &middot; Fiber laser &middot; Powder coat &middot; UV print</span>
       <img class="hero-img" src="/brochures/papa-alpha-tools/images/kit-aileron-flap.jpg" alt="Papa-Alpha aileron and flap rigging tool" />
       <div class="photo-strip">
         <figure><img src="/brochures/papa-alpha-tools/images/bellcrank.jpg" alt="Papa-Alpha bell crank rigging tool" /><figcaption>Bell crank tool</figcaption></figure>
         <figure><img src="/brochures/papa-alpha-tools/images/rudder-tool.jpg" alt="Papa-Alpha rudder rigging tool" /><figcaption>Rudder tool</figcaption></figure>
       </div>
-      <p class="lead" style="margin-top:8px;">Aircraft-grade aluminum rigging reference tools for Piper airframes — precise, durable, lightweight, and ready for real hangar work.</p>
-      <div class="cta body"><strong>OTC checkout.</strong> Pick the correct tool or kit and ship direct from RWAS.</div>
+      <p class="lead" style="margin-top:8px;">Aircraft-grade aluminum rigging reference tools for Piper airframes &mdash; precise, durable, lightweight, and ready for real hangar work.</p>
+      <p class="price-tag">Tools from $60 &middot; Rigging Kit $579</p>
+      <div class="cta qr-mini">
+        <div class="qr" aria-label="QR code linking to the Papa-Alpha Tools collection"><svg><use href="#qr-papa-alpha"/></svg></div>
+        <div class="lbl" style="color:#fff5df;">Scan to order direct.<span style="color:#f2cc66;">rogerwilcoaviation.com/collections/papa-alpha-tools</span></div>
+      </div>
     </article>
   </section>
   <p class="download-note">Outside spread: left = fold-in flap, middle = back cover, right = front cover. Print duplex, flip on short edge.</p>
@@ -181,10 +240,10 @@
       <p class="kicker">Examples from the live collection</p>
       <h2>Individual tools</h2>
       <div class="product-grid">
-        <div class="product"><strong>PA-28/32/34/44 Aileron & Flap Rigging Tool</strong><span class="price">$279</span></div>
+        <div class="product"><strong>PA-28/32/34/44 Aileron &amp; Flap Rigging Tool</strong><span class="price">$279</span></div>
         <div class="product"><strong>Papa-Alpha Bell Crank Rigging Tool</strong><span class="price">$287</span></div>
         <div class="product"><strong>PA-30/39 Aileron Rigging Tool</strong><span class="price">$213</span></div>
-        <div class="product"><strong>PA-31 Aileron & Elevator Rigging Tool</strong><span class="price">$255</span></div>
+        <div class="product"><strong>PA-31 Aileron &amp; Elevator Rigging Tool</strong><span class="price">$255</span></div>
         <div class="product"><strong>PA-31 Rudder Trim Rigging Tool</strong><span class="price">$350</span></div>
         <div class="product"><strong>PA-36 Flap Rigging Tool</strong><span class="price">$60</span></div>
         <div class="product"><strong>Rudder Rigging Tool</strong><span class="price">$90</span></div>
@@ -194,7 +253,15 @@
         <figure class="photo-card"><img src="/brochures/papa-alpha-tools/images/af-013.jpg" alt="PA-30/39 aileron rigging tool detail" /><figcaption>PA-30/39 detail</figcaption></figure>
         <figure class="photo-card"><img src="/brochures/papa-alpha-tools/images/pa31-ae.jpg" alt="PA-31 aileron and elevator rigging tool" /><figcaption>PA-31 aileron/elevator</figcaption></figure>
       </div>
-      <div class="spec-grid"><div><strong>9</strong>live collection items</div><div><strong>OTC</strong>direct checkout</div></div>
+      <div class="qr-block">
+        <div class="qr" aria-label="QR code linking to the Papa-Alpha Tools collection"><svg><use href="#qr-papa-alpha"/></svg></div>
+        <div class="qr-label"><strong>Scan to order.</strong>Direct from RWAS<span>rogerwilcoaviation.com<br/>/collections/papa-alpha-tools</span></div>
+      </div>
+      <div class="order-steps" aria-label="How to order">
+        <div class="step"><div class="n">1</div><div><strong>Scan or visit</strong> the live Shopify collection above.</div></div>
+        <div class="step"><div class="n">2</div><div><strong>Confirm applicability</strong> for your model and serial range.</div></div>
+        <div class="step"><div class="n">3</div><div><strong>Add to cart and check out</strong> &mdash; ships from KYKN.</div></div>
+      </div>
       <p class="small muted" style="margin-top:6px;">Prices are brochure snapshots from the site. Confirm live pricing and applicability before ordering.</p>
     </article>
 
@@ -203,18 +270,19 @@
       <h2>Build around the airframe.</h2>
       <figure class="big-photo"><img src="/brochures/papa-alpha-tools/images/pa3039-aileron.jpg" alt="PA-30/39 aileron rigging tool" /><figcaption>PA-30/39 aileron rigging tool</figcaption></figure>
       <div class="kit-box body"><strong>Papa-Alpha Rigging Kit</strong><br/>The live site lists the rigging kit at <b>$579</b>. Kits combine airframe-specific tools so a shop can keep common Piper references together.</div>
-      <div class="airframes" aria-label="Example supported Piper families">
-        <span>PA-23</span><span>PA-24</span><span>PA-28</span><span>PA-30</span><span>PA-31</span><span>PA-32</span><span>PA-34</span><span>PA-36</span><span>PA-39</span><span>PA-44</span><span>Cherokee</span><span>Navajo</span>
+      <div class="airframes" aria-label="Supported Piper PA families">
+        <span>PA-23</span><span>PA-24</span><span>PA-28</span><span>PA-30</span><span>PA-31</span>
+        <span>PA-32</span><span>PA-34</span><span>PA-36</span><span>PA-39</span><span>PA-44</span>
       </div>
       <div class="callout body"><strong>Why the kit matters:</strong> a controlled, repeatable tool set saves time during setup and keeps the shop from relying on fragile one-off references.</div>
       <div class="shop-made">
-        <div><strong>Worldwide delivery</strong>We sell internationally all over the world.</div>
-        <div><strong>Same-day focus</strong>Ships from Yankton when inventory allows.</div>
+        <div><strong>Worldwide delivery</strong>We ship internationally on request.</div>
+        <div><strong>Fast dispatch</strong>In-stock orders ship the next business day from KYKN.</div>
       </div>
     </article>
 
     <article class="panel">
-      <p class="kicker">How they’re built</p>
+      <p class="kicker">How they&rsquo;re built</p>
       <h2>Modern fabrication, old-school utility.</h2>
       <p class="lead">Crafted with CAD, CNC routing, and fiber laser cutting of aircraft-grade aluminum, then powder coated and UV printed for reduced weight, durability, and precision.</p>
       <div class="thin-rule"></div>
@@ -224,7 +292,12 @@
         <div class="mini-feature"><div class="num">C</div><div><strong>From a shop that uses tools</strong><span>RWAS is an FAA Part 145 repair station and Garmin dealer, not a catalog house pretending to know airplanes.</span></div></div>
       </div>
       <figure class="big-photo tall-photo"><img src="/brochures/papa-alpha-tools/images/rudder-tool.jpg" alt="Papa-Alpha rudder rigging tool" /><figcaption>Rudder rigging reference tool</figcaption></figure>
-      <div class="spec-grid"><div><strong>CAD</strong>modeled</div><div><strong>CNC</strong>cut aluminum</div><div><strong>UV</strong>printed</div><div><strong>SD</strong>ships from KYKN</div></div>
+      <div class="trust-grid">
+        <div><strong>FAA Part 145</strong>Repair Station<br/>Cert. RWSR491E</div>
+        <div><strong>KYKN Based</strong>Yankton, SD<br/>Mon&ndash;Fri 7&ndash;5 CT</div>
+        <div><strong>Garmin Dealer</strong>Authorized avionics dealer</div>
+        <div><strong>NBAA &middot; AEA</strong>Industry memberships</div>
+      </div>
       <div class="cta body"><strong>Browse the live collection:</strong><br/>rogerwilcoaviation.com/collections/papa-alpha-tools</div>
     </article>
   </section>
