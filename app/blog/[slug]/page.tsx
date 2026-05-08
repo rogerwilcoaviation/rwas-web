@@ -115,9 +115,12 @@ function renderMarkdownBody(markdown?: string) {
 }
 
 const publishedArticles = blogData.articles.filter((article) => article.status === 'published');
+const allArticles = blogData.articles;
 
 export async function generateStaticParams() {
-  return publishedArticles.map((article) => ({ slug: article.id }));
+  // Export draft article pages too so direct review links work on Cloudflare Pages.
+  // The public blog index still filters to publishedArticles only.
+  return allArticles.map((article) => ({ slug: article.id }));
 }
 
 export async function generateMetadata({
@@ -126,7 +129,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = publishedArticles.find((entry) => entry.id === slug);
+  const article = allArticles.find((entry) => entry.id === slug);
 
   if (!article) {
     return {
@@ -156,6 +159,7 @@ export async function generateMetadata({
       authors: article.byline ? [article.byline] : undefined,
       images: [{ url: imageUrl, alt: (article as { image_alt?: string }).image_alt || article.title }],
     },
+    robots: article.status === 'published' ? undefined : { index: false, follow: false },
     twitter: {
       card: 'summary_large_image',
       title: article.title,
@@ -171,7 +175,7 @@ export default async function BlogArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = publishedArticles.find((entry) => entry.id === slug);
+  const article = allArticles.find((entry) => entry.id === slug);
 
   if (!article) notFound();
 
