@@ -26,6 +26,11 @@ export default function AboutPage() {
         .np-lightbox:target{display:flex}
         .np-lightbox img{max-width:95vw;max-height:90vh;object-fit:contain;box-shadow:0 8px 40px rgba(0,0,0,.5)}
         .np-lightbox-close{position:absolute;top:20px;right:30px;font-size:40px;color:#F4EFE3;text-decoration:none;font-weight:700;z-index:100001}
+        .about-map{margin:clamp(24px,4vw,42px) 0;border:1px solid var(--ink-900);background:var(--paper);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+        .about-map__frame{position:relative;min-height:320px;border-top:1px solid var(--ink-900);background:#d8d2c3}
+        .about-map__frame iframe{display:block;width:100%;height:clamp(320px,38vw,460px);border:0;filter:grayscale(.15) contrast(1.05)}
+        .about-map__meta{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;padding:12px 14px;font-size:.82rem;letter-spacing:.04em;text-transform:uppercase;border-top:1px solid rgba(30,25,20,.22)}
+        .about-map__meta a{color:var(--ink-900);font-weight:700;text-decoration:underline;text-underline-offset:2px}
       `}</style>
 
       <Dateline />
@@ -56,6 +61,29 @@ export default function AboutPage() {
             </p>
           </div>
         </section>
+
+        {/* ── LOCATION MAP ─────────────────────────────────────────── */}
+        <Specimen variant="hero" as="section" className="about-map" aria-labelledby="about-map-title">
+          <span className="bs-kicker">Find Us at KYKN</span>
+          <h2 id="about-map-title" className="bs-headline bs-headline--section">
+            Chan Gurney Municipal Airport
+          </h2>
+          <div className="about-map__frame">
+            <iframe
+              title="Google map showing Roger Wilco Aviation Services at Chan Gurney Municipal Airport in Yankton, South Dakota"
+              src="https://www.google.com/maps?q=Roger%20Wilco%20Aviation%20Services%20700%20E%2031st%20St%20Yankton%20SD%2057078&output=embed"
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+          <div className="about-map__meta">
+            <span>700 E 31st St &middot; Yankton, SD 57078 &middot; KYKN</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=Roger%20Wilco%20Aviation%20Services%20700%20E%2031st%20St%20Yankton%20SD%2057078">
+              Open in Google Maps
+            </a>
+          </div>
+        </Specimen>
 
         {/* ── TWO-COLUMN GRID ───────────────────────────────────────── */}
         <div className="about-grid">
