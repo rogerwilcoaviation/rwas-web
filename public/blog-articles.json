@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-05-08T12:11:58.115025+00:00",
+    "last_updated": "2026-05-08T12:47:35.558657+00:00",
     "total_articles": 13,
     "categories": [
       "regulatory",
@@ -13,7 +13,7 @@
   "articles": [
     {
       "id": "new-d2-mach-2-aviator-smartwatch-promotion-20260507",
-      "status": "draft",
+      "status": "published",
       "category": "product-update",
       "title": "New D2 Mach 2 Aviator Smartwatch Promotion",
       "subtitle": "Customers can save $150 on Garmin D2 Mach 2 aviator smartwatches through June 29, 2026.",
@@ -39,16 +39,22 @@
       "social": {
         "facebook": {
           "text": "Garmin is running a limited-time D2 Mach 2 aviator smartwatch promotion.\n\nCustomers can save $150 on qualifying D2 Mach 2 and D2 Mach 2 Pro models through June 29, 2026.\n\nQualifying promotional prices:\n\u2022 D2 Mach 2, 47 mm \u2014 $1,199.99\n\u2022 D2 Mach 2, 51 mm \u2014 $1,349.99\n\u2022 D2 Mach 2 Pro, 51 mm \u2014 $1,399.99\n\nRWAS can help you choose the right model and order during the promotion window.\n\nCall (605) 299-8178.\n\n#Garmin #D2Mach2 #Aviation #PilotWatch #RogerWilcoAviation",
-          "status": "pending"
+          "status": "published",
+          "published_at": "2026-05-08T12:46:55.527937+00:00",
+          "post_id": "106057782039473_966033192850553"
         },
         "instagram": {
           "text": "Garmin D2 Mach 2 promotion: save $150 through June 29, 2026.\n\nQualifying models include D2 Mach 2 47 mm, D2 Mach 2 51 mm, and D2 Mach 2 Pro 51 mm.\n\nRWAS can help you pick the right model and order while the promotion is active.\n\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #D2Mach2 #PilotWatch #Aviation #RogerWilcoAviation",
-          "status": "pending"
+          "status": "published",
+          "published_at": "2026-05-08T12:47:35.558506+00:00",
+          "media_id": "18108631072722898"
         }
       },
       "image": "/images/blog/new-d2-mach-2-aviator-smartwatch-promotion.jpg",
       "image_alt": "Garmin D2 Mach 2 aviator smartwatch promotion image.",
-      "body_markdown": "Garmin has announced a limited-time promotion on the **D2 Mach 2 aviator smartwatch** family. From **May 7 through June 29, 2026**, customers can save **$150** on qualifying D2 Mach 2 and D2 Mach 2 Pro models purchased through an authorized Garmin aviation dealer.\n\nThe promotion applies to:\n\n- **D2 Mach 2, 47 mm** \u2014 promotional price **$1,199.99**\n- **D2 Mach 2, 51 mm** \u2014 promotional price **$1,349.99**\n- **D2 Mach 2 Pro, 51 mm** \u2014 promotional price **$1,399.99**\n\nFor pilots, the D2 line is Garmin\u2019s aviation-focused smartwatch family: flight-oriented tools on the wrist, everyday smartwatch capability, and a cleaner link between the pilot\u2019s flying life and daily routine. The D2 Mach 2 Pro adds built-in inReach capability, with important limitations: an active subscription is required, coverage is not available everywhere, satellite and LTE services are subject to regional availability, and Garmin notes it is not for in-flight use.\n\nRWAS can help customers confirm which D2 Mach 2 model fits their needs, place an order during the promotion window, and coordinate the Garmin ecosystem around the aircraft, panel, mobile apps, and pilot workflow. If you have been considering a D2 aviation watch, this is a good window to ask about availability before the **June 29** deadline."
+      "body_markdown": "Garmin has announced a limited-time promotion on the **D2 Mach 2 aviator smartwatch** family. From **May 7 through June 29, 2026**, customers can save **$150** on qualifying D2 Mach 2 and D2 Mach 2 Pro models purchased through an authorized Garmin aviation dealer.\n\nThe promotion applies to:\n\n- **D2 Mach 2, 47 mm** \u2014 promotional price **$1,199.99**\n- **D2 Mach 2, 51 mm** \u2014 promotional price **$1,349.99**\n- **D2 Mach 2 Pro, 51 mm** \u2014 promotional price **$1,399.99**\n\nFor pilots, the D2 line is Garmin\u2019s aviation-focused smartwatch family: flight-oriented tools on the wrist, everyday smartwatch capability, and a cleaner link between the pilot\u2019s flying life and daily routine. The D2 Mach 2 Pro adds built-in inReach capability, with important limitations: an active subscription is required, coverage is not available everywhere, satellite and LTE services are subject to regional availability, and Garmin notes it is not for in-flight use.\n\nRWAS can help customers confirm which D2 Mach 2 model fits their needs, place an order during the promotion window, and coordinate the Garmin ecosystem around the aircraft, panel, mobile apps, and pilot workflow. If you have been considering a D2 aviation watch, this is a good window to ask about availability before the **June 29** deadline.",
+      "approved_at": "2026-05-08T12:46:48.543609+00:00",
+      "published_at": "2026-05-08T12:46:48.569562+00:00"
     },
     {
       "id": "rwas-customer-panel-planner-now-live-20260427",
