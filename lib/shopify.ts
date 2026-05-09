@@ -167,6 +167,30 @@ const PAPA_ALPHA_SYNTHETIC: ShopifyCollectionSummary = {
   },
 };
 
+function isFallbackProductImage(image?: ShopifyImage | null): boolean {
+  const haystack = `${image?.url || ''} ${image?.altText || ''}`.toLowerCase();
+  return (
+    haystack.includes('garmin-no-product-image-available') ||
+    haystack.includes('no product image available') ||
+    haystack.includes('no-product-image')
+  );
+}
+
+function productImagePriority(product: Pick<ShopifyCollectionProduct, 'featuredImage'>): number {
+  if (!product.featuredImage?.url) return 2;
+  return isFallbackProductImage(product.featuredImage) ? 1 : 0;
+}
+
+function sortProductsByImagePriority<T extends ShopifyCollectionProduct>(products: T[]): T[] {
+  return products
+    .map((product, index) => ({ product, index }))
+    .sort((a, b) => {
+      const imageRank = productImagePriority(a.product) - productImagePriority(b.product);
+      return imageRank || a.index - b.index;
+    })
+    .map(({ product }) => product);
+}
+
 export async function shopifyFetch<T>(query: string, variables?: Record<string, unknown>) {
   if (!STOREFRONT_TOKEN) {
     throw new Error('SHOPIFY_STOREFRONT_ACCESS_TOKEN is not configured.');
@@ -416,7 +440,7 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
 
   return {
     ...collectionMeta,
-    products,
+    products: sortProductsByImagePriority(products),
   };
 }
 
