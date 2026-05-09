@@ -266,7 +266,7 @@ export default async function CollectionDetailPage({
             <div style={{ display: 'grid', gap: 32 }}>
               {subcategoryGroups.map(([subcategory, products], index) => {
                 const sectionId = `subcategory-${subcategory.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`;
-                const defaultOpen = subcategoryGroups.length <= 3 || index < 2;
+                const defaultOpen = false;
                 const productGrid = (
                   <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
                     {products.map((product) => (
@@ -299,7 +299,7 @@ export default async function CollectionDetailPage({
                           <span className="bs-kicker block">Subcategory &middot; {products.length} item{products.length === 1 ? '' : 's'}</span>
                           <span
                             id={sectionId}
-                            className="bs-headline block"
+                            className="bs-headline block text-3xl font-black underline decoration-2 underline-offset-4 md:text-4xl"
                             style={{ marginTop: 4, marginBottom: 0 }}
                           >
                             {subcategory}
