@@ -14,6 +14,7 @@ export const metadata = {
   title: 'Home Mockup (Ship 3 Tranche B) — Roger Wilco Aviation Services',
   description:
     'Preview of the shared-broadsheet Home page. Not linked from production navigation.',
+  robots: { index: false, follow: false },
 };
 
 /*
@@ -41,7 +42,7 @@ export default function HomeSamplePage() {
             <Specimen variant="flat" as="aside" className="bs-toc">
               <div className="bs-toc__title">Today&rsquo;s Edition</div>
               <div className="bs-toc__row">
-                <a href="/garmin/">
+                <a href="/garmin">
                   <span>Latest From Garmin</span>
                   <span className="bs-toc__pg">A2 &rarr;</span>
                 </a>

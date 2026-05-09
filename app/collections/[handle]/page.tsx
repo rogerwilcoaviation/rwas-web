@@ -12,7 +12,7 @@ import {
 } from '@/components/shared/broadsheet';
 import { getCollectionByHandle, getFeaturedCollections, isQuoteCollection } from '@/lib/shopify';
 import Link from 'next/link';
-import { collectionSeoTitle, truncateMeta } from '@/lib/seo';
+import { collectionMetaDescription, collectionSeoTitle, truncateMeta } from '@/lib/seo';
 
 const FALLBACK_COLLECTION_HANDLES = [
   'on-sale',
@@ -47,9 +47,7 @@ export async function generateMetadata({
     }
 
     const title = collectionSeoTitle(collection.title);
-    const description = truncateMeta(
-      collection.description || `Browse ${collection.title} at Roger Wilco Aviation Services.`,
-    );
+    const description = collectionMetaDescription(collection);
     const url = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
     return {
       title: { absolute: title },

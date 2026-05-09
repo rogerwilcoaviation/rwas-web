@@ -16,6 +16,7 @@ export const metadata = {
   title: 'Garmin Avionics & Aircraft Maintenance — Yankton, SD',
   description:
     'FAA Part 145 repair station in Yankton, SD. Certified Garmin dealer: G3X Touch, GFC 500, annual inspections, NDT. Call (605) 299-8178.',
+  alternates: { canonical: 'https://www.rogerwilcoaviation.com/' },
 };
 
 /*
@@ -43,7 +44,7 @@ export default function Home() {
             <Specimen variant="flat" as="aside" className="bs-toc">
               <div className="bs-toc__title">Today&rsquo;s Edition</div>
               <div className="bs-toc__row">
-                <a href="/garmin/">
+                <a href="/garmin">
                   <span>Latest From Garmin</span>
                   <span className="bs-toc__pg">A2 &rarr;</span>
                 </a>

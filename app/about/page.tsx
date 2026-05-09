@@ -222,7 +222,7 @@ export default function AboutPage() {
               <p>
                 Monday &ndash; Friday
                 <br />
-                8:00 AM &ndash; 5:00 PM CT
+                7:00 AM &ndash; 5:00 PM CT
               </p>
             </Specimen>
 

@@ -5,7 +5,7 @@
 - **Phone:** (605) 299-8178
 - **Email:** avionics@rwas.team
 - **Location:** Chan Gurney Municipal Airport (KYKN), Yankton, SD
-- **Hours:** Monday–Friday, 8:00 AM – 5:00 PM CT
+- **Hours:** Monday–Friday, 7:00 AM – 5:00 PM CT
 - **Certifications:** FAA Part 145 Certificate RWSR491E, Certified Garmin Dealer, NBAA Member, AEA Member
 
 ## Core Pages
@@ -13,8 +13,8 @@
 - [Home](https://www.rogerwilcoaviation.com/) — Overview of services and featured capabilities
 - [About](https://www.rogerwilcoaviation.com/about) — Company history, founder bio, contact details
 - [Shop Capabilities](https://www.rogerwilcoaviation.com/shop-capabilities) — Full catalog of services: Garmin installations, A&P maintenance, NDT, fabrication
-- [Garmin](https://www.rogerwilcoaviation.com/garmin/) — Garmin product updates, bulletins, promotions
-- [Blog](https://www.rogerwilcoaviation.com/blog/) — Aviation news, service bulletins, Garmin memos, shop dispatches
+- [Garmin](https://www.rogerwilcoaviation.com/garmin) — Garmin product updates, bulletins, promotions
+- [Blog](https://www.rogerwilcoaviation.com/blog) — Aviation news, service bulletins, Garmin memos, shop dispatches
 - [Aircraft for Sale](https://www.rogerwilcoaviation.com/aircraft-for-sale) — Aircraft marketplace powered by Captain Jerry's guided intake
 - [Financing](https://www.rogerwilcoaviation.com/financing) — Avionics upgrade financing options
 
@@ -64,7 +64,7 @@ Precision flight-control rigging reference tools for Piper aircraft, designed in
 - Complete rigging kit from $264
 - Individual tools from $59.99
 - Available at: rogerwilcoaviation.com, Aircraft Spruce, and Amazon (coming soon)
-- Shop collection: https://www.rogerwilcoaviation.com/collections/rigging-tools
+- Shop collection: https://www.rogerwilcoaviation.com/collections/papa-alpha-tools
 
 ## Captain Jerry
 

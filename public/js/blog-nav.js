@@ -11,7 +11,7 @@
     { text: "Ask Jerry", href: "/#ask-jerry" },
     { text: "On Sale", href: "/collections/on-sale" },
     { text: "Garmin", href: "/collections/garmin-avionics" },
-    { text: "Papa-Alpha Tools", href: "/collections/rigging-tools" },
+    { text: "Papa-Alpha Tools", href: "/collections/papa-alpha-tools" },
     { text: "Aircraft 4 Sale", href: "/aircraft-for-sale" },
     { text: "Financing", href: "/financing" },
     { text: "Shop Capabilities", href: "/shop-capabilities" },

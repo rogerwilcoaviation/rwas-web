@@ -14,7 +14,7 @@ const collectionLinks = [
     label: 'Garmin accessories',
   },
   {
-    href: '/collections/papa-alpha-tools',
+    href: '/collections/retail-experimental',
     label: 'Experimental avionics',
   },
   {
@@ -62,10 +62,10 @@ export const Footer = ({ className }: { className?: string }) => {
         ))}
       </LandingFooterColumn>
       <LandingFooterColumn title="Company">
-        <LandingFooterLink href="https://www.rogerwilcoaviation.com/pages/about">
+        <LandingFooterLink href="/about">
           About
         </LandingFooterLink>
-        <LandingFooterLink href="https://www.rogerwilcoaviation.com/pages/shop-capabilities">
+        <LandingFooterLink href="/shop-capabilities">
           Shop capabilities
         </LandingFooterLink>
         <LandingFooterLink href="/contact">

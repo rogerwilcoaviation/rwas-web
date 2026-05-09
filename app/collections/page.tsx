@@ -14,7 +14,8 @@ import Link from 'next/link';
 
 export const metadata = {
   title: 'RWAS Collections',
-  description: 'Browse Garmin avionics, Papa-Alpha tools, and RWAS sale collections.',
+  description:
+    'Browse Garmin avionics, aviation accessories, Papa-Alpha rigging tools, and RWAS sale collections from an FAA Part 145 repair station in Yankton, SD.',
 };
 
 export default async function CollectionsPage() {

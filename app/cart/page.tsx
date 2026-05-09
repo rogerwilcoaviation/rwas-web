@@ -12,6 +12,7 @@ import CartClient from '@/components/shopify/CartClient';
 export const metadata = {
   title: 'RWAS Cart',
   description: 'Review your RWAS Shopify cart and continue to checkout.',
+  robots: { index: false, follow: false },
 };
 
 export default function CartPage() {

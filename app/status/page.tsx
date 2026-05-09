@@ -14,6 +14,7 @@ export const metadata = {
   description:
     'Live operational status for the Roger Wilco Aviation Services website, aircraft marketplace, Captain Jerry assistant, and Shopify checkout.',
   alternates: { canonical: 'https://www.rogerwilcoaviation.com/status' },
+  robots: { index: false, follow: true },
 };
 
 type SystemRow = {

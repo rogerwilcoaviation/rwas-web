@@ -6,10 +6,26 @@
 /faq /about 301
 /features /shop-capabilities 301
 /pricing /financing 301
+/pages/about /about 301
+/pages/contact /contact 301
+/pages/financing /financing 301
+/pages/garmin-avionics-accessories /collections/garmin-avionics-accessories 301
+/pages/shop-capabilities /shop-capabilities 301
+/collections/aircraft-management /collections 301
+/collections/rigging-tools /collections/papa-alpha-tools 301
+/collections/on-sale/Garmin-Product-On-Sale /collections/on-sale 301
 
-# P3.2: trailing-slash variants for Mevolut deletions + contact consolidation
+# P3.2: trailing-slash variants for template deletions + contact consolidation
 /careers/ /about 301
 /press/ /blog/ 301
 /faq/ /about 301
 /features/ /shop-capabilities 301
 /pricing/ /financing 301
+/pages/about/ /about 301
+/pages/contact/ /contact 301
+/pages/financing/ /financing 301
+/pages/garmin-avionics-accessories/ /collections/garmin-avionics-accessories 301
+/pages/shop-capabilities/ /shop-capabilities 301
+/collections/aircraft-management/ /collections 301
+/collections/rigging-tools/ /collections/papa-alpha-tools 301
+/collections/on-sale/Garmin-Product-On-Sale/ /collections/on-sale 301

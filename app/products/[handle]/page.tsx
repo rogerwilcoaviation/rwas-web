@@ -29,7 +29,7 @@ import {
   isOtcCollection,
   isOtcEligible,
 } from '@/lib/shopify';
-import { productSeoTitle, truncateMeta } from '@/lib/seo';
+import { productMetaDescription, productSeoTitle, truncateMeta } from '@/lib/seo';
 import {
   BroadsheetLayout,
   Dateline,
@@ -86,12 +86,10 @@ export async function generateMetadata({
   try {
     const product = await getProductByHandle(handle);
     if (!product) return { title: 'Product not found' };
-    const description = truncateMeta(
-      product.description || `View ${product.title} from Roger Wilco Aviation Services.`,
-    );
+    const description = productMetaDescription(product);
     const url = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
     const imageUrl = product.featuredImage?.url || product.images[0]?.url;
-    const title = productSeoTitle(product.title);
+    const title = productSeoTitle(product.title, product.productType);
     return {
       title: { absolute: title },
       description,

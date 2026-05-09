@@ -1,15 +1,15 @@
 {
-  "name": "Mevolut",
-  "short_name": "Mevolut",
-  "description": "Manage your money the easy way with Mevolut . Track expenses, send money, and grow your savings – safely and simply. Sign up free today!",
+  "name": "Roger Wilco Aviation Services",
+  "short_name": "RWAS",
+  "description": "FAA Part 145 repair station in Yankton, SD offering Garmin avionics, aircraft maintenance, NDT, fabrication, and Papa-Alpha rigging tools.",
   "dir": "auto",
   "lang": "en-US",
   "display": "standalone",
   "orientation": "any",
   "scope": "/",
-  "start_url": "/?homescreen=1",
-  "background_color": "#fff",
-  "theme_color": "#fff",
+  "start_url": "/",
+  "background_color": "#f7f4ef",
+  "theme_color": "#111111",
   "icons": [
     {
       "src": "/static/favicons/android-chrome-36x36.png",

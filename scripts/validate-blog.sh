@@ -50,7 +50,7 @@ done
 
 # 5. No stale Shopify-style nav links (these should never appear)
 for f in public/blog/index.html public/blog/article.html; do
-  if grep -q "/pages/shop-capabilities\|/pages/financing\|/pages/contact\|/collections/aircraft-management" "$f"; then
+  if grep -q "/shop-capabilities\|/financing\|/contact\|/collections" "$f"; then
     echo "FAIL: $f has stale Shopify nav links"
     FAIL=1
   else
@@ -78,7 +78,7 @@ else
 fi
 
 # 8. Nav config correct in blog-nav.js
-for route in "/collections/on-sale" "/collections/garmin-avionics" "/collections/rigging-tools" "/financing" "/shop-capabilities" "/about"; do
+for route in "/collections/on-sale" "/collections/garmin-avionics" "/collections/papa-alpha-tools" "/financing" "/shop-capabilities" "/about"; do
   if ! grep -q "$route" public/js/blog-nav.js; then
     echo "FAIL: blog-nav.js missing route $route"
     FAIL=1

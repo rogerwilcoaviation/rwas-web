@@ -14,6 +14,7 @@ export const metadata = {
   description:
     'How Roger Wilco Aviation Services protects customer data, payment information, and marketplace listings. FAA Part 145 Repair Station RWSR491E.',
   alternates: { canonical: 'https://www.rogerwilcoaviation.com/security' },
+  robots: { index: false, follow: true },
 };
 
 const LAST_UPDATED = 'April 21, 2026';
