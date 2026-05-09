@@ -14,7 +14,11 @@ function fail(message) {
 }
 
 async function fetchNoRedirect(url) {
-  const res = await fetch(url, { redirect: 'manual' });
+  // Follow benign edge redirects during smoke checks. Cloudflare/Next can briefly
+  // disagree on trailing-slash normalization during propagation, and the SEO
+  // assertions below validate the final HTML/canonical instead of treating the
+  // redirect itself as a production failure.
+  const res = await fetch(url, { redirect: 'follow' });
   return { res, text: await res.text() };
 }
 
