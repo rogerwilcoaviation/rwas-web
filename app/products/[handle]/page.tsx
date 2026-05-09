@@ -237,15 +237,20 @@ export default async function ProductDetailPage({
   const breadcrumbs = ['Pilot Shop', productTypeLabel, vendor].filter(Boolean);
 
   // Variant payload for the client component — keep only what we need.
-  const variantPayload: PdpVariant[] = product.variants.map((v) => ({
-    id: v.id,
-    title: v.title,
-    sku: v.sku,
-    price: v.price,
-    compareAtPrice: v.compareAtPrice,
-    availableForSale: v.availableForSale,
-    selectedOptions: v.selectedOptions,
-  }));
+  const variantPayload: PdpVariant[] = product.variants.map((v) => {
+    const selectedOptions = v.selectedOptions.filter(
+      (opt) => !(opt.name.trim().toLowerCase() === 'title' && opt.value.trim().toLowerCase() === 'default title'),
+    );
+    return {
+      id: v.id,
+      title: v.title.trim().toLowerCase() === 'default title' ? 'Standard configuration' : v.title,
+      sku: v.sku,
+      price: v.price,
+      compareAtPrice: v.compareAtPrice,
+      availableForSale: v.availableForSale,
+      selectedOptions,
+    };
+  });
   const canonicalUrl = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
   const imageUrls = product.images.map((img) => img.url).filter(Boolean);
   const productSchema = {
