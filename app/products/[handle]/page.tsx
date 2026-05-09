@@ -25,6 +25,7 @@ import PdpPriceCard, { type PdpVariant } from '@/components/shopify/PdpPriceCard
 import {
   getProductByHandle,
   getProductHandles,
+  getProductsByTag,
   isOtcCollection,
   isOtcEligible,
 } from '@/lib/shopify';
@@ -278,6 +279,15 @@ export default async function ProductDetailPage({
   const hasSalePrice = Boolean(normalListPrice && primaryPrice && Number(normalListPrice.amount) > Number(primaryPrice.amount));
   const d2Briefing = D2_WATCH_BRIEFINGS[product.handle];
   const visibleOptions = product.options.filter((opt) => !isPlaceholderOption(opt));
+  const familyTag = (product.tags || []).find((tag) => tag.toLowerCase().startsWith('family-'));
+  let comparisonProducts: Awaited<ReturnType<typeof getProductsByTag>> = [];
+  if (familyTag) {
+    try {
+      comparisonProducts = (await getProductsByTag(familyTag, 8)).filter((item) => item.handle !== product.handle);
+    } catch {
+      comparisonProducts = [];
+    }
+  }
 
   // Breadcrumb dateline
   const productTypeLabel = product.productType || (gating.isGarmin ? 'Garmin' : 'Shop');
@@ -531,6 +541,83 @@ export default async function ProductDetailPage({
             </div>
           </aside>
         </section>
+
+        {comparisonProducts.length ? (
+          <section className="bs-comparison-section" aria-label="Related product comparison">
+            <div className="bs-section-kicker">Compare related products</div>
+            <h2>Side-by-side feature comparison</h2>
+            <p>
+              Compare this item with related products in the same RWAS/Garmin family before you add it to the cart.
+            </p>
+            <div className="bs-comparison-scroll">
+              <table className="bs-comparison-table">
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th className="current-product">This product</th>
+                    {comparisonProducts.map((item) => (
+                      <th key={item.handle}>
+                        <Link href={`/products/${item.handle}`}>{item.title}</Link>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>Image</th>
+                    <td className="current-product">
+                      {heroImg ? <img src={heroImg.url} alt={heroImg.altText || product.title} /> : '—'}
+                    </td>
+                    {comparisonProducts.map((item) => (
+                      <td key={item.handle}>{item.featuredImage ? <img src={item.featuredImage.url} alt={item.featuredImage.altText || item.title} /> : '—'}</td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <th>SKU</th>
+                    <td className="current-product">{firstSku || '—'}</td>
+                    {comparisonProducts.map((item) => <td key={item.handle}>{item.variants?.[0]?.sku || '—'}</td>)}
+                  </tr>
+                  <tr>
+                    <th>Sale price</th>
+                    <td className="current-product"><strong>{primaryPrice ? formatPrice(primaryPrice.amount, primaryPrice.currencyCode) : 'Contact RWAS'}</strong></td>
+                    {comparisonProducts.map((item) => {
+                      const price = item.variants?.[0]?.price || item.priceRange?.minVariantPrice;
+                      return <td key={item.handle}><strong>{price ? formatPrice(price.amount, price.currencyCode) : 'Contact RWAS'}</strong></td>;
+                    })}
+                  </tr>
+                  <tr>
+                    <th>Normal list price</th>
+                    <td className="current-product">{normalListPrice ? formatPrice(normalListPrice.amount, normalListPrice.currencyCode) : '—'}</td>
+                    {comparisonProducts.map((item) => {
+                      const list = item.variants?.[0]?.compareAtPrice;
+                      return <td key={item.handle}>{list ? formatPrice(list.amount, list.currencyCode) : '—'}</td>;
+                    })}
+                  </tr>
+                  <tr>
+                    <th>Product type</th>
+                    <td className="current-product">{product.productType || '—'}</td>
+                    {comparisonProducts.map((item) => <td key={item.handle}>{item.productType || product.productType || '—'}</td>)}
+                  </tr>
+                  <tr>
+                    <th>Best fit</th>
+                    <td className="current-product">{d2Briefing?.highlights[0]?.copy || truncateMeta(cleanDescText || product.description, 180)}</td>
+                    {comparisonProducts.map((item) => {
+                      const brief = D2_WATCH_BRIEFINGS[item.handle];
+                      return <td key={item.handle}>{brief?.highlights[0]?.copy || truncateMeta(item.description || item.title, 180)}</td>;
+                    })}
+                  </tr>
+                  <tr>
+                    <th>Action</th>
+                    <td className="current-product">Selected</td>
+                    {comparisonProducts.map((item) => (
+                      <td key={item.handle}><Link className="bs-compare-link" href={`/products/${item.handle}`}>View product</Link></td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ) : null}
       </main>
 
       <BroadsheetFooter />

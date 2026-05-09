@@ -47,6 +47,8 @@ export type ShopifyCollectionSummary = {
 export type ShopifyCollectionProduct = ShopifyFeaturedProduct & {
   availableForSale?: boolean;
   tags?: string[];
+  vendor?: string;
+  productType?: string;
   variants?: ShopifyVariant[];
 };
 
@@ -293,6 +295,8 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
                 description
                 availableForSale
                 tags
+                vendor
+                productType
                 featuredImage {
                   url
                   altText

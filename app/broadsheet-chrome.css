@@ -1685,3 +1685,77 @@ html, body {
   display: inline-block;
   margin-left: 2px;
 }
+
+/* Related product comparison table */
+.broadsheet .bs-comparison-section {
+  margin-top: 42px;
+  background: var(--bone);
+  border: 1px solid var(--rule);
+  box-shadow: var(--specimen-shadow);
+  padding: 22px;
+}
+.broadsheet .bs-comparison-section h2 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.05;
+  color: var(--ink-900);
+}
+.broadsheet .bs-comparison-section p {
+  margin: 0 0 16px;
+  font-family: var(--font-body);
+  color: var(--ink-800);
+}
+.broadsheet .bs-comparison-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.broadsheet .bs-comparison-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.broadsheet .bs-comparison-table th,
+.broadsheet .bs-comparison-table td {
+  border: 1px solid var(--rule-soft);
+  padding: 12px;
+  vertical-align: top;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink-800);
+  background: rgba(255,255,255,.42);
+}
+.broadsheet .bs-comparison-table th {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--ink-900);
+  background: var(--parchment);
+}
+.broadsheet .bs-comparison-table thead th {
+  font-size: 11px;
+}
+.broadsheet .bs-comparison-table .current-product {
+  background: color-mix(in srgb, var(--gold-700) 10%, var(--bone) 90%);
+}
+.broadsheet .bs-comparison-table img {
+  display: block;
+  max-width: 132px;
+  max-height: 132px;
+  object-fit: contain;
+  margin: 0 auto;
+}
+.broadsheet .bs-comparison-table a {
+  color: var(--ink-900);
+  text-decoration-color: var(--gold-700);
+  text-underline-offset: 3px;
+}
+.broadsheet .bs-compare-link {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
