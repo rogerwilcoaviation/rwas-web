@@ -467,6 +467,104 @@ html, body {
     padding: 10px;
   }
 }
+.broadsheet .bs-part-finder {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(280px, 1.1fr);
+  gap: 22px;
+  align-items: start;
+}
+.broadsheet .bs-part-finder__title {
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 46px);
+  font-weight: 900;
+  line-height: .98;
+  color: var(--ink-900);
+}
+.broadsheet .bs-part-finder__search {
+  display: grid;
+  gap: 8px;
+}
+.broadsheet .bs-part-finder__search span {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-600);
+}
+.broadsheet .bs-part-finder__search input {
+  width: 100%;
+  border: 2px solid var(--ink-900);
+  background: #fff;
+  padding: 16px 18px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-900);
+  box-shadow: 4px 4px 0 var(--ink-900);
+  outline: none;
+}
+.broadsheet .bs-part-finder__search input:focus {
+  border-color: var(--gold-700);
+  box-shadow: 4px 4px 0 var(--gold-700);
+}
+.broadsheet .bs-part-finder__results {
+  grid-column: 1 / -1;
+  min-height: 40px;
+}
+.broadsheet .bs-part-finder__results ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+.broadsheet .bs-part-finder__results a {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid var(--rule);
+  color: var(--ink-900);
+  text-decoration: none;
+}
+.broadsheet .bs-part-finder__results a:hover {
+  border-color: var(--gold-700);
+  box-shadow: 3px 3px 0 var(--gold-700);
+}
+.broadsheet .bs-part-finder__results img,
+.broadsheet .bs-part-finder__noimage {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  background: var(--bone);
+  border: 1px solid var(--rule-soft);
+}
+.broadsheet .bs-part-finder__noimage {
+  display: grid;
+  place-items: center;
+  color: var(--ink-500);
+}
+.broadsheet .bs-part-finder__results strong,
+.broadsheet .bs-part-finder__results em {
+  display: block;
+}
+.broadsheet .bs-part-finder__results strong {
+  font-size: 15px;
+  line-height: 1.25;
+}
+.broadsheet .bs-part-finder__results em {
+  margin-top: 3px;
+  font-size: 12px;
+  font-style: normal;
+  color: var(--ink-600);
+}
+@media (max-width: 760px) {
+  .broadsheet .bs-part-finder {
+    grid-template-columns: 1fr;
+  }
+}
 .broadsheet .bs-photo-caption {
   display: grid;
   grid-template-columns: auto 1fr;

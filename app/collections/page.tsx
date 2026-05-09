@@ -1,4 +1,5 @@
 import CollectionCard from '@/components/shopify/CollectionCard';
+import PartFinder, { type PartFinderProduct } from '@/components/shopify/PartFinder';
 import {
   BroadsheetLayout,
   Dateline,
@@ -9,7 +10,7 @@ import {
   BroadsheetFooter,
   Specimen,
 } from '@/components/shared/broadsheet';
-import { getFeaturedCollections } from '@/lib/shopify';
+import { getFeaturedCollections, getPartFinderProducts } from '@/lib/shopify';
 import Link from 'next/link';
 
 export const metadata = {
@@ -20,11 +21,30 @@ export const metadata = {
 
 export default async function CollectionsPage() {
   let collections: Awaited<ReturnType<typeof getFeaturedCollections>> = [];
+  let finderProducts: PartFinderProduct[] = [];
 
   try {
     collections = await getFeaturedCollections();
   } catch {
     collections = [];
+  }
+
+  try {
+    const products = await getPartFinderProducts();
+    finderProducts = products.map((product) => ({
+      id: product.id,
+      title: product.title,
+      handle: product.handle,
+      vendor: product.vendor,
+      productType: product.productType,
+      description: product.description,
+      featuredImage: product.featuredImage,
+      price: product.priceRange.minVariantPrice.amount,
+      currencyCode: product.priceRange.minVariantPrice.currencyCode,
+      skus: product.variants.map((variant) => variant.sku || '').filter(Boolean),
+    }));
+  } catch {
+    finderProducts = [];
   }
 
   return (
@@ -55,6 +75,12 @@ export default async function CollectionsPage() {
             </Link>
           </div>
         </section>
+
+        {finderProducts.length ? (
+          <Specimen variant="flat">
+            <PartFinder products={finderProducts} scopeLabel="RWAS catalog" />
+          </Specimen>
+        ) : null}
 
         <Specimen variant="flat">
           <div style={{ marginBottom: 20 }}>

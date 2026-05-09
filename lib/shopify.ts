@@ -75,6 +75,20 @@ export type ShopifyProductDetail = {
   collections: string[];
 };
 
+export type ShopifyPartFinderProduct = {
+  id: string;
+  title: string;
+  handle: string;
+  description: string;
+  vendor?: string;
+  productType?: string;
+  featuredImage?: ShopifyImage | null;
+  priceRange: {
+    minVariantPrice: Money;
+  };
+  variants: ShopifyVariant[];
+};
+
 export type ShopifyCartLine = {
   id: string;
   quantity: number;
@@ -389,6 +403,93 @@ export async function getSeoProductHandles(): Promise<string[]> {
 
   return Array.from(new Set([...PRIORITY_PRODUCT_HANDLES, ...handles]))
     .filter(isSeoSafeProductHandle);
+}
+
+export async function getPartFinderProducts(limit = 2000): Promise<ShopifyPartFinderProduct[]> {
+  const all: ShopifyPartFinderProduct[] = [];
+  let cursor: string | null = null;
+
+  do {
+    const data = await shopifyFetch<{
+      products: {
+        pageInfo: { hasNextPage: boolean; endCursor: string | null };
+        edges: Array<{
+          cursor: string;
+          node: ShopifyPartFinderProduct & { variants: { edges: Array<{ node: ShopifyVariant }> } };
+        }>;
+      };
+    }>(
+      `#graphql
+        query PartFinderProducts($first: Int!, $after: String) {
+          products(first: $first, after: $after, sortKey: TITLE) {
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+            edges {
+              cursor
+              node {
+                id
+                title
+                handle
+                description
+                vendor
+                productType
+                featuredImage {
+                  url
+                  altText
+                }
+                priceRange {
+                  minVariantPrice {
+                    amount
+                    currencyCode
+                  }
+                }
+                variants(first: 20) {
+                  edges {
+                    node {
+                      id
+                      title
+                      availableForSale
+                      quantityAvailable
+                      sku
+                      selectedOptions {
+                        name
+                        value
+                      }
+                      price {
+                        amount
+                        currencyCode
+                      }
+                      compareAtPrice {
+                        amount
+                        currencyCode
+                      }
+                      image {
+                        url
+                        altText
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `,
+      { first: Math.min(250, limit - all.length), after: cursor }
+    );
+
+    all.push(
+      ...data.products.edges.map((edge) => ({
+        ...edge.node,
+        variants: mapVariants(edge.node.variants.edges),
+      }))
+    );
+    cursor = data.products.pageInfo.hasNextPage ? data.products.pageInfo.endCursor : null;
+  } while (cursor && all.length < limit);
+
+  return all;
 }
 
 export async function getProductsByTag(tag: string, limit = 48): Promise<ShopifyCollectionProduct[]> {

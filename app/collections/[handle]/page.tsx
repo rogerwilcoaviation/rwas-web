@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import ProductCard from '@/components/shopify/ProductCard';
+import PartFinder, { type PartFinderProduct } from '@/components/shopify/PartFinder';
 import {
   BroadsheetLayout,
   Dateline,
@@ -123,6 +124,18 @@ export default async function CollectionDetailPage({
   const indexableProducts = collection.products.filter((product) =>
     isSeoSafeProductHandle(product.handle)
   );
+  const finderProducts: PartFinderProduct[] = indexableProducts.map((product) => ({
+    id: product.id,
+    title: product.title,
+    handle: product.handle,
+    vendor: product.vendor,
+    productType: product.productType,
+    description: product.description,
+    featuredImage: product.featuredImage,
+    price: product.priceRange.minVariantPrice.amount,
+    currencyCode: product.priceRange.minVariantPrice.currencyCode,
+    skus: (product.variants || []).map((variant) => variant.sku || '').filter(Boolean),
+  }));
   const quoteOnly = isQuoteCollection(collection.handle);
   const canonicalUrl = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
   const itemListSchema = {
@@ -171,6 +184,12 @@ export default async function CollectionDetailPage({
             </Link>
           </div>
         </section>
+
+        {finderProducts.length ? (
+          <Specimen variant="flat">
+            <PartFinder products={finderProducts} scopeLabel={collection.title} />
+          </Specimen>
+        ) : null}
 
         {collection.handle === 'papa-alpha-tools' && (
           <Specimen variant="flat">
