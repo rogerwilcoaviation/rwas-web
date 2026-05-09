@@ -626,17 +626,6 @@ export default async function ProductDetailPage({
             </p>
             <div className="bs-comparison-scroll">
               <table className="bs-comparison-table">
-                <thead>
-                  <tr>
-                    <th>Feature</th>
-                    <th className="current-product">This product</th>
-                    {comparisonProducts.map((item) => (
-                      <th key={item.handle}>
-                        <Link href={`/products/${item.handle}`}>{item.title}</Link>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
                 <tbody>
                   <tr>
                     <th>Image</th>
