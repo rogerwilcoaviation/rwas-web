@@ -52,7 +52,14 @@ function sanitizeProductHtml(html: string): string {
   return out;
 }
 
+const PRIORITY_PRODUCT_HANDLES = [
+  'd2-mach-2-47-mm-titanium-oxford-brown-leather-band',
+  'd2-mach-2-51-mm-carbon-gray-dlc-titanium-vented-titanium-bracelet',
+  'd2-mach-2-pro-51-mm-carbon-gray-dlc-titanium-chestnut-leather-band',
+];
+
 const FALLBACK_PRODUCT_HANDLES = [
+  ...PRIORITY_PRODUCT_HANDLES,
   'garmin-g5-dg-hsi-stcd-for-certified-aircraft-with-lpm',
   'garmin-g5-primary-electronic-attitude-display-stcd-for-certified-aircraft-with-lpm',
   'garmin-gea-71b-enhanced',
@@ -62,7 +69,7 @@ const FALLBACK_PRODUCT_HANDLES = [
 export async function generateStaticParams() {
   try {
     const handles = await getProductHandles(120);
-    return handles.map((handle) => ({ handle }));
+    return Array.from(new Set([...PRIORITY_PRODUCT_HANDLES, ...handles])).map((handle) => ({ handle }));
   } catch {
     return FALLBACK_PRODUCT_HANDLES.map((handle) => ({ handle }));
   }
