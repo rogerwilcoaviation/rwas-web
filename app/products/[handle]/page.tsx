@@ -648,6 +648,11 @@ export default async function ProductDetailPage({
                     ))}
                   </tr>
                   <tr>
+                    <th>Model</th>
+                    <td className="current-product"><strong>{product.title}</strong></td>
+                    {comparisonProducts.map((item) => <td key={item.handle}><strong>{item.title}</strong></td>)}
+                  </tr>
+                  <tr>
                     <th>SKU</th>
                     <td className="current-product">{firstSku || '—'}</td>
                     {comparisonProducts.map((item) => <td key={item.handle}>{item.variants?.[0]?.sku || '—'}</td>)}
