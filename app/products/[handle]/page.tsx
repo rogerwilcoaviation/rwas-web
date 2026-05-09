@@ -185,6 +185,7 @@ const D2_WATCH_BRIEFINGS: Record<string, {
   display: string;
   battery: string;
   saleNote: string;
+  technical: Record<string, string>;
   highlights: Array<{ label: string; copy: string }>;
 }> = {
   'd2-mach-2-47-mm-titanium-oxford-brown-leather-band': {
@@ -194,6 +195,21 @@ const D2_WATCH_BRIEFINGS: Record<string, {
     display: 'AMOLED display with sapphire lens',
     battery: 'Up to 24 days in smartwatch mode',
     saleNote: 'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
+    technical: {
+      'Case size': '47 mm',
+      'Case / bezel': 'Titanium case and bezel',
+      Lens: 'Sapphire lens',
+      Band: 'Oxford Brown leather band',
+      Display: 'AMOLED aviation smartwatch display',
+      Battery: 'Up to 24 days in smartwatch mode; GPS endurance varies by GNSS and display settings',
+      'Aviation navigation': 'Direct-to, nearest-airport reference, moving-map style awareness, HSI course guidance and UTC/time-zone tools',
+      'Airport / weather tools': 'Airport information plus METAR/TAF and aviation weather awareness when paired/connected',
+      'Garmin ecosystem': 'Garmin Pilot and flyGarmin ecosystem support where available',
+      Connectivity: 'Bluetooth, Wi-Fi and ANT+ smartwatch connectivity; no built-in inReach satellite/LTE on this model',
+      'Health / training': 'Garmin wellness, sleep, training and activity tracking features',
+      'Ground features': 'Garmin Pay, music support and smart notifications when paired with a compatible phone',
+      Fulfillment: 'Special-order Garmin item; Garmin delivers to RWAS, then RWAS delivers to the customer',
+    },
     highlights: [
       { label: 'Flight-ready tools', copy: 'Moving-map style aviation tools, nearest-airport/direct-to functions, HSI course guidance, timers and UTC/time-zone references.' },
       { label: 'Weather before launch', copy: 'Pilot-focused weather views including METAR/TAF awareness, NEXRAD, winds and temperature overlays when paired with the Garmin ecosystem.' },
@@ -207,6 +223,21 @@ const D2_WATCH_BRIEFINGS: Record<string, {
     display: '1.4-inch AMOLED display with sapphire lens',
     battery: 'Up to 24 days in smartwatch mode',
     saleNote: 'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
+    technical: {
+      'Case size': '51 mm',
+      'Case / bezel': 'Carbon Gray DLC titanium case and bezel',
+      Lens: 'Sapphire lens',
+      Band: 'Vented titanium bracelet',
+      Display: '1.4-inch AMOLED aviation smartwatch display',
+      Battery: 'Up to 24 days in smartwatch mode; GPS endurance varies by GNSS and display settings',
+      'Aviation navigation': 'Direct-to, nearest-airport reference, moving-map style awareness, HSI course guidance and UTC/time-zone tools',
+      'Airport / weather tools': 'Airport information plus METAR/TAF and aviation weather awareness when paired/connected',
+      'Garmin ecosystem': 'Garmin Pilot and flyGarmin ecosystem support where available',
+      Connectivity: 'Bluetooth, Wi-Fi and ANT+ smartwatch connectivity; no built-in inReach satellite/LTE on this model',
+      'Health / training': 'Garmin wellness, sleep, training and activity tracking features',
+      'Ground features': 'Built-in LED flashlight, Garmin Pay, music support and smart notifications when paired with a compatible phone',
+      Fulfillment: 'Special-order Garmin item; Garmin delivers to RWAS, then RWAS delivers to the customer',
+    },
     highlights: [
       { label: 'Premium cockpit watch', copy: 'Larger 51 mm case, titanium bracelet, UTC bezel styling and aviation-first widgets for pilots who want a more substantial watch.' },
       { label: 'Advanced flight awareness', copy: 'Airport data, moving-map style navigation, weather awareness and flight logging support through Garmin’s aviation ecosystem.' },
@@ -220,6 +251,23 @@ const D2_WATCH_BRIEFINGS: Record<string, {
     display: '1.4-inch AMOLED display with sapphire lens',
     battery: 'Up to 24 days in smartwatch mode',
     saleNote: 'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
+    technical: {
+      'Case size': '51 mm',
+      'Case / bezel': 'Carbon Gray DLC titanium case and bezel',
+      Lens: 'Sapphire lens',
+      Band: 'Chestnut leather band',
+      Display: '1.4-inch AMOLED aviation smartwatch display',
+      Battery: 'Up to 24 days in smartwatch mode; GPS and inReach/LTE endurance vary by mode, coverage and settings',
+      'Aviation navigation': 'Dynamic flight mapping, Direct-to, nearest-airport navigation, HSI course guidance and UTC/time-zone tools',
+      'Airport / weather tools': 'Airport information plus METAR/TAF and aviation weather awareness when paired/connected',
+      'Garmin ecosystem': 'PlaneSync compatibility, Garmin Pilot integration and flyGarmin ecosystem support where available',
+      Connectivity: 'Bluetooth, Wi-Fi, ANT+, LTE and inReach satellite connectivity between flights',
+      'inReach / SOS': 'Messaging, LiveTrack and SOS features require active Garmin subscription and are subject to coverage/regional availability',
+      'Flight-use caveat': 'Garmin notes satellite/LTE service is not for in-flight use; present it as between-flight/ground connectivity',
+      'Health / training': 'Garmin wellness, sleep, training and activity tracking features',
+      'Ground features': 'Built-in LED flashlight, Garmin Pay, music support and smart notifications when paired with a compatible phone',
+      Fulfillment: 'Special-order Garmin item; Garmin delivers to RWAS, then RWAS delivers to the customer',
+    },
     highlights: [
       { label: 'D2 Mach 2 Pro connectivity', copy: 'Adds Garmin inReach technology with LTE and satellite connectivity between flights for messaging, LiveTrack and SOS features.' },
       { label: 'Ultimate aviator toolset', copy: 'Dynamic flight mapping, HSI guidance, nearest-airport navigation, PlaneSync compatibility and Garmin Pilot integration.' },
@@ -227,6 +275,29 @@ const D2_WATCH_BRIEFINGS: Record<string, {
     ],
   },
 };
+
+
+const TECHNICAL_COMPARISON_ROWS = [
+  'Case size',
+  'Case / bezel',
+  'Lens',
+  'Band',
+  'Display',
+  'Battery',
+  'Aviation navigation',
+  'Airport / weather tools',
+  'Garmin ecosystem',
+  'Connectivity',
+  'inReach / SOS',
+  'Flight-use caveat',
+  'Health / training',
+  'Ground features',
+  'Fulfillment',
+] as const;
+
+function technicalComparisonValue(handle: string, row: string) {
+  return D2_WATCH_BRIEFINGS[handle]?.technical[row] || '—';
+}
 
 export default async function ProductDetailPage({
   params,
@@ -598,6 +669,15 @@ export default async function ProductDetailPage({
                     <td className="current-product">{product.productType || '—'}</td>
                     {comparisonProducts.map((item) => <td key={item.handle}>{item.productType || product.productType || '—'}</td>)}
                   </tr>
+                  {TECHNICAL_COMPARISON_ROWS.map((row) => (
+                    <tr key={row}>
+                      <th>{row}</th>
+                      <td className="current-product">{technicalComparisonValue(product.handle, row)}</td>
+                      {comparisonProducts.map((item) => (
+                        <td key={item.handle}>{technicalComparisonValue(item.handle, row)}</td>
+                      ))}
+                    </tr>
+                  ))}
                   <tr>
                     <th>Best fit</th>
                     <td className="current-product">{d2Briefing?.highlights[0]?.copy || truncateMeta(cleanDescText || product.description, 180)}</td>
