@@ -417,7 +417,19 @@ export default async function ProductDetailPage({
         <section className="bs-hero">
           <figure className="bs-photo-box">
             {heroImg ? (
-              <img src={heroImg.url} alt={heroImg.altText || product.title} />
+              <>
+                <a className="bs-product-image-link" href="#product-image-zoom" aria-label={`Open larger image for ${product.title}`}>
+                  <img src={heroImg.url} alt={heroImg.altText || product.title} />
+                  <span>Click image to enlarge</span>
+                </a>
+                <div id="product-image-zoom" className="bs-product-image-lightbox" aria-label={`Expanded image for ${product.title}`}>
+                  <a className="bs-product-image-lightbox__backdrop" href="#" aria-label="Close expanded image" />
+                  <div className="bs-product-image-lightbox__panel">
+                    <a className="bs-product-image-lightbox__close" href="#" aria-label="Close expanded image">×</a>
+                    <img src={heroImg.url} alt={heroImg.altText || product.title} />
+                  </div>
+                </div>
+              </>
             ) : (
               <div
                 style={{
