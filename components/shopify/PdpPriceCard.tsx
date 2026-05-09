@@ -71,11 +71,14 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
   const otcEligible = otc === 'eligible';
   const isNonOtcGarmin = isGarmin && !otcEligible;
 
-  // Stock pill: only show the positive OTC in-stock message. The old
-  // "Check stock with RWAS before ordering" messaging was removed per
-  // product direction (2026-04-21).
+  // Stock pill: never call Garmin items "in stock". Garmin products are
+  // special-order/direct-fulfillment: Garmin delivers to RWAS, then RWAS
+  // delivers to the customer. Papa-Alpha/non-Garmin OTC items may still show
+  // normal availability language.
   const stockPill = otcEligible
-    ? 'In stock — ships direct from Garmin or Yankton'
+    ? isGarmin
+      ? 'Special order — Garmin delivers to RWAS, then RWAS delivers to you'
+      : 'Available to order'
     : null;
 
   const displayPrice = selected?.price

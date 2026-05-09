@@ -115,6 +115,12 @@ function formatPrice(amount: string, currencyCode: string) {
   }).format(Number(amount));
 }
 
+function isPlaceholderOption(option: { name: string; values: string[] }) {
+  const name = option.name.trim().toLowerCase();
+  const values = option.values.map((value) => value.trim().toLowerCase());
+  return name === 'title' && values.length === 1 && values[0] === 'default title';
+}
+
 /* ──────────────────────────────────────────────────────────────────────────
  * Tag-based gating — brand-agnostic. A Garmin product tagged `otc-eligible`
  * takes the add-to-cart path just like a Papa-Alpha tool.
@@ -211,6 +217,7 @@ export default async function ProductDetailPage({
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
   const primaryPrice = product.variants[0]?.price;
+  const visibleOptions = product.options.filter((opt) => !isPlaceholderOption(opt));
 
   // Breadcrumb dateline
   const productTypeLabel = product.productType || (gating.isGarmin ? 'Garmin' : 'Shop');
@@ -246,7 +253,11 @@ export default async function ProductDetailPage({
       '@type': 'Offer',
       price: primaryPrice.amount,
       priceCurrency: primaryPrice.currencyCode,
-      availability: product.availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      availability: product.availableForSale
+        ? gating.isGarmin
+          ? 'https://schema.org/PreOrder'
+          : 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
       url: canonicalUrl,
       seller: { '@type': 'Organization', name: 'Roger Wilco Aviation Services' },
     } : undefined,
@@ -301,9 +312,7 @@ export default async function ProductDetailPage({
             <p className="bs-product-kicker">From the workbench</p>
             <h1 className="bs-product-headline">{product.title}</h1>
             {cleanDescText ? (
-              <p className="bs-product-subhead">
-                {cleanDescText.split('\n')[0].slice(0, 220)}
-              </p>
+              <p className="bs-product-subhead">{cleanDescText}</p>
             ) : null}
 
             <div className="bs-byline">
@@ -333,10 +342,12 @@ export default async function ProductDetailPage({
         {/* Detail — article + spec aside */}
         <section className="bs-detail">
           <article>
-            <div
-              className="bs-body bs-body--rich"
-              dangerouslySetInnerHTML={{ __html: sanitizeProductHtml(product.descriptionHtml || product.description || '') }}
-            />
+            {!cleanDescText ? (
+              <div
+                className="bs-body bs-body--rich"
+                dangerouslySetInnerHTML={{ __html: sanitizeProductHtml(product.descriptionHtml || product.description || '') }}
+              />
+            ) : null}
 
             {/* Trust strip */}
             <div className="bs-trust-strip">
@@ -403,7 +414,7 @@ export default async function ProductDetailPage({
                       <td>{formatPrice(primaryPrice.amount, primaryPrice.currencyCode)}</td>
                     </tr>
                   ) : null}
-                  {product.options.map((opt) => (
+                  {visibleOptions.map((opt) => (
                     <tr key={opt.name}>
                       <th>{opt.name}</th>
                       <td>{opt.values.join(', ')}</td>
