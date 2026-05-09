@@ -131,6 +131,7 @@ export default async function CollectionDetailPage({
     vendor: product.vendor,
     productType: product.productType,
     description: product.description,
+    tags: product.tags,
     featuredImage: product.featuredImage,
     price: product.priceRange.minVariantPrice.amount,
     currencyCode: product.priceRange.minVariantPrice.currencyCode,

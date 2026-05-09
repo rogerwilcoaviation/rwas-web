@@ -32,10 +32,16 @@ export default function ProductCard({
   // a one-line change if the policy reverses.
   void isOtcCollection; void isOtcEligible;
   const otcEligible = false;
-  const price = formatPrice(
-    product.priceRange.minVariantPrice.amount,
-    product.priceRange.minVariantPrice.currencyCode
-  );
+  const dealerOnly =
+    quoteOnly ||
+    product.tags?.some((tag) => tag.toLowerCase() === 'garmin-dealer-only') ||
+    Number(product.priceRange.minVariantPrice.amount) === 0;
+  const price = dealerOnly
+    ? null
+    : formatPrice(
+        product.priceRange.minVariantPrice.amount,
+        product.priceRange.minVariantPrice.currencyCode
+      );
   const productUrl = `/products/${encodeURIComponent(product.handle)}`;
   const quoteUrl = `/contact?reason=quote&product=${encodeURIComponent(
     product.title
@@ -89,7 +95,9 @@ export default function ProductCard({
           <h3 className="mt-2 line-clamp-3 text-xl font-bold leading-snug text-[#111111]">
             {product.title}
           </h3>
-          <p className="mt-3 text-sm text-black/60">From {price}</p>
+          {price ? (
+            <p className="mt-3 text-sm text-black/60">From {price}</p>
+          ) : null}
         </div>
 
         <div className="flex flex-wrap gap-3">

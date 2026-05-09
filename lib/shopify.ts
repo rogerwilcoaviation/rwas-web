@@ -82,6 +82,7 @@ export type ShopifyPartFinderProduct = {
   description: string;
   vendor?: string;
   productType?: string;
+  tags?: string[];
   featuredImage?: ShopifyImage | null;
   priceRange: {
     minVariantPrice: Money;
@@ -435,6 +436,7 @@ export async function getPartFinderProducts(limit = 2000): Promise<ShopifyPartFi
                 description
                 vendor
                 productType
+                tags
                 featuredImage {
                   url
                   altText

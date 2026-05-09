@@ -13,6 +13,7 @@ export type PartFinderProduct = {
   featuredImage?: { url: string; altText: string | null } | null;
   price?: string;
   currencyCode?: string;
+  tags?: string[];
   skus: string[];
 };
 
@@ -89,7 +90,10 @@ export default function PartFinder({
         ) : results.length ? (
           <ul>
             {results.map((product) => {
-              const price = formatPrice(product.price, product.currencyCode);
+              const dealerOnly =
+                product.tags?.some((tag) => tag.toLowerCase() === 'garmin-dealer-only') ||
+                Number(product.price || '0') === 0;
+              const price = dealerOnly ? null : formatPrice(product.price, product.currencyCode);
               return (
                 <li key={product.id}>
                   <Link href={`/products/${encodeURIComponent(product.handle)}`}>
