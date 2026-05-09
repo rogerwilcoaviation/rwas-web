@@ -133,7 +133,16 @@ const FEATURED_COLLECTION_HANDLES = [
   'garmin-avionics',
   'garmin-avionics-certified-retail',
   'garmin-avionics-accessories',
+  'garmin-database-cards',
+  'garmin-traffic-weather-receivers',
+  'garmin-portable-gps-wearables',
   'garmin-watches',
+  'garmin-inreach-communicators',
+  'garmin-marine',
+  'garmin-cycling-fitness',
+  'garmin-golf',
+  'garmin-outdoor-dog-tracking',
+  'garmin-products',
   'retail-experimental',
   'on-sale',
 ] as const;
@@ -293,7 +302,7 @@ export async function getFeaturedCollections(): Promise<ShopifyCollectionSummary
       }
     `,
     {
-      first: 20, // safety margin: Shopify `handle:` query prefix-matches
+      first: 40, // safety margin: Shopify `handle:` query prefix-matches
       query: FEATURED_COLLECTION_HANDLES.map((handle) => `handle:${handle}`).join(' OR '),
     }
   );
@@ -944,7 +953,16 @@ export function isOtcCollection(handle: string): boolean {
     handle === 'garmin-avionics-certified-retail' ||
     handle === 'retail-experimental' ||
     handle === 'garmin-avionics-accessories' ||
+    handle === 'garmin-database-cards' ||
+    handle === 'garmin-traffic-weather-receivers' ||
+    handle === 'garmin-portable-gps-wearables' ||
     handle === 'garmin-watches' ||
+    handle === 'garmin-inreach-communicators' ||
+    handle === 'garmin-marine' ||
+    handle === 'garmin-cycling-fitness' ||
+    handle === 'garmin-golf' ||
+    handle === 'garmin-outdoor-dog-tracking' ||
+    handle === 'garmin-products' ||
     handle === 'papa-alpha-tools'
   );
 }

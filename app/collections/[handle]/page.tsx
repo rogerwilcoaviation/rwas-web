@@ -21,18 +21,60 @@ import Link from 'next/link';
 import { collectionMetaDescription, collectionSeoTitle, truncateMeta } from '@/lib/seo';
 
 const FALLBACK_COLLECTION_HANDLES = [
-  'on-sale',
+  'garmin-avionics',
   'garmin-avionics-certified-retail',
   'garmin-avionics-accessories',
+  'garmin-database-cards',
+  'garmin-traffic-weather-receivers',
+  'garmin-portable-gps-wearables',
   'garmin-watches',
+  'garmin-inreach-communicators',
+  'garmin-marine',
+  'garmin-cycling-fitness',
+  'garmin-golf',
+  'garmin-outdoor-dog-tracking',
+  'garmin-products',
   'retail-experimental',
+  'on-sale',
   'papa-alpha-tools',
 ];
+
+function labelFromGarminTag(tags: string[] | undefined, prefix: string) {
+  const tag = tags?.find((value) => value.startsWith(prefix));
+  if (!tag) return null;
+  return tag
+    .slice(prefix.length)
+    .split('-')
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function productSubcategory(product: { tags?: string[] }) {
+  return (
+    labelFromGarminTag(product.tags, 'garmin-family:') ||
+    labelFromGarminTag(product.tags, 'garmin-subcategory:') ||
+    'General'
+  );
+}
+
+function groupProductsBySubcategory<T extends { tags?: string[] }>(products: T[]) {
+  const groups = new Map<string, T[]>();
+  for (const product of products) {
+    const label = productSubcategory(product);
+    groups.set(label, [...(groups.get(label) || []), product]);
+  }
+  return Array.from(groups.entries()).sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
+}
 
 export async function generateStaticParams() {
   try {
     const collections = await getFeaturedCollections();
-    return collections.map((collection) => ({ handle: collection.handle }));
+    const handles = new Set([
+      ...collections.map((collection) => collection.handle),
+      ...FALLBACK_COLLECTION_HANDLES,
+    ]);
+    return Array.from(handles).map((handle) => ({ handle }));
   } catch {
     return FALLBACK_COLLECTION_HANDLES.map((handle) => ({ handle }));
   }
@@ -138,6 +180,7 @@ export default async function CollectionDetailPage({
     skus: (product.variants || []).map((variant) => variant.sku || '').filter(Boolean),
   }));
   const quoteOnly = isQuoteCollection(collection.handle);
+  const subcategoryGroups = groupProductsBySubcategory(indexableProducts);
   const canonicalUrl = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
   const itemListSchema = {
     '@context': 'https://schema.org',
@@ -220,13 +263,31 @@ export default async function CollectionDetailPage({
           </div>
 
           {indexableProducts.length ? (
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-              {indexableProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  collectionHandle={collection.handle}
-                />
+            <div style={{ display: 'grid', gap: 32 }}>
+              {subcategoryGroups.map(([subcategory, products]) => (
+                <section key={subcategory} aria-labelledby={`subcategory-${subcategory.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}>
+                  {subcategoryGroups.length > 1 ? (
+                    <div style={{ marginBottom: 14 }}>
+                      <p className="bs-kicker">Subcategory &middot; {products.length} item{products.length === 1 ? '' : 's'}</p>
+                      <h2
+                        id={`subcategory-${subcategory.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}
+                        className="bs-headline"
+                        style={{ marginTop: 4, marginBottom: 0 }}
+                      >
+                        {subcategory}
+                      </h2>
+                    </div>
+                  ) : null}
+                  <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+                    {products.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        collectionHandle={collection.handle}
+                      />
+                    ))}
+                  </div>
+                </section>
               ))}
             </div>
           ) : (
