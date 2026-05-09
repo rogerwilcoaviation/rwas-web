@@ -1759,3 +1759,36 @@ html, body {
   letter-spacing: .14em;
   text-transform: uppercase;
 }
+.broadsheet .bs-comparison-select-row td {
+  background: var(--bone);
+}
+.broadsheet .bs-current-selection,
+.broadsheet .bs-select-model-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 8px 10px;
+  border: 1px solid var(--ink-900);
+  font-family: var(--font-ui);
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  text-align: center;
+}
+.broadsheet .bs-current-selection {
+  color: var(--bone);
+  background: var(--ink-900);
+}
+.broadsheet .bs-select-model-link {
+  color: var(--ink-900);
+  background: color-mix(in srgb, var(--gold-700) 12%, var(--bone) 88%);
+  text-decoration: none;
+  box-shadow: 2px 2px 0 var(--ink-900);
+}
+.broadsheet .bs-select-model-link:hover,
+.broadsheet .bs-select-model-link:focus-visible {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink-900);
+}

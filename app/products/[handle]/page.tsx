@@ -695,11 +695,11 @@ export default async function ProductDetailPage({
                       return <td key={item.handle}>{brief?.highlights[0]?.copy || truncateMeta(item.description || item.title, 180)}</td>;
                     })}
                   </tr>
-                  <tr>
-                    <th>Action</th>
-                    <td className="current-product">Selected</td>
+                  <tr className="bs-comparison-select-row">
+                    <th>Select</th>
+                    <td className="current-product"><span className="bs-current-selection">Current selection</span></td>
                     {comparisonProducts.map((item) => (
-                      <td key={item.handle}><Link className="bs-compare-link" href={`/products/${item.handle}`}>View product</Link></td>
+                      <td key={item.handle}><Link className="bs-compare-link bs-select-model-link" href={`/products/${item.handle}`}>Select this model</Link></td>
                     ))}
                   </tr>
                 </tbody>
