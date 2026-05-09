@@ -298,71 +298,89 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
     };
   }
 
-  const data = await shopifyFetch<{
+  type CollectionProductNode = ShopifyCollectionProduct & {
+    variants: { edges: Array<{ node: ShopifyVariant }> };
+  };
+  type CollectionQueryResult = {
     collection: {
       id: string;
       title: string;
       handle: string;
       description: string;
       image?: ShopifyImage | null;
-      products: { edges: Array<{ node: ShopifyCollectionProduct & { variants: { edges: Array<{ node: ShopifyVariant }> } } }> };
+      products: {
+        pageInfo: { hasNextPage: boolean; endCursor: string | null };
+        edges: Array<{ node: CollectionProductNode }>;
+      };
     } | null;
-  }>(
-    `#graphql
-      query CollectionByHandle($handle: String!) {
-        collection(handle: $handle) {
-          id
-          title
-          handle
-          description
-          image {
-            url
-            altText
-          }
-          products(first: 48, sortKey: BEST_SELLING) {
-            edges {
-              node {
-                id
-                title
-                handle
-                description
-                availableForSale
-                tags
-                vendor
-                productType
-                featuredImage {
-                  url
-                  altText
-                }
-                priceRange {
-                  minVariantPrice {
-                    amount
-                    currencyCode
+  };
+
+  const products: ShopifyCollectionProduct[] = [];
+  let collectionMeta: Omit<ShopifyCollectionDetail, 'products'> | null = null;
+  let cursor: string | null = null;
+
+  do {
+    const data = await shopifyFetch<CollectionQueryResult>(
+      `#graphql
+        query CollectionByHandle($handle: String!, $after: String) {
+          collection(handle: $handle) {
+            id
+            title
+            handle
+            description
+            image {
+              url
+              altText
+            }
+            products(first: 250, after: $after, sortKey: BEST_SELLING) {
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
+              edges {
+                node {
+                  id
+                  title
+                  handle
+                  description
+                  availableForSale
+                  tags
+                  vendor
+                  productType
+                  featuredImage {
+                    url
+                    altText
                   }
-                }
-                variants(first: 20) {
-                  edges {
-                    node {
-                      id
-                      title
-                      availableForSale
-                      quantityAvailable
-                      sku
-                      selectedOptions {
-                        name
-                        value
-                      }
-                      price {
-                        amount
-                        currencyCode
-                      }
-                      compareAtPrice {
-                        amount
-                        currencyCode
-                      }
-                      image {
-                        url
-                        altText
+                  priceRange {
+                    minVariantPrice {
+                      amount
+                      currencyCode
+                    }
+                  }
+                  variants(first: 20) {
+                    edges {
+                      node {
+                        id
+                        title
+                        availableForSale
+                        quantityAvailable
+                        sku
+                        selectedOptions {
+                          name
+                          value
+                        }
+                        price {
+                          amount
+                          currencyCode
+                        }
+                        compareAtPrice {
+                          amount
+                          currencyCode
+                        }
+                        image {
+                          url
+                          altText
+                        }
                       }
                     }
                   }
@@ -371,23 +389,34 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
             }
           }
         }
-      }
-    `,
-    { handle }
-  );
+      `,
+      { handle, after: cursor }
+    );
 
-  if (!data.collection) return null;
+    if (!data.collection) return null;
+
+    collectionMeta ??= {
+      id: data.collection.id,
+      title: displayTitleForCollection(data.collection.handle, data.collection.title),
+      handle: data.collection.handle,
+      description: data.collection.description,
+      image: data.collection.image,
+    };
+
+    products.push(
+      ...data.collection.products.edges.map((edge) => ({
+        ...edge.node,
+        variants: mapVariants(edge.node.variants.edges),
+      }))
+    );
+    cursor = data.collection.products.pageInfo.hasNextPage
+      ? data.collection.products.pageInfo.endCursor
+      : null;
+  } while (cursor);
 
   return {
-    id: data.collection.id,
-    title: displayTitleForCollection(data.collection.handle, data.collection.title),
-    handle: data.collection.handle,
-    description: data.collection.description,
-    image: data.collection.image,
-    products: data.collection.products.edges.map((edge) => ({
-      ...edge.node,
-      variants: mapVariants(edge.node.variants.edges),
-    })),
+    ...collectionMeta,
+    products,
   };
 }
 
