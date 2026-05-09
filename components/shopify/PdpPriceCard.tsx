@@ -140,7 +140,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
           {hasSalePrice ? (
             <div className="map-line">
               <span className="seal">Normal Garmin List Price</span>
-              After the sale: {normalListPrice}
+              <span className="map-line-copy">After the sale: {normalListPrice}</span>
             </div>
           ) : null}
         </>

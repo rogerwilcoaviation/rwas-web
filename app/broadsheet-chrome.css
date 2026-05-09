@@ -1681,3 +1681,7 @@ html, body {
   font-size: 13px;
   color: var(--ink-800);
 }
+.broadsheet .bs-price-card .map-line-copy {
+  display: inline-block;
+  margin-left: 2px;
+}
