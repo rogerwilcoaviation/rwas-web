@@ -56,10 +56,18 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
           set -e
-          echo "Waiting 20s for edge propagation..."
-          sleep 20
           echo "=== SEO smoke ==="
-          npm run seo:smoke
+          for attempt in {1..12}; do
+            if npm run seo:smoke; then
+              break
+            fi
+            if [ "$attempt" -eq 12 ]; then
+              echo "SEO smoke failed after edge propagation retries."
+              exit 1
+            fi
+            echo "SEO smoke failed while the edge is propagating; retrying in 10s... ($attempt/12)"
+            sleep 10
+          done
           echo "=== /aircraft-for-sale ==="
           curl -sS -o /dev/null -w "HTTP %{http_code}\n" https://rogerwilcoaviation.com/aircraft-for-sale
           echo "=== /aircraft-for-sale/mnvmpdlz-ng1n0 (detail page) ==="

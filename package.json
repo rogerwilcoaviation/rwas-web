@@ -1,6 +1,6 @@
 {
   "name": "rwas-web",
-  "description": "Manage your money the easy way with Mevolut. Track expenses, send money, and grow your savings – safely and simply. Sign up free today!",
+  "description": "Roger Wilco Aviation Services builds, upgrades, and supports certified avionics, Garmin pilot gear, aircraft sales, and shop-backed aviation products.",
   "version": "1.0.0",
   "private": true,
   "scripts": {
