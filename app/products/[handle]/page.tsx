@@ -23,11 +23,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import PdpPriceCard, { type PdpVariant } from '@/components/shopify/PdpPriceCard';
 import {
+  FALLBACK_PRODUCT_HANDLES,
   getProductByHandle,
-  getProductHandles,
+  getSeoProductHandles,
   getProductsByTag,
   isOtcCollection,
   isOtcEligible,
+  PRIORITY_PRODUCT_HANDLES,
 } from '@/lib/shopify';
 import { productMetaDescription, productSeoTitle, truncateMeta } from '@/lib/seo';
 import {
@@ -53,23 +55,9 @@ function sanitizeProductHtml(html: string): string {
   return out;
 }
 
-const PRIORITY_PRODUCT_HANDLES = [
-  'd2-mach-2-47-mm-titanium-oxford-brown-leather-band',
-  'd2-mach-2-51-mm-carbon-gray-dlc-titanium-vented-titanium-bracelet',
-  'd2-mach-2-pro-51-mm-carbon-gray-dlc-titanium-chestnut-leather-band',
-];
-
-const FALLBACK_PRODUCT_HANDLES = [
-  ...PRIORITY_PRODUCT_HANDLES,
-  'garmin-g5-dg-hsi-stcd-for-certified-aircraft-with-lpm',
-  'garmin-g5-primary-electronic-attitude-display-stcd-for-certified-aircraft-with-lpm',
-  'garmin-gea-71b-enhanced',
-  'garmin-gfc-500-digital-autopilot',
-];
-
 export async function generateStaticParams() {
   try {
-    const handles = await getProductHandles(120);
+    const handles = await getSeoProductHandles();
     return Array.from(new Set([...PRIORITY_PRODUCT_HANDLES, ...handles])).map((handle) => ({ handle }));
   } catch {
     return FALLBACK_PRODUCT_HANDLES.map((handle) => ({ handle }));

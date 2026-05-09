@@ -123,6 +123,24 @@ const FEATURED_COLLECTION_HANDLES = [
   'on-sale',
 ] as const;
 
+export const PRIORITY_PRODUCT_HANDLES = [
+  'd2-mach-2-47-mm-titanium-oxford-brown-leather-band',
+  'd2-mach-2-51-mm-carbon-gray-dlc-titanium-vented-titanium-bracelet',
+  'd2-mach-2-pro-51-mm-carbon-gray-dlc-titanium-chestnut-leather-band',
+] as const;
+
+export const FALLBACK_PRODUCT_HANDLES = [
+  ...PRIORITY_PRODUCT_HANDLES,
+  'garmin-g5-dg-hsi-stcd-for-certified-aircraft-with-lpm',
+  'garmin-g5-primary-electronic-attitude-display-stcd-for-certified-aircraft-with-lpm',
+  'garmin-gea-71b-enhanced',
+  'garmin-gfc-500-digital-autopilot',
+] as const;
+
+export function isSeoSafeProductHandle(handle: string): boolean {
+  return /^[a-z0-9][a-z0-9-]*$/.test(handle);
+}
+
 const PAPA_ALPHA_SYNTHETIC: ShopifyCollectionSummary = {
   id: 'synthetic:papa-alpha-tools',
   handle: 'papa-alpha-tools',
@@ -356,6 +374,21 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
       variants: mapVariants(edge.node.variants.edges),
     })),
   };
+}
+
+export async function getSeoProductHandles(): Promise<string[]> {
+  const collections = await getFeaturedCollections();
+  const results = await Promise.allSettled(
+    collections.map((collection) => getCollectionByHandle(collection.handle))
+  );
+  const handles = results.flatMap((result) =>
+    result.status === 'fulfilled' && result.value
+      ? result.value.products.map((product) => product.handle)
+      : []
+  );
+
+  return Array.from(new Set([...PRIORITY_PRODUCT_HANDLES, ...handles]))
+    .filter(isSeoSafeProductHandle);
 }
 
 export async function getProductsByTag(tag: string, limit = 48): Promise<ShopifyCollectionProduct[]> {

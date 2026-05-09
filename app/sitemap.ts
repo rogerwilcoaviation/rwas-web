@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { siteConfig } from '@/data/config/site.settings';
 import blogData from '../public/blog-articles.json';
-import { getFeaturedCollections, getProductHandles } from '@/lib/shopify';
+import { getFeaturedCollections, getSeoProductHandles } from '@/lib/shopify';
 
 export const dynamic = 'force-static';
 
@@ -92,7 +92,7 @@ async function getShopEntries(siteUrl: string, today: string): Promise<MetadataR
   }
 
   try {
-    const productHandles = await getProductHandles(150);
+    const productHandles = await getSeoProductHandles();
     entries.push(
       ...productHandles.map((handle) => ({
         url: `${siteUrl}/products/${handle}`,

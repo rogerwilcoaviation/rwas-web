@@ -10,7 +10,12 @@ import {
   BroadsheetFooter,
   Specimen,
 } from '@/components/shared/broadsheet';
-import { getCollectionByHandle, getFeaturedCollections, isQuoteCollection } from '@/lib/shopify';
+import {
+  getCollectionByHandle,
+  getFeaturedCollections,
+  isQuoteCollection,
+  isSeoSafeProductHandle,
+} from '@/lib/shopify';
 import Link from 'next/link';
 import { collectionMetaDescription, collectionSeoTitle, truncateMeta } from '@/lib/seo';
 
@@ -115,6 +120,9 @@ export default async function CollectionDetailPage({
     );
   }
 
+  const indexableProducts = collection.products.filter((product) =>
+    isSeoSafeProductHandle(product.handle)
+  );
   const quoteOnly = isQuoteCollection(collection.handle);
   const canonicalUrl = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
   const itemListSchema = {
@@ -124,8 +132,8 @@ export default async function CollectionDetailPage({
     name: collection.title,
     description: truncateMeta(collection.description || collection.title, 500),
     url: canonicalUrl,
-    numberOfItems: collection.products.length,
-    itemListElement: collection.products.map((product, index) => ({
+    numberOfItems: indexableProducts.length,
+    itemListElement: indexableProducts.map((product, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       url: `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`,
@@ -146,7 +154,7 @@ export default async function CollectionDetailPage({
       <BulletinBar />
       <main className="bs-stage">
         <section className="hero-headline-group">
-          <p className="bs-kicker">Collection &middot; {collection.products.length} items</p>
+          <p className="bs-kicker">Collection &middot; {indexableProducts.length} items</p>
           <p className="bs-script-accent">&mdash; browse live inventory &mdash;</p>
           <h1 className="bs-headline bs-headline--hero">{collection.title}</h1>
           <p className="bs-subhead">
@@ -191,9 +199,9 @@ export default async function CollectionDetailPage({
             </p>
           </div>
 
-          {collection.products.length ? (
+          {indexableProducts.length ? (
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-              {collection.products.map((product) => (
+              {indexableProducts.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}
