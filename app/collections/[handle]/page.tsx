@@ -264,20 +264,10 @@ export default async function CollectionDetailPage({
 
           {indexableProducts.length ? (
             <div style={{ display: 'grid', gap: 32 }}>
-              {subcategoryGroups.map(([subcategory, products]) => (
-                <section key={subcategory} aria-labelledby={`subcategory-${subcategory.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}>
-                  {subcategoryGroups.length > 1 ? (
-                    <div style={{ marginBottom: 14 }}>
-                      <p className="bs-kicker">Subcategory &middot; {products.length} item{products.length === 1 ? '' : 's'}</p>
-                      <h2
-                        id={`subcategory-${subcategory.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}
-                        className="bs-headline"
-                        style={{ marginTop: 4, marginBottom: 0 }}
-                      >
-                        {subcategory}
-                      </h2>
-                    </div>
-                  ) : null}
+              {subcategoryGroups.map(([subcategory, products], index) => {
+                const sectionId = `subcategory-${subcategory.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`;
+                const defaultOpen = subcategoryGroups.length <= 3 || index < 2;
+                const productGrid = (
                   <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
                     {products.map((product) => (
                       <ProductCard
@@ -287,8 +277,45 @@ export default async function CollectionDetailPage({
                       />
                     ))}
                   </div>
-                </section>
-              ))}
+                );
+
+                if (subcategoryGroups.length <= 1) {
+                  return (
+                    <section key={subcategory} aria-labelledby={sectionId}>
+                      {productGrid}
+                    </section>
+                  );
+                }
+
+                return (
+                  <details
+                    key={subcategory}
+                    open={defaultOpen}
+                    className="rounded-[1.5rem] border border-black/10 bg-white/80 p-4 shadow-sm"
+                  >
+                    <summary className="cursor-pointer list-none rounded-[1rem] px-2 py-1 transition hover:bg-[#f5f3ef]">
+                      <span className="flex flex-wrap items-baseline justify-between gap-3">
+                        <span>
+                          <span className="bs-kicker block">Subcategory &middot; {products.length} item{products.length === 1 ? '' : 's'}</span>
+                          <span
+                            id={sectionId}
+                            className="bs-headline block"
+                            style={{ marginTop: 4, marginBottom: 0 }}
+                          >
+                            {subcategory}
+                          </span>
+                        </span>
+                        <span className="text-sm font-semibold uppercase tracking-[0.22em] text-black/50">
+                          Tap to open / close
+                        </span>
+                      </span>
+                    </summary>
+                    <div className="mt-5">
+                      {productGrid}
+                    </div>
+                  </details>
+                );
+              })}
             </div>
           ) : (
             <p className="bs-body">No products in this collection yet.</p>
