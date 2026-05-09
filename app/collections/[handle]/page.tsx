@@ -291,10 +291,10 @@ export default async function CollectionDetailPage({
                   <details
                     key={subcategory}
                     open={defaultOpen}
-                    className="rounded-[1.5rem] border border-black/10 bg-white/80 p-4 shadow-sm"
+                    className="w-fit max-w-full rounded-[1.5rem] border border-black/10 bg-white/80 p-2 shadow-sm transition-all duration-200 open:w-full open:p-4"
                   >
-                    <summary className="cursor-pointer list-none rounded-[1rem] px-2 py-1 transition hover:bg-[#f5f3ef]">
-                      <span className="flex flex-wrap items-baseline justify-between gap-3">
+                    <summary className="cursor-pointer list-none rounded-[1rem] px-3 py-2 transition hover:bg-[#f5f3ef]">
+                      <span className="inline-flex flex-wrap items-baseline justify-between gap-3">
                         <span>
                           <span className="bs-kicker block">Subcategory &middot; {products.length} item{products.length === 1 ? '' : 's'}</span>
                           <span
