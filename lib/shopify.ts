@@ -671,25 +671,40 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
   };
 }
 
-export async function getProductHandles(limit = 150): Promise<string[]> {
-  const data = await shopifyFetch<{
-    products: { edges: Array<{ node: { handle: string } }> };
-  }>(
-    `#graphql
-      query ProductHandles($first: Int!) {
-        products(first: $first, sortKey: UPDATED_AT, reverse: true) {
-          edges {
-            node {
-              handle
+export async function getProductHandles(limit = 3000): Promise<string[]> {
+  const handles: string[] = [];
+  let cursor: string | null = null;
+
+  do {
+    const data = await shopifyFetch<{
+      products: {
+        pageInfo: { hasNextPage: boolean; endCursor: string | null };
+        edges: Array<{ node: { handle: string } }>;
+      };
+    }>(
+      `#graphql
+        query ProductHandles($first: Int!, $after: String) {
+          products(first: $first, after: $after, sortKey: UPDATED_AT, reverse: true) {
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+            edges {
+              node {
+                handle
+              }
             }
           }
         }
-      }
-    `,
-    { first: limit }
-  );
+      `,
+      { first: Math.min(250, limit - handles.length), after: cursor }
+    );
 
-  return data.products.edges.map((edge) => edge.node.handle);
+    handles.push(...data.products.edges.map((edge) => edge.node.handle));
+    cursor = data.products.pageInfo.hasNextPage ? data.products.pageInfo.endCursor : null;
+  } while (cursor && handles.length < limit);
+
+  return handles;
 }
 
 export async function createCart(merchandiseId: string, quantity = 1) {

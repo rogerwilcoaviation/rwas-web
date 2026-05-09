@@ -25,7 +25,7 @@ import PdpPriceCard, { type PdpVariant } from '@/components/shopify/PdpPriceCard
 import {
   FALLBACK_PRODUCT_HANDLES,
   getProductByHandle,
-  getSeoProductHandles,
+  getProductHandles,
   getProductsByTag,
   isOtcCollection,
   isOtcEligible,
@@ -57,7 +57,7 @@ function sanitizeProductHtml(html: string): string {
 
 export async function generateStaticParams() {
   try {
-    const handles = await getSeoProductHandles();
+    const handles = await getProductHandles();
     return Array.from(new Set([...PRIORITY_PRODUCT_HANDLES, ...handles])).map((handle) => ({ handle }));
   } catch {
     return FALLBACK_PRODUCT_HANDLES.map((handle) => ({ handle }));
