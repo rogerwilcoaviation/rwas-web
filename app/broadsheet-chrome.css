@@ -1615,3 +1615,69 @@ html, body {
 @media (max-width: 520px) {
   .broadsheet .panel-planner-cta-row { grid-template-columns: 1fr; }
 }
+
+/* D2 Mach 2 product briefing — aviation-specific PDP polish */
+.broadsheet .bs-pilot-briefing {
+  background: color-mix(in srgb, var(--bone) 92%, white 8%);
+  border: 1px solid var(--rule);
+  border-left: 5px solid var(--gold-700);
+  box-shadow: var(--specimen-shadow);
+  margin: 0 0 24px;
+  padding: 20px 22px;
+}
+.broadsheet .bs-section-kicker {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--gold-800);
+  margin-bottom: 8px;
+}
+.broadsheet .bs-pilot-briefing h2 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.05;
+  color: var(--ink-900);
+}
+.broadsheet .bs-pilot-briefing p {
+  margin: 0 0 16px;
+  color: var(--ink-800);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.broadsheet .bs-brief-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 860px) {
+  .broadsheet .bs-brief-grid { grid-template-columns: 1fr; }
+}
+.broadsheet .bs-brief-card {
+  background: rgba(255,255,255,.55);
+  border: 1px solid var(--rule-soft);
+  padding: 13px 14px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-800);
+}
+.broadsheet .bs-brief-card span {
+  display: block;
+  margin-bottom: 5px;
+  font-family: var(--font-ui);
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-900);
+}
+.broadsheet .bs-promo-note {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule-soft);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--ink-800);
+}

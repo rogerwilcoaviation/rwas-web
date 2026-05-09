@@ -177,6 +177,56 @@ function gateFromProduct(
   return { otc, stockCheckRequired, mapLocked, isGarmin };
 }
 
+const D2_WATCH_BRIEFINGS: Record<string, {
+  caseSize: string;
+  finish: string;
+  band: string;
+  display: string;
+  battery: string;
+  saleNote: string;
+  highlights: Array<{ label: string; copy: string }>;
+}> = {
+  'd2-mach-2-47-mm-titanium-oxford-brown-leather-band': {
+    caseSize: '47 mm',
+    finish: 'Titanium case',
+    band: 'Oxford Brown leather band',
+    display: 'AMOLED display with sapphire lens',
+    battery: 'Up to 24 days in smartwatch mode',
+    saleNote: 'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
+    highlights: [
+      { label: 'Flight-ready tools', copy: 'Moving-map style aviation tools, nearest-airport/direct-to functions, HSI course guidance, timers and UTC/time-zone references.' },
+      { label: 'Weather before launch', copy: 'Pilot-focused weather views including METAR/TAF awareness, NEXRAD, winds and temperature overlays when paired with the Garmin ecosystem.' },
+      { label: 'Daily performance watch', copy: 'Health monitoring, training readiness, suggested workouts and travel recovery tools in a dress-watch aviation package.' },
+    ],
+  },
+  'd2-mach-2-51-mm-carbon-gray-dlc-titanium-vented-titanium-bracelet': {
+    caseSize: '51 mm',
+    finish: 'Carbon Gray DLC titanium',
+    band: 'Vented titanium bracelet',
+    display: '1.4-inch AMOLED display with sapphire lens',
+    battery: 'Up to 24 days in smartwatch mode',
+    saleNote: 'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
+    highlights: [
+      { label: 'Premium cockpit watch', copy: 'Larger 51 mm case, titanium bracelet, UTC bezel styling and aviation-first widgets for pilots who want a more substantial watch.' },
+      { label: 'Advanced flight awareness', copy: 'Airport data, moving-map style navigation, weather awareness and flight logging support through Garmin’s aviation ecosystem.' },
+      { label: 'Everyday capability', copy: 'Built-in LED flashlight, red shift mode, fitness metrics and long battery life for travel days as well as flight days.' },
+    ],
+  },
+  'd2-mach-2-pro-51-mm-carbon-gray-dlc-titanium-chestnut-leather-band': {
+    caseSize: '51 mm',
+    finish: 'Carbon Gray DLC titanium',
+    band: 'Chestnut leather band',
+    display: '1.4-inch AMOLED display with sapphire lens',
+    battery: 'Up to 24 days in smartwatch mode',
+    saleNote: 'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
+    highlights: [
+      { label: 'D2 Mach 2 Pro connectivity', copy: 'Adds Garmin inReach technology with LTE and satellite connectivity between flights for messaging, LiveTrack and SOS features.' },
+      { label: 'Ultimate aviator toolset', copy: 'Dynamic flight mapping, HSI guidance, nearest-airport navigation, PlaneSync compatibility and Garmin Pilot integration.' },
+      { label: 'Important service note', copy: 'inReach/LTE features require an active Garmin subscription and are intended for ground use between flights, subject to coverage and regional availability.' },
+    ],
+  },
+};
+
 export default async function ProductDetailPage({
   params,
 }: {
@@ -226,6 +276,7 @@ export default async function ProductDetailPage({
   const primaryPrice = product.variants[0]?.price;
   const normalListPrice = product.variants[0]?.compareAtPrice;
   const hasSalePrice = Boolean(normalListPrice && primaryPrice && Number(normalListPrice.amount) > Number(primaryPrice.amount));
+  const d2Briefing = D2_WATCH_BRIEFINGS[product.handle];
   const visibleOptions = product.options.filter((opt) => !isPlaceholderOption(opt));
 
   // Breadcrumb dateline
@@ -324,7 +375,7 @@ export default async function ProductDetailPage({
                 </span>
               ))}
             </div>
-            <p className="bs-product-kicker">From the workbench</p>
+            <p className="bs-product-kicker">{d2Briefing ? 'Authorized Garmin aviation dealer offering' : 'From the workbench'}</p>
             <h1 className="bs-product-headline">{product.title}</h1>
             {cleanDescText ? (
               <p className="bs-product-subhead">{cleanDescText}</p>
@@ -362,6 +413,29 @@ export default async function ProductDetailPage({
                 className="bs-body bs-body--rich"
                 dangerouslySetInnerHTML={{ __html: sanitizeProductHtml(product.descriptionHtml || product.description || '') }}
               />
+            ) : null}
+
+            {d2Briefing ? (
+              <section className="bs-pilot-briefing" aria-label="Pilot briefing">
+                <div className="bs-section-kicker">Pilot briefing</div>
+                <h2>Built for the flight deck, sold by an aviation shop</h2>
+                <p>
+                  RWAS presents the D2 Mach 2 line as an aviation product first: exact Garmin SKU,
+                  current promotional price, normal Garmin list price after the sale, and practical
+                  pilot notes before you buy.
+                </p>
+                <div className="bs-brief-grid">
+                  {d2Briefing.highlights.map((item) => (
+                    <div className="bs-brief-card" key={item.label}>
+                      <span>{item.label}</span>
+                      {item.copy}
+                    </div>
+                  ))}
+                </div>
+                <div className="bs-promo-note">
+                  <strong>Current Garmin promotion:</strong> {d2Briefing.saleNote}
+                </div>
+              </section>
             ) : null}
 
             {/* Trust strip */}
@@ -422,6 +496,15 @@ export default async function ProductDetailPage({
                   ) : null}
                   {firstSku ? (
                     <tr><th>SKU</th><td>{firstSku}</td></tr>
+                  ) : null}
+                  {d2Briefing ? (
+                    <>
+                      <tr><th>Case Size</th><td>{d2Briefing.caseSize}</td></tr>
+                      <tr><th>Finish</th><td>{d2Briefing.finish}</td></tr>
+                      <tr><th>Band</th><td>{d2Briefing.band}</td></tr>
+                      <tr><th>Display</th><td>{d2Briefing.display}</td></tr>
+                      <tr><th>Battery</th><td>{d2Briefing.battery}</td></tr>
+                    </>
                   ) : null}
                   {primaryPrice && !(gating.isGarmin && gating.otc !== 'eligible') ? (
                     <tr>
