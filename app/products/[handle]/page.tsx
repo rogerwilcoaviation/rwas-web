@@ -224,6 +224,8 @@ export default async function ProductDetailPage({
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
   const primaryPrice = product.variants[0]?.price;
+  const normalListPrice = product.variants[0]?.compareAtPrice;
+  const hasSalePrice = Boolean(normalListPrice && primaryPrice && Number(normalListPrice.amount) > Number(primaryPrice.amount));
   const visibleOptions = product.options.filter((opt) => !isPlaceholderOption(opt));
 
   // Breadcrumb dateline
@@ -240,6 +242,7 @@ export default async function ProductDetailPage({
     title: v.title,
     sku: v.sku,
     price: v.price,
+    compareAtPrice: v.compareAtPrice,
     availableForSale: v.availableForSale,
     selectedOptions: v.selectedOptions,
   }));
@@ -362,8 +365,8 @@ export default async function ProductDetailPage({
                 <span className="lab">Order &amp; fulfillment</span>
                 {gating.isGarmin && gating.otc === 'eligible' && !gating.stockCheckRequired ? (
                   <>
-                    Garmin watches and direct-ship accessories are sold at Garmin List Price (MAP)
-                    and ship direct from Garmin. RWAS processes the order and handles warranty claims.
+                    Garmin watches are sold at the current Garmin promotional sale price when applicable.
+                    Garmin delivers to RWAS first; RWAS then delivers to the customer and handles warranty claims.
                   </>
                 ) : gating.isGarmin ? (
                   <>
@@ -417,8 +420,14 @@ export default async function ProductDetailPage({
                   ) : null}
                   {primaryPrice && !(gating.isGarmin && gating.otc !== 'eligible') ? (
                     <tr>
-                      <th>Price</th>
-                      <td>{formatPrice(primaryPrice.amount, primaryPrice.currencyCode)}</td>
+                      <th>{hasSalePrice ? 'Sale Price' : 'Price'}</th>
+                      <td><strong>{formatPrice(primaryPrice.amount, primaryPrice.currencyCode)}</strong></td>
+                    </tr>
+                  ) : null}
+                  {hasSalePrice && normalListPrice ? (
+                    <tr>
+                      <th>Normal List Price After Sale</th>
+                      <td>{formatPrice(normalListPrice.amount, normalListPrice.currencyCode)}</td>
                     </tr>
                   ) : null}
                   {visibleOptions.map((opt) => (

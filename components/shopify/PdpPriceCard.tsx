@@ -27,6 +27,7 @@ export type PdpVariant = {
   title: string;
   sku?: string | null;
   price: Money;
+  compareAtPrice?: Money | null;
   availableForSale: boolean;
   selectedOptions: Array<{ name: string; value: string }>;
 };
@@ -84,6 +85,10 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
   const displayPrice = selected?.price
     ? formatPrice(selected.price.amount, selected.price.currencyCode)
     : 'Contact for pricing';
+  const normalListPrice = selected?.compareAtPrice
+    ? formatPrice(selected.compareAtPrice.amount, selected.compareAtPrice.currencyCode)
+    : null;
+  const hasSalePrice = Boolean(normalListPrice && selected?.price && Number(selected.compareAtPrice?.amount) > Number(selected.price.amount));
 
   const multiVariant = variants.length > 1;
   const contactHref = selected?.sku
@@ -125,17 +130,23 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
     <div className="bs-price-card">
       {!isNonOtcGarmin ? (
         <>
-          <div className="label">Price</div>
+          <div className="label">{hasSalePrice ? 'Sale Price' : 'Price'}</div>
           <div className="price-row">
-            <div className="price">{displayPrice}</div>
+            <div className="price"><strong>{displayPrice}</strong></div>
             {stockPill ? (
               <span className={`stock${otcEligible ? ' stock--ok' : ''}`}>{stockPill}</span>
             ) : null}
           </div>
+          {hasSalePrice ? (
+            <div className="map-line">
+              <span className="seal">Normal Garmin List Price</span>
+              After the sale: {normalListPrice}
+            </div>
+          ) : null}
         </>
       ) : null}
 
-      {mapLocked && !isNonOtcGarmin ? (
+      {mapLocked && !isNonOtcGarmin && !hasSalePrice ? (
         <div className="map-line">
           <span className="seal">Garmin List Price</span>
           Sold at MAP — no markup, no markdown.
