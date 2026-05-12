@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-05-12T14:59:36.878454+00:00",
+    "last_updated": "2026-05-12T15:16:47.043509+00:00",
     "total_articles": 14,
     "categories": [
       "regulatory",
@@ -50,7 +50,7 @@
       "image_alt": "Electroair electronic ignition system kit components for aircraft installation.",
       "social": {
         "facebook": {
-          "status": "pending",
+          "status": "published",
           "text": "RWAS is working with Electroair to support electronic ignition installations for piston aircraft owners.\n\nElectronic ignition is more than a \u201creplace a magneto\u201d job. A proper installation means confirming aircraft and engine eligibility, reviewing STC/applicability data, planning wiring and switching, addressing power and backup considerations where applicable, documenting the work correctly, and returning the aircraft to service through the right maintenance process.\n\nFor eligible aircraft, Electroair electronic ignition can bring modern spark timing, high-energy ignition, smoother operation, and potential fuel-efficiency benefits compared with a traditional magneto-only setup.\n\nInterested in an Electroair electronic ignition installation? Contact RWAS and we\u2019ll review the airplane, the engine, and the installation path before quoting the work.\n\nElectroair contact: 248.674.3433 | sales@electroair.net | https://www.electroair.net/\nTag Electroair on Facebook: @AircraftElectronicIgnitionSystems\nhttps://www.facebook.com/AircraftElectronicIgnitionSystems/\n\n#RogerWilcoAviation #Electroair #ElectronicIgnition #AircraftMaintenance #PistonAircraft #Lycoming #Continental #Avionics #GeneralAviation",
           "tag_pages": [
             {
@@ -58,11 +58,14 @@
               "url": "https://www.facebook.com/AircraftElectronicIgnitionSystems/",
               "handle": "@AircraftElectronicIgnitionSystems"
             }
-          ]
+          ],
+          "published_at": "2026-05-12T15:15:29.297615+00:00",
+          "post_id": "106057782039473_969403385846867"
         },
         "instagram": {
           "status": "pending",
-          "text": "Modern ignition, installed like it matters.\n\nRWAS is working with Electroair to support electronic ignition installations for eligible piston aircraft.\n\nThis is not just a parts swap. It means eligibility review, approved data, clean wiring, switching and power considerations, documentation, testing, and a proper return-to-service path.\n\nFor the right aircraft, electronic ignition can offer modern spark timing, smoother operation, and potential efficiency benefits over a traditional magneto-only setup.\n\n#RogerWilcoAviation #Electroair #ElectronicIgnition #AircraftMaintenance #PistonAircraft #GeneralAviation #Avionics #Lycoming #Continental\n\nElectroair contact: 248.674.3433 | sales@electroair.net | electroair.net\nFacebook: facebook.com/AircraftElectronicIgnitionSystems"
+          "text": "Modern ignition, installed like it matters.\n\nRWAS is working with Electroair to support electronic ignition installations for eligible piston aircraft.\n\nThis is not just a parts swap. It means eligibility review, approved data, clean wiring, switching and power considerations, documentation, testing, and a proper return-to-service path.\n\nFor the right aircraft, electronic ignition can offer modern spark timing, smoother operation, and potential efficiency benefits over a traditional magneto-only setup.\n\n#RogerWilcoAviation #Electroair #ElectronicIgnition #AircraftMaintenance #PistonAircraft #GeneralAviation #Avionics #Lycoming #Continental\n\nElectroair contact: 248.674.3433 | sales@electroair.net | electroair.net\nFacebook: facebook.com/AircraftElectronicIgnitionSystems",
+          "image": "/images/social/electroair-electronic-ignition-instagram-20260512.jpg"
         }
       },
       "electroair_contact": {
