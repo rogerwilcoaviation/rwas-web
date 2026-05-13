@@ -316,6 +316,8 @@ export async function getFeaturedCollections(): Promise<ShopifyCollectionSummary
   ).filter(Boolean) as ShopifyCollectionSummary[]).map((node) => ({
     ...node,
     title: displayTitleForCollection(node.handle, node.title),
+    description: descriptionForCollection(node.handle, node.description),
+    image: imageForCollection(node.handle, node.image),
   }));
 
   // Papa-Alpha Tools isn't a real Shopify collection; synthesize from tag=papa-alpha.
@@ -432,8 +434,8 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
       id: data.collection.id,
       title: displayTitleForCollection(data.collection.handle, data.collection.title),
       handle: data.collection.handle,
-      description: data.collection.description,
-      image: data.collection.image,
+      description: descriptionForCollection(data.collection.handle, data.collection.description),
+      image: imageForCollection(data.collection.handle, data.collection.image),
     };
 
     products.push(
@@ -1012,6 +1014,74 @@ export function cartPermalink(variantGid?: string | null, quantity = 1): string 
 export function displayTitleForCollection(handle: string, shopifyTitle: string): string {
   if (handle === 'garmin-avionics') return 'Garmin Avionics \u2014 Dealer Only';
   return shopifyTitle;
+}
+
+const COLLECTION_DESCRIPTION_OVERRIDES: Record<string, string> = {
+  'garmin-avionics':
+    'Certified-aircraft Garmin avionics supported by Roger Wilco Aviation Services, an authorized Garmin dealer and FAA Part 145 repair station. Quote and installation coordination required.',
+  'garmin-avionics-certified-retail':
+    'Garmin certified-aircraft avionics catalog staging area. For active certified avionics inventory, start with the Garmin Avionics dealer collection.',
+  'garmin-avionics-accessories':
+    'Garmin installation kits, cable assemblies, brackets, racks, and service hardware for avionics projects supported by RWAS.',
+  'garmin-database-cards':
+    'Garmin database cards, data media, and navigation-data accessories for supported avionics systems.',
+  'garmin-traffic-weather-receivers':
+    'Garmin traffic, weather, datalink, and receiver equipment for supported aircraft installations.',
+  'garmin-portable-gps-wearables':
+    'Portable Garmin aviation GPS, pilot wearables, satellite communicators, and cockpit-ready accessories.',
+  'garmin-watches':
+    'Garmin watches and watch accessories, including D2 aviator watches, multisport smartwatches, bands, and wearable accessories.',
+  'garmin-inreach-communicators':
+    'Garmin inReach satellite communicators and accessories for pilots, backcountry operators, and remote travel.',
+  'garmin-marine':
+    'Garmin marine electronics, sensors, and chartplotter-related equipment available through RWAS catalog support.',
+  'garmin-cycling-fitness':
+    'Garmin cycling and fitness devices, sensors, and training accessories for lifestyle and performance customers.',
+  'garmin-golf':
+    'Garmin golf watches, rangefinders, launch monitors, and course tools available through the RWAS catalog.',
+  'garmin-outdoor-dog-tracking':
+    'Garmin outdoor, handheld GPS, and dog tracking equipment for field, hunting, and adventure use.',
+  'garmin-products':
+    'A broad Garmin catalog view across avionics, pilot gear, marine, outdoor, fitness, and service-related products.',
+  'retail-experimental':
+    'Garmin experimental and LSA avionics plus related replacement parts, sensor kits, documentation, and service items.',
+  'on-sale':
+    'Current RWAS sale items, including Garmin pilot gear, avionics accessories, and shop-supported aviation products.',
+};
+
+function isPlaceholderCollectionDescription(description: string): boolean {
+  const clean = description.trim();
+  return (
+    !clean ||
+    /^browse this rwas collection\.?$/i.test(clean) ||
+    /passion for functionality and presentation/i.test(clean)
+  );
+}
+
+export function descriptionForCollection(handle: string, shopifyDescription: string): string {
+  if (isPlaceholderCollectionDescription(shopifyDescription)) {
+    return COLLECTION_DESCRIPTION_OVERRIDES[handle] || shopifyDescription;
+  }
+
+  return shopifyDescription;
+}
+
+export function imageForCollection(
+  handle: string,
+  shopifyImage?: ShopifyImage | null
+): ShopifyImage | null | undefined {
+  if (handle !== 'garmin-avionics-certified-retail' || !shopifyImage?.url) {
+    return shopifyImage;
+  }
+
+  if (!/GARMIN_EXPERIMENTAL_BANNER_MAIN4/i.test(shopifyImage.url)) {
+    return shopifyImage;
+  }
+
+  return {
+    url: 'https://cdn.shopify.com/s/files/1/0746/0073/6923/collections/GARMIN_AVIONICS_BANNER_MAIN_2220x600.webp',
+    altText: 'Garmin certified avionics supported by Roger Wilco Aviation Services',
+  };
 }
 
 export function isQuoteCollection(handle: string) {

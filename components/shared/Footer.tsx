@@ -6,8 +6,8 @@ const collectionLinks = [
     label: 'Garmin install-only',
   },
   {
-    href: '/collections/garmin-avionics-certified-retail',
-    label: 'Garmin retail',
+    href: '/collections/garmin-avionics',
+    label: 'Garmin certified',
   },
   {
     href: '/collections/garmin-avionics-accessories',

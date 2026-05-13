@@ -65,7 +65,7 @@ export default async function CollectionsPage() {
           </p>
           <p className="bs-byline">RWAS Avionics Desk &middot; Yankton, SD &middot; KYKN</p>
           <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Link href="/collections/garmin-avionics-certified-retail" className="bs-cta-primary">
+            <Link href="/collections/garmin-avionics" className="bs-cta-primary">
               Start with Garmin
             </Link>
             <Link href="/collections/papa-alpha-tools" className="bs-cta-secondary">
