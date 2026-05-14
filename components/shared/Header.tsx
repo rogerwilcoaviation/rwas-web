@@ -4,8 +4,24 @@ import Link from 'next/link';
 
 const collectionLinks = [
   {
-    href: '/collections/garmin-avionics',
-    label: 'Garmin',
+    href: '/collections/avionics-certified',
+    label: 'Certified Avionics',
+  },
+  {
+    href: '/collections/avionics-experimental',
+    label: 'Experimental',
+  },
+  {
+    href: '/collections/pilot-gear',
+    label: 'Pilot Gear',
+  },
+  {
+    href: '/collections/watches-accessories',
+    label: 'Watches',
+  },
+  {
+    href: '/collections/garmin-dealer-install',
+    label: 'Install Parts',
   },
   {
     href: '/collections/papa-alpha-tools',

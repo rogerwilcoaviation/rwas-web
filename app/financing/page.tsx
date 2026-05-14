@@ -163,7 +163,7 @@ export default function FinancingPage() {
               <span className="bs-kicker">Browse Products</span>
               <ul>
                 <li>
-                  <a href="/collections/garmin-avionics">Garmin Avionics</a>
+                  <a href="/collections/avionics-certified">Garmin Avionics</a>
                   <span className="arr">&rarr;</span>
                 </li>
                 <li>

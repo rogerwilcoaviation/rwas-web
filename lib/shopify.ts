@@ -130,20 +130,12 @@ const STOREFRONT_TOKEN =
 const API_VERSION = process.env.SHOPIFY_STOREFRONT_API_VERSION || '2026-01';
 
 const FEATURED_COLLECTION_HANDLES = [
-  'garmin-avionics',
-  'garmin-avionics-certified-retail',
-  'garmin-avionics-accessories',
-  'garmin-database-cards',
-  'garmin-traffic-weather-receivers',
-  'garmin-portable-gps-wearables',
-  'garmin-watches',
-  'garmin-inreach-communicators',
-  'garmin-marine',
-  'garmin-cycling-fitness',
-  'garmin-golf',
-  'garmin-outdoor-dog-tracking',
-  'garmin-products',
-  'retail-experimental',
+  'avionics-certified',
+  'avionics-experimental',
+  'pilot-gear',
+  'watches-accessories',
+  'garmin-dealer-install',
+  'papa-alpha-tools',
   'on-sale',
 ] as const;
 
@@ -175,6 +167,48 @@ const PAPA_ALPHA_SYNTHETIC: ShopifyCollectionSummary = {
     altText: 'Papa-Alpha precision rigging tool kit for Piper airframes',
   },
 };
+
+const PRODUCT_TYPE_COLLECTIONS: Record<
+  string,
+  { title: string; productType: string }
+> = {
+  'avionics-certified': {
+    title: 'Avionics — Certified',
+    productType: 'Avionics — Certified',
+  },
+  'avionics-experimental': {
+    title: 'Avionics — Experimental',
+    productType: 'Avionics — Experimental',
+  },
+  'pilot-gear': {
+    title: 'Pilot Gear',
+    productType: 'Pilot Gear',
+  },
+  'watches-accessories': {
+    title: 'Watches & Accessories',
+    productType: 'Watches & Accessories',
+  },
+  'garmin-dealer-install': {
+    title: 'Garmin Dealer Install',
+    productType: 'Garmin Dealer Install',
+  },
+  'papa-alpha-tools': {
+    title: 'Papa-Alpha Tools',
+    productType: 'Papa-Alpha Tools',
+  },
+};
+
+function productTypeCollectionSummary(handle: string): ShopifyCollectionSummary | null {
+  const meta = PRODUCT_TYPE_COLLECTIONS[handle];
+  if (!meta) return null;
+  return {
+    id: `product-type:${handle}`,
+    handle,
+    title: meta.title,
+    description: descriptionForCollection(handle, ''),
+    image: imageForCollection(handle, null),
+  };
+}
 
 function isFallbackProductImage(image?: ShopifyImage | null): boolean {
   const haystack = `${image?.url || ''} ${image?.altText || ''}`.toLowerCase();
@@ -320,19 +354,22 @@ export async function getFeaturedCollections(): Promise<ShopifyCollectionSummary
     image: imageForCollection(node.handle, node.image),
   }));
 
-  // Papa-Alpha Tools isn't a real Shopify collection; synthesize from tag=papa-alpha.
-  return [...shopifyFeatured, PAPA_ALPHA_SYNTHETIC];
+  const byHandle = new Map<string, ShopifyCollectionSummary>(
+    shopifyFeatured.map((collection) => [collection.handle, collection])
+  );
+  for (const handle of FEATURED_COLLECTION_HANDLES) {
+    if (!byHandle.has(handle)) {
+      const fallback = productTypeCollectionSummary(handle);
+      if (fallback) byHandle.set(handle, fallback);
+    }
+  }
+
+  return FEATURED_COLLECTION_HANDLES.map((handle) => byHandle.get(handle)).filter(
+    Boolean
+  ) as ShopifyCollectionSummary[];
 }
 
 export async function getCollectionByHandle(handle: string): Promise<ShopifyCollectionDetail | null> {
-  if (handle === 'papa-alpha-tools') {
-    const products = await getProductsByTag('papa-alpha');
-    return {
-      ...PAPA_ALPHA_SYNTHETIC,
-      products,
-    };
-  }
-
   type CollectionProductNode = ShopifyCollectionProduct & {
     variants: { edges: Array<{ node: ShopifyVariant }> };
   };
@@ -428,7 +465,15 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
       { handle, after: cursor }
     );
 
-    if (!data.collection) return null;
+    if (!data.collection) {
+      const fallback = productTypeCollectionSummary(handle);
+      const productType = PRODUCT_TYPE_COLLECTIONS[handle]?.productType;
+      if (!fallback || !productType) return null;
+      return {
+        ...fallback,
+        products: await getProductsByProductType(productType),
+      };
+    }
 
     collectionMeta ??= {
       id: data.collection.id,
@@ -628,6 +673,102 @@ export async function getProductsByTag(tag: string, limit = 48): Promise<Shopify
     ...edge.node,
     variants: mapVariants(edge.node.variants.edges),
   }));
+}
+
+export async function getProductsByProductType(
+  productType: string,
+  limit = 1000
+): Promise<ShopifyCollectionProduct[]> {
+  const products: ShopifyCollectionProduct[] = [];
+  let cursor: string | null = null;
+
+  do {
+    const data = await shopifyFetch<{
+      products: {
+        pageInfo: { hasNextPage: boolean; endCursor: string | null };
+        edges: Array<{
+          node: ShopifyCollectionProduct & {
+            variants: { edges: Array<{ node: ShopifyVariant }> };
+          };
+        }>;
+      };
+    }>(
+      `#graphql
+        query ProductsByProductType($first: Int!, $after: String, $query: String!) {
+          products(first: $first, after: $after, query: $query, sortKey: TITLE) {
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+            edges {
+              node {
+                id
+                title
+                handle
+                description
+                availableForSale
+                vendor
+                productType
+                tags
+                featuredImage {
+                  url
+                  altText
+                }
+                priceRange {
+                  minVariantPrice {
+                    amount
+                    currencyCode
+                  }
+                }
+                variants(first: 20) {
+                  edges {
+                    node {
+                      id
+                      title
+                      availableForSale
+                      quantityAvailable
+                      sku
+                      selectedOptions {
+                        name
+                        value
+                      }
+                      price {
+                        amount
+                        currencyCode
+                      }
+                      compareAtPrice {
+                        amount
+                        currencyCode
+                      }
+                      image {
+                        url
+                        altText
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `,
+      {
+        first: Math.min(250, limit - products.length),
+        after: cursor,
+        query: `product_type:"${productType}"`,
+      }
+    );
+
+    products.push(
+      ...data.products.edges.map((edge) => ({
+        ...edge.node,
+        variants: mapVariants(edge.node.variants.edges),
+      }))
+    );
+    cursor = data.products.pageInfo.hasNextPage ? data.products.pageInfo.endCursor : null;
+  } while (cursor && products.length < limit);
+
+  return sortProductsByImagePriority(products);
 }
 
 export async function getProductByHandle(handle: string): Promise<ShopifyProductDetail | null> {
@@ -947,24 +1088,15 @@ export async function getCart(cartId: string) {
  */
 export function isOtcCollection(handle: string): boolean {
   // Collection-level OTC for the PDP buy box (2026-04-21 PM revision).
-  // Every catalog collection EXCEPT the quote-only "Garmin Avionics for
-  // Certified Aircraft (RWAS Install Only)" (handle: garmin-avionics) gets
+  // Every catalog collection EXCEPT certified avionics gets
   // an Add-to-Cart button on the PDP. Collection grids do NOT render
   // Add-to-cart — that's enforced separately in ProductCard.
   return (
-    handle === 'garmin-avionics-certified-retail' ||
-    handle === 'retail-experimental' ||
-    handle === 'garmin-avionics-accessories' ||
-    handle === 'garmin-database-cards' ||
-    handle === 'garmin-traffic-weather-receivers' ||
-    handle === 'garmin-portable-gps-wearables' ||
-    handle === 'garmin-watches' ||
-    handle === 'garmin-inreach-communicators' ||
-    handle === 'garmin-marine' ||
-    handle === 'garmin-cycling-fitness' ||
-    handle === 'garmin-golf' ||
-    handle === 'garmin-outdoor-dog-tracking' ||
-    handle === 'garmin-products' ||
+    handle === 'avionics-experimental' ||
+    handle === 'pilot-gear' ||
+    handle === 'watches-accessories' ||
+    handle === 'garmin-dealer-install' ||
+    handle === 'on-sale' ||
     handle === 'papa-alpha-tools'
   );
 }
@@ -1005,46 +1137,26 @@ export function cartPermalink(variantGid?: string | null, quantity = 1): string 
  * Display-title override for Shopify collections. Lets rwas-web present
  * a cleaner name to customers without touching Shopify's collection title.
  *
- * Current overrides:
- *   - garmin-avionics: Shopify has "Garmin Avionics for Certified Aircraft
- *     (RWAS Install Only)". Rendered as "Garmin Avionics — Dealer Only".
- *     Rationale: shorter, clearer positioning — this collection is
- *     dealer-only (quote-only, no Add-to-cart) per 2026-04-21 PM direction.
+ * Current overrides: none. Shopify collection titles already match the
+ * Phase 3 structure.
  */
 export function displayTitleForCollection(handle: string, shopifyTitle: string): string {
-  if (handle === 'garmin-avionics') return 'Garmin Avionics \u2014 Dealer Only';
   return shopifyTitle;
 }
 
 const COLLECTION_DESCRIPTION_OVERRIDES: Record<string, string> = {
-  'garmin-avionics':
-    'Certified-aircraft Garmin avionics supported by Roger Wilco Aviation Services, an authorized Garmin dealer and FAA Part 145 repair station. Quote and installation coordination required.',
-  'garmin-avionics-certified-retail':
-    'Garmin certified-aircraft avionics catalog staging area. For active certified avionics inventory, start with the Garmin Avionics dealer collection.',
-  'garmin-avionics-accessories':
-    'Garmin installation kits, cable assemblies, brackets, racks, and service hardware for avionics projects supported by RWAS.',
-  'garmin-database-cards':
-    'Garmin database cards, data media, and navigation-data accessories for supported avionics systems.',
-  'garmin-traffic-weather-receivers':
-    'Garmin traffic, weather, datalink, and receiver equipment for supported aircraft installations.',
-  'garmin-portable-gps-wearables':
-    'Portable Garmin aviation GPS, pilot wearables, satellite communicators, and cockpit-ready accessories.',
-  'garmin-watches':
-    'Garmin watches and watch accessories, including D2 aviator watches, multisport smartwatches, bands, and wearable accessories.',
-  'garmin-inreach-communicators':
-    'Garmin inReach satellite communicators and accessories for pilots, backcountry operators, and remote travel.',
-  'garmin-marine':
-    'Garmin marine electronics, sensors, and chartplotter-related equipment available through RWAS catalog support.',
-  'garmin-cycling-fitness':
-    'Garmin cycling and fitness devices, sensors, and training accessories for lifestyle and performance customers.',
-  'garmin-golf':
-    'Garmin golf watches, rangefinders, launch monitors, and course tools available through the RWAS catalog.',
-  'garmin-outdoor-dog-tracking':
-    'Garmin outdoor, handheld GPS, and dog tracking equipment for field, hunting, and adventure use.',
-  'garmin-products':
-    'A broad Garmin catalog view across avionics, pilot gear, marine, outdoor, fitness, and service-related products.',
-  'retail-experimental':
-    'Garmin experimental and LSA avionics plus related replacement parts, sensor kits, documentation, and service items.',
+  'avionics-certified':
+    'Certified-aircraft Garmin avionics supported by Roger Wilco Aviation Services, including navigators, displays, autopilots, transponders, audio panels, LRUs, and related installation products.',
+  'avionics-experimental':
+    'Garmin avionics and related components for experimental, LSA, and builder-supported installations, including G3X Touch and compatible accessories.',
+  'pilot-gear':
+    'Portable Garmin aviation gear for pilots, including aera portable GPS units, inReach communicators, and cockpit-ready wearables.',
+  'watches-accessories':
+    'Garmin watches, bands, wearable accessories, and aviation-ready smartwatches supported through the RWAS storefront.',
+  'garmin-dealer-install':
+    'Garmin dealer-install hardware, service parts, cable assemblies, install kits, batteries, documentation, and replacement components used in shop-supported avionics work.',
+  'papa-alpha-tools':
+    'RWAS-built Papa-Alpha rigging tools for Piper airframes, including reference tools and kits built for practical shop-floor use.',
   'on-sale':
     'Current RWAS sale items, including Garmin pilot gear, avionics accessories, and shop-supported aviation products.',
 };
@@ -1070,22 +1182,41 @@ export function imageForCollection(
   handle: string,
   shopifyImage?: ShopifyImage | null
 ): ShopifyImage | null | undefined {
-  if (handle !== 'garmin-avionics-certified-retail' || !shopifyImage?.url) {
-    return shopifyImage;
-  }
-
-  if (!/GARMIN_EXPERIMENTAL_BANNER_MAIN4/i.test(shopifyImage.url)) {
-    return shopifyImage;
-  }
-
-  return {
-    url: 'https://cdn.shopify.com/s/files/1/0746/0073/6923/collections/GARMIN_AVIONICS_BANNER_MAIN_2220x600.webp',
-    altText: 'Garmin certified avionics supported by Roger Wilco Aviation Services',
+  const fallbackByHandle: Record<string, ShopifyImage> = {
+    'avionics-certified': {
+      url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth_ad7c40ee-efc6-4cb2-bcc8-67b2140557d4.png?v=1754905863',
+      altText: 'Certified Garmin avionics supported by Roger Wilco Aviation Services',
+    },
+    'avionics-experimental': {
+      url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth_cdc37a0b-a976-4c50-93e4-59d3c68337c1.png?v=1754906168',
+      altText: 'Experimental and LSA Garmin avionics supported by Roger Wilco Aviation Services',
+    },
+    'pilot-gear': {
+      url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth.png?v=1754905659',
+      altText: 'Pilot gear and aviation wearables from Garmin',
+    },
+    'watches-accessories': {
+      url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth.png?v=1754905659',
+      altText: 'Garmin watches and accessories',
+    },
+    'garmin-dealer-install': {
+      url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth_4e9bffcf-996a-4c71-a9d6-6763db1e597f.png?v=1754921983',
+      altText: 'Garmin dealer install hardware, service parts, and cable assemblies',
+    },
+    'papa-alpha-tools': {
+      url: '/newspaper/images/papa_alpha_kit_collection.jpg',
+      altText: 'Papa-Alpha precision rigging tool kit for Piper airframes',
+    },
+    'on-sale': {
+      url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Garmin_Sales_Banner.png?v=1763254366',
+      altText: 'Current Garmin sale inventory supported by RWAS',
+    },
   };
+  return shopifyImage || fallbackByHandle[handle];
 }
 
 export function isQuoteCollection(handle: string) {
-  return handle === 'garmin-avionics';
+  return handle === 'avionics-certified';
 }
 
 export function isQuoteProduct(product: {

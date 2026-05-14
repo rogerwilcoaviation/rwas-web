@@ -16,7 +16,7 @@ import Link from 'next/link';
 export const metadata = {
   title: 'RWAS Collections',
   description:
-    'Browse Garmin avionics, aviation accessories, Papa-Alpha rigging tools, and RWAS sale collections from an FAA Part 145 repair station in Yankton, SD.',
+    'Browse RWAS Garmin collections by buyer type: certified avionics, experimental avionics, pilot gear, lifestyle Garmin, service parts, Papa-Alpha tools, and sale inventory.',
 };
 
 export default async function CollectionsPage() {
@@ -61,12 +61,12 @@ export default async function CollectionsPage() {
           <p className="bs-script-accent">&mdash; pulled straight from Shopify &mdash;</p>
           <h1 className="bs-headline bs-headline--hero">Browse every RWAS collection in one place.</h1>
           <p className="bs-subhead">
-            Garmin certified and experimental avionics, accessories, Papa-Alpha tools, and sale inventory &mdash; all live with real product data behind them.
+            Certified and experimental avionics, pilot gear, lifestyle Garmin, service parts, Papa-Alpha tools, and sale inventory &mdash; all live with real product data behind them.
           </p>
           <p className="bs-byline">RWAS Avionics Desk &middot; Yankton, SD &middot; KYKN</p>
           <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Link href="/collections/garmin-avionics" className="bs-cta-primary">
-              Start with Garmin
+            <Link href="/collections/avionics-certified" className="bs-cta-primary">
+              Start with certified avionics
             </Link>
             <Link href="/collections/papa-alpha-tools" className="bs-cta-secondary">
               See Papa-Alpha tools

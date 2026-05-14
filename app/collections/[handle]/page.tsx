@@ -21,20 +21,11 @@ import Link from 'next/link';
 import { collectionMetaDescription, collectionSeoTitle, truncateMeta } from '@/lib/seo';
 
 const FALLBACK_COLLECTION_HANDLES = [
-  'garmin-avionics',
-  'garmin-avionics-certified-retail',
-  'garmin-avionics-accessories',
-  'garmin-database-cards',
-  'garmin-traffic-weather-receivers',
-  'garmin-portable-gps-wearables',
-  'garmin-watches',
-  'garmin-inreach-communicators',
-  'garmin-marine',
-  'garmin-cycling-fitness',
-  'garmin-golf',
-  'garmin-outdoor-dog-tracking',
-  'garmin-products',
-  'retail-experimental',
+  'avionics-certified',
+  'avionics-experimental',
+  'pilot-gear',
+  'watches-accessories',
+  'garmin-dealer-install',
   'on-sale',
   'papa-alpha-tools',
 ];

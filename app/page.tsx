@@ -272,7 +272,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/collections/garmin-avionics">GTN 650Xi / 750Xi</a>
+                    <a href="/collections/avionics-certified">GTN 650Xi / 750Xi</a>
                   </p>
                   <p className="bs-svc-desc">
                     GPS/NAV/COMM with WAAS LPV approaches, IFR certification, and flight-plan integration.
@@ -280,7 +280,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/collections/garmin-avionics">GFC 500 Autopilot</a>
+                    <a href="/collections/avionics-certified">GFC 500 Autopilot</a>
                   </p>
                   <p className="bs-svc-desc">
                     Retrofit digital autopilot with GPSS steering, altitude hold, and vertical-speed modes.
@@ -288,7 +288,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/collections/garmin-avionics">ADS-B Out Compliance</a>
+                    <a href="/collections/avionics-certified">ADS-B Out Compliance</a>
                   </p>
                   <p className="bs-svc-desc">
                     FAR 91.227 compliant installations. Transponder upgrades and system certification.

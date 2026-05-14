@@ -2,20 +2,24 @@ import { LandingFooter, LandingFooterColumn, LandingFooterLink } from '@/compone
 
 const collectionLinks = [
   {
-    href: '/collections/garmin-avionics',
-    label: 'Garmin install-only',
+    href: '/collections/avionics-certified',
+    label: 'Certified avionics',
   },
   {
-    href: '/collections/garmin-avionics',
-    label: 'Garmin certified',
-  },
-  {
-    href: '/collections/garmin-avionics-accessories',
-    label: 'Garmin accessories',
-  },
-  {
-    href: '/collections/retail-experimental',
+    href: '/collections/avionics-experimental',
     label: 'Experimental avionics',
+  },
+  {
+    href: '/collections/pilot-gear',
+    label: 'Pilot gear',
+  },
+  {
+    href: '/collections/watches-accessories',
+    label: 'Watches & accessories',
+  },
+  {
+    href: '/collections/garmin-dealer-install',
+    label: 'Dealer install parts',
   },
   {
     href: '/collections/papa-alpha-tools',
