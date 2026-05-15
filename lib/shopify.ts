@@ -177,7 +177,7 @@ const PRODUCT_TYPE_COLLECTIONS: Record<
     productType: 'Avionics — Certified',
   },
   'avionics-experimental': {
-    title: 'Avionics — Experimental',
+    title: 'Avionics Experimental',
     productType: 'Avionics — Experimental',
   },
   'pilot-gear': {

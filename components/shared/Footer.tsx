@@ -7,7 +7,7 @@ const collectionLinks = [
   },
   {
     href: '/collections/avionics-experimental',
-    label: 'Experimental avionics',
+    label: 'Avionics experimental',
   },
   {
     href: '/collections/pilot-gear',
