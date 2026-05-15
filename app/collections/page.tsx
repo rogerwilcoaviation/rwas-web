@@ -66,7 +66,7 @@ export default async function CollectionsPage() {
           <p className="bs-byline">RWAS Avionics Desk &middot; Yankton, SD &middot; KYKN</p>
           <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link href="/collections/avionics-certified" className="bs-cta-primary">
-              Start with certified avionics
+              Start with certified retail
             </Link>
             <Link href="/collections/papa-alpha-tools" className="bs-cta-secondary">
               See Papa-Alpha tools

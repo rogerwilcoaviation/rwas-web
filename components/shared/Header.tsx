@@ -5,7 +5,7 @@ import Link from 'next/link';
 const collectionLinks = [
   {
     href: '/collections/avionics-certified',
-    label: 'Certified Avionics',
+    label: 'Certified Retail',
   },
   {
     href: '/collections/avionics-experimental',

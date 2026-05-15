@@ -173,7 +173,7 @@ const PRODUCT_TYPE_COLLECTIONS: Record<
   { title: string; productType: string }
 > = {
   'avionics-certified': {
-    title: 'Avionics — Certified',
+    title: 'Avionics Certified Retail',
     productType: 'Avionics — Certified',
   },
   'avionics-experimental': {
@@ -1146,7 +1146,7 @@ export function displayTitleForCollection(handle: string, shopifyTitle: string):
 
 const COLLECTION_DESCRIPTION_OVERRIDES: Record<string, string> = {
   'avionics-certified':
-    'Certified-aircraft Garmin avionics supported by Roger Wilco Aviation Services, including navigators, displays, autopilots, transponders, audio panels, LRUs, and related installation products.',
+    'Retail-certified Garmin avionics supported by Roger Wilco Aviation Services, including navigators, displays, autopilots, transponders, audio panels, LRUs, and related installation products.',
   'avionics-experimental':
     'Garmin avionics and related components for experimental, LSA, and builder-supported installations, including G3X Touch and compatible accessories.',
   'pilot-gear':

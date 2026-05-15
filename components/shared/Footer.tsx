@@ -3,7 +3,7 @@ import { LandingFooter, LandingFooterColumn, LandingFooterLink } from '@/compone
 const collectionLinks = [
   {
     href: '/collections/avionics-certified',
-    label: 'Certified avionics',
+    label: 'Avionics certified retail',
   },
   {
     href: '/collections/avionics-experimental',
