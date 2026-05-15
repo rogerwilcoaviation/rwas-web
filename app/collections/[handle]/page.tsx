@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import ProductCard from '@/components/shopify/ProductCard';
+import CollectionProductBrowser from '@/components/shopify/CollectionProductBrowser';
 import PartFinder, { type PartFinderProduct } from '@/components/shopify/PartFinder';
 import {
   BroadsheetLayout,
@@ -29,34 +29,6 @@ const FALLBACK_COLLECTION_HANDLES = [
   'on-sale',
   'papa-alpha-tools',
 ];
-
-function labelFromGarminTag(tags: string[] | undefined, prefix: string) {
-  const tag = tags?.find((value) => value.startsWith(prefix));
-  if (!tag) return null;
-  return tag
-    .slice(prefix.length)
-    .split('-')
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
-}
-
-function productSubcategory(product: { tags?: string[] }) {
-  return (
-    labelFromGarminTag(product.tags, 'garmin-family:') ||
-    labelFromGarminTag(product.tags, 'garmin-subcategory:') ||
-    'General'
-  );
-}
-
-function groupProductsBySubcategory<T extends { tags?: string[] }>(products: T[]) {
-  const groups = new Map<string, T[]>();
-  for (const product of products) {
-    const label = productSubcategory(product);
-    groups.set(label, [...(groups.get(label) || []), product]);
-  }
-  return Array.from(groups.entries()).sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
-}
 
 export async function generateStaticParams() {
   try {
@@ -171,7 +143,6 @@ export default async function CollectionDetailPage({
     skus: (product.variants || []).map((variant) => variant.sku || '').filter(Boolean),
   }));
   const quoteOnly = isQuoteCollection(collection.handle);
-  const subcategoryGroups = groupProductsBySubcategory(indexableProducts);
   const canonicalUrl = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
   const itemListSchema = {
     '@context': 'https://schema.org',
@@ -254,60 +225,12 @@ export default async function CollectionDetailPage({
           </div>
 
           {indexableProducts.length ? (
-            <div style={{ display: 'grid', gap: 32 }}>
-              {subcategoryGroups.map(([subcategory, products], index) => {
-                const sectionId = `subcategory-${subcategory.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`;
-                const defaultOpen = false;
-                const productGrid = (
-                  <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-                    {products.map((product) => (
-                      <ProductCard
-                        key={product.id}
-                        product={product}
-                        collectionHandle={collection.handle}
-                      />
-                    ))}
-                  </div>
-                );
-
-                if (subcategoryGroups.length <= 1) {
-                  return (
-                    <section key={subcategory} aria-labelledby={sectionId}>
-                      {productGrid}
-                    </section>
-                  );
-                }
-
-                return (
-                  <details
-                    key={subcategory}
-                    open={defaultOpen}
-                    className="w-fit max-w-full rounded-[1.5rem] border border-black/10 bg-white/80 p-2 shadow-sm transition-all duration-200 open:w-full open:p-4"
-                  >
-                    <summary className="cursor-pointer list-none rounded-[1rem] px-3 py-2 transition hover:bg-[#f5f3ef]">
-                      <span className="inline-flex flex-wrap items-baseline justify-between gap-3">
-                        <span>
-                          <span className="bs-kicker block">Subcategory &middot; {products.length} item{products.length === 1 ? '' : 's'}</span>
-                          <span
-                            id={sectionId}
-                            className="bs-headline block text-3xl font-black underline decoration-2 underline-offset-4 md:text-4xl"
-                            style={{ marginTop: 4, marginBottom: 0 }}
-                          >
-                            {subcategory}
-                          </span>
-                        </span>
-                        <span className="text-sm font-semibold uppercase tracking-[0.22em] text-black/50">
-                          Tap to open / close
-                        </span>
-                      </span>
-                    </summary>
-                    <div className="mt-5">
-                      {productGrid}
-                    </div>
-                  </details>
-                );
-              })}
-            </div>
+            <CollectionProductBrowser
+              products={indexableProducts}
+              collectionTitle={collection.title}
+              collectionHandle={collection.handle}
+              quoteOnly={quoteOnly}
+            />
           ) : (
             <p className="bs-body">No products in this collection yet.</p>
           )}
