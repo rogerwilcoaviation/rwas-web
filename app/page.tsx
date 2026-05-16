@@ -104,8 +104,12 @@ export default function Home() {
             {/* Papa-Alpha kit figure */}
             <Specimen variant="flat" as="figure" className="bs-specimen-figure">
               <Specimen.Image
-                src="/newspaper/images/papa_alpha_kit.jpg"
+                src="/newspaper/images/papa_alpha_kit.webp"
                 alt="Papa-Alpha rigging reference tools"
+                width={800}
+                height={533}
+                loading="eager"
+                decoding="async"
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -126,8 +130,12 @@ export default function Home() {
               {/* Hero photo — Cessna 182RG G500TXi install */}
               <Specimen variant="flat" as="figure" className="bs-specimen-figure">
                 <Specimen.Image
-                  src="/newspaper/images/r182_panel.jpg"
+                  src="/newspaper/images/r182_panel.webp"
                   alt="Full Garmin G500TXi Suite installation in a Cessna 182RG"
+                  width={1200}
+                  height={750}
+                  fetchPriority="high"
+                  decoding="async"
                 />
                 <Specimen.CaptionRule />
                 <Specimen.Caption numeral="FIG. 02">
@@ -177,7 +185,11 @@ export default function Home() {
             {/* Laser cutter new-capability figure */}
             <Specimen variant="flat" as="figure" className="bs-specimen-figure">
               <Specimen.Image
-                src="/newspaper/images/laser_cutter.jpg"
+                src="/newspaper/images/laser_cutter.webp"
+                width={800}
+                height={533}
+                loading="lazy"
+                decoding="async"
                 alt="Industrial fiber laser cutting at Roger Wilco Aviation Services"
               />
               <Specimen.CaptionRule />

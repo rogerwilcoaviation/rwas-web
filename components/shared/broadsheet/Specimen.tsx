@@ -29,6 +29,11 @@ type SpecimenImageProps = {
   src: string;
   alt: string;
   className?: string;
+  width?: number;
+  height?: number;
+  loading?: 'lazy' | 'eager';
+  decoding?: 'sync' | 'async' | 'auto';
+  fetchPriority?: 'high' | 'low' | 'auto';
 };
 
 type SpecimenCaptionProps = {
@@ -53,11 +58,25 @@ export const Specimen = ({
   return <Tag className={classes}>{children}</Tag>;
 };
 
-const SpecimenImage = ({ src, alt, className }: SpecimenImageProps) => (
+const SpecimenImage = ({
+  src,
+  alt,
+  className,
+  width,
+  height,
+  loading,
+  decoding,
+  fetchPriority,
+}: SpecimenImageProps) => (
   <img
     src={src}
     alt={alt}
     className={`specimen__image${className ? ' ' + className : ''}`}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding={decoding}
+    fetchPriority={fetchPriority}
   />
 );
 
