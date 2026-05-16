@@ -25,6 +25,8 @@ export type CollectionBrowserProduct = {
 };
 
 type FilterKey = 'subcategory' | 'family' | 'purchase';
+const INITIAL_PRODUCT_LIMIT = 24;
+const PRODUCT_PAGE_SIZE = 24;
 
 function tagValue(tags: string[] | undefined, prefix: string) {
   return tags?.find((tag) => tag.startsWith(prefix))?.slice(prefix.length) || '';
@@ -137,9 +139,11 @@ function FilterButton({
 function ProductTile({
   product,
   quoteOnly,
+  eager = false,
 }: {
   product: CollectionBrowserProduct;
   quoteOnly: boolean;
+  eager?: boolean;
 }) {
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
@@ -162,6 +166,9 @@ function ProductTile({
             <img
               src={product.featuredImage.url}
               alt={product.featuredImage.altText || product.title}
+              loading={eager ? 'eager' : 'lazy'}
+              fetchPriority={eager ? 'high' : 'low'}
+              decoding="async"
               className="h-full w-full object-contain p-6 transition duration-300 group-hover:scale-[1.03]"
             />
           ) : null}
@@ -208,6 +215,7 @@ export default function CollectionProductBrowser({
   const [family, setFamily] = useState('all');
   const [purchase, setPurchase] = useState('all');
   const [query, setQuery] = useState('');
+  const [visibleLimit, setVisibleLimit] = useState(INITIAL_PRODUCT_LIMIT);
 
   const indexed = useMemo(
     () =>
@@ -266,6 +274,8 @@ export default function CollectionProductBrowser({
   };
   const hasActiveFilters =
     subcategory !== 'all' || family !== 'all' || purchase !== 'all' || query.trim().length > 0;
+  const visibleProducts = filtered.slice(0, visibleLimit);
+  const hasMoreProducts = visibleLimit < filtered.length;
 
   const filterPanel = (
     <div className="space-y-6">
@@ -319,6 +329,7 @@ export default function CollectionProductBrowser({
             setFamily('all');
             setPurchase('all');
             setQuery('');
+            setVisibleLimit(INITIAL_PRODUCT_LIMIT);
           }}
           className="w-full rounded-xl border border-black/15 px-3 py-2 text-sm font-semibold text-[#111111] transition hover:bg-[#f5f3ef]"
         >
@@ -346,18 +357,36 @@ export default function CollectionProductBrowser({
         <section aria-label={`${collectionTitle} products`}>
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <p className="bs-body" style={{ margin: 0 }}>
-              Showing {filtered.length.toLocaleString()} products
+              Showing {visibleProducts.length.toLocaleString()} of {filtered.length.toLocaleString()} products
             </p>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/45">
               {collectionHandle}
             </p>
           </div>
           {filtered.length ? (
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {filtered.map((product) => (
-                <ProductTile key={product.id} product={product} quoteOnly={quoteOnly} />
-              ))}
-            </div>
+            <>
+              <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {visibleProducts.map((product, index) => (
+                  <ProductTile
+                    key={product.id}
+                    product={product}
+                    quoteOnly={quoteOnly}
+                    eager={index < 3}
+                  />
+                ))}
+              </div>
+              {hasMoreProducts ? (
+                <div className="mt-8 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setVisibleLimit((limit) => limit + PRODUCT_PAGE_SIZE)}
+                    className="inline-flex items-center justify-center rounded-md border border-[#111111] bg-white px-5 py-3 text-sm font-semibold text-[#111111] transition hover:bg-[#f5f3ef]"
+                  >
+                    Load more products
+                  </button>
+                </div>
+              ) : null}
+            </>
           ) : (
             <div className="rounded-[1.25rem] border border-black/10 bg-white p-8">
               <p className="bs-body">No products match those filters yet.</p>

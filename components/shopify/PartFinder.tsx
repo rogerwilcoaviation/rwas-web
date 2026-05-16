@@ -99,7 +99,13 @@ export default function PartFinder({
                   <Link href={`/products/${encodeURIComponent(product.handle)}`}>
                     {product.featuredImage ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={product.featuredImage.url} alt={product.featuredImage.altText || product.title} />
+                      <img
+                        src={product.featuredImage.url}
+                        alt={product.featuredImage.altText || product.title}
+                        loading="lazy"
+                        fetchPriority="low"
+                        decoding="async"
+                      />
                     ) : (
                       <span className="bs-part-finder__noimage">—</span>
                     )}

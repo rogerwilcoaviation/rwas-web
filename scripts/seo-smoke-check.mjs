@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 const base = (process.env.BASE_URL || process.argv[2] || 'https://www.rogerwilcoaviation.com').replace(/\/$/, '');
+const isLocalBase = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/i.test(base);
+const CONCURRENCY = Math.max(1, Number(process.env.SEO_SMOKE_CONCURRENCY || 16));
 const REQUIRED_HEADERS = [
   'strict-transport-security',
   'x-content-type-options',
@@ -18,8 +20,13 @@ async function fetchNoRedirect(url) {
   // disagree on trailing-slash normalization during propagation, and the SEO
   // assertions below validate the final HTML/canonical instead of treating the
   // redirect itself as a production failure.
-  const res = await fetch(url, { redirect: 'follow' });
-  return { res, text: await res.text() };
+  try {
+    const res = await fetch(url, { redirect: 'follow' });
+    return { res, text: await res.text() };
+  } catch (error) {
+    const detail = error?.cause?.code || error?.code || error?.message || String(error);
+    fail(`${url} fetch failed: ${detail}`);
+  }
 }
 
 function tags(html, tag) {
@@ -33,29 +40,58 @@ function hasMeta(html, pattern) {
 
 const home = await fetchNoRedirect(`${base}/`);
 if (home.res.status !== 200) fail(`Home returned ${home.res.status}`);
-for (const header of REQUIRED_HEADERS) {
-  if (!home.res.headers.get(header)) fail(`Missing security header on home: ${header}`);
+if (!isLocalBase) {
+  for (const header of REQUIRED_HEADERS) {
+    if (!home.res.headers.get(header)) fail(`Missing security header on home: ${header}`);
+  }
 }
 
 const sitemapRes = await fetchNoRedirect(`${base}/sitemap.xml`);
 if (sitemapRes.res.status !== 200) fail(`Sitemap returned ${sitemapRes.res.status}`);
-const urls = Array.from(sitemapRes.text.matchAll(/<loc>(.*?)<\/loc>/g), (m) => m[1]).filter(Boolean);
+const urls = Array.from(sitemapRes.text.matchAll(/<loc>(.*?)<\/loc>/g), (m) => {
+  const url = m[1];
+  if (!isLocalBase) return url;
+  try {
+    const parsed = new URL(url);
+    return `${base}${parsed.pathname}${parsed.search}`;
+  } catch {
+    return url;
+  }
+}).filter(Boolean);
 if (!urls.length) fail('Sitemap has no URLs');
 
 const failures = [];
-for (const url of urls) {
+
+async function checkUrl(url) {
   const { res, text } = await fetchNoRedirect(url);
   if (res.status !== 200) {
-    failures.push(`${url} returned ${res.status}${res.headers.get('location') ? ` -> ${res.headers.get('location')}` : ''}`);
-    continue;
+    return `${url} returned ${res.status}${res.headers.get('location') ? ` -> ${res.headers.get('location')}` : ''}`;
   }
   const title = tags(text, 'title')[0];
   const h1s = tags(text, 'h1');
-  if (!title) failures.push(`${url} missing <title>`);
-  if (!hasMeta(text, /<meta[^>]+name=["']description["']/i)) failures.push(`${url} missing meta description`);
-  if (!hasMeta(text, /<link[^>]+rel=["']canonical["']/i)) failures.push(`${url} missing canonical`);
-  if (h1s.length !== 1) failures.push(`${url} has ${h1s.length} H1 tags`);
+  const urlFailures = [];
+  if (!title) urlFailures.push(`${url} missing <title>`);
+  if (!hasMeta(text, /<meta[^>]+name=["']description["']/i)) urlFailures.push(`${url} missing meta description`);
+  if (!hasMeta(text, /<link[^>]+rel=["']canonical["']/i)) urlFailures.push(`${url} missing canonical`);
+  if (h1s.length !== 1) urlFailures.push(`${url} has ${h1s.length} H1 tags`);
+  return urlFailures;
 }
+
+let cursor = 0;
+async function worker() {
+  while (cursor < urls.length) {
+    const url = urls[cursor++];
+    try {
+      const result = await checkUrl(url);
+      if (Array.isArray(result)) failures.push(...result);
+      else if (result) failures.push(result);
+    } catch (error) {
+      failures.push(`${url} failed: ${error?.message || String(error)}`);
+    }
+  }
+}
+
+await Promise.all(Array.from({ length: Math.min(CONCURRENCY, urls.length) }, worker));
 
 if (failures.length) {
   console.error(failures.join('\n'));
