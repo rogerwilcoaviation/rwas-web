@@ -44,9 +44,9 @@
       var payload = JSON.stringify(body);
       if (navigator.sendBeacon) {
         var blob = new Blob([payload], { type: 'application/json' });
-        if (navigator.sendBeacon('/api/track', blob)) return;
+        if (navigator.sendBeacon('/api/rum', blob)) return;
       }
-      fetch('/api/track', {
+      fetch('/api/rum', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: payload,

@@ -1,7 +1,7 @@
 /*
- * Cloudflare Pages Function — /api/track
+ * Cloudflare Pages Function — /api/rum
  *
- * Receives anonymous RWAS analytics beacons from public/rwas-analytics.js.
+ * Receives anonymous RWAS real-user metric beacons from public/rwas-analytics.js.
  * This intentionally stores nothing by itself; events are emitted as
  * structured logs so Cloudflare runtime logs can be used as the first RUM
  * source without adding a database or exposing visitor PII.
