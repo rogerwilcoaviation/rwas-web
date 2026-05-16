@@ -12,6 +12,9 @@ module.exports = () => {
   return plugins.reduce((acc, next) => next(acc), {
     reactStrictMode: true,
     output: 'export',
+    experimental: {
+      optimizeCss: true,
+    },
     outputFileTracingRoot: path.join(__dirname),
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
     eslint: {

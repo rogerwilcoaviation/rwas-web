@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run appinfo && cross-env PORT=6006 NODE_OPTIONS='--no-warnings' next dev",
-    "build": "npm run appinfo && next build",
+    "build": "npm run appinfo && next build && python3 scripts/css_defer_postbuild.py",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "next lint --fix --dir pages --dir app --dir components --dir lib --dir layouts --dir scripts",
@@ -109,6 +109,7 @@
     "@typescript-eslint/eslint-plugin": "^8.43.0",
     "@typescript-eslint/parser": "^8.43.0",
     "autoprefixer": "^10.4.20",
+    "critters": "^0.0.23",
     "cross-env": "^10.0.0",
     "eslint": "^9.35.0",
     "eslint-config-next": "^15.5.9",
