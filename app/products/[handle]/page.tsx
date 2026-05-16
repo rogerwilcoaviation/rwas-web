@@ -480,6 +480,7 @@ export default async function ProductDetailPage({
                     alt={heroImg.altText || product.title}
                     width={800}
                     height={600}
+                    style={{ width: '100%', height: 'auto', display: 'block', background: '#fff' }}
                     fetchPriority="high"
                     decoding="async"
                     loading="eager"
@@ -493,6 +494,7 @@ export default async function ProductDetailPage({
                     <img
                       src={productImageUrl(heroImg.url, 1600)}
                       alt={heroImg.altText || product.title}
+                      style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
                       loading="lazy"
                       decoding="async"
                     />
