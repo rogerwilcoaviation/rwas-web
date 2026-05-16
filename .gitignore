@@ -56,3 +56,9 @@ yarn-error.log*
 .gitignore.bak.*
 audit_*/
 ship*-screens*/
+
+# build artifacts
+tsconfig.tsbuildinfo
+
+# automation logs (sitemap health checks, PSI weekly checks)
+logs/
