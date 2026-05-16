@@ -41,10 +41,10 @@ print(f"  using OUT_DIR={OUT}")
 CSS_DIR = OUT / "_next/static/css"
 
 # Step 1: identify the broadsheet CSS file (contains Google Fonts @import)
-BROADSHEET_MARKER = '@import url("https://fonts.googleapis.com'
+BROADSHEET_MARKER = '--font-display:'  # broadsheet-tokens.css token, unique to that bundle
 broadsheet_filename = None
 for css in sorted(CSS_DIR.glob("*.css")):
-    head = css.read_text(errors="replace")[:300]
+    head = css.read_text(errors="replace")  # scan whole file; marker may be deep
     size_kb = css.stat().st_size // 1024
     if BROADSHEET_MARKER in head:
         broadsheet_filename = css.name

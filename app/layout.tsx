@@ -1,5 +1,11 @@
 import { Suspense } from 'react';
-import { Nunito_Sans } from 'next/font/google';
+import {
+  Nunito_Sans,
+  Playfair_Display,
+  Source_Serif_4,
+  Inter,
+  Caveat,
+} from 'next/font/google';
 import { siteConfig } from '@/data/config/site.settings';
 import { ThemeProviders } from './theme-providers';
 import { Metadata } from 'next';
@@ -26,6 +32,34 @@ const baseFont = Nunito_Sans({
   subsets: ['latin'],
   display: 'optional',
   variable: '--font-space-default',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['700', '900'],
+  display: 'optional',
+  variable: '--font-playfair',
+});
+
+const sourceSerif = Source_Serif_4({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  display: 'optional',
+  variable: '--font-source-serif',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'optional',
+  variable: '--font-inter',
+});
+
+const caveat = Caveat({
+  subsets: ['latin'],
+  weight: ['500', '700'],
+  display: 'optional',
+  variable: '--font-caveat',
 });
 
 const globalColors = colors;
@@ -86,12 +120,10 @@ export default function RootLayout({
   return (
     <html
       lang={siteConfig.language}
-      className={`${baseFont.variable} ${displayFont.variable} scroll-smooth`}
+      className={`${baseFont.variable} ${displayFont.variable} ${playfair.variable} ${sourceSerif.variable} ${inter.variable} ${caveat.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <style>
           {`
           :root, :before, :after {
