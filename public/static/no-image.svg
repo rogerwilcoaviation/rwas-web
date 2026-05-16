@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-label="Image not available">
+  <rect width="800" height="600" fill="#f3eada"/>
+  <rect x="40" y="40" width="720" height="520" fill="none" stroke="#1a1612" stroke-width="2" stroke-dasharray="6 6" opacity="0.4"/>
+  <g transform="translate(400,260)" fill="none" stroke="#1a1612" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.55">
+    <rect x="-90" y="-60" width="180" height="120" rx="6"/>
+    <circle cx="-50" cy="-25" r="10"/>
+    <path d="M -85 50 L -25 -5 L 20 30 L 60 -15 L 85 5"/>
+  </g>
+  <text x="400" y="400" text-anchor="middle" font-family="Georgia, serif" font-size="28" font-weight="600" fill="#1a1612" opacity="0.7">Image not available</text>
+  <text x="400" y="436" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#1a1612" opacity="0.5">Roger Wilco Aviation Services</text>
+</svg>

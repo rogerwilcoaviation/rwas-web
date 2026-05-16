@@ -55,6 +55,27 @@ function sanitizeProductHtml(html: string): string {
   return out;
 }
 
+/**
+ * Resolve a product image URL for use in <img src=...>.
+ *
+ * - When Shopify returns the bloated "Picture may not be exact" placeholder
+ *   (~2.2MB SVG), substitute a tiny 970-byte local placeholder.
+ * - For real Shopify CDN images, append `?width=N` so the CDN serves a
+ *   resized variant (and WebP when the client accepts it) instead of the
+ *   multi-megabyte original.
+ */
+function productImageUrl(url: string, width: number): string {
+  if (!url) return '/static/no-image.svg';
+  if (/Picturemaynot/i.test(url) || /picture[_-]?may[_-]?not/i.test(url)) {
+    return '/static/no-image.svg';
+  }
+  if (/cdn\.shopify\.com/.test(url)) {
+    const sep = url.includes('?') ? '&' : '?';
+    return `${url}${sep}width=${width}`;
+  }
+  return url;
+}
+
 export async function generateStaticParams() {
   try {
     const handles = await getSeoProductHandles();
@@ -454,14 +475,27 @@ export default async function ProductDetailPage({
             {heroImg ? (
               <>
                 <a className="bs-product-image-link" href="#product-image-zoom" aria-label={`Open larger image for ${product.title}`}>
-                  <img src={heroImg.url} alt={heroImg.altText || product.title} />
+                  <img
+                    src={productImageUrl(heroImg.url, 800)}
+                    alt={heroImg.altText || product.title}
+                    width={800}
+                    height={600}
+                    fetchPriority="high"
+                    decoding="async"
+                    loading="eager"
+                  />
                   <span>Click image to enlarge</span>
                 </a>
                 <div id="product-image-zoom" className="bs-product-image-lightbox" aria-label={`Expanded image for ${product.title}`}>
                   <a className="bs-product-image-lightbox__backdrop" href="#" aria-label="Close expanded image" />
                   <div className="bs-product-image-lightbox__panel">
                     <a className="bs-product-image-lightbox__close" href="#" aria-label="Close expanded image">×</a>
-                    <img src={heroImg.url} alt={heroImg.altText || product.title} />
+                    <img
+                      src={productImageUrl(heroImg.url, 1600)}
+                      alt={heroImg.altText || product.title}
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                 </div>
               </>
@@ -663,10 +697,10 @@ export default async function ProductDetailPage({
                   <tr>
                     <th>Image</th>
                     <td className="current-product">
-                      {heroImg ? <img src={heroImg.url} alt={heroImg.altText || product.title} /> : '—'}
+                      {heroImg ? <img src={productImageUrl(heroImg.url, 120)} alt={heroImg.altText || product.title} loading="lazy" decoding="async" width={120} height={90} /> : '—'}
                     </td>
                     {comparisonProducts.map((item) => (
-                      <td key={item.handle}>{item.featuredImage ? <img src={item.featuredImage.url} alt={item.featuredImage.altText || item.title} /> : '—'}</td>
+                      <td key={item.handle}>{item.featuredImage ? <img src={productImageUrl(item.featuredImage.url, 120)} alt={item.featuredImage.altText || item.title} loading="lazy" decoding="async" width={120} height={90} /> : '—'}</td>
                     ))}
                   </tr>
                   <tr>
