@@ -16,10 +16,11 @@ Critical CSS extraction:
   - Everything from byte 0 to the first .container{ selector (~11.5KB of
     preflight + global resets + html/body/headings/forms + :root vars + .dark
     vars) — these MUST be applied before first paint.
-  - Plus targeted rules for ~35 universal Tailwind utility classes used
-    above-the-fold across representative pages (flex, w-full, min-h-screen,
-    items-stretch, etc.).
-  - Total inlined: ~13KB raw, ~3KB after gzip in HTTP transit.
+  - Plus targeted Tailwind utility classes used above-the-fold across
+    representative pages. This includes responsive grid/card utilities wrapped
+    in @media rules, because collection pages reflow without them.
+  - Total inlined: small compared with the original 144KB Tailwind bundle, and
+    still removes that bundle from the render-blocking path.
 
 Replaces media=print + <noscript> fallback in HTML head. Idempotent: safe
 to run twice (Cloudflare next-on-pages re-runs build hooks).
@@ -81,19 +82,30 @@ tailwind_url = f"/_next/static/css/{tailwind_filename}"
 # ───────────────────────────────────────────────────────────────────────────
 CRITICAL_UTILS = [
     "flex", "flex-col", "block", "inline-block", "inline-flex", "grid", "hidden",
-    "relative", "absolute",
+    "relative", "absolute", "overflow-hidden",
     "w-full", "h-full", "min-h-screen",
-    "max-w-7xl", "max-w-screen-xl", "max-w-screen-lg",
+    "max-w-7xl",
     "items-center", "items-stretch", "items-start", "items-end",
     "justify-between", "justify-center", "justify-start", "justify-end",
     "mb-auto", "mx-auto",
     "px-4", "px-6", "px-8", "py-2", "py-3", "py-4",
-    "gap-2", "gap-3", "gap-4",
+    "p-6", "gap-2", "gap-3", "gap-4", "gap-6", "gap-8",
     "font-sans", "font-bold", "font-semibold",
     "text-black", "text-white",
     "text-sm", "text-base", "text-lg",
+    "object-contain",
     "antialiased",
     "container",
+    # Collection and product-card grids. These rules prevent deferred Tailwind
+    # from changing product-card image size after first paint, which pushes LCP
+    # later on heavy collection pages.
+    "grid-cols-1", "md:grid-cols-2", "xl:grid-cols-3",
+    "aspect-[4/3]", "bg-[#f5f3ef]",
+]
+
+EXTRA_CRITICAL_SELECTORS = [
+    # Tailwind serializes comma in arbitrary values as "\2c " rather than "\,".
+    r".lg\:grid-cols-\[280px_minmax\(0\2c 1fr\)\]",
 ]
 
 
@@ -106,12 +118,60 @@ def _find_utility_start(src: str) -> int:
     return m.start()
 
 
-def _find_base_rule(cls: str, src: str):
-    pat = r"(?:^|[}\s])(\." + re.escape(cls) + r")\{([^{}]*)\}"
-    m = re.search(pat, src)
-    if not m:
-        return None
-    return f".{cls}{{{m.group(2)}}}"
+def _css_class_selector(cls: str) -> str:
+    """Return the emitted Tailwind CSS selector fragment for a class name."""
+    safe = []
+    for ch in cls:
+        if ch.isalnum() or ch in ("_", "-"):
+            safe.append(ch)
+        else:
+            safe.append("\\" + ch)
+    return "." + "".join(safe)
+
+
+def _split_top_level_rules(src: str):
+    """Yield (prelude, body) pairs for top-level CSS blocks.
+
+    The built Tailwind CSS is minified to one line, so line-oriented parsing is
+    not useful. This light parser only needs balanced braces; it does not try to
+    understand CSS values.
+    """
+    i = 0
+    n = len(src)
+    while i < n:
+        start = i
+        open_idx = src.find("{", i)
+        if open_idx < 0:
+            return
+        prelude = src[start:open_idx]
+        depth = 1
+        j = open_idx + 1
+        while j < n and depth:
+            if src[j] == "{":
+                depth += 1
+            elif src[j] == "}":
+                depth -= 1
+            j += 1
+        if depth == 0:
+            yield prelude, src[open_idx + 1:j - 1]
+        i = j
+
+
+def _extract_matching_rules(src: str, selector: str) -> list[str]:
+    """Find a utility rule by selector, preserving enclosing @media blocks."""
+    matches = []
+    for prelude, body in _split_top_level_rules(src):
+        prelude = prelude.strip()
+        if not prelude:
+            continue
+        if prelude.startswith("@media") or prelude.startswith("@supports"):
+            nested = _extract_matching_rules(body, selector)
+            if nested:
+                matches.append(prelude + "{" + "".join(nested) + "}")
+            continue
+        if selector in prelude:
+            matches.append(prelude + "{" + body + "}")
+    return matches
 
 
 def extract_critical(tw_src: str) -> str:
@@ -122,12 +182,22 @@ def extract_critical(tw_src: str) -> str:
     utility_block = tw_src[util_start:]
     rules = []
     missing = []
+    seen_rules = set()
     for cls in CRITICAL_UTILS:
-        rule = _find_base_rule(cls, utility_block)
-        if rule:
-            rules.append(rule)
+        selector = _css_class_selector(cls)
+        found = _extract_matching_rules(utility_block, selector)
+        if found:
+            for rule in found:
+                if rule not in seen_rules:
+                    seen_rules.add(rule)
+                    rules.append(rule)
         else:
             missing.append(cls)
+    for selector in EXTRA_CRITICAL_SELECTORS:
+        for rule in _extract_matching_rules(utility_block, selector):
+            if rule not in seen_rules:
+                seen_rules.add(rule)
+                rules.append(rule)
     if missing:
         print(f"  WARNING: critical utility rules missing: {missing}")
     # Visual safety net: rules that live in the deferred broadsheet bundle
