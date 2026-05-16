@@ -1,34 +1,76 @@
-import Link from '@/components/shared/Link';
-import Footer from '@/components/shared/Footer';
-import Header from '@/components/shared/Header';
+import Link from 'next/link';
 
+export const metadata = {
+  title: 'Page not found — Roger Wilco Aviation Services',
+  description: 'The page you requested could not be found at Roger Wilco Aviation Services.',
+};
+
+/**
+ * Minimal 404 page — intentionally does NOT import the site Header/Footer
+ * components, because doing so would drag the entire shared-component tree
+ * (search provider, dynamic menus, mobile nav, social links, cart floater)
+ * into the not-found chunk. That chunk is loaded by Next.js's App Router
+ * for every page so the client knows how to render a 404 if navigation
+ * hits an unmatched route.
+ *
+ * This standalone page renders without any chrome. Users get a clear
+ * message and a link home. Header/Footer reappear on subsequent navigation
+ * because they live in the root layout, which is preserved on client-side
+ * route changes.
+ */
 export default function NotFound() {
   return (
-    <>
-      <Header />
-      <div className="min-h-[500px] flex flex-col items-start justify-start md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6">
-        <div className="space-x-2 pb-8 pt-6 md:space-y-5">
-          <h1 className="text-6xl font-semibold leading-9 tracking-tight text-gray-900 dark:text-gray-100 md:border-r-2 md:px-6 md:text-8xl md:leading-14">
-            404
-          </h1>
-        </div>
-        <div className="max-w-md">
-          <p className="mb-4 text-xl font-bold leading-normal md:text-2xl">
-            Sorry, we couldn't find this page.
-          </p>
-          <p className="mb-8">
-            Please head back to the homepage or contact us if you think this is
-            an error.
-          </p>
-          <Link
-            href="/"
-            className="focus:shadow-outline-primary inline rounded-lg border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium leading-5 text-white shadow transition-colors duration-150 hover:bg-primary-700 focus:outline-none dark:hover:bg-primary-500"
-          >
-            Back to homepage
-          </Link>
-        </div>
-      </div>
-      <Footer />
-    </>
+    <main
+      style={{
+        minHeight: '60vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '4rem 1.5rem',
+        textAlign: 'center',
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+      }}
+    >
+      <h1
+        style={{
+          fontSize: 'clamp(3rem, 10vw, 6rem)',
+          fontWeight: 800,
+          margin: 0,
+          lineHeight: 1,
+          color: '#1a1a1a',
+        }}
+      >
+        404
+      </h1>
+      <p
+        style={{
+          fontSize: '1.25rem',
+          fontWeight: 600,
+          margin: '1rem 0 0.5rem',
+          color: '#1a1a1a',
+        }}
+      >
+        Page not found
+      </p>
+      <p style={{ color: '#555', maxWidth: '32rem', margin: '0 0 2rem' }}>
+        Sorry, we couldn&apos;t find the page you were looking for. It may have moved,
+        or the link you followed may be out of date.
+      </p>
+      <Link
+        href="/"
+        style={{
+          display: 'inline-block',
+          padding: '0.75rem 1.5rem',
+          background: '#1a1a1a',
+          color: '#fff',
+          textDecoration: 'none',
+          borderRadius: '0.375rem',
+          fontWeight: 600,
+        }}
+      >
+        Back to homepage
+      </Link>
+    </main>
   );
 }
