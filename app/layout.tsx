@@ -17,7 +17,6 @@ import { colors } from '@/data/config/colors.js';
 import '@/css/globals.css';
 import './broadsheet-tokens.css';
 import './broadsheet-chrome.css';
-import { SearchProvider } from '@/components/shared/SearchProvider';
 import { AnalyticsWrapper } from '@/components/shared/Analytics';
 
 const displayFont = Nunito_Sans({
@@ -272,12 +271,10 @@ export default function RootLayout({
           <AnalyticsWrapper />
 
           <div className="w-full flex flex-col justify-between items-center font-sans">
-            <SearchProvider>
-              <ClientVisualEffects />
+            <ClientVisualEffects />
               <main className="w-full flex flex-col items-stretch mb-auto">
                 {children}
               </main>
-            </SearchProvider>
           </div>
         </ThemeProviders>
       </body>
