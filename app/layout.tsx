@@ -11,8 +11,14 @@ import { ThemeProviders } from './theme-providers';
 import { Metadata } from 'next';
 import Script from 'next/script';
 import CartFloater from "@/components/shared/CartFloater";
-import SeasonalTheme from './seasonal-theme';
-import WeatherEffects from './weather-effects';
+import dynamic from 'next/dynamic';
+
+// Visual-effect components — render seasonal themes and weather effects
+// (snow, fireworks, leaves, etc). Dynamically imported with ssr:false so
+// their code is split into separate chunks and loaded after hydration,
+// keeping the layout's initial JS bundle smaller.
+const SeasonalTheme = dynamic(() => import('./seasonal-theme'), { ssr: false });
+const WeatherEffects = dynamic(() => import('./weather-effects'), { ssr: false });
 
 import { colors } from '@/data/config/colors.js';
 
