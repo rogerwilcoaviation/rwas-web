@@ -52,12 +52,18 @@ export function ListingCard({ listing }: { listing: Listing }) {
   const [imageBroken, setImageBroken] = useState(false);
 
   const firstPhoto = listing.photos?.[0];
-  const imageUrl =
+  const photoBase =
     firstPhoto && firstPhoto.key
       ? `https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(
           firstPhoto.key,
         )}`
       : null;
+  // Resized variants via Worker: w=800 for default, w=1200 for retina.
+  // Aircraft cards display ~280-400px wide on mobile, ~360px on desktop.
+  const imageUrl = photoBase ? `${photoBase}?w=800&q=80` : null;
+  const imageSrcSet = photoBase
+    ? `${photoBase}?w=600&q=80 600w, ${photoBase}?w=800&q=80 800w, ${photoBase}?w=1200&q=80 1200w`
+    : undefined;
 
   const headline =
     [listing.year, listing.make, listing.model].filter(Boolean).join(" ") ||
@@ -187,8 +193,13 @@ export function ListingCard({ listing }: { listing: Listing }) {
         {imageUrl && !imageBroken ? (
           <img
             src={imageUrl}
+            srcSet={imageSrcSet}
+            sizes="(max-width: 600px) 92vw, (max-width: 1024px) 45vw, 360px"
             alt={`${headline} photo`}
             loading="lazy"
+            decoding="async"
+            width={800}
+            height={600}
             onError={() => setImageBroken(true)}
           />
         ) : (

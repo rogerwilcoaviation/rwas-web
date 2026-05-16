@@ -156,7 +156,7 @@ export async function generateMetadata({
   const url = `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(l.id)}`;
   const firstPhoto = (l.photos || [])[0];
   const imageUrl = firstPhoto
-    ? `https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(firstPhoto.key)}`
+    ? `https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(firstPhoto.key)}?w=1600&q=82`
     : 'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg';
   return {
     title,
@@ -192,7 +192,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
   const photos = listing.photos || [];
   const photoUrls = photos.map(
     (p) =>
-      `https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(p.key)}`,
+      `https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(p.key)}?w=400&q=75`,
   );
   const canonicalUrl = `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(listing.id)}`;
 
