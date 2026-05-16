@@ -41,6 +41,7 @@ import {
   BulletinBar,
   BroadsheetFooter,
 } from '@/components/shared/broadsheet';
+import { productImageUrl } from '@/lib/product-image';
 
 
 // Strip Garmin "Buy & Save rebate form" paragraph from Shopify descriptionHtml.
@@ -53,27 +54,6 @@ function sanitizeProductHtml(html: string): string {
   // Remove bare rebate anchor
   out = out.replace(/<a[^>]*BuyAndSaveRebateForm[^>]*>[\s\S]*?<\/a>/gi, '');
   return out;
-}
-
-/**
- * Resolve a product image URL for use in <img src=...>.
- *
- * - When Shopify returns the bloated "Picture may not be exact" placeholder
- *   (~2.2MB SVG), substitute a tiny 970-byte local placeholder.
- * - For real Shopify CDN images, append `?width=N` so the CDN serves a
- *   resized variant (and WebP when the client accepts it) instead of the
- *   multi-megabyte original.
- */
-function productImageUrl(url: string, width: number): string {
-  if (!url) return '/static/no-image.svg';
-  if (/Picturemaynot/i.test(url) || /picture[_-]?may[_-]?not/i.test(url)) {
-    return '/static/no-image.svg';
-  }
-  if (/cdn\.shopify\.com/.test(url)) {
-    const sep = url.includes('?') ? '&' : '?';
-    return `${url}${sep}width=${width}`;
-  }
-  return url;
 }
 
 export async function generateStaticParams() {

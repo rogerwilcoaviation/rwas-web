@@ -7,6 +7,7 @@ import {
   cartPermalink,
 } from '@/lib/shopify';
 import Image from 'next/image';
+import { productImageUrl } from '@/lib/product-image';
 import Link from 'next/link';
 
 function formatPrice(amount: string, currencyCode: string) {
@@ -78,11 +79,12 @@ export default function ProductCard({
         <div className="relative aspect-[4/3] bg-[#f5f3ef]">
           {product.featuredImage ? (
             <Image
-              src={product.featuredImage.url}
+              src={productImageUrl(product.featuredImage.url, 600)}
               alt={product.featuredImage.altText || product.title}
               fill
               className="object-contain p-6 transition duration-300 group-hover:scale-[1.03]"
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
+              unoptimized
             />
           ) : null}
         </div>

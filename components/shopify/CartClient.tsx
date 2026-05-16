@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { Specimen } from '@/components/shared/broadsheet';
+import { productImageUrl } from '@/lib/product-image';
 
 const CART_STORAGE_KEY = 'rwas-shopify-cart-id';
 
@@ -240,7 +241,7 @@ export default function CartClient() {
                 >
                   {line.merchandise.product.featuredImage ? (
                     <Image
-                      src={line.merchandise.product.featuredImage.url}
+                      src={productImageUrl(line.merchandise.product.featuredImage.url, 240)}
                       alt={
                         line.merchandise.product.featuredImage.altText ||
                         line.merchandise.product.title

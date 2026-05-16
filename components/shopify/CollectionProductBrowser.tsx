@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { productImageUrl } from '@/lib/product-image';
 
 type CollectionBrowserImage = {
   url: string;
@@ -164,7 +165,7 @@ function ProductTile({
           {product.featuredImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={product.featuredImage.url}
+              src={productImageUrl(product.featuredImage.url, 600)}
               alt={product.featuredImage.altText || product.title}
               loading={eager ? 'eager' : 'lazy'}
               fetchPriority={eager ? 'high' : 'low'}

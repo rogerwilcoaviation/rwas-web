@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { productImageUrl } from '@/lib/product-image';
 
 export type PartFinderProduct = {
   id: string;
@@ -100,7 +101,7 @@ export default function PartFinder({
                     {product.featuredImage ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={product.featuredImage.url}
+                        src={productImageUrl(product.featuredImage.url, 200)}
                         alt={product.featuredImage.altText || product.title}
                         loading="lazy"
                         fetchPriority="low"
