@@ -386,18 +386,39 @@ export default async function ProductDetailPage({
     category: product.productType || undefined,
     image: imageUrls.length ? imageUrls : undefined,
     url: canonicalUrl,
-    offers: primaryPrice && !(gating.isGarmin && gating.otc !== 'eligible') ? {
-      '@type': 'Offer',
-      price: primaryPrice.amount,
-      priceCurrency: primaryPrice.currencyCode,
-      availability: product.availableForSale
-        ? gating.isGarmin
-          ? 'https://schema.org/PreOrder'
-          : 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
-      url: canonicalUrl,
-      seller: { '@type': 'Organization', name: 'Roger Wilco Aviation Services' },
-    } : undefined,
+    offers: (() => {
+      if (!primaryPrice) return undefined;
+      // Garmin MAP-locked path: emit Offer with availability + URL + seller
+      // but NO price/priceCurrency. Tells Google the product is acquirable
+      // through us without broadcasting a retail price that could violate
+      // Garmin dealer MAP policy. Renders for any Garmin product not tagged
+      // otc-eligible (mirrors the storefront pricing gate exactly).
+      if (gating.isGarmin && gating.otc !== 'eligible') {
+        return {
+          '@type': 'Offer',
+          availability: 'https://schema.org/PreOrder',
+          itemCondition: 'https://schema.org/NewCondition',
+          url: canonicalUrl,
+          seller: { '@type': 'Organization', name: 'Roger Wilco Aviation Services' },
+        };
+      }
+      // Default path: full Offer with price, used for non-Garmin products
+      // (Papa-Alpha tools) and Garmin products tagged otc-eligible (Garmin
+      // Watches collection and similar).
+      return {
+        '@type': 'Offer',
+        price: primaryPrice.amount,
+        priceCurrency: primaryPrice.currencyCode,
+        itemCondition: 'https://schema.org/NewCondition',
+        availability: product.availableForSale
+          ? gating.isGarmin
+            ? 'https://schema.org/PreOrder'
+            : 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock',
+        url: canonicalUrl,
+        seller: { '@type': 'Organization', name: 'Roger Wilco Aviation Services' },
+      };
+    })(),
   };
 
   return (
