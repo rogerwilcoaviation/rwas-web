@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import {
   Nunito_Sans,
   Playfair_Display,
@@ -11,14 +10,7 @@ import { ThemeProviders } from './theme-providers';
 import { Metadata } from 'next';
 import Script from 'next/script';
 import CartFloater from "@/components/shared/CartFloater";
-import dynamic from 'next/dynamic';
-
-// Visual-effect components — render seasonal themes and weather effects
-// (snow, fireworks, leaves, etc). Dynamically imported with ssr:false so
-// their code is split into separate chunks and loaded after hydration,
-// keeping the layout's initial JS bundle smaller.
-const SeasonalTheme = dynamic(() => import('./seasonal-theme'), { ssr: false });
-const WeatherEffects = dynamic(() => import('./weather-effects'), { ssr: false });
+import ClientVisualEffects from './client-visual-effects';
 
 import { colors } from '@/data/config/colors.js';
 
@@ -281,10 +273,7 @@ export default function RootLayout({
 
           <div className="w-full flex flex-col justify-between items-center font-sans">
             <SearchProvider>
-              <Suspense fallback={null}>
-                <SeasonalTheme />
-                <WeatherEffects />
-              </Suspense>
+              <ClientVisualEffects />
               <main className="w-full flex flex-col items-stretch mb-auto">
                 {children}
               </main>
