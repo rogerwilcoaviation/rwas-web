@@ -26,7 +26,7 @@ Usage: run after `next build` against the `out/` directory.
 import re, os, sys
 from pathlib import Path
 
-OUT = Path(os.path.expanduser("~/projects/rwas-web/out"))
+OUT = Path(os.environ.get("OUT_DIR", "out")).resolve()
 CSS_DIR = OUT / "_next/static/css"
 
 # Step 1: identify the broadsheet CSS file (contains Google Fonts @import)
