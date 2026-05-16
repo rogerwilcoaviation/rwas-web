@@ -24,7 +24,7 @@ import {
 } from '@/components/shared/broadsheet';
 import { type Listing } from './listing-card';
 import { ListingsGrid } from './listings-grid';
-import SellerAuthPanel from './seller-auth-panel';
+import SellerAuthPanelLoader from './seller-auth-panel-loader';
 
 // ISR — re-render at most every 60 seconds.
 export const revalidate = 60;
@@ -172,7 +172,7 @@ export default async function AircraftForSalePage() {
             <a className="a4s-cta-btn" href="#listings">
               Browse Aircraft
             </a>
-            <SellerAuthPanel />
+            <SellerAuthPanelLoader />
           </div>
         </section>
 

@@ -3,8 +3,8 @@
 Post-build CSS deferral for rwas-web.
 
 Strategy: identify the broadsheet CSS bundle in the build output (the one
-containing the @import for Google Fonts — that's the broadsheet-tokens.css
-+ broadsheet-chrome.css + newspaper.css merge). Convert its <link
+containing the broadsheet font-display CSS token — that's the
+broadsheet-tokens.css + broadsheet-chrome.css + newspaper.css merge). Convert its <link
 rel=stylesheet> tag in every HTML page to use the media=print swap trick:
 
     <link rel="stylesheet" href="..." media="print" onload="this.media='all';this.onload=null">
@@ -65,11 +65,17 @@ SKELETON = """<style data-rwas-skeleton>html{background:#f3eada;color:#1a1612;fo
 # Step 3: rewrite each HTML page
 def defer_link(html: str) -> tuple[str, bool]:
     """Find the broadsheet stylesheet link, replace with deferred version."""
-    # Match: <link rel="stylesheet" href="/_next/static/css/<bundlefile>.css" [attrs]/>
+    # Match the broadsheet link plus an optional existing noscript fallback.
+    # The Cloudflare build path can run this script twice: once during `next build`
+    # and again after next-on-pages copies output to .vercel/output/static.
+    # Capturing the fallback keeps the rewrite idempotent.
     pattern = (
         r'<link\s+rel="stylesheet"\s+href="'
         + re.escape(broadsheet_url)
         + r'"([^>]*)/?>'
+        + r'(?:<noscript><link\s+rel="stylesheet"\s+href="'
+        + re.escape(broadsheet_url)
+        + r'"\s*/></noscript>)?'
     )
     new_link = (
         f'<link rel="stylesheet" href="{broadsheet_url}" media="print" '
