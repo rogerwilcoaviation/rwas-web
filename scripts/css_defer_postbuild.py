@@ -26,7 +26,18 @@ Usage: run after `next build` against the `out/` directory.
 import re, os, sys
 from pathlib import Path
 
-OUT = Path(os.environ.get("OUT_DIR", "out")).resolve()
+def _find_out_dir():
+    """Auto-detect the build output dir.
+    next-on-pages (used by GitHub Actions deploy) writes to .vercel/output/static.
+    Plain `next build` writes to out/.
+    """
+    for candidate in (".vercel/output/static", "out"):
+        if Path(candidate).is_dir():
+            return candidate
+    return "out"  # fallback so the error message is sensible
+
+OUT = Path(os.environ.get("OUT_DIR") or _find_out_dir()).resolve()
+print(f"  using OUT_DIR={OUT}")
 CSS_DIR = OUT / "_next/static/css"
 
 # Step 1: identify the broadsheet CSS file (contains Google Fonts @import)

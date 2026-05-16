@@ -13,7 +13,7 @@
     "appinfo": "node ./scripts/generateAppInfo.mjs",
     "pages:build": "npm run build:cloudflare",
     "pages:deploy:preview": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview",
-    "build:cloudflare": "npm run appinfo && npx @cloudflare/next-on-pages && node scripts/inject-cloudflare-collection-redirects.mjs",
+    "build:cloudflare": "npm run appinfo && npx @cloudflare/next-on-pages && node scripts/inject-cloudflare-collection-redirects.mjs && python3 scripts/css_defer_postbuild.py",
     "deploy:preview": "npm run build:cloudflare && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview",
     "seo:smoke": "node scripts/seo-smoke-check.mjs"
   },
