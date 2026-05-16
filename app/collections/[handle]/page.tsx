@@ -144,6 +144,16 @@ export default async function CollectionDetailPage({
   }));
   const quoteOnly = isQuoteCollection(collection.handle);
   const canonicalUrl = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${canonicalUrl}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Collections', item: 'https://www.rogerwilcoaviation.com/collections' },
+      { '@type': 'ListItem', position: 3, name: collection.title, item: canonicalUrl },
+    ],
+  };
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -165,6 +175,10 @@ export default async function CollectionDetailPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <Dateline />
       <Masthead />

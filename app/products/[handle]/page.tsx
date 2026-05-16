@@ -375,6 +375,16 @@ export default async function ProductDetailPage({
   });
   const canonicalUrl = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
   const imageUrls = product.images.map((img) => img.url).filter(Boolean);
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${canonicalUrl}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Collections', item: 'https://www.rogerwilcoaviation.com/collections' },
+      { '@type': 'ListItem', position: 3, name: product.title, item: canonicalUrl },
+    ],
+  };
   const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -426,6 +436,10 @@ export default async function ProductDetailPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <Dateline />
       <Masthead />
