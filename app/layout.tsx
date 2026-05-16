@@ -235,7 +235,7 @@ export default function RootLayout({
       </head>
 
       <body className="flex flex-col text-black antialiased dark:bg-gray-950 dark:text-white min-h-screen bs-body-cream">
-        <Script src="/jerry-widget.js?v=20260422" strategy="afterInteractive" />
+        <Script src="/jerry-widget.js?v=20260422" strategy="lazyOnload" />
         <Script src="/rwas-analytics.js?v=20260429" strategy="afterInteractive" />
         <CartFloater />
         <ThemeProviders>
