@@ -1,7 +1,4 @@
 
-# --- /garmin no-redirect: serve /garmin/index.html under /garmin URL (no 308 hop) ---
-/garmin /garmin/index.html 200
-
 # --- P1.1: deleted Shipixen template pages redirect to real content ---
 # P1.1: old Shipixen template page deleted
 /careers /about 301
