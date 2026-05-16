@@ -200,9 +200,27 @@ def extract_critical(tw_src: str) -> str:
                 rules.append(rule)
     if missing:
         print(f"  WARNING: critical utility rules missing: {missing}")
-    # Visual safety net: rules that live in the deferred broadsheet bundle
-    # but affect first paint. Without these the body briefly paints white.
-    SAFETY_NET = ".bs-body-cream{background:#F4EFE3}"
+    # Visual safety net: rules that live in the deferred broadsheet bundle but
+    # affect first paint and LCP. PSI consistently reports the masthead brand
+    # text as the LCP node on mobile pages, so keep the masthead's first-frame
+    # layout/type styles inline while the full broadsheet bundle loads async.
+    SAFETY_NET = (
+        ".bs-body-cream{background:#F4EFE3}"
+        "html,body{background:#F4EFE3;margin:0}"
+        ".broadsheet{background:#F4EFE3;width:100%;color:#0F1418;font-family:var(--font-source-serif),Georgia,serif;font-size:15px;line-height:1.55;min-height:100vh;position:relative;isolation:isolate}"
+        ".broadsheet>*{position:relative;z-index:1}"
+        ".broadsheet .bs-masthead{background:#FBF7EC;border-top:1px solid #9E7826;border-bottom:6px double #9E7826;padding:22px 28px 18px}"
+        ".broadsheet .bs-masthead__inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center}"
+        ".broadsheet .bs-masthead__logo{height:84px;width:auto}"
+        ".broadsheet .bs-masthead__titles{text-align:center}"
+        ".broadsheet .bs-masthead__brand{font-family:var(--font-playfair),Georgia,serif;font-weight:900;font-size:40px;line-height:1;letter-spacing:.01em;margin:0;color:#0F1418}"
+        ".broadsheet .bs-masthead__tagline{font-family:var(--font-inter),system-ui,sans-serif;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#2A333C;margin-top:8px}"
+        ".broadsheet .bs-masthead__cert{text-align:right;font-family:var(--font-inter),system-ui,sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;line-height:1.6}"
+        ".broadsheet .bs-masthead__cert-main{color:#0F1418;font-weight:700}"
+        ".broadsheet .bs-masthead__cert-location{color:#2A333C}"
+        "@media(max-width:900px){.broadsheet .bs-masthead__inner{grid-template-columns:1fr;text-align:center}.broadsheet .bs-masthead__cert{text-align:center}}"
+        "@media(max-width:640px){.broadsheet .bs-masthead{padding:18px 14px 14px}.broadsheet .bs-masthead__inner{gap:12px}.broadsheet .bs-masthead__logo{height:64px}.broadsheet .bs-masthead__brand{font-size:clamp(30px,9vw,36px);letter-spacing:-.01em}.broadsheet .bs-masthead__tagline,.broadsheet .bs-masthead__cert{font-size:9px;letter-spacing:.16em}}"
+    )
     return preflight_globals + "".join(rules) + SAFETY_NET
 
 
