@@ -28,6 +28,7 @@
 
   function send(event, feature, path, extra) {
     try {
+      var endpoint = event === 'web_vital' ? '/api/rum' : '/api/track';
       var body = {
         sessionId: getSessionId(),
         event: event || 'feature',
@@ -44,9 +45,9 @@
       var payload = JSON.stringify(body);
       if (navigator.sendBeacon) {
         var blob = new Blob([payload], { type: 'application/json' });
-        if (navigator.sendBeacon('/api/rum', blob)) return;
+        if (navigator.sendBeacon(endpoint, blob)) return;
       }
-      fetch('/api/rum', {
+      fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: payload,
