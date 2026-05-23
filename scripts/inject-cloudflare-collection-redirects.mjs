@@ -21,17 +21,23 @@ const redirects = {
   '/collections/garmin-outdoor-dog-tracking': '/collections',
 };
 
+const gonePaths = [
+  '/pages/script-rwas',
+];
+
 const marker = 'async fetch(t,e,a){';
-const injected = `${marker}const rwasPath=new URL(t.url).pathname.replace(/\\/$/,"");const rwasTarget=${JSON.stringify(
+const injected = `${marker}const rwasPath=new URL(t.url).pathname.replace(/\\/$/,"");if(${JSON.stringify(
+  gonePaths
+)}.includes(rwasPath))return new Response("Gone",{status:410,headers:{"Cache-Control":"public, max-age=3600","X-Robots-Tag":"noindex, noarchive"}});const rwasTarget=${JSON.stringify(
   redirects
 )}[rwasPath];if(rwasTarget)return Response.redirect(new URL(rwasTarget,t.url),301);`;
 
 const worker = readFileSync(workerPath, 'utf8');
 if (worker.includes('const rwasPath=')) {
-  console.log('RWAS collection redirects already injected into Cloudflare worker.');
+  console.log('RWAS SEO edge rules already injected into Cloudflare worker.');
 } else if (!worker.includes(marker)) {
   throw new Error(`Could not find Cloudflare worker fetch marker in ${workerPath}`);
 } else {
   writeFileSync(workerPath, worker.replace(marker, injected));
-  console.log(`Injected ${Object.keys(redirects).length} RWAS collection redirects into Cloudflare worker.`);
+  console.log(`Injected ${Object.keys(redirects).length} RWAS collection redirects and ${gonePaths.length} gone URL into Cloudflare worker.`);
 }

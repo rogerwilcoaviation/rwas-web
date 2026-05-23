@@ -19,8 +19,23 @@ const COLLECTION_REDIRECTS: Record<string, string> = {
   '/collections/garmin-outdoor-dog-tracking': '/collections',
 };
 
+const LEGACY_GONE_PATHS = new Set([
+  // Legacy indexed Shopify page with no current public-site equivalent.
+  '/pages/script-rwas',
+]);
+
 export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname.replace(/\/$/, '');
+  if (LEGACY_GONE_PATHS.has(pathname)) {
+    return new NextResponse('Gone', {
+      status: 410,
+      headers: {
+        'Cache-Control': 'public, max-age=3600',
+        'X-Robots-Tag': 'noindex, noarchive',
+      },
+    });
+  }
+
   const target = COLLECTION_REDIRECTS[pathname];
   if (target) {
     const url = req.nextUrl.clone();
@@ -33,5 +48,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/collections/:path*'],
+  matcher: ['/dashboard/:path*', '/collections/:path*', '/pages/:path*'],
 };

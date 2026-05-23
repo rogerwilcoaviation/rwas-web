@@ -48,6 +48,13 @@ if (!isLocalBase) {
 
 const sitemapRes = await fetchNoRedirect(`${base}/sitemap.xml`);
 if (sitemapRes.res.status !== 200) fail(`Sitemap returned ${sitemapRes.res.status}`);
+
+const goneRes = await fetch(`${base}/pages/script-rwas`, { redirect: 'manual' });
+if (goneRes.status !== 410) fail(`/pages/script-rwas should return 410, got ${goneRes.status}`);
+if (!/noindex/i.test(goneRes.headers.get('x-robots-tag') || '')) {
+  fail('/pages/script-rwas missing X-Robots-Tag noindex');
+}
+
 const urls = Array.from(sitemapRes.text.matchAll(/<loc>(.*?)<\/loc>/g), (m) => {
   const url = m[1];
   if (!isLocalBase) return url;
