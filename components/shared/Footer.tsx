@@ -72,6 +72,9 @@ export const Footer = ({ className }: { className?: string }) => {
         <LandingFooterLink href="/shop-capabilities">
           Shop capabilities
         </LandingFooterLink>
+        <LandingFooterLink href="/services/ndt-inspection">
+          NDT inspection
+        </LandingFooterLink>
         <LandingFooterLink href="/contact">
           Contact
         </LandingFooterLink>

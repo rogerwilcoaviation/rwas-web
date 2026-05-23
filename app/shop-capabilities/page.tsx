@@ -222,6 +222,9 @@ export default function ShopCapabilitiesPage() {
                   <p>
                     Level 3 NDT services with FAA Form 8130-3 return to service and Airworthiness Directive compliance. Full range of inspection methods for structural integrity verification across metallic airframe, engine, and propeller components.
                   </p>
+                  <p>
+                    <a href="/services/ndt-inspection">Read more about aircraft NDT inspection at RWAS</a>
+                  </p>
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc">
