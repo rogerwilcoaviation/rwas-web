@@ -133,7 +133,7 @@ export default function GarminInstallationNorthernPlainsPage() {
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc">
-                    <p className="bs-svc-name">G3X Touch</p>
+                    <p className="bs-svc-name"><Link href="/services/g3x-touch-installation">G3X Touch</Link></p>
                     <p className="bs-svc-desc">Glass-cockpit upgrades with ADAHRS, engine information, synthetic vision, and display planning.</p>
                   </li>
                   <li className="bs-svc">

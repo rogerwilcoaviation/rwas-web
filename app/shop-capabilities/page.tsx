@@ -163,7 +163,7 @@ export default function ShopCapabilitiesPage() {
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/collections/avionics-certified">G3X Touch Suite</a></p>
+                    <p className="bs-svc-name"><a href="/services/g3x-touch-installation">G3X Touch Suite</a></p>
                   </li>
                   <li className="bs-svc">
                     <p className="bs-svc-name"><a href="/collections/avionics-certified">GTN 650Xi / 750Xi</a></p>

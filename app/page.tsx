@@ -284,6 +284,14 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
+                    <a href="/services/g3x-touch-installation">G3X Touch Suite</a>
+                  </p>
+                  <p className="bs-svc-desc">
+                    Glass cockpit planning with display layout, EIS, ADAHRS, connectivity, and panel fabrication.
+                  </p>
+                </li>
+                <li className="bs-svc">
+                  <p className="bs-svc-name">
                     <a href="/collections/avionics-certified">GTN 650Xi / 750Xi</a>
                   </p>
                   <p className="bs-svc-desc">

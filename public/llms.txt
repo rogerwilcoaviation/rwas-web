@@ -17,6 +17,7 @@
 - [Papa-Alpha Tools](https://www.rogerwilcoaviation.com/services/papa-alpha-tools) — Story and application guide for RWAS-built Piper rigging reference tools
 - [Fiber Laser Fabrication](https://www.rogerwilcoaviation.com/services/fiber-laser-fabrication) — Aircraft panel cutting, laser welding, powder coating, UV printing, and fabrication support
 - [Garmin Installation Northern Plains](https://www.rogerwilcoaviation.com/services/garmin-installation-northern-plains) — Garmin G3X Touch, GTN Xi, GFC 500, ADS-B, and panel installation support for SD, NE, IA, MN, and ND
+- [G3X Touch Installation](https://www.rogerwilcoaviation.com/services/g3x-touch-installation) — Garmin G3X Touch glass panel planning, EIS, ADAHRS, Connext workflow, panel fabrication, configuration, and documentation support
 - [GFC 500 Autopilot Installation](https://www.rogerwilcoaviation.com/services/gfc-500-autopilot-installation) — Garmin GFC 500 eligibility review, quote planning, panel integration, installation, testing, and documentation
 - [ADS-B Installation](https://www.rogerwilcoaviation.com/services/ads-b-installation) — ADS-B Out compliance, Garmin transponder upgrade planning, GPS source review, antenna planning, configuration, and documentation support
 - [Rotax Repair](https://www.rogerwilcoaviation.com/services/rotax-repair) — Rotax aircraft engine maintenance support, inspection planning, troubleshooting, and documentation review
