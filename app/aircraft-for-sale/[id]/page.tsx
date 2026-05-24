@@ -477,7 +477,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
                 >
                   Contact Seller
                 </a>
-                <a href="tel:+16052998178" className="secondary">
+                <a href="/services/pre-buy-inspection" className="secondary">
                   Call RWAS for Pre-Buy
                 </a>
               </div>
@@ -635,7 +635,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
             ) : null}
           </dl>
           <p className="a4s-seller-disclaimer">
-            RWAS introduces buyers and sellers. We are not the seller of record unless explicitly noted. Pre-buy inspection by our FAA Part 145 repair station is available on request &mdash; call (605) 299-8178.
+            RWAS introduces buyers and sellers. We are not the seller of record unless explicitly noted. <a href="/services/pre-buy-inspection">Pre-buy inspection by our FAA Part 145 repair station</a> is available on request &mdash; call (605) 299-8178.
           </p>
         </Specimen>
       </main>

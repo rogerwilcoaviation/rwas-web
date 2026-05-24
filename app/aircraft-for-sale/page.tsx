@@ -172,6 +172,9 @@ export default async function AircraftForSalePage() {
             <a className="a4s-cta-btn" href="#listings">
               Browse Aircraft
             </a>
+            <a className="a4s-cta-btn" href="/services/pre-buy-inspection">
+              Pre-Buy Inspection
+            </a>
             <SellerAuthPanelLoader />
           </div>
         </section>
@@ -215,7 +218,7 @@ export default async function AircraftForSalePage() {
             <div className="a4s-how-step">
               <h3>4. Buyers contact you</h3>
               <p>
-                Interested buyers reach out directly. Pre-buy inspections by RWAS available &mdash; ask the buyer, not us; you decide.
+                Interested buyers reach out directly. <a href="/services/pre-buy-inspection">Pre-buy inspections by RWAS</a> available &mdash; ask the buyer, not us; you decide.
               </p>
             </div>
           </div>

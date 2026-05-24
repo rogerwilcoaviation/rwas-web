@@ -198,7 +198,7 @@ export default function ShopCapabilitiesPage() {
                     <p className="bs-svc-desc">Per FAR 43 with discrepancy reports</p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name">Condition &amp; Pre-Buy Inspections</p>
+                    <p className="bs-svc-name"><a href="/services/pre-buy-inspection">Condition &amp; Pre-Buy Inspections</a></p>
                   </li>
                   <li className="bs-svc">
                     <p className="bs-svc-name">100-Hour Inspections</p>
