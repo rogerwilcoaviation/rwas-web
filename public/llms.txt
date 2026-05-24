@@ -14,6 +14,7 @@
 - [About](https://www.rogerwilcoaviation.com/about) — Company history, founder bio, contact details
 - [Sioux Falls Location](https://www.rogerwilcoaviation.com/locations/sioux-falls) — Hangar 3 address, regional service area, and links to RWAS service capabilities
 - [Shop Capabilities](https://www.rogerwilcoaviation.com/shop-capabilities) — Full catalog of services: Garmin installations, A&P maintenance, NDT, fabrication
+- [Aircraft Services](https://www.rogerwilcoaviation.com/services) — Crawlable service hub linking RWAS avionics, maintenance, NDT, fabrication, Rotax, pre-buy, and Papa-Alpha service pages
 - [Aircraft NDT Inspection](https://www.rogerwilcoaviation.com/services/ndt-inspection) — Eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing
 - [Papa-Alpha Tools](https://www.rogerwilcoaviation.com/services/papa-alpha-tools) — Story and application guide for RWAS-built Piper rigging reference tools
 - [Fiber Laser Fabrication](https://www.rogerwilcoaviation.com/services/fiber-laser-fabrication) — Aircraft panel cutting, laser welding, powder coating, UV printing, and fabrication support
