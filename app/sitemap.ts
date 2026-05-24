@@ -25,6 +25,7 @@ const STATIC_ROUTES: StaticRoute[] = [
   { path: 'services/fiber-laser-fabrication', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services/garmin-installation-northern-plains', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services/rotax-repair', priority: 0.8, changeFrequency: 'monthly' },
+  { path: 'services/aircraft-maintenance-yankton', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'panel-planner',     priority: 0.9, changeFrequency: 'monthly' },
   { path: 'aircraft-for-sale', priority: 0.8, changeFrequency: 'daily'   },
   { path: 'garmin',            priority: 0.8, changeFrequency: 'weekly'  },

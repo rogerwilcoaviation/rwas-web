@@ -19,6 +19,7 @@ const redirects = {
   '/collections/garmin-cycling-fitness': '/collections',
   '/collections/garmin-golf': '/collections',
   '/collections/garmin-outdoor-dog-tracking': '/collections',
+  '/maintenance': '/services/aircraft-maintenance-yankton',
 };
 
 const gonePaths = [

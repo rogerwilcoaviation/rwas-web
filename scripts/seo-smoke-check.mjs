@@ -67,6 +67,15 @@ const urls = Array.from(sitemapRes.text.matchAll(/<loc>(.*?)<\/loc>/g), (m) => {
 }).filter(Boolean);
 if (!urls.length) fail('Sitemap has no URLs');
 
+if (urls.some((url) => url.includes('/services/aircraft-maintenance-yankton'))) {
+  const maintenanceRes = await fetch(`${base}/maintenance`, { redirect: 'manual' });
+  if (maintenanceRes.status !== 301) fail(`/maintenance should 301, got ${maintenanceRes.status}`);
+  const maintenanceLocation = maintenanceRes.headers.get('location') || '';
+  if (!maintenanceLocation.includes('/services/aircraft-maintenance-yankton')) {
+    fail(`/maintenance redirects to unexpected location: ${maintenanceLocation}`);
+  }
+}
+
 const failures = [];
 
 async function checkUrl(url) {

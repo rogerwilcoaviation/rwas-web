@@ -316,7 +316,7 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/shop-capabilities">Annual Inspections</a>
+                    <a href="/services/aircraft-maintenance-yankton">Annual Inspections</a>
                   </p>
                   <p className="bs-svc-desc">
                     Thorough airworthiness inspections per FAR 43. Discrepancy reports and return-to-service documentation.
@@ -324,7 +324,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/shop-capabilities">100-Hour Inspections</a>
+                    <a href="/services/aircraft-maintenance-yankton">100-Hour Inspections</a>
                   </p>
                   <p className="bs-svc-desc">
                     For aircraft operated for hire under 14 C.F.R. Part 91 and Part 135 requirements.

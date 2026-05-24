@@ -188,10 +188,13 @@ export default function ShopCapabilitiesPage() {
                   <p>
                     Comprehensive airframe and powerplant services for GA, corporate, and commercial operators. All work performed by certificated mechanics with full logbook documentation and FAA Form 8130-3 return to service when applicable.
                   </p>
+                  <p>
+                    <a href="/services/aircraft-maintenance-yankton">Read more about aircraft maintenance and annual inspections at RWAS</a>
+                  </p>
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc">
-                    <p className="bs-svc-name">Annual Inspections</p>
+                    <p className="bs-svc-name"><a href="/services/aircraft-maintenance-yankton">Annual Inspections</a></p>
                     <p className="bs-svc-desc">Per FAR 43 with discrepancy reports</p>
                   </li>
                   <li className="bs-svc">
