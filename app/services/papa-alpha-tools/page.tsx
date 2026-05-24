@@ -91,7 +91,7 @@ export default function PapaAlphaToolsPage() {
             Stabilator &middot; rudder &middot; aileron &middot; flap &middot; bell crank references for PA-series maintenance work
           </p>
           <div className="bs-byline">
-            Built by Roger Wilco Aviation Services &middot; FAA Part 145 Repair Station RWSR491E &middot; Sioux Falls, SD, Sioux Falls, SD
+            Built by Roger Wilco Aviation Services &middot; FAA Part 145 Repair Station RWSR491E &middot; Sioux Falls, SD
           </div>
         </section>
 
