@@ -10,16 +10,16 @@ import {
 } from '@/components/shared/broadsheet';
 import Link from 'next/link';
 
-const pageUrl = 'https://www.rogerwilcoaviation.com/services/aircraft-maintenance-yankton';
+const pageUrl = 'https://www.rogerwilcoaviation.com/services/aircraft-maintenance-sioux-falls';
 
 export const metadata = {
-  title: { absolute: 'Aircraft Maintenance & Annual Inspections - Yankton, SD | RWAS' },
+  title: { absolute: 'Aircraft Maintenance & Annual Inspections - Sioux Falls, SD | RWAS' },
   description:
-    'Aircraft maintenance, annual inspections, 100-hour inspections, pre-buy support, AOG service, and logbook documentation from FAA Part 145 repair station RWSR491E at KYKN in Yankton, SD.',
+    'Aircraft maintenance, annual inspections, 100-hour inspections, pre-buy support, AOG service, and logbook documentation from FAA Part 145 repair station RWSR491E at Hangar 3 in Sioux Falls, SD.',
   alternates: { canonical: pageUrl },
 };
 
-export default function AircraftMaintenanceYanktonPage() {
+export default function AircraftMaintenanceSiouxFallsPage() {
   return (
     <BroadsheetLayout>
       <script
@@ -31,7 +31,7 @@ export default function AircraftMaintenanceYanktonPage() {
               {
                 '@type': 'Service',
                 '@id': `${pageUrl}#service`,
-                name: 'Aircraft Maintenance and Annual Inspections in Yankton, SD',
+                name: 'Aircraft maintenance and annual inspections in Sioux Falls, SD',
                 serviceType: 'Aircraft maintenance',
                 url: pageUrl,
                 provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
@@ -43,7 +43,7 @@ export default function AircraftMaintenanceYanktonPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Aircraft maintenance, annual inspections, 100-hour inspections, pre-buy support, AOG service, propeller balancing, aircraft weight certification, and logbook documentation from Roger Wilco Aviation Services at Chan Gurney Municipal Airport in Yankton, South Dakota.',
+                  'Aircraft maintenance, annual inspections, 100-hour inspections, pre-buy support, AOG service, propeller balancing, aircraft weight certification, and logbook documentation from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Aircraft maintenance services',
@@ -63,7 +63,7 @@ export default function AircraftMaintenanceYanktonPage() {
                 itemListElement: [
                   { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
                   { '@type': 'ListItem', position: 2, name: 'Shop Capabilities', item: 'https://www.rogerwilcoaviation.com/shop-capabilities' },
-                  { '@type': 'ListItem', position: 3, name: 'Aircraft Maintenance Yankton', item: pageUrl },
+                  { '@type': 'ListItem', position: 3, name: 'Aircraft Maintenance Sioux Falls', item: pageUrl },
                 ],
               },
             ],
@@ -80,7 +80,7 @@ export default function AircraftMaintenanceYanktonPage() {
       <main className="bs-stage">
         <section className="hero-headline-group" aria-labelledby="maintenance-hero">
           <span className="bs-kicker">FAA Part 145 Repair Station &middot; Certificate #RWSR491E</span>
-          <span className="bs-script-accent">&mdash; aircraft maintenance at KYKN &mdash;</span>
+          <span className="bs-script-accent">&mdash; aircraft maintenance in Sioux Falls &mdash;</span>
           <h1 id="maintenance-hero" className="bs-headline bs-headline--hero">
             Aircraft maintenance and annual inspections,
             <br />
@@ -90,7 +90,7 @@ export default function AircraftMaintenanceYanktonPage() {
             Annuals &middot; 100-hour inspections &middot; pre-buy support &middot; AOG service &middot; prop balancing &middot; weight certification
           </p>
           <div className="bs-byline">
-            Chan Gurney Municipal (KYKN) &middot; Yankton, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -102,7 +102,7 @@ export default function AircraftMaintenanceYanktonPage() {
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  Roger Wilco Aviation Services provides aircraft maintenance from Chan Gurney Municipal Airport in Yankton, South Dakota. The shop supports general aviation, corporate, commercial, light sport, and experimental owners who need inspections, discrepancies, troubleshooting, and documentation handled in a controlled repair-station environment.
+                  Roger Wilco Aviation Services provides aircraft maintenance from Hangar 3 in Sioux Falls, South Dakota. The shop supports general aviation, corporate, commercial, light sport, and experimental owners who need inspections, discrepancies, troubleshooting, and documentation handled in a controlled repair-station environment.
                 </p>
                 <p>
                   RWAS is not just a place to park the airplane during an annual. The value is in the process: careful discrepancy review, clear communication before costs run away, parts and records traceability, logbook entries that still make sense later, and the ability to coordinate airframe, avionics, NDT, and fabrication issues when a simple inspection turns into real aircraft work.
@@ -191,7 +191,7 @@ export default function AircraftMaintenanceYanktonPage() {
                 </p>
               </div>
               <p>
-                <Link className="bs-cta-primary" href="/contact?reason=service&source=aircraft-maintenance-yankton">
+                <Link className="bs-cta-primary" href="/contact?reason=service&source=aircraft-maintenance-sioux-falls">
                   Request maintenance scheduling
                 </Link>
                 <Link className="bs-cta-secondary" href="/services/ndt-inspection">
@@ -219,9 +219,9 @@ export default function AircraftMaintenanceYanktonPage() {
                   service@rwas.team
                 </a>
                 <br />
-                Chan Gurney Municipal (KYKN)
+                Hangar 3, 3701 N. Aviation Avenue
                 <br />
-                Yankton, South Dakota
+                Sioux Falls, South Dakota 57104
               </p>
             </Specimen>
 

@@ -180,22 +180,17 @@ export default function RootLayout({
                   logo: `${siteConfig.siteUrl}/newspaper/images/logo.png`,
                   image: `${siteConfig.siteUrl}/newspaper/images/r182_panel.jpg`,
                   description:
-                    'FAA Part 145 Repair Station (Certificate RWSR491E) in Yankton, South Dakota. Certified Garmin dealer specializing in G3X Touch, GFC 500, GTN navigators, annual inspections, NDT, sheet metal fabrication, and Papa-Alpha Piper rigging tools.',
+                    'FAA Part 145 Repair Station (Certificate RWSR491E) in Sioux Falls, South Dakota. Certified Garmin dealer specializing in G3X Touch, GFC 500, GTN navigators, annual inspections, NDT, sheet metal fabrication, and Papa-Alpha Piper rigging tools.',
                   telephone: '+1-605-299-8178',
                   email: 'avionics@rwas.team',
                   priceRange: '$$',
                   address: {
                     '@type': 'PostalAddress',
-                    streetAddress: '700 E 31st Street',
-                    addressLocality: 'Yankton',
+                    streetAddress: 'Hangar 3, 3701 N. Aviation Avenue',
+                    addressLocality: 'Sioux Falls',
                     addressRegion: 'SD',
-                    postalCode: '57078',
+                    postalCode: '57104',
                     addressCountry: 'US',
-                  },
-                  geo: {
-                    '@type': 'GeoCoordinates',
-                    latitude: 42.9167,
-                    longitude: -97.3858,
                   },
                   openingHoursSpecification: [
                     {
@@ -239,9 +234,6 @@ export default function RootLayout({
                   sameAs: [
                     'https://www.facebook.com/rogerwilcoaviationservices/',
                     'https://aea.net/memberdetails.asp?ID=3310',
-                    'https://www.aopa.org/destinations/business/39868',
-                    'https://www.bbb.org/us/sd/yankton/profile/aviation-services/roger-wilco-aviation-services-llc-0714-1000062719',
-                    'https://business.yanktonsd.com/list/member/roger-wilco-aviation-services-6940',
                   ],
                   founder: {
                     '@type': 'Person',

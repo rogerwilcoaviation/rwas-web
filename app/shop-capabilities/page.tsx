@@ -13,7 +13,7 @@ import {
 export const metadata = {
   title: { absolute: 'RWAS Shop Capabilities — Avionics, A&P, NDT' },
   description:
-    'Garmin avionics, A&P maintenance, NDT inspection, sheet metal, fiber laser, and fabrication support from FAA Part 145 repair station RWSR491E at KYKN.',
+    'Garmin avionics, A&P maintenance, NDT inspection, sheet metal, fiber laser, and fabrication support from FAA Part 145 repair station RWSR491E at Sioux Falls, SD.',
 };
 
 export default function ShopCapabilitiesPage() {
@@ -139,7 +139,7 @@ export default function ShopCapabilitiesPage() {
             Limited Airframe &middot; Limited Instrument &middot; Limited Radio &middot; NDT Inspection &amp; Testing
           </p>
           <div className="bs-byline">
-            Chan Gurney Municipal (KYKN) &middot; Yankton, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -189,12 +189,12 @@ export default function ShopCapabilitiesPage() {
                     Comprehensive airframe and powerplant services for GA, corporate, and commercial operators. All work performed by certificated mechanics with full logbook documentation and FAA Form 8130-3 return to service when applicable.
                   </p>
                   <p>
-                    <a href="/services/aircraft-maintenance-yankton">Read more about aircraft maintenance and annual inspections at RWAS</a>
+                    <a href="/services/aircraft-maintenance-sioux-falls">Read more about aircraft maintenance and annual inspections at RWAS</a>
                   </p>
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/services/aircraft-maintenance-yankton">Annual Inspections</a></p>
+                    <p className="bs-svc-name"><a href="/services/aircraft-maintenance-sioux-falls">Annual Inspections</a></p>
                     <p className="bs-svc-desc">Per FAR 43 with discrepancy reports</p>
                   </li>
                   <li className="bs-svc">
@@ -320,9 +320,9 @@ export default function ShopCapabilitiesPage() {
                   (605) 299-8178
                 </a>
                 <br />
-                Chan Gurney Municipal (KYKN)
+                Hangar 3, 3701 N. Aviation Avenue
                 <br />
-                Yankton, South Dakota
+                Sioux Falls, South Dakota 57104
               </p>
             </Specimen>
 

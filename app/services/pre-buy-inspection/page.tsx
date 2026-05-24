@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/pre-buy-inspection'
 export const metadata = {
   title: { absolute: 'Aircraft Pre-Buy Inspection - South Dakota, Nebraska, Iowa | RWAS' },
   description:
-    'Aircraft pre-buy inspection support from RWAS, an FAA Part 145 repair station at KYKN in Yankton, SD. Logbook review, aircraft condition checks, NDT coordination, avionics review, and buyer decision support.',
+    'Aircraft pre-buy inspection support from RWAS, an FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. Logbook review, aircraft condition checks, NDT coordination, avionics review, and buyer decision support.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function PreBuyInspectionPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Aircraft pre-buy inspection support, logbook review, physical inspection, avionics review, NDT coordination, and buyer decision support from Roger Wilco Aviation Services at Chan Gurney Municipal Airport in Yankton, South Dakota.',
+                  'Aircraft pre-buy inspection support, logbook review, physical inspection, avionics review, NDT coordination, and buyer decision support from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Pre-buy inspection services',
@@ -89,7 +89,7 @@ export default function PreBuyInspectionPage() {
             Logbooks &middot; physical condition &middot; avionics &middot; NDT coordination &middot; discrepancy summary &middot; buyer decision support
           </p>
           <div className="bs-byline">
-            Chan Gurney Municipal (KYKN) &middot; Yankton, SD &middot; Supporting buyers across SD &middot; NE &middot; IA &middot; MN &middot; ND
+            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Supporting buyers across SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -104,7 +104,7 @@ export default function PreBuyInspectionPage() {
                   A pre-buy inspection exists to help a buyer understand risk before closing on an aircraft. It is not a substitute for an annual inspection, and it is not a guarantee that every future problem has been found. It is a focused look at records, condition, systems, obvious airworthiness concerns, and cost drivers that can materially change the purchase decision.
                 </p>
                 <p>
-                  Roger Wilco Aviation Services performs pre-buy support from an FAA Part 145 repair-station environment at Chan Gurney Municipal Airport in Yankton, South Dakota. That matters when a purchase question crosses airframe, avionics, NDT, logbook, structural, or documentation boundaries.
+                  Roger Wilco Aviation Services performs pre-buy support from an FAA Part 145 repair-station environment at Hangar 3 in Sioux Falls, South Dakota. That matters when a purchase question crosses airframe, avionics, NDT, logbook, structural, or documentation boundaries.
                 </p>
               </div>
             </Specimen>
@@ -190,7 +190,7 @@ export default function PreBuyInspectionPage() {
                 <Link className="bs-cta-primary" href="/contact?reason=service&source=pre-buy-inspection">
                   Request pre-buy inspection
                 </Link>
-                <Link className="bs-cta-secondary" href="/services/aircraft-maintenance-yankton">
+                <Link className="bs-cta-secondary" href="/services/aircraft-maintenance-sioux-falls">
                   Aircraft maintenance services
                 </Link>
               </p>
@@ -215,9 +215,9 @@ export default function PreBuyInspectionPage() {
                   service@rwas.team
                 </a>
                 <br />
-                Chan Gurney Municipal (KYKN)
+                Hangar 3, 3701 N. Aviation Avenue
                 <br />
-                Yankton, South Dakota
+                Sioux Falls, South Dakota 57104
               </p>
             </Specimen>
 

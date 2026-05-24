@@ -32,7 +32,7 @@ export default function CartPage() {
             Adjust quantities, remove items, then hand off to Shopify checkout when ready.
           </p>
           <p className="bs-byline">
-            RWAS Avionics Desk &middot; Yankton, SD &middot; KYKN
+            RWAS Avionics Desk &middot; Hangar 3 &middot; Sioux Falls, SD
           </p>
         </section>
 

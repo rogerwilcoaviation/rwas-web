@@ -14,7 +14,7 @@ import {
 export const metadata = {
   title: { absolute: 'About RWAS — FAA Part 145 Repair Station' },
   description:
-    'FAA Part 145 repair station RWSR491E at KYKN in Yankton, SD, providing avionics, airframe, powerplant, NDT, and fabrication support.',
+    'FAA Part 145 repair station RWSR491E at Hangar 3, 3701 N. Aviation Avenue, Sioux Falls, SD, providing avionics, airframe, powerplant, NDT, and fabrication support.',
 };
 
 export default function AboutPage() {
@@ -50,36 +50,36 @@ export default function AboutPage() {
             built on the Northern Plains.
           </h1>
           <p className="bs-subhead">
-            FAA Part 145 Repair Station &middot; Certificate No. RWSR491E &middot; Chan Gurney Municipal Airport (KYKN) &middot; Yankton, South Dakota
+            FAA Part 145 Repair Station &middot; Certificate No. RWSR491E &middot; Hangar 3 &middot; Sioux Falls, South Dakota
           </p>
           <div className="bs-byline">
             Founded 2022 &nbsp;&middot;&nbsp; Avionics &middot; Airframe &middot; Powerplant &middot; NDT &middot; Fabrication &nbsp;&middot;&nbsp; Authorized Garmin Dealer
           </div>
           <div className="bs-body">
             <p>
-              Roger Wilco Aviation Services is an FAA-certificated repair station providing full-spectrum airframe, powerplant, avionics, and non-destructive testing services to general aviation, corporate, and commercial operators across the Northern Plains. Operating from Chan Gurney Municipal Airport (KYKN) in Yankton, South Dakota, the station is authorized under Certificate No. RWSR491E for a complete range of maintenance, repair, and alteration work.
+              Roger Wilco Aviation Services is an FAA-certificated repair station providing full-spectrum airframe, powerplant, avionics, and non-destructive testing services to general aviation, corporate, and commercial operators across the Northern Plains. Operating from Hangar 3 at 3701 N. Aviation Avenue in Sioux Falls, South Dakota, the station is authorized under Certificate No. RWSR491E for a complete range of maintenance, repair, and alteration work.
             </p>
           </div>
         </section>
 
         {/* ── LOCATION MAP ─────────────────────────────────────────── */}
         <Specimen variant="hero" as="section" className="about-map" aria-labelledby="about-map-title">
-          <span className="bs-kicker">Find Us at KYKN</span>
+          <span className="bs-kicker">Find Us in Sioux Falls</span>
           <h2 id="about-map-title" className="bs-headline bs-headline--section">
-            Chan Gurney Municipal Airport
+            Hangar 3
           </h2>
           <div className="about-map__frame">
             <iframe
-              title="Google map showing Roger Wilco Aviation Services at Chan Gurney Municipal Airport in Yankton, South Dakota"
-              src="https://www.google.com/maps?q=Roger%20Wilco%20Aviation%20Services%20700%20E%2031st%20St%20Yankton%20SD%2057078&output=embed"
+              title="Google map showing Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota"
+              src="https://www.google.com/maps?q=Roger%20Wilco%20Aviation%20Services%20Hangar%203%203701%20N.%20Aviation%20Avenue%20Sioux%20Falls%20SD%2057104&output=embed"
               loading="lazy"
               allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
           <div className="about-map__meta">
-            <span>700 E 31st St &middot; Yankton, SD 57078 &middot; KYKN</span>
-            <a href="https://www.google.com/maps/search/?api=1&query=Roger%20Wilco%20Aviation%20Services%20700%20E%2031st%20St%20Yankton%20SD%2057078">
+            <span>Hangar 3, 3701 N. Aviation Avenue &middot; Sioux Falls, SD 57104</span>
+            <a href="https://www.google.com/maps/search/?api=1&query=Roger%20Wilco%20Aviation%20Services%20Hangar%203%203701%20N.%20Aviation%20Avenue%20Sioux%20Falls%20SD%2057104">
               Open in Google Maps
             </a>
           </div>
@@ -96,7 +96,7 @@ export default function AboutPage() {
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  RWAS was founded by John Halsted, a veteran Delta Air Lines captain with more than 40 years of aviation experience spanning airline operations, aircraft maintenance, avionics systems, and flight instruction. What started as a single-hangar maintenance shop at Chan Gurney Municipal Airport in Yankton, South Dakota, has evolved into a full-service FAA-certificated repair station serving aircraft owners and operators across the upper Midwest and beyond.
+                  RWAS was founded by John Halsted, a veteran Delta Air Lines captain with more than 40 years of aviation experience spanning airline operations, aircraft maintenance, avionics systems, and flight instruction. What started as a single-hangar maintenance shop at Hangar 3 in Sioux Falls, South Dakota, has evolved into a full-service FAA-certificated repair station serving aircraft owners and operators across the upper Midwest and beyond.
                 </p>
                 <p>
                   Halsted earned his Airline Transport Pilot certificate at 21 and has spent the decades since building deep expertise on both sides of the cockpit, flying the line and turning wrenches. That dual perspective shapes everything RWAS does.
@@ -183,13 +183,11 @@ export default function AboutPage() {
             <Specimen as="section">
               <span className="bs-kicker">Location</span>
               <p>
-                Chan Gurney Municipal Airport
+                Hangar 3
                 <br />
-                700 E 31st St
+                3701 N. Aviation Avenue
                 <br />
-                Yankton, South Dakota 57078
-                <br />
-                Airport ID: KYKN
+                Sioux Falls, South Dakota 57104
               </p>
             </Specimen>
 

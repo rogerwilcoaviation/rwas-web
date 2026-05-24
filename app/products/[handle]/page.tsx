@@ -606,7 +606,7 @@ export default async function ProductDetailPage({
                     Warranty for labor of installation is life-time (conditions apply).
                   </>
                 ) : (
-                  <>Manufacturer warranty. Service and support from our Part 145 repair station, KYKN.</>
+                  <>Manufacturer warranty. Service and support from our Part 145 repair station in Sioux Falls, SD.</>
                 )}
               </div>
               <div className="cell">
@@ -658,7 +658,7 @@ export default async function ProductDetailPage({
                       <td>{opt.values.join(', ')}</td>
                     </tr>
                   ))}
-                  <tr><th>Installs at</th><td>KYKN · Yankton, SD</td></tr>
+                  <tr><th>Installs at</th><td>Hangar 3 · Sioux Falls, SD</td></tr>
                   <tr><th>Certification</th><td>FAA Part 145 · RWSR491E</td></tr>
                 </tbody>
               </table>

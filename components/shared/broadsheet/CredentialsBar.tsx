@@ -18,7 +18,7 @@ export type CredentialsBarProps = {
  * asset folder doesn't carry a licensed Garmin logo bitmap. Text is
  * ink-900, Inter, 0.22em tracking — consistent with the mockup's plate.
  *
- * Location (KYKN · Yankton, SD) lives in the Masthead's right column,
+ * Location (Hangar 3 · Sioux Falls, SD) lives in the Masthead's right column,
  * not here.
  */
 export default function CredentialsBar({

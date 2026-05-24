@@ -9,7 +9,7 @@ export type BulletinBarProps = {
 const DEFAULT_ITEMS: string[] = [
   "Now booking May Garmin install slots \u2014 schedule early",
   "GFC 500 installs: Bonanza, Mooney, Cessna \u2014 same-day quote",
-  "Papa-Alpha tools ship same day from Yankton",
+  "Papa-Alpha tools ship same day from Sioux Falls",
 ];
 
 const DEFAULT_FOOTER = "Avionics desk: (605) 299-8178 \u00b7 avionics@rwas.team";

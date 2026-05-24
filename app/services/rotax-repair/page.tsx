@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/rotax-repair';
 export const metadata = {
   title: { absolute: 'Rotax Aircraft Engine Maintenance - Northern Plains | RWAS' },
   description:
-    'Rotax aircraft engine maintenance support from RWAS at KYKN in Yankton, SD. Light sport and experimental aircraft maintenance, inspections, troubleshooting, documentation, and quote support for the Northern Plains.',
+    'Rotax aircraft engine maintenance support from RWAS at Hangar 3 in Sioux Falls, SD. Light sport and experimental aircraft maintenance, inspections, troubleshooting, documentation, and quote support for the Northern Plains.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function RotaxRepairPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Rotax aircraft engine maintenance support, inspection coordination, troubleshooting, and documentation from Roger Wilco Aviation Services at Chan Gurney Municipal Airport in Yankton, South Dakota.',
+                  'Rotax aircraft engine maintenance support, inspection coordination, troubleshooting, and documentation from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Rotax maintenance support',
@@ -89,7 +89,7 @@ export default function RotaxRepairPage() {
             912 &middot; 914 &middot; 915 iS &middot; 916 iS &middot; light sport &middot; experimental &middot; inspection and troubleshooting support
           </p>
           <div className="bs-byline">
-            Chan Gurney Municipal (KYKN) &middot; Yankton, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -203,9 +203,9 @@ export default function RotaxRepairPage() {
                   service@rwas.team
                 </a>
                 <br />
-                Chan Gurney Municipal (KYKN)
+                Hangar 3, 3701 N. Aviation Avenue
                 <br />
-                Yankton, South Dakota
+                Sioux Falls, South Dakota 57104
               </p>
             </Specimen>
 

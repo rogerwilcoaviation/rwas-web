@@ -51,7 +51,7 @@ def slugify(text):
 def generate_social_posts(title, lead, category, tags):
     """Generate Facebook and Instagram post text."""
     tag_str = ' '.join(['#' + t.replace('-', '').title() for t in tags[:6]])
-    base_tags = "#GarminAvionics #RogerWilcoAviation #KYKN #FlyGA"
+    base_tags = "#GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA"
 
     cat_labels = {
         'press-release': 'NEWS',

@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/gtn-xi-navigator-in
 export const metadata = {
   title: { absolute: 'Garmin GTN 650Xi / 750Xi Installation - Northern Plains | RWAS' },
   description:
-    'Garmin GTN 650Xi and GTN 750Xi navigator installation planning from RWAS, a certified Garmin dealer and FAA Part 145 repair station at KYKN in Yankton, SD. WAAS GPS/NAV/COMM, LPV approach capability, panel integration, and documentation support.',
+    'Garmin GTN 650Xi and GTN 750Xi navigator installation planning from RWAS, a certified Garmin dealer and FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. WAAS GPS/NAV/COMM, LPV approach capability, panel integration, and documentation support.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function GtnXiNavigatorInstallationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Garmin GTN 650Xi and GTN 750Xi navigator installation planning, WAAS GPS/NAV/COMM integration, antenna and wiring review, autopilot and display integration, configuration, testing, and documentation from Roger Wilco Aviation Services at Chan Gurney Municipal Airport in Yankton, South Dakota.',
+                  'Garmin GTN 650Xi and GTN 750Xi navigator installation planning, WAAS GPS/NAV/COMM integration, antenna and wiring review, autopilot and display integration, configuration, testing, and documentation from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'GTN Xi navigator installation workflow',
@@ -89,7 +89,7 @@ export default function GtnXiNavigatorInstallationPage() {
             WAAS GPS/NAV/COMM &middot; LPV approach capability &middot; antenna planning &middot; autopilot integration &middot; documentation
           </p>
           <div className="bs-byline">
-            Chan Gurney Municipal (KYKN) &middot; Yankton, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -208,9 +208,9 @@ export default function GtnXiNavigatorInstallationPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Chan Gurney Municipal (KYKN)
+                Hangar 3, 3701 N. Aviation Avenue
                 <br />
-                Yankton, South Dakota
+                Sioux Falls, South Dakota 57104
               </p>
             </Specimen>
 

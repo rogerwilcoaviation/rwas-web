@@ -580,8 +580,8 @@
       if (phone) extracted.sellerPhone = phone[1];
       
       // Location
-      var loc = allText.match(/(?:Yankton|yankton)[,\s]*(?:South Dakota|SD|south dakota)/i);
-      if (loc) extracted.sellerLocation = 'Yankton, SD';
+      var loc = allText.match(/Sioux Falls[,\s]*(?:South Dakota|SD|south dakota)/i);
+      if (loc) extracted.sellerLocation = 'Sioux Falls, SD';
       if (!extracted.sellerLocation) {
         var locMatch = allText.match(/([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)[,\s]+(?:SD|ND|MN|IA|NE|MT|WY|CO|KS|MO|WI|IL)/);
         if (locMatch) extracted.sellerLocation = locMatch[0];

@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/fiber-laser-fabrica
 export const metadata = {
   title: { absolute: 'Aircraft Fiber Laser Fabrication - Panel Cutting, Welding, UV Print | RWAS' },
   description:
-    'Aircraft fiber laser cutting, welding, panel fabrication, powder coating, UV printing, and sheet metal support from FAA Part 145 repair station RWSR491E at KYKN in Yankton, SD.',
+    'Aircraft fiber laser cutting, welding, panel fabrication, powder coating, UV printing, and sheet metal support from FAA Part 145 repair station RWSR491E at Hangar 3 in Sioux Falls, SD.',
   alternates: { canonical: pageUrl },
 };
 
@@ -91,7 +91,7 @@ export default function FiberLaserFabricationPage() {
             Fiber laser cutting &middot; laser welding &middot; panel fabrication &middot; powder coating &middot; UV printing &middot; CAD/CNC support
           </p>
           <div className="bs-byline">
-            Chan Gurney Municipal (KYKN) &middot; Yankton, SD &middot; Serving aircraft owners and shops across the Northern Plains
+            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving aircraft owners and shops across the Northern Plains
           </div>
         </section>
 
@@ -118,7 +118,7 @@ export default function FiberLaserFabricationPage() {
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
-                RWAS fiber laser cutting capability - used for panel, tooling, and fabrication support in Yankton.
+                RWAS fiber laser cutting capability - used for panel, tooling, and fabrication support in Sioux Falls.
               </Specimen.Caption>
             </Specimen>
 
@@ -242,9 +242,9 @@ export default function FiberLaserFabricationPage() {
                   service@rwas.team
                 </a>
                 <br />
-                Chan Gurney Municipal (KYKN)
+                Hangar 3, 3701 N. Aviation Avenue
                 <br />
-                Yankton, South Dakota
+                Sioux Falls, South Dakota 57104
               </p>
             </Specimen>
 

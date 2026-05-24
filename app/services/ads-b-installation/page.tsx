@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/ads-b-installation'
 export const metadata = {
   title: { absolute: 'ADS-B Out Installation - South Dakota, Nebraska, Iowa | RWAS' },
   description:
-    'ADS-B Out installation and transponder upgrade planning from RWAS, a certified Garmin dealer and FAA Part 145 repair station at KYKN in Yankton, SD. GTX transponders, antenna review, FAR 91.227 compliance, and documentation support.',
+    'ADS-B Out installation and transponder upgrade planning from RWAS, a certified Garmin dealer and FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. GTX transponders, antenna review, FAR 91.227 compliance, and documentation support.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function AdsBInstallationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'ADS-B Out installation, transponder upgrade planning, antenna review, GPS source review, configuration, testing, and documentation support from Roger Wilco Aviation Services at Chan Gurney Municipal Airport in Yankton, South Dakota.',
+                  'ADS-B Out installation, transponder upgrade planning, antenna review, GPS source review, configuration, testing, and documentation support from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'ADS-B installation workflow',
@@ -89,7 +89,7 @@ export default function AdsBInstallationPage() {
             Transponder upgrades &middot; GPS source review &middot; antenna planning &middot; configuration &middot; FAR 91.227 documentation
           </p>
           <div className="bs-byline">
-            Chan Gurney Municipal (KYKN) &middot; Yankton, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -211,9 +211,9 @@ export default function AdsBInstallationPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Chan Gurney Municipal (KYKN)
+                Hangar 3, 3701 N. Aviation Avenue
                 <br />
-                Yankton, South Dakota
+                Sioux Falls, South Dakota 57104
               </p>
             </Specimen>
 

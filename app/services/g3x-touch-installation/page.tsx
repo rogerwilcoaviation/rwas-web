@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/g3x-touch-installat
 export const metadata = {
   title: { absolute: 'Garmin G3X Touch Installation - Northern Plains | RWAS' },
   description:
-    'Garmin G3X Touch installation planning from RWAS, a certified Garmin dealer and FAA Part 145 repair station at KYKN in Yankton, SD. Glass panel design, EIS, ADAHRS, Connext, panel fabrication, and documentation support.',
+    'Garmin G3X Touch installation planning from RWAS, a certified Garmin dealer and FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. Glass panel design, EIS, ADAHRS, Connext, panel fabrication, and documentation support.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function G3xTouchInstallationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Garmin G3X Touch installation planning, panel design, ADAHRS and EIS integration, Connext workflow review, fabrication support, testing, and documentation from Roger Wilco Aviation Services at Chan Gurney Municipal Airport in Yankton, South Dakota.',
+                  'Garmin G3X Touch installation planning, panel design, ADAHRS and EIS integration, Connext workflow review, fabrication support, testing, and documentation from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'G3X Touch installation workflow',
@@ -89,7 +89,7 @@ export default function G3xTouchInstallationPage() {
             Display layout &middot; ADAHRS &middot; EIS &middot; navigator integration &middot; Connext workflow &middot; panel fabrication
           </p>
           <div className="bs-byline">
-            Chan Gurney Municipal (KYKN) &middot; Yankton, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -211,9 +211,9 @@ export default function G3xTouchInstallationPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Chan Gurney Municipal (KYKN)
+                Hangar 3, 3701 N. Aviation Avenue
                 <br />
-                Yankton, South Dakota
+                Sioux Falls, South Dakota 57104
               </p>
             </Specimen>
 

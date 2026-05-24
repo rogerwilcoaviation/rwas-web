@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/gfc-500-autopilot-i
 export const metadata = {
   title: { absolute: 'Garmin GFC 500 Autopilot Installation - Northern Plains | RWAS' },
   description:
-    'Garmin GFC 500 autopilot installation from RWAS, a certified Garmin dealer and FAA Part 145 repair station at KYKN in Yankton, SD. Eligibility review, quote planning, panel integration, and installation support.',
+    'Garmin GFC 500 autopilot installation from RWAS, a certified Garmin dealer and FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. Eligibility review, quote planning, panel integration, and installation support.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function Gfc500AutopilotInstallationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Garmin GFC 500 autopilot installation planning, eligibility review, quote support, panel integration, and return-to-service documentation from Roger Wilco Aviation Services at Chan Gurney Municipal Airport in Yankton, South Dakota.',
+                  'Garmin GFC 500 autopilot installation planning, eligibility review, quote support, panel integration, and return-to-service documentation from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'GFC 500 installation workflow',
@@ -89,7 +89,7 @@ export default function Gfc500AutopilotInstallationPage() {
             Eligibility review &middot; quote planning &middot; servo installation &middot; navigator integration &middot; functional checks
           </p>
           <div className="bs-byline">
-            Chan Gurney Municipal (KYKN) &middot; Yankton, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -222,9 +222,9 @@ export default function Gfc500AutopilotInstallationPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Chan Gurney Municipal (KYKN)
+                Hangar 3, 3701 N. Aviation Avenue
                 <br />
-                Yankton, South Dakota
+                Sioux Falls, South Dakota 57104
               </p>
             </Specimen>
 

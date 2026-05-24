@@ -193,7 +193,7 @@ export default async function CollectionDetailPage({
           <p className="bs-subhead">
             {collection.description || 'Live product listing from the Shopify Storefront API.'}
           </p>
-          <p className="bs-byline">RWAS Avionics Desk &middot; Yankton, SD &middot; KYKN</p>
+          <p className="bs-byline">RWAS Avionics Desk &middot; Hangar 3 &middot; Sioux Falls, SD</p>
           <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link href="/collections" className="bs-cta-secondary">Back to collections</Link>
             <Link
@@ -214,7 +214,7 @@ export default async function CollectionDetailPage({
         {collection.handle === 'papa-alpha-tools' && (
           <Specimen variant="flat">
             <p className="bs-kicker">Worldwide delivery</p>
-            <p className="bs-script-accent">&mdash; from Yankton to wherever you fly &mdash;</p>
+            <p className="bs-script-accent">&mdash; from Sioux Falls to wherever you fly &mdash;</p>
             <h2 className="bs-headline" style={{ marginTop: 6, marginBottom: 12 }}>
               We sell internationally all over the world.
             </h2>

@@ -14,7 +14,7 @@ import '../contact.css';
 export const metadata = {
   title: 'Contact RWAS',
   description:
-    'Contact the Roger Wilco Aviation Services Avionics Desk in Yankton, SD. Quote requests, project inquiries, and general questions route to service@rwas.team.',
+    'Contact the Roger Wilco Aviation Services Avionics Desk in Sioux Falls, SD. Quote requests, project inquiries, and general questions route to service@rwas.team.',
   alternates: { canonical: '/contact' },
 };
 
@@ -42,7 +42,7 @@ export default function ContactPage() {
             with real numbers.
           </p>
           <p className="bs-byline">
-            RWAS Avionics Desk &middot; 700 E 31st St, Yankton, SD 57078 &middot; KYKN &middot; (605) 299-8178
+            RWAS Avionics Desk &middot; Hangar 3, 3701 N. Aviation Avenue &middot; Sioux Falls, SD 57104 &middot; (605) 299-8178
           </p>
         </section>
 
@@ -75,11 +75,9 @@ export default function ContactPage() {
             <div>
               <dt>Shop address</dt>
               <dd>
-                700 E 31st Street
+                Hangar 3, 3701 N. Aviation Avenue
                 <br />
-                Yankton, SD 57078
-                <br />
-                <span className="contact-hours">KYKN — based at Chan Gurney Municipal</span>
+                Sioux Falls, SD 57104
               </dd>
             </div>
           </dl>

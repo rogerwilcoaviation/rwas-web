@@ -67,12 +67,21 @@ const urls = Array.from(sitemapRes.text.matchAll(/<loc>(.*?)<\/loc>/g), (m) => {
 }).filter(Boolean);
 if (!urls.length) fail('Sitemap has no URLs');
 
-if (urls.some((url) => url.includes('/services/aircraft-maintenance-yankton'))) {
+if (urls.some((url) => url.includes('/services/aircraft-maintenance-sioux-falls'))) {
   const maintenanceRes = await fetch(`${base}/maintenance`, { redirect: 'manual' });
   if (maintenanceRes.status !== 301) fail(`/maintenance should 301, got ${maintenanceRes.status}`);
   const maintenanceLocation = maintenanceRes.headers.get('location') || '';
-  if (!maintenanceLocation.includes('/services/aircraft-maintenance-yankton')) {
+  if (!maintenanceLocation.includes('/services/aircraft-maintenance-sioux-falls')) {
     fail(`/maintenance redirects to unexpected location: ${maintenanceLocation}`);
+  }
+
+  const oldMaintenanceRes = await fetch(`${base}/services/aircraft-maintenance-yankton`, { redirect: 'manual' });
+  if (oldMaintenanceRes.status !== 301) {
+    fail(`/services/aircraft-maintenance-yankton should 301, got ${oldMaintenanceRes.status}`);
+  }
+  const oldMaintenanceLocation = oldMaintenanceRes.headers.get('location') || '';
+  if (!oldMaintenanceLocation.includes('/services/aircraft-maintenance-sioux-falls')) {
+    fail(`/services/aircraft-maintenance-yankton redirects to unexpected location: ${oldMaintenanceLocation}`);
   }
 }
 

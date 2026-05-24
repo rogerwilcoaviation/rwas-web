@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/garmin-installation
 export const metadata = {
   title: { absolute: 'Garmin Avionics Installation - South Dakota, Nebraska, Iowa | RWAS' },
   description:
-    'Garmin avionics installation from RWAS, a certified Garmin dealer and FAA Part 145 repair station at KYKN in Yankton, SD. G3X Touch, GTN Xi, GFC 500, ADS-B, panel fabrication, and quote support for the Northern Plains.',
+    'Garmin avionics installation from RWAS, a certified Garmin dealer and FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. G3X Touch, GTN Xi, GFC 500, ADS-B, panel fabrication, and quote support for the Northern Plains.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function GarminInstallationNorthernPlainsPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Garmin avionics installation, panel planning, aircraft review, and quote support from Roger Wilco Aviation Services, a certified Garmin dealer and FAA Part 145 repair station at Chan Gurney Municipal Airport in Yankton, South Dakota.',
+                  'Garmin avionics installation, panel planning, aircraft review, and quote support from Roger Wilco Aviation Services, a certified Garmin dealer and FAA Part 145 repair station at Hangar 3 in Sioux Falls, South Dakota.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Garmin avionics installation services',
@@ -90,7 +90,7 @@ export default function GarminInstallationNorthernPlainsPage() {
             G3X Touch &middot; GTN Xi &middot; GFC 500 &middot; GI 275 &middot; G5 &middot; ADS-B Out &middot; panel fabrication
           </p>
           <div className="bs-byline">
-            Chan Gurney Municipal (KYKN) &middot; Yankton, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -102,7 +102,7 @@ export default function GarminInstallationNorthernPlainsPage() {
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  Roger Wilco Aviation Services gives Northern Plains aircraft owners a certified Garmin dealer and FAA-certificated repair station at Chan Gurney Municipal Airport in Yankton, South Dakota. Instead of ferrying a piston single or light twin across multiple states for a panel upgrade, owners can work with a shop built around Garmin avionics, aircraft maintenance, panel fabrication, and return-to-service documentation under one roof.
+                  Roger Wilco Aviation Services gives Northern Plains aircraft owners a certified Garmin dealer and FAA-certificated repair station at Hangar 3 in Sioux Falls, South Dakota. Instead of ferrying a piston single or light twin across multiple states for a panel upgrade, owners can work with a shop built around Garmin avionics, aircraft maintenance, panel fabrication, and return-to-service documentation under one roof.
                 </p>
                 <p>
                   RWAS supports Garmin installation projects for South Dakota, Nebraska, Iowa, Minnesota, and North Dakota operators, with practical quoting, aircraft review, product sourcing, fabrication, wiring, testing, and logbook documentation handled by the same team.
@@ -241,9 +241,9 @@ export default function GarminInstallationNorthernPlainsPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Chan Gurney Municipal (KYKN)
+                Hangar 3, 3701 N. Aviation Avenue
                 <br />
-                Yankton, South Dakota
+                Sioux Falls, South Dakota 57104
               </p>
             </Specimen>
 

@@ -152,7 +152,7 @@ export async function generateMetadata({
   const title = `${headline(l)} — ${priceLabel(l)} — RWAS`;
   const description =
     (l.description && l.description.slice(0, 160)) ||
-    `${headline(l)} for sale at Roger Wilco Aviation Services, Yankton, SD. Tail ${l.nNumber || 'n/a'}.`;
+    `${headline(l)} for sale at Roger Wilco Aviation Services, Sioux Falls, SD. Tail ${l.nNumber || 'n/a'}.`;
   const url = `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(l.id)}`;
   const firstPhoto = (l.photos || [])[0];
   const imageUrl = firstPhoto

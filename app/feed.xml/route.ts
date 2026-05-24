@@ -64,7 +64,7 @@ ${imageEnclosure}      <dc:creator>${escapeXml(a.author || 'Roger Wilco Aviation
   <channel>
     <title>Roger Wilco Aviation Services — Blog</title>
     <link>${site}/blog</link>
-    <description>Service bulletins, Garmin product updates, regulatory notes, and maintenance insights from RWAS, an FAA Part 145 repair station in Yankton, SD.</description>
+    <description>Service bulletins, Garmin product updates, regulatory notes, and maintenance insights from RWAS, an FAA Part 145 repair station in Sioux Falls, SD.</description>
     <language>en-us</language>
     <copyright>Copyright ${new Date().getFullYear()} Roger Wilco Aviation Services</copyright>
     <lastBuildDate>${now}</lastBuildDate>
