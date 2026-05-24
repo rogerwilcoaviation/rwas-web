@@ -16,6 +16,7 @@
 - [Aircraft NDT Inspection](https://www.rogerwilcoaviation.com/services/ndt-inspection) — Eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing
 - [Papa-Alpha Tools](https://www.rogerwilcoaviation.com/services/papa-alpha-tools) — Story and application guide for RWAS-built Piper rigging reference tools
 - [Fiber Laser Fabrication](https://www.rogerwilcoaviation.com/services/fiber-laser-fabrication) — Aircraft panel cutting, laser welding, powder coating, UV printing, and fabrication support
+- [Garmin Installation Northern Plains](https://www.rogerwilcoaviation.com/services/garmin-installation-northern-plains) — Garmin G3X Touch, GTN Xi, GFC 500, ADS-B, and panel installation support for SD, NE, IA, MN, and ND
 - [Garmin](https://www.rogerwilcoaviation.com/garmin) — Garmin product updates, bulletins, promotions
 - [Blog](https://www.rogerwilcoaviation.com/blog) — Aviation news, service bulletins, Garmin memos, shop dispatches
 - [Aircraft for Sale](https://www.rogerwilcoaviation.com/aircraft-for-sale) — Aircraft marketplace powered by Captain Jerry's guided intake

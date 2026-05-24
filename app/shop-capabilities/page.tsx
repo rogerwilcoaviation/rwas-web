@@ -157,6 +157,9 @@ export default function ShopCapabilitiesPage() {
                   <p>
                     Certified Garmin dealer and installation center. Full glass cockpit upgrades including the G3X Touch suite with ADAHRS, EIS, and synthetic vision &mdash; plus navigator, autopilot, and ADS-B retrofits across the piston, turboprop, and experimental fleet.
                   </p>
+                  <p>
+                    <a href="/services/garmin-installation-northern-plains">Read more about Garmin avionics installation at RWAS</a>
+                  </p>
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc">

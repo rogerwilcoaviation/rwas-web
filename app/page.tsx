@@ -276,7 +276,7 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/panel-planner">Build a Garmin Panel Concept</a>
+                    <a href="/services/garmin-installation-northern-plains">Garmin Installation Planning</a>
                   </p>
                   <p className="bs-svc-desc">
                     Choose equipment, preview panel finishes, and submit a concept sketch to RWAS for avionics review.
@@ -292,7 +292,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/collections/avionics-certified">GFC 500 Autopilot</a>
+                    <a href="/services/garmin-installation-northern-plains">GFC 500 Autopilot</a>
                   </p>
                   <p className="bs-svc-desc">
                     Retrofit digital autopilot with GPSS steering, altitude hold, and vertical-speed modes.

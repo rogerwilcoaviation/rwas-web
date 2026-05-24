@@ -72,6 +72,9 @@ export const Footer = ({ className }: { className?: string }) => {
         <LandingFooterLink href="/shop-capabilities">
           Shop capabilities
         </LandingFooterLink>
+        <LandingFooterLink href="/services/garmin-installation-northern-plains">
+          Garmin installation
+        </LandingFooterLink>
         <LandingFooterLink href="/services/ndt-inspection">
           NDT inspection
         </LandingFooterLink>
