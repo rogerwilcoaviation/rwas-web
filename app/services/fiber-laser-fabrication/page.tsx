@@ -63,7 +63,7 @@ export default function FiberLaserFabricationPage() {
                 '@id': `${pageUrl}#breadcrumb`,
                 itemListElement: [
                   { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
-                  { '@type': 'ListItem', position: 2, name: 'Shop Capabilities', item: 'https://www.rogerwilcoaviation.com/shop-capabilities' },
+                  { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://www.rogerwilcoaviation.com/services' },
                   { '@type': 'ListItem', position: 3, name: 'Aircraft Fiber Laser Fabrication', item: pageUrl },
                 ],
               },

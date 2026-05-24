@@ -61,8 +61,9 @@ export default function PreBuyInspectionPage() {
                 '@id': `${pageUrl}#breadcrumb`,
                 itemListElement: [
                   { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
-                  { '@type': 'ListItem', position: 2, name: 'Aircraft for Sale', item: 'https://www.rogerwilcoaviation.com/aircraft-for-sale' },
-                  { '@type': 'ListItem', position: 3, name: 'Aircraft Pre-Buy Inspection', item: pageUrl },
+                  { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://www.rogerwilcoaviation.com/services' },
+                  { '@type': 'ListItem', position: 3, name: 'Aircraft for Sale', item: 'https://www.rogerwilcoaviation.com/aircraft-for-sale' },
+                  { '@type': 'ListItem', position: 4, name: 'Aircraft Pre-Buy Inspection', item: pageUrl },
                 ],
               },
             ],

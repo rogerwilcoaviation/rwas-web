@@ -61,8 +61,9 @@ export default function GtnXiNavigatorInstallationPage() {
                 '@id': `${pageUrl}#breadcrumb`,
                 itemListElement: [
                   { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
-                  { '@type': 'ListItem', position: 2, name: 'Garmin Installation', item: 'https://www.rogerwilcoaviation.com/services/garmin-installation-northern-plains' },
-                  { '@type': 'ListItem', position: 3, name: 'GTN Xi Navigator Installation', item: pageUrl },
+                  { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://www.rogerwilcoaviation.com/services' },
+                  { '@type': 'ListItem', position: 3, name: 'Garmin Installation', item: 'https://www.rogerwilcoaviation.com/services/garmin-installation-northern-plains' },
+                  { '@type': 'ListItem', position: 4, name: 'GTN Xi Navigator Installation', item: pageUrl },
                 ],
               },
             ],
