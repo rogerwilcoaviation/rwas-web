@@ -340,7 +340,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/shop-capabilities">Engine Troubleshooting</a>
+                    <a href="/services/rotax-repair">Rotax Engine Support</a>
                   </p>
                   <p className="bs-svc-desc">
                     Powerplant diagnostics, mag checks, compression testing, and engine runs.

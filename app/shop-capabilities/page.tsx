@@ -208,6 +208,10 @@ export default function ShopCapabilitiesPage() {
                     <p className="bs-svc-name">Propeller Balancing</p>
                   </li>
                   <li className="bs-svc">
+                    <p className="bs-svc-name"><a href="/services/rotax-repair">Rotax Maintenance Support</a></p>
+                    <p className="bs-svc-desc">Light sport and experimental aircraft engine support</p>
+                  </li>
+                  <li className="bs-svc">
                     <p className="bs-svc-name">Aircraft Weight Certification</p>
                     <p className="bs-svc-desc">Up to 30,000 lbs</p>
                   </li>
