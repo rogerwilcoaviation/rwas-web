@@ -72,7 +72,7 @@ export default function RotaxRepairPage() {
 
       <Dateline />
       <Masthead />
-      <BroadsheetNav activeHref="/shop-capabilities" />
+      <BroadsheetNav activeHref="/services" />
       <CredentialsBar />
       <BulletinBar />
 

@@ -74,7 +74,7 @@ export default function FiberLaserFabricationPage() {
 
       <Dateline />
       <Masthead />
-      <BroadsheetNav activeHref="/shop-capabilities" />
+      <BroadsheetNav activeHref="/services" />
       <CredentialsBar />
       <BulletinBar />
 

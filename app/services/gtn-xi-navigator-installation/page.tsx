@@ -73,7 +73,7 @@ export default function GtnXiNavigatorInstallationPage() {
 
       <Dateline />
       <Masthead />
-      <BroadsheetNav activeHref="/shop-capabilities" />
+      <BroadsheetNav activeHref="/services" />
       <CredentialsBar />
       <BulletinBar />
 

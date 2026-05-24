@@ -175,7 +175,7 @@ export default function FinancingPage() {
                   <span className="arr">&rarr;</span>
                 </li>
                 <li>
-                  <a href="/shop-capabilities">Shop Capabilities</a>
+                  <a href="/services">Aircraft Services</a>
                   <span className="arr">&rarr;</span>
                 </li>
               </ul>

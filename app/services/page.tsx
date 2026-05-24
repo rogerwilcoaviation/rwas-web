@@ -165,7 +165,7 @@ export default function ServicesPage() {
 
       <Dateline />
       <Masthead />
-      <BroadsheetNav activeHref="/shop-capabilities" />
+      <BroadsheetNav activeHref="/services" />
       <CredentialsBar />
       <BulletinBar />
 

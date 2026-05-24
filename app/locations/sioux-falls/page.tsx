@@ -170,8 +170,8 @@ export default function SiouxFallsLocationPage() {
                 <Link className="bs-cta-primary" href="/contact?reason=service&source=sioux-falls-location">
                   Contact the Sioux Falls shop
                 </Link>
-                <Link className="bs-cta-secondary" href="/shop-capabilities">
-                  View shop capabilities
+                <Link className="bs-cta-secondary" href="/services">
+                  View aircraft services
                 </Link>
               </p>
             </Specimen>

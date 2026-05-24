@@ -253,15 +253,15 @@ export default function AboutPage() {
                   <span className="arr">&rarr;</span>
                 </li>
                 <li>
-                  <a href="/shop-capabilities">A&amp;P Maintenance</a>
+                  <a href="/services/aircraft-maintenance-sioux-falls">A&amp;P Maintenance</a>
                   <span className="arr">&rarr;</span>
                 </li>
                 <li>
-                  <a href="/shop-capabilities">NDT Inspection</a>
+                  <a href="/services/ndt-inspection">NDT Inspection</a>
                   <span className="arr">&rarr;</span>
                 </li>
                 <li>
-                  <a href="/shop-capabilities">Sheet Metal &amp; Fabrication</a>
+                  <a href="/services/fiber-laser-fabrication">Sheet Metal &amp; Fabrication</a>
                   <span className="arr">&rarr;</span>
                 </li>
                 <li>

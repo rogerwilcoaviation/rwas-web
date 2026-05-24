@@ -20,7 +20,7 @@ const DEFAULT_ITEMS: NavItem[] = [
   { href: "/collections/papa-alpha-tools", label: "Papa-Alpha Tools" },
   { href: "/aircraft-for-sale", label: "Aircraft 4 Sale" },
   { href: "/financing", label: "Financing" },
-  { href: "/shop-capabilities", label: "Shop Capabilities" },
+  { href: "/services", label: "Services" },
   { href: "/blog", label: "Blog Articles" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

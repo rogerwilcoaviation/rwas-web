@@ -68,13 +68,13 @@ export default function Home() {
                 </a>
               </div>
               <div className="bs-toc__row">
-                <a href="/shop-capabilities">
+                <a href="/services/aircraft-maintenance-sioux-falls">
                   <span>Annual Inspections</span>
                   <span className="bs-toc__pg">B2 &rarr;</span>
                 </a>
               </div>
               <div className="bs-toc__row">
-                <a href="/shop-capabilities">
+                <a href="/services/ndt-inspection">
                   <span>NDT Services</span>
                   <span className="bs-toc__pg">C1 &rarr;</span>
                 </a>
@@ -364,7 +364,7 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/shop-capabilities">Eddy Current Inspection</a>
+                    <a href="/services/ndt-inspection">Eddy Current Inspection</a>
                   </p>
                   <p className="bs-svc-desc">
                     Subsurface crack and corrosion detection in aluminum and ferrous components &mdash; without disassembly.
@@ -372,7 +372,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/shop-capabilities">Dye Penetrant Testing</a>
+                    <a href="/services/ndt-inspection">Dye Penetrant Testing</a>
                   </p>
                   <p className="bs-svc-desc">
                     Surface crack detection per ASTM E1417 for engine components, castings, and structural parts.

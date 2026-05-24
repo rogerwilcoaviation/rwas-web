@@ -73,7 +73,7 @@ export default function Gfc500AutopilotInstallationPage() {
 
       <Dateline />
       <Masthead />
-      <BroadsheetNav activeHref="/shop-capabilities" />
+      <BroadsheetNav activeHref="/services" />
       <CredentialsBar />
       <BulletinBar />
 
