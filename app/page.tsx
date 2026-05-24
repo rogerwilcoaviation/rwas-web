@@ -238,7 +238,7 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/collections/papa-alpha-tools">Piper Rigging Reference Tools</a>
+                    <a href="/services/papa-alpha-tools">Piper Rigging Reference Tools</a>
                   </p>
                   <p className="bs-svc-desc">
                     Precision flight-control rigging for PA-28, PA-30, PA-31, PA-36. CNC-machined aluminum, powder coated, UV printed. Sold worldwide.

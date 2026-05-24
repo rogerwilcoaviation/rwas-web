@@ -253,6 +253,9 @@ export default function ShopCapabilitiesPage() {
                   <p>
                     In-house CNC machining, laser cutting, and fabrication capabilities for aircraft panels, structural components, and precision tooling. Home of Papa-Alpha rigging reference tools for the Piper fleet.
                   </p>
+                  <p>
+                    <a href="/services/papa-alpha-tools">Read the Papa-Alpha tools story</a>
+                  </p>
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc"><p className="bs-svc-name">CNC Router Fabrication</p></li>
