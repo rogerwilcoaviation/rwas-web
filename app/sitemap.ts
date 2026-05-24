@@ -19,6 +19,7 @@ interface StaticRoute {
 const STATIC_ROUTES: StaticRoute[] = [
   { path: '',                  priority: 1.0, changeFrequency: 'weekly'  },
   { path: 'about',             priority: 0.9, changeFrequency: 'monthly' },
+  { path: 'locations/sioux-falls', priority: 0.9, changeFrequency: 'monthly' },
   { path: 'shop-capabilities', priority: 0.9, changeFrequency: 'monthly' },
   { path: 'services/ndt-inspection', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services/papa-alpha-tools', priority: 0.8, changeFrequency: 'monthly' },

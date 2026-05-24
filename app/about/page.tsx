@@ -10,6 +10,7 @@ import {
   BroadsheetFooter,
   Specimen,
 } from '@/components/shared/broadsheet';
+import Link from 'next/link';
 
 export const metadata = {
   title: { absolute: 'About RWAS — FAA Part 145 Repair Station' },
@@ -82,6 +83,7 @@ export default function AboutPage() {
             <a href="https://www.google.com/maps/search/?api=1&query=Roger%20Wilco%20Aviation%20Services%20Hangar%203%203701%20N.%20Aviation%20Avenue%20Sioux%20Falls%20SD%2057104">
               Open in Google Maps
             </a>
+            <Link href="/locations/sioux-falls">Sioux Falls location page</Link>
           </div>
         </Specimen>
 
