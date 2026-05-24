@@ -141,7 +141,7 @@ export default function GarminInstallationNorthernPlainsPage() {
                     <p className="bs-svc-desc">WAAS GPS/NAV/COMM navigator installs, panel integration, and database-ready flight-deck workflow.</p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name">GFC 500 Autopilot</p>
+                    <p className="bs-svc-name"><Link href="/services/gfc-500-autopilot-installation">GFC 500 Autopilot</Link></p>
                     <p className="bs-svc-desc">Retrofit autopilot planning for eligible aircraft, including servo, control, and integration review.</p>
                   </li>
                   <li className="bs-svc">

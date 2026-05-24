@@ -292,7 +292,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/garmin-installation-northern-plains">GFC 500 Autopilot</a>
+                    <a href="/services/gfc-500-autopilot-installation">GFC 500 Autopilot</a>
                   </p>
                   <p className="bs-svc-desc">
                     Retrofit digital autopilot with GPSS steering, altitude hold, and vertical-speed modes.
