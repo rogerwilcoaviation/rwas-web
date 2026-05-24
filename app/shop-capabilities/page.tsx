@@ -172,7 +172,7 @@ export default function ShopCapabilitiesPage() {
                     <p className="bs-svc-name"><a href="/services/gfc-500-autopilot-installation">GFC 500 Autopilot</a></p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/collections/avionics-certified">ADS-B Out Compliance</a></p>
+                    <p className="bs-svc-name"><a href="/services/ads-b-installation">ADS-B Out Compliance</a></p>
                   </li>
                 </ul>
               </div>

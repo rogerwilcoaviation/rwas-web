@@ -145,7 +145,7 @@ export default function GarminInstallationNorthernPlainsPage() {
                     <p className="bs-svc-desc">Retrofit autopilot planning for eligible aircraft, including servo, control, and integration review.</p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name">GI 275, G5, GTX, GMA, and ADS-B</p>
+                    <p className="bs-svc-name">GI 275, G5, GTX, GMA, and <Link href="/services/ads-b-installation">ADS-B</Link></p>
                     <p className="bs-svc-desc">Instrument, transponder, audio-panel, and ADS-B Out compliance work.</p>
                   </li>
                   <li className="bs-svc">

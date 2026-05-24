@@ -300,7 +300,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/collections/avionics-certified">ADS-B Out Compliance</a>
+                    <a href="/services/ads-b-installation">ADS-B Out Compliance</a>
                   </p>
                   <p className="bs-svc-desc">
                     FAR 91.227 compliant installations. Transponder upgrades and system certification.

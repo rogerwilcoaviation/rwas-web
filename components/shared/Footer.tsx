@@ -78,6 +78,9 @@ export const Footer = ({ className }: { className?: string }) => {
         <LandingFooterLink href="/services/gfc-500-autopilot-installation">
           GFC 500 autopilot
         </LandingFooterLink>
+        <LandingFooterLink href="/services/ads-b-installation">
+          ADS-B installation
+        </LandingFooterLink>
         <LandingFooterLink href="/services/aircraft-maintenance-yankton">
           Aircraft maintenance
         </LandingFooterLink>
