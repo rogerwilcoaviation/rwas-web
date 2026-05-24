@@ -332,7 +332,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/shop-capabilities">Sheet Metal &amp; Fabrication</a>
+                    <a href="/services/fiber-laser-fabrication">Sheet Metal &amp; Fabrication</a>
                   </p>
                   <p className="bs-svc-desc">
                     Structural repair, skin replacement, custom fabrication in aircraft-grade aluminum alloys.

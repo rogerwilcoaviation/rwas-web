@@ -78,6 +78,9 @@ export const Footer = ({ className }: { className?: string }) => {
         <LandingFooterLink href="/services/papa-alpha-tools">
           Papa-Alpha story
         </LandingFooterLink>
+        <LandingFooterLink href="/services/fiber-laser-fabrication">
+          Fiber laser fabrication
+        </LandingFooterLink>
         <LandingFooterLink href="/contact">
           Contact
         </LandingFooterLink>

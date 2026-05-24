@@ -22,6 +22,7 @@ const STATIC_ROUTES: StaticRoute[] = [
   { path: 'shop-capabilities', priority: 0.9, changeFrequency: 'monthly' },
   { path: 'services/ndt-inspection', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services/papa-alpha-tools', priority: 0.8, changeFrequency: 'monthly' },
+  { path: 'services/fiber-laser-fabrication', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'panel-planner',     priority: 0.9, changeFrequency: 'monthly' },
   { path: 'aircraft-for-sale', priority: 0.8, changeFrequency: 'daily'   },
   { path: 'garmin',            priority: 0.8, changeFrequency: 'weekly'  },

@@ -254,6 +254,10 @@ export default function ShopCapabilitiesPage() {
                     In-house CNC machining, laser cutting, and fabrication capabilities for aircraft panels, structural components, and precision tooling. Home of Papa-Alpha rigging reference tools for the Piper fleet.
                   </p>
                   <p>
+                    <a href="/services/fiber-laser-fabrication">Read more about aircraft fiber laser fabrication at RWAS</a>
+                    {' '}
+                    &middot;
+                    {' '}
                     <a href="/services/papa-alpha-tools">Read the Papa-Alpha tools story</a>
                   </p>
                 </div>
