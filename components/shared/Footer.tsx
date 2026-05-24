@@ -78,6 +78,9 @@ export const Footer = ({ className }: { className?: string }) => {
         <LandingFooterLink href="/services/g3x-touch-installation">
           G3X Touch
         </LandingFooterLink>
+        <LandingFooterLink href="/services/gtn-xi-navigator-installation">
+          GTN Xi navigators
+        </LandingFooterLink>
         <LandingFooterLink href="/services/gfc-500-autopilot-installation">
           GFC 500 autopilot
         </LandingFooterLink>

@@ -292,7 +292,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/collections/avionics-certified">GTN 650Xi / 750Xi</a>
+                    <a href="/services/gtn-xi-navigator-installation">GTN 650Xi / 750Xi</a>
                   </p>
                   <p className="bs-svc-desc">
                     GPS/NAV/COMM with WAAS LPV approaches, IFR certification, and flight-plan integration.

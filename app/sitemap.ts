@@ -30,6 +30,7 @@ const STATIC_ROUTES: StaticRoute[] = [
   { path: 'services/gfc-500-autopilot-installation', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services/ads-b-installation', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services/g3x-touch-installation', priority: 0.8, changeFrequency: 'monthly' },
+  { path: 'services/gtn-xi-navigator-installation', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'panel-planner',     priority: 0.9, changeFrequency: 'monthly' },
   { path: 'aircraft-for-sale', priority: 0.8, changeFrequency: 'daily'   },
   { path: 'garmin',            priority: 0.8, changeFrequency: 'weekly'  },

@@ -137,7 +137,7 @@ export default function GarminInstallationNorthernPlainsPage() {
                     <p className="bs-svc-desc">Glass-cockpit upgrades with ADAHRS, engine information, synthetic vision, and display planning.</p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name">GTN 650Xi / GTN 750Xi</p>
+                    <p className="bs-svc-name"><Link href="/services/gtn-xi-navigator-installation">GTN 650Xi / GTN 750Xi</Link></p>
                     <p className="bs-svc-desc">WAAS GPS/NAV/COMM navigator installs, panel integration, and database-ready flight-deck workflow.</p>
                   </li>
                   <li className="bs-svc">
