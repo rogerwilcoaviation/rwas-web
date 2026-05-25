@@ -43,4 +43,4 @@ Once the link is confirmed, add it to the CRM/email signature snippets and use `
 
 ## Status - 2026-05-25
 
-GBP currently shows 3 Google reviews and 417 customer interactions. The review-request link is blocked until Google Business Profile video verification is completed after the Sioux Falls address change.
+GBP currently shows 3 Google reviews and 417 customer interactions. The review-request link is blocked until Google Business Profile video verification is completed after the Sioux Falls address change. Address, description, and 12 service entries have been staged but are not public until verification clears.

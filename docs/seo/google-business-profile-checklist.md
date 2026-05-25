@@ -33,6 +33,7 @@ Roger Wilco Aviation Services LLC is an FAA Part 145 repair station at Hangar 3 
 - Address was changed in GBP from `700 East 31st Street, Yankton, SD 57078` to `3701 N. Aviation Avenue, Hangar 3, Sioux Falls, SD 57104`.
 - Google accepted the address edit into pending review and did not show an immediate hard rejection.
 - Description was updated in the profile editor to the Sioux Falls / Hangar 3 version with Part 145, Garmin, NDT, fabrication, and Papa-Alpha language.
+- All 12 service entries in the checklist below were staged under the primary `Aircraft maintenance company` category. Google shows these edits will be visible after verification.
 - Attempting to open the review-request link showed a verification gate: Google says the profile is not visible until verification is complete.
 - Required verification method shown by Google: submit one continuous business video showing surrounding area, permanent business-name signage/fixture, and access to staff-only areas or proof of management.
 

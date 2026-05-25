@@ -12,7 +12,7 @@ https://www.rogerwilcoaviation.com/
 
 | Source | Current finding | Action |
 | --- | --- | --- |
-| Google Business Profile | Address and description updated on 2026-05-25; address/revisibility now gated by Google video verification | Complete GBP video verification, then confirm public NAP and capture review link |
+| Google Business Profile | Address, description, and 12 service entries updated/staged on 2026-05-25; address/revisibility now gated by Google video verification | Complete GBP video verification, then confirm public NAP, services, and review link |
 | AEA member directory | Public search result still shows Yankton, SD / KYKN | Submit member-profile update to Sioux Falls / KFSD / current NAP |
 | BBB profile | Public search result still shows Yankton context | Request NAP update or profile correction |
 | Existing Google index snippets | Some crawled snippets still show old Yankton title/copy | Let updated site crawl; inspect in GSC after sitemap recrawl |
