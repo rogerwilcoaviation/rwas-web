@@ -42,6 +42,7 @@ import {
   BroadsheetFooter,
 } from '@/components/shared/broadsheet';
 import { productImageUrl } from '@/lib/product-image';
+import { serviceLinksForProduct } from '@/lib/service-links';
 
 
 // Strip Garmin "Buy & Save rebate form" paragraph from Shopify descriptionHtml.
@@ -340,6 +341,7 @@ export default async function ProductDetailPage({
   const normalListPrice = product.variants[0]?.compareAtPrice;
   const hasSalePrice = Boolean(normalListPrice && primaryPrice && Number(normalListPrice.amount) > Number(primaryPrice.amount));
   const d2Briefing = D2_WATCH_BRIEFINGS[product.handle];
+  const relatedServiceLinks = serviceLinksForProduct(product);
   const visibleOptions = product.options.filter((opt) => !isPlaceholderOption(opt));
   const familyTag = (product.tags || []).find((tag) => tag.toLowerCase().startsWith('family-'));
   let comparisonProducts: Awaited<ReturnType<typeof getProductsByTag>> = [];
@@ -614,6 +616,19 @@ export default async function ProductDetailPage({
                 Call (605) 299-8178 — staffed by pilots and A&amp;Ps, not a call center.
               </div>
             </div>
+
+            {relatedServiceLinks.length ? (
+              <section className="bs-trust-strip" aria-label="Related RWAS services">
+                {relatedServiceLinks.map((service) => (
+                  <div className="cell" key={service.href}>
+                    <span className="lab">Related service</span>
+                    <Link href={service.href}>{service.label}</Link>
+                    <br />
+                    {service.description}
+                  </div>
+                ))}
+              </section>
+            ) : null}
           </article>
 
           {/* Spec aside — built from variant options for now */}

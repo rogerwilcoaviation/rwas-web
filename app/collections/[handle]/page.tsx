@@ -19,6 +19,7 @@ import {
 } from '@/lib/shopify';
 import Link from 'next/link';
 import { collectionMetaDescription, collectionSeoTitle, truncateMeta } from '@/lib/seo';
+import { serviceLinksForCollection } from '@/lib/service-links';
 
 const FALLBACK_COLLECTION_HANDLES = [
   'avionics-certified',
@@ -143,6 +144,7 @@ export default async function CollectionDetailPage({
     skus: (product.variants || []).map((variant) => variant.sku || '').filter(Boolean),
   }));
   const quoteOnly = isQuoteCollection(collection.handle);
+  const relatedServiceLinks = serviceLinksForCollection(collection.handle, collection.title);
   const canonicalUrl = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -227,6 +229,25 @@ export default async function CollectionDetailPage({
             </p>
           </Specimen>
         )}
+
+        {relatedServiceLinks.length ? (
+          <Specimen variant="flat" as="section">
+            <p className="bs-kicker">Shop-supported services</p>
+            <h2 className="bs-headline" style={{ marginTop: 6, marginBottom: 12 }}>
+              Need the work behind the part?
+            </h2>
+            <ul className="bs-svc-list">
+              {relatedServiceLinks.map((service) => (
+                <li key={service.href} className="bs-svc">
+                  <p className="bs-svc-name">
+                    <Link href={service.href}>{service.label}</Link>
+                  </p>
+                  <p className="bs-svc-desc">{service.description}</p>
+                </li>
+              ))}
+            </ul>
+          </Specimen>
+        ) : null}
 
         <Specimen variant="flat">
           <div style={{ marginBottom: 20 }}>
