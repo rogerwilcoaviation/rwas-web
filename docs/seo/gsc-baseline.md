@@ -22,6 +22,15 @@ Outputs are written under:
 
 `logs/gsc-baseline/YYYY-MM-DD_YYYY-MM-DD/`
 
+## Manual GSC Check - 2026-05-25
+
+- Property selected: `https://www.rogerwilcoaviation.com/`
+- `/sitemap.xml` was resubmitted manually in Search Console.
+- Result: submitted successfully.
+- Current sitemap table showed `Success`, last read May 24, 2026, and 1,625 discovered pages.
+- Pages/indexing report was still processing and said to check again in a day or so.
+- Performance report was still processing, with no query/page data available to export yet.
+
 Files:
 
 - `queries.csv` and `queries.json`

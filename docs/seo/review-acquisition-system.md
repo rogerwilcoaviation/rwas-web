@@ -40,3 +40,7 @@ Ask for a review only once. Do not offer discounts, gifts, or incentives for rev
 Add the final Google review URL from the Google Business Profile dashboard. The preferred format is the short review link Google provides inside GBP.
 
 Once the link is confirmed, add it to the CRM/email signature snippets and use `?utm_source=review_request&utm_medium=email` only if Google preserves the URL safely.
+
+## Status - 2026-05-25
+
+GBP currently shows 3 Google reviews and 417 customer interactions. The review-request link is blocked until Google Business Profile video verification is completed after the Sioux Falls address change.

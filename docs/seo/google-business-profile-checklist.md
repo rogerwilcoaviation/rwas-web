@@ -25,6 +25,17 @@ Do not invent categories. Choose only from Google’s live category picker.
 
 Roger Wilco Aviation Services LLC is an FAA Part 145 repair station at Hangar 3 in Sioux Falls, South Dakota. RWAS supports Garmin avionics installation, aircraft maintenance, annual inspections, NDT inspection, fiber laser fabrication, Rotax support, pre-buy inspections, and Papa-Alpha Piper rigging tools for aircraft owners across the Northern Plains.
 
+## Manual GBP Pass - 2026-05-25
+
+- Profile account: John Halsted / `jchalsted@gmail.com`.
+- Visible profile state before edits: 417 customer interactions, 5.0 rating, 3 Google reviews.
+- Categories visible in GBP: primary `Aircraft maintenance company`, secondary `Repair service`.
+- Address was changed in GBP from `700 East 31st Street, Yankton, SD 57078` to `3701 N. Aviation Avenue, Hangar 3, Sioux Falls, SD 57104`.
+- Google accepted the address edit into pending review and did not show an immediate hard rejection.
+- Description was updated in the profile editor to the Sioux Falls / Hangar 3 version with Part 145, Garmin, NDT, fabrication, and Papa-Alpha language.
+- Attempting to open the review-request link showed a verification gate: Google says the profile is not visible until verification is complete.
+- Required verification method shown by Google: submit one continuous business video showing surrounding area, permanent business-name signage/fixture, and access to staff-only areas or proof of management.
+
 ## Services To Add
 
 - Garmin avionics installation
