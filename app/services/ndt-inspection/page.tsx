@@ -14,7 +14,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/ndt-inspection';
 export const metadata = {
   title: { absolute: 'Aircraft NDT Inspection - Eddy Current, Penetrant, Magnetic Particle | RWAS' },
   description:
-    'Aircraft NDT inspection from FAA Part 145 repair station RWSR491E at Hangar 3 in Sioux Falls, SD. Eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing.',
+    'Aircraft NDT inspection in Sioux Falls, SD: eddy current, dye penetrant, magnetic particle, ultrasound, visual testing, and Rockwell hardness.',
   alternates: { canonical: pageUrl },
 };
 

@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/g3x-touch-installat
 export const metadata = {
   title: { absolute: 'Garmin G3X Touch Installation - Northern Plains | RWAS' },
   description:
-    'Garmin G3X Touch installation planning from RWAS, a certified Garmin dealer and FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. Glass panel design, EIS, ADAHRS, Connext, panel fabrication, and documentation support.',
+    'Garmin G3X Touch installation in Sioux Falls, SD: glass panel planning, EIS, ADAHRS, Connext workflow, fabrication, testing, and documentation.',
   alternates: { canonical: pageUrl },
 };
 

@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/fiber-laser-fabrica
 export const metadata = {
   title: { absolute: 'Aircraft Fiber Laser Fabrication - Panel Cutting, Welding, UV Print | RWAS' },
   description:
-    'Aircraft fiber laser cutting, welding, panel fabrication, powder coating, UV printing, and sheet metal support from FAA Part 145 repair station RWSR491E at Hangar 3 in Sioux Falls, SD.',
+    'Aircraft fiber laser fabrication in Sioux Falls, SD: panel cutting, laser welding, powder coating, UV printing, CAD/CNC workflow, and sheet metal support.',
   alternates: { canonical: pageUrl },
 };
 

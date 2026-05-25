@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/locations/sioux-falls';
 export const metadata = {
   title: { absolute: 'Aircraft Maintenance & Avionics Shop - Sioux Falls, SD | RWAS' },
   description:
-    'Roger Wilco Aviation Services is an FAA Part 145 repair station at Hangar 3, 3701 N. Aviation Avenue, Sioux Falls, SD, supporting Garmin avionics, maintenance, NDT, fabrication, and aircraft pre-buy inspections.',
+    'RWAS is an FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD, supporting Garmin avionics, maintenance, NDT, fabrication, and pre-buys.',
   alternates: { canonical: pageUrl },
 };
 

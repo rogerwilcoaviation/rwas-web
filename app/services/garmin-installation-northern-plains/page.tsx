@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/garmin-installation
 export const metadata = {
   title: { absolute: 'Garmin Avionics Installation - South Dakota, Nebraska, Iowa | RWAS' },
   description:
-    'Garmin avionics installation from RWAS, a certified Garmin dealer and FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. G3X Touch, GTN Xi, GFC 500, ADS-B, panel fabrication, and quote support for the Northern Plains.',
+    'Garmin avionics installation in Sioux Falls, SD. RWAS supports G3X Touch, GTN Xi, GFC 500, ADS-B, panel fabrication, and quote planning.',
   alternates: { canonical: pageUrl },
 };
 

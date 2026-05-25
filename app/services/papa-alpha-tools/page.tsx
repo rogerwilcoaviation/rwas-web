@@ -16,7 +16,7 @@ const collectionUrl = 'https://www.rogerwilcoaviation.com/collections/papa-alpha
 export const metadata = {
   title: { absolute: 'Papa-Alpha Piper Rigging Tools - PA-28, PA-30, PA-31, PA-36 | RWAS' },
   description:
-    'Papa-Alpha Piper rigging tools from Roger Wilco Aviation Services. CNC-machined aluminum reference tools for PA-28, PA-30, PA-31, PA-36 stabilator, rudder, aileron, flap, and bell crank rigging work.',
+    'Papa-Alpha Piper rigging tools from RWAS: CNC-machined reference tools for PA-28, PA-30, PA-31, and PA-36 flight-control rigging work.',
   alternates: { canonical: pageUrl },
 };
 

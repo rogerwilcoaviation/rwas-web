@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/pre-buy-inspection'
 export const metadata = {
   title: { absolute: 'Aircraft Pre-Buy Inspection - South Dakota, Nebraska, Iowa | RWAS' },
   description:
-    'Aircraft pre-buy inspection support from RWAS, an FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. Logbook review, aircraft condition checks, NDT coordination, avionics review, and buyer decision support.',
+    'Aircraft pre-buy inspection support in Sioux Falls, SD: logbook review, physical inspection, avionics review, NDT coordination, and buyer guidance.',
   alternates: { canonical: pageUrl },
 };
 

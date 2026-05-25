@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/aircraft-maintenanc
 export const metadata = {
   title: { absolute: 'Aircraft Maintenance & Annual Inspections - Sioux Falls, SD | RWAS' },
   description:
-    'Aircraft maintenance, annual inspections, 100-hour inspections, pre-buy support, AOG service, and logbook documentation from FAA Part 145 repair station RWSR491E at Hangar 3 in Sioux Falls, SD.',
+    'Aircraft maintenance in Sioux Falls, SD from RWAS: annual inspections, 100-hour inspections, pre-buy support, AOG service, prop balancing, and weighing.',
   alternates: { canonical: pageUrl },
 };
 

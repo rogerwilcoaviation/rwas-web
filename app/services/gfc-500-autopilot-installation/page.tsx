@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/gfc-500-autopilot-i
 export const metadata = {
   title: { absolute: 'Garmin GFC 500 Autopilot Installation - Northern Plains | RWAS' },
   description:
-    'Garmin GFC 500 autopilot installation from RWAS, a certified Garmin dealer and FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. Eligibility review, quote planning, panel integration, and installation support.',
+    'Garmin GFC 500 autopilot installation in Sioux Falls, SD: eligibility review, quote planning, integration, installation, testing, and documentation.',
   alternates: { canonical: pageUrl },
 };
 

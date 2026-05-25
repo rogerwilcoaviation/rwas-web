@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/rotax-repair';
 export const metadata = {
   title: { absolute: 'Rotax Aircraft Engine Maintenance - Northern Plains | RWAS' },
   description:
-    'Rotax aircraft engine maintenance support from RWAS at Hangar 3 in Sioux Falls, SD. Light sport and experimental aircraft maintenance, inspections, troubleshooting, documentation, and quote support for the Northern Plains.',
+    'Rotax aircraft engine maintenance support in Sioux Falls, SD: inspection planning, troubleshooting, documentation review, and repair-station coordination.',
   alternates: { canonical: pageUrl },
 };
 

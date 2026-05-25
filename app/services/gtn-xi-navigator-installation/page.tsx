@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/gtn-xi-navigator-in
 export const metadata = {
   title: { absolute: 'Garmin GTN 650Xi / 750Xi Installation - Northern Plains | RWAS' },
   description:
-    'Garmin GTN 650Xi and GTN 750Xi navigator installation planning from RWAS, a certified Garmin dealer and FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. WAAS GPS/NAV/COMM, LPV approach capability, panel integration, and documentation support.',
+    'Garmin GTN 650Xi and GTN 750Xi installation in Sioux Falls, SD: WAAS navigator integration, antennas, panel work, testing, and documentation.',
   alternates: { canonical: pageUrl },
 };
 

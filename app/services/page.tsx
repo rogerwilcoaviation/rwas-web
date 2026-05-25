@@ -90,7 +90,7 @@ const allServices = serviceGroups.flatMap((group) => group.services);
 export const metadata = {
   title: { absolute: 'Aircraft Services - Avionics, Maintenance, NDT & Fabrication | RWAS' },
   description:
-    'Explore RWAS aircraft services from FAA Part 145 repair station RWSR491E at Hangar 3 in Sioux Falls, SD: Garmin avionics installation, annual inspections, NDT, fabrication, Rotax support, pre-buy inspections, and Papa-Alpha tools.',
+    'RWAS aircraft services in Sioux Falls, SD: Garmin avionics, annual inspections, NDT, fabrication, Rotax support, pre-buys, and Papa-Alpha tools.',
   alternates: { canonical: pageUrl },
 };
 

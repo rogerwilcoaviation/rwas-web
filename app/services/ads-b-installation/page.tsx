@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/ads-b-installation'
 export const metadata = {
   title: { absolute: 'ADS-B Out Installation - South Dakota, Nebraska, Iowa | RWAS' },
   description:
-    'ADS-B Out installation and transponder upgrade planning from RWAS, a certified Garmin dealer and FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD. GTX transponders, antenna review, FAR 91.227 compliance, and documentation support.',
+    'ADS-B Out installation in Sioux Falls, SD: Garmin transponder upgrades, GPS source review, antenna planning, configuration, testing, and paperwork.',
   alternates: { canonical: pageUrl },
 };
 
