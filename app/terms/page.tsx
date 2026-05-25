@@ -415,16 +415,7 @@ export default function TermsPage() {
           </p>
 
           <p className="mb-0">
-            Happy with our work?{' '}
-            <a
-              href="https://search.google.com/local/writereview?placeid=ChIJaciUulNp3WURsopwVblVMIo&source=g.page.m.ia._&laa=nmx-review-solicitation-ia2"
-              className="text-blue-600 underline"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Write a review on Google
-            </a>
-            .
+            Happy with our work? Ask your RWAS contact for the current review link.
           </p>
         </div>
 

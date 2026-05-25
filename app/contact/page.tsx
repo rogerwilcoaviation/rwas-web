@@ -11,11 +11,13 @@ import {
 import ContactForm from '@/components/shared/ContactForm';
 import '../contact.css';
 
+const pageUrl = 'https://www.rogerwilcoaviation.com/contact';
+
 export const metadata = {
   title: 'Contact RWAS',
   description:
     'Contact the Roger Wilco Aviation Services Avionics Desk in Sioux Falls, SD. Quote requests, project inquiries, and general questions route to service@rwas.team.',
-  alternates: { canonical: '/contact' },
+  alternates: { canonical: pageUrl },
 };
 
 // Dynamic = the form reads ?product=/?sku= from the URL on the client,
@@ -25,6 +27,33 @@ export const dynamic = 'force-static';
 export default function ContactPage() {
   return (
     <BroadsheetLayout>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'ContactPage',
+                '@id': `${pageUrl}#contact`,
+                url: pageUrl,
+                name: 'Contact Roger Wilco Aviation Services',
+                description:
+                  'Contact Roger Wilco Aviation Services for aircraft maintenance, Garmin avionics installation, NDT, fabrication, pre-buy support, and general aircraft-service questions.',
+                about: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
+              },
+              {
+                '@type': 'BreadcrumbList',
+                '@id': `${pageUrl}#breadcrumb`,
+                itemListElement: [
+                  { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
+                  { '@type': 'ListItem', position: 2, name: 'Contact', item: pageUrl },
+                ],
+              },
+            ],
+          }),
+        }}
+      />
       <Dateline />
       <Masthead />
       <BroadsheetNav activeHref="/contact" />
