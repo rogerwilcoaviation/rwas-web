@@ -20,6 +20,7 @@
 import '../../newspaper.css';
 import blogData from '../../../public/blog-articles.json';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import {
   BroadsheetLayout,
   Dateline,
@@ -31,6 +32,7 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import { truncateMeta } from '@/lib/seo';
+import { serviceLinksForBlogArticle } from '@/lib/service-links';
 
 function escapeHtml(text: string) {
   return text
@@ -181,6 +183,7 @@ export default async function BlogArticlePage({
 
   const relatedArticles = publishedArticles.filter((entry) => entry.id !== article.id).slice(0, 4);
   const markdownBlocks = renderMarkdownBody((article as { body_markdown?: string }).body_markdown);
+  const relatedServiceLinks = serviceLinksForBlogArticle(article);
 
   const siteUrl = 'https://www.rogerwilcoaviation.com';
   const articleUrl = `${siteUrl}/blog/${article.id}`;
@@ -214,6 +217,13 @@ export default async function BlogArticlePage({
     mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
     articleSection: article.category,
     keywords: (article as { tags?: string[] }).tags ? (article as { tags: string[] }).tags.join(', ') : undefined,
+    mentions: relatedServiceLinks.length
+      ? relatedServiceLinks.map((service) => ({
+          '@type': 'Service',
+          name: service.label,
+          url: `${siteUrl}${service.href}`,
+        }))
+      : undefined,
     isPartOf: { '@id': `${siteUrl}#website` },
   };
 
@@ -320,6 +330,20 @@ export default async function BlogArticlePage({
                 </div>
               ))}
             </Specimen>
+
+            {relatedServiceLinks.length ? (
+              <Specimen variant="flat" as="aside">
+                <div className="np-box-title">Related RWAS Services</div>
+                {relatedServiceLinks.map((service) => (
+                  <div className="np-box-row" key={service.href}>
+                    <Link href={service.href}>
+                      <span>{service.label}</span>
+                      <span className="np-box-pg">&rarr;</span>
+                    </Link>
+                  </div>
+                ))}
+              </Specimen>
+            ) : null}
 
             <Specimen variant="flat" as="aside">
               <div className="np-box-title">Recent Dispatches</div>

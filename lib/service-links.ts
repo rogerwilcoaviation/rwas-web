@@ -111,3 +111,30 @@ export function serviceLinksForCollection(handle: string, title?: string | null)
 
   return unique(selected).slice(0, 5);
 }
+
+export function serviceLinksForBlogArticle(input: {
+  title?: string | null;
+  id?: string | null;
+  category?: string | null;
+  tags?: string[] | null;
+}) {
+  const haystack = [input.title, input.id, input.category, ...(input.tags || [])]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+  const selected: SeoServiceLink[] = [];
+
+  if (/avionics|panel|g3x|g500|txi|gtn|gfc|ads-?b|audio-panel|g1000|perspective|stc/.test(haystack)) selected.push(links[0]);
+  if (/g3x|engine-monitoring|eis/.test(haystack)) selected.push(links[1]);
+  if (/gtn|navigator|waas/.test(haystack)) selected.push(links[2]);
+  if (/gfc|autopilot|stc/.test(haystack)) selected.push(links[3]);
+  if (/ads-?b|transponder/.test(haystack)) selected.push(links[4]);
+  if (/maintenance|repair-station|service-bulletin|airworthiness|electroair|electronic-ignition|lycoming|continental/.test(haystack)) selected.push(links[5]);
+  if (/pre-?buy|buyer/.test(haystack)) selected.push(links[6]);
+  if (/ndt|eddy|penetrant|magnetic|ultrasound|rockwell/.test(haystack)) selected.push(links[7]);
+  if (/fabrication|fiber|laser|sheet-metal|panel-cutting/.test(haystack)) selected.push(links[8]);
+  if (/rotax/.test(haystack)) selected.push(links[9]);
+  if (/papa-alpha|papa alpha|rigging|pa-28|pa-32|stabilator|bell-crank/.test(haystack)) selected.push(links[10]);
+
+  return unique(selected).slice(0, 4);
+}
