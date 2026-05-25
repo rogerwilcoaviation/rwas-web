@@ -62,3 +62,9 @@ tsconfig.tsbuildinfo
 
 # automation logs (sitemap health checks, PSI weekly checks)
 logs/
+
+# local agent/runtime artifacts
+.claude-flow/
+.claude/
+.swarm/
+ruvector.db
