@@ -23,6 +23,35 @@ Outputs:
 
 The audit checks title length, meta description length, canonical, Product schema, noindex state, fallback image residue, and rough body word count.
 
+## Full Audit Snapshot - 2026-05-25
+
+Command:
+
+```bash
+CATALOG_AUDIT_LIMIT=2000 npm run seo:catalog-audit
+```
+
+Output:
+
+`logs/catalog-index-audit/2026-05-25T13-07-22-413Z/`
+
+Results:
+
+- Audited 1,591 product URLs.
+- 1,591 returned OK; zero fetch failures.
+- 1,591 had valid canonicals; zero canonical misses.
+- 1,591 had Product schema; zero Product schema misses.
+- Zero noindex tags found.
+- Zero short meta descriptions under the audit threshold.
+- Five fallback images remained, all on Papa-Alpha product pages:
+  - `/products/pa-28-32-34-44-aileron-and-flap-rigging-tool-1`
+  - `/products/bell-crank-rigging-tool`
+  - `/products/rigging-kit`
+  - `/products/rudder-rigging-tool`
+  - `/products/stabilator-rigging-tool`
+
+Interpretation: catalog technical hygiene is much better than the original risk framing implied. The product-index question is now a demand and uniqueness decision to make from Search Console data, not an emergency technical cleanup. Do not prune or noindex solely because the catalog is large.
+
 ## Decision Rules
 
 Keep indexed:
