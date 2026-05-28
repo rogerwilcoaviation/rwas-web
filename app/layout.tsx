@@ -172,7 +172,7 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@graph': [
                 {
-                  '@type': ['LocalBusiness', 'AutomotiveBusiness'],
+                  '@type': ['LocalBusiness', 'ProfessionalService'],
                   '@id': `${siteConfig.siteUrl}#organization`,
                   name: 'Roger Wilco Aviation Services',
                   alternateName: 'RWAS',
@@ -192,6 +192,11 @@ export default function RootLayout({
                     postalCode: '57104',
                     addressCountry: 'US',
                   },
+                  geo: {
+                    '@type': 'GeoCoordinates',
+                    latitude: 43.5820,
+                    longitude: -96.7419,
+                  },
                   openingHoursSpecification: [
                     {
                       '@type': 'OpeningHoursSpecification',
@@ -202,7 +207,7 @@ export default function RootLayout({
                         'Thursday',
                         'Friday',
                       ],
-                      opens: '07:00',
+                      opens: '08:00',
                       closes: '17:00',
                     },
                   ],

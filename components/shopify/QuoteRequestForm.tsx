@@ -10,7 +10,7 @@
  *
  * New pattern: redirect to the unified /contact page with product
  * context in the query string. The Correspondence Desk handles
- * validation, spam protection, and delivery to service@rwas.team.
+ * validation, spam protection, and delivery to avionics@rwas.team.
  */
 
 import Link from 'next/link';
@@ -44,7 +44,7 @@ export default function QuoteRequestForm({
         Continue to Quote Request
       </Link>
       <p className="text-xs text-black/50">
-        Routes to service@rwas.team with this product pre-filled.
+        Routes to avionics@rwas.team with this product pre-filled.
       </p>
     </div>
   );

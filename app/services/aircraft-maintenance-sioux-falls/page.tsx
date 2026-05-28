@@ -213,10 +213,10 @@ export default function AircraftMaintenanceSiouxFallsPage() {
                 </a>
                 <br />
                 <a
-                  href="mailto:service@rwas.team"
+                  href="mailto:avionics@rwas.team"
                   style={{ color: 'var(--ink-900)', textDecoration: 'underline', textUnderlineOffset: '2px' }}
                 >
-                  service@rwas.team
+                  avionics@rwas.team
                 </a>
                 <br />
                 Hangar 3, 3701 N. Aviation Avenue

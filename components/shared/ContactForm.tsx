@@ -191,7 +191,7 @@ export default function ContactForm() {
       const message =
         err instanceof Error
           ? err.message
-          : 'Something went wrong. Please email service@rwas.team directly.';
+          : 'Something went wrong. Please email avionics@rwas.team directly.';
       setSubmitState({ status: 'error', message });
     }
   };
@@ -216,7 +216,7 @@ export default function ContactForm() {
           <dt>Reference</dt>
           <dd>{submitState.ticketId}</dd>
           <dt>Routed to</dt>
-          <dd>service@rwas.team</dd>
+          <dd>avionics@rwas.team</dd>
         </dl>
         <button
           type="button"
@@ -414,7 +414,7 @@ export default function ContactForm() {
             {submitState.status === 'submitting' ? 'Sending…' : 'Send to RWAS'}
           </button>
           <p className="rwas-contact-form__fineprint">
-            Routed to <strong>service@rwas.team</strong>. We never share your
+            Routed to <strong>avionics@rwas.team</strong>. We never share your
             contact information.
           </p>
         </div>

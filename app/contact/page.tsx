@@ -16,7 +16,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/contact';
 export const metadata = {
   title: 'Contact RWAS',
   description:
-    'Contact the Roger Wilco Aviation Services Avionics Desk in Sioux Falls, SD. Quote requests, project inquiries, and general questions route to service@rwas.team.',
+    'Contact the Roger Wilco Aviation Services Avionics Desk in Sioux Falls, SD. Quote requests, project inquiries, and general questions route to avionics@rwas.team.',
   alternates: { canonical: pageUrl },
 };
 
@@ -65,7 +65,7 @@ export default function ContactPage() {
           <p className="bs-script-accent">&mdash; quote requests &amp; inquiries &mdash;</p>
           <h1 className="bs-headline bs-headline--hero">Contact RWAS.</h1>
           <p className="bs-subhead">
-            Every message below lands at <strong>service@rwas.team</strong> — read
+            Every message below lands at <strong>avionics@rwas.team</strong> — read
             by the shop, not by a phone tree. For quote requests, include your
             aircraft make / model and N-number so we can pull records and reply
             with real numbers.
@@ -98,7 +98,7 @@ export default function ContactPage() {
             <div>
               <dt>General / service</dt>
               <dd>
-                <a href="mailto:service@rwas.team">service@rwas.team</a>
+                <a href="mailto:avionics@rwas.team">avionics@rwas.team</a>
               </dd>
             </div>
             <div>

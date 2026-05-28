@@ -205,10 +205,10 @@ export default function SiouxFallsLocationPage() {
               <span className="bs-kicker">Email</span>
               <p>
                 <a
-                  href="mailto:service@rwas.team"
+                  href="mailto:avionics@rwas.team"
                   style={{ color: 'var(--ink-900)', textDecoration: 'underline', textUnderlineOffset: '2px' }}
                 >
-                  service@rwas.team
+                  avionics@rwas.team
                 </a>
               </p>
             </Specimen>

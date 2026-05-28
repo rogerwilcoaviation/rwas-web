@@ -102,6 +102,25 @@ export default function ServicesPage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            '@id': `${pageUrl}#faq`,
+            mainEntity: [
+              { '@type': 'Question', name: 'What does Roger Wilco Aviation Services do?', acceptedAnswer: { '@type': 'Answer', text: 'RWAS is an FAA-certificated repair station specializing in Garmin avionics installation, airframe and powerplant maintenance, non-destructive testing, and sheet metal fabrication. We also manufacture Papa-Alpha rigging reference tools for Piper aircraft.' } },
+              { '@type': 'Question', name: 'Where is Roger Wilco Aviation Services located?', acceptedAnswer: { '@type': 'Answer', text: 'RWAS is located in Sioux Falls, South Dakota, at Sioux Falls Regional Airport (KFSD).' } },
+              { '@type': 'Question', name: 'What are your business hours?', acceptedAnswer: { '@type': 'Answer', text: 'Monday through Friday, 8:00 AM to 5:00 PM Central Time.' } },
+              { '@type': 'Question', name: 'What Garmin systems do you install?', acceptedAnswer: { '@type': 'Answer', text: 'We specialize in Garmin systems including the G3X Touch suite, G500/G600 TXi, GTN Xi navigators, GFC 500 autopilots, GI 275 displays, transponders, audio panels, ADS-B solutions, and full integrated panel installations.' } },
+              { '@type': 'Question', name: 'Can you work on my aircraft if I am not local?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Many customers fly their aircraft in for avionics installation and maintenance. We can coordinate logistics with you, your mechanic, or a ferry pilot, and we ship Papa-Alpha tools nationwide and internationally.' } },
+              { '@type': 'Question', name: 'Do you offer financing for avionics or maintenance work?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. RWAS offers financing options for avionics installations and maintenance projects including panel upgrades, autopilot installs, ADS-B upgrades, and major maintenance.' } },
+              { '@type': 'Question', name: 'Are you an FAA repair station?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. RWAS is an FAA-certificated repair station, Certificate No. RWSR491E, and a certified Garmin dealer.' } },
+            ],
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
             '@graph': [
               {
                 '@type': 'Service',

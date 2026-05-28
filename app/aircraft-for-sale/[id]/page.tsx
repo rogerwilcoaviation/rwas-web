@@ -473,7 +473,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
               ) : null}
               <div className="a4s-detail-cta">
                 <a
-                  href={`mailto:${listing.sellerEmail || 'service@rwas.team'}?subject=${encodeURIComponent('Inquiry: ' + h + (listing.nNumber ? ' (' + listing.nNumber + ')' : ''))}`}
+                  href={`mailto:${listing.sellerEmail || 'avionics@rwas.team'}?subject=${encodeURIComponent('Inquiry: ' + h + (listing.nNumber ? ' (' + listing.nNumber + ')' : ''))}`}
                 >
                   Contact Seller
                 </a>
