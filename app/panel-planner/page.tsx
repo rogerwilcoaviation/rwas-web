@@ -14,7 +14,7 @@ const PANEL_PLANNER_URL = 'https://panelplanner.rwas.team/customer';
 export const metadata = {
   title: { absolute: 'Build My Panel — RWAS Garmin Panel Planner' },
   description:
-    'Sketch a Garmin avionics panel concept with the RWAS customer Panel Planner. Submit your concept for RWAS review before fabrication or installation.',
+    'Sketch a Garmin avionics panel concept with the RWAS customer Panel Planner in Sioux Falls (KFSD). Submit your design for RWAS review before fabrication.',
   alternates: {
     canonical: 'https://www.rogerwilcoaviation.com/panel-planner',
   },
@@ -23,6 +23,69 @@ export const metadata = {
 export default function PanelPlannerPage() {
   return (
     <BroadsheetLayout>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': [
+              {
+                '@type': 'WebApplication',
+                '@id': 'https://www.rogerwilcoaviation.com/panel-planner#app',
+                name: 'RWAS Garmin Panel Planner',
+                url: 'https://www.rogerwilcoaviation.com/panel-planner',
+                applicationCategory: 'DesignApplication',
+                operatingSystem: 'Web browser (desktop, tablet, mobile)',
+                browserRequirements: 'Requires JavaScript. Works in any modern browser.',
+                description:
+                  'A free web tool from Roger Wilco Aviation Services for sketching a Garmin avionics panel concept. Choose an aircraft panel outline, place Garmin equipment such as G500 TXi, G3X Touch, GTN, GFC, GMA, GTX, and GI 275, preview panel finishes, and submit the concept to RWAS for review.',
+                offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+                provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
+                featureList: [
+                  'Choose an aircraft panel outline',
+                  'Place Garmin avionics equipment',
+                  'Preview panel finish options',
+                  'Submit a concept to RWAS for review',
+                ],
+              },
+              {
+                '@type': 'HowTo',
+                '@id': 'https://www.rogerwilcoaviation.com/panel-planner#howto',
+                name: 'How to plan a Garmin avionics panel with the RWAS Panel Planner',
+                description:
+                  'Use the RWAS customer Panel Planner to rough out a Garmin panel concept and send it to the shop for a reviewed proposal.',
+                totalTime: 'PT15M',
+                step: [
+                  {
+                    '@type': 'HowToStep',
+                    position: 1,
+                    name: 'Choose an aircraft panel',
+                    text: 'Start with an available panel outline, such as the measured Cessna R182 template.',
+                  },
+                  {
+                    '@type': 'HowToStep',
+                    position: 2,
+                    name: 'Place Garmin equipment',
+                    text: 'Search and position common avionics including G500 TXi, G3X Touch, GTN, GFC, GMA, GTX, and GI 275.',
+                  },
+                  {
+                    '@type': 'HowToStep',
+                    position: 3,
+                    name: 'Preview finish ideas',
+                    text: 'Try satin, carbon fiber, wood grain, brushed aluminum, or a custom color for UV-print concepts.',
+                  },
+                  {
+                    '@type': 'HowToStep',
+                    position: 4,
+                    name: 'Submit to RWAS',
+                    text: 'Send the sketch and notes directly into the RWAS review queue for engineering, eligibility, and quote review.',
+                  },
+                ],
+              },
+            ],
+          }),
+        }}
+      />
       <Dateline />
       <Masthead />
       <BroadsheetNav activeHref="/panel-planner" />
