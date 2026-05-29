@@ -7,7 +7,7 @@ import {
   cartPermalink,
 } from '@/lib/shopify';
 import Image from 'next/image';
-import { isShopifyPlaceholderImage, productImageUrl } from '@/lib/product-image';
+import { isShopifyPlaceholderImage, productImageAlt, productImageUrl } from '@/lib/product-image';
 import Link from 'next/link';
 
 function formatPrice(amount: string, currencyCode: string) {
@@ -73,8 +73,8 @@ export default function ProductCard({
     ? 'In stock \u00b7 OTC'
     : 'Shopify product';
   const displayImage =
-    product.images?.find((image) => !isShopifyPlaceholderImage(image.url)) ??
-    product.variants?.map((variant) => variant.image).find((image) => image?.url && !isShopifyPlaceholderImage(image.url)) ??
+    product.images?.find((image) => !isShopifyPlaceholderImage(image.url, image.altText)) ??
+    product.variants?.map((variant) => variant.image).find((image) => image?.url && !isShopifyPlaceholderImage(image.url, image.altText)) ??
     product.featuredImage;
 
   return (
@@ -83,8 +83,8 @@ export default function ProductCard({
         <div className="relative aspect-[4/3] bg-[#f5f3ef]">
           {displayImage ? (
             <Image
-              src={productImageUrl(displayImage.url, 600)}
-              alt={displayImage.altText || product.title}
+              src={productImageUrl(displayImage.url, 600, displayImage.altText)}
+              alt={productImageAlt(displayImage.url, displayImage.altText, product.title)}
               fill
               className="object-contain p-6 transition duration-300 group-hover:scale-[1.03]"
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"

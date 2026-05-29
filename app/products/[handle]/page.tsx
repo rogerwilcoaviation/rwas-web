@@ -42,7 +42,7 @@ import {
   BulletinBar,
   BroadsheetFooter,
 } from '@/components/shared/broadsheet';
-import { isShopifyPlaceholderImage, productImageUrl } from '@/lib/product-image';
+import { isShopifyPlaceholderImage, productImageAlt, productImageUrl } from '@/lib/product-image';
 import { serviceLinksForProduct } from '@/lib/service-links';
 
 function isProductImage(image: ShopifyProductDetail['featuredImage']): image is NonNullable<ShopifyProductDetail['featuredImage']> {
@@ -92,8 +92,7 @@ export async function generateMetadata({
     const url = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
     const imageCandidates = productImageCandidates(product);
     const metaImage =
-      imageCandidates.find((image) => !isShopifyPlaceholderImage(image.url)) ??
-      imageCandidates[0];
+      imageCandidates.find((image) => !isShopifyPlaceholderImage(image.url, image.altText));
     const imageUrl = metaImage?.url;
     const title = productSeoTitle(product.title, product.productType);
     return {
@@ -105,7 +104,7 @@ export async function generateMetadata({
         url,
         title,
         description,
-        images: imageUrl ? [{ url: imageUrl, alt: product.featuredImage?.altText || product.title }] : undefined,
+        images: imageUrl ? [{ url: imageUrl, alt: productImageAlt(metaImage.url, metaImage.altText, product.title) }] : undefined,
       },
       twitter: {
         card: 'summary_large_image',
@@ -352,7 +351,7 @@ export default async function ProductDetailPage({
   const gating = gateFromProduct(product.tags || [], product.vendor, product.collections || []);
   const imageCandidates = productImageCandidates(product);
   const heroImg =
-    imageCandidates.find((image) => !isShopifyPlaceholderImage(image.url)) ??
+    imageCandidates.find((image) => !isShopifyPlaceholderImage(image.url, image.altText)) ??
     imageCandidates[0];
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
@@ -397,7 +396,7 @@ export default async function ProductDetailPage({
   });
   const canonicalUrl = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
   const imageUrls = imageCandidates
-    .filter((img) => !isShopifyPlaceholderImage(img.url))
+    .filter((img) => !isShopifyPlaceholderImage(img.url, img.altText))
     .map((img) => img.url)
     .filter(Boolean);
   const breadcrumbSchema = {
@@ -480,8 +479,8 @@ export default async function ProductDetailPage({
               <>
                 <a className="bs-product-image-link" href="#product-image-zoom" aria-label={`Open larger image for ${product.title}`}>
                   <img
-                    src={productImageUrl(heroImg.url, 800)}
-                    alt={heroImg.altText || product.title}
+                    src={productImageUrl(heroImg.url, 800, heroImg.altText)}
+                    alt={productImageAlt(heroImg.url, heroImg.altText, product.title)}
                     width={800}
                     height={600}
                     style={{ width: '100%', height: 'auto', display: 'block', background: '#fff' }}
@@ -496,8 +495,8 @@ export default async function ProductDetailPage({
                   <div className="bs-product-image-lightbox__panel">
                     <a className="bs-product-image-lightbox__close" href="#" aria-label="Close expanded image">×</a>
                     <img
-                      src={productImageUrl(heroImg.url, 1600)}
-                      alt={heroImg.altText || product.title}
+                      src={productImageUrl(heroImg.url, 1600, heroImg.altText)}
+                      alt={productImageAlt(heroImg.url, heroImg.altText, product.title)}
                       style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
                       loading="lazy"
                       decoding="async"
@@ -716,10 +715,10 @@ export default async function ProductDetailPage({
                   <tr>
                     <th>Image</th>
                     <td className="current-product">
-                      {heroImg ? <img src={productImageUrl(heroImg.url, 120)} alt={heroImg.altText || product.title} loading="lazy" decoding="async" width={120} height={90} /> : '—'}
+                      {heroImg ? <img src={productImageUrl(heroImg.url, 120, heroImg.altText)} alt={productImageAlt(heroImg.url, heroImg.altText, product.title)} loading="lazy" decoding="async" width={120} height={90} /> : '—'}
                     </td>
                     {comparisonProducts.map((item) => (
-                      <td key={item.handle}>{item.featuredImage ? <img src={productImageUrl(item.featuredImage.url, 120)} alt={item.featuredImage.altText || item.title} loading="lazy" decoding="async" width={120} height={90} /> : '—'}</td>
+                      <td key={item.handle}>{item.featuredImage ? <img src={productImageUrl(item.featuredImage.url, 120, item.featuredImage.altText)} alt={productImageAlt(item.featuredImage.url, item.featuredImage.altText, item.title)} loading="lazy" decoding="async" width={120} height={90} /> : '—'}</td>
                     ))}
                   </tr>
                   <tr>

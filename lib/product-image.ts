@@ -21,13 +21,27 @@
  * slightly larger than the displayed CSS width (e.g. width=800 for a card
  * that displays at ~360px).
  */
-export function isShopifyPlaceholderImage(url: string | null | undefined): boolean {
-  return Boolean(url && /picture[_-]?may[_-]?not/i.test(url));
+export function isShopifyPlaceholderImage(
+  url: string | null | undefined,
+  altText?: string | null
+): boolean {
+  const haystack = `${url || ''} ${altText || ''}`;
+  return (
+    /picture[_-]?may[_-]?not/i.test(haystack) ||
+    /garmin-no-product-image-available/i.test(haystack) ||
+    /no product image available/i.test(haystack) ||
+    /no-product-image/i.test(haystack) ||
+    /product image placeholder/i.test(haystack)
+  );
 }
 
-export function productImageUrl(url: string | null | undefined, width: number): string {
+export function productImageUrl(
+  url: string | null | undefined,
+  width: number,
+  altText?: string | null
+): string {
   if (!url) return '/static/no-image.svg';
-  if (isShopifyPlaceholderImage(url)) {
+  if (isShopifyPlaceholderImage(url, altText)) {
     return '/static/no-image.svg';
   }
   if (/cdn\.shopify\.com/.test(url)) {
@@ -35,4 +49,13 @@ export function productImageUrl(url: string | null | undefined, width: number): 
     return `${url}${sep}width=${width}`;
   }
   return url;
+}
+
+export function productImageAlt(
+  url: string | null | undefined,
+  altText: string | null | undefined,
+  fallback: string
+): string {
+  if (altText && !isShopifyPlaceholderImage(url, altText)) return altText;
+  return fallback;
 }

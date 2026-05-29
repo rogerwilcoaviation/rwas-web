@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { isShopifyPlaceholderImage, productImageUrl } from '@/lib/product-image';
+import { isShopifyPlaceholderImage, productImageAlt, productImageUrl } from '@/lib/product-image';
 
 type CollectionBrowserImage = {
   url: string;
@@ -160,8 +160,8 @@ function ProductTile({
       ? 'OTC-ready item'
       : 'Shopify product';
   const displayImage =
-    product.images?.find((image) => !isShopifyPlaceholderImage(image.url)) ??
-    product.variants?.map((variant) => variant.image).find((image) => image?.url && !isShopifyPlaceholderImage(image.url)) ??
+    product.images?.find((image) => !isShopifyPlaceholderImage(image.url, image.altText)) ??
+    product.variants?.map((variant) => variant.image).find((image) => image?.url && !isShopifyPlaceholderImage(image.url, image.altText)) ??
     product.featuredImage;
 
   return (
@@ -171,8 +171,8 @@ function ProductTile({
           {displayImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={productImageUrl(displayImage.url, 600)}
-              alt={displayImage.altText || product.title}
+              src={productImageUrl(displayImage.url, 600, displayImage.altText)}
+              alt={productImageAlt(displayImage.url, displayImage.altText, product.title)}
               loading={eager ? 'eager' : 'lazy'}
               fetchPriority={eager ? 'high' : 'low'}
               decoding="async"

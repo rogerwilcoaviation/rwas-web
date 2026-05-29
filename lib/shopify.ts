@@ -228,7 +228,8 @@ function isFallbackProductImage(image?: ShopifyImage | null): boolean {
   return (
     haystack.includes('garmin-no-product-image-available') ||
     haystack.includes('no product image available') ||
-    haystack.includes('no-product-image')
+    haystack.includes('no-product-image') ||
+    haystack.includes('product image placeholder')
   );
 }
 
