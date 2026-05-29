@@ -49,6 +49,7 @@ export type ShopifyCollectionProduct = ShopifyFeaturedProduct & {
   tags?: string[];
   vendor?: string;
   productType?: string;
+  images?: ShopifyImage[];
   variants?: ShopifyVariant[];
 };
 
@@ -120,6 +121,18 @@ export type ShopifyCart = {
 type ShopifyResponse<T> = {
   data?: T;
   errors?: Array<{ message: string }>;
+};
+
+type ShopifyImageConnection = {
+  edges: Array<{ node: ShopifyImage }>;
+};
+
+type ShopifyCollectionProductQueryNode = Omit<
+  ShopifyCollectionProduct,
+  'images' | 'variants'
+> & {
+  images?: ShopifyImageConnection;
+  variants: { edges: Array<{ node: ShopifyVariant }> };
 };
 
 const SHOP_DOMAIN =
@@ -370,9 +383,6 @@ export async function getFeaturedCollections(): Promise<ShopifyCollectionSummary
 }
 
 export async function getCollectionByHandle(handle: string): Promise<ShopifyCollectionDetail | null> {
-  type CollectionProductNode = ShopifyCollectionProduct & {
-    variants: { edges: Array<{ node: ShopifyVariant }> };
-  };
   type CollectionQueryResult = {
     collection: {
       id: string;
@@ -382,7 +392,7 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
       image?: ShopifyImage | null;
       products: {
         pageInfo: { hasNextPage: boolean; endCursor: string | null };
-        edges: Array<{ node: CollectionProductNode }>;
+        edges: Array<{ node: ShopifyCollectionProductQueryNode }>;
       };
     } | null;
   };
@@ -422,6 +432,14 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
                   featuredImage {
                     url
                     altText
+                  }
+                  images(first: 3) {
+                    edges {
+                      node {
+                        url
+                        altText
+                      }
+                    }
                   }
                   priceRange {
                     minVariantPrice {
@@ -486,6 +504,7 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
     products.push(
       ...data.collection.products.edges.map((edge) => ({
         ...edge.node,
+        images: edge.node.images?.edges.map((imageEdge) => imageEdge.node) ?? [],
         variants: mapVariants(edge.node.variants.edges),
       }))
     );
@@ -607,9 +626,7 @@ export async function getProductsByTag(tag: string, limit = 48): Promise<Shopify
   const data = await shopifyFetch<{
     products: {
       edges: Array<{
-        node: ShopifyCollectionProduct & {
-          variants: { edges: Array<{ node: ShopifyVariant }> };
-        };
+        node: ShopifyCollectionProductQueryNode;
       }>;
     };
   }>(
@@ -627,6 +644,14 @@ export async function getProductsByTag(tag: string, limit = 48): Promise<Shopify
               featuredImage {
                 url
                 altText
+              }
+              images(first: 3) {
+                edges {
+                  node {
+                    url
+                    altText
+                  }
+                }
               }
               priceRange {
                 minVariantPrice {
@@ -671,6 +696,7 @@ export async function getProductsByTag(tag: string, limit = 48): Promise<Shopify
 
   return data.products.edges.map((edge) => ({
     ...edge.node,
+    images: edge.node.images?.edges.map((imageEdge) => imageEdge.node) ?? [],
     variants: mapVariants(edge.node.variants.edges),
   }));
 }
@@ -687,9 +713,7 @@ export async function getProductsByProductType(
       products: {
         pageInfo: { hasNextPage: boolean; endCursor: string | null };
         edges: Array<{
-          node: ShopifyCollectionProduct & {
-            variants: { edges: Array<{ node: ShopifyVariant }> };
-          };
+          node: ShopifyCollectionProductQueryNode;
         }>;
       };
     }>(
@@ -713,6 +737,14 @@ export async function getProductsByProductType(
                 featuredImage {
                   url
                   altText
+                }
+                images(first: 3) {
+                  edges {
+                    node {
+                      url
+                      altText
+                    }
+                  }
                 }
                 priceRange {
                   minVariantPrice {
@@ -762,6 +794,7 @@ export async function getProductsByProductType(
     products.push(
       ...data.products.edges.map((edge) => ({
         ...edge.node,
+        images: edge.node.images?.edges.map((imageEdge) => imageEdge.node) ?? [],
         variants: mapVariants(edge.node.variants.edges),
       }))
     );

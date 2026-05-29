@@ -30,6 +30,7 @@ import {
   isOtcCollection,
   isOtcEligible,
   PRIORITY_PRODUCT_HANDLES,
+  type ShopifyProductDetail,
 } from '@/lib/shopify';
 import { productMetaDescription, productSeoTitle, truncateMeta } from '@/lib/seo';
 import {
@@ -41,9 +42,20 @@ import {
   BulletinBar,
   BroadsheetFooter,
 } from '@/components/shared/broadsheet';
-import { productImageUrl } from '@/lib/product-image';
+import { isShopifyPlaceholderImage, productImageUrl } from '@/lib/product-image';
 import { serviceLinksForProduct } from '@/lib/service-links';
 
+function isProductImage(image: ShopifyProductDetail['featuredImage']): image is NonNullable<ShopifyProductDetail['featuredImage']> {
+  return Boolean(image?.url);
+}
+
+function productImageCandidates(product: ShopifyProductDetail) {
+  return [
+    ...product.images,
+    ...product.variants.map((variant) => variant.image).filter(Boolean),
+    product.featuredImage,
+  ].filter(isProductImage);
+}
 
 // Strip Garmin "Buy & Save rebate form" paragraph from Shopify descriptionHtml.
 // John (2026-04-21): on Garmin PDPs, remove "Click here for Garmin's Buy & Save rebate form."
@@ -78,7 +90,11 @@ export async function generateMetadata({
     if (!product) return { title: 'Product not found' };
     const description = productMetaDescription(product);
     const url = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
-    const imageUrl = product.featuredImage?.url || product.images[0]?.url;
+    const imageCandidates = productImageCandidates(product);
+    const metaImage =
+      imageCandidates.find((image) => !isShopifyPlaceholderImage(image.url)) ??
+      imageCandidates[0];
+    const imageUrl = metaImage?.url;
     const title = productSeoTitle(product.title, product.productType);
     return {
       title: { absolute: title },
@@ -334,7 +350,10 @@ export default async function ProductDetailPage({
   }
 
   const gating = gateFromProduct(product.tags || [], product.vendor, product.collections || []);
-  const heroImg = product.images[0];
+  const imageCandidates = productImageCandidates(product);
+  const heroImg =
+    imageCandidates.find((image) => !isShopifyPlaceholderImage(image.url)) ??
+    imageCandidates[0];
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
   const primaryPrice = product.variants[0]?.price;
@@ -377,7 +396,10 @@ export default async function ProductDetailPage({
     };
   });
   const canonicalUrl = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
-  const imageUrls = product.images.map((img) => img.url).filter(Boolean);
+  const imageUrls = imageCandidates
+    .filter((img) => !isShopifyPlaceholderImage(img.url))
+    .map((img) => img.url)
+    .filter(Boolean);
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',

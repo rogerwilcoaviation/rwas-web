@@ -21,9 +21,13 @@
  * slightly larger than the displayed CSS width (e.g. width=800 for a card
  * that displays at ~360px).
  */
+export function isShopifyPlaceholderImage(url: string | null | undefined): boolean {
+  return Boolean(url && /picture[_-]?may[_-]?not/i.test(url));
+}
+
 export function productImageUrl(url: string | null | undefined, width: number): string {
   if (!url) return '/static/no-image.svg';
-  if (/picture[_-]?may[_-]?not/i.test(url)) {
+  if (isShopifyPlaceholderImage(url)) {
     return '/static/no-image.svg';
   }
   if (/cdn\.shopify\.com/.test(url)) {

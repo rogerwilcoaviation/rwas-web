@@ -7,7 +7,7 @@ import {
   cartPermalink,
 } from '@/lib/shopify';
 import Image from 'next/image';
-import { productImageUrl } from '@/lib/product-image';
+import { isShopifyPlaceholderImage, productImageUrl } from '@/lib/product-image';
 import Link from 'next/link';
 
 function formatPrice(amount: string, currencyCode: string) {
@@ -72,15 +72,19 @@ export default function ProductCard({
     : otcEligible
     ? 'In stock \u00b7 OTC'
     : 'Shopify product';
+  const displayImage =
+    product.images?.find((image) => !isShopifyPlaceholderImage(image.url)) ??
+    product.variants?.map((variant) => variant.image).find((image) => image?.url && !isShopifyPlaceholderImage(image.url)) ??
+    product.featuredImage;
 
   return (
     <div className="overflow-hidden rounded-[1.75rem] border border-black/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
       <Link href={productUrl} className="group block">
         <div className="relative aspect-[4/3] bg-[#f5f3ef]">
-          {product.featuredImage ? (
+          {displayImage ? (
             <Image
-              src={productImageUrl(product.featuredImage.url, 600)}
-              alt={product.featuredImage.altText || product.title}
+              src={productImageUrl(displayImage.url, 600)}
+              alt={displayImage.altText || product.title}
               fill
               className="object-contain p-6 transition duration-300 group-hover:scale-[1.03]"
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"

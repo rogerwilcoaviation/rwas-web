@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { productImageUrl } from '@/lib/product-image';
+import { isShopifyPlaceholderImage, productImageUrl } from '@/lib/product-image';
 
 type CollectionBrowserImage = {
   url: string;
@@ -17,6 +17,8 @@ export type CollectionBrowserProduct = {
   productType?: string;
   tags?: string[];
   featuredImage?: CollectionBrowserImage | null;
+  images?: CollectionBrowserImage[];
+  variants?: Array<{ image?: CollectionBrowserImage | null }>;
   priceRange: {
     minVariantPrice: {
       amount: string;
@@ -157,16 +159,20 @@ function ProductTile({
       : mode === 'otc-ready'
       ? 'OTC-ready item'
       : 'Shopify product';
+  const displayImage =
+    product.images?.find((image) => !isShopifyPlaceholderImage(image.url)) ??
+    product.variants?.map((variant) => variant.image).find((image) => image?.url && !isShopifyPlaceholderImage(image.url)) ??
+    product.featuredImage;
 
   return (
     <article className="overflow-hidden rounded-[1.25rem] border border-black/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
       <Link href={`/products/${encodeURIComponent(product.handle)}`} className="group block">
         <div className="relative aspect-[4/3] bg-[#f5f3ef]">
-          {product.featuredImage ? (
+          {displayImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={productImageUrl(product.featuredImage.url, 600)}
-              alt={product.featuredImage.altText || product.title}
+              src={productImageUrl(displayImage.url, 600)}
+              alt={displayImage.altText || product.title}
               loading={eager ? 'eager' : 'lazy'}
               fetchPriority={eager ? 'high' : 'low'}
               decoding="async"
