@@ -35,6 +35,14 @@ export function isShopifyPlaceholderImage(
   );
 }
 
+function placeholderImageUrl(url: string | null | undefined, altText?: string | null): string {
+  const haystack = `${url || ''} ${altText || ''}`;
+  if (/garmin/i.test(haystack)) {
+    return '/images/products/garmin-no-product-image-available-approved.jpg';
+  }
+  return '/static/no-image.svg';
+}
+
 export function productImageUrl(
   url: string | null | undefined,
   width: number,
@@ -42,7 +50,7 @@ export function productImageUrl(
 ): string {
   if (!url) return '/static/no-image.svg';
   if (isShopifyPlaceholderImage(url, altText)) {
-    return '/static/no-image.svg';
+    return placeholderImageUrl(url, altText);
   }
   if (/cdn\.shopify\.com/.test(url)) {
     const sep = url.includes('?') ? '&' : '?';
