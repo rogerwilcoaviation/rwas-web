@@ -28,14 +28,14 @@ const gonePaths = [
 ];
 
 const marker = 'async fetch(t,e,a){';
-const injected = `${marker}const rwasPath=new URL(t.url).pathname.replace(/\\/$/,"");if(${JSON.stringify(
+const injected = `${marker}const rwasUrl=new URL(t.url);if(rwasUrl.pathname==="/rwas-ops-api"||rwasUrl.pathname.startsWith("/rwas-ops-api/")){const rwasOpsPath=rwasUrl.pathname.replace(/^\\/rwas-ops-api\\/?/,"/");const rwasOpsTarget=new URL("https://rwas-ops-api.john-08c.workers.dev"+rwasOpsPath);rwasOpsTarget.search=rwasUrl.search;const rwasOpsHeaders=new Headers(t.headers);rwasOpsHeaders.delete("host");rwasOpsHeaders.delete("origin");rwasOpsHeaders.delete("referer");const rwasOpsResponse=await fetch(rwasOpsTarget,{method:t.method,headers:rwasOpsHeaders,body:t.method==="GET"||t.method==="HEAD"?void 0:t.body,redirect:"manual"});const rwasOpsResponseHeaders=new Headers(rwasOpsResponse.headers);rwasOpsResponseHeaders.delete("access-control-allow-origin");rwasOpsResponseHeaders.delete("access-control-allow-credentials");rwasOpsResponseHeaders.set("Cache-Control","no-store");return new Response(rwasOpsResponse.body,{status:rwasOpsResponse.status,statusText:rwasOpsResponse.statusText,headers:rwasOpsResponseHeaders})}const rwasPath=rwasUrl.pathname.replace(/\\/$/,"");if(${JSON.stringify(
   gonePaths
 )}.includes(rwasPath))return new Response("Gone",{status:410,headers:{"Cache-Control":"public, max-age=3600","X-Robots-Tag":"noindex, noarchive"}});const rwasTarget=${JSON.stringify(
   redirects
 )}[rwasPath];if(rwasTarget)return Response.redirect(new URL(rwasTarget,t.url),301);`;
 
 const worker = readFileSync(workerPath, 'utf8');
-if (worker.includes('const rwasPath=')) {
+if (worker.includes('const rwasUrl=') && worker.includes('const rwasPath=')) {
   console.log('RWAS SEO edge rules already injected into Cloudflare worker.');
 } else if (!worker.includes(marker)) {
   throw new Error(`Could not find Cloudflare worker fetch marker in ${workerPath}`);
