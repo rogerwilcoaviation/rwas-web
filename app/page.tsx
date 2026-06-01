@@ -86,7 +86,7 @@ export default function Home() {
                 </a>
               </div>
               <div className="bs-toc__row">
-                <a href="https://rwas.quantum-mx.com/">
+                <a href="/work-order-system/">
                   <span>Work Order Login</span>
                   <span className="bs-toc__pg">Portal &rarr;</span>
                 </a>
@@ -101,7 +101,7 @@ export default function Home() {
               <div className="bs-ad__kicker">Secure Access</div>
               <h3 className="bs-ad__title">RWAS Work Order System</h3>
               <p className="bs-ad__sub">Customer portal and employee workbench</p>
-              <a className="bs-ad__cta" href="https://rwas.quantum-mx.com/">
+              <a className="bs-ad__cta" href="/work-order-system/">
                 Open Portal
               </a>
             </aside>
