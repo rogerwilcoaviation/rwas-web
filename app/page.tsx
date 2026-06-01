@@ -85,11 +85,26 @@ export default function Home() {
                   <span className="bs-toc__pg">D1 &rarr;</span>
                 </a>
               </div>
+              <div className="bs-toc__row">
+                <a href="https://rwas.quantum-mx.com/">
+                  <span>Work Order Login</span>
+                  <span className="bs-toc__pg">Portal &rarr;</span>
+                </a>
+              </div>
             </Specimen>
 
             <p className="bs-pullquote">
               &ldquo;Don&rsquo;t fly single-pilot, Roger Wilco is your trusted copilot&rdquo;
             </p>
+
+            <aside className="bs-ad" aria-label="RWAS Work Order System access">
+              <div className="bs-ad__kicker">Secure Access</div>
+              <h3 className="bs-ad__title">RWAS Work Order System</h3>
+              <p className="bs-ad__sub">Customer portal and employee workbench</p>
+              <a className="bs-ad__cta" href="https://rwas.quantum-mx.com/">
+                Open Portal
+              </a>
+            </aside>
 
             {/* Papa-Alpha Depot boxed ad */}
             <aside className="bs-ad" aria-label="Papa-Alpha Depot advertisement">
