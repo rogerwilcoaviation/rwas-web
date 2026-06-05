@@ -6,7 +6,7 @@
  * - Variant dropdown (<select>) displays Shopify variants.
  * - Displayed price tracks the selected variant.
  * - Single CTA:
- *     otc === 'eligible'  →  "Add to Cart"    (POST /api/cart → /cart)
+ *     otc === 'eligible'  →  "Add to Cart"    (Shopify cart permalink)
  *     otherwise           →  "Check availability" (Link to /contact?sku=...)
  * - Stock pill, MAP line, and OTC notice rendered from parent-supplied flags.
  *
@@ -39,6 +39,7 @@ export type PdpPriceCardProps = {
   stockCheckRequired: boolean;
   isGarmin: boolean;
   mapLocked: boolean;
+  shopifyCartBaseUrl: string;
 };
 
 function formatPrice(amount: string, currencyCode: string) {
@@ -57,8 +58,14 @@ function variantLabel(v: PdpVariant) {
   return opts || v.title || 'Standard configuration';
 }
 
+function variantNumericId(gid?: string | null): string | null {
+  if (!gid) return null;
+  const match = gid.match(/(\d+)$/);
+  return match ? match[1] : null;
+}
+
 export default function PdpPriceCard(props: PdpPriceCardProps) {
-  const { productTitle, variants, otc, stockCheckRequired, isGarmin, mapLocked } = props;
+  const { productTitle, variants, otc, stockCheckRequired, isGarmin, mapLocked, shopifyCartBaseUrl } = props;
 
   const [selectedId, setSelectedId] = useState<string>(variants[0]?.id || '');
   const [loading, setLoading] = useState(false);
@@ -100,26 +107,14 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
     setLoading(true);
     setError(null);
     try {
-      const existingCartId =
-        typeof window !== 'undefined' ? window.localStorage.getItem(CART_STORAGE_KEY) : null;
-      const response = await fetch('/api/cart', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cartId: existingCartId,
-          merchandiseId: selected.id,
-          quantity: 1,
-        }),
-      });
-      const payload = await response.json();
-      if (!response.ok) {
-        throw new Error(payload.error || 'Unable to add item to cart.');
+      const numericId = variantNumericId(selected.id);
+      if (!numericId) {
+        throw new Error('Unable to prepare Shopify checkout for this item.');
       }
-      if (payload.cart?.id && typeof window !== 'undefined') {
-        window.localStorage.setItem(CART_STORAGE_KEY, payload.cart.id);
+      if (typeof window !== 'undefined') {
+        window.localStorage.removeItem(CART_STORAGE_KEY);
+        window.location.href = new URL(`/cart/${numericId}:1`, shopifyCartBaseUrl).toString();
       }
-      window.dispatchEvent(new Event("rwas-cart-updated"));
-      window.location.href = "/cart";
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to add item to cart.');
       setLoading(false);

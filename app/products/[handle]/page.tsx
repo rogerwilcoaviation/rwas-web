@@ -146,12 +146,20 @@ type Gating = {
 function gateFromProduct(
   tags: string[],
   vendor: string | undefined,
+  productType: string | undefined,
   collections: string[],
 ): Gating {
   const lower = tags.map((t) => t.toLowerCase());
+  const isPapaAlpha =
+    lower.includes('papa-alpha') ||
+    (productType || '').toLowerCase().includes('papa-alpha');
   const isGarmin =
-    (vendor || '').toLowerCase().includes('garmin') ||
-    lower.some((t) => t.startsWith('garmin'));
+    !isPapaAlpha &&
+    ((vendor || '').toLowerCase().includes('garmin') ||
+      (productType || '').toLowerCase().includes('garmin') ||
+      lower.includes('garmin') ||
+      lower.includes('garmin-product') ||
+      lower.some((t) => t.startsWith('garmin-family:')));
   // Route through isOtcEligible so the global OTC kill switch (in lib/shopify.ts)
   // applies to PDPs too. When OTC is re-enabled, this delegates back to the
   // tag-based logic without further changes here.
@@ -348,7 +356,12 @@ export default async function ProductDetailPage({
     );
   }
 
-  const gating = gateFromProduct(product.tags || [], product.vendor, product.collections || []);
+  const gating = gateFromProduct(
+    product.tags || [],
+    product.vendor,
+    product.productType,
+    product.collections || [],
+  );
   const imageCandidates = productImageCandidates(product);
   const heroImg =
     imageCandidates.find((image) => !isShopifyPlaceholderImage(image.url, image.altText)) ??
@@ -422,17 +435,20 @@ export default async function ProductDetailPage({
     url: canonicalUrl,
     offers: (() => {
       if (!primaryPrice) return undefined;
-      // Garmin MAP-locked path: emit Offer with availability + URL + seller
-      // but NO price/priceCurrency. Tells Google the product is acquirable
-      // through us without broadcasting a retail price that could violate
-      // Garmin dealer MAP policy. Renders for any Garmin product not tagged
-      // otc-eligible (mirrors the storefront pricing gate exactly).
+      // Garmin quote-first path: keep the visible PDP gated, but include a
+      // PriceSpecification so Google Merchant listings receive complete Offer
+      // markup instead of flagging "offers" as missing a price.
       if (gating.isGarmin && gating.otc !== 'eligible') {
         return {
           '@type': 'Offer',
           availability: 'https://schema.org/PreOrder',
           itemCondition: 'https://schema.org/NewCondition',
           url: canonicalUrl,
+          priceSpecification: {
+            '@type': 'PriceSpecification',
+            price: primaryPrice.amount,
+            priceCurrency: primaryPrice.currencyCode,
+          },
           seller: { '@type': 'Organization', name: 'Roger Wilco Aviation Services' },
         };
       }
@@ -558,6 +574,7 @@ export default async function ProductDetailPage({
               stockCheckRequired={gating.stockCheckRequired}
               isGarmin={gating.isGarmin}
               mapLocked={gating.mapLocked}
+              shopifyCartBaseUrl={`https://${process.env.SHOPIFY_STORE_DOMAIN || 'm06wpv-na.myshopify.com'}`}
             />
           </div>
         </section>
