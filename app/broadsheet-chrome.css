@@ -969,6 +969,15 @@ html, body {
   border-left: 3px solid #8a2020;
   padding-left: 8px;
 }
+.broadsheet .bs-cta-notice {
+  margin-top: 8px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #17643a;
+  border-left: 3px solid #17643a;
+  padding-left: 8px;
+}
 
 
 /* ---------------------------------------------------------------- */

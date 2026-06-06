@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/shared/ui/button';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const CART_STORAGE_KEY = 'rwas-shopify-cart-id';
@@ -13,13 +12,14 @@ export default function AddToCartButton({
   merchandiseId: string;
   disabled?: boolean;
 }) {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   async function handleAdd() {
     setLoading(true);
     setError(null);
+    setNotice(null);
 
     try {
       const existingCartId = window.localStorage.getItem(CART_STORAGE_KEY);
@@ -44,8 +44,7 @@ export default function AddToCartButton({
       }
 
       window.dispatchEvent(new Event("rwas-cart-updated"));
-      router.push("/cart");
-      router.refresh();
+      setNotice('Added to cart. You can keep shopping.');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to add item to cart.');
     } finally {
@@ -63,6 +62,7 @@ export default function AddToCartButton({
       >
         {loading ? 'Adding…' : 'Add to cart'}
       </Button>
+      {notice ? <p className="text-sm font-medium text-emerald-700" role="status">{notice}</p> : null}
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
     </div>
   );

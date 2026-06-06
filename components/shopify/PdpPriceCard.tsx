@@ -6,7 +6,7 @@
  * - Variant dropdown (<select>) displays Shopify variants.
  * - Displayed price tracks the selected variant.
  * - Single CTA:
- *     otc === 'eligible'  →  "Add to Cart"    (Shopify cart permalink)
+ *     otc === 'eligible'  →  "Add to Cart"    (RWAS website cart)
  *     otherwise           →  "Check availability" (Link to /contact?sku=...)
  * - Stock pill, MAP line, and OTC notice rendered from parent-supplied flags.
  *
@@ -39,7 +39,6 @@ export type PdpPriceCardProps = {
   stockCheckRequired: boolean;
   isGarmin: boolean;
   mapLocked: boolean;
-  shopifyCartBaseUrl: string;
 };
 
 function formatPrice(amount: string, currencyCode: string) {
@@ -89,18 +88,13 @@ function compactVariantLabel(v: PdpVariant) {
   return compact ? `${sku} - ${compact}` : sku;
 }
 
-function variantNumericId(gid?: string | null): string | null {
-  if (!gid) return null;
-  const match = gid.match(/(\d+)$/);
-  return match ? match[1] : null;
-}
-
 export default function PdpPriceCard(props: PdpPriceCardProps) {
-  const { productTitle, variants, otc, stockCheckRequired, isGarmin, mapLocked, shopifyCartBaseUrl } = props;
+  const { productTitle, variants, otc, stockCheckRequired, isGarmin, mapLocked } = props;
 
   const [selectedId, setSelectedId] = useState<string>(variants[0]?.id || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   const selected = useMemo(
     () => variants.find((v) => v.id === selectedId) || variants[0],
@@ -137,17 +131,34 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
     if (!selected || !selected.availableForSale) return;
     setLoading(true);
     setError(null);
+    setNotice(null);
     try {
-      const numericId = variantNumericId(selected.id);
-      if (!numericId) {
-        throw new Error('Unable to prepare Shopify checkout for this item.');
+      const existingCartId = window.localStorage.getItem(CART_STORAGE_KEY);
+      const response = await fetch('/api/cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cartId: existingCartId,
+          merchandiseId: selected.id,
+          quantity: 1,
+        }),
+      });
+
+      const payload = await response.json();
+
+      if (!response.ok) {
+        throw new Error(payload.error || 'Unable to add item to cart.');
       }
-      if (typeof window !== 'undefined') {
-        window.localStorage.removeItem(CART_STORAGE_KEY);
-        window.location.href = new URL(`/cart/${numericId}:1`, shopifyCartBaseUrl).toString();
+
+      if (payload.cart?.id) {
+        window.localStorage.setItem(CART_STORAGE_KEY, payload.cart.id);
       }
+
+      window.dispatchEvent(new Event('rwas-cart-updated'));
+      setNotice('Added to cart. You can keep shopping.');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to add item to cart.');
+    } finally {
       setLoading(false);
     }
   }
@@ -222,6 +233,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
       </div>
 
       {error ? <div className="bs-cta-error">{error}</div> : null}
+      {notice ? <div className="bs-cta-notice" role="status">{notice}</div> : null}
 
       {/* bs-otc "RWAS does not hold Garmin stock" notice removed per product
           direction (2026-04-21). */}

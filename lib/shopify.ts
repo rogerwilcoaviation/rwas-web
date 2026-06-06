@@ -1147,27 +1147,6 @@ export function isOtcEligible(product: { tags?: string[] } | null | undefined): 
 }
 
 /**
- * Extract the numeric variant ID from a Storefront GID like
- * `gid://shopify/ProductVariant/50123456789`, for use in Shopify's classic
- * cart permalink: `/cart/<variantId>:<qty>`.
- *
- * The /cart* route is still proxied to Shopify via the shopify-proxy Worker,
- * so a cart permalink GET is the simplest zero-JS add-to-cart that works
- * today (before a Next.js cart context is built out for headless).
- */
-export function variantNumericId(gid?: string | null): string | null {
-  if (!gid) return null;
-  const m = gid.match(/(\d+)$/);
-  return m ? m[1] : null;
-}
-
-export function cartPermalink(variantGid?: string | null, quantity = 1): string | null {
-  const id = variantNumericId(variantGid);
-  if (!id) return null;
-  return `/cart/${id}:${Math.max(1, Math.floor(quantity))}`;
-}
-
-/**
  * Display-title override for Shopify collections. Lets rwas-web present
  * a cleaner name to customers without touching Shopify's collection title.
  *

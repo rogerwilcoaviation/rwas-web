@@ -996,7 +996,6 @@ export default async function ProductDetailPage({
               stockCheckRequired={gating.stockCheckRequired}
               isGarmin={gating.isGarmin}
               mapLocked={gating.mapLocked}
-              shopifyCartBaseUrl={`https://${process.env.SHOPIFY_STORE_DOMAIN || 'm06wpv-na.myshopify.com'}`}
             />
           </div>
         </section>

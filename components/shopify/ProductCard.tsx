@@ -4,7 +4,6 @@ import {
   isOtcCollection,
   isOtcEligible,
   isQuoteCollection,
-  cartPermalink,
 } from '@/lib/shopify';
 import Image from 'next/image';
 import { isShopifyPlaceholderImage, productImageAlt, productImageUrl } from '@/lib/product-image';
@@ -48,11 +47,7 @@ export default function ProductCard({
     product.title
   )}`;
 
-  // First available variant drives the cart permalink; fall back to first variant.
-  const primaryVariant =
-    product.variants?.find((v) => v.availableForSale) ?? product.variants?.[0];
-  const addToCartHref =
-    otcEligible && !quoteOnly ? cartPermalink(primaryVariant?.id, 1) : null;
+  const addToCartHref = null;
 
   // Secondary CTA: collection grid cards intentionally show NO secondary
   // button. Quote-only (`garmin-avionics`, the Dealer-Only collection) used
