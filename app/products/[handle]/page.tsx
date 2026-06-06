@@ -20,6 +20,7 @@
  * trust strip's third cell.
  */
 import type { Metadata } from 'next';
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import PdpPriceCard, { type PdpVariant } from '@/components/shopify/PdpPriceCard';
 import {
@@ -88,7 +89,9 @@ export async function generateMetadata({
   try {
     const product = await getProductByHandle(handle);
     if (!product) return { title: 'Product not found' };
-    const description = productMetaDescription(product);
+    const description =
+      papaAlphaApplicabilityIntro(product) ||
+      (isPa31RudderTrimProduct(product) ? PA31_RUDDER_TRIM_INTRO : productMetaDescription(product));
     const url = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
     const imageCandidates = productImageCandidates(product);
     const metaImage =
@@ -314,6 +317,376 @@ function technicalComparisonValue(handle: string, row: string) {
   return D2_WATCH_BRIEFINGS[handle]?.technical[row] || '—';
 }
 
+const PA31_RUDDER_TRIM_HANDLE = 'pa-31-rudder-trim-rigging-tool';
+const PAPA_ALPHA_APPLICABILITY_HANDLES = [
+  'pa-28-32-34-44-aileron-and-flap-rigging-tool-1',
+  'bell-crank-rigging-tool',
+  'rigging-kit',
+  'rudder-rigging-tool',
+  'stabilator-rigging-tool',
+] as const;
+
+const PA31_RUDDER_TRIM_INTRO =
+  'Applicability guide for the Papa-Alpha PA-31 rudder trim rigging tool set. Match the aircraft model and serial-number range before ordering; serial ranges marked N/A do not use this rudder trim tool.';
+
+const PAPA_ALPHA_APPLICABILITY_CONFIG: Record<string, {
+  heading: string;
+  intro: string;
+  toolColumn: string;
+  primaryLabel: string;
+}> = {
+  'pa-28-32-34-44-aileron-and-flap-rigging-tool-1': {
+    heading: 'Aileron and flap tool applicability',
+    intro:
+      'Applicability guide for the Papa-Alpha aileron and flap rigging tools. Match the aircraft model and serial-number range before ordering; N/A rows are included so shops can quickly rule out unsupported airframes.',
+    toolColumn: 'Aileron/flap rigging tool',
+    primaryLabel: 'Aileron / flap',
+  },
+  'bell-crank-rigging-tool': {
+    heading: 'Bell crank tool applicability',
+    intro:
+      'Applicability guide for the Papa-Alpha bell crank reference tools. Use the aircraft model and serial-number range together, then select the matching bell crank tool variant.',
+    toolColumn: 'Bell crank tool',
+    primaryLabel: 'Bell crank',
+  },
+  'rigging-kit': {
+    heading: 'Rigging kit selector',
+    intro:
+      'Applicability guide for the Papa-Alpha rigging kit family. Match the aircraft model and serial-number range to the kit code, then review the kit contents list before ordering.',
+    toolColumn: 'Kit',
+    primaryLabel: 'Kit',
+  },
+  'rudder-rigging-tool': {
+    heading: 'Rudder tool applicability',
+    intro:
+      'Applicability guide for the Papa-Alpha rudder reference tools. Match the aircraft model and serial-number range before ordering, then select the matching rudder tool variant.',
+    toolColumn: 'Rudder tool',
+    primaryLabel: 'Rudder',
+  },
+  'stabilator-rigging-tool': {
+    heading: 'Stabilator tool applicability',
+    intro:
+      'Applicability guide for the Papa-Alpha stabilator rigging tools. Match the aircraft model and serial-number range before ordering, then select the matching stabilator tool variant.',
+    toolColumn: 'Stabilator tool',
+    primaryLabel: 'Stabilator',
+  },
+};
+
+const PA31_RUDDER_TRIM_ROWS = [
+  { model: 'PA-31-300', serials: '31-228 thru 31-511', tool: 'N/A' },
+  { model: 'PA-31-310', serials: '31-5 thru 31-900', tool: 'N/A' },
+  { model: 'PA-31-310', serials: '31-7300901 thru 31-7512072', tool: 'N/A' },
+  { model: 'PA-31-325', serials: '31-7512006 thru 31-8312019; 31-7400990', tool: 'N/A' },
+  { model: 'PA-31-350', serials: '31-5001, 31-5002, 31-5003', tool: 'N/A' },
+  { model: 'PA-31-350', serials: '31-7305005 thru 31-8452021', tool: 'N/A' },
+  { model: 'PA-31-350 T1020', serials: '31-8253001 thru 31-8453021', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
+  { model: 'PA-31P', serials: '31P-3 thru 31P-80', tool: 'PA-31P Rudder Trim Rigging Tool #2' },
+  { model: 'PA-31P', serials: '31P-7300110 thru 31P-7730012', tool: 'PA-31P Rudder Trim Rigging Tool #2' },
+  { model: 'PA-31P-350', serials: '31P-8414001 thru 31P-8414050', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
+  { model: 'PA-31T', serials: '31T-7400002 thru 31T-7720069', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
+  { model: 'PA-31T', serials: '31T-7820001 thru 31T-8120104', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
+  { model: 'PA-31T1', serials: '31T-7804002 thru 31T-8104101', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
+  { model: 'PA-31T1', serials: '31T-8304002 thru 31T-1104017', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
+  { model: 'PA-31T2', serials: '31T-8166002 thru 31T-1166008', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
+  { model: 'PA-31T3 T1040', serials: '31T-5575001', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
+  { model: 'PA-31T3 T1040', serials: '31T-8275001 thru 31T-8275017; 31T-8275025', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
+  { model: 'PA-31T3 T1040', serials: '31T-8375001 thru 31T-8375003; 31T-8375005', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
+  { model: 'PA-31T3 T1040', serials: '31T-8475001', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
+] as const;
+
+function isPa31RudderTrimProduct(product: Pick<ShopifyProductDetail, 'handle' | 'title' | 'variants'>) {
+  return (
+    product.handle === PA31_RUDDER_TRIM_HANDLE ||
+    product.title.toLowerCase().includes('pa-31 rudder trim') ||
+    product.variants.some((variant) => variant.sku === 'RT-01' || variant.sku === 'RT-02')
+  );
+}
+
+function isPapaAlphaApplicabilityProduct(product: Pick<ShopifyProductDetail, 'handle'>) {
+  return PAPA_ALPHA_APPLICABILITY_HANDLES.includes(product.handle as (typeof PAPA_ALPHA_APPLICABILITY_HANDLES)[number]);
+}
+
+function papaAlphaApplicabilityIntro(product: Pick<ShopifyProductDetail, 'handle'>) {
+  if (product.handle === PA31_RUDDER_TRIM_HANDLE) return PA31_RUDDER_TRIM_INTRO;
+  return PAPA_ALPHA_APPLICABILITY_CONFIG[product.handle]?.intro;
+}
+
+function toolClassName(tool: string) {
+  if (tool === 'N/A') return 'na';
+  if (tool.includes('#2')) return 'tool-two';
+  return 'tool-one';
+}
+
+type PapaAlphaApplicabilityRow = {
+  model: string;
+  serials: string;
+  tool: string;
+};
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function splitModelAndSerial(value: string): Pick<PapaAlphaApplicabilityRow, 'model' | 'serials'> {
+  const tokens = value.trim().split(/\s+/);
+  const serialIndex = tokens.findIndex((token, index) => {
+    if (index === 0) return false;
+    const clean = token.replace(/^[,(]+|[,.)]+$/g, '');
+    return clean === 'N/A' || /^[0-9]{2}[A-Z]*-[0-9A-Z]+$/i.test(clean) || /^[0-9]{6,}$/i.test(clean);
+  });
+
+  if (serialIndex < 0) {
+    return { model: value.trim(), serials: 'N/A' };
+  }
+
+  return {
+    model: tokens.slice(0, serialIndex).join(' '),
+    serials: tokens.slice(serialIndex).join(' '),
+  };
+}
+
+function toolTokensForProduct(product: Pick<ShopifyProductDetail, 'handle' | 'variants'>) {
+  const variantTools = product.variants.flatMap((variant) => {
+    const title = variant.title.trim();
+    const sku = variant.sku?.trim();
+    const aliases = [
+      title,
+      title.replace(/\bBell Crank\b/gi, 'Bellcrank'),
+      title.replace(/\bBellcrank\b/gi, 'Bell Crank'),
+    ];
+    return [...aliases, sku].filter((value): value is string => Boolean(value && value.toLowerCase() !== 'default title'));
+  });
+  const tableToolPatterns = [
+    'PA-[A-Z0-9/(). -]+?Rudder Reference Tool #\\d+',
+    'PA-[A-Z0-9/(). -]+?Stabilator Rigging Tool #\\d+',
+    'PA-[A-Z0-9/(). -]+?Bell ?Crank Reference Tool #\\d+',
+    'PA-[A-Z0-9/(). -]+?Aileron [Aa]nd Flap Rigging Tool #\\d+',
+    'KT-\\d{2}',
+  ];
+  return [
+    ...Array.from(new Set(['N/A', ...variantTools])).sort((a, b) => b.length - a.length).map(escapeRegExp),
+    ...tableToolPatterns,
+  ];
+}
+
+function parsePapaAlphaApplicabilityRows(
+  product: Pick<ShopifyProductDetail, 'handle' | 'description' | 'variants'>,
+): PapaAlphaApplicabilityRow[] {
+  const headerPattern =
+    product.handle === 'rigging-kit'
+      ? /Aircraft\s+S\/N\s+KIT/i
+      : product.handle === 'bell-crank-rigging-tool'
+        ? /Aircraft\s+Model\s+S\/N\s+Bellcrank/i
+        : product.handle === 'rudder-rigging-tool'
+          ? /Aircraft\s+Model\s+S\/N\s+Rudder/i
+          : product.handle === 'stabilator-rigging-tool'
+            ? /Aircraft\s+S\/N\s+Stabilator\s+Rigging\s+Tool/i
+            : /Aircraft\s+Model\s+S\/N\s+Aileron-\s*Flap/i;
+  const headerMatch = headerPattern.exec(product.description);
+  if (!headerMatch) return [];
+
+  const toolPattern = toolTokensForProduct(product).join('|');
+  const rowsText = product.description
+    .slice(headerMatch.index + headerMatch[0].length)
+    .split('KIT CONTENTS:')[0]
+    .replace(/\s+/g, ' ')
+    .trim();
+  const rowPattern = new RegExp(`(.+?)\\s+(${toolPattern})(?=\\s+PA-\\d|$)`, 'gi');
+  const rows: PapaAlphaApplicabilityRow[] = [];
+  let match: RegExpExecArray | null;
+
+  while ((match = rowPattern.exec(rowsText))) {
+    const { model, serials } = splitModelAndSerial(match[1]);
+    rows.push({ model, serials, tool: match[2] });
+  }
+
+  return rows;
+}
+
+function parseRiggingKitContents(description: string) {
+  const [, contentsText = ''] = description.split('KIT CONTENTS:');
+  return contentsText
+    .replace(/\s+/g, ' ')
+    .trim()
+    .split(/\s+(?=KT-\d{2}\s)/)
+    .map((entry) => {
+      const match = entry.match(/^(KT-\d{2})\s+(.+)$/);
+      return match ? { kit: match[1], contents: match[2].replaceAll(',', ', ') } : null;
+    })
+    .filter((entry): entry is { kit: string; contents: string } => Boolean(entry));
+}
+
+function PapaAlphaApplicabilityGuide({
+  product,
+}: {
+  product: Pick<ShopifyProductDetail, 'handle' | 'description' | 'variants'>;
+}) {
+  const config = PAPA_ALPHA_APPLICABILITY_CONFIG[product.handle];
+  if (!config) return null;
+
+  const rows = parsePapaAlphaApplicabilityRows(product);
+  const kitContents = product.handle === 'rigging-kit' ? parseRiggingKitContents(product.description) : [];
+  const supportedRows = rows.filter((row) => row.tool !== 'N/A');
+  const notApplicableRows = rows.length - supportedRows.length;
+  const toolCounts = Array.from(
+    supportedRows.reduce((counts, row) => {
+      counts.set(row.tool, (counts.get(row.tool) || 0) + 1);
+      return counts;
+    }, new Map<string, number>()),
+  ).sort((a, b) => b[1] - a[1]);
+  const topToolCounts = toolCounts.slice(0, 6);
+  const maxToolCount = Math.max(...topToolCounts.map(([, count]) => count), 1);
+
+  if (!rows.length) return null;
+
+  return (
+    <section className="bs-pa31-applicability bs-pa-applicability" aria-label={`${config.heading} chart`}>
+      <div className="bs-section-kicker">Application chart</div>
+      <h2>{config.heading}</h2>
+      <p>{config.intro}</p>
+
+      <div className="bs-pa31-summary" aria-label="Applicability summary">
+        <div className="bs-pa31-summary-item tool-one">
+          <span>{supportedRows.length}</span>
+          Supported ranges
+        </div>
+        <div className="bs-pa31-summary-item tool-two">
+          <span>{toolCounts.length}</span>
+          {config.primaryLabel} options
+        </div>
+        <div className="bs-pa31-summary-item na">
+          <span>{notApplicableRows}</span>
+          Not applicable
+        </div>
+      </div>
+
+      <div className="bs-pa31-chart bs-pa-chart" aria-label="Most common matching tools">
+        {topToolCounts.map(([tool, count], index) => (
+          <div
+            className={`bs-pa31-chart-bar ${index === 0 ? 'tool-one' : index === 1 ? 'tool-two' : 'tool-neutral'}`}
+            style={{ '--bar-size': `${Math.max(2, (count / maxToolCount) * 12)}` } as CSSProperties}
+            key={tool}
+          >
+            <span>{tool}</span>
+            <b>{count}</b>
+          </div>
+        ))}
+        {notApplicableRows ? (
+          <div className="bs-pa31-chart-bar na" style={{ '--bar-size': `${Math.max(2, (notApplicableRows / Math.max(rows.length, 1)) * 12)}` } as CSSProperties}>
+            <span>N/A</span>
+            <b>{notApplicableRows}</b>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="bs-pa31-table-wrap">
+        <table className="bs-pa31-table">
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Serial number</th>
+              <th>{config.toolColumn}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={`${row.model}-${row.serials}-${row.tool}`}>
+                <td><strong>{row.model}</strong></td>
+                <td>{row.serials}</td>
+                <td>
+                  <span className={`bs-pa31-tool-pill ${toolClassName(row.tool)}`}>{row.tool}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {kitContents.length ? (
+        <div className="bs-pa-kit-contents" aria-label="Rigging kit contents">
+          <h3>Kit contents</h3>
+          <div className="bs-pa-kit-grid">
+            {kitContents.map((entry) => (
+              <div className="bs-pa-kit-item" key={entry.kit}>
+                <strong>{entry.kit}</strong>
+                <span>{entry.contents}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function Pa31RudderTrimApplicability() {
+  const toolOneCount = PA31_RUDDER_TRIM_ROWS.filter((row) => row.tool.includes('#1')).length;
+  const toolTwoCount = PA31_RUDDER_TRIM_ROWS.filter((row) => row.tool.includes('#2')).length;
+  const notApplicableCount = PA31_RUDDER_TRIM_ROWS.filter((row) => row.tool === 'N/A').length;
+
+  return (
+    <section className="bs-pa31-applicability" aria-label="PA-31 rudder trim rigging tool applicability">
+      <div className="bs-section-kicker">Application chart</div>
+      <h2>PA-31 rudder trim tool applicability</h2>
+      <p>
+        Use the aircraft model and serial-number range together. The chart below separates the PA-31
+        Rudder Trim Rigging Tool #1, the PA-31P Rudder Trim Rigging Tool #2, and serial ranges where
+        this rudder trim tool is not applicable.
+      </p>
+
+      <div className="bs-pa31-summary" aria-label="Applicability summary">
+        <div className="bs-pa31-summary-item tool-one">
+          <span>{toolOneCount}</span>
+          Tool #1 ranges
+        </div>
+        <div className="bs-pa31-summary-item tool-two">
+          <span>{toolTwoCount}</span>
+          Tool #2 ranges
+        </div>
+        <div className="bs-pa31-summary-item na">
+          <span>{notApplicableCount}</span>
+          Not applicable
+        </div>
+      </div>
+
+      <div className="bs-pa31-chart" aria-hidden="true">
+        <div className="bs-pa31-chart-bar tool-one" style={{ '--bar-size': `${toolOneCount}` } as CSSProperties}>
+          <span>Tool #1</span>
+        </div>
+        <div className="bs-pa31-chart-bar tool-two" style={{ '--bar-size': `${toolTwoCount}` } as CSSProperties}>
+          <span>Tool #2</span>
+        </div>
+        <div className="bs-pa31-chart-bar na" style={{ '--bar-size': `${notApplicableCount}` } as CSSProperties}>
+          <span>N/A</span>
+        </div>
+      </div>
+
+      <div className="bs-pa31-table-wrap">
+        <table className="bs-pa31-table">
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Serial number</th>
+              <th>Rudder trim rigging tool</th>
+            </tr>
+          </thead>
+          <tbody>
+            {PA31_RUDDER_TRIM_ROWS.map((row) => (
+              <tr key={`${row.model}-${row.serials}`}>
+                <td><strong>{row.model}</strong></td>
+                <td>{row.serials}</td>
+                <td>
+                  <span className={`bs-pa31-tool-pill ${toolClassName(row.tool)}`}>{row.tool}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 export default async function ProductDetailPage({
   params,
 }: {
@@ -386,7 +759,11 @@ export default async function ProductDetailPage({
 
   // Breadcrumb dateline
   const productTypeLabel = product.productType || (gating.isGarmin ? 'Garmin' : 'Shop');
-    const cleanDescText = (product.description || '')
+  const showPa31RudderTrimApplicability = isPa31RudderTrimProduct(product);
+  const showPapaAlphaApplicability = isPapaAlphaApplicabilityProduct(product);
+  const cleanDescText = showPa31RudderTrimApplicability || showPapaAlphaApplicability
+    ? papaAlphaApplicabilityIntro(product) || PA31_RUDDER_TRIM_INTRO
+    : (product.description || '')
     .replace(/^[^\n]*Buy\s*&\s*Save rebate form\.?\s*\n*/i, '')
     .replace(/Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi, '')
     .trim();
@@ -588,6 +965,9 @@ export default async function ProductDetailPage({
                 dangerouslySetInnerHTML={{ __html: sanitizeProductHtml(product.descriptionHtml || product.description || '') }}
               />
             ) : null}
+
+            {showPa31RudderTrimApplicability ? <Pa31RudderTrimApplicability /> : null}
+            {showPapaAlphaApplicability ? <PapaAlphaApplicabilityGuide product={product} /> : null}
 
             {d2Briefing ? (
               <section className="bs-pilot-briefing" aria-label="Pilot briefing">
