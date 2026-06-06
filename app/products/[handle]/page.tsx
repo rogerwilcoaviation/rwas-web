@@ -423,10 +423,6 @@ type PapaAlphaApplicabilityRow = {
   tool: string;
 };
 
-function escapeRegExp(value: string) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 function splitModelAndSerial(value: string): Pick<PapaAlphaApplicabilityRow, 'model' | 'serials'> {
   const tokens = value.trim().split(/\s+/);
   const serialIndex = tokens.findIndex((token, index) => {
@@ -461,11 +457,54 @@ function toolTokensForProduct(product: Pick<ShopifyProductDetail, 'handle' | 'va
     ];
     return [...aliases, sku].filter((value): value is string => Boolean(value && value.toLowerCase() !== 'default title'));
   });
-  const tableToolPatterns = product.handle === 'rigging-kit' ? ['KT-\\d{2}'] : [];
-  return [
-    ...Array.from(new Set(['N/A', ...variantTools])).sort((a, b) => b.length - a.length).map(escapeRegExp),
-    ...tableToolPatterns,
-  ];
+  const tableToolAliases =
+    product.handle === 'pa-28-32-34-44-aileron-and-flap-rigging-tool-1'
+      ? [
+          'PA-28/32/34/44 Aileron and Flap Rigging Tool #1',
+          'PA-34-200T/220T Aileron And Flap Rigging Tool #2',
+        ]
+      : [];
+  return Array.from(new Set(['N/A', ...variantTools, ...tableToolAliases])).sort((a, b) => b.length - a.length);
+}
+
+function hasRowBoundaryAfter(value: string, index: number) {
+  return /^\s*(?:PA-\d|$)/.test(value.slice(index));
+}
+
+function nextToolMatch(rowsText: string, startIndex: number, toolTokens: string[], allowKitCodes: boolean) {
+  let best: { index: number; tool: string } | null = null;
+  const lowerRowsText = rowsText.toLowerCase();
+
+  for (const token of toolTokens) {
+    const lowerToken = token.toLowerCase();
+    let index = lowerRowsText.indexOf(lowerToken, startIndex);
+    while (index >= 0) {
+      if (hasRowBoundaryAfter(rowsText, index + token.length)) {
+        const tool = rowsText.slice(index, index + token.length);
+        if (!best || index < best.index || (index === best.index && token.length > best.tool.length)) {
+          best = { index, tool };
+        }
+        break;
+      }
+      index = lowerRowsText.indexOf(lowerToken, index + token.length);
+    }
+  }
+
+  if (allowKitCodes) {
+    const kitPattern = /KT-\d{2}/g;
+    kitPattern.lastIndex = startIndex;
+    let match: RegExpExecArray | null;
+    while ((match = kitPattern.exec(rowsText))) {
+      if (hasRowBoundaryAfter(rowsText, match.index + match[0].length)) {
+        if (!best || match.index < best.index) {
+          best = { index: match.index, tool: match[0] };
+        }
+        break;
+      }
+    }
+  }
+
+  return best;
 }
 
 function parsePapaAlphaApplicabilityRows(
@@ -484,19 +523,26 @@ function parsePapaAlphaApplicabilityRows(
   const headerMatch = headerPattern.exec(product.description);
   if (!headerMatch) return [];
 
-  const toolPattern = toolTokensForProduct(product).join('|');
+  const toolTokens = toolTokensForProduct(product);
   const rowsText = product.description
     .slice(headerMatch.index + headerMatch[0].length)
     .split('KIT CONTENTS:')[0]
     .replace(/\s+/g, ' ')
     .trim();
-  const rowPattern = new RegExp(`(.+?)\\s+(${toolPattern})(?=\\s+PA-\\d|$)`, 'gi');
   const rows: PapaAlphaApplicabilityRow[] = [];
-  let match: RegExpExecArray | null;
+  let cursor = 0;
 
-  while ((match = rowPattern.exec(rowsText))) {
-    const { model, serials } = splitModelAndSerial(match[1]);
-    rows.push({ model, serials, tool: match[2] });
+  while (cursor < rowsText.length) {
+    const match = nextToolMatch(rowsText, cursor, toolTokens, product.handle === 'rigging-kit');
+    if (!match) break;
+
+    const rowText = rowsText.slice(cursor, match.index).trim();
+    if (rowText) {
+      const { model, serials } = splitModelAndSerial(rowText);
+      rows.push({ model, serials, tool: match.tool });
+    }
+    cursor = match.index + match.tool.length;
+    while (cursor < rowsText.length && /\s/.test(rowsText[cursor])) cursor += 1;
   }
 
   return rows;
