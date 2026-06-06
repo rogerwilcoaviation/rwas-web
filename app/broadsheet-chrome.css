@@ -898,6 +898,7 @@ html, body {
   grid-template-columns: auto 1fr;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 .broadsheet .bs-variant-label {
   font-family: var(--font-ui);
@@ -921,10 +922,24 @@ html, body {
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
   padding-right: 32px;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .broadsheet .bs-variant-select:focus {
   outline: 2px solid var(--gold-700);
   outline-offset: 1px;
+}
+.broadsheet .bs-variant-detail {
+  grid-column: 2;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--ink-600);
 }
 
 /* Single-CTA layout — use full-width instead of 2fr/1fr grid */

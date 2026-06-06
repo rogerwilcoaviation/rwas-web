@@ -58,6 +58,37 @@ function variantLabel(v: PdpVariant) {
   return opts || v.title || 'Standard configuration';
 }
 
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function compactVariantLabel(v: PdpVariant) {
+  let compact = variantLabel(v)
+    .replace(/\b(?:Airframe|Configuration|Variant|Option):\s*/gi, '')
+    .replace(/\bAileron and Flap Rigging Tool\b/gi, 'Tool')
+    .replace(/\bBellcrank Reference Tool\b/gi, 'Ref')
+    .replace(/\bBell Crank Reference Tool\b/gi, 'Ref')
+    .replace(/\bBell Crank Rigging Tool\b/gi, 'Tool')
+    .replace(/\bRudder Reference Tool\b/gi, 'Ref')
+    .replace(/\bRudder Trim Rigging Tool\b/gi, 'Tool')
+    .replace(/\bStabilator Reference Tool\b/gi, 'Ref')
+    .replace(/\bStabilator Rigging Tool\b/gi, 'Tool')
+    .replace(/\bRudder Rigging Tool\b/gi, 'Tool')
+    .replace(/\bRigging Kit\b/gi, 'Kit')
+    .replace(/\bRigging Tool\b/gi, 'Tool')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const sku = v.sku?.trim();
+  if (!sku) return compact || 'Standard configuration';
+
+  compact = compact
+    .replace(new RegExp(`^(?:Kit|Tool)?\\s*${escapeRegExp(sku)}\\b\\s*-?\\s*`, 'i'), '')
+    .trim();
+
+  return compact ? `${sku} - ${compact}` : sku;
+}
+
 function variantNumericId(gid?: string | null): string | null {
   if (!gid) return null;
   const match = gid.match(/(\d+)$/);
@@ -161,12 +192,15 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
           >
             {variants.map((v) => (
               <option key={v.id} value={v.id} disabled={!v.availableForSale}>
-                {variantLabel(v)}
-                {v.sku ? ` — SKU ${v.sku}` : ''}
+                {compactVariantLabel(v)}
                 {!v.availableForSale ? ' (unavailable)' : ''}
               </option>
             ))}
           </select>
+          <div className="bs-variant-detail" aria-live="polite">
+            {selected ? variantLabel(selected) : 'Standard configuration'}
+            {selected?.sku ? ` - SKU ${selected.sku}` : ''}
+          </div>
         </div>
       ) : null}
 
