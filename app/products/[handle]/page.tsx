@@ -439,8 +439,13 @@ function splitModelAndSerial(value: string): Pick<PapaAlphaApplicabilityRow, 'mo
     return { model: value.trim(), serials: 'N/A' };
   }
 
+  const model = tokens
+    .slice(0, serialIndex)
+    .join(' ')
+    .replace(/^PA-\d{2},\s+(?=PA-\d{2})/i, '');
+
   return {
-    model: tokens.slice(0, serialIndex).join(' '),
+    model,
     serials: tokens.slice(serialIndex).join(' '),
   };
 }
@@ -456,13 +461,7 @@ function toolTokensForProduct(product: Pick<ShopifyProductDetail, 'handle' | 'va
     ];
     return [...aliases, sku].filter((value): value is string => Boolean(value && value.toLowerCase() !== 'default title'));
   });
-  const tableToolPatterns = [
-    'PA-[A-Z0-9/(). -]+?Rudder Reference Tool #\\d+',
-    'PA-[A-Z0-9/(). -]+?Stabilator Rigging Tool #\\d+',
-    'PA-[A-Z0-9/(). -]+?Bell ?Crank Reference Tool #\\d+',
-    'PA-[A-Z0-9/(). -]+?Aileron [Aa]nd Flap Rigging Tool #\\d+',
-    'KT-\\d{2}',
-  ];
+  const tableToolPatterns = product.handle === 'rigging-kit' ? ['KT-\\d{2}'] : [];
   return [
     ...Array.from(new Set(['N/A', ...variantTools])).sort((a, b) => b.length - a.length).map(escapeRegExp),
     ...tableToolPatterns,
