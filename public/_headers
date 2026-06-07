@@ -11,3 +11,12 @@
 
 /work-order-system
   X-Robots-Tag: noindex, nofollow, noarchive
+
+/contact.html
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/preview/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+/newspaper/index.html
+  X-Robots-Tag: noindex, nofollow, noarchive
