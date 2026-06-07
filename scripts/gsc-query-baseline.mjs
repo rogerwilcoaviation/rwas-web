@@ -2,16 +2,64 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import crypto from 'node:crypto';
 
 const siteUrl = process.env.GSC_SITE_URL || 'https://www.rogerwilcoaviation.com/';
 const accessToken = process.env.GSC_ACCESS_TOKEN;
+const serviceAccountKey = process.env.GSC_SERVICE_ACCOUNT_KEY;
 const days = Number(process.env.GSC_DAYS || process.argv[2] || 28);
 const outputDir = process.env.GSC_OUTPUT_DIR || path.join('logs', 'gsc-baseline');
 
-if (!accessToken) {
-  console.error('Missing GSC_ACCESS_TOKEN.');
-  console.error('Use an OAuth token with Search Console scope, then run:');
+function base64url(value) {
+  return Buffer.from(value)
+    .toString('base64')
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
+}
+
+async function tokenFromServiceAccount(keyPath) {
+  const key = JSON.parse(await fs.readFile(keyPath, 'utf8'));
+  const now = Math.floor(Date.now() / 1000);
+  const header = { alg: 'RS256', typ: 'JWT' };
+  const claim = {
+    iss: key.client_email,
+    scope: 'https://www.googleapis.com/auth/webmasters.readonly',
+    aud: key.token_uri || 'https://oauth2.googleapis.com/token',
+    exp: now + 3600,
+    iat: now,
+  };
+  const unsigned = `${base64url(JSON.stringify(header))}.${base64url(JSON.stringify(claim))}`;
+  const signature = crypto
+    .createSign('RSA-SHA256')
+    .update(unsigned)
+    .sign(key.private_key, 'base64')
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
+
+  const response = await fetch(claim.aud, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      assertion: `${unsigned}.${signature}`,
+    }),
+  });
+  const json = await response.json();
+  if (!response.ok) {
+    throw new Error(`Service account token request failed: ${JSON.stringify(json)}`);
+  }
+  return json.access_token;
+}
+
+async function getAccessToken() {
+  if (accessToken) return accessToken;
+  if (serviceAccountKey) return tokenFromServiceAccount(serviceAccountKey);
+  console.error('Missing GSC_ACCESS_TOKEN or GSC_SERVICE_ACCOUNT_KEY.');
+  console.error('Use one of:');
   console.error('  GSC_ACCESS_TOKEN=... GSC_DAYS=28 npm run seo:gsc-baseline');
+  console.error('  GSC_SERVICE_ACCOUNT_KEY=.secrets/gsc-baseline-rwas-seo.json GSC_DAYS=28 npm run seo:gsc-baseline');
   process.exit(2);
 }
 
@@ -38,11 +86,12 @@ function toCsv(rows, columns) {
 }
 
 async function querySearchAnalytics(dimensions, rowLimit = 25000) {
+  const bearerToken = await getAccessToken();
   const endpoint = `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/searchAnalytics/query`;
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${bearerToken}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({

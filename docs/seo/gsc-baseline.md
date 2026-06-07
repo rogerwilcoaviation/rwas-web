@@ -12,6 +12,15 @@ The script expects an OAuth access token with Search Console access for:
 GSC_ACCESS_TOKEN="ya29..." npm run seo:gsc-baseline
 ```
 
+Or use the dedicated RWAS service account after verifying it as a site owner
+with the published Google verification file:
+
+`gsc-baseline@rwas-seo.iam.gserviceaccount.com`
+
+```bash
+GSC_SERVICE_ACCOUNT_KEY=.secrets/gsc-baseline-rwas-seo.json npm run seo:gsc-baseline
+```
+
 Optional controls:
 
 ```bash
