@@ -917,7 +917,7 @@ export default async function ProductDetailPage({
               <>
                 <a className="bs-product-image-link" href="#product-image-zoom" aria-label={`Open larger image for ${product.title}`}>
                   <img
-                    src={productImageUrl(heroImg.url, 800, heroImg.altText)}
+                    src={productImageUrl(heroImg.url, 800, heroImg.altText || product.title, handle)}
                     alt={productImageAlt(heroImg.url, heroImg.altText, product.title)}
                     width={800}
                     height={600}
@@ -933,7 +933,7 @@ export default async function ProductDetailPage({
                   <div className="bs-product-image-lightbox__panel">
                     <a className="bs-product-image-lightbox__close" href="#" aria-label="Close expanded image">×</a>
                     <img
-                      src={productImageUrl(heroImg.url, 1600, heroImg.altText)}
+                      src={productImageUrl(heroImg.url, 1600, heroImg.altText || product.title, handle)}
                       alt={productImageAlt(heroImg.url, heroImg.altText, product.title)}
                       style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
                       loading="lazy"
@@ -1156,10 +1156,10 @@ export default async function ProductDetailPage({
                   <tr>
                     <th>Image</th>
                     <td className="current-product">
-                      {heroImg ? <img src={productImageUrl(heroImg.url, 120, heroImg.altText)} alt={productImageAlt(heroImg.url, heroImg.altText, product.title)} loading="lazy" decoding="async" width={120} height={90} /> : '—'}
+                      {heroImg ? <img src={productImageUrl(heroImg.url, 120, heroImg.altText || product.title, handle)} alt={productImageAlt(heroImg.url, heroImg.altText, product.title)} loading="lazy" decoding="async" width={120} height={90} /> : '—'}
                     </td>
                     {comparisonProducts.map((item) => (
-                      <td key={item.handle}>{item.featuredImage ? <img src={productImageUrl(item.featuredImage.url, 120, item.featuredImage.altText)} alt={productImageAlt(item.featuredImage.url, item.featuredImage.altText, item.title)} loading="lazy" decoding="async" width={120} height={90} /> : '—'}</td>
+                      <td key={item.handle}>{item.featuredImage ? <img src={productImageUrl(item.featuredImage.url, 120, item.featuredImage.altText || item.title, item.handle)} alt={productImageAlt(item.featuredImage.url, item.featuredImage.altText, item.title)} loading="lazy" decoding="async" width={120} height={90} /> : '—'}</td>
                     ))}
                   </tr>
                   <tr>

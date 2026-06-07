@@ -78,7 +78,7 @@ export default function ProductCard({
         <div className="relative aspect-[4/3] bg-[#f5f3ef]">
           {displayImage ? (
             <Image
-              src={productImageUrl(displayImage.url, 600, displayImage.altText)}
+              src={productImageUrl(displayImage.url, 600, displayImage.altText || product.title, product.handle)}
               alt={productImageAlt(displayImage.url, displayImage.altText, product.title)}
               fill
               className="object-contain p-6 transition duration-300 group-hover:scale-[1.03]"

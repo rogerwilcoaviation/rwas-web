@@ -171,7 +171,7 @@ function ProductTile({
           {displayImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={productImageUrl(displayImage.url, 600, displayImage.altText)}
+              src={productImageUrl(displayImage.url, 600, displayImage.altText || product.title, product.handle)}
               alt={productImageAlt(displayImage.url, displayImage.altText, product.title)}
               loading={eager ? 'eager' : 'lazy'}
               fetchPriority={eager ? 'high' : 'low'}

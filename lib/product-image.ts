@@ -31,13 +31,21 @@ export function isShopifyPlaceholderImage(
     /garmin-no-product-image-available/i.test(haystack) ||
     /no product image available/i.test(haystack) ||
     /no-product-image/i.test(haystack) ||
+    /\/static\/no-image\.svg/i.test(haystack) ||
     /product image placeholder/i.test(haystack)
   );
 }
 
-function placeholderImageUrl(url: string | null | undefined, altText?: string | null): string {
-  const haystack = `${url || ''} ${altText || ''}`;
-  if (/garmin/i.test(haystack)) {
+function placeholderImageUrl(
+  url: string | null | undefined,
+  altText?: string | null,
+  handle?: string | null
+): string {
+  const haystack = `${handle || ''} ${url || ''} ${altText || ''}`;
+  if (/papa-alpha|papa alpha|rigging-tool/i.test(haystack)) {
+    return '/newspaper/images/papa_alpha_kit_collection.jpg';
+  }
+  if (/garmin|kit-gfc|kit-gtn|kit-g3x|\bgfc\b|\bgtn\b|\bg3x\b|\bgnx\b|\bgdu\b|\bgdl\b|\bgtx\b|\bgma\b|\bgi\s?\d|ads-b|install kit/i.test(haystack)) {
     return '/images/products/garmin-no-product-image-available-approved.jpg';
   }
   return '/static/no-image.svg';
@@ -46,11 +54,12 @@ function placeholderImageUrl(url: string | null | undefined, altText?: string | 
 export function productImageUrl(
   url: string | null | undefined,
   width: number,
-  altText?: string | null
+  altText?: string | null,
+  handle?: string | null
 ): string {
-  if (!url) return '/static/no-image.svg';
+  if (!url) return placeholderImageUrl(url, altText, handle);
   if (isShopifyPlaceholderImage(url, altText)) {
-    return placeholderImageUrl(url, altText);
+    return placeholderImageUrl(url, altText, handle);
   }
   if (/cdn\.shopify\.com/.test(url)) {
     const sep = url.includes('?') ? '&' : '?';

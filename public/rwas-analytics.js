@@ -28,7 +28,7 @@
 
   function send(event, feature, path, extra) {
     try {
-      var endpoint = '/api/rum';
+      var endpoint = '/api/track';
       var body = {
         sessionId: getSessionId(),
         event: event || 'feature',
