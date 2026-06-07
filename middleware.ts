@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const COLLECTION_REDIRECTS: Record<string, string> = {
+  '/contact.html': '/contact',
+  '/newspaper/index.html': '/',
   '/collections/garmin-avionics': '/collections/avionics-certified',
   '/collections/garmin-avionics-certified-retail': '/collections/avionics-certified',
   '/collections/garmin-avionics-accessories': '/collections/garmin-dealer-install',

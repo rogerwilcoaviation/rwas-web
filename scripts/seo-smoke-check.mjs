@@ -85,6 +85,20 @@ if (urls.some((url) => url.includes('/services/aircraft-maintenance-sioux-falls'
   }
 }
 
+const duplicateContactRes = await fetch(`${base}/contact.html`, { redirect: 'manual' });
+if (duplicateContactRes.status !== 301) fail(`/contact.html should 301, got ${duplicateContactRes.status}`);
+const duplicateContactLocation = duplicateContactRes.headers.get('location') || '';
+if (!duplicateContactLocation.includes('/contact')) {
+  fail(`/contact.html redirects to unexpected location: ${duplicateContactLocation}`);
+}
+
+const newspaperIndexRes = await fetch(`${base}/newspaper/index.html`, { redirect: 'manual' });
+if (newspaperIndexRes.status !== 301) fail(`/newspaper/index.html should 301, got ${newspaperIndexRes.status}`);
+const newspaperIndexLocation = newspaperIndexRes.headers.get('location') || '';
+if (!newspaperIndexLocation.endsWith('/') && !newspaperIndexLocation.endsWith(base)) {
+  fail(`/newspaper/index.html redirects to unexpected location: ${newspaperIndexLocation}`);
+}
+
 const failures = [];
 
 async function checkUrl(url) {

@@ -4,6 +4,8 @@ import { resolve } from 'node:path';
 const workerPath = resolve('.vercel/output/static/_worker.js/index.js');
 
 const redirects = {
+  '/contact.html': '/contact',
+  '/newspaper/index.html': '/',
   '/collections/garmin-avionics': '/collections/avionics-certified',
   '/collections/garmin-avionics-certified-retail': '/collections/avionics-certified',
   '/collections/garmin-avionics-accessories': '/collections/garmin-dealer-install',
