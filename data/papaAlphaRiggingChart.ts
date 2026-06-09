@@ -1120,94 +1120,94 @@ export const PAPA_ALPHA_RIGGING_CHART_ROWS: readonly PapaAlphaChartRow[] = [
 export const PAPA_ALPHA_RIGGING_KIT_CONTENTS: ReadonlyArray<{ kit: string; contents: string }> = [
   {
     "kit": "KT-01",
-    "contents": "R-01, BC-01, S-01"
+    "contents": "(1) R-01, (2) BC-01, (1) S-01"
   },
   {
     "kit": "KT-02",
-    "contents": "R-02, BC-01, S-02"
+    "contents": "(1) R-02, (2) BC-01, (1) S-02"
   },
   {
     "kit": "KT-03",
-    "contents": "R-02, BC-01, S-01"
+    "contents": "(1) R-02, (2) BC-01, (1) S-01"
   },
   {
     "kit": "KT-04",
-    "contents": "BC-02, S-03"
+    "contents": "(2) BC-02, (1) S-03"
   },
   {
     "kit": "KT-05",
-    "contents": "BC-02, S-04"
+    "contents": "(2) BC-02, (1) S-04"
   },
   {
     "kit": "KT-06",
-    "contents": "R-03, BC-03, S-05, AF-01"
+    "contents": "(1) R-03, (2) BC-03, (1) S-05, (1) AF-01"
   },
   {
     "kit": "KT-07",
-    "contents": "R-04, BC-06, S-05, AF-1"
+    "contents": "(1) R-04, (2) BC-06, (1) S-05, (1) AF-01"
   },
   {
     "kit": "KT-08",
-    "contents": "R-04, BC04, S-05, AF-1"
+    "contents": "(1) R-04, (2) BC-04, (1) S-05, (1) AF-01"
   },
   {
     "kit": "KT-09",
-    "contents": "R-05, BC-04, S-05, AF-01"
+    "contents": "(1) R-05, (2) BC-04, (1) S-05, (1) AF-01"
   },
   {
     "kit": "KT-10",
-    "contents": "R-10, BC-06, S-05, AF-01"
+    "contents": "(1) R-10, (2) BC-06, (1) S-05, (1) AF-01"
   },
   {
     "kit": "KT-11",
-    "contents": "R-04, BC-05, S-05, AF-01"
+    "contents": "(1) R-04, (2) BC-05, (1) S-05, (1) AF-01"
   },
   {
     "kit": "KT-12",
-    "contents": "R-06, BC-07, S-05, AF-01"
+    "contents": "(1) R-06, (2) BC-07, (1) S-05, (1) AF-01"
   },
   {
     "kit": "KT-13",
-    "contents": "BC-02, S-03, A-01"
+    "contents": "(2) BC-02, (1) S-03, (1) A-01"
   },
   {
     "kit": "KT-14",
-    "contents": "BC-02, S-06, A-01"
+    "contents": "(2) BC-02, (1) S-06, (1) A-01"
   },
   {
     "kit": "KT-15",
-    "contents": "R-07, BC-08, AE-01"
+    "contents": "(1) R-07, (2) BC-08, (1) AE-01"
   },
   {
     "kit": "KT-16",
-    "contents": "R-07, BC-08, AE-01, RT-01"
+    "contents": "(1) R-07, (2) BC-08, (1) AE-01, (1) RT-01"
   },
   {
     "kit": "KT-17",
-    "contents": "R-07, BC-08, AE-01, RT-02"
+    "contents": "(1) R-07, (2) BC-08, (1) AE-01, (1) RT-02"
   },
   {
     "kit": "KT-18",
-    "contents": "R-03, BC-04, S-05, AF-01"
+    "contents": "(1) R-03, (2) BC-04, (1) S-05, (1) AF-01"
   },
   {
     "kit": "KT-19",
-    "contents": "R-03, BC-05, S-05, AF-01"
+    "contents": "(1) R-03, (2) BC-05, (1) S-05, (1) AF-01"
   },
   {
     "kit": "KT-20",
-    "contents": "R-08, BC-03, S-05, AF-01"
+    "contents": "(1) R-08, (2) BC-03, (1) S-05, (1) AF-01"
   },
   {
     "kit": "KT-21",
-    "contents": "R-09, BC-03, S-07, AF-01"
+    "contents": "(1) R-09, (2) BC-03, (1) S-07, (1) AF-01"
   },
   {
     "kit": "KT-22",
-    "contents": "R-09, BC-09, S-07, AF-02"
+    "contents": "(1) R-09, (2) BC-09, (1) S-07, (1) AF-02"
   },
   {
     "kit": "KT-23",
-    "contents": "R-08, BC-06, S-05, AF-01"
+    "contents": "(1) R-08, (2) BC-06, (1) S-05, (1) AF-01"
   }
 ] as const;
