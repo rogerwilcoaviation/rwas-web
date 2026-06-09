@@ -24,6 +24,11 @@ import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import PdpPriceCard, { type PdpVariant } from '@/components/shopify/PdpPriceCard';
 import {
+  PAPA_ALPHA_RIGGING_CHART_ROWS,
+  PAPA_ALPHA_RIGGING_KIT_CONTENTS,
+  type PapaAlphaChartToolKey,
+} from '@/data/papaAlphaRiggingChart';
+import {
   FALLBACK_PRODUCT_HANDLES,
   getProductByHandle,
   getSeoProductHandles,
@@ -372,27 +377,42 @@ const PAPA_ALPHA_APPLICABILITY_CONFIG: Record<string, {
   },
 };
 
-const PA31_RUDDER_TRIM_ROWS = [
-  { model: 'PA-31-300', serials: '31-228 thru 31-511', tool: 'N/A' },
-  { model: 'PA-31-310', serials: '31-5 thru 31-900', tool: 'N/A' },
-  { model: 'PA-31-310', serials: '31-7300901 thru 31-7512072', tool: 'N/A' },
-  { model: 'PA-31-325', serials: '31-7512006 thru 31-8312019; 31-7400990', tool: 'N/A' },
-  { model: 'PA-31-350', serials: '31-5001, 31-5002, 31-5003', tool: 'N/A' },
-  { model: 'PA-31-350', serials: '31-7305005 thru 31-8452021', tool: 'N/A' },
-  { model: 'PA-31-350 T1020', serials: '31-8253001 thru 31-8453021', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
-  { model: 'PA-31P', serials: '31P-3 thru 31P-80', tool: 'PA-31P Rudder Trim Rigging Tool #2' },
-  { model: 'PA-31P', serials: '31P-7300110 thru 31P-7730012', tool: 'PA-31P Rudder Trim Rigging Tool #2' },
-  { model: 'PA-31P-350', serials: '31P-8414001 thru 31P-8414050', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
-  { model: 'PA-31T', serials: '31T-7400002 thru 31T-7720069', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
-  { model: 'PA-31T', serials: '31T-7820001 thru 31T-8120104', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
-  { model: 'PA-31T1', serials: '31T-7804002 thru 31T-8104101', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
-  { model: 'PA-31T1', serials: '31T-8304002 thru 31T-1104017', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
-  { model: 'PA-31T2', serials: '31T-8166002 thru 31T-1166008', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
-  { model: 'PA-31T3 T1040', serials: '31T-5575001', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
-  { model: 'PA-31T3 T1040', serials: '31T-8275001 thru 31T-8275017; 31T-8275025', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
-  { model: 'PA-31T3 T1040', serials: '31T-8375001 thru 31T-8375003; 31T-8375005', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
-  { model: 'PA-31T3 T1040', serials: '31T-8475001', tool: 'PA-31 Rudder Trim Rigging Tool #1' },
-] as const;
+type PapaAlphaApplicabilityRow = {
+  model: string;
+  serials: string;
+  tool: string;
+};
+
+const PAPA_ALPHA_APPLICABILITY_TOOL_KEYS: Record<string, PapaAlphaChartToolKey> = {
+  'pa-28-32-34-44-aileron-and-flap-rigging-tool-1': 'aileronFlap',
+  'bell-crank-rigging-tool': 'bellcrank',
+  'rigging-kit': 'kit',
+  'rudder-rigging-tool': 'rudder',
+  'stabilator-rigging-tool': 'stabilator',
+};
+
+function spreadsheetToolValue(value: string) {
+  return value.trim() || 'N/A';
+}
+
+function papaAlphaSpreadsheetRowsForHandle(handle: string): PapaAlphaApplicabilityRow[] | null {
+  const toolKey = PAPA_ALPHA_APPLICABILITY_TOOL_KEYS[handle];
+  if (!toolKey) return null;
+
+  return PAPA_ALPHA_RIGGING_CHART_ROWS.map((row) => ({
+    model: row.model,
+    serials: row.serials || 'N/A',
+    tool: spreadsheetToolValue(row[toolKey]),
+  }));
+}
+
+const PA31_RUDDER_TRIM_ROWS: PapaAlphaApplicabilityRow[] = PAPA_ALPHA_RIGGING_CHART_ROWS
+  .filter((row) => row.model.startsWith('PA-31'))
+  .map((row) => ({
+    model: row.model,
+    serials: row.serials || 'N/A',
+    tool: spreadsheetToolValue(row.misc),
+  }));
 
 function isPa31RudderTrimProduct(product: Pick<ShopifyProductDetail, 'handle' | 'title' | 'variants'>) {
   return (
@@ -416,12 +436,6 @@ function toolClassName(tool: string) {
   if (tool.includes('#2')) return 'tool-two';
   return 'tool-one';
 }
-
-type PapaAlphaApplicabilityRow = {
-  model: string;
-  serials: string;
-  tool: string;
-};
 
 function splitModelAndSerial(value: string): Pick<PapaAlphaApplicabilityRow, 'model' | 'serials'> {
   const tokens = value.trim().split(/\s+/);
@@ -510,6 +524,9 @@ function nextToolMatch(rowsText: string, startIndex: number, toolTokens: string[
 function parsePapaAlphaApplicabilityRows(
   product: Pick<ShopifyProductDetail, 'handle' | 'description' | 'variants'>,
 ): PapaAlphaApplicabilityRow[] {
+  const spreadsheetRows = papaAlphaSpreadsheetRowsForHandle(product.handle);
+  if (spreadsheetRows) return spreadsheetRows;
+
   const headerPattern =
     product.handle === 'rigging-kit'
       ? /Aircraft\s+S\/N\s+KIT/i
@@ -570,7 +587,7 @@ function PapaAlphaApplicabilityGuide({
   if (!config) return null;
 
   const rows = parsePapaAlphaApplicabilityRows(product);
-  const kitContents = product.handle === 'rigging-kit' ? parseRiggingKitContents(product.description) : [];
+  const kitContents = product.handle === 'rigging-kit' ? PAPA_ALPHA_RIGGING_KIT_CONTENTS : [];
   const supportedRows = rows.filter((row) => row.tool !== 'N/A');
   const notApplicableRows = rows.length - supportedRows.length;
   const toolCounts = Array.from(
