@@ -88,7 +88,7 @@ const serviceGroups = [
 const allServices = serviceGroups.flatMap((group) => group.services);
 
 export const metadata = {
-  title: { absolute: 'Aircraft Services - Avionics, Maintenance, NDT & Fabrication | RWAS' },
+  title: { absolute: 'Aircraft Services - Avionics, Maintenance & NDT | RWAS' },
   description:
     'RWAS aircraft services in Sioux Falls, SD: Garmin avionics, annual inspections, NDT, fabrication, Rotax support, pre-buys, and Papa-Alpha tools.',
   alternates: { canonical: pageUrl },

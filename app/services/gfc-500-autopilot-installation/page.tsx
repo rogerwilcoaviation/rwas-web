@@ -13,7 +13,7 @@ import Link from 'next/link';
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/gfc-500-autopilot-installation';
 
 export const metadata = {
-  title: { absolute: 'Garmin GFC 500 Autopilot Installation - Northern Plains | RWAS' },
+  title: { absolute: 'Garmin GFC 500 Autopilot Install | RWAS' },
   description:
     'Garmin GFC 500 autopilot installation in Sioux Falls, SD: eligibility review, quote planning, integration, installation, testing, and documentation.',
   alternates: { canonical: pageUrl },

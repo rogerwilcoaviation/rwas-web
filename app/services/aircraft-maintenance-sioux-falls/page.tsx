@@ -13,7 +13,7 @@ import Link from 'next/link';
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/aircraft-maintenance-sioux-falls';
 
 export const metadata = {
-  title: { absolute: 'Aircraft Maintenance & Annual Inspections - Sioux Falls, SD | RWAS' },
+  title: { absolute: 'Aircraft Maintenance in Sioux Falls, SD | RWAS' },
   description:
     'Aircraft maintenance in Sioux Falls, SD from RWAS: annual inspections, 100-hour inspections, pre-buy support, AOG service, prop balancing, and weighing.',
   alternates: { canonical: pageUrl },

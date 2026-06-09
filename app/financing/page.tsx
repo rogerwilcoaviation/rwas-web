@@ -14,7 +14,7 @@ import LoanCalc from '../components/LoanCalc';
 export const metadata = {
   title: { absolute: 'Avionics Financing — RWAS' },
   description:
-    'Finance a Garmin avionics upgrade or major maintenance project with RWAS. Estimate payments and discuss flexible terms with our Sioux Falls, SD repair station team.',
+    'Finance Garmin avionics upgrades or major maintenance with RWAS. Estimate payments and discuss flexible terms with our Sioux Falls repair station.',
 };
 
 export default function FinancingPage() {

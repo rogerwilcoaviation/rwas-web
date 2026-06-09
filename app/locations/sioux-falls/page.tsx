@@ -13,7 +13,7 @@ import Link from 'next/link';
 const pageUrl = 'https://www.rogerwilcoaviation.com/locations/sioux-falls';
 
 export const metadata = {
-  title: { absolute: 'Aircraft Maintenance & Avionics Shop - Sioux Falls, SD | RWAS' },
+  title: { absolute: 'Aircraft Shop in Sioux Falls, SD | RWAS' },
   description:
     'RWAS is an FAA Part 145 repair station at Hangar 3 in Sioux Falls, SD, supporting Garmin avionics, maintenance, NDT, fabrication, and pre-buys.',
   alternates: { canonical: pageUrl },

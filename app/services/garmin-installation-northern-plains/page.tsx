@@ -13,7 +13,7 @@ import Link from 'next/link';
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/garmin-installation-northern-plains';
 
 export const metadata = {
-  title: { absolute: 'Garmin Avionics Installation - South Dakota, Nebraska, Iowa | RWAS' },
+  title: { absolute: 'Garmin Avionics Installation in Sioux Falls | RWAS' },
   description:
     'Garmin avionics installation in Sioux Falls, SD. RWAS supports G3X Touch, GTN Xi, GFC 500, ADS-B, panel fabrication, and quote planning.',
   alternates: { canonical: pageUrl },

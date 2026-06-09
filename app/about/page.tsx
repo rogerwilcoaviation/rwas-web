@@ -15,7 +15,7 @@ import Link from 'next/link';
 export const metadata = {
   title: { absolute: 'About RWAS — FAA Part 145 Repair Station' },
   description:
-    'FAA Part 145 repair station RWSR491E at Hangar 3, 3701 N. Aviation Avenue, Sioux Falls, SD, providing avionics, airframe, powerplant, NDT, and fabrication support.',
+    'FAA Part 145 repair station RWSR491E at Hangar 3 in Sioux Falls, SD, supporting avionics, A&P maintenance, NDT, and fabrication.',
 };
 
 export default function AboutPage() {

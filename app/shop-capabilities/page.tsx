@@ -13,7 +13,7 @@ import {
 export const metadata = {
   title: { absolute: 'RWAS Shop Capabilities — Avionics, A&P, NDT' },
   description:
-    'Garmin avionics, A&P maintenance, NDT inspection, sheet metal, fiber laser, and fabrication support from FAA Part 145 repair station RWSR491E at Sioux Falls, SD.',
+    'Garmin avionics, A&P maintenance, NDT, sheet metal, fiber laser, and fabrication support from RWAS in Sioux Falls, SD.',
 };
 
 export default function ShopCapabilitiesPage() {

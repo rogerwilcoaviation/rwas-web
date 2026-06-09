@@ -357,7 +357,7 @@ const PAPA_ALPHA_APPLICABILITY_CONFIG: Record<string, {
   'rigging-kit': {
     heading: 'Rigging kit selector',
     intro:
-      'Applicability guide for the Papa-Alpha rigging kit family. Match the aircraft model and serial-number range to the kit code, then review the kit contents list before ordering.',
+      'Papa-Alpha rigging kit selector for Piper PA-series aircraft. Match model and serial range to KT-01 through KT-23 before ordering.',
     toolColumn: 'Kit',
     primaryLabel: 'Kit',
   },
