@@ -57,3 +57,13 @@
 /collections/retail-experimental/ /collections/avionics-experimental 301
 /collections/rigging-tools/ /collections/papa-alpha-tools 301
 /collections/on-sale/Garmin-Product-On-Sale/ /collections/on-sale 301
+
+# --- RWAS Work Order System SPA deep links ---
+/ops /work-order-system/ops 301
+/ops/* /work-order-system/ops/:splat 301
+/work-order-system/ops /work-order-system/index.html 200
+/work-order-system/ops/* /work-order-system/index.html 200
+/work-order-system/customer /work-order-system/index.html 200
+/work-order-system/customer/* /work-order-system/index.html 200
+/work-order-system/employee /work-order-system/index.html 200
+/work-order-system/portal/* /work-order-system/index.html 200
