@@ -20,8 +20,15 @@ export const metadata = {
 const publishedArticles = blogData.articles.filter((article) => article.status === 'published');
 const leadArticle = publishedArticles[0];
 const secondaryArticles = publishedArticles.slice(1);
-const recentDispatches = publishedArticles.slice(0, 5);
+const recentDispatches = publishedArticles.slice(1, 6);
 const topics = blogData.meta.categories;
+
+function stripInlineMarkdown(value: string): string {
+  return value
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/([*_`~])/g, '')
+    .trim();
+}
 
 export default function BlogPage() {
   return (
@@ -56,7 +63,9 @@ export default function BlogPage() {
             <p className="bs-byline" style={{ marginTop: 8 }}>
               {leadArticle.byline} &middot; {leadArticle.date} &middot; {leadArticle.source}
             </p>
-            <p className="bs-body" style={{ marginTop: 14 }}>{leadArticle.lead}</p>
+            <p className="bs-body" style={{ marginTop: 14 }}>
+              {stripInlineMarkdown(leadArticle.lead)}
+            </p>
             {leadArticle.body.slice(0, 2).map((paragraph, index) => (
               <p key={index} className="bs-body" style={{ marginTop: 10 }}>{paragraph}</p>
             ))}
@@ -108,7 +117,9 @@ export default function BlogPage() {
                       {article.title}
                     </h3>
                   </Link>
-                  <p className="bs-body" style={{ marginTop: 8 }}>{article.lead}</p>
+                  <p className="bs-body" style={{ marginTop: 8 }}>
+                    {stripInlineMarkdown(article.lead)}
+                  </p>
                   <p className="bs-byline" style={{ marginTop: 8 }}>
                     {article.author} &middot; {article.date}
                   </p>
