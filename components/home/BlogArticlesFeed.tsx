@@ -24,7 +24,7 @@ export default function BlogArticlesFeed() {
 
   useEffect(() => {
     let alive = true;
-    fetch('/blog-articles.json?t=' + Date.now())
+    fetch('/blog-articles.json')
       .then((r) => r.json())
       .then((data: { articles?: Article[] }) => {
         if (!alive) return;
