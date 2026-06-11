@@ -51,6 +51,7 @@ yarn-error.log*
 
 # local working backups / audit artifacts
 *.bak
+*.bak*
 *.bak.*
 *.bak-*
 *.v2-backup
