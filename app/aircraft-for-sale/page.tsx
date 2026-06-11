@@ -137,15 +137,6 @@ export default async function AircraftForSalePage() {
           margin: 0;
           color: #1a1a1a;
         }
-        .a4s-admin-link {
-          text-align: center;
-          font-size: 10px;
-          color: #888;
-          font-family: Arial, sans-serif;
-          margin-top: 20px;
-          letter-spacing: 0.05em;
-        }
-        .a4s-admin-link a { color: #888; text-decoration: none; }
       `}</style>
 
       <Dateline />
@@ -224,14 +215,6 @@ export default async function AircraftForSalePage() {
           </div>
         </Specimen>
 
-        <div className="a4s-admin-link">
-          <a
-            href="https://sale-api.rogerwilcoaviation.com/admin"
-            rel="noreferrer"
-          >
-            Admin
-          </a>
-        </div>
       </main>
 
       <BroadsheetFooter />
