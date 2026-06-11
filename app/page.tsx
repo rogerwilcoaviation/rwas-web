@@ -21,10 +21,9 @@ export const metadata = {
 
 /*
  * / (Home) — Ship 3 Tranche B production migration.
- * Mirrors the approved /preview/home-sample layout. Dynamic feeds
- * (#aircraft-sale-feed and #blog-articles-feed) are hydrated
- * client-side from the legacy JSON/API endpoints, rendered with the
- * bs-* broadsheet chrome classes.
+ * Dynamic feeds (#aircraft-sale-feed and #blog-articles-feed) are hydrated
+ * client-side from the legacy JSON/API endpoints, rendered with the bs-*
+ * broadsheet chrome classes.
  */
 export default function Home() {
   return (
