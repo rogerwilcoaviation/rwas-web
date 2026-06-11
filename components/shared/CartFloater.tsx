@@ -3,7 +3,7 @@
 /*
  * CartFloater
  *
- * Fixed-position top-right broadsheet-styled link to /cart, with a live
+ * Fixed-position bottom-left broadsheet-styled link to /cart, with a live
  * "(N)" count fetched from /api/cart.
  *
  * Rendered once from app/layout.tsx so it appears on every www page,
@@ -74,19 +74,14 @@ export default function CartFloater() {
     };
   }, [refresh]);
 
-  const label =
-    count === null || count === 0 ? 'Cart' : `Cart (${count})`;
+  const label = count === null || count === 0 ? 'Cart' : `Cart (${count})`;
   const ariaLabel =
     count && count > 0
       ? `Shopping cart, ${count} item${count === 1 ? '' : 's'}`
       : 'Shopping cart';
 
   return (
-    <Link
-      href="/cart"
-      className="rwas-cart-floater"
-      aria-label={ariaLabel}
-    >
+    <Link href="/cart" className="rwas-cart-floater" aria-label={ariaLabel}>
       {label}
     </Link>
   );

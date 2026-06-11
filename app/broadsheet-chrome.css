@@ -5,7 +5,8 @@
    broadsheet-tokens.css (imported separately in app/layout.tsx).
    ======================================================================== */
 
-html, body {
+html,
+body {
   background: var(--cream);
   margin: 0;
 }
@@ -15,7 +16,7 @@ html, body {
   background: var(--ink-900);
   color: var(--cream);
   border-bottom: 2px solid var(--gold-700);
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -38,7 +39,7 @@ html, body {
   flex-wrap: wrap;
 }
 .broadsheet .bs-dateline__kicker {
-  font-family: "Caveat", cursive;
+  font-family: 'Caveat', cursive;
   text-transform: none;
   font-size: 18px;
   letter-spacing: 0;
@@ -91,7 +92,7 @@ html, body {
   text-align: center;
 }
 .broadsheet .bs-masthead__brand {
-  font-family: "Playfair Display", serif;
+  font-family: 'Playfair Display', serif;
   font-weight: 900;
   font-size: 40px;
   line-height: 1;
@@ -100,7 +101,7 @@ html, body {
   color: var(--ink-900);
 }
 .broadsheet .bs-masthead__tagline {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 10px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -109,7 +110,7 @@ html, body {
 }
 .broadsheet .bs-masthead__cert {
   text-align: right;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -123,8 +124,13 @@ html, body {
   color: var(--ink-700);
 }
 @media (max-width: 900px) {
-  .broadsheet .bs-masthead__inner { grid-template-columns: 1fr; text-align: center; }
-  .broadsheet .bs-masthead__cert { text-align: center; }
+  .broadsheet .bs-masthead__inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .broadsheet .bs-masthead__cert {
+    text-align: center;
+  }
 }
 
 /* ---------- Primary Nav (single row) ---------- */
@@ -132,7 +138,7 @@ html, body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 12px 28px 0;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -176,7 +182,7 @@ html, body {
   justify-content: center;
   gap: 22px;
   flex-wrap: wrap;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -198,7 +204,7 @@ html, body {
   background: var(--bone);
 }
 .broadsheet .bs-dealer-plate__label {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -214,7 +220,7 @@ html, body {
 .broadsheet .bs-bulletin {
   background: var(--ink-900);
   color: var(--cream);
-  font-family: "Inter", "Source Sans 3", system-ui, sans-serif;
+  font-family: 'Inter', 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.82rem;
   letter-spacing: 0.04em;
   padding: 0.55rem 1.25rem;
@@ -231,7 +237,7 @@ html, body {
   line-height: 1.3;
 }
 .broadsheet .bs-bulletin__kicker {
-  font-family: "Playfair Display", serif;
+  font-family: 'Playfair Display', serif;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -261,8 +267,13 @@ html, body {
 }
 
 @media (max-width: 720px) {
-  .broadsheet .bs-bulletin { font-size: 0.78rem; padding: 0.5rem 0.9rem; }
-  .broadsheet .bs-bulletin__kicker { font-size: 0.72rem; }
+  .broadsheet .bs-bulletin {
+    font-size: 0.78rem;
+    padding: 0.5rem 0.9rem;
+  }
+  .broadsheet .bs-bulletin__kicker {
+    font-size: 0.72rem;
+  }
 }
 
 /* ---------- Stage (content container beneath chrome) ---------- */
@@ -279,7 +290,7 @@ html, body {
   border-top: 6px double var(--gold-700);
   margin-top: 48px;
   padding: 22px 28px;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -325,16 +336,17 @@ html, body {
   margin: 12px 0;
 }
 .broadsheet .specimen__caption {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-700);
 }
 
-
 /* ---------- Body cream helper (applied via body className) ---------- */
-.bs-body-cream { background: var(--cream); }
+.bs-body-cream {
+  background: var(--cream);
+}
 
 /* ═════════════════════════════════════════════════════════════════════════
  * PDP block styles — Ship 2 (2026-04-21)
@@ -396,11 +408,11 @@ html, body {
   right: 12px;
   bottom: 12px;
   padding: 6px 10px;
-  background: rgba(17, 24, 39, .78);
+  background: rgba(17, 24, 39, 0.78);
   color: #fff;
   font-size: 12px;
   font-weight: 800;
-  letter-spacing: .08em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 .broadsheet .bs-product-image-lightbox {
@@ -418,7 +430,7 @@ html, body {
 .broadsheet .bs-product-image-lightbox__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(8, 13, 23, .84);
+  background: rgba(8, 13, 23, 0.84);
 }
 .broadsheet .bs-product-image-lightbox__panel {
   position: relative;
@@ -428,7 +440,7 @@ html, body {
   padding: 18px;
   background: var(--paper, #f8f5ee);
   border: 1px solid var(--rule);
-  box-shadow: 0 30px 90px rgba(0, 0, 0, .45);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.45);
 }
 .broadsheet .bs-product-image-lightbox__panel img {
   width: auto;
@@ -469,7 +481,7 @@ html, body {
 }
 .broadsheet .bs-part-finder {
   display: grid;
-  grid-template-columns: minmax(0, .9fr) minmax(280px, 1.1fr);
+  grid-template-columns: minmax(0, 0.9fr) minmax(280px, 1.1fr);
   gap: 22px;
   align-items: start;
 }
@@ -478,7 +490,7 @@ html, body {
   font-family: var(--font-display);
   font-size: clamp(28px, 3vw, 46px);
   font-weight: 900;
-  line-height: .98;
+  line-height: 0.98;
   color: var(--ink-900);
 }
 .broadsheet .bs-part-finder__search {
@@ -488,7 +500,7 @@ html, body {
 .broadsheet .bs-part-finder__search span {
   font-size: 12px;
   font-weight: 900;
-  letter-spacing: .16em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ink-600);
 }
@@ -592,12 +604,14 @@ html, body {
 .broadsheet .bs-product-dateline {
   font-family: var(--font-ui);
   font-size: 11px;
-  letter-spacing: .22em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink-600);
   margin-bottom: 8px;
 }
-.broadsheet .bs-product-dateline .gilded { color: var(--gold-800); }
+.broadsheet .bs-product-dateline .gilded {
+  color: var(--gold-800);
+}
 
 .broadsheet .bs-product-kicker {
   font-family: var(--font-script);
@@ -613,12 +627,14 @@ html, body {
   font-weight: 900;
   font-size: 44px;
   line-height: 1.05;
-  letter-spacing: -.005em;
+  letter-spacing: -0.005em;
   margin: 0 0 8px;
   color: var(--ink-900);
 }
 @media (max-width: 860px) {
-  .broadsheet .bs-product-headline { font-size: 34px; }
+  .broadsheet .bs-product-headline {
+    font-size: 34px;
+  }
 }
 
 .broadsheet .bs-product-subhead {
@@ -633,7 +649,7 @@ html, body {
 .broadsheet .bs-byline {
   font-family: var(--font-ui);
   font-size: 11px;
-  letter-spacing: .18em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink-600);
   padding: 8px 0 12px;
@@ -654,9 +670,11 @@ html, body {
   height: 14px;
   width: auto;
   display: block;
-  opacity: .9;
+  opacity: 0.9;
 }
-.broadsheet .bs-byline .sep { color: var(--rule-soft); }
+.broadsheet .bs-byline .sep {
+  color: var(--rule-soft);
+}
 
 /* Price card — the buy box. Gets the 3D lift. */
 .broadsheet .bs-price-card {
@@ -668,7 +686,7 @@ html, body {
 .broadsheet .bs-price-card .label {
   font-family: var(--font-ui);
   font-size: 10px;
-  letter-spacing: .22em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink-600);
 }
@@ -689,7 +707,7 @@ html, body {
 .broadsheet .bs-price-card .stock {
   font-family: var(--font-ui);
   font-size: 11px;
-  letter-spacing: .18em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--gold-800);
   padding: 4px 8px;
@@ -715,7 +733,7 @@ html, body {
   color: var(--gold-800);
   font-family: var(--font-ui);
   font-size: 9px;
-  letter-spacing: .22em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   font-weight: 700;
 }
@@ -726,7 +744,9 @@ html, body {
   margin-top: 14px;
 }
 @media (max-width: 520px) {
-  .broadsheet .bs-cta-row { grid-template-columns: 1fr; }
+  .broadsheet .bs-cta-row {
+    grid-template-columns: 1fr;
+  }
 }
 .broadsheet .bs-otc {
   margin-top: 12px;
@@ -794,7 +814,9 @@ html, body {
   gap: 18px;
 }
 @media (max-width: 860px) {
-  .broadsheet .bs-trust-strip { grid-template-columns: 1fr; }
+  .broadsheet .bs-trust-strip {
+    grid-template-columns: 1fr;
+  }
 }
 .broadsheet .bs-trust-strip .cell {
   background: var(--bone);
@@ -808,7 +830,7 @@ html, body {
 .broadsheet .bs-trust-strip .cell .lab {
   font-family: var(--font-ui);
   font-size: 9px;
-  letter-spacing: .22em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--gold-800);
   display: block;
@@ -859,7 +881,7 @@ html, body {
 .broadsheet .bs-spec-card th {
   font-family: var(--font-ui);
   font-size: 10px;
-  letter-spacing: .18em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink-700);
   width: 42%;
@@ -878,7 +900,7 @@ html, body {
   margin: 0 0 10px;
   font-family: var(--font-ui);
   font-size: 11px;
-  letter-spacing: .22em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--ink-700);
 }
@@ -916,10 +938,15 @@ html, body {
   padding: 8px 12px;
   width: 100%;
   appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--ink-700) 50%),
-                    linear-gradient(135deg, var(--ink-700) 50%, transparent 50%);
-  background-position: calc(100% - 16px) 50%, calc(100% - 10px) 50%;
-  background-size: 6px 6px, 6px 6px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--ink-700) 50%),
+    linear-gradient(135deg, var(--ink-700) 50%, transparent 50%);
+  background-position:
+    calc(100% - 16px) 50%,
+    calc(100% - 10px) 50%;
+  background-size:
+    6px 6px,
+    6px 6px;
   background-repeat: no-repeat;
   padding-right: 32px;
   max-width: 100%;
@@ -979,7 +1006,6 @@ html, body {
   padding-left: 8px;
 }
 
-
 /* ---------------------------------------------------------------- */
 /* Rich HTML inside .bs-body (PDP descriptionHtml — tables, h2, iframes)
    Added 2026-04-21 for Ship 2 Task #10. Styles echo broadsheet specimen-card
@@ -998,25 +1024,39 @@ html, body {
   padding-bottom: 6px;
   border-bottom: 1px solid var(--rule-soft);
 }
-.broadsheet .bs-body--rich h3 { font-size: 18px; }
+.broadsheet .bs-body--rich h3 {
+  font-size: 18px;
+}
 
-.broadsheet .bs-body--rich p { margin: 0 0 12px; }
-.broadsheet .bs-body--rich strong { font-weight: 700; color: var(--ink-900); }
-.broadsheet .bs-body--rich em { font-style: italic; color: var(--ink-800); }
+.broadsheet .bs-body--rich p {
+  margin: 0 0 12px;
+}
+.broadsheet .bs-body--rich strong {
+  font-weight: 700;
+  color: var(--ink-900);
+}
+.broadsheet .bs-body--rich em {
+  font-style: italic;
+  color: var(--ink-800);
+}
 
 .broadsheet .bs-body--rich ul,
 .broadsheet .bs-body--rich ol {
   margin: 0 0 14px 0;
   padding-left: 22px;
 }
-.broadsheet .bs-body--rich li { margin-bottom: 6px; }
+.broadsheet .bs-body--rich li {
+  margin-bottom: 6px;
+}
 
 .broadsheet .bs-body--rich a {
   color: var(--gold-800);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-.broadsheet .bs-body--rich a:hover { color: var(--ink-900); }
+.broadsheet .bs-body--rich a:hover {
+  color: var(--ink-900);
+}
 
 /* Applicability tables / spec tables — specimen-card style */
 .broadsheet .bs-body--rich table {
@@ -1037,9 +1077,13 @@ html, body {
   vertical-align: top;
   text-align: left;
 }
-.broadsheet .bs-body--rich table tr:last-child td { border-bottom: none; }
+.broadsheet .bs-body--rich table tr:last-child td {
+  border-bottom: none;
+}
 .broadsheet .bs-body--rich table td:last-child,
-.broadsheet .bs-body--rich table th:last-child { border-right: none; }
+.broadsheet .bs-body--rich table th:last-child {
+  border-right: none;
+}
 .broadsheet .bs-body--rich table tr:first-child td,
 .broadsheet .bs-body--rich table th {
   background: var(--parchment);
@@ -1114,7 +1158,7 @@ html, body {
   text-align: center;
 }
 .broadsheet .bs-pullquote::before {
-  content: "\201C";
+  content: '\201C';
   color: var(--gold-700);
   font-size: 40px;
   line-height: 0;
@@ -1123,7 +1167,7 @@ html, body {
   margin-right: 4px;
 }
 .broadsheet .bs-pullquote::after {
-  content: "\201D";
+  content: '\201D';
   color: var(--gold-700);
   font-size: 40px;
   line-height: 0;
@@ -1199,7 +1243,7 @@ html, body {
   color: var(--cream);
 }
 .broadsheet .jerry-card .footnote {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 10px;
   color: var(--ink-600);
   letter-spacing: 0.08em;
@@ -1295,7 +1339,10 @@ html, body {
   align-items: start;
 }
 @media (max-width: 700px) {
-  .broadsheet .bs-split { grid-template-columns: 1fr; gap: 10px; }
+  .broadsheet .bs-split {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 }
 
 /* ── Service / capability list (broadsheet replacement for np-svc) ── */
@@ -1309,7 +1356,9 @@ html, body {
   padding: 8px 0;
   border-bottom: 1px dashed var(--rule-soft);
 }
-.broadsheet .bs-svc:last-child { border-bottom: 0; }
+.broadsheet .bs-svc:last-child {
+  border-bottom: 0;
+}
 .broadsheet .bs-svc-name {
   font-family: var(--font-body);
   font-weight: 700;
@@ -1323,7 +1372,9 @@ html, body {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-.broadsheet .bs-svc-name a:hover { color: var(--gold-800); }
+.broadsheet .bs-svc-name a:hover {
+  color: var(--gold-800);
+}
 .broadsheet .bs-svc-desc {
   font-family: var(--font-body);
   font-size: 12.5px;
@@ -1343,7 +1394,9 @@ html, body {
   margin-bottom: 14px;
 }
 @media (max-width: 700px) {
-  .broadsheet .bs-steps { grid-template-columns: 1fr; }
+  .broadsheet .bs-steps {
+    grid-template-columns: 1fr;
+  }
 }
 .broadsheet .bs-step {
   background: var(--bone);
@@ -1394,19 +1447,28 @@ html, body {
 }
 .broadsheet .bs-3col::before,
 .broadsheet .bs-3col::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   bottom: 0;
   width: 1px;
   background: var(--rule-soft);
 }
-.broadsheet .bs-3col::before { left: calc((100% - 44px) / 3.6 + 11px); }
-.broadsheet .bs-3col::after  { right: calc((100% - 44px) / 3.6 + 11px); }
+.broadsheet .bs-3col::before {
+  left: calc((100% - 44px) / 3.6 + 11px);
+}
+.broadsheet .bs-3col::after {
+  right: calc((100% - 44px) / 3.6 + 11px);
+}
 @media (max-width: 900px) {
-  .broadsheet .bs-3col { grid-template-columns: 1fr; gap: 16px; }
+  .broadsheet .bs-3col {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
   .broadsheet .bs-3col::before,
-  .broadsheet .bs-3col::after { display: none; }
+  .broadsheet .bs-3col::after {
+    display: none;
+  }
 }
 
 /* ── 4-column service band ────────────────────────────────────────── */
@@ -1419,15 +1481,23 @@ html, body {
   margin-top: 24px;
 }
 @media (max-width: 1024px) {
-  .broadsheet .bs-4col { grid-template-columns: 1fr 1fr; }
+  .broadsheet .bs-4col {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 @media (max-width: 600px) {
-  .broadsheet .bs-4col { grid-template-columns: 1fr; }
+  .broadsheet .bs-4col {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── "Today's Edition" TOC card (tabled contents) ─────────────────── */
 
-.broadsheet .bs-toc { margin: 0; padding: 0 14px; list-style: none; }
+.broadsheet .bs-toc {
+  margin: 0;
+  padding: 0 14px;
+  list-style: none;
+}
 .broadsheet .bs-toc__title {
   font-family: var(--font-ui);
   font-weight: 700;
@@ -1449,7 +1519,9 @@ html, body {
   font-size: 14px;
   color: var(--ink-900);
 }
-.broadsheet .bs-toc__row:last-child { border-bottom: 0; }
+.broadsheet .bs-toc__row:last-child {
+  border-bottom: 0;
+}
 .broadsheet .bs-toc__row a {
   color: var(--ink-900);
   text-decoration: none;
@@ -1457,7 +1529,9 @@ html, body {
   width: 100%;
   justify-content: space-between;
 }
-.broadsheet .bs-toc__row a:hover { color: var(--gold-800); }
+.broadsheet .bs-toc__row a:hover {
+  color: var(--gold-800);
+}
 .broadsheet .bs-toc__pg {
   font-family: var(--font-ui);
   font-size: 10px;
@@ -1511,7 +1585,10 @@ html, body {
   padding: 8px 16px;
   text-decoration: none;
 }
-.broadsheet .bs-ad__cta:hover { background: var(--gold-800); border-color: var(--gold-800); }
+.broadsheet .bs-ad__cta:hover {
+  background: var(--gold-800);
+  border-color: var(--gold-800);
+}
 
 /* ── Drop cap for hero lede paragraph ─────────────────────────────── */
 
@@ -1536,23 +1613,34 @@ html, body {
   text-decoration: none;
   color: var(--ink-900);
 }
-.broadsheet .bs-listing:last-child { border-bottom: 0; }
+.broadsheet .bs-listing:last-child {
+  border-bottom: 0;
+}
 .broadsheet .bs-listing__img {
   width: 110px;
   height: 78px;
   background: var(--parchment);
   border: 1px solid var(--rule);
   overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-ui);
   font-size: 9px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-500);
 }
-.broadsheet .bs-listing__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.broadsheet .bs-listing__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .broadsheet .bs-listing__body {
-  display: flex; flex-direction: column; justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .broadsheet .bs-listing__meta {
   font-family: var(--font-ui);
@@ -1571,7 +1659,9 @@ html, body {
   margin: 2px 0 0;
 }
 .broadsheet .bs-listing__foot {
-  display: flex; justify-content: space-between; align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
   margin-top: 6px;
 }
 .broadsheet .bs-listing__price {
@@ -1598,7 +1688,7 @@ html, body {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1607,7 +1697,9 @@ html, body {
   color: var(--cream);
   text-decoration: none;
   opacity: 0.88;
-  transition: opacity 0.15s, color 0.15s;
+  transition:
+    opacity 0.15s,
+    color 0.15s;
 }
 .broadsheet .bs-footer__policy-link:hover,
 .broadsheet .bs-footer__policy-link:focus {
@@ -1625,7 +1717,9 @@ html, body {
   background: var(--cream) !important;
   border: 1px solid var(--ink-700);
   color: var(--ink-900);
-  box-shadow: 2px 3px 0 rgba(30,36,46,0.12), 0 1px 2px rgba(30,36,46,0.08);
+  box-shadow:
+    2px 3px 0 rgba(30, 36, 46, 0.12),
+    0 1px 2px rgba(30, 36, 46, 0.08);
 }
 .broadsheet .policy-card h2,
 .broadsheet .policy-card h3,
@@ -1636,46 +1730,43 @@ html, body {
 /* ---------- Floating Cart link (fixed top-right, every page) ---------- */
 .rwas-cart-floater {
   position: fixed;
-  top: 14px;
-  right: 18px;
+  bottom: 18px;
+  left: 18px;
   z-index: 100;
   padding: 6px 14px;
-  background: var(--bone, #FBF7EC);
-  color: var(--ink-900, #0F1418);
-  border: 1px solid var(--ink-900, #0F1418);
+  background: var(--bone, #fbf7ec);
+  color: var(--ink-900, #0f1418);
+  border: 1px solid var(--ink-900, #0f1418);
   border-radius: 2px;
   font-family: var(--font-ui, Inter, system-ui, sans-serif);
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: .14em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   text-decoration: none;
-  box-shadow: 2px 2px 0 var(--ink-900, #0F1418);
-  transition: background .12s ease, color .12s ease, transform .12s ease;
+  box-shadow: 2px 2px 0 var(--ink-900, #0f1418);
+  transition:
+    background 0.12s ease,
+    color 0.12s ease,
+    transform 0.12s ease;
 }
 .rwas-cart-floater:hover {
-  background: var(--ink-900, #0F1418);
-  color: var(--cream, #F4EFE3);
+  background: var(--ink-900, #0f1418);
+  color: var(--cream, #f4efe3);
   transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 var(--gold-700, #9E7826);
+  box-shadow: 3px 3px 0 var(--gold-700, #9e7826);
 }
 .rwas-cart-floater:focus-visible {
-  outline: 2px solid var(--gold-700, #9E7826);
+  outline: 2px solid var(--gold-700, #9e7826);
   outline-offset: 2px;
-}
-@media (max-width: 1500px) {
-  .rwas-cart-floater {
-    top: 54px;
-    right: 14px;
-  }
 }
 @media (max-width: 640px) {
   .rwas-cart-floater {
-    top: 58px;
-    right: 10px;
+    bottom: 12px;
+    left: 10px;
     padding: 5px 10px;
     font-size: 11px;
-    letter-spacing: .1em;
+    letter-spacing: 0.1em;
   }
 }
 
@@ -1697,13 +1788,19 @@ html, body {
     justify-content: center;
     gap: 8px 12px;
   }
-  .broadsheet .bs-dateline__kicker { font-size: 15px; }
+  .broadsheet .bs-dateline__kicker {
+    font-size: 15px;
+  }
 
   .broadsheet .bs-masthead {
     padding: 18px 14px 14px;
   }
-  .broadsheet .bs-masthead__inner { gap: 12px; }
-  .broadsheet .bs-masthead__logo { height: 64px; }
+  .broadsheet .bs-masthead__inner {
+    gap: 12px;
+  }
+  .broadsheet .bs-masthead__logo {
+    height: 64px;
+  }
   .broadsheet .bs-masthead__brand {
     font-size: clamp(30px, 9vw, 36px);
     letter-spacing: -0.01em;
@@ -1720,8 +1817,12 @@ html, body {
     font-size: 9px;
     letter-spacing: 0.11em;
   }
-  .broadsheet .bs-nav a { padding-top: 5px; }
-  .broadsheet .bs-credentials { padding: 8px 12px; }
+  .broadsheet .bs-nav a {
+    padding-top: 5px;
+  }
+  .broadsheet .bs-credentials {
+    padding: 8px 12px;
+  }
   .broadsheet .bs-credentials__inner {
     gap: 8px 12px;
     font-size: 9px;
@@ -1736,16 +1837,31 @@ html, body {
     padding: 16px 14px;
     box-shadow: 3px 3px 0 var(--ink-900);
   }
-  .broadsheet .bs-headline--hero { font-size: clamp(30px, 11vw, 40px); }
-  .broadsheet .bs-headline--section { font-size: clamp(22px, 8vw, 30px); }
+  .broadsheet .bs-headline--hero {
+    font-size: clamp(30px, 11vw, 40px);
+  }
+  .broadsheet .bs-headline--section {
+    font-size: clamp(22px, 8vw, 30px);
+  }
   .broadsheet .bs-subhead,
-  .broadsheet .bs-body { font-size: 15px; line-height: 1.5; }
-  .broadsheet .section-rule { margin-bottom: 12px; }
+  .broadsheet .bs-body {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .broadsheet .section-rule {
+    margin-bottom: 12px;
+  }
 
   /* On phones, lead with the actual story/classifieds instead of the left rail. */
-  .broadsheet .bs-3col > div:nth-child(2) { order: 1; }
-  .broadsheet .bs-3col > div:nth-child(1) { order: 2; }
-  .broadsheet .bs-3col > div:nth-child(3) { order: 3; }
+  .broadsheet .bs-3col > div:nth-child(2) {
+    order: 1;
+  }
+  .broadsheet .bs-3col > div:nth-child(1) {
+    order: 2;
+  }
+  .broadsheet .bs-3col > div:nth-child(3) {
+    order: 3;
+  }
 
   .broadsheet .bs-listing {
     grid-template-columns: 96px 1fr;
@@ -1787,12 +1903,13 @@ html, body {
   }
 }
 
-
 .broadsheet .home-panel-cta-row {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 @media (max-width: 720px) {
-  .broadsheet .home-panel-cta-row { grid-template-columns: 1fr; }
+  .broadsheet .home-panel-cta-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------- Customer Panel Planner landing page ---------- */
@@ -1826,7 +1943,9 @@ html, body {
   line-height: 1.55;
 }
 @media (max-width: 520px) {
-  .broadsheet .panel-planner-cta-row { grid-template-columns: 1fr; }
+  .broadsheet .panel-planner-cta-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* D2 Mach 2 product briefing — aviation-specific PDP polish */
@@ -1841,7 +1960,7 @@ html, body {
 .broadsheet .bs-section-kicker {
   font-family: var(--font-ui);
   font-size: 10px;
-  letter-spacing: .24em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--gold-800);
   margin-bottom: 8px;
@@ -1866,10 +1985,12 @@ html, body {
   gap: 14px;
 }
 @media (max-width: 860px) {
-  .broadsheet .bs-brief-grid { grid-template-columns: 1fr; }
+  .broadsheet .bs-brief-grid {
+    grid-template-columns: 1fr;
+  }
 }
 .broadsheet .bs-brief-card {
-  background: rgba(255,255,255,.55);
+  background: rgba(255, 255, 255, 0.55);
   border: 1px solid var(--rule-soft);
   padding: 13px 14px;
   font-family: var(--font-body);
@@ -1882,7 +2003,7 @@ html, body {
   margin-bottom: 5px;
   font-family: var(--font-ui);
   font-size: 10px;
-  letter-spacing: .18em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink-900);
 }
@@ -1935,12 +2056,12 @@ html, body {
 }
 .broadsheet .bs-pa31-summary-item {
   border: 1px solid var(--rule);
-  background: rgba(255,255,255,.58);
+  background: rgba(255, 255, 255, 0.58);
   padding: 12px 14px;
   font-family: var(--font-ui);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: .16em;
+  letter-spacing: 0.16em;
   line-height: 1.35;
   text-transform: uppercase;
   color: var(--ink-800);
@@ -1955,9 +2076,15 @@ html, body {
   line-height: 1;
   color: var(--ink-900);
 }
-.broadsheet .bs-pa31-summary-item.tool-one { border-left: 5px solid var(--gold-700); }
-.broadsheet .bs-pa31-summary-item.tool-two { border-left: 5px solid #6f7f8f; }
-.broadsheet .bs-pa31-summary-item.na { border-left: 5px solid var(--rule-soft); }
+.broadsheet .bs-pa31-summary-item.tool-one {
+  border-left: 5px solid var(--gold-700);
+}
+.broadsheet .bs-pa31-summary-item.tool-two {
+  border-left: 5px solid #6f7f8f;
+}
+.broadsheet .bs-pa31-summary-item.na {
+  border-left: 5px solid var(--rule-soft);
+}
 .broadsheet .bs-pa31-chart {
   display: grid;
   gap: 8px;
@@ -1977,14 +2104,22 @@ html, body {
   font-family: var(--font-ui);
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: .16em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ink-900);
 }
-.broadsheet .bs-pa31-chart-bar.tool-one { background: var(--gold-500); }
-.broadsheet .bs-pa31-chart-bar.tool-two { background: #b8c2cc; }
-.broadsheet .bs-pa31-chart-bar.tool-neutral { background: #d7d1c3; }
-.broadsheet .bs-pa31-chart-bar.na { background: rgba(255,255,255,.68); }
+.broadsheet .bs-pa31-chart-bar.tool-one {
+  background: var(--gold-500);
+}
+.broadsheet .bs-pa31-chart-bar.tool-two {
+  background: #b8c2cc;
+}
+.broadsheet .bs-pa31-chart-bar.tool-neutral {
+  background: #d7d1c3;
+}
+.broadsheet .bs-pa31-chart-bar.na {
+  background: rgba(255, 255, 255, 0.68);
+}
 .broadsheet .bs-pa-chart .bs-pa31-chart-bar {
   justify-content: space-between;
   gap: 10px;
@@ -2015,7 +2150,7 @@ html, body {
   min-width: min(100%, 720px);
   border-collapse: collapse;
   table-layout: fixed;
-  background: rgba(255,255,255,.42);
+  background: rgba(255, 255, 255, 0.42);
 }
 .broadsheet .bs-pa31-table th,
 .broadsheet .bs-pa31-table td {
@@ -2033,7 +2168,7 @@ html, body {
   font-family: var(--font-ui);
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: .18em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 .broadsheet .bs-pa31-table th:first-child,
@@ -2046,7 +2181,7 @@ html, body {
   padding-right: 16px;
 }
 .broadsheet .bs-pa31-table tbody tr:nth-child(even) td {
-  background: rgba(255,255,255,.45);
+  background: rgba(255, 255, 255, 0.45);
 }
 .broadsheet .bs-pa31-tool-pill {
   display: inline-flex;
@@ -2057,18 +2192,22 @@ html, body {
   font-family: var(--font-ui);
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: .08em;
+  letter-spacing: 0.08em;
   line-height: 1.25;
   text-transform: uppercase;
   color: var(--ink-900);
   background: var(--bone);
 }
-.broadsheet .bs-pa31-tool-pill.tool-one { background: var(--gold-500); }
-.broadsheet .bs-pa31-tool-pill.tool-two { background: #b8c2cc; }
+.broadsheet .bs-pa31-tool-pill.tool-one {
+  background: var(--gold-500);
+}
+.broadsheet .bs-pa31-tool-pill.tool-two {
+  background: #b8c2cc;
+}
 .broadsheet .bs-pa31-tool-pill.na {
   color: var(--ink-600);
   border-color: var(--rule-soft);
-  background: rgba(255,255,255,.62);
+  background: rgba(255, 255, 255, 0.62);
 }
 .broadsheet .bs-pa-kit-contents {
   margin-top: 18px;
@@ -2093,7 +2232,7 @@ html, body {
   gap: 10px;
   align-items: start;
   border: 1px solid var(--rule-soft);
-  background: rgba(255,255,255,.48);
+  background: rgba(255, 255, 255, 0.48);
   padding: 9px 10px;
   font-family: var(--font-body);
   font-size: 12px;
@@ -2104,14 +2243,20 @@ html, body {
   font-family: var(--font-ui);
   font-size: 10px;
   font-weight: 900;
-  letter-spacing: .14em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-900);
 }
 @media (max-width: 700px) {
-  .broadsheet .bs-pa31-applicability { padding: 18px 16px; }
-  .broadsheet .bs-pa31-summary { grid-template-columns: 1fr; }
-  .broadsheet .bs-pa31-chart-bar { width: 100%; }
+  .broadsheet .bs-pa31-applicability {
+    padding: 18px 16px;
+  }
+  .broadsheet .bs-pa31-summary {
+    grid-template-columns: 1fr;
+  }
+  .broadsheet .bs-pa31-chart-bar {
+    width: 100%;
+  }
   .broadsheet .bs-pa31-table {
     min-width: 0;
     table-layout: fixed;
@@ -2124,14 +2269,16 @@ html, body {
   }
   .broadsheet .bs-pa31-table th {
     font-size: 8px;
-    letter-spacing: .08em;
+    letter-spacing: 0.08em;
   }
   .broadsheet .bs-pa31-tool-pill {
     padding: 4px 5px;
     font-size: 8px;
-    letter-spacing: .04em;
+    letter-spacing: 0.04em;
   }
-  .broadsheet .bs-pa-kit-grid { grid-template-columns: 1fr; }
+  .broadsheet .bs-pa-kit-grid {
+    grid-template-columns: 1fr;
+  }
   .broadsheet .bs-pa-kit-item {
     grid-template-columns: 48px minmax(0, 1fr);
     font-size: 10px;
@@ -2177,12 +2324,12 @@ html, body {
   font-size: 13px;
   line-height: 1.4;
   color: var(--ink-800);
-  background: rgba(255,255,255,.42);
+  background: rgba(255, 255, 255, 0.42);
 }
 .broadsheet .bs-comparison-table th {
   font-family: var(--font-ui);
   font-size: 10px;
-  letter-spacing: .15em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--ink-900);
   background: var(--parchment);
@@ -2208,7 +2355,7 @@ html, body {
 .broadsheet .bs-compare-link {
   font-family: var(--font-ui);
   font-size: 11px;
-  letter-spacing: .14em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 .broadsheet .bs-comparison-select-row td {
@@ -2225,7 +2372,7 @@ html, body {
   font-family: var(--font-ui);
   font-size: 10px;
   line-height: 1.2;
-  letter-spacing: .13em;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   text-align: center;
 }
@@ -2243,4 +2390,24 @@ html, body {
 .broadsheet .bs-select-model-link:focus-visible {
   transform: translate(-1px, -1px);
   box-shadow: 3px 3px 0 var(--ink-900);
+}
+
+/* ===================================================================
+ * Homepage CTA band — full-width, centered.
+ * Relocated from the right rail so the three CTAs get real width
+ * (Call button no longer wraps to four lines). 2026-06-11.
+ * =================================================================== */
+.broadsheet .home-cta-band {
+  max-width: 760px;
+  margin: 28px auto 0;
+}
+.broadsheet .home-cta-band .bs-cta-row,
+.broadsheet .home-cta-band__row {
+  grid-template-columns: 1.4fr 1fr 1fr;
+}
+@media (max-width: 640px) {
+  .broadsheet .home-cta-band .bs-cta-row,
+  .broadsheet .home-cta-band__row {
+    grid-template-columns: 1fr;
+  }
 }

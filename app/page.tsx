@@ -93,23 +93,31 @@ export default function Home() {
             </Specimen>
 
             <p className="bs-pullquote">
-              &ldquo;Don&rsquo;t fly single-pilot, Roger Wilco is your trusted copilot&rdquo;
+              &ldquo;Don&rsquo;t fly single-pilot, Roger Wilco is your trusted
+              copilot&rdquo;
             </p>
 
             <aside className="bs-ad" aria-label="RWAS Work Order System access">
               <div className="bs-ad__kicker">Secure Access</div>
               <h3 className="bs-ad__title">RWAS Work Order System</h3>
-              <p className="bs-ad__sub">Customer portal and employee workbench</p>
+              <p className="bs-ad__sub">
+                Customer portal and employee workbench
+              </p>
               <a className="bs-ad__cta" href="/work-order-system/">
                 Open Portal
               </a>
             </aside>
 
             {/* Papa-Alpha Depot boxed ad */}
-            <aside className="bs-ad" aria-label="Papa-Alpha Depot advertisement">
+            <aside
+              className="bs-ad"
+              aria-label="Papa-Alpha Depot advertisement"
+            >
               <div className="bs-ad__kicker">Advertisement</div>
               <h3 className="bs-ad__title">Papa-Alpha Depot</h3>
-              <p className="bs-ad__sub">Precision Piper rigging tools &middot; Tiered pricing</p>
+              <p className="bs-ad__sub">
+                Precision Piper rigging tools &middot; Tiered pricing
+              </p>
               <a className="bs-ad__cta" href="/collections/papa-alpha-tools">
                 Order Papa-Alpha
               </a>
@@ -127,7 +135,8 @@ export default function Home() {
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
-                Papa-Alpha rigging reference tools &mdash; CNC-machined aircraft-grade aluminum.
+                Papa-Alpha rigging reference tools &mdash; CNC-machined
+                aircraft-grade aluminum.
               </Specimen.Caption>
             </Specimen>
           </div>
@@ -142,7 +151,11 @@ export default function Home() {
               <hr className="section-rule" />
 
               {/* Hero photo — Cessna 182RG G500TXi install */}
-              <Specimen variant="flat" as="figure" className="bs-specimen-figure">
+              <Specimen
+                variant="flat"
+                as="figure"
+                className="bs-specimen-figure"
+              >
                 <Specimen.Image
                   src="/newspaper/images/r182_panel.webp"
                   alt="Full Garmin G500TXi Suite installation in a Cessna 182RG"
@@ -153,16 +166,27 @@ export default function Home() {
                 />
                 <Specimen.CaptionRule />
                 <Specimen.Caption numeral="FIG. 02">
-                  Cessna 182RG &mdash; full Garmin G500TXi Suite installation by RWAS.
+                  Cessna 182RG &mdash; full Garmin G500TXi Suite installation by
+                  RWAS.
                 </Specimen.Caption>
               </Specimen>
 
               <div className="bs-body">
                 <p className="bs-drop">
-                  Roger Wilco Aviation Services is an FAA-certificated repair station providing full-spectrum airframe, powerplant, avionics, and non-destructive testing services to general aviation, corporate, and commercial operators across the Northern Plains. Operating under Certificate No. RWSR491E, the station is authorized for a complete range of maintenance, repair, and alteration work.
+                  Roger Wilco Aviation Services is an FAA-certificated repair
+                  station providing full-spectrum airframe, powerplant,
+                  avionics, and non-destructive testing services to general
+                  aviation, corporate, and commercial operators across the
+                  Northern Plains. Operating under Certificate No. RWSR491E, the
+                  station is authorized for a complete range of maintenance,
+                  repair, and alteration work.
                 </p>
                 <p>
-                  Under the direction of John Halsted &mdash; with more than 40 years of aviation experience &mdash; RWAS delivers sheet metal fabrication, structural repair, and complete Garmin avionics installations including the G3X Touch suite, GTN navigator series, and GFC 500 autopilot.
+                  Under the direction of John Halsted &mdash; with more than 40
+                  years of aviation experience &mdash; RWAS delivers sheet metal
+                  fabrication, structural repair, and complete Garmin avionics
+                  installations including the G3X Touch suite, GTN navigator
+                  series, and GFC 500 autopilot.
                 </p>
               </div>
             </Specimen>
@@ -170,7 +194,9 @@ export default function Home() {
             {/* Aircraft 4 Sale feed (hydrated client-side) */}
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Classifieds</span>
-              <h2 className="bs-headline bs-headline--section">Aircraft 4 Sale</h2>
+              <h2 className="bs-headline bs-headline--section">
+                Aircraft 4 Sale
+              </h2>
               <hr className="section-rule" />
 
               <AircraftSaleFeed />
@@ -182,9 +208,15 @@ export default function Home() {
               </div>
               <p
                 className="bs-body"
-                style={{ marginTop: '10px', textAlign: 'center', fontStyle: 'italic' }}
+                style={{
+                  marginTop: '10px',
+                  textAlign: 'center',
+                  fontStyle: 'italic',
+                }}
               >
-                <strong>Selling?</strong> Click the Jerry bubble &mdash; our AI concierge will walk you through listing your aircraft step by step.
+                <strong>Selling?</strong> Click the Jerry bubble &mdash; our AI
+                concierge will walk you through listing your aircraft step by
+                step.
               </p>
             </Specimen>
           </div>
@@ -208,33 +240,45 @@ export default function Home() {
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 03">
-                New capability &mdash; fiber laser cutting, welding, and scaling.
+                New capability &mdash; fiber laser cutting, welding, and
+                scaling.
               </Specimen.Caption>
             </Specimen>
-
-            {/* Schedule your inspection CTA (relocated from services band per John) */}
-            <p
-              className="bs-kicker"
-              style={{ marginTop: '18px', textAlign: 'center', display: 'block' }}
-            >
-              Schedule your inspection today
-            </p>
-            <div className="bs-cta-row home-panel-cta-row">
-              <a href="tel:+16052998178" className="bs-cta-primary">
-                Call (605) 299-8178
-              </a>
-              <a href="/contact?reason=quote&source=home-cta" className="bs-cta-secondary">
-                Request a Quote
-              </a>
-              <a href="/panel-planner" className="bs-cta-secondary">
-                Build My Panel
-              </a>
-            </div>
           </div>
         </div>
 
+        {/* Schedule your inspection CTA — full-width band (relocated from right rail; fixes cramped 3-up buttons) */}
+        <section
+          className="home-cta-band"
+          aria-label="Schedule your inspection"
+        >
+          <p
+            className="bs-kicker"
+            style={{ textAlign: 'center', display: 'block' }}
+          >
+            Schedule your inspection today
+          </p>
+          <div className="bs-cta-row home-cta-band__row">
+            <a href="tel:+16052998178" className="bs-cta-primary">
+              Call (605) 299-8178
+            </a>
+            <a
+              href="/contact?reason=quote&source=home-cta"
+              className="bs-cta-secondary"
+            >
+              Request a Quote
+            </a>
+            <a href="/panel-planner" className="bs-cta-secondary">
+              Build My Panel
+            </a>
+          </div>
+        </section>
+
         {/* ── 4-COL SERVICES BAND ───────────────────────────────────── */}
-        <section aria-labelledby="services-heading" style={{ marginTop: '32px' }}>
+        <section
+          aria-labelledby="services-heading"
+          style={{ marginTop: '32px' }}
+        >
           <h2
             id="services-heading"
             className="bs-headline bs-headline--section"
@@ -252,10 +296,14 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/papa-alpha-tools">Piper Rigging Reference Tools</a>
+                    <a href="/services/papa-alpha-tools">
+                      Piper Rigging Reference Tools
+                    </a>
                   </p>
                   <p className="bs-svc-desc">
-                    Precision flight-control rigging for PA-28, PA-30, PA-31, PA-36. CNC-machined aluminum, powder coated, UV printed. Sold worldwide.
+                    Precision flight-control rigging for PA-28, PA-30, PA-31,
+                    PA-36. CNC-machined aluminum, powder coated, UV printed.
+                    Sold worldwide.
                   </p>
                 </li>
                 <li className="bs-svc">
@@ -263,7 +311,8 @@ export default function Home() {
                     <a href="/products/rigging-kit">Complete Rigging Kit</a>
                   </p>
                   <p className="bs-svc-desc">
-                    Stabilator, rudder, aileron, flap, and bell crank in one case. From $264.
+                    Stabilator, rudder, aileron, flap, and bell crank in one
+                    case. From $264.
                   </p>
                 </li>
                 <li className="bs-svc">
@@ -271,13 +320,15 @@ export default function Home() {
                     <a href="/collections/papa-alpha-tools">Individual Tools</a>
                   </p>
                   <p className="bs-svc-desc">
-                    Stabilator, rudder, aileron &amp; flap, bell crank, PA-31/PA-36 specifics. From $59.99.
+                    Stabilator, rudder, aileron &amp; flap, bell crank,
+                    PA-31/PA-36 specifics. From $59.99.
                   </p>
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">Available At</p>
                   <p className="bs-svc-desc">
-                    rogerwilcoaviation.com, Aircraft Spruce, Amazon (coming soon). Made by mechanics, for mechanics.
+                    rogerwilcoaviation.com, Aircraft Spruce, Amazon (coming
+                    soon). Made by mechanics, for mechanics.
                   </p>
                 </li>
               </ul>
@@ -290,42 +341,57 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/garmin-installation-northern-plains">Garmin Installation Planning</a>
+                    <a href="/services/garmin-installation-northern-plains">
+                      Garmin Installation Planning
+                    </a>
                   </p>
                   <p className="bs-svc-desc">
-                    Choose equipment, preview panel finishes, and submit a concept sketch to RWAS for avionics review.
+                    Choose equipment, preview panel finishes, and submit a
+                    concept sketch to RWAS for avionics review.
                   </p>
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/g3x-touch-installation">G3X Touch Suite</a>
+                    <a href="/services/g3x-touch-installation">
+                      G3X Touch Suite
+                    </a>
                   </p>
                   <p className="bs-svc-desc">
-                    Glass cockpit planning with display layout, EIS, ADAHRS, connectivity, and panel fabrication.
+                    Glass cockpit planning with display layout, EIS, ADAHRS,
+                    connectivity, and panel fabrication.
                   </p>
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/gtn-xi-navigator-installation">GTN 650Xi / 750Xi</a>
+                    <a href="/services/gtn-xi-navigator-installation">
+                      GTN 650Xi / 750Xi
+                    </a>
                   </p>
                   <p className="bs-svc-desc">
-                    GPS/NAV/COMM with WAAS LPV approaches, IFR certification, and flight-plan integration.
+                    GPS/NAV/COMM with WAAS LPV approaches, IFR certification,
+                    and flight-plan integration.
                   </p>
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/gfc-500-autopilot-installation">GFC 500 Autopilot</a>
+                    <a href="/services/gfc-500-autopilot-installation">
+                      GFC 500 Autopilot
+                    </a>
                   </p>
                   <p className="bs-svc-desc">
-                    Retrofit digital autopilot with GPSS steering, altitude hold, and vertical-speed modes.
+                    Retrofit digital autopilot with GPSS steering, altitude
+                    hold, and vertical-speed modes.
                   </p>
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/ads-b-installation">ADS-B Out Compliance</a>
+                    <a href="/services/ads-b-installation">
+                      ADS-B Out Compliance
+                    </a>
                   </p>
                   <p className="bs-svc-desc">
-                    FAR 91.227 compliant installations. Transponder upgrades and system certification.
+                    FAR 91.227 compliant installations. Transponder upgrades and
+                    system certification.
                   </p>
                 </li>
               </ul>
@@ -338,26 +404,35 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/aircraft-maintenance-sioux-falls">Annual Inspections</a>
+                    <a href="/services/aircraft-maintenance-sioux-falls">
+                      Annual Inspections
+                    </a>
                   </p>
                   <p className="bs-svc-desc">
-                    Thorough airworthiness inspections per FAR 43. Discrepancy reports and return-to-service documentation.
+                    Thorough airworthiness inspections per FAR 43. Discrepancy
+                    reports and return-to-service documentation.
                   </p>
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/aircraft-maintenance-sioux-falls">100-Hour Inspections</a>
+                    <a href="/services/aircraft-maintenance-sioux-falls">
+                      100-Hour Inspections
+                    </a>
                   </p>
                   <p className="bs-svc-desc">
-                    For aircraft operated for hire under 14 C.F.R. Part 91 and Part 135 requirements.
+                    For aircraft operated for hire under 14 C.F.R. Part 91 and
+                    Part 135 requirements.
                   </p>
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/fiber-laser-fabrication">Sheet Metal &amp; Fabrication</a>
+                    <a href="/services/fiber-laser-fabrication">
+                      Sheet Metal &amp; Fabrication
+                    </a>
                   </p>
                   <p className="bs-svc-desc">
-                    Structural repair, skin replacement, custom fabrication in aircraft-grade aluminum alloys.
+                    Structural repair, skin replacement, custom fabrication in
+                    aircraft-grade aluminum alloys.
                   </p>
                 </li>
                 <li className="bs-svc">
@@ -365,7 +440,8 @@ export default function Home() {
                     <a href="/services/rotax-repair">Rotax Engine Support</a>
                   </p>
                   <p className="bs-svc-desc">
-                    Powerplant diagnostics, mag checks, compression testing, and engine runs.
+                    Powerplant diagnostics, mag checks, compression testing, and
+                    engine runs.
                   </p>
                 </li>
               </ul>
@@ -378,10 +454,13 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/ndt-inspection">Eddy Current Inspection</a>
+                    <a href="/services/ndt-inspection">
+                      Eddy Current Inspection
+                    </a>
                   </p>
                   <p className="bs-svc-desc">
-                    Subsurface crack and corrosion detection in aluminum and ferrous components &mdash; without disassembly.
+                    Subsurface crack and corrosion detection in aluminum and
+                    ferrous components &mdash; without disassembly.
                   </p>
                 </li>
                 <li className="bs-svc">
@@ -389,7 +468,8 @@ export default function Home() {
                     <a href="/services/ndt-inspection">Dye Penetrant Testing</a>
                   </p>
                   <p className="bs-svc-desc">
-                    Surface crack detection per ASTM E1417 for engine components, castings, and structural parts.
+                    Surface crack detection per ASTM E1417 for engine
+                    components, castings, and structural parts.
                   </p>
                 </li>
                 <li className="bs-svc">
@@ -397,7 +477,8 @@ export default function Home() {
                     <a href="/about">Certified Repair Station</a>
                   </p>
                   <p className="bs-svc-desc">
-                    FAA Certificate RWSR491E. All work by certificated mechanics with full logbook documentation.
+                    FAA Certificate RWSR491E. All work by certificated mechanics
+                    with full logbook documentation.
                   </p>
                 </li>
               </ul>
@@ -407,8 +488,6 @@ export default function Home() {
       </main>
 
       <BroadsheetFooter />
-
-
     </BroadsheetLayout>
   );
 }
