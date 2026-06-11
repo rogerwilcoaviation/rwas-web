@@ -58,13 +58,13 @@ interface SaleListing {
 
 async function getAircraftListingEntries(siteUrl: string, today: string): Promise<MetadataRoute.Sitemap> {
   try {
-    const response = await fetch('https://sale-api.rogerwilcoaviation.com/browse', {
+    const response = await fetch('https://sale-api.rogerwilcoaviation.com/browse?include=sold', {
       next: { revalidate: 300 },
     });
     if (!response.ok) return [];
     const data = (await response.json()) as { listings?: SaleListing[] };
     return (data.listings || [])
-      .filter((listing) => listing.id && (!listing.status || listing.status === 'active'))
+      .filter((listing) => listing.id && (!listing.status || listing.status === 'active' || listing.status === 'sold'))
       .map((listing) => ({
         url: `${siteUrl}/aircraft-for-sale/${encodeURIComponent(listing.id as string)}`,
         lastModified: listing.updatedAt || listing.createdAt || today,

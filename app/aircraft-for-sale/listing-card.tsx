@@ -50,6 +50,7 @@ function formatHours(v: Listing["totalTime"]): string | null {
 
 export function ListingCard({ listing }: { listing: Listing }) {
   const [imageBroken, setImageBroken] = useState(false);
+  const isSold = listing.status === "sold";
 
   const firstPhoto = listing.photos?.[0];
   const photoBase =
@@ -76,6 +77,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
     <>
       <style>{`
         .a4s-card {
+          position: relative;
           display: block;
           text-decoration: none;
           color: #1a1a1a;
@@ -83,6 +85,11 @@ export function ListingCard({ listing }: { listing: Listing }) {
           background: rgba(245, 243, 239, 0.92);
           overflow: hidden;
           transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+        .a4s-card--sold {
+          border: 4px solid #8b0000;
+          background: rgba(250, 244, 231, 0.98);
+          box-shadow: inset 0 0 0 2px rgba(139, 0, 0, 0.28);
         }
         .a4s-card:hover {
           transform: translateY(-2px);
@@ -95,6 +102,45 @@ export function ListingCard({ listing }: { listing: Listing }) {
           aspect-ratio: 4 / 3;
           background: #e8e5df;
           overflow: hidden;
+        }
+        .a4s-card--sold .a4s-card-photo img {
+          filter: grayscale(0.35) contrast(0.9);
+        }
+        .a4s-card-sold-ribbon {
+          position: absolute;
+          z-index: 4;
+          top: 28%;
+          left: -18%;
+          width: 136%;
+          transform: rotate(-10deg);
+          border-top: 5px solid #8b0000;
+          border-bottom: 5px solid #8b0000;
+          background: rgba(139, 0, 0, 0.9);
+          color: #fff7e6;
+          font-family: Arial, sans-serif;
+          font-size: clamp(42px, 9vw, 86px);
+          font-weight: 900;
+          line-height: 1;
+          letter-spacing: 0;
+          text-align: center;
+          text-transform: uppercase;
+          text-shadow: 0 3px 8px rgba(0, 0, 0, 0.42);
+          pointer-events: none;
+          box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+        }
+        .a4s-card-sold-note {
+          display: inline-block;
+          margin: 0 0 10px;
+          padding: 7px 10px;
+          border: 2px solid #8b0000;
+          background: #fff7e6;
+          color: #8b0000;
+          font-family: Arial, sans-serif;
+          font-size: 13px;
+          font-weight: 900;
+          line-height: 1.1;
+          letter-spacing: 0;
+          text-transform: uppercase;
         }
         .a4s-card-photo img {
           width: 100%;
@@ -138,6 +184,14 @@ export function ListingCard({ listing }: { listing: Listing }) {
           white-space: nowrap;
           color: #1a1a1a;
         }
+        .a4s-card--sold .a4s-card-price {
+          color: #8b0000;
+          font-family: Arial, sans-serif;
+          font-size: 18px;
+          font-weight: 900;
+          letter-spacing: 0;
+          text-transform: uppercase;
+        }
         .a4s-card-specs {
           margin: 10px 0 0;
           display: grid;
@@ -160,6 +214,10 @@ export function ListingCard({ listing }: { listing: Listing }) {
           font-weight: 600;
         }
         @media (max-width: 640px) {
+          .a4s-card-sold-ribbon {
+            top: 24%;
+            font-size: clamp(34px, 18vw, 64px);
+          }
           .a4s-card-body {
             padding: 12px 13px 14px;
           }
@@ -185,10 +243,11 @@ export function ListingCard({ listing }: { listing: Listing }) {
       `}</style>
 
       <a
-        className="a4s-card"
+        className={`a4s-card${isSold ? " a4s-card--sold" : ""}`}
         href={`/aircraft-for-sale/${encodeURIComponent(listing.id)}`}
-        aria-label={`${headline}, ${priceLabel}${listing.nNumber ? `, tail ${listing.nNumber}` : ''}`}
+        aria-label={`${headline}, ${isSold ? "sold" : priceLabel}${listing.nNumber ? `, tail ${listing.nNumber}` : ''}`}
       >
+        {isSold ? <div className="a4s-card-sold-ribbon">Sold</div> : null}
         <div className="a4s-card-photo">
         {imageUrl && !imageBroken ? (
           <img
@@ -208,9 +267,10 @@ export function ListingCard({ listing }: { listing: Listing }) {
       </div>
 
         <div className="a4s-card-body">
+        {isSold ? <div className="a4s-card-sold-note">Sold - this aircraft has sold</div> : null}
         <div className="a4s-card-head">
           <h3 className="a4s-card-title">{headline}</h3>
-          <span className="a4s-card-price">{priceLabel}</span>
+          <span className="a4s-card-price">{isSold ? "Sold" : priceLabel}</span>
         </div>
 
         <dl className="a4s-card-specs">

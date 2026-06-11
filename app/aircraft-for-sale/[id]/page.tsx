@@ -39,7 +39,7 @@ export const revalidate = 60;
 export async function generateStaticParams(): Promise<{ id: string }[]> {
   try {
     const resp = await fetch(
-      'https://sale-api.rogerwilcoaviation.com/browse',
+      'https://sale-api.rogerwilcoaviation.com/browse?include=sold',
       { cache: 'no-store' },
     );
     if (!resp.ok) return [];
@@ -47,7 +47,7 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
       listings?: Array<{ id?: string; status?: string }>;
     };
     return (data.listings || [])
-      .filter((l) => l.id && (!l.status || l.status === 'active'))
+      .filter((l) => l.id && (!l.status || l.status === 'active' || l.status === 'sold'))
       .map((l) => ({ id: l.id as string }));
   } catch {
     return [];
@@ -68,6 +68,7 @@ interface Photo {
 interface Listing {
   id: string;
   status?: string;
+  soldAt?: string;
   createdAt?: string;
   updatedAt?: string;
   sellerEmail?: string;
@@ -149,7 +150,8 @@ export async function generateMetadata({
       robots: { index: false, follow: false },
     };
   }
-  const title = `${headline(l)} — ${priceLabel(l)} — RWAS`;
+  const sold = l.status === 'sold';
+  const title = `${sold ? 'SOLD — ' : ''}${headline(l)} — ${priceLabel(l)} — RWAS`;
   const description =
     (l.description && l.description.slice(0, 160)) ||
     `${headline(l)} for sale at Roger Wilco Aviation Services, Sioux Falls, SD. Tail ${l.nNumber || 'n/a'}.`;
@@ -188,6 +190,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
   if (!listing) notFound();
 
   const h = headline(listing);
+  const isSold = listing.status === 'sold';
   const priceStr = priceLabel(listing);
   const photos = listing.photos || [];
   const photoUrls = photos.map(
@@ -231,7 +234,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
       price: String(listing.price),
       priceCurrency: 'USD',
       availability:
-        listing.status === 'active'
+        !isSold && listing.status === 'active'
           ? 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',
       url: canonicalUrl,
@@ -291,9 +294,45 @@ export default async function AircraftDetailPage({ params }: PageProps) {
           display: inline-block;
           margin-bottom: 12px;
         }
+        .a4s-detail-hero { position: relative; overflow: hidden; }
         .a4s-detail-header { display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; }
         .a4s-detail-gallery { flex: 1 1 420px; min-width: 280px; }
         .a4s-detail-summary { flex: 1 1 320px; min-width: 260px; }
+        .a4s-sold-splash {
+          position: absolute;
+          z-index: 5;
+          top: 36%;
+          left: -8%;
+          width: 116%;
+          transform: rotate(-8deg);
+          border-top: 8px solid #8b0000;
+          border-bottom: 8px solid #8b0000;
+          background: rgba(139, 0, 0, 0.88);
+          color: #fff7e6;
+          font-family: Arial, sans-serif;
+          font-size: clamp(68px, 13vw, 180px);
+          font-weight: 900;
+          line-height: 0.95;
+          letter-spacing: 0;
+          text-align: center;
+          text-transform: uppercase;
+          text-shadow: 0 4px 12px rgba(0, 0, 0, 0.42);
+          pointer-events: none;
+          box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+        }
+        .a4s-sold-note {
+          display: inline-block;
+          margin: 0 0 14px;
+          padding: 10px 16px;
+          border: 3px solid #8b0000;
+          background: #fff7e6;
+          color: #8b0000;
+          font-family: Arial, sans-serif;
+          font-size: 18px;
+          font-weight: 900;
+          letter-spacing: 0;
+          text-transform: uppercase;
+        }
         .a4s-detail-subtitle {
           font-family: Arial, sans-serif;
           font-size: 12px;
@@ -321,6 +360,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
           flex-wrap: wrap;
           margin: 14px 0 4px;
         }
+        .a4s-detail-cta.is-sold { display: none; }
         .a4s-detail-cta a {
           display: inline-block;
           padding: 10px 18px;
@@ -439,6 +479,16 @@ export default async function AircraftDetailPage({ params }: PageProps) {
           color: #555;
           line-height: 1.55;
         }
+        @media (max-width: 640px) {
+          .a4s-sold-splash {
+            top: 28%;
+            font-size: clamp(54px, 22vw, 96px);
+            border-width: 5px;
+          }
+          .a4s-sold-note {
+            font-size: 15px;
+          }
+        }
       `}</style>
 
       <Dateline />
@@ -454,24 +504,26 @@ export default async function AircraftDetailPage({ params }: PageProps) {
 
         {/* ── HERO: Gallery + Summary ────────────────────────────────── */}
         <Specimen variant="hero" as="section" className="a4s-detail-hero">
+          {isSold ? <div className="a4s-sold-splash">Sold</div> : null}
           <div className="a4s-detail-header">
             <div className="a4s-detail-gallery">
               <PhotoCarousel photoUrls={photoUrls} alt={h} />
             </div>
             <div className="a4s-detail-summary">
+              {isSold ? <div className="a4s-sold-note">Sold - this aircraft has sold</div> : null}
               <div className="a4s-detail-subtitle">
                 {listing.nNumber ? `Tail ${listing.nNumber}` : 'Aircraft listing'}
               </div>
               <h1 className="bs-headline bs-headline--section" style={{ margin: '0 0 6px' }}>
                 {h}
               </h1>
-              <div className="a4s-detail-price">{priceStr}</div>
+              <div className="a4s-detail-price">{isSold ? 'Sold' : priceStr}</div>
               {listing.sellerLocation ? (
                 <div className="a4s-detail-location">
                   Located in {listing.sellerLocation}
                 </div>
               ) : null}
-              <div className="a4s-detail-cta">
+              <div className={`a4s-detail-cta${isSold ? ' is-sold' : ''}`}>
                 <a
                   href={`mailto:${listing.sellerEmail || 'avionics@rwas.team'}?subject=${encodeURIComponent('Inquiry: ' + h + (listing.nNumber ? ' (' + listing.nNumber + ')' : ''))}`}
                 >

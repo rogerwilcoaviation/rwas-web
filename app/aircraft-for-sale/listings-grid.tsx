@@ -25,12 +25,12 @@ export function ListingsGrid({ initialListings }: { initialListings: Listing[] }
   useEffect(() => {
     let cancelled = false;
     setRefreshing(true);
-    fetch(API + '/browse', { cache: 'no-store' })
+    fetch(API + '/browse?include=sold', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((data: { listings?: Listing[] }) => {
         if (cancelled) return;
         const fresh = (data.listings || []).filter(
-          (l) => !l.status || l.status === 'active',
+          (l) => !l.status || l.status === 'active' || l.status === 'sold',
         );
         setListings(fresh);
       })
