@@ -45,7 +45,7 @@ export default function PapaAlphaToolsPage() {
                 url: pageUrl,
                 logo: 'https://www.rogerwilcoaviation.com/newspaper/images/logo.png',
                 description:
-                  'Precision Piper rigging reference tools designed and manufactured by Roger Wilco Aviation Services in Sioux Falls, South Dakota.',
+                  'Precision Piper rigging reference tools designed and manufactured by Roger Wilco Aviation Services in the Northern Plains.',
               },
               {
                 '@type': 'ItemList',
@@ -91,7 +91,7 @@ export default function PapaAlphaToolsPage() {
             Stabilator &middot; rudder &middot; aileron &middot; flap &middot; bell crank references for PA-series maintenance work
           </p>
           <div className="bs-byline">
-            Built by Roger Wilco Aviation Services &middot; FAA Part 145 Repair Station RWSR491E &middot; Sioux Falls, SD
+            Built by Roger Wilco Aviation Services &middot; FAA Part 145 Repair Station RWSR491E &middot; the Northern Plains
           </div>
         </section>
 
@@ -118,7 +118,7 @@ export default function PapaAlphaToolsPage() {
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
-                Papa-Alpha rigging reference tools - designed and manufactured by RWAS in Sioux Falls, South Dakota.
+                Papa-Alpha rigging reference tools - designed and manufactured by RWAS in the Northern Plains.
               </Specimen.Caption>
             </Specimen>
 
@@ -180,7 +180,7 @@ export default function PapaAlphaToolsPage() {
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  The Papa-Alpha collection is the source of truth for current product availability, model applicability, kit contents, and pricing. Individual tools and kit options can be ordered directly through the RWAS store, with fulfillment from Sioux Falls.
+                  The Papa-Alpha collection is the source of truth for current product availability, model applicability, kit contents, and pricing. Individual tools and kit options can be ordered directly through the RWAS store, with fulfillment from the RWAS shop.
                 </p>
                 <p>
                   Shops ordering for a specific aircraft should confirm the aircraft model, serial applicability, and maintenance data before purchase. If you are not sure which tool applies, contact RWAS with the aircraft model and the rigging task you are trying to perform.
@@ -240,7 +240,7 @@ export default function PapaAlphaToolsPage() {
                   Live Papa-Alpha collection
                 </Link>
                 <br />
-                Ships from Sioux Falls, SD
+                Ships from the Northern Plains
                 <br />
                 Phone: <a href="tel:+16052998178">(605) 299-8178</a>
               </p>

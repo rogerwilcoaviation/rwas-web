@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/g3x-touch-installat
 export const metadata = {
   title: { absolute: 'Garmin G3X Touch Installation - Northern Plains | RWAS' },
   description:
-    'Garmin G3X Touch installation in Sioux Falls, SD: glass panel planning, EIS, ADAHRS, Connext workflow, fabrication, testing, and documentation.',
+    'Garmin G3X Touch installation in the Northern Plains: glass panel planning, EIS, ADAHRS, Connext workflow, fabrication, testing, and documentation.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function G3xTouchInstallationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Garmin G3X Touch installation planning, panel design, ADAHRS and EIS integration, Connext workflow review, fabrication support, testing, and documentation from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
+                  'Garmin G3X Touch installation planning, panel design, ADAHRS and EIS integration, Connext workflow review, fabrication support, testing, and documentation from Roger Wilco Aviation Services for the Northern Plains.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'G3X Touch installation workflow',
@@ -90,7 +90,7 @@ export default function G3xTouchInstallationPage() {
             Display layout &middot; ADAHRS &middot; EIS &middot; navigator integration &middot; Connext workflow &middot; panel fabrication
           </p>
           <div className="bs-byline">
-            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            RWAS Avionics Desk &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -212,9 +212,9 @@ export default function G3xTouchInstallationPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Hangar 3, 3701 N. Aviation Avenue
+                RWAS Avionics Desk
                 <br />
-                Sioux Falls, South Dakota 57104
+                the Northern Plains
               </p>
             </Specimen>
 

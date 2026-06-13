@@ -106,7 +106,7 @@ export default async function CollectionsPage() {
           <p className="bs-subhead">
             Certified and experimental avionics, pilot gear, lifestyle Garmin, service parts, Papa-Alpha tools, and sale inventory &mdash; all live with real product data behind them.
           </p>
-          <p className="bs-byline">RWAS Avionics Desk &middot; Hangar 3 &middot; Sioux Falls, SD</p>
+          <p className="bs-byline">RWAS Avionics Desk &middot; the Northern Plains</p>
           <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link href="/collections/avionics-certified" className="bs-cta-primary">
               Start with certified retail

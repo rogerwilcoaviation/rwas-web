@@ -1074,7 +1074,7 @@ function ListingFormFields({
       </div>
 
       <label style={labelStyle}>Location (city, state)</label>
-      <input style={inputStyle} value={value.sellerLocation} onChange={set('sellerLocation')} placeholder="Sioux Falls, SD" />
+      <input style={inputStyle} value={value.sellerLocation} onChange={set('sellerLocation')} placeholder="the Northern Plains" />
 
       <div style={twoColStyle}>
         <div>

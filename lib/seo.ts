@@ -44,17 +44,17 @@ export function collectionMetaDescription(collection: {
   const handle = collection.handle || '';
   if (handle.includes('papa-alpha')) {
     return truncateMeta(
-      'Shop RWAS-built Papa-Alpha rigging tools for Piper PA-28, PA-30, PA-31, and PA-36 aircraft. Precision reference tools ship from Sioux Falls, SD.',
+      'Shop RWAS-built Papa-Alpha rigging tools for Piper PA-28, PA-30, PA-31, and PA-36 aircraft. Precision reference tools ship from the Northern Plains.',
     );
   }
   if (handle.includes('garmin')) {
     return truncateMeta(
-      `Browse ${title} from Roger Wilco Aviation Services, an authorized Garmin dealer and FAA Part 145 repair station in Sioux Falls, SD.`,
+      `Browse ${title} from Roger Wilco Aviation Services, an authorized Garmin dealer and FAA Part 145 repair station in the Northern Plains.`,
     );
   }
   if (handle.includes('sale')) {
     return truncateMeta(
-      'Browse current RWAS sale items, Garmin pilot gear, avionics accessories, and shop-supported aviation products from Sioux Falls, SD.',
+      'Browse current RWAS sale items, Garmin pilot gear, avionics accessories, and shop-supported aviation products from the Northern Plains.',
     );
   }
   return truncateMeta(
@@ -84,7 +84,7 @@ export function productMetaDescription(product: {
   if (!isThinMeta(description) && !modelMismatch) return truncateMeta(description);
 
   return truncateMeta(
-    `${title} from ${vendor}, available through RWAS in Sioux Falls, SD. ${type} support from an FAA Part 145 repair station and authorized Garmin dealer.${skuText}`,
+    `${title} from ${vendor}, available through RWAS in the Northern Plains. ${type} support from an FAA Part 145 repair station and authorized Garmin dealer.${skuText}`,
   );
 }
 

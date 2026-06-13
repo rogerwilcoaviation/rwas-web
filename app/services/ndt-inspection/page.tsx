@@ -14,7 +14,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/ndt-inspection';
 export const metadata = {
   title: { absolute: 'Aircraft NDT Inspection - Eddy Current, Penetrant, Magnetic Particle | RWAS' },
   description:
-    'Aircraft NDT inspection in Sioux Falls, SD: eddy current, dye penetrant, magnetic particle, ultrasound, visual testing, and Rockwell hardness.',
+    'Aircraft NDT inspection in the Northern Plains: eddy current, dye penetrant, magnetic particle, ultrasound, visual testing, and Rockwell hardness.',
   alternates: { canonical: pageUrl },
 };
 
@@ -42,7 +42,7 @@ export default function NdtInspectionPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Aircraft non-destructive testing from Roger Wilco Aviation Services, FAA Part 145 repair station RWSR491E at Hangar 3 in Sioux Falls, South Dakota.',
+                  'Aircraft non-destructive testing from Roger Wilco Aviation Services, FAA Part 145 repair station RWSR491E for the Northern Plains.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'NDT inspection methods',
@@ -104,7 +104,7 @@ export default function NdtInspectionPage() {
             Eddy current &middot; dye penetrant &middot; magnetic particle &middot; ultrasound &middot; visual &middot; Rockwell hardness
           </p>
           <div className="bs-byline">
-            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            RWAS Avionics Desk &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -119,7 +119,7 @@ export default function NdtInspectionPage() {
                   Roger Wilco Aviation Services provides aircraft non-destructive testing for owners, operators, mechanics, and shops that need a disciplined inspection path without unnecessary disassembly. NDT is used when the question is specific: is there a crack, corrosion, heat damage, material change, or other defect that cannot be answered well by a normal visual inspection alone?
                 </p>
                 <p>
-                  From Hangar 3 in Sioux Falls, South Dakota, RWAS supports general aviation, corporate, and commercial operators across the Northern Plains. Work is handled through an FAA-certificated Part 145 repair station environment, with method selection, inspection scope, findings, and return-to-service documentation matched to the aircraft, component, maintenance manual, service bulletin, Airworthiness Directive, or approved data involved.
+                  For the Northern Plains, RWAS supports general aviation, corporate, and commercial operators across the Northern Plains. Work is handled through an FAA-certificated Part 145 repair station environment, with method selection, inspection scope, findings, and return-to-service documentation matched to the aircraft, component, maintenance manual, service bulletin, Airworthiness Directive, or approved data involved.
                 </p>
               </div>
             </Specimen>
@@ -229,9 +229,9 @@ export default function NdtInspectionPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Hangar 3, 3701 N. Aviation Avenue
+                RWAS Avionics Desk
                 <br />
-                Sioux Falls, South Dakota 57104
+                the Northern Plains
               </p>
             </Specimen>
 

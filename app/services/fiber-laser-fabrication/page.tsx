@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/fiber-laser-fabrica
 export const metadata = {
   title: { absolute: 'Aircraft Fiber Laser Fabrication - Panel Cutting, Welding, UV Print | RWAS' },
   description:
-    'Aircraft fiber laser fabrication in Sioux Falls, SD: panel cutting, laser welding, powder coating, UV printing, CAD/CNC workflow, and sheet metal support.',
+    'Aircraft fiber laser fabrication in the Northern Plains: panel cutting, laser welding, powder coating, UV printing, CAD/CNC workflow, and sheet metal support.',
   alternates: { canonical: pageUrl },
 };
 
@@ -91,7 +91,7 @@ export default function FiberLaserFabricationPage() {
             Fiber laser cutting &middot; laser welding &middot; panel fabrication &middot; powder coating &middot; UV printing &middot; CAD/CNC support
           </p>
           <div className="bs-byline">
-            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving aircraft owners and shops across the Northern Plains
+            RWAS Avionics Desk &middot; Serving aircraft owners and shops across the Northern Plains
           </div>
         </section>
 
@@ -118,7 +118,7 @@ export default function FiberLaserFabricationPage() {
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
-                RWAS fiber laser cutting capability - used for panel, tooling, and fabrication support in Sioux Falls.
+                RWAS fiber laser cutting capability - used for panel, tooling, and fabrication support in the Northern Plains.
               </Specimen.Caption>
             </Specimen>
 
@@ -242,9 +242,9 @@ export default function FiberLaserFabricationPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Hangar 3, 3701 N. Aviation Avenue
+                RWAS Avionics Desk
                 <br />
-                Sioux Falls, South Dakota 57104
+                the Northern Plains
               </p>
             </Specimen>
 

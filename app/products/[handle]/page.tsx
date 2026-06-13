@@ -51,8 +51,17 @@ import {
 import { isShopifyPlaceholderImage, productImageAlt, productImageUrl } from '@/lib/product-image';
 import { serviceLinksForProduct } from '@/lib/service-links';
 
+const SITE_ORIGIN = 'https://www.rogerwilcoaviation.com';
+
 function isProductImage(image: ShopifyProductDetail['featuredImage']): image is NonNullable<ShopifyProductDetail['featuredImage']> {
   return Boolean(image?.url);
+}
+
+function absoluteImageUrl(url: string | null | undefined) {
+  if (!url) return undefined;
+  if (/^https?:\/\//i.test(url)) return url;
+  if (url.startsWith('//')) return `https:${url}`;
+  return `${SITE_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
 function productImageCandidates(product: ShopifyProductDetail) {
@@ -849,8 +858,16 @@ export default async function ProductDetailPage({
   const canonicalUrl = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
   const imageUrls = imageCandidates
     .filter((img) => !isShopifyPlaceholderImage(img.url, img.altText))
-    .map((img) => img.url)
-    .filter(Boolean);
+    .map((img) => absoluteImageUrl(img.url))
+    .filter((url): url is string => Boolean(url));
+  const fallbackSchemaImage = absoluteImageUrl(
+    productImageUrl(heroImg?.url, 1200, heroImg?.altText, product.handle),
+  );
+  const schemaImageUrls = imageUrls.length
+    ? Array.from(new Set(imageUrls))
+    : fallbackSchemaImage
+      ? [fallbackSchemaImage]
+      : undefined;
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -870,7 +887,7 @@ export default async function ProductDetailPage({
     sku: firstSku || undefined,
     brand: product.vendor ? { '@type': 'Brand', name: product.vendor } : undefined,
     category: product.productType || undefined,
-    image: imageUrls.length ? imageUrls : undefined,
+    image: schemaImageUrls,
     url: canonicalUrl,
     offers: (() => {
       if (!primaryPrice) return undefined;
@@ -1087,7 +1104,7 @@ export default async function ProductDetailPage({
                     Warranty for labor of installation is life-time (conditions apply).
                   </>
                 ) : (
-                  <>Manufacturer warranty. Service and support from our Part 145 repair station in Sioux Falls, SD.</>
+                  <>Manufacturer warranty. Service and support from our Part 145 repair station in the Northern Plains.</>
                 )}
               </div>
               <div className="cell">
@@ -1152,7 +1169,7 @@ export default async function ProductDetailPage({
                       <td>{opt.values.join(', ')}</td>
                     </tr>
                   ))}
-                  <tr><th>Installs at</th><td>Hangar 3 · Sioux Falls, SD</td></tr>
+                  <tr><th>Installs at</th><td>RWAS Avionics Desk · the Northern Plains</td></tr>
                   <tr><th>Certification</th><td>FAA Part 145 · RWSR491E</td></tr>
                 </tbody>
               </table>

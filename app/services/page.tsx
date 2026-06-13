@@ -47,8 +47,8 @@ const serviceGroups = [
     label: 'Maintenance, inspection, and buyer support',
     services: [
       {
-        name: 'Aircraft maintenance in Sioux Falls',
-        href: '/services/aircraft-maintenance-sioux-falls',
+        name: 'Aircraft maintenance in the Northern Plains',
+        href: '/services/aircraft-maintenance',
         description: 'Annual inspections, 100-hour inspections, AOG coordination, prop balancing, aircraft weighing, and repair-station paperwork.',
       },
       {
@@ -90,7 +90,7 @@ const allServices = serviceGroups.flatMap((group) => group.services);
 export const metadata = {
   title: { absolute: 'Aircraft Services - Avionics, Maintenance & NDT | RWAS' },
   description:
-    'RWAS aircraft services in Sioux Falls, SD: Garmin avionics, annual inspections, NDT, fabrication, Rotax support, pre-buys, and Papa-Alpha tools.',
+    'RWAS aircraft services in the Northern Plains: Garmin avionics, annual inspections, NDT, fabrication, Rotax support, pre-buys, and Papa-Alpha tools.',
   alternates: { canonical: pageUrl },
 };
 
@@ -106,7 +106,7 @@ export default function ServicesPage() {
             '@id': `${pageUrl}#faq`,
             mainEntity: [
               { '@type': 'Question', name: 'What does Roger Wilco Aviation Services do?', acceptedAnswer: { '@type': 'Answer', text: 'RWAS is an FAA-certificated repair station specializing in Garmin avionics installation, airframe and powerplant maintenance, non-destructive testing, and sheet metal fabrication. We also manufacture Papa-Alpha rigging reference tools for Piper aircraft.' } },
-              { '@type': 'Question', name: 'Where is Roger Wilco Aviation Services located?', acceptedAnswer: { '@type': 'Answer', text: 'RWAS is located in Sioux Falls, South Dakota, at Sioux Falls Regional Airport (KFSD).' } },
+              { '@type': 'Question', name: 'Where is Roger Wilco Aviation Services located?', acceptedAnswer: { '@type': 'Answer', text: 'RWAS serves aircraft owners across the Northern Plains. Contact the service desk for current scheduling and arrival details.' } },
               { '@type': 'Question', name: 'What are your business hours?', acceptedAnswer: { '@type': 'Answer', text: 'Monday through Friday, 8:00 AM to 5:00 PM Central Time.' } },
               { '@type': 'Question', name: 'What Garmin systems do you install?', acceptedAnswer: { '@type': 'Answer', text: 'We specialize in Garmin systems including the G3X Touch suite, G500/G600 TXi, GTN Xi navigators, GFC 500 autopilots, GI 275 displays, transponders, audio panels, ADS-B solutions, and full integrated panel installations.' } },
               { '@type': 'Question', name: 'Can you work on my aircraft if I am not local?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Many customers fly their aircraft in for avionics installation and maintenance. We can coordinate logistics with you, your mechanic, or a ferry pilot, and we ship Papa-Alpha tools nationwide and internationally.' } },
@@ -139,7 +139,7 @@ export default function ServicesPage() {
                   { '@type': 'State', name: 'Montana' },
                 ],
                 description:
-                  'FAA Part 145 aircraft services from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota, including Garmin avionics installation, maintenance, NDT inspection, fabrication, Rotax support, and pre-buy inspections.',
+                  'FAA Part 145 aircraft services from Roger Wilco Aviation Services for the Northern Plains, including Garmin avionics installation, maintenance, NDT inspection, fabrication, Rotax support, and pre-buy inspections.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'RWAS aircraft service catalog',
@@ -191,7 +191,7 @@ export default function ServicesPage() {
       <main className="bs-stage">
         <section className="hero-headline-group" aria-labelledby="services-hero">
           <span className="bs-kicker">FAA Part 145 Repair Station #RWSR491E</span>
-          <span className="bs-script-accent">&mdash; Sioux Falls aircraft services desk &mdash;</span>
+          <span className="bs-script-accent">&mdash; the Northern Plains aircraft services desk &mdash;</span>
           <h1 id="services-hero" className="bs-headline bs-headline--hero">
             Aircraft services for owners who need
             <br />
@@ -201,7 +201,7 @@ export default function ServicesPage() {
             Garmin avionics &middot; aircraft maintenance &middot; NDT inspection &middot; fabrication &middot; Rotax support &middot; pre-buy inspections
           </p>
           <div className="bs-byline">
-            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD 57104 &middot; Serving the Northern Plains
+            RWAS Avionics Desk &middot; Serving the Northern Plains
           </div>
         </section>
 
@@ -213,7 +213,7 @@ export default function ServicesPage() {
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  Roger Wilco Aviation Services is a working FAA Part 145 repair station at Hangar 3 in Sioux Falls, South Dakota. This page is the front desk for the shop's crawlable service pages: Garmin installation, aircraft maintenance, NDT, fabrication, Rotax support, pre-buy inspections, and RWAS-built Papa-Alpha tools.
+                  Roger Wilco Aviation Services is a working FAA Part 145 repair station for the Northern Plains. This page is the front desk for the shop's crawlable service pages: Garmin installation, aircraft maintenance, NDT, fabrication, Rotax support, pre-buy inspections, and RWAS-built Papa-Alpha tools.
                 </p>
                 <p>
                   If you already know the system or service you need, choose the matching page below. If you are still deciding, send the aircraft, mission, location, photos, and logbook context through the contact form and the shop can route the request.
@@ -260,15 +260,12 @@ export default function ServicesPage() {
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  Useful first contact details include aircraft make and model, N-number, current airport, desired work, known squawks, panel or damage photos, logbook notes, preferred schedule, and whether the aircraft can fly to Sioux Falls.
+                  Useful first contact details include aircraft make and model, N-number, current airport, desired work, known squawks, panel or damage photos, logbook notes, preferred schedule, and whether the aircraft can fly to the RWAS shop.
                 </p>
               </div>
               <p>
                 <Link className="bs-cta-primary" href="/contact?reason=service&source=services-hub">
                   Contact the service desk
-                </Link>
-                <Link className="bs-cta-secondary" href="/locations/sioux-falls">
-                  View the Sioux Falls location
                 </Link>
                 <Link className="bs-cta-secondary" href="/shop-capabilities">
                   Read shop capabilities
@@ -279,13 +276,9 @@ export default function ServicesPage() {
 
           <aside className="about-rail" aria-label="RWAS service quick reference">
             <Specimen as="section">
-              <span className="bs-kicker">Shop Address</span>
+              <span className="bs-kicker">Service Desk</span>
               <p>
-                Hangar 3
-                <br />
-                3701 N. Aviation Avenue
-                <br />
-                Sioux Falls, South Dakota 57104
+                Contact RWAS for current scheduling and arrival details.
               </p>
             </Specimen>
 

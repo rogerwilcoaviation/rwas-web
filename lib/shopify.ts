@@ -174,7 +174,8 @@ const PAPA_ALPHA_SYNTHETIC: ShopifyCollectionSummary = {
   id: 'synthetic:papa-alpha-tools',
   handle: 'papa-alpha-tools',
   title: 'Papa-Alpha Tools',
-  description: 'RWAS-built rigging tools for Piper Papa-Alpha airframes. Priced OTC — ships same day.',
+  description:
+    'RWAS-built rigging tools for Piper Papa-Alpha airframes. Priced OTC — ships same day.',
   image: {
     url: '/newspaper/images/papa_alpha_kit_collection.jpg',
     altText: 'Papa-Alpha precision rigging tool kit for Piper airframes',
@@ -211,7 +212,9 @@ const PRODUCT_TYPE_COLLECTIONS: Record<
   },
 };
 
-function productTypeCollectionSummary(handle: string): ShopifyCollectionSummary | null {
+function productTypeCollectionSummary(
+  handle: string,
+): ShopifyCollectionSummary | null {
   const meta = PRODUCT_TYPE_COLLECTIONS[handle];
   if (!meta) return null;
   return {
@@ -233,22 +236,69 @@ function isFallbackProductImage(image?: ShopifyImage | null): boolean {
   );
 }
 
-function productImagePriority(product: Pick<ShopifyCollectionProduct, 'featuredImage'>): number {
+function productImagePriority(
+  product: Pick<ShopifyCollectionProduct, 'featuredImage'>,
+): number {
   if (!product.featuredImage?.url) return 2;
   return isFallbackProductImage(product.featuredImage) ? 1 : 0;
 }
 
-function sortProductsByImagePriority<T extends ShopifyCollectionProduct>(products: T[]): T[] {
+function sortProductsByImagePriority<T extends ShopifyCollectionProduct>(
+  products: T[],
+): T[] {
   return products
     .map((product, index) => ({ product, index }))
     .sort((a, b) => {
-      const imageRank = productImagePriority(a.product) - productImagePriority(b.product);
+      const imageRank =
+        productImagePriority(a.product) - productImagePriority(b.product);
       return imageRank || a.index - b.index;
     })
     .map(({ product }) => product);
 }
 
-export async function shopifyFetch<T>(query: string, variables?: Record<string, unknown>) {
+type ProductVisibilityText = Pick<
+  ShopifyCollectionProduct,
+  'title' | 'handle' | 'description' | 'productType' | 'tags' | 'variants'
+>;
+
+function normalizedProductText(product: ProductVisibilityText): string {
+  return [
+    product.title,
+    product.handle,
+    product.description,
+    product.productType,
+    ...(product.tags || []),
+    ...(product.variants || []).map((variant) => variant.sku || ''),
+  ]
+    .join(' ')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function isGmc605InstallOnlyProduct(product: ProductVisibilityText): boolean {
+  const text = normalizedProductText(product);
+  return /\bgmc\s*605[a-z]?\b/.test(text) || /\b010\s*01075\b/.test(text);
+}
+
+function filterCollectionProductsForHandle(
+  handle: string,
+  products: ShopifyCollectionProduct[],
+): ShopifyCollectionProduct[] {
+  if (handle === 'garmin-dealer-install') return products;
+  return products.filter((product) => !isGmc605InstallOnlyProduct(product));
+}
+
+function filterPublicCatalogProducts<T extends ProductVisibilityText>(
+  products: T[],
+): T[] {
+  return products.filter((product) => !isGmc605InstallOnlyProduct(product));
+}
+
+export async function shopifyFetch<T>(
+  query: string,
+  variables?: Record<string, unknown>,
+) {
   if (!STOREFRONT_TOKEN) {
     throw new Error('SHOPIFY_STOREFRONT_ACCESS_TOKEN is not configured.');
   }
@@ -263,11 +313,13 @@ export async function shopifyFetch<T>(query: string, variables?: Record<string, 
       },
       body: JSON.stringify({ query, variables }),
       next: { revalidate: 300 },
-    }
+    },
   );
 
   if (!response.ok) {
-    throw new Error(`Shopify Storefront API request failed: ${response.status}`);
+    throw new Error(
+      `Shopify Storefront API request failed: ${response.status}`,
+    );
   }
 
   const payload = (await response.json()) as ShopifyResponse<T>;
@@ -293,7 +345,9 @@ function mapCart(cart: any): ShopifyCart {
   };
 }
 
-export async function getFeaturedProducts(limit = 4): Promise<ShopifyFeaturedProduct[]> {
+export async function getFeaturedProducts(
+  limit = 4,
+): Promise<ShopifyFeaturedProduct[]> {
   const data = await shopifyFetch<{
     products: { edges: Array<{ node: ShopifyFeaturedProduct }> };
   }>(
@@ -321,13 +375,15 @@ export async function getFeaturedProducts(limit = 4): Promise<ShopifyFeaturedPro
         }
       }
     `,
-    { first: limit }
+    { first: limit },
   );
 
   return data.products.edges.map((edge) => edge.node);
 }
 
-export async function getFeaturedCollections(): Promise<ShopifyCollectionSummary[]> {
+export async function getFeaturedCollections(): Promise<
+  ShopifyCollectionSummary[]
+> {
   const data = await shopifyFetch<{
     collections: { edges: Array<{ node: ShopifyCollectionSummary }> };
   }>(
@@ -351,17 +407,21 @@ export async function getFeaturedCollections(): Promise<ShopifyCollectionSummary
     `,
     {
       first: 40, // safety margin: Shopify `handle:` query prefix-matches
-      query: FEATURED_COLLECTION_HANDLES.map((handle) => `handle:${handle}`).join(' OR '),
-    }
+      query: FEATURED_COLLECTION_HANDLES.map(
+        (handle) => `handle:${handle}`,
+      ).join(' OR '),
+    },
   );
 
   const collectionsByHandle = new Map(
-    data.collections.edges.map((edge) => [edge.node.handle, edge.node])
+    data.collections.edges.map((edge) => [edge.node.handle, edge.node]),
   );
 
-  const shopifyFeatured = (FEATURED_COLLECTION_HANDLES.map((handle) =>
-    collectionsByHandle.get(handle)
-  ).filter(Boolean) as ShopifyCollectionSummary[]).map((node) => ({
+  const shopifyFeatured = (
+    FEATURED_COLLECTION_HANDLES.map((handle) =>
+      collectionsByHandle.get(handle),
+    ).filter(Boolean) as ShopifyCollectionSummary[]
+  ).map((node) => ({
     ...node,
     title: displayTitleForCollection(node.handle, node.title),
     description: descriptionForCollection(node.handle, node.description),
@@ -369,7 +429,7 @@ export async function getFeaturedCollections(): Promise<ShopifyCollectionSummary
   }));
 
   const byHandle = new Map<string, ShopifyCollectionSummary>(
-    shopifyFeatured.map((collection) => [collection.handle, collection])
+    shopifyFeatured.map((collection) => [collection.handle, collection]),
   );
   for (const handle of FEATURED_COLLECTION_HANDLES) {
     if (!byHandle.has(handle)) {
@@ -378,12 +438,14 @@ export async function getFeaturedCollections(): Promise<ShopifyCollectionSummary
     }
   }
 
-  return FEATURED_COLLECTION_HANDLES.map((handle) => byHandle.get(handle)).filter(
-    Boolean
-  ) as ShopifyCollectionSummary[];
+  return FEATURED_COLLECTION_HANDLES.map((handle) =>
+    byHandle.get(handle),
+  ).filter(Boolean) as ShopifyCollectionSummary[];
 }
 
-export async function getCollectionByHandle(handle: string): Promise<ShopifyCollectionDetail | null> {
+export async function getCollectionByHandle(
+  handle: string,
+): Promise<ShopifyCollectionDetail | null> {
   type CollectionQueryResult = {
     collection: {
       id: string;
@@ -481,7 +543,7 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
           }
         }
       `,
-      { handle, after: cursor }
+      { handle, after: cursor },
     );
 
     if (!data.collection) {
@@ -490,24 +552,34 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
       if (!fallback || !productType) return null;
       return {
         ...fallback,
-        products: await getProductsByProductType(productType),
+        products: filterCollectionProductsForHandle(
+          handle,
+          await getProductsByProductType(productType),
+        ),
       };
     }
 
     collectionMeta ??= {
       id: data.collection.id,
-      title: displayTitleForCollection(data.collection.handle, data.collection.title),
+      title: displayTitleForCollection(
+        data.collection.handle,
+        data.collection.title,
+      ),
       handle: data.collection.handle,
-      description: descriptionForCollection(data.collection.handle, data.collection.description),
+      description: descriptionForCollection(
+        data.collection.handle,
+        data.collection.description,
+      ),
       image: imageForCollection(data.collection.handle, data.collection.image),
     };
 
     products.push(
       ...data.collection.products.edges.map((edge) => ({
         ...edge.node,
-        images: edge.node.images?.edges.map((imageEdge) => imageEdge.node) ?? [],
+        images:
+          edge.node.images?.edges.map((imageEdge) => imageEdge.node) ?? [],
         variants: mapVariants(edge.node.variants.edges),
-      }))
+      })),
     );
     cursor = data.collection.products.pageInfo.hasNextPage
       ? data.collection.products.pageInfo.endCursor
@@ -516,26 +588,31 @@ export async function getCollectionByHandle(handle: string): Promise<ShopifyColl
 
   return {
     ...collectionMeta,
-    products: sortProductsByImagePriority(products),
+    products: sortProductsByImagePriority(
+      filterCollectionProductsForHandle(handle, products),
+    ),
   };
 }
 
 export async function getSeoProductHandles(): Promise<string[]> {
   const collections = await getFeaturedCollections();
   const results = await Promise.allSettled(
-    collections.map((collection) => getCollectionByHandle(collection.handle))
+    collections.map((collection) => getCollectionByHandle(collection.handle)),
   );
   const handles = results.flatMap((result) =>
     result.status === 'fulfilled' && result.value
       ? result.value.products.map((product) => product.handle)
-      : []
+      : [],
   );
 
-  return Array.from(new Set([...PRIORITY_PRODUCT_HANDLES, ...handles]))
-    .filter(isSeoSafeProductHandle);
+  return Array.from(new Set([...PRIORITY_PRODUCT_HANDLES, ...handles])).filter(
+    isSeoSafeProductHandle,
+  );
 }
 
-export async function getPartFinderProducts(limit = 2000): Promise<ShopifyPartFinderProduct[]> {
+export async function getPartFinderProducts(
+  limit = 2000,
+): Promise<ShopifyPartFinderProduct[]> {
   const all: ShopifyPartFinderProduct[] = [];
   let cursor: string | null = null;
 
@@ -545,7 +622,9 @@ export async function getPartFinderProducts(limit = 2000): Promise<ShopifyPartFi
         pageInfo: { hasNextPage: boolean; endCursor: string | null };
         edges: Array<{
           cursor: string;
-          node: ShopifyPartFinderProduct & { variants: { edges: Array<{ node: ShopifyVariant }> } };
+          node: ShopifyPartFinderProduct & {
+            variants: { edges: Array<{ node: ShopifyVariant }> };
+          };
         }>;
       };
     }>(
@@ -608,22 +687,27 @@ export async function getPartFinderProducts(limit = 2000): Promise<ShopifyPartFi
           }
         }
       `,
-      { first: Math.min(250, limit - all.length), after: cursor }
+      { first: Math.min(250, limit - all.length), after: cursor },
     );
 
     all.push(
       ...data.products.edges.map((edge) => ({
         ...edge.node,
         variants: mapVariants(edge.node.variants.edges),
-      }))
+      })),
     );
-    cursor = data.products.pageInfo.hasNextPage ? data.products.pageInfo.endCursor : null;
+    cursor = data.products.pageInfo.hasNextPage
+      ? data.products.pageInfo.endCursor
+      : null;
   } while (cursor && all.length < limit);
 
-  return all;
+  return filterPublicCatalogProducts(all);
 }
 
-export async function getProductsByTag(tag: string, limit = 48): Promise<ShopifyCollectionProduct[]> {
+export async function getProductsByTag(
+  tag: string,
+  limit = 48,
+): Promise<ShopifyCollectionProduct[]> {
   const data = await shopifyFetch<{
     products: {
       edges: Array<{
@@ -692,19 +776,21 @@ export async function getProductsByTag(tag: string, limit = 48): Promise<Shopify
         }
       }
     `,
-    { first: limit, query: `tag:${tag}` }
+    { first: limit, query: `tag:${tag}` },
   );
 
-  return data.products.edges.map((edge) => ({
-    ...edge.node,
-    images: edge.node.images?.edges.map((imageEdge) => imageEdge.node) ?? [],
-    variants: mapVariants(edge.node.variants.edges),
-  }));
+  return filterPublicCatalogProducts(
+    data.products.edges.map((edge) => ({
+      ...edge.node,
+      images: edge.node.images?.edges.map((imageEdge) => imageEdge.node) ?? [],
+      variants: mapVariants(edge.node.variants.edges),
+    })),
+  );
 }
 
 export async function getProductsByProductType(
   productType: string,
-  limit = 1000
+  limit = 1000,
 ): Promise<ShopifyCollectionProduct[]> {
   const products: ShopifyCollectionProduct[] = [];
   let cursor: string | null = null;
@@ -789,23 +875,28 @@ export async function getProductsByProductType(
         first: Math.min(250, limit - products.length),
         after: cursor,
         query: `product_type:"${productType}"`,
-      }
+      },
     );
 
     products.push(
       ...data.products.edges.map((edge) => ({
         ...edge.node,
-        images: edge.node.images?.edges.map((imageEdge) => imageEdge.node) ?? [],
+        images:
+          edge.node.images?.edges.map((imageEdge) => imageEdge.node) ?? [],
         variants: mapVariants(edge.node.variants.edges),
-      }))
+      })),
     );
-    cursor = data.products.pageInfo.hasNextPage ? data.products.pageInfo.endCursor : null;
+    cursor = data.products.pageInfo.hasNextPage
+      ? data.products.pageInfo.endCursor
+      : null;
   } while (cursor && products.length < limit);
 
   return sortProductsByImagePriority(products);
 }
 
-export async function getProductByHandle(handle: string): Promise<ShopifyProductDetail | null> {
+export async function getProductByHandle(
+  handle: string,
+): Promise<ShopifyProductDetail | null> {
   const data = await shopifyFetch<{
     product: {
       id: string;
@@ -889,7 +980,7 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
         }
       }
     `,
-    { handle }
+    { handle },
   );
 
   if (!data.product) return null;
@@ -938,11 +1029,13 @@ export async function getProductHandles(limit = 3000): Promise<string[]> {
           }
         }
       `,
-      { first: Math.min(250, limit - handles.length), after: cursor }
+      { first: Math.min(250, limit - handles.length), after: cursor },
     );
 
     handles.push(...data.products.edges.map((edge) => edge.node.handle));
-    cursor = data.products.pageInfo.hasNextPage ? data.products.pageInfo.endCursor : null;
+    cursor = data.products.pageInfo.hasNextPage
+      ? data.products.pageInfo.endCursor
+      : null;
   } while (cursor && handles.length < limit);
 
   return handles;
@@ -991,17 +1084,23 @@ export async function createCart(merchandiseId: string, quantity = 1) {
         }
       }
     `,
-    { merchandiseId, quantity }
+    { merchandiseId, quantity },
   );
 
   if (data.cartCreate.userErrors.length) {
-    throw new Error(data.cartCreate.userErrors.map((e) => e.message).join('; '));
+    throw new Error(
+      data.cartCreate.userErrors.map((e) => e.message).join('; '),
+    );
   }
 
   return mapCart(data.cartCreate.cart);
 }
 
-export async function addCartLine(cartId: string, merchandiseId: string, quantity = 1) {
+export async function addCartLine(
+  cartId: string,
+  merchandiseId: string,
+  quantity = 1,
+) {
   const data = await shopifyFetch<{
     cartLinesAdd: { cart: any; userErrors: Array<{ message: string }> };
   }>(
@@ -1044,11 +1143,13 @@ export async function addCartLine(cartId: string, merchandiseId: string, quantit
         }
       }
     `,
-    { cartId, merchandiseId, quantity }
+    { cartId, merchandiseId, quantity },
   );
 
   if (data.cartLinesAdd.userErrors.length) {
-    throw new Error(data.cartLinesAdd.userErrors.map((e) => e.message).join('; '));
+    throw new Error(
+      data.cartLinesAdd.userErrors.map((e) => e.message).join('; '),
+    );
   }
 
   return mapCart(data.cartLinesAdd.cart);
@@ -1092,7 +1193,7 @@ export async function getCart(cartId: string) {
         }
       }
     `,
-    { cartId }
+    { cartId },
   );
 
   if (!data.cart) return null;
@@ -1135,7 +1236,9 @@ export function isOtcCollection(handle: string): boolean {
   );
 }
 
-export function isOtcEligible(product: { tags?: string[] } | null | undefined): boolean {
+export function isOtcEligible(
+  product: { tags?: string[] } | null | undefined,
+): boolean {
   // Per-product OTC gate (re-enabled 2026-04-21 PM). Used by the PDP gate
   // for products that don't sit in an isOtcCollection (e.g., Papa-Alpha
   // Tools, since the papa-alpha-tools collection is synthetic in rwas-web
@@ -1153,7 +1256,10 @@ export function isOtcEligible(product: { tags?: string[] } | null | undefined): 
  * Current overrides: none. Shopify collection titles already match the
  * Phase 3 structure.
  */
-export function displayTitleForCollection(handle: string, shopifyTitle: string): string {
+export function displayTitleForCollection(
+  handle: string,
+  shopifyTitle: string,
+): string {
   return shopifyTitle;
 }
 
@@ -1183,7 +1289,10 @@ function isPlaceholderCollectionDescription(description: string): boolean {
   );
 }
 
-export function descriptionForCollection(handle: string, shopifyDescription: string): string {
+export function descriptionForCollection(
+  handle: string,
+  shopifyDescription: string,
+): string {
   if (isPlaceholderCollectionDescription(shopifyDescription)) {
     return COLLECTION_DESCRIPTION_OVERRIDES[handle] || shopifyDescription;
   }
@@ -1193,16 +1302,18 @@ export function descriptionForCollection(handle: string, shopifyDescription: str
 
 export function imageForCollection(
   handle: string,
-  shopifyImage?: ShopifyImage | null
+  shopifyImage?: ShopifyImage | null,
 ): ShopifyImage | null | undefined {
   const fallbackByHandle: Record<string, ShopifyImage> = {
     'avionics-certified': {
       url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth_ad7c40ee-efc6-4cb2-bcc8-67b2140557d4.png?v=1754905863',
-      altText: 'Certified Garmin avionics supported by Roger Wilco Aviation Services',
+      altText:
+        'Certified Garmin avionics supported by Roger Wilco Aviation Services',
     },
     'avionics-experimental': {
       url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth_cdc37a0b-a976-4c50-93e4-59d3c68337c1.png?v=1754906168',
-      altText: 'Experimental and LSA Garmin avionics supported by Roger Wilco Aviation Services',
+      altText:
+        'Experimental and LSA Garmin avionics supported by Roger Wilco Aviation Services',
     },
     'pilot-gear': {
       url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth.png?v=1754905659',
@@ -1214,7 +1325,8 @@ export function imageForCollection(
     },
     'garmin-dealer-install': {
       url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth_4e9bffcf-996a-4c71-a9d6-6763db1e597f.png?v=1754921983',
-      altText: 'Garmin dealer install hardware, service parts, and cable assemblies',
+      altText:
+        'Garmin dealer install hardware, service parts, and cable assemblies',
     },
     'papa-alpha-tools': {
       url: '/newspaper/images/papa_alpha_kit_collection.jpg',

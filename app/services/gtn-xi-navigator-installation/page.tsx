@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/gtn-xi-navigator-in
 export const metadata = {
   title: { absolute: 'Garmin GTN 650Xi / 750Xi Installation - Northern Plains | RWAS' },
   description:
-    'Garmin GTN 650Xi and GTN 750Xi installation in Sioux Falls, SD: WAAS navigator integration, antennas, panel work, testing, and documentation.',
+    'Garmin GTN 650Xi and GTN 750Xi installation in the Northern Plains: WAAS navigator integration, antennas, panel work, testing, and documentation.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function GtnXiNavigatorInstallationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Garmin GTN 650Xi and GTN 750Xi navigator installation planning, WAAS GPS/NAV/COMM integration, antenna and wiring review, autopilot and display integration, configuration, testing, and documentation from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
+                  'Garmin GTN 650Xi and GTN 750Xi navigator installation planning, WAAS GPS/NAV/COMM integration, antenna and wiring review, autopilot and display integration, configuration, testing, and documentation from Roger Wilco Aviation Services for the Northern Plains.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'GTN Xi navigator installation workflow',
@@ -90,7 +90,7 @@ export default function GtnXiNavigatorInstallationPage() {
             WAAS GPS/NAV/COMM &middot; LPV approach capability &middot; antenna planning &middot; autopilot integration &middot; documentation
           </p>
           <div className="bs-byline">
-            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            RWAS Avionics Desk &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -209,9 +209,9 @@ export default function GtnXiNavigatorInstallationPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Hangar 3, 3701 N. Aviation Avenue
+                RWAS Avionics Desk
                 <br />
-                Sioux Falls, South Dakota 57104
+                the Northern Plains
               </p>
             </Specimen>
 

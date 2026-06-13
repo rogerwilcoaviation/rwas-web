@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/rotax-repair';
 export const metadata = {
   title: { absolute: 'Rotax Aircraft Engine Maintenance - Northern Plains | RWAS' },
   description:
-    'Rotax aircraft engine maintenance support in Sioux Falls, SD: inspection planning, troubleshooting, documentation review, and repair-station coordination.',
+    'Rotax aircraft engine maintenance support in the Northern Plains: inspection planning, troubleshooting, documentation review, and repair-station coordination.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function RotaxRepairPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Rotax aircraft engine maintenance support, inspection coordination, troubleshooting, and documentation from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
+                  'Rotax aircraft engine maintenance support, inspection coordination, troubleshooting, and documentation from Roger Wilco Aviation Services for the Northern Plains.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Rotax maintenance support',
@@ -89,7 +89,7 @@ export default function RotaxRepairPage() {
             912 &middot; 914 &middot; 915 iS &middot; 916 iS &middot; light sport &middot; experimental &middot; inspection and troubleshooting support
           </p>
           <div className="bs-byline">
-            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            RWAS Avionics Desk &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -203,9 +203,9 @@ export default function RotaxRepairPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Hangar 3, 3701 N. Aviation Avenue
+                RWAS Avionics Desk
                 <br />
-                Sioux Falls, South Dakota 57104
+                the Northern Plains
               </p>
             </Specimen>
 

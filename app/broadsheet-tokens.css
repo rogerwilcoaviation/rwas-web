@@ -481,7 +481,7 @@
 
 /* Weather-driven action layer — decorative only, reduced-motion safe.
  * Manual preview: ?effect=snow|thunderstorm|icing|none
- * Automatic: Sioux Falls, SD METAR/TAF drives snow, thunderstorm, or icing when no manual effect is present.
+ * Automatic: the Northern Plains METAR/TAF drives snow, thunderstorm, or icing when no manual effect is present.
  */
 .weather-effects {
   position: fixed;

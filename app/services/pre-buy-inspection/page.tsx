@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/pre-buy-inspection'
 export const metadata = {
   title: { absolute: 'Aircraft Pre-Buy Inspection | RWAS' },
   description:
-    'Aircraft pre-buy inspection support in Sioux Falls, SD: logbook review, physical inspection, avionics review, NDT coordination, and buyer guidance.',
+    'Aircraft pre-buy inspection support in the Northern Plains: logbook review, physical inspection, avionics review, NDT coordination, and buyer guidance.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function PreBuyInspectionPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Aircraft pre-buy inspection support, logbook review, physical inspection, avionics review, NDT coordination, and buyer decision support from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
+                  'Aircraft pre-buy inspection support, logbook review, physical inspection, avionics review, NDT coordination, and buyer decision support from Roger Wilco Aviation Services for the Northern Plains.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Pre-buy inspection services',
@@ -90,7 +90,7 @@ export default function PreBuyInspectionPage() {
             Logbooks &middot; physical condition &middot; avionics &middot; NDT coordination &middot; discrepancy summary &middot; buyer decision support
           </p>
           <div className="bs-byline">
-            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Supporting buyers across SD &middot; NE &middot; IA &middot; MN &middot; ND
+            RWAS Avionics Desk &middot; Supporting buyers across SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -105,7 +105,7 @@ export default function PreBuyInspectionPage() {
                   A pre-buy inspection exists to help a buyer understand risk before closing on an aircraft. It is not a substitute for an annual inspection, and it is not a guarantee that every future problem has been found. It is a focused look at records, condition, systems, obvious airworthiness concerns, and cost drivers that can materially change the purchase decision.
                 </p>
                 <p>
-                  Roger Wilco Aviation Services performs pre-buy support from an FAA Part 145 repair-station environment at Hangar 3 in Sioux Falls, South Dakota. That matters when a purchase question crosses airframe, avionics, NDT, logbook, structural, or documentation boundaries.
+                  Roger Wilco Aviation Services performs pre-buy support from an FAA Part 145 repair-station environment for the Northern Plains. That matters when a purchase question crosses airframe, avionics, NDT, logbook, structural, or documentation boundaries.
                 </p>
               </div>
             </Specimen>
@@ -191,7 +191,7 @@ export default function PreBuyInspectionPage() {
                 <Link className="bs-cta-primary" href="/contact?reason=service&source=pre-buy-inspection">
                   Request pre-buy inspection
                 </Link>
-                <Link className="bs-cta-secondary" href="/services/aircraft-maintenance-sioux-falls">
+                <Link className="bs-cta-secondary" href="/services/aircraft-maintenance">
                   Aircraft maintenance services
                 </Link>
               </p>
@@ -216,9 +216,9 @@ export default function PreBuyInspectionPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Hangar 3, 3701 N. Aviation Avenue
+                RWAS Avionics Desk
                 <br />
-                Sioux Falls, South Dakota 57104
+                the Northern Plains
               </p>
             </Specimen>
 

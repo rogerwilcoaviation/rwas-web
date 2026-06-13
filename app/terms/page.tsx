@@ -16,7 +16,7 @@ import {
 export const metadata = {
   title: { absolute: 'Terms of Service | Roger Wilco Aviation Services' },
   description:
-    'Terms of service for Roger Wilco Aviation Services (rogerwilcoaviation.com). FAA Part 145 Repair Station in Sioux Falls, SD.',
+    'Terms of service for Roger Wilco Aviation Services (rogerwilcoaviation.com). FAA Part 145 Repair Station in the Northern Plains.',
   alternates: { canonical: 'https://www.rogerwilcoaviation.com/terms' },
 };
 
@@ -393,8 +393,7 @@ export default function TermsPage() {
             <li>
               Beneficiary name and address:{' '}
               <span className="font-bold">
-                Roger Wilco Aviation Services LLC, Hangar 3, 3701 N. Aviation Avenue, Sioux Falls,
-                SD 57104
+                Roger Wilco Aviation Services LLC, RWAS Avionics Desk
               </span>
             </li>
           </ul>

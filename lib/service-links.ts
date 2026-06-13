@@ -31,8 +31,8 @@ const links: SeoServiceLink[] = [
     description: 'Transponder upgrades, GPS source review, antenna planning, configuration, and compliance documentation.',
   },
   {
-    href: '/services/aircraft-maintenance-sioux-falls',
-    label: 'Aircraft maintenance in Sioux Falls',
+    href: '/services/aircraft-maintenance',
+    label: 'Aircraft maintenance in the Northern Plains',
     description: 'Annual inspections, troubleshooting, AOG coordination, and repair-station documentation.',
   },
   {

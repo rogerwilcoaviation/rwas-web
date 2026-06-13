@@ -1,7 +1,7 @@
 const metadata = {
   title: 'Roger Wilco Aviation Services',
   description:
-    'FAA Part 145 Repair Station in Sioux Falls, SD. Certified Garmin dealer offering G3X Touch, GFC 500, annual inspections, NDT, and fabrication. Call (605) 299-8178.',
+    'FAA Part 145 Repair Station in the Northern Plains. Certified Garmin dealer offering G3X Touch, GFC 500, annual inspections, NDT, and fabrication. Call (605) 299-8178.',
   domain: 'rogerwilcoaviation.com',
   logoTitle: 'Roger Wilco Aviation Services',
   businessName: 'Roger Wilco Aviation Services',

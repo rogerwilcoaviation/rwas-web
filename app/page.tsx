@@ -13,9 +13,9 @@ import BlogArticlesFeed from '@/components/home/BlogArticlesFeed';
 import AircraftSaleFeed from '@/components/home/AircraftSaleFeed';
 
 export const metadata = {
-  title: 'Garmin Avionics & Aircraft Maintenance — Sioux Falls, SD',
+  title: 'Garmin Avionics & Aircraft Maintenance — the Northern Plains',
   description:
-    'FAA Part 145 repair station in Sioux Falls, SD. Certified Garmin dealer: G3X Touch, GFC 500, annual inspections, NDT. Call (605) 299-8178.',
+    'FAA Part 145 repair station in the Northern Plains. Certified Garmin dealer: G3X Touch, GFC 500, annual inspections, NDT. Call (605) 299-8178.',
   alternates: { canonical: 'https://www.rogerwilcoaviation.com/' },
 };
 
@@ -67,7 +67,7 @@ export default function Home() {
                 </a>
               </div>
               <div className="bs-toc__row">
-                <a href="/services/aircraft-maintenance-sioux-falls">
+                <a href="/services/aircraft-maintenance">
                   <span>Annual Inspections</span>
                   <span className="bs-toc__pg">B2 &rarr;</span>
                 </a>
@@ -404,7 +404,7 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/aircraft-maintenance-sioux-falls">
+                    <a href="/services/aircraft-maintenance">
                       Annual Inspections
                     </a>
                   </p>
@@ -415,7 +415,7 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/aircraft-maintenance-sioux-falls">
+                    <a href="/services/aircraft-maintenance">
                       100-Hour Inspections
                     </a>
                   </p>

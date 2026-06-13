@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/services/ads-b-installation'
 export const metadata = {
   title: { absolute: 'ADS-B Out Installation - South Dakota, Nebraska, Iowa | RWAS' },
   description:
-    'ADS-B Out installation in Sioux Falls, SD: Garmin transponder upgrades, GPS source review, antenna planning, configuration, testing, and paperwork.',
+    'ADS-B Out installation in the Northern Plains: Garmin transponder upgrades, GPS source review, antenna planning, configuration, testing, and paperwork.',
   alternates: { canonical: pageUrl },
 };
 
@@ -43,7 +43,7 @@ export default function AdsBInstallationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'ADS-B Out installation, transponder upgrade planning, antenna review, GPS source review, configuration, testing, and documentation support from Roger Wilco Aviation Services at Hangar 3 in Sioux Falls, South Dakota.',
+                  'ADS-B Out installation, transponder upgrade planning, antenna review, GPS source review, configuration, testing, and documentation support from Roger Wilco Aviation Services for the Northern Plains.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'ADS-B installation workflow',
@@ -90,7 +90,7 @@ export default function AdsBInstallationPage() {
             Transponder upgrades &middot; GPS source review &middot; antenna planning &middot; configuration &middot; FAR 91.227 documentation
           </p>
           <div className="bs-byline">
-            Hangar 3 &middot; 3701 N. Aviation Avenue &middot; Sioux Falls, SD &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            RWAS Avionics Desk &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
           </div>
         </section>
 
@@ -212,9 +212,9 @@ export default function AdsBInstallationPage() {
                   avionics@rwas.team
                 </a>
                 <br />
-                Hangar 3, 3701 N. Aviation Avenue
+                RWAS Avionics Desk
                 <br />
-                Sioux Falls, South Dakota 57104
+                the Northern Plains
               </p>
             </Specimen>
 

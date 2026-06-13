@@ -184,7 +184,7 @@ If someone says "continue my listing" or "resume my listing":
 | nNumber | string | "N4372T" |
 | sellerName | string | "John Halsted" |
 | sellerPhone | string | "(605) 299-8178" |
-| sellerLocation | string | "Sioux Falls, SD (Sioux Falls, SD)" |
+| sellerLocation | string | "the Northern Plains (the Northern Plains)" |
 | category | string | "single-piston" |
 | description | string | "Well-maintained..." |
 

@@ -14,7 +14,7 @@ const PANEL_PLANNER_URL = 'https://panelplanner.rwas.team/customer';
 export const metadata = {
   title: { absolute: 'Build My Panel — RWAS Garmin Panel Planner' },
   description:
-    'Sketch a Garmin avionics panel concept with the RWAS customer Panel Planner in Sioux Falls (KFSD). Submit your design for RWAS review before fabrication.',
+    'Sketch a Garmin avionics panel concept with the RWAS customer Panel Planner in the Northern Plains (KFSD). Submit your design for RWAS review before fabrication.',
   alternates: {
     canonical: 'https://www.rogerwilcoaviation.com/panel-planner',
   },

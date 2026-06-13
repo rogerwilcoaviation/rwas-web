@@ -69,9 +69,6 @@ export const Footer = ({ className }: { className?: string }) => {
         <LandingFooterLink href="/about">
           About
         </LandingFooterLink>
-        <LandingFooterLink href="/locations/sioux-falls">
-          Sioux Falls location
-        </LandingFooterLink>
         <LandingFooterLink href="/shop-capabilities">
           Shop capabilities
         </LandingFooterLink>
@@ -93,7 +90,7 @@ export const Footer = ({ className }: { className?: string }) => {
         <LandingFooterLink href="/services/ads-b-installation">
           ADS-B installation
         </LandingFooterLink>
-        <LandingFooterLink href="/services/aircraft-maintenance-sioux-falls">
+        <LandingFooterLink href="/services/aircraft-maintenance">
           Aircraft maintenance
         </LandingFooterLink>
         <LandingFooterLink href="/services/pre-buy-inspection">

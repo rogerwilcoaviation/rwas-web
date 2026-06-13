@@ -32,7 +32,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: { absolute: 'Aircraft for Sale — RWAS Marketplace' },
   description:
-    'Aircraft listings from RWAS in Sioux Falls, SD. Cessna, Piper, Beechcraft, and more. Verified logbooks, trusted sellers, FAA Cert. Repair Station support.',
+    'Aircraft listings from RWAS in the Northern Plains. Cessna, Piper, Beechcraft, and more. Verified logbooks, trusted sellers, FAA Cert. Repair Station support.',
   alternates: {
     canonical: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
   },
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     url: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
     title: 'Aircraft for Sale — RWAS Marketplace',
     description:
-      'Browse aircraft listings backed by a FAA Part 145 repair station in Sioux Falls, SD.',
+      'Browse aircraft listings backed by a FAA Part 145 repair station in the Northern Plains.',
     images: [
       {
         url: 'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Aircraft for Sale — RWAS Marketplace',
     description:
-      'Browse aircraft listings backed by a FAA Part 145 repair station in Sioux Falls, SD.',
+      'Browse aircraft listings backed by a FAA Part 145 repair station in the Northern Plains.',
     images: ['https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg'],
   },
 };
@@ -157,7 +157,7 @@ export default async function AircraftForSalePage() {
             Pre-owned aircraft listings vetted by a FAA Part 145 repair station. Every listing comes with the option of a pre-buy inspection by the RWAS team.
           </p>
           <div className="bs-byline">
-            Call <strong>(605) 299-8178</strong> &nbsp;&middot;&nbsp; Ask Captain Jerry &nbsp;&middot;&nbsp; Hangar 3 &middot; Sioux Falls, South Dakota
+            Call <strong>(605) 299-8178</strong> &nbsp;&middot;&nbsp; Ask Captain Jerry &nbsp;&middot;&nbsp; RWAS Avionics Desk &middot; the Northern Plains
           </div>
           <div className="a4s-cta-row">
             <a className="a4s-cta-btn" href="#listings">

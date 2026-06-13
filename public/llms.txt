@@ -1,10 +1,10 @@
 # Roger Wilco Aviation Services (RWAS)
 
-> FAA Part 145 Repair Station (Certificate RWSR491E) at Hangar 3, 3701 N. Aviation Avenue, Sioux Falls, South Dakota, specializing in Garmin avionics installation, aircraft maintenance, non-destructive testing, and sheet metal fabrication. Founded by John Halsted, a veteran pilot with 40+ years in aviation. Serving the Northern Plains: South Dakota, Nebraska, Iowa, Minnesota, North Dakota, Wyoming, and Montana.
+> FAA Part 145 Repair Station (Certificate RWSR491E) at the Northern Plains, specializing in Garmin avionics installation, aircraft maintenance, non-destructive testing, and sheet metal fabrication. Founded by John Halsted, a veteran pilot with 40+ years in aviation. Serving the Northern Plains: South Dakota, Nebraska, Iowa, Minnesota, North Dakota, Wyoming, and Montana.
 
 - **Phone:** (605) 299-8178
 - **Email:** avionics@rwas.team
-- **Location:** Hangar 3, 3701 N. Aviation Avenue, Sioux Falls, SD 57104
+- **Location:** the Northern Plains
 - **Hours:** Monday–Friday, 7:00 AM – 5:00 PM CT
 - **Certifications:** FAA Part 145 Certificate RWSR491E, Certified Garmin Dealer, NBAA Member, AEA Member
 
@@ -12,7 +12,7 @@
 
 - [Home](https://www.rogerwilcoaviation.com/) — Overview of services and featured capabilities
 - [About](https://www.rogerwilcoaviation.com/about) — Company history, founder bio, contact details
-- [Sioux Falls Location](https://www.rogerwilcoaviation.com/locations/sioux-falls) — Hangar 3 address, regional service area, and links to RWAS service capabilities
+- [the Northern Plains Location](https://www.rogerwilcoaviation.com/services) — RWAS Avionics Desk address, regional service area, and links to RWAS service capabilities
 - [Shop Capabilities](https://www.rogerwilcoaviation.com/shop-capabilities) — Full catalog of services: Garmin installations, A&P maintenance, NDT, fabrication
 - [Aircraft Services](https://www.rogerwilcoaviation.com/services) — Crawlable service hub linking RWAS avionics, maintenance, NDT, fabrication, Rotax, pre-buy, and Papa-Alpha service pages
 - [Aircraft NDT Inspection](https://www.rogerwilcoaviation.com/services/ndt-inspection) — Eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing
@@ -24,7 +24,7 @@
 - [GFC 500 Autopilot Installation](https://www.rogerwilcoaviation.com/services/gfc-500-autopilot-installation) — Garmin GFC 500 eligibility review, quote planning, panel integration, installation, testing, and documentation
 - [ADS-B Installation](https://www.rogerwilcoaviation.com/services/ads-b-installation) — ADS-B Out compliance, Garmin transponder upgrade planning, GPS source review, antenna planning, configuration, and documentation support
 - [Rotax Repair](https://www.rogerwilcoaviation.com/services/rotax-repair) — Rotax aircraft engine maintenance support, inspection planning, troubleshooting, and documentation review
-- [Aircraft Maintenance Sioux Falls](https://www.rogerwilcoaviation.com/services/aircraft-maintenance-sioux-falls) — Annual inspections, 100-hour inspections, pre-buy support, AOG service, and repair-station documentation at Hangar 3 in Sioux Falls, SD
+- [Aircraft Maintenance the Northern Plains](https://www.rogerwilcoaviation.com/services/aircraft-maintenance) — Annual inspections, 100-hour inspections, pre-buy support, AOG service, and repair-station documentation for the Northern Plains
 - [Pre-Buy Inspection](https://www.rogerwilcoaviation.com/services/pre-buy-inspection) — Aircraft logbook review, physical condition checks, avionics review, NDT coordination, and buyer decision support
 - [Garmin](https://www.rogerwilcoaviation.com/garmin) — Garmin product updates, bulletins, promotions
 - [Blog](https://www.rogerwilcoaviation.com/blog) — Aviation news, service bulletins, Garmin memos, shop dispatches

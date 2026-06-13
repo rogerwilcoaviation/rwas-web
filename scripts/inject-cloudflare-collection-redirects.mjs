@@ -21,8 +21,8 @@ const redirects = {
   '/collections/garmin-cycling-fitness': '/collections',
   '/collections/garmin-golf': '/collections',
   '/collections/garmin-outdoor-dog-tracking': '/collections',
-  '/maintenance': '/services/aircraft-maintenance-sioux-falls',
-  '/services/aircraft-maintenance-yankton': '/services/aircraft-maintenance-sioux-falls',
+  '/maintenance': '/services/aircraft-maintenance',
+  '/services/aircraft-maintenance-yankton': '/services/aircraft-maintenance',
 };
 
 const gonePaths = [

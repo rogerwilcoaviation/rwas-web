@@ -23,7 +23,7 @@ const DEFAULT_POLICIES: PolicyLink[] = [
  */
 export default function BroadsheetFooter({
   brand = "Roger Wilco Aviation Services",
-  copyright = `\u00a9 ${new Date().getFullYear()} Roger Wilco Aviation Services \u00b7 Sioux Falls, SD`,
+  copyright = `\u00a9 ${new Date().getFullYear()} Roger Wilco Aviation Services \u00b7 the Northern Plains`,
 }: BroadsheetFooterProps) {
   return (
     <footer className="bs-footer">

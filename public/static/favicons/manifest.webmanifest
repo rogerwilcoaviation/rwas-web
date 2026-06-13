@@ -1,7 +1,7 @@
 {
   "name": "Roger Wilco Aviation Services",
   "short_name": "RWAS",
-  "description": "FAA Part 145 repair station in Sioux Falls, SD offering Garmin avionics, aircraft maintenance, NDT, fabrication, and Papa-Alpha rigging tools.",
+  "description": "FAA Part 145 repair station in the Northern Plains offering Garmin avionics, aircraft maintenance, NDT, fabrication, and Papa-Alpha rigging tools.",
   "dir": "auto",
   "lang": "en-US",
   "display": "standalone",

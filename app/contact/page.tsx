@@ -16,7 +16,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/contact';
 export const metadata = {
   title: 'Contact RWAS',
   description:
-    'Contact the Roger Wilco Aviation Services Avionics Desk in Sioux Falls, SD. Quote requests, project inquiries, and general questions route to avionics@rwas.team.',
+    'Contact the Roger Wilco Aviation Services Avionics Desk in the Northern Plains. Quote requests, project inquiries, and general questions route to avionics@rwas.team.',
   alternates: { canonical: pageUrl },
 };
 
@@ -71,7 +71,7 @@ export default function ContactPage() {
             with real numbers.
           </p>
           <p className="bs-byline">
-            RWAS Avionics Desk &middot; Hangar 3, 3701 N. Aviation Avenue &middot; Sioux Falls, SD 57104 &middot; (605) 299-8178
+            RWAS Avionics Desk &middot; the Northern Plains &middot; (605) 299-8178
           </p>
         </section>
 
@@ -102,11 +102,9 @@ export default function ContactPage() {
               </dd>
             </div>
             <div>
-              <dt>Shop address</dt>
+              <dt>Service desk</dt>
               <dd>
-                Hangar 3, 3701 N. Aviation Avenue
-                <br />
-                Sioux Falls, SD 57104
+                Contact RWAS for current scheduling and arrival details.
               </dd>
             </div>
           </dl>

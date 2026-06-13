@@ -28,6 +28,9 @@ import { PhotoCarousel } from './photo-carousel';
 
 export const revalidate = 60;
 
+const AIRCRAFT_LISTING_FALLBACK_IMAGE =
+  'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg';
+
 /*
  * Required because the site is configured with `output: 'export'` (static
  * export). At build time we enumerate every active listing and pre-render
@@ -154,12 +157,12 @@ export async function generateMetadata({
   const title = `${sold ? 'SOLD — ' : ''}${headline(l)} — ${priceLabel(l)} — RWAS`;
   const description =
     (l.description && l.description.slice(0, 160)) ||
-    `${headline(l)} for sale at Roger Wilco Aviation Services, Sioux Falls, SD. Tail ${l.nNumber || 'n/a'}.`;
+    `${headline(l)} for sale at Roger Wilco Aviation Services, the Northern Plains. Tail ${l.nNumber || 'n/a'}.`;
   const url = `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(l.id)}`;
   const firstPhoto = (l.photos || [])[0];
   const imageUrl = firstPhoto
     ? `https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(firstPhoto.key)}?w=1600&q=82`
-    : 'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg';
+    : AIRCRAFT_LISTING_FALLBACK_IMAGE;
   return {
     title,
     description,
@@ -227,7 +230,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
     })),
   };
   if (listing.make) productJsonLd.brand = { '@type': 'Brand', name: listing.make };
-  if (photoUrls.length) productJsonLd.image = photoUrls;
+  productJsonLd.image = photoUrls.length ? photoUrls : [AIRCRAFT_LISTING_FALLBACK_IMAGE];
   if (listing.price && Number(listing.price) > 0) {
     productJsonLd.offers = {
       '@type': 'Offer',

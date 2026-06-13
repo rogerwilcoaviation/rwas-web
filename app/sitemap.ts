@@ -19,7 +19,6 @@ interface StaticRoute {
 const STATIC_ROUTES: StaticRoute[] = [
   { path: '',                  priority: 1.0, changeFrequency: 'weekly'  },
   { path: 'about',             priority: 0.9, changeFrequency: 'monthly' },
-  { path: 'locations/sioux-falls', priority: 0.9, changeFrequency: 'monthly' },
   { path: 'shop-capabilities', priority: 0.9, changeFrequency: 'monthly' },
   { path: 'garmin',            priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services', priority: 0.9, changeFrequency: 'monthly' },
@@ -28,7 +27,7 @@ const STATIC_ROUTES: StaticRoute[] = [
   { path: 'services/fiber-laser-fabrication', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services/garmin-installation-northern-plains', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services/rotax-repair', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services/aircraft-maintenance-sioux-falls', priority: 0.8, changeFrequency: 'monthly' },
+  { path: 'services/aircraft-maintenance', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services/pre-buy-inspection', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services/gfc-500-autopilot-installation', priority: 0.8, changeFrequency: 'monthly' },
   { path: 'services/ads-b-installation', priority: 0.8, changeFrequency: 'monthly' },
