@@ -30,7 +30,13 @@ export default function Masthead({
   return (
     <header className="bs-masthead">
       <div className="bs-masthead__inner">
-        <img className="bs-masthead__logo" src={logoSrc} alt={logoAlt} />
+        <img
+          className="bs-masthead__logo"
+          src={logoSrc}
+          alt={logoAlt}
+          width={256}
+          height={256}
+        />
         <div className="bs-masthead__titles">
           <div className="bs-masthead__brand" aria-label={brand}>{brand}</div>
           {tagline ? <div className="bs-masthead__tagline">{tagline}</div> : null}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { deferUntilIdle } from '@/components/shared/deferUntilIdle';
 
 type Article = {
   id: string;
@@ -24,26 +25,33 @@ export default function BlogArticlesFeed() {
 
   useEffect(() => {
     let alive = true;
-    fetch('/blog-articles.json')
-      .then((r) => r.json())
-      .then((data: { articles?: Article[] }) => {
-        if (!alive) return;
-        const list = (data.articles || [])
-          .filter((a) => a.status === 'published')
-          .sort((a, b) => b.date.localeCompare(a.date))
-          .slice(0, 3);
-        setArticles(list);
-      })
-      .catch(() => {
-        if (alive) setArticles([]);
-      });
+    const cancelDeferredFetch = deferUntilIdle(() => {
+      fetch('/blog-articles.json')
+        .then((r) => r.json())
+        .then((data: { articles?: Article[] }) => {
+          if (!alive) return;
+          const list = (data.articles || [])
+            .filter((a) => a.status === 'published')
+            .sort((a, b) => b.date.localeCompare(a.date))
+            .slice(0, 3);
+          setArticles(list);
+        })
+        .catch(() => {
+          if (alive) setArticles([]);
+        });
+    });
     return () => {
       alive = false;
+      cancelDeferredFetch();
     };
   }, []);
 
   if (articles === null) {
-    return <span className="bs-kicker">Loading&hellip;</span>;
+    return (
+      <div aria-busy="true" aria-label="Loading latest articles" style={{ minHeight: '320px' }}>
+        <span className="bs-kicker">Loading&hellip;</span>
+      </div>
+    );
   }
 
   if (!articles.length) {

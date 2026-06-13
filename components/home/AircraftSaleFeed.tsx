@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { deferUntilIdle } from '@/components/shared/deferUntilIdle';
 
 type Listing = {
   id: string;
@@ -32,30 +33,33 @@ export default function AircraftSaleFeed() {
 
   useEffect(() => {
     let alive = true;
-    fetch('https://sale-api.rogerwilcoaviation.com/browse')
-      .then((r) => r.json())
-      .then((data: { listings?: Listing[] }) => {
-        if (!alive) return;
-        const listings = (data.listings || []).slice(0, 4);
-        if (!listings.length) {
-          setState({ status: 'empty' });
-        } else {
-          setState({ status: 'ready', listings });
-        }
-      })
-      .catch(() => {
-        if (alive) setState({ status: 'error' });
-      });
+    const cancelDeferredFetch = deferUntilIdle(() => {
+      fetch('https://sale-api.rogerwilcoaviation.com/browse')
+        .then((r) => r.json())
+        .then((data: { listings?: Listing[] }) => {
+          if (!alive) return;
+          const listings = (data.listings || []).slice(0, 4);
+          if (!listings.length) {
+            setState({ status: 'empty' });
+          } else {
+            setState({ status: 'ready', listings });
+          }
+        })
+        .catch(() => {
+          if (alive) setState({ status: 'error' });
+        });
+    });
     return () => {
       alive = false;
+      cancelDeferredFetch();
     };
   }, []);
 
   if (state.status === 'loading') {
     return (
-      <div aria-busy="true" aria-label="Loading aircraft listings" style={{ display: 'grid', gap: '8px', padding: '4px 0' }}>
+      <div aria-busy="true" aria-label="Loading aircraft listings" style={{ display: 'grid', gap: '8px', minHeight: '260px', padding: '4px 0' }}>
         {[0, 1, 2].map((i) => (
-          <div key={i} style={{ height: '14px', borderRadius: '2px', background: 'linear-gradient(90deg, #ececec 25%, #f5f5f5 50%, #ececec 75%)', backgroundSize: '200% 100%', animation: 'bsShimmer 1.2s ease-in-out infinite', width: i === 2 ? '60%' : '100%' }} />
+          <div key={i} style={{ height: i === 0 ? '120px' : '52px', borderRadius: '2px', background: 'linear-gradient(90deg, #ececec 25%, #f5f5f5 50%, #ececec 75%)', backgroundSize: '200% 100%', animation: 'bsShimmer 1.2s ease-in-out infinite', width: i === 2 ? '70%' : '100%' }} />
         ))}
         <style>{'@keyframes bsShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}'}</style>
       </div>

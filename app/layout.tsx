@@ -11,6 +11,7 @@ import { Metadata } from 'next';
 import Script from 'next/script';
 import CartFloater from "@/components/shared/CartFloater";
 import ClientVisualEffects from './client-visual-effects';
+import DeferredJerryWidget from '@/components/shared/DeferredJerryWidget';
 
 import { colors } from '@/data/config/colors.js';
 
@@ -248,7 +249,7 @@ export default function RootLayout({
       </head>
 
       <body className="flex flex-col text-black antialiased dark:bg-gray-950 dark:text-white min-h-screen bs-body-cream">
-        <Script src="/jerry-widget.js?v=20260422" strategy="lazyOnload" />
+        <DeferredJerryWidget />
         <Script src="/rwas-analytics.js?v=20260607-track" strategy="afterInteractive" />
         <CartFloater />
         <ThemeProviders>
