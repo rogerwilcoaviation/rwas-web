@@ -20,12 +20,6 @@ import './broadsheet-tokens.css';
 import './broadsheet-chrome.css';
 import { AnalyticsWrapper } from '@/components/shared/Analytics';
 
-const displayFont = Nunito_Sans({
-  subsets: ['latin'],
-  display: 'optional',
-  variable: '--font-space-display',
-});
-
 const baseFont = Nunito_Sans({
   subsets: ['latin'],
   display: 'optional',
@@ -36,6 +30,7 @@ const playfair = Playfair_Display({
   subsets: ['latin'],
   weight: ['700', '900'],
   display: 'optional',
+  preload: false,
   variable: '--font-playfair',
 });
 
@@ -43,6 +38,7 @@ const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
   display: 'optional',
+  preload: false,
   variable: '--font-source-serif',
 });
 
@@ -50,6 +46,7 @@ const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   display: 'optional',
+  preload: false,
   variable: '--font-inter',
 });
 
@@ -57,6 +54,7 @@ const caveat = Caveat({
   subsets: ['latin'],
   weight: ['500', '700'],
   display: 'optional',
+  preload: false,
   variable: '--font-caveat',
 });
 
@@ -118,7 +116,7 @@ export default function RootLayout({
   return (
     <html
       lang={siteConfig.language}
-      className={`${baseFont.variable} ${displayFont.variable} ${playfair.variable} ${sourceSerif.variable} ${inter.variable} ${caveat.variable} scroll-smooth`}
+      className={`${baseFont.variable} ${playfair.variable} ${sourceSerif.variable} ${inter.variable} ${caveat.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <head>

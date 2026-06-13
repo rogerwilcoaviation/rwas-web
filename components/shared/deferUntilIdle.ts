@@ -17,8 +17,8 @@ type WindowWithIdleCallback = Window & {
 export function deferUntilIdle(
   task: () => void,
   {
-    minDelayMs = 3500,
-    timeoutMs = 8000,
+    minDelayMs = 8000,
+    timeoutMs = 15000,
     events = ['scroll', 'pointerdown', 'touchstart'],
   }: DeferredTaskOptions = {}
 ) {

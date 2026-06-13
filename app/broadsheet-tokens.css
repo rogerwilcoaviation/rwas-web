@@ -123,6 +123,12 @@
   pointer-events: none;
 }
 
+@media (max-width: 700px) {
+  .broadsheet::before {
+    background-image: none;
+  }
+}
+
 .broadsheet > * {
   position: relative;
   z-index: 1;

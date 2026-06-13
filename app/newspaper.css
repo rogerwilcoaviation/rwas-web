@@ -18,6 +18,12 @@
   pointer-events: none;
 }
 
+@media (max-width: 700px) {
+  .np-wrapper::before {
+    background-image: none;
+  }
+}
+
 .np-wrapper > * {
   position: relative;
   z-index: 1;
