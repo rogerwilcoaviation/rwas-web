@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 const THEMES = [
   'spring',
@@ -103,7 +103,14 @@ function isTheme(value?: string | null): value is Theme {
   return !!value && (THEMES as readonly string[]).includes(value);
 }
 
-function resolveTheme(searchParams: URLSearchParams): { theme: Theme | null; source: string } {
+function resolveTheme(
+  searchParams: URLSearchParams,
+  pathname: string | null,
+): { theme: Theme | null; source: string } {
+  if (pathname === '/preview/july-4') {
+    return { theme: 'july-4', source: 'Preview path' };
+  }
+
   const explicit = (searchParams.get('theme') || searchParams.get('season'))?.toLowerCase();
   if (isTheme(explicit)) return { theme: explicit, source: 'Manual preview' };
 
@@ -119,9 +126,16 @@ function resolveTheme(searchParams: URLSearchParams): { theme: Theme | null; sou
 }
 
 export default function SeasonalTheme() {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { theme, source } = useMemo(() => resolveTheme(searchParams), [searchParams]);
-  const showBadge = searchParams.get('themeBadge') !== '0' && (theme || searchParams.get('autoTheme') === '1');
+  const { theme, source } = useMemo(
+    () => resolveTheme(searchParams, pathname),
+    [pathname, searchParams],
+  );
+  const showBadge =
+    pathname !== '/preview/july-4' &&
+    searchParams.get('themeBadge') !== '0' &&
+    (theme || searchParams.get('autoTheme') === '1');
 
   useEffect(() => {
     const root = document.documentElement;
