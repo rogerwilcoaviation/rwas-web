@@ -92,7 +92,7 @@ body {
   text-align: center;
 }
 .broadsheet .bs-masthead__brand {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-display);
   font-weight: 900;
   font-size: 40px;
   line-height: 1;
@@ -101,7 +101,7 @@ body {
   color: var(--ink-900);
 }
 .broadsheet .bs-masthead__tagline {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-ui);
   font-size: 10px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -110,7 +110,7 @@ body {
 }
 .broadsheet .bs-masthead__cert {
   text-align: right;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-ui);
   font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
