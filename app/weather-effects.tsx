@@ -43,7 +43,7 @@ export default function WeatherEffects() {
     }
     if (theme === 'winter-storm') return 'snow';
     if (theme === 'christmas') return 'snow';
-    if (theme === 'july-4') return 'fireworks';
+    if (theme === 'july-4') return 'none';
     if (theme === 'memorial-day') return 'flag';
     if (theme === 'veterans-day') return 'branch-flags';
     if (theme === 'thanksgiving') return 'turkeys';

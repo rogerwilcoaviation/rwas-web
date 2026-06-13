@@ -429,22 +429,22 @@
 }
 
 .theme-july-4 .broadsheet {
-  --ink-900: #061a40;
-  --ink-800: #0a3161;
-  --ink-700: #174ea6;
-  --ink-600: #2f6fc6;
-  --ink-500: #7199d7;
-  --gold-900: #7b0f1d;
-  --gold-800: #a3132a;
-  --gold-700: #bf0d2f;
-  --gold-600: #d9283f;
-  --gold-500: #ffffff;
-  --gold-light: #ffffff;
-  --cream: #f7f7f2;
-  --bone: #ffffff;
-  --parchment: #e7eef9;
-  --rule: #174ea6;
-  --rule-soft: #b7c6dc;
+  --ink-900: #07182f;
+  --ink-800: #10294a;
+  --ink-700: #1f3f66;
+  --ink-600: #45688f;
+  --ink-500: #7d93ad;
+  --gold-900: #641b25;
+  --gold-800: #842330;
+  --gold-700: #9c2f3e;
+  --gold-600: #b85a62;
+  --gold-500: #cfa0a2;
+  --gold-light: #ead3cf;
+  --cream: #f4f0e6;
+  --bone: #fff9ec;
+  --parchment: #e5dfd2;
+  --rule: #1f3f66;
+  --rule-soft: #b8b0a2;
 }
 
 .theme-thanksgiving .broadsheet {
@@ -960,18 +960,18 @@
 }
 
 
-/* Stronger Stars & Stripes treatment for the Fourth of July edition. */
+/* Restrained Independence Day edition: patriotic, not parade-float. */
 .theme-july-4 .broadsheet::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: .18;
+  opacity: .06;
   background:
-    radial-gradient(circle, #ffffff 0 1.5px, transparent 2.1px) 18px 18px / 34px 30px repeat,
-    linear-gradient(90deg, rgba(10,49,97,.85) 0 34%, transparent 34% 100%),
-    repeating-linear-gradient(180deg, rgba(191,13,47,.42) 0 7.69%, rgba(255,255,255,.60) 7.69% 15.38%);
+    radial-gradient(circle, #fff9ec 0 1.1px, transparent 1.8px) 22px 18px / 42px 36px repeat,
+    linear-gradient(90deg, rgba(16,41,74,.72) 0 28%, transparent 28% 100%),
+    repeating-linear-gradient(180deg, rgba(132,35,48,.28) 0 9px, rgba(255,249,236,.38) 9px 18px);
   mix-blend-mode: multiply;
 }
 
@@ -981,58 +981,58 @@
 }
 
 .theme-july-4 .broadsheet .bs-dateline {
-  background: linear-gradient(90deg, #061a40 0%, #0a3161 35%, #ffffff 35% 39%, #bf0d2f 39% 100%);
-  color: #ffffff;
-  border-bottom-color: #ffffff;
+  background: linear-gradient(90deg, #07182f 0%, #10294a 68%, #842330 100%);
+  color: #fff9ec;
+  border-bottom-color: #b8b0a2;
 }
 
 .theme-july-4 .broadsheet .bs-masthead {
   background:
-    radial-gradient(circle, rgba(255,255,255,.96) 0 1.4px, transparent 2px) 18px 16px / 30px 26px repeat,
-    linear-gradient(90deg, rgba(10,49,97,.28) 0 30%, transparent 30% 100%),
-    repeating-linear-gradient(180deg, rgba(191,13,47,.18) 0 12px, rgba(255,255,255,.78) 12px 24px);
-  border-top-color: #bf0d2f;
-  border-bottom-color: #0a3161;
+    radial-gradient(circle, rgba(255,249,236,.82) 0 1px, transparent 1.8px) 20px 16px / 36px 32px repeat,
+    linear-gradient(90deg, rgba(16,41,74,.10) 0 26%, transparent 26% 100%),
+    linear-gradient(180deg, rgba(255,249,236,.98), rgba(244,240,230,.97));
+  border-top-color: #842330;
+  border-bottom-color: #1f3f66;
 }
 
 .theme-july-4 .broadsheet .bs-masthead__brand {
-  color: #061a40;
-  text-shadow: 1px 1px 0 #ffffff, 2px 2px 0 rgba(191,13,47,.25);
+  color: #07182f;
+  text-shadow: none;
 }
 
 .theme-july-4 .broadsheet .bs-masthead__tagline,
 .theme-july-4 .broadsheet .bs-kicker,
 .theme-july-4 .broadsheet .bs-bulletin__kicker {
-  color: #bf0d2f;
+  color: #842330;
 }
 
 .theme-july-4 .broadsheet .bs-nav a.bs-nav__accent,
 .theme-july-4 .broadsheet .bs-dateline__cta {
-  background: #bf0d2f;
-  color: #ffffff;
+  background: #842330;
+  color: #fff9ec;
 }
 
 .theme-july-4 .broadsheet .specimen--hero {
-  box-shadow: 4px 4px 0 #bf0d2f;
+  box-shadow: 4px 4px 0 #1f3f66;
 }
 
 .theme-july-4 .weather-flag--stripes {
-  opacity: .20;
+  opacity: .08;
 }
 
 .theme-july-4 .weather-flag--canton {
-  opacity: .30;
-  width: min(48vw, 620px);
-  height: min(34vw, 410px);
+  opacity: .14;
+  width: min(42vw, 540px);
+  height: min(30vw, 360px);
 }
 
 .theme-july-4 .weather-flag--stars {
-  opacity: .62;
-  width: min(40vw, 520px);
-  height: min(27vw, 330px);
+  opacity: .28;
+  width: min(34vw, 430px);
+  height: min(23vw, 280px);
   background-image:
-    radial-gradient(circle, #ffffff 0 1.7px, transparent 2.4px),
-    radial-gradient(circle, rgba(255,255,255,.80) 0 1.2px, transparent 2px);
-  background-size: 28px 24px, 28px 24px;
-  background-position: 0 0, 14px 12px;
+    radial-gradient(circle, #fff9ec 0 1.3px, transparent 2px),
+    radial-gradient(circle, rgba(255,249,236,.72) 0 1px, transparent 1.8px);
+  background-size: 30px 26px, 30px 26px;
+  background-position: 0 0, 15px 13px;
 }
