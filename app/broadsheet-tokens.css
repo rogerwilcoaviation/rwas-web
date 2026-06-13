@@ -762,14 +762,12 @@
   animation: holiday-easter-float 36s linear infinite;
 }
 
-.theme-july-4 .broadsheet .bs-dateline,
 .theme-memorial-day .broadsheet .bs-dateline,
 .theme-veterans-day .broadsheet .bs-dateline {
   background: linear-gradient(90deg, #0a3161 0%, #07152c 48%, #b31942 100%);
   border-bottom-color: #fff;
 }
 
-.theme-july-4 .broadsheet .bs-masthead,
 .theme-memorial-day .broadsheet .bs-masthead,
 .theme-veterans-day .broadsheet .bs-masthead {
   background:
@@ -777,11 +775,6 @@
     repeating-linear-gradient(180deg, rgba(179,25,66,.10) 0 10px, rgba(255,255,255,.10) 10px 20px),
     linear-gradient(90deg, rgba(10,49,97,.16), transparent 38%);
   border-bottom-color: #b31942;
-}
-
-.theme-july-4 .broadsheet .bs-masthead__brand {
-  color: #0a3161;
-  text-shadow: 1px 1px 0 rgba(179,25,66,.22);
 }
 
 .theme-thanksgiving .broadsheet .bs-dateline {
@@ -957,82 +950,4 @@
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
-}
-
-
-/* Restrained Independence Day edition: patriotic, not parade-float. */
-.theme-july-4 .broadsheet::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: .06;
-  background:
-    radial-gradient(circle, #fff9ec 0 1.1px, transparent 1.8px) 22px 18px / 42px 36px repeat,
-    linear-gradient(90deg, rgba(16,41,74,.72) 0 28%, transparent 28% 100%),
-    repeating-linear-gradient(180deg, rgba(132,35,48,.28) 0 9px, rgba(255,249,236,.38) 9px 18px);
-  mix-blend-mode: multiply;
-}
-
-.theme-july-4 .broadsheet > * {
-  position: relative;
-  z-index: 1;
-}
-
-.theme-july-4 .broadsheet .bs-dateline {
-  background: linear-gradient(90deg, #07182f 0%, #10294a 68%, #842330 100%);
-  color: #fff9ec;
-  border-bottom-color: #b8b0a2;
-}
-
-.theme-july-4 .broadsheet .bs-masthead {
-  background:
-    radial-gradient(circle, rgba(255,249,236,.82) 0 1px, transparent 1.8px) 20px 16px / 36px 32px repeat,
-    linear-gradient(90deg, rgba(16,41,74,.10) 0 26%, transparent 26% 100%),
-    linear-gradient(180deg, rgba(255,249,236,.98), rgba(244,240,230,.97));
-  border-top-color: #842330;
-  border-bottom-color: #1f3f66;
-}
-
-.theme-july-4 .broadsheet .bs-masthead__brand {
-  color: #07182f;
-  text-shadow: none;
-}
-
-.theme-july-4 .broadsheet .bs-masthead__tagline,
-.theme-july-4 .broadsheet .bs-kicker,
-.theme-july-4 .broadsheet .bs-bulletin__kicker {
-  color: #842330;
-}
-
-.theme-july-4 .broadsheet .bs-nav a.bs-nav__accent,
-.theme-july-4 .broadsheet .bs-dateline__cta {
-  background: #842330;
-  color: #fff9ec;
-}
-
-.theme-july-4 .broadsheet .specimen--hero {
-  box-shadow: 4px 4px 0 #1f3f66;
-}
-
-.theme-july-4 .weather-flag--stripes {
-  opacity: .08;
-}
-
-.theme-july-4 .weather-flag--canton {
-  opacity: .14;
-  width: min(42vw, 540px);
-  height: min(30vw, 360px);
-}
-
-.theme-july-4 .weather-flag--stars {
-  opacity: .28;
-  width: min(34vw, 430px);
-  height: min(23vw, 280px);
-  background-image:
-    radial-gradient(circle, #fff9ec 0 1.3px, transparent 2px),
-    radial-gradient(circle, rgba(255,249,236,.72) 0 1px, transparent 1.8px);
-  background-size: 30px 26px, 30px 26px;
-  background-position: 0 0, 15px 13px;
 }
