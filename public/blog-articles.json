@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-06-11T16:00:32.500563+00:00",
-    "total_articles": 18,
+    "last_updated": "2026-06-19T16:00:37.591159+00:00",
+    "total_articles": 19,
     "categories": [
       "regulatory",
       "product-update",
@@ -11,6 +11,45 @@
     ]
   },
   "articles": [
+    {
+      "id": "lead-times-as-of-61926-20260619",
+      "status": "draft",
+      "category": "product-update",
+      "title": "Lead Times as of 6.19.26",
+      "subtitle": "What D2 Mach 2 Pro means for owners, maintenance visibility, and smarter post-flight analysis",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Desk",
+      "date": "2026-06-19",
+      "source": "Garmin Dealer Memo",
+      "source_url": "",
+      "lead": "Garmin is running a limited-time D2 Mach 2 aviator smartwatch promotion: customers can save $150 on qualifying D2 Mach 2 and D2 Mach 2 Pro models through June 29, 2026.",
+      "body": [
+        "Garmin has announced a limited-time promotion on the D2 Mach 2 aviator smartwatch family. From May 7 through June 29, 2026, customers can save $150 on qualifying D2 Mach 2 and D2 Mach 2 Pro models purchased through an authorized Garmin aviation dealer.",
+        "The promotion applies to D2 Mach 2, 47 mm at $1,199.99, D2 Mach 2, 51 mm at $1,349.99, D2 Mach 2 Pro, 51 mm at $1,399.99. These are customer-facing promotional prices for the active promotion window; normal pricing resumes after the promotion ends.",
+        "For pilots, the D2 line is Garmin\u2019s aviation-focused smartwatch family: flight-oriented tools on the wrist, everyday smartwatch capability, and a cleaner link between the pilot\u2019s flying life and daily routine. The D2 Mach 2 Pro adds built-in inReach capability, with important limitations: an active subscription is required, coverage is not available everywhere, satellite and LTE services are subject to regional availability, and Garmin notes it is not for in-flight use.",
+        "RWAS can help customers confirm which D2 Mach 2 model fits their needs, place an order during the promotion window, and coordinate the Garmin ecosystem around the aircraft, panel, mobile apps, and pilot workflow. If you have been considering a D2 aviation watch, this is a good window to ask about availability before the June 29 deadline."
+      ],
+      "tags": [
+        "garmin",
+        "dealer-memo",
+        "d2-mach-2-pro",
+        "d2-mach-2",
+        "g3x-touch",
+        "g5"
+      ],
+      "social": {
+        "facebook": {
+          "text": "Garmin just made D2 Mach 2 Pro more useful after the flight, not just during it.\n\nThis memo covers automatic flight logging through Connext, Garmin Pilot, and flyGarmin.com, with partner integrations that can help owners get better maintenance and operating insight from their data.\n\nRWAS is an authorized Garmin dealer, and we can help you make the panel, connectivity, and workflow actually work together.\n\nReview the article: https://www.rogerwilcoaviation.com/blog/lead-times-as-of-61926-20260619\nCall (605) 299-8178.\n\n#Garmin #RogerWilcoAviation #Avionics #GarminPilot #Connext #flyGarmin",
+          "status": "pending"
+        },
+        "instagram": {
+          "text": "New Garmin memo, and this one actually matters for owners.\n\nAutomatic flight logging ties the panel, Garmin Pilot, flyGarmin.com, and outside analysis tools together in a much cleaner workflow.\n\nRWAS is an authorized Garmin dealer. We can help you build or upgrade a system that works as a whole, not just as separate boxes in the panel.\n\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Avionics #GarminPilot #Connext #flyGarmin #GeneralAviation #RogerWilcoAviation",
+          "status": "pending"
+        }
+      },
+      "image": "/images/blog/lead-times-as-of-61926.jpg",
+      "image_alt": "Lead Times as of 6.19.26 Garmin dealer memo image."
+    },
     {
       "id": "june-dealer-reminders-20260611",
       "status": "draft",
