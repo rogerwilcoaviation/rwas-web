@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-06-19T16:00:37.591159+00:00",
-    "total_articles": 19,
+    "last_updated": "2026-06-23T20:00:24.025174+00:00",
+    "total_articles": 20,
     "categories": [
       "regulatory",
       "product-update",
@@ -11,6 +11,41 @@
     ]
   },
   "articles": [
+    {
+      "id": "dealer-product-update-and-training-webinars-20260623",
+      "status": "draft",
+      "category": "product-update",
+      "title": "Dealer Product Update and Training Webinars",
+      "subtitle": "What this Garmin update means for owners, maintenance visibility, and smarter post-flight analysis",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Desk",
+      "date": "2026-06-23",
+      "source": "Garmin Dealer Memo",
+      "source_url": "",
+      "lead": "June 23, 2026 Confidential \u2014 Authorized dealers only. Redistribution is prohibited.",
+      "body": [
+        "Dealer Product Update and Training Webinars is the kind of update that matters because it makes the airplane more useful after the flight, not just during it. For owners flying behind the supported Garmin system, Garmin is pushing automatic flight log handling farther into the real world by letting flight and engine data move wirelessly through Connext to the Garmin Pilot app, then up to flyGarmin.com once the device sees an internet connection.",
+        "That matters because the data can then be shared with analysis partners including outside analysis services. Depending on the service, that can mean better engine trend visibility, maintenance insight, flight analysis, or safety review. For owners trying to get more value out of the airplane they already have, it is a cleaner path from raw data to something actionable.",
+        "There is one operational catch worth saying out loud. Garmin is tying the automatic workflow to the connected ecosystem, not to manual file handling. In other words, SD card uploads are not what drives these integrations. The airplane, the Connext link, the Garmin Pilot app, and the flyGarmin.com account all need to be set up correctly if you want the process to work the way Garmin describes it.",
+        "From the shop side, RWAS sees this as a solid value-add for owners who want their panel to do more than display information in flight. We are an authorized Garmin dealer, and we can help owners think through the installation, connectivity, and day-to-day workflow so the panel, the mobile tools, and the post-flight analysis all work together like one system instead of a pile of unrelated features."
+      ],
+      "tags": [
+        "garmin",
+        "dealer-memo"
+      ],
+      "social": {
+        "facebook": {
+          "text": "Garmin just made this Garmin platform more useful after the flight, not just during it.\n\nThis memo covers automatic flight logging through Connext, Garmin Pilot, and flyGarmin.com, with partner integrations that can help owners get better maintenance and operating insight from their data.\n\nRWAS is an authorized Garmin dealer, and we can help you make the panel, connectivity, and workflow actually work together.\n\nReview the article: https://www.rogerwilcoaviation.com/blog/dealer-product-update-and-training-webinars-20260623\nCall (605) 299-8178.\n\n#Garmin #RogerWilcoAviation #Avionics #GarminPilot #Connext #flyGarmin",
+          "status": "pending"
+        },
+        "instagram": {
+          "text": "New Garmin memo, and this one actually matters for owners.\n\nAutomatic flight logging ties the panel, Garmin Pilot, flyGarmin.com, and outside analysis tools together in a much cleaner workflow.\n\nRWAS is an authorized Garmin dealer. We can help you build or upgrade a system that works as a whole, not just as separate boxes in the panel.\n\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Avionics #GarminPilot #Connext #flyGarmin #GeneralAviation #RogerWilcoAviation",
+          "status": "pending"
+        }
+      },
+      "image": "/images/blog/dealer-product-update-and-training-webinars.jpg",
+      "image_alt": "Dealer Product Update and Training Webinars Garmin dealer memo image."
+    },
     {
       "id": "lead-times-as-of-61926-20260619",
       "status": "draft",
