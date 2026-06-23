@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Roger Wilco — Complete Piper Rigging Kits — Launch</title>
+<base href="/launch/papa-alpha-rigging-kits/" />
+<meta name="ext-resource-dependency" content="assets/raw_2_684x516.png" data-resource-id="product" />
+<meta name="ext-resource-dependency" content="assets/raw_0_683x556.png" data-resource-id="inAction" />
+<meta name="ext-resource-dependency" content="assets/raw_1_385x209.png" data-resource-id="level" />
+<meta name="ext-resource-dependency" content="assets/raw_3_256x256.png" data-resource-id="logo" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #0a0a0a; overflow: hidden; }
+  #root { position: fixed; inset: 0; }
+</style>
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#0C0D0F">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0C0D0F"/>
+    <line x1="600" y1="0" x2="600" y2="800" stroke="#E1241A" stroke-opacity="0.25" stroke-width="3"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#E1241A" stroke-opacity="0.25" stroke-width="3"/>
+    <g fill="none" stroke="#E1241A" stroke-width="8">
+      <path d="M120 120 h70 M120 120 v70"/>
+      <path d="M1080 120 h-70 M1080 120 v70"/>
+      <path d="M120 680 h70 M120 680 v-70"/>
+      <path d="M1080 680 h-70 M1080 680 v-70"/>
+    </g>
+    <text x="600" y="360" fill="#F2F0EC" font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="150" text-anchor="middle">PAPA-ALPHA</text>
+    <text x="600" y="500" fill="#E1241A" font-family="Oswald, Arial Narrow, sans-serif" font-weight="700" font-size="110" text-anchor="middle">RIGGING KITS</text>
+  </svg>
+</template>
+<div id="root"></div>
+
+<script src="vendor/react.development.js"></script>
+<script src="vendor/react-dom.development.js"></script>
+<script src="vendor/babel.min.js"></script>
+
+<script type="text/babel" src="animations.jsx"></script>
+<script type="text/babel" src="brand.jsx"></script>
+<script type="text/babel" src="scenes.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+const StageC = window.Stage, SpriteC = window.Sprite, useTimeC = window.useTime;
+const FrameChromeC = window.FrameChrome, SwipeC = window.Swipe;
+
+const R = (window.__resources || {});
+const IMG = {
+  product:   R.product  || 'assets/raw_2_684x516.png',
+  inAction:  R.inAction || 'assets/raw_0_683x556.png',
+  level:     R.level    || 'assets/raw_1_385x209.png',
+  logo:      R.logo     || 'assets/raw_3_256x256.png',
+};
+
+// scene timeline windows
+const T = {
+  hook:      [0,    4.3],
+  tagline:   [4.3,  8.0],
+  product:   [8.0,  13.5],
+  rigs:      [13.5, 19.0],
+  precision: [19.0, 24.3],
+  brand:     [24.3, 27.8],
+  cta:       [27.8, 33.0],
+};
+const SWIPES = [4.3, 8.0, 13.5, 19.0, 24.3, 27.8];
+
+const CHROME = [
+  { t: 0,    no: '01', label: 'REV A · 2026' },
+  { t: 4.3,  no: '02', label: 'INTRODUCING' },
+  { t: 8.0,  no: '03', label: 'PA-SERIES KIT' },
+  { t: 13.5, no: '04', label: '5 CONTROL SURFACES' },
+  { t: 19.0, no: '05', label: 'TOLERANCE ±0.0°' },
+  { t: 24.3, no: '06', label: 'EST. RWA' },
+  { t: 27.8, no: '07', label: 'ORDER NOW' },
+];
+
+function ChromeDriver() {
+  const time = useTimeC();
+  const tl = window.useTimeline();
+  React.useEffect(() => {
+    window.__deckSeek = (x) => { tl.setPlaying(false); tl.setTime(x); };
+  }, [tl]);
+  let cur = CHROME[0];
+  for (const c of CHROME) if (time >= c.t) cur = c;
+  // update video-root screen label ~each second for comment context
+  React.useEffect(() => {
+    const root = document.getElementById('video-root');
+    if (root) root.dataset.screenLabel = 't=' + Math.floor(time) + 's';
+  }, [Math.floor(time)]);
+  return <FrameChromeC rightLabel={cur.label} sceneNo={cur.no} />;
+}
+
+function App() {
+  return (
+    <div id="video-root" data-screen-label="t=0s" style={{ position: 'absolute', inset: 0 }}>
+      <StageC width={1920} height={1080} duration={33} background={window.BRAND.ink}
+             persistKey={null}>
+        <SpriteC start={T.hook[0]}      end={T.hook[1]}>      <window.SceneHook /></SpriteC>
+        <SpriteC start={T.tagline[0]}   end={T.tagline[1]}>   <window.SceneTagline /></SpriteC>
+        <SpriteC start={T.product[0]}   end={T.product[1]}>   <window.SceneProduct img={IMG.product} /></SpriteC>
+        <SpriteC start={T.rigs[0]}      end={T.rigs[1]}>      <window.SceneRigs img={IMG.inAction} /></SpriteC>
+        <SpriteC start={T.precision[0]} end={T.precision[1]}> <window.ScenePrecision img={IMG.level} /></SpriteC>
+        <SpriteC start={T.brand[0]}     end={T.brand[1]}>     <window.SceneBrand logo={IMG.logo} /></SpriteC>
+        <SpriteC start={T.cta[0]}       end={T.cta[1]}>       <window.SceneCTA logo={IMG.logo} /></SpriteC>
+
+        <ChromeDriver />
+        {SWIPES.map((s, i) => <SwipeC key={i} start={s} />)}
+      </StageC>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

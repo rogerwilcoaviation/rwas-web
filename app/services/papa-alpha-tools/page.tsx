@@ -8,6 +8,7 @@ import {
   BroadsheetFooter,
   Specimen,
 } from '@/components/shared/broadsheet';
+import { PapaAlphaLaunchFrame } from '@/components/shared/PapaAlphaLaunchFrame';
 import Link from 'next/link';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/papa-alpha-tools';
@@ -120,6 +121,24 @@ export default function PapaAlphaToolsPage() {
               <Specimen.Caption numeral="FIG. 01">
                 Papa-Alpha rigging reference tools - designed and manufactured by RWAS in the Northern Plains.
               </Specimen.Caption>
+            </Specimen>
+
+            <Specimen variant="hero" as="section">
+              <span className="bs-kicker">Launch Animation</span>
+              <h2 className="bs-headline bs-headline--section">Complete Piper rigging kits, in motion.</h2>
+              <hr className="section-rule" />
+              <PapaAlphaLaunchFrame />
+              <div className="bs-body">
+                <p>
+                  A launch piece for the Papa-Alpha complete Piper rigging kit line, packaged as a self-hosted animation
+                  for review and presentation use.
+                </p>
+              </div>
+              <p>
+                <Link className="bs-cta-secondary" href="/collections/papa-alpha-tools">
+                  Shop Papa-Alpha tools
+                </Link>
+              </p>
             </Specimen>
 
             <Specimen variant="hero" as="section">

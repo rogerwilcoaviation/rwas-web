@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import CollectionProductBrowser from '@/components/shopify/CollectionProductBrowser';
 import PartFinder, { type PartFinderProduct } from '@/components/shopify/PartFinder';
+import { PapaAlphaLaunchFrame } from '@/components/shared/PapaAlphaLaunchFrame';
 import {
   BroadsheetLayout,
   Dateline,
@@ -214,20 +215,28 @@ export default async function CollectionDetailPage({
         ) : null}
 
         {collection.handle === 'papa-alpha-tools' && (
-          <Specimen variant="flat">
-            <p className="bs-kicker">Worldwide delivery</p>
-            <p className="bs-script-accent">&mdash; from the RWAS shop to wherever you fly &mdash;</p>
-            <h2 className="bs-headline" style={{ marginTop: 6, marginBottom: 12 }}>
-              We sell internationally all over the world.
-            </h2>
-            <p className="bs-body">
-              Crafted with CAD, CNC routing, and fiber laser cutting of aircraft-grade aluminum,
-              powder coated, and UV printed for reduced weight, durability, and precision.
-            </p>
-            <p className="bs-byline" style={{ marginTop: 16, fontStyle: 'italic' }}>
-              Made by professional mechanics for professional mechanics.
-            </p>
-          </Specimen>
+          <>
+            <Specimen variant="flat">
+              <p className="bs-kicker">Launch video</p>
+              <p className="bs-script-accent">&mdash; complete Piper rigging kits &mdash;</p>
+              <PapaAlphaLaunchFrame />
+            </Specimen>
+
+            <Specimen variant="flat">
+              <p className="bs-kicker">Worldwide delivery</p>
+              <p className="bs-script-accent">&mdash; from the RWAS shop to wherever you fly &mdash;</p>
+              <h2 className="bs-headline" style={{ marginTop: 6, marginBottom: 12 }}>
+                We sell internationally all over the world.
+              </h2>
+              <p className="bs-body">
+                Crafted with CAD, CNC routing, and fiber laser cutting of aircraft-grade aluminum,
+                powder coated, and UV printed for reduced weight, durability, and precision.
+              </p>
+              <p className="bs-byline" style={{ marginTop: 16, fontStyle: 'italic' }}>
+                Made by professional mechanics for professional mechanics.
+              </p>
+            </Specimen>
+          </>
         )}
 
         {relatedServiceLinks.length ? (
