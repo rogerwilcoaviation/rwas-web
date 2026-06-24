@@ -8,6 +8,7 @@ import {
   BroadsheetFooter,
   Specimen,
 } from '@/components/shared/broadsheet';
+import { PanelPlannerLaunchFrame } from '@/components/shared/PanelPlannerLaunchFrame';
 
 const PANEL_PLANNER_URL = 'https://panelplanner.rwas.team/customer';
 
@@ -102,6 +103,8 @@ export default function PanelPlannerPage() {
             Use the RWAS customer Panel Planner to choose an aircraft panel, place avionics, preview finish ideas such as carbon fiber or brushed aluminum, and send the concept to our shop for review.
           </p>
         </section>
+
+        <PanelPlannerLaunchFrame />
 
         <div className="bs-hero" style={{ marginTop: '28px' }}>
           <Specimen variant="hero" as="section">
