@@ -1323,6 +1323,17 @@ body {
 .broadsheet .about-fig--rail {
   margin: 0;
 }
+.broadsheet .fabrication-video {
+  overflow: hidden;
+}
+.broadsheet .fabrication-video__media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--ink-900);
+  border: 1px solid var(--rule-strong);
+  object-fit: cover;
+}
 
 /* ==================================================================
    Ship 3 Tranche A — Financing + Shop Capabilities helpers

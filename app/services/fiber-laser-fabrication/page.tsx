@@ -11,12 +11,29 @@ import {
 import Link from 'next/link';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/fiber-laser-fabrication';
+const videoUrl = 'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-fiber-laser-capability-20260626.mp4';
+const posterUrl = 'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-fiber-laser-capability-20260626-poster.jpg';
+const socialImageUrl = 'https://www.rogerwilcoaviation.com/images/social/rwas-fiber-laser-fabrication-20260626.jpg';
 
 export const metadata = {
   title: { absolute: 'Aircraft Fiber Laser Fabrication - Panel Cutting, Welding, UV Print | RWAS' },
   description:
     'Aircraft fiber laser fabrication in the Northern Plains: panel cutting, laser welding, powder coating, UV printing, CAD/CNC workflow, and sheet metal support.',
   alternates: { canonical: pageUrl },
+  openGraph: {
+    title: 'Aircraft Fiber Laser Fabrication - Panel Cutting, Welding, UV Print | RWAS',
+    description:
+      'See RWAS in-house aircraft fabrication capability: fiber laser cutting, panel work, marking, finishing, and repair-station workflow.',
+    url: pageUrl,
+    images: [socialImageUrl],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Aircraft Fiber Laser Fabrication - RWAS',
+    description:
+      'See RWAS in-house aircraft fabrication capability: fiber laser cutting, panel work, marking, finishing, and repair-station workflow.',
+    images: [socialImageUrl],
+  },
 };
 
 export default function FiberLaserFabricationPage() {
@@ -57,6 +74,19 @@ export default function FiberLaserFabricationPage() {
                     { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'CAD and CNC Fabrication Support' } },
                   ],
                 },
+              },
+              {
+                '@type': 'VideoObject',
+                '@id': `${pageUrl}#fabrication-video`,
+                name: 'RWAS Aircraft Fabrication and Shop Capability Reel',
+                description:
+                  'A Roger Wilco Aviation Services shop reel showing in-house fabrication, laser work, aircraft support, and repair-station capabilities.',
+                thumbnailUrl: posterUrl,
+                uploadDate: '2026-06-26',
+                duration: 'PT56S',
+                contentUrl: videoUrl,
+                embedUrl: `${pageUrl}#fabrication-video`,
+                publisher: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
               },
               {
                 '@type': 'BreadcrumbList',
@@ -109,6 +139,25 @@ export default function FiberLaserFabricationPage() {
                   RWAS can take a project from aircraft review and CAD layout through cutting, finishing, marking, and installation planning. That shortens the loop for owners who need panel modernization, replacement metal, custom brackets, or a manufactured tool that has to survive normal hangar use.
                 </p>
               </div>
+            </Specimen>
+
+            <Specimen variant="hero" as="figure" className="about-fig fabrication-video">
+              <div id="fabrication-video">
+                <video
+                  className="fabrication-video__media"
+                  controls
+                  preload="metadata"
+                  poster="/videos/fabrication/rwas-fiber-laser-capability-20260626-poster.jpg"
+                  playsInline
+                >
+                  <source src="/videos/fabrication/rwas-fiber-laser-capability-20260626.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+              <Specimen.CaptionRule />
+              <Specimen.Caption numeral="REEL">
+                In-house fabrication capability at RWAS - laser cutting, shop workflow, aircraft context, and finish-ready work under one roof.
+              </Specimen.Caption>
             </Specimen>
 
             <Specimen variant="hero" as="figure" className="about-fig">
