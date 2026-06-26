@@ -125,6 +125,28 @@ export default function FiberLaserFabricationPage() {
           </div>
         </section>
 
+        <figure className="fabrication-video fabrication-video--feature" aria-labelledby="fabrication-video-title">
+          <div className="fabrication-video__frame" id="fabrication-video">
+            <video
+              className="fabrication-video__media"
+              controls
+              autoPlay
+              muted
+              loop
+              preload="auto"
+              poster="/videos/fabrication/rwas-fiber-laser-capability-20260626-poster.jpg"
+              playsInline
+            >
+              <source src="/videos/fabrication/rwas-fiber-laser-capability-20260626.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <figcaption className="fabrication-video__caption" id="fabrication-video-title">
+            <span>RWAS capability reel</span>
+            <strong>Fiber laser cutting, aircraft panel workflow, fabrication, finishing, and shop support under one roof.</strong>
+          </figcaption>
+        </figure>
+
         <div className="about-grid">
           <div className="about-main">
             <Specimen variant="hero" as="section">
@@ -139,25 +161,6 @@ export default function FiberLaserFabricationPage() {
                   RWAS can take a project from aircraft review and CAD layout through cutting, finishing, marking, and installation planning. That shortens the loop for owners who need panel modernization, replacement metal, custom brackets, or a manufactured tool that has to survive normal hangar use.
                 </p>
               </div>
-            </Specimen>
-
-            <Specimen variant="hero" as="figure" className="about-fig fabrication-video">
-              <div id="fabrication-video">
-                <video
-                  className="fabrication-video__media"
-                  controls
-                  preload="metadata"
-                  poster="/videos/fabrication/rwas-fiber-laser-capability-20260626-poster.jpg"
-                  playsInline
-                >
-                  <source src="/videos/fabrication/rwas-fiber-laser-capability-20260626.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-              <Specimen.CaptionRule />
-              <Specimen.Caption numeral="REEL">
-                In-house fabrication capability at RWAS - laser cutting, shop workflow, aircraft context, and finish-ready work under one roof.
-              </Specimen.Caption>
             </Specimen>
 
             <Specimen variant="hero" as="figure" className="about-fig">
