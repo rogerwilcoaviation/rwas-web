@@ -189,6 +189,27 @@ export default function ServicesPage() {
       <BulletinBar />
 
       <main className="bs-stage">
+        <figure className="fabrication-video fabrication-video--feature" aria-labelledby="services-laser-promo-title">
+          <Link className="fabrication-video__frame fabrication-video__frame--link" href="/services/fiber-laser-fabrication">
+            <video
+              className="fabrication-video__media"
+              autoPlay
+              muted
+              loop
+              preload="metadata"
+              poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg"
+              playsInline
+              aria-label="RWAS fiber laser fabrication video"
+            >
+              <source src="/videos/fabrication/rwas-laser-steel-16x9-20260626.mp4" type="video/mp4" />
+            </video>
+          </Link>
+          <figcaption className="fabrication-video__caption" id="services-laser-promo-title">
+            <span>New shop capability</span>
+            <strong>The fiber laser has landed: cutting, welding, marking, and fabrication support now visible from the service desk.</strong>
+          </figcaption>
+        </figure>
+
         <section className="hero-headline-group" aria-labelledby="services-hero">
           <span className="bs-kicker">FAA Part 145 Repair Station #RWSR491E</span>
           <span className="bs-script-accent">&mdash; the Northern Plains aircraft services desk &mdash;</span>

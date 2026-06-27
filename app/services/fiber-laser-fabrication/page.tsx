@@ -11,9 +11,9 @@ import {
 import Link from 'next/link';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/fiber-laser-fabrication';
-const videoUrl = 'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-fiber-laser-capability-20260626.mp4';
-const posterUrl = 'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-fiber-laser-capability-20260626-poster.jpg';
-const socialImageUrl = 'https://www.rogerwilcoaviation.com/images/social/rwas-fiber-laser-fabrication-20260626.jpg';
+const videoUrl = 'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-laser-steel-16x9-20260626.mp4';
+const posterUrl = 'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg';
+const socialImageUrl = 'https://www.rogerwilcoaviation.com/images/social/rwas-laser-steel-1x1-20260626.jpg';
 
 export const metadata = {
   title: { absolute: 'Aircraft Fiber Laser Fabrication - Panel Cutting, Welding, UV Print | RWAS' },
@@ -109,6 +109,28 @@ export default function FiberLaserFabricationPage() {
       <BulletinBar />
 
       <main className="bs-stage">
+        <figure className="fabrication-video fabrication-video--feature" aria-labelledby="fabrication-video-title">
+          <div className="fabrication-video__frame" id="fabrication-video">
+            <video
+              className="fabrication-video__media"
+              autoPlay
+              muted
+              loop
+              preload="auto"
+              poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg"
+              playsInline
+              aria-label="RWAS laser fabrication video"
+            >
+              <source src="/videos/fabrication/rwas-laser-steel-16x9-20260626.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <figcaption className="fabrication-video__caption" id="fabrication-video-title">
+            <span>RWAS capability reel</span>
+            <strong>Fiber laser cutting, aircraft panel workflow, fabrication, finishing, and shop support under one roof.</strong>
+          </figcaption>
+        </figure>
+
         <section className="hero-headline-group" aria-labelledby="laser-hero">
           <span className="bs-kicker">Fabrication &amp; Manufacturing &middot; FAA Part 145 Repair Station #RWSR491E</span>
           <span className="bs-script-accent">&mdash; cut, marked, finished, and reviewed in-house &mdash;</span>
@@ -124,28 +146,6 @@ export default function FiberLaserFabricationPage() {
             RWAS Avionics Desk &middot; Serving aircraft owners and shops across the Northern Plains
           </div>
         </section>
-
-        <figure className="fabrication-video fabrication-video--feature" aria-labelledby="fabrication-video-title">
-          <div className="fabrication-video__frame" id="fabrication-video">
-            <video
-              className="fabrication-video__media"
-              autoPlay
-              muted
-              loop
-              preload="auto"
-              poster="/videos/fabrication/rwas-fiber-laser-capability-20260626-poster.jpg"
-              playsInline
-              aria-label="RWAS laser fabrication video"
-            >
-              <source src="/videos/fabrication/rwas-fiber-laser-capability-20260626.mp4" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          <figcaption className="fabrication-video__caption" id="fabrication-video-title">
-            <span>RWAS capability reel</span>
-            <strong>Fiber laser cutting, aircraft panel workflow, fabrication, finishing, and shop support under one roof.</strong>
-          </figcaption>
-        </figure>
 
         <div className="about-grid">
           <div className="about-main">

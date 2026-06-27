@@ -223,6 +223,26 @@ export default function Home() {
 
           {/* RIGHT RAIL ------------------------------------------------ */}
           <div>
+            <Specimen variant="flat" as="aside" className="laser-rail-promo">
+              <a className="laser-rail-promo__link" href="/services/fiber-laser-fabrication">
+                <span className="bs-kicker">New shop capability</span>
+                <video
+                  className="laser-rail-promo__media"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg"
+                  aria-label="RWAS fiber laser fabrication video"
+                >
+                  <source src="/videos/fabrication/rwas-laser-steel-16x9-20260626.mp4" type="video/mp4" />
+                </video>
+                <span className="laser-rail-promo__title">The fiber laser has landed.</span>
+                <span className="laser-rail-promo__copy">Cutting, welding, marking, and fabrication support in-house.</span>
+              </a>
+            </Specimen>
+
             {/* Blog articles feed (hydrated client-side) */}
             <Specimen variant="flat" as="aside">
               <BlogArticlesFeed />
