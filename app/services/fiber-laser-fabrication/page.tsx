@@ -11,7 +11,7 @@ import {
 import Link from 'next/link';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/fiber-laser-fabrication';
-const videoUrl = 'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-laser-steel-16x9-slow-20260627.mp4';
+const videoUrl = 'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-laser-steel-16x9-quote-pause-20260627.mp4';
 const posterUrl = 'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg';
 const socialImageUrl = 'https://www.rogerwilcoaviation.com/images/social/rwas-laser-steel-1x1-20260626.jpg';
 
@@ -83,7 +83,7 @@ export default function FiberLaserFabricationPage() {
                   'A Roger Wilco Aviation Services shop reel showing in-house fabrication, laser work, aircraft support, and repair-station capabilities.',
                 thumbnailUrl: posterUrl,
                 uploadDate: '2026-06-26',
-                duration: 'PT34S',
+                duration: 'PT39S',
                 contentUrl: videoUrl,
                 embedUrl: `${pageUrl}#fabrication-video`,
                 publisher: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
@@ -121,7 +121,7 @@ export default function FiberLaserFabricationPage() {
               playsInline
               aria-label="RWAS laser fabrication video"
             >
-              <source src="/videos/fabrication/rwas-laser-steel-16x9-slow-20260627.mp4" type="video/mp4" />
+              <source src="/videos/fabrication/rwas-laser-steel-16x9-quote-pause-20260627.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>

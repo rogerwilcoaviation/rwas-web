@@ -201,7 +201,7 @@ export default function ServicesPage() {
               playsInline
               aria-label="RWAS fiber laser fabrication video"
             >
-              <source src="/videos/fabrication/rwas-laser-steel-16x9-slow-20260627.mp4" type="video/mp4" />
+              <source src="/videos/fabrication/rwas-laser-steel-16x9-quote-pause-20260627.mp4" type="video/mp4" />
             </video>
           </Link>
           <figcaption className="fabrication-video__caption" id="services-laser-promo-title">
