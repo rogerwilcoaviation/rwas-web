@@ -1348,6 +1348,8 @@ body {
 }
 .broadsheet .fabrication-video--feature .fabrication-video__media {
   border: 0;
+  height: min(56.25vw, 630px);
+  min-height: 320px;
 }
 .broadsheet .fabrication-video__caption {
   display: grid;
@@ -1380,6 +1382,10 @@ body {
   .broadsheet .fabrication-video__caption {
     grid-template-columns: 1fr;
     gap: 4px;
+  }
+  .broadsheet .fabrication-video--feature .fabrication-video__media {
+    height: min(62vw, 360px);
+    min-height: 220px;
   }
 }
 

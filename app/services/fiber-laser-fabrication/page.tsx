@@ -83,7 +83,7 @@ export default function FiberLaserFabricationPage() {
                   'A Roger Wilco Aviation Services shop reel showing in-house fabrication, laser work, aircraft support, and repair-station capabilities.',
                 thumbnailUrl: posterUrl,
                 uploadDate: '2026-06-26',
-                duration: 'PT56S',
+                duration: 'PT17S',
                 contentUrl: videoUrl,
                 embedUrl: `${pageUrl}#fabrication-video`,
                 publisher: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
@@ -129,13 +129,13 @@ export default function FiberLaserFabricationPage() {
           <div className="fabrication-video__frame" id="fabrication-video">
             <video
               className="fabrication-video__media"
-              controls
               autoPlay
               muted
               loop
               preload="auto"
               poster="/videos/fabrication/rwas-fiber-laser-capability-20260626-poster.jpg"
               playsInline
+              aria-label="RWAS laser fabrication video"
             >
               <source src="/videos/fabrication/rwas-fiber-laser-capability-20260626.mp4" type="video/mp4" />
               Your browser does not support the video tag.
