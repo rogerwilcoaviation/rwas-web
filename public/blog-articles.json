@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-01T19:31:00.000000+00:00",
+    "last_updated": "2026-07-01T19:41:30.059725+00:00",
     "total_articles": 21,
     "categories": [
       "regulatory",
@@ -13,7 +13,7 @@
   "articles": [
     {
       "id": "garmin-announces-2026-autopilot-rebate-program-20260701",
-      "status": "draft",
+      "status": "published",
       "category": "product-update",
       "title": "Garmin Announces 2026 Autopilot Rebate Program",
       "subtitle": "A planning note for aircraft owners considering a Garmin autopilot upgrade",
@@ -37,16 +37,20 @@
       ],
       "social": {
         "facebook": {
-          "text": "Garmin has announced a 2026 autopilot rebate program, and that makes this a good time for aircraft owners to revisit a Garmin autopilot upgrade.\n\nRWAS can help confirm aircraft eligibility, review the installation options, and build a real plan around the current program terms.\n\nReview the article: https://www.rogerwilcoaviation.com/blog/garmin-announces-2026-autopilot-rebate-program-20260701\nCall (605) 299-8178.\n\n#Garmin #GFC500 #Autopilot #Avionics #RogerWilcoAviation",
-          "status": "pending"
+          "text": "Garmin has announced a 2026 autopilot rebate program, and that makes this a good time for aircraft owners to revisit a Garmin autopilot upgrade.\n\nRWAS can help confirm aircraft eligibility, review the installation options, and build a real plan around the current program terms.\n\nCall (605) 299-8178.\n\n#Garmin #GFC500 #Autopilot #Avionics #RogerWilcoAviation",
+          "status": "approved",
+          "approved_at": "2026-07-01T19:41:30.012271+00:00"
         },
         "instagram": {
           "text": "Thinking about a Garmin autopilot upgrade? Garmin's 2026 autopilot rebate program may make the timing worth a closer look.\n\nRWAS can help verify eligibility, quote the Garmin package, and plan the installation around the aircraft you actually fly.\n\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #GFC500 #Autopilot #Avionics #GeneralAviation #RogerWilcoAviation",
-          "status": "pending"
+          "status": "approved",
+          "approved_at": "2026-07-01T19:41:30.059498+00:00"
         }
       },
       "image": "/images/blog/garmin-gfc-500-autopilot-controller-garmin-34602-4.jpg",
-      "image_alt": "Garmin GFC 500 autopilot controller head. Image source: Garmin."
+      "image_alt": "Garmin GFC 500 autopilot controller head. Image source: Garmin.",
+      "approved_at": "2026-07-01T19:41:29.938551+00:00",
+      "published_at": "2026-07-01T19:41:29.967041+00:00"
     },
     {
       "id": "dealer-product-update-and-training-webinars-20260623",
