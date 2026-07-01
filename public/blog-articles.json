@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-01T16:00:33.232180+00:00",
+    "last_updated": "2026-07-01T19:31:00.000000+00:00",
     "total_articles": 21,
     "categories": [
       "regulatory",
@@ -21,7 +21,7 @@
       "byline": "RWAS Avionics Desk",
       "date": "2026-07-01",
       "source": "Garmin announcement",
-      "source_url": "",
+      "source_url": "https://www.garmin.com/en-US/p/604257/",
       "lead": "Garmin has announced a 2026 autopilot rebate program, creating a useful planning window for aircraft owners who have been considering a certified Garmin autopilot upgrade.",
       "body": [
         "If an autopilot has been sitting on your aircraft upgrade list, Garmin's 2026 autopilot rebate program is worth paying attention to. Programs like this can help make the timing easier for owners who already know they want modern flight control, envelope protection, and a cleaner interface with the rest of the panel.",
@@ -45,8 +45,8 @@
           "status": "pending"
         }
       },
-      "image": "/images/blog/garmin-announces-2026-autopilot-rebate-program.jpg",
-      "image_alt": "Panel-mounted autopilot controller in a modern general aviation cockpit."
+      "image": "/images/blog/garmin-gfc-500-autopilot-controller-garmin-34602-4.jpg",
+      "image_alt": "Garmin GFC 500 autopilot controller head. Image source: Garmin."
     },
     {
       "id": "dealer-product-update-and-training-webinars-20260623",
