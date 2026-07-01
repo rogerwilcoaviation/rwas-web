@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-01T19:41:30.059725+00:00",
+    "last_updated": "2026-07-01T19:44:29.521533+00:00",
     "total_articles": 21,
     "categories": [
       "regulatory",
@@ -38,13 +38,17 @@
       "social": {
         "facebook": {
           "text": "Garmin has announced a 2026 autopilot rebate program, and that makes this a good time for aircraft owners to revisit a Garmin autopilot upgrade.\n\nRWAS can help confirm aircraft eligibility, review the installation options, and build a real plan around the current program terms.\n\nCall (605) 299-8178.\n\n#Garmin #GFC500 #Autopilot #Avionics #RogerWilcoAviation",
-          "status": "approved",
-          "approved_at": "2026-07-01T19:41:30.012271+00:00"
+          "status": "published",
+          "approved_at": "2026-07-01T19:41:30.012271+00:00",
+          "published_at": "2026-07-01T19:44:04.719771+00:00",
+          "post_id": "106057782039473_1011636564956882"
         },
         "instagram": {
           "text": "Thinking about a Garmin autopilot upgrade? Garmin's 2026 autopilot rebate program may make the timing worth a closer look.\n\nRWAS can help verify eligibility, quote the Garmin package, and plan the installation around the aircraft you actually fly.\n\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #GFC500 #Autopilot #Avionics #GeneralAviation #RogerWilcoAviation",
-          "status": "approved",
-          "approved_at": "2026-07-01T19:41:30.059498+00:00"
+          "status": "published",
+          "approved_at": "2026-07-01T19:41:30.059498+00:00",
+          "published_at": "2026-07-01T19:44:29.521446+00:00",
+          "media_id": "18021725852839339"
         }
       },
       "image": "/images/blog/garmin-gfc-500-autopilot-controller-garmin-34602-4.jpg",
