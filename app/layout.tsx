@@ -69,7 +69,7 @@ Object.keys(globalColors).map((variant) => {
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.siteUrl),
+  metadataBase: new URL(`${siteConfig.siteUrl.replace(/\/$/, '')}/`),
   title: {
     default: siteConfig.title,
     template: `%s | ${siteConfig.title}`,

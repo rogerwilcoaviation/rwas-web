@@ -38,6 +38,23 @@ function hasMeta(html, pattern) {
   return pattern.test(html);
 }
 
+function canonicalHref(html) {
+  return (
+    html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)?.[1] ||
+    html.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["']canonical["']/i)?.[1] ||
+    ''
+  );
+}
+
+function canonicalMatchesUrl(canonical, url) {
+  if (canonical === url) return true;
+  const expected = new URL(url);
+  if (expected.pathname === '/' && !expected.search && !expected.hash) {
+    return canonical === `${expected.origin}/` || canonical === expected.origin;
+  }
+  return false;
+}
+
 const home = await fetchNoRedirect(`${base}/`);
 if (home.res.status !== 200) fail(`Home returned ${home.res.status}`);
 if (!isLocalBase) {
@@ -108,10 +125,14 @@ async function checkUrl(url) {
   }
   const title = tags(text, 'title')[0];
   const h1s = tags(text, 'h1');
+  const canonical = canonicalHref(text);
   const urlFailures = [];
   if (!title) urlFailures.push(`${url} missing <title>`);
   if (!hasMeta(text, /<meta[^>]+name=["']description["']/i)) urlFailures.push(`${url} missing meta description`);
-  if (!hasMeta(text, /<link[^>]+rel=["']canonical["']/i)) urlFailures.push(`${url} missing canonical`);
+  if (!canonical) urlFailures.push(`${url} missing canonical`);
+  if (canonical && !canonicalMatchesUrl(canonical, url)) {
+    urlFailures.push(`${url} canonical mismatch: ${canonical}`);
+  }
   if (h1s.length !== 1) urlFailures.push(`${url} has ${h1s.length} H1 tags`);
   return urlFailures;
 }
