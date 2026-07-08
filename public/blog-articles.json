@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-08T15:12:51+00:00",
+    "last_updated": "2026-07-08T15:30:17.800453+00:00",
     "total_articles": 23,
     "categories": [
       "regulatory",
@@ -13,7 +13,7 @@
   "articles": [
     {
       "id": "introducing-axis-a-new-generation-of-flight-displays-20260708",
-      "status": "draft",
+      "status": "published",
       "category": "product-update",
       "title": "Introducing AXIS, A New Generation of Flight Displays",
       "subtitle": "Garmin's new integrated flight display family brings a cleaner upgrade path for piston aircraft panels",
@@ -42,15 +42,19 @@
       "social": {
         "facebook": {
           "text": "Garmin has introduced AXIS, a new generation of integrated flight displays for certified piston aircraft, experimental aircraft, and LSA panels.\n\nThe big idea is a cleaner cockpit: modern touchscreen displays with optional built-in IFR GPS, NAV/COM, and audio panel capability in certain 11.6-inch models.\n\nRWAS is an authorized Garmin dealer. We can help owners evaluate whether AXIS fits their aircraft, panel goals, and upgrade path.\n\nReview the article: https://www.rogerwilcoaviation.com/blog/introducing-axis-a-new-generation-of-flight-displays-20260708\nCall (605) 299-8178.\n\n#Garmin #AXIS #Avionics #FlightDisplays #RogerWilcoAviation",
-          "status": "pending"
+          "status": "approved",
+          "approved_at": "2026-07-08T15:30:17.751380+00:00"
         },
         "instagram": {
           "text": "Garmin AXIS is here: a new integrated flight display family with optional built-in IFR GPS, NAV/COM, and audio panel capability in certain 11.6-inch models.\n\nFor the right aircraft, this could mean a cleaner panel, fewer standalone boxes, and a more practical upgrade path from existing Garmin equipment.\n\nRWAS is an authorized Garmin dealer.\n\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #AXIS #Avionics #FlightDisplays #GeneralAviation #RogerWilcoAviation",
-          "status": "pending"
+          "status": "approved",
+          "approved_at": "2026-07-08T15:30:17.800243+00:00"
         }
       },
       "image": "/images/blog/introducing-axis-a-new-generation-of-flight-displays.jpg",
-      "image_alt": "Garmin AXIS flight display product image from the Garmin dealer memo."
+      "image_alt": "Garmin AXIS flight display product image from the Garmin dealer memo.",
+      "approved_at": "2026-07-08T15:30:17.666474+00:00",
+      "published_at": "2026-07-08T15:30:17.699521+00:00"
     },
     {
       "id": "reminder-new-product-preview-and-training-webinars-20260701",
