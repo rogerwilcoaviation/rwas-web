@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-08T12:07:48.715745+00:00",
+    "last_updated": "2026-07-08T15:12:51+00:00",
     "total_articles": 23,
     "categories": [
       "regulatory",
@@ -16,39 +16,41 @@
       "status": "draft",
       "category": "product-update",
       "title": "Introducing AXIS, A New Generation of Flight Displays",
-      "subtitle": "What G3X Touch means for owners, maintenance visibility, and smarter post-flight analysis",
+      "subtitle": "Garmin's new integrated flight display family brings a cleaner upgrade path for piston aircraft panels",
       "author": "Roger Wilco Aviation Services",
       "byline": "RWAS Avionics Desk",
       "date": "2026-07-08",
       "source": "Garmin Dealer Memo",
       "source_url": "",
-      "lead": "July 8, 2026 New Product Announcement Introducing AXIS, A New Generation of Flight Displays IFR GPS, NAV/COM and Audio Panel Capability into a Single Display Advance Dealer Communication \u2013 Confidential until 11:00 a.m. CDT July 8, 2026 Garmin is pleased to announce AXIS\u2122, an all-new family of flight displays, designed from the ground up to offer a highly integrated and flexible cockpit display solution.",
+      "lead": "Garmin has introduced AXIS, a new family of flight displays aimed at certified piston singles and twins, experimental aircraft, and LSA panels. The headline is integration: AXIS can combine modern touchscreen flight displays with optional built-in IFR GPS, NAV/COM, and audio panel capability in a cleaner, lighter installation package.",
       "body": [
-        "Introducing AXIS, A New Generation of Flight Displays is the kind of update that matters because it makes the airplane more useful after the flight, not just during it. For owners flying behind G3X Touch, Garmin is pushing automatic flight log handling farther into the real world by letting flight and engine data move wirelessly through Connext to the Garmin Pilot app, then up to flyGarmin.com once the device sees an internet connection.",
-        "That matters because the data can then be shared with analysis partners including FlySto. Depending on the service, that can mean better engine trend visibility, maintenance insight, flight analysis, or safety review. For owners trying to get more value out of the airplane they already have, it is a cleaner path from raw data to something actionable.",
-        "There is one operational catch worth saying out loud. Garmin is tying the automatic workflow to the connected ecosystem, not to manual file handling. In other words, SD card uploads are not what drives these integrations. The airplane, the Connext link, the Garmin Pilot app, and the flyGarmin.com account all need to be set up correctly if you want the process to work the way Garmin describes it.",
-        "From the shop side, RWAS sees this as a solid value-add for owners who want their panel to do more than display information in flight. We are an authorized Garmin dealer, and we can help owners think through the installation, connectivity, and day-to-day workflow so the panel, the mobile tools, and the post-flight analysis all work together like one system instead of a pile of unrelated features."
+        "AXIS is Garmin's new flight display family for aircraft owners who want a more integrated panel without turning the cockpit into a stack of disconnected boxes. The system is planned around 11.6-inch landscape displays, with 8-inch portrait and landscape versions expected later, and each display can be configured as a primary flight display or multi-function display with engine information available in either role.",
+        "The most interesting part is the 11.6-inch display option. Garmin says certain AXIS models can include a TSO-certified IFR GPS, COMM radio, NAV radio, and audio panel inside the display itself. For the right aircraft, that can reduce panel clutter, simplify wiring, save weight, and make the pilot interface feel more like one coordinated system instead of separate avionics that simply happen to sit near each other.",
+        "For pilots, AXIS brings familiar Garmin strengths: synthetic vision, dynamic mapping, ADS-B traffic and weather support when properly equipped, engine monitoring, connectivity with Garmin Pilot, database workflows, and safety tools such as Smart Glide, runway awareness features, and airport surface awareness options. It is not just a prettier screen; it is Garmin packaging more of the airplane's navigation, communication, engine, and awareness functions into one upgrade path.",
+        "For current G3X Touch owners and experimental builders, Garmin is also emphasizing upgrade efficiency. AXIS is designed to work with many of the same navigators, radios, modules, sensors, panel cutouts, and mounting points used in G3X Touch installations. That does not make every upgrade simple, but it does mean many owners may have a more practical path than starting from a blank sheet of aluminum.",
+        "The availability details matter. Garmin says the 11.6-inch AXIS displays are available to order, with shipments expected after FAA STC completion, and the 8-inch displays are expected in early 2027. Certified installations still depend on the exact aircraft, STC eligibility, configuration, and equipment choices. RWAS is an authorized Garmin dealer, and we can help owners sort out whether AXIS belongs in the plan, what it replaces, what it keeps, and what the installation path really looks like."
       ],
       "tags": [
         "garmin",
         "dealer-memo",
+        "axis",
+        "flight-displays",
+        "avionics",
         "g3x-touch",
-        "gfc-500",
-        "garmin-pilot",
-        "flygarmincom"
+        "ifrgps"
       ],
       "social": {
         "facebook": {
-          "text": "Garmin just made G3X Touch more useful after the flight, not just during it.\n\nThis memo covers automatic flight logging through Connext, Garmin Pilot, and flyGarmin.com, with partner integrations that can help owners get better maintenance and operating insight from their data.\n\nRWAS is an authorized Garmin dealer, and we can help you make the panel, connectivity, and workflow actually work together.\n\nReview the article: https://www.rogerwilcoaviation.com/blog/introducing-axis-a-new-generation-of-flight-displays-20260708\nCall (605) 299-8178.\n\n#Garmin #RogerWilcoAviation #Avionics #GarminPilot #Connext #flyGarmin",
+          "text": "Garmin has introduced AXIS, a new generation of integrated flight displays for certified piston aircraft, experimental aircraft, and LSA panels.\n\nThe big idea is a cleaner cockpit: modern touchscreen displays with optional built-in IFR GPS, NAV/COM, and audio panel capability in certain 11.6-inch models.\n\nRWAS is an authorized Garmin dealer. We can help owners evaluate whether AXIS fits their aircraft, panel goals, and upgrade path.\n\nReview the article: https://www.rogerwilcoaviation.com/blog/introducing-axis-a-new-generation-of-flight-displays-20260708\nCall (605) 299-8178.\n\n#Garmin #AXIS #Avionics #FlightDisplays #RogerWilcoAviation",
           "status": "pending"
         },
         "instagram": {
-          "text": "New Garmin memo, and this one actually matters for owners.\n\nAutomatic flight logging ties the panel, Garmin Pilot, flyGarmin.com, and outside analysis tools together in a much cleaner workflow.\n\nRWAS is an authorized Garmin dealer. We can help you build or upgrade a system that works as a whole, not just as separate boxes in the panel.\n\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Avionics #GarminPilot #Connext #flyGarmin #GeneralAviation #RogerWilcoAviation",
+          "text": "Garmin AXIS is here: a new integrated flight display family with optional built-in IFR GPS, NAV/COM, and audio panel capability in certain 11.6-inch models.\n\nFor the right aircraft, this could mean a cleaner panel, fewer standalone boxes, and a more practical upgrade path from existing Garmin equipment.\n\nRWAS is an authorized Garmin dealer.\n\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #AXIS #Avionics #FlightDisplays #GeneralAviation #RogerWilcoAviation",
           "status": "pending"
         }
       },
       "image": "/images/blog/introducing-axis-a-new-generation-of-flight-displays.jpg",
-      "image_alt": "Introducing AXIS, A New Generation of Flight Displays Garmin dealer memo image."
+      "image_alt": "Garmin AXIS flight display product image from the Garmin dealer memo."
     },
     {
       "id": "reminder-new-product-preview-and-training-webinars-20260701",
