@@ -10,14 +10,18 @@ import {
 } from '@/components/shared/broadsheet';
 import blogData from '../../public/blog-articles.json';
 import Link from 'next/link';
+import { genPageMetadata } from '@/app/seo';
 
-export const metadata = {
-  title: { absolute: 'Aviation News, Garmin Bulletins & Memos | RWAS' },
+export const metadata = genPageMetadata({
+  title: 'Aviation News, Garmin Bulletins & Memos | RWAS',
   description:
     'Garmin press releases, service bulletins, product updates, dealer memos, and industry dispatches from Roger Wilco Aviation Services.',
-};
+  canonical: 'https://www.rogerwilcoaviation.com/blog',
+});
 
-const publishedArticles = blogData.articles.filter((article) => article.status === 'published');
+const publishedArticles = blogData.articles.filter(
+  (article) => article.status === 'published',
+);
 const leadArticle = publishedArticles[0];
 const secondaryArticles = publishedArticles.slice(1);
 const recentDispatches = publishedArticles.slice(1, 6);
@@ -41,36 +45,51 @@ export default function BlogPage() {
       <main className="bs-stage">
         <section className="hero-headline-group">
           <p className="bs-kicker">Dispatches &amp; Bulletins</p>
-          <p className="bs-script-accent">&mdash; from the RWAS avionics desk &mdash;</p>
+          <p className="bs-script-accent">
+            &mdash; from the RWAS avionics desk &mdash;
+          </p>
           <h1 className="bs-headline bs-headline--hero">
             Blog Articles, Product Updates, and Shop Dispatches
           </h1>
           <p className="bs-subhead">
-            Garmin updates, service bulletins, shop notes, and industry memos &mdash; current
-            as of {blogData.meta.last_updated.slice(0, 10)}.
+            Garmin updates, service bulletins, shop notes, and industry memos
+            &mdash; current as of {blogData.meta.last_updated.slice(0, 10)}.
           </p>
           <p className="bs-byline">
-            {blogData.meta.total_articles} published dispatches &middot; Topics: {topics.join(' / ')}
+            {blogData.meta.total_articles} published dispatches &middot; Topics:{' '}
+            {topics.join(' / ')}
           </p>
         </section>
 
         {leadArticle && (
           <Specimen variant="hero">
             <p className="bs-kicker">Lead Article</p>
-            <Link href={`/blog/${leadArticle.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <h2 className="bs-headline" style={{ marginTop: 6 }}>{leadArticle.title}</h2>
+            <Link
+              href={`/blog/${leadArticle.id}`}
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <h2 className="bs-headline" style={{ marginTop: 6 }}>
+                {leadArticle.title}
+              </h2>
             </Link>
             <p className="bs-byline" style={{ marginTop: 8 }}>
-              {leadArticle.byline} &middot; {leadArticle.date} &middot; {leadArticle.source}
+              {leadArticle.byline} &middot; {leadArticle.date} &middot;{' '}
+              {leadArticle.source}
             </p>
             <p className="bs-body" style={{ marginTop: 14 }}>
               {stripInlineMarkdown(leadArticle.lead)}
             </p>
             {leadArticle.body.slice(0, 2).map((paragraph, index) => (
-              <p key={index} className="bs-body" style={{ marginTop: 10 }}>{paragraph}</p>
+              <p key={index} className="bs-body" style={{ marginTop: 10 }}>
+                {paragraph}
+              </p>
             ))}
-            <p className="bs-kicker" style={{ marginTop: 18 }}>Filed Under</p>
-            <p className="bs-body" style={{ marginTop: 4 }}>{leadArticle.tags.join(' · ')}</p>
+            <p className="bs-kicker" style={{ marginTop: 18 }}>
+              Filed Under
+            </p>
+            <p className="bs-body" style={{ marginTop: 4 }}>
+              {leadArticle.tags.join(' · ')}
+            </p>
             <div style={{ marginTop: 16 }}>
               <Link href={`/blog/${leadArticle.id}`} className="bs-cta-primary">
                 Read the full dispatch
@@ -84,13 +103,20 @@ export default function BlogPage() {
           <div style={{ marginTop: 12, display: 'grid', gap: 20 }}>
             {recentDispatches.map((article) => (
               <div key={article.id}>
-                <Link href={`/blog/${article.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <h3 className="bs-headline" style={{ fontSize: '1.4rem' }}>{article.title}</h3>
+                <Link
+                  href={`/blog/${article.id}`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <h3 className="bs-headline" style={{ fontSize: '1.4rem' }}>
+                    {article.title}
+                  </h3>
                 </Link>
                 <p className="bs-byline" style={{ marginTop: 4 }}>
                   {article.date} &middot; {article.category}
                 </p>
-                <p className="bs-body" style={{ marginTop: 6 }}>{article.subtitle}</p>
+                <p className="bs-body" style={{ marginTop: 6 }}>
+                  {article.subtitle}
+                </p>
               </div>
             ))}
           </div>
@@ -109,11 +135,20 @@ export default function BlogPage() {
             >
               {secondaryArticles.map((article) => (
                 <div key={article.id}>
-                  <p className="bs-kicker" style={{ textTransform: 'capitalize' }}>
+                  <p
+                    className="bs-kicker"
+                    style={{ textTransform: 'capitalize' }}
+                  >
                     {article.category.replace(/-/g, ' ')}
                   </p>
-                  <Link href={`/blog/${article.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <h3 className="bs-headline" style={{ fontSize: '1.3rem', marginTop: 4 }}>
+                  <Link
+                    href={`/blog/${article.id}`}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <h3
+                      className="bs-headline"
+                      style={{ fontSize: '1.3rem', marginTop: 4 }}
+                    >
                       {article.title}
                     </h3>
                   </Link>

@@ -9,15 +9,17 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import Link from 'next/link';
+import { genPageMetadata } from '@/app/seo';
 
-const pageUrl = 'https://www.rogerwilcoaviation.com/services/aircraft-maintenance';
+const pageUrl =
+  'https://www.rogerwilcoaviation.com/services/aircraft-maintenance';
 
-export const metadata = {
-  title: { absolute: 'Aircraft Maintenance in the Northern Plains | RWAS' },
+export const metadata = genPageMetadata({
+  title: 'Aircraft Maintenance in Sioux Falls | RWAS',
   description:
-    'Aircraft maintenance in the Northern Plains from RWAS: annual inspections, 100-hour inspections, pre-buy support, AOG service, prop balancing, and weighing.',
-  alternates: { canonical: pageUrl },
-};
+    'Aircraft maintenance at KFSD in Sioux Falls: annual and 100-hour inspections, pre-buy support, AOG service, prop balancing, and aircraft weighing.',
+  canonical: pageUrl,
+});
 
 export default function AircraftMaintenancePage() {
   return (
@@ -31,10 +33,12 @@ export default function AircraftMaintenancePage() {
               {
                 '@type': 'Service',
                 '@id': `${pageUrl}#service`,
-                name: 'Aircraft maintenance and annual inspections in the Northern Plains',
+                name: 'Aircraft maintenance and annual inspections in Sioux Falls',
                 serviceType: 'Aircraft maintenance',
                 url: pageUrl,
-                provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
+                provider: {
+                  '@id': 'https://www.rogerwilcoaviation.com#organization',
+                },
                 areaServed: [
                   { '@type': 'State', name: 'South Dakota' },
                   { '@type': 'State', name: 'Nebraska' },
@@ -43,17 +47,53 @@ export default function AircraftMaintenancePage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Aircraft maintenance, annual inspections, 100-hour inspections, pre-buy support, AOG service, propeller balancing, aircraft weight certification, and logbook documentation from Roger Wilco Aviation Services in the Northern Plains.',
+                  'Aircraft maintenance, annual inspections, 100-hour inspections, pre-buy support, AOG service, propeller balancing, aircraft weight certification, and logbook documentation at KFSD in Sioux Falls, serving the Northern Plains.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Aircraft maintenance services',
                   itemListElement: [
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Annual Inspections' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: '100-Hour Inspections' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Condition and Pre-Buy Inspections' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'AOG Go-Van Service' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Propeller Balancing' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Aircraft Weight Certification' } },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Annual Inspections',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: '100-Hour Inspections',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Condition and Pre-Buy Inspections',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'AOG Go-Van Service',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Propeller Balancing',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Aircraft Weight Certification',
+                      },
+                    },
                   ],
                 },
               },
@@ -61,9 +101,24 @@ export default function AircraftMaintenancePage() {
                 '@type': 'BreadcrumbList',
                 '@id': `${pageUrl}#breadcrumb`,
                 itemListElement: [
-                  { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
-                  { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://www.rogerwilcoaviation.com/services' },
-                  { '@type': 'ListItem', position: 3, name: 'Aircraft Maintenance the Northern Plains', item: pageUrl },
+                  {
+                    '@type': 'ListItem',
+                    position: 1,
+                    name: 'Home',
+                    item: 'https://www.rogerwilcoaviation.com/',
+                  },
+                  {
+                    '@type': 'ListItem',
+                    position: 2,
+                    name: 'Services',
+                    item: 'https://www.rogerwilcoaviation.com/services',
+                  },
+                  {
+                    '@type': 'ListItem',
+                    position: 3,
+                    name: 'Aircraft Maintenance in Sioux Falls',
+                    item: pageUrl,
+                  },
                 ],
               },
             ],
@@ -78,19 +133,29 @@ export default function AircraftMaintenancePage() {
       <BulletinBar />
 
       <main className="bs-stage">
-        <section className="hero-headline-group" aria-labelledby="maintenance-hero">
-          <span className="bs-kicker">FAA Part 145 Repair Station &middot; Certificate #RWSR491E</span>
-          <span className="bs-script-accent">&mdash; aircraft maintenance in the Northern Plains &mdash;</span>
+        <section
+          className="hero-headline-group"
+          aria-labelledby="maintenance-hero"
+        >
+          <span className="bs-kicker">
+            FAA Part 145 Repair Station &middot; Certificate #RWSR491E
+          </span>
+          <span className="bs-script-accent">
+            &mdash; aircraft maintenance in the Northern Plains &mdash;
+          </span>
           <h1 id="maintenance-hero" className="bs-headline bs-headline--hero">
             Aircraft maintenance and annual inspections,
             <br />
             <em>documented like the airplane depends on it.</em>
           </h1>
           <p className="bs-subhead">
-            Annuals &middot; 100-hour inspections &middot; pre-buy support &middot; AOG service &middot; prop balancing &middot; weight certification
+            Annuals &middot; 100-hour inspections &middot; pre-buy support
+            &middot; AOG service &middot; prop balancing &middot; weight
+            certification
           </p>
           <div className="bs-byline">
-            RWAS Avionics Desk &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            RWAS Avionics Desk &middot; Serving SD &middot; NE &middot; IA
+            &middot; MN &middot; ND
           </div>
         </section>
 
@@ -98,14 +163,27 @@ export default function AircraftMaintenancePage() {
           <div className="about-main">
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Maintenance Desk</span>
-              <h2 className="bs-headline bs-headline--section">A Part 145 shop for the work owners cannot treat casually.</h2>
+              <h2 className="bs-headline bs-headline--section">
+                A Part 145 shop for the work owners cannot treat casually.
+              </h2>
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  Roger Wilco Aviation Services provides aircraft maintenance for owners across the Northern Plains. The shop supports general aviation, corporate, commercial, light sport, and experimental owners who need inspections, discrepancies, troubleshooting, and documentation handled in a controlled repair-station environment.
+                  Roger Wilco Aviation Services provides aircraft maintenance
+                  for owners across the Northern Plains. The shop supports
+                  general aviation, corporate, commercial, light sport, and
+                  experimental owners who need inspections, discrepancies,
+                  troubleshooting, and documentation handled in a controlled
+                  repair-station environment.
                 </p>
                 <p>
-                  RWAS is not just a place to park the airplane during an annual. The value is in the process: careful discrepancy review, clear communication before costs run away, parts and records traceability, logbook entries that still make sense later, and the ability to coordinate airframe, avionics, NDT, and fabrication issues when a simple inspection turns into real aircraft work.
+                  RWAS is not just a place to park the airplane during an
+                  annual. The value is in the process: careful discrepancy
+                  review, clear communication before costs run away, parts and
+                  records traceability, logbook entries that still make sense
+                  later, and the ability to coordinate airframe, avionics, NDT,
+                  and fabrication issues when a simple inspection turns into
+                  real aircraft work.
                 </p>
               </div>
             </Specimen>
@@ -117,40 +195,66 @@ export default function AircraftMaintenancePage() {
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
-                Repair-station maintenance is a quality system, not just a mechanic with a flashlight.
+                Repair-station maintenance is a quality system, not just a
+                mechanic with a flashlight.
               </Specimen.Caption>
             </Specimen>
 
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Core Maintenance</span>
-              <h2 className="bs-headline bs-headline--section">Inspections, discrepancies, and return-to-service work.</h2>
+              <h2 className="bs-headline bs-headline--section">
+                Inspections, discrepancies, and return-to-service work.
+              </h2>
               <hr className="section-rule" />
               <div className="bs-split">
                 <div className="bs-body">
                   <p>
-                    The right maintenance path depends on how the aircraft is operated, what the records show, what the manufacturer requires, and what the inspection finds. RWAS scopes each job around the aircraft rather than using the same checklist conversation for every owner.
+                    The right maintenance path depends on how the aircraft is
+                    operated, what the records show, what the manufacturer
+                    requires, and what the inspection finds. RWAS scopes each
+                    job around the aircraft rather than using the same checklist
+                    conversation for every owner.
                   </p>
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc">
                     <p className="bs-svc-name">Annual inspections</p>
-                    <p className="bs-svc-desc">FAR 43 Appendix D inspection flow, discrepancy review, owner communication, and return-to-service documentation.</p>
+                    <p className="bs-svc-desc">
+                      FAR 43 Appendix D inspection flow, discrepancy review,
+                      owner communication, and return-to-service documentation.
+                    </p>
                   </li>
                   <li className="bs-svc">
                     <p className="bs-svc-name">100-hour inspections</p>
-                    <p className="bs-svc-desc">Inspection support for aircraft operated for hire where the 100-hour requirement applies.</p>
+                    <p className="bs-svc-desc">
+                      Inspection support for aircraft operated for hire where
+                      the 100-hour requirement applies.
+                    </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name">Condition and pre-buy inspections</p>
-                    <p className="bs-svc-desc">Records review, physical inspection, and findings that help owners make decisions before money changes hands.</p>
+                    <p className="bs-svc-name">
+                      Condition and pre-buy inspections
+                    </p>
+                    <p className="bs-svc-desc">
+                      Records review, physical inspection, and findings that
+                      help owners make decisions before money changes hands.
+                    </p>
                   </li>
                   <li className="bs-svc">
                     <p className="bs-svc-name">AOG Go-Van service</p>
-                    <p className="bs-svc-desc">Practical response for aircraft-on-ground situations when the issue and location make mobile support appropriate.</p>
+                    <p className="bs-svc-desc">
+                      Practical response for aircraft-on-ground situations when
+                      the issue and location make mobile support appropriate.
+                    </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name">Propeller balancing and weight certification</p>
-                    <p className="bs-svc-desc">Support for vibration issues, aircraft weighing, and documentation needs up to the shop capability limits.</p>
+                    <p className="bs-svc-name">
+                      Propeller balancing and weight certification
+                    </p>
+                    <p className="bs-svc-desc">
+                      Support for vibration issues, aircraft weighing, and
+                      documentation needs up to the shop capability limits.
+                    </p>
                   </li>
                 </ul>
               </div>
@@ -158,18 +262,34 @@ export default function AircraftMaintenancePage() {
 
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Why Part 145 Matters</span>
-              <h2 className="bs-headline bs-headline--section">The system catches what memory misses.</h2>
+              <h2 className="bs-headline bs-headline--section">
+                The system catches what memory misses.
+              </h2>
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  An individual mechanic can be excellent. A repair station adds something different: procedures, inspection authority, controlled records, tooling expectations, traceability, and a certificate holder accountable for the system. That difference matters when the work involves avionics, structural questions, NDT findings, major repairs, recurring inspections, or sale-driven pre-buy decisions.
+                  An individual mechanic can be excellent. A repair station adds
+                  something different: procedures, inspection authority,
+                  controlled records, tooling expectations, traceability, and a
+                  certificate holder accountable for the system. That difference
+                  matters when the work involves avionics, structural questions,
+                  NDT findings, major repairs, recurring inspections, or
+                  sale-driven pre-buy decisions.
                 </p>
                 <p>
-                  RWAS operates under FAA Repair Station Certificate RWSR491E with limited airframe, instrument, radio, and NDT inspection/testing capability. That structure gives owners a maintenance path designed to produce work that is inspectable, documented, and usable at the next annual, the next sale, or the next squawk.
+                  RWAS operates under FAA Repair Station Certificate RWSR491E
+                  with limited airframe, instrument, radio, and NDT
+                  inspection/testing capability. That structure gives owners a
+                  maintenance path designed to produce work that is inspectable,
+                  documented, and usable at the next annual, the next sale, or
+                  the next squawk.
                 </p>
               </div>
               <p>
-                <Link className="bs-cta-primary" href="/blog/repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414">
+                <Link
+                  className="bs-cta-primary"
+                  href="/blog/repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414"
+                >
                   Read the repair-station explainer
                 </Link>
                 <Link className="bs-cta-secondary" href="/shop-capabilities">
@@ -180,41 +300,68 @@ export default function AircraftMaintenancePage() {
 
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Before You Schedule</span>
-              <h2 className="bs-headline bs-headline--section">Send records early, not after the airplane is apart.</h2>
+              <h2 className="bs-headline bs-headline--section">
+                Send records early, not after the airplane is apart.
+              </h2>
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  Good maintenance planning starts with context. For inspections, pre-buy work, troubleshooting, or AOG support, send the aircraft make and model, N-number, current location, tach and total time, last annual or inspection date, known squawks, logbook photos, AD/service-bulletin concerns, and any deadline that matters.
+                  Good maintenance planning starts with context. For
+                  inspections, pre-buy work, troubleshooting, or AOG support,
+                  send the aircraft make and model, N-number, current location,
+                  tach and total time, last annual or inspection date, known
+                  squawks, logbook photos, AD/service-bulletin concerns, and any
+                  deadline that matters.
                 </p>
                 <p>
-                  RWAS will tell you what can be scoped from records, what needs hands-on inspection, and where the project may need avionics, NDT, fabrication, or parts coordination before the aircraft can return to service.
+                  RWAS will tell you what can be scoped from records, what needs
+                  hands-on inspection, and where the project may need avionics,
+                  NDT, fabrication, or parts coordination before the aircraft
+                  can return to service.
                 </p>
               </div>
               <p>
-                <Link className="bs-cta-primary" href="/contact?reason=service&source=aircraft-maintenance">
+                <Link
+                  className="bs-cta-primary"
+                  href="/contact?reason=service&source=aircraft-maintenance"
+                >
                   Request maintenance scheduling
                 </Link>
-                <Link className="bs-cta-secondary" href="/services/ndt-inspection">
+                <Link
+                  className="bs-cta-secondary"
+                  href="/services/ndt-inspection"
+                >
                   NDT inspection support
                 </Link>
               </p>
             </Specimen>
           </div>
 
-          <aside className="about-rail" aria-label="Aircraft maintenance quick reference">
+          <aside
+            className="about-rail"
+            aria-label="Aircraft maintenance quick reference"
+          >
             <Specimen as="section">
               <span className="bs-kicker">Quick Contact</span>
               <p>
                 <a
                   href="tel:+16052998178"
-                  style={{ color: 'var(--ink-900)', textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                  style={{
+                    color: 'var(--ink-900)',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '2px',
+                  }}
                 >
                   (605) 299-8178
                 </a>
                 <br />
                 <a
                   href="mailto:avionics@rwas.team"
-                  style={{ color: 'var(--ink-900)', textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                  style={{
+                    color: 'var(--ink-900)',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '2px',
+                  }}
                 >
                   avionics@rwas.team
                 </a>
@@ -275,13 +422,23 @@ export default function AircraftMaintenancePage() {
             </Specimen>
 
             <div className="jerry-card">
-              <span className="bs-script-accent">&mdash; maintenance desk &mdash;</span>
+              <span className="bs-script-accent">
+                &mdash; maintenance desk &mdash;
+              </span>
               <h4>Need an annual or pre-buy?</h4>
-              <p>Send the N-number, records, timing, and the decision you need to make.</p>
-              <a className="cta" href="/contact?reason=service&source=maintenance-card">
+              <p>
+                Send the N-number, records, timing, and the decision you need to
+                make.
+              </p>
+              <a
+                className="cta"
+                href="/contact?reason=service&source=maintenance-card"
+              >
                 Start request
               </a>
-              <div className="footnote">Records sent early make the first shop conversation useful.</div>
+              <div className="footnote">
+                Records sent early make the first shop conversation useful.
+              </div>
             </div>
           </aside>
         </div>

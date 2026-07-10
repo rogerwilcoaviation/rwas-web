@@ -6,9 +6,7 @@
       "date": "2026-04-14",
       "title": "Auto Flight Logging Now Available for G3X Touch",
       "summary": "Garmin announces auto flight logging capability for G3X Touch avionics, enabling automatic recording of flight data without pilot intervention.",
-      "products": [
-        "G3X Touch"
-      ],
+      "products": ["G3X Touch"],
       "category": "product",
       "source_pdf": "2026_mktgmemo___g3x_autoflightlog.pdf"
     },
@@ -17,9 +15,7 @@
       "date": "2026-04-08",
       "title": "Garmin Announces New Garmin Pilot Promotions",
       "summary": "Garmin announced a new 15-for-12 Garmin Pilot promotion for new customers. Customers who purchase an annual Garmin Pilot subscription between April 7 and July 26, 2026 receive three additional months, for 15 months total at the price of 12. The offer applies to both Standard and Premium subscriptions, with the extra three months added within five business days.",
-      "products": [
-        "Garmin Pilot"
-      ],
+      "products": ["Garmin Pilot"],
       "category": "promotion",
       "source_pdf": "New Garmin Memo 2026-04-08 Garmin Announces New Garmin Pilot Promotions.pdf"
     },
@@ -28,13 +24,7 @@
       "date": "2026-04-01",
       "title": "New Dual G5 AI/HSI Promotion \u2014 Save Over $600 Through June 15",
       "summary": "Garmin announces a new promotional Dual G5 Kit (Part K10-00280-51) combining attitude indicator and horizontal situation indicator functions in a single package with all installation accessories included. The kit lists at $6,995 and offers over $600 in savings compared to purchasing components individually. Includes GMU 11 magnetometer, GAD 13 adapter, GAD 29D adapter, GPS antenna, and complete connector kits. This limited-time promotional pricing is available now through June 15, 2026. Contact RWAS for installed pricing and scheduling.",
-      "products": [
-        "G5",
-        "Dual G5 AI/HSI Kit",
-        "GMU 11",
-        "GAD 13",
-        "GAD 29D"
-      ],
+      "products": ["G5", "Dual G5 AI/HSI Kit", "GMU 11", "GAD 13", "GAD 29D"],
       "category": "promotion",
       "source_pdf": "2026_mktgmemo___g5_ai_hsi_promo_final.pdf"
     },
@@ -43,12 +33,7 @@
       "date": "2026-03-15",
       "title": "Spring 2026 Garmin Dealer Pricing Update",
       "summary": "Garmin has released updated dealer pricing for the Spring 2026 season across the G3X Touch, GTN Xi series, and GFC 500 autopilot product lines. Pricing reflects modest adjustments from the 2025 schedule. Contact RWAS for current installed pricing on all configurations.",
-      "products": [
-        "G3X Touch",
-        "GTN 650Xi",
-        "GTN 750Xi",
-        "GFC 500"
-      ],
+      "products": ["G3X Touch", "GTN 650Xi", "GTN 750Xi", "GFC 500"],
       "category": "pricing",
       "source_pdf": "Garmin-Spring-2026-Dealer-Pricing.pdf"
     }
@@ -71,7 +56,7 @@
         "Piper PA-32",
         "Beechcraft Bonanza"
       ],
-      "link": "/collections/garmin-avionics"
+      "link": "/collections/avionics-certified"
     },
     {
       "name": "GTN 650Xi",
@@ -83,10 +68,8 @@
         "Wireless database updates",
         "4-inch display"
       ],
-      "stc_aircraft": [
-        "Most GA singles and light twins"
-      ],
-      "link": "/collections/garmin-avionics"
+      "stc_aircraft": ["Most GA singles and light twins"],
+      "link": "/collections/avionics-certified"
     },
     {
       "name": "GTN 750Xi",
@@ -98,10 +81,8 @@
         "Chart overlay",
         "Remote transponder control"
       ],
-      "stc_aircraft": [
-        "Most GA singles and light twins"
-      ],
-      "link": "/collections/garmin-avionics"
+      "stc_aircraft": ["Most GA singles and light twins"],
+      "link": "/collections/avionics-certified"
     },
     {
       "name": "GFC 500 Autopilot",
@@ -113,13 +94,8 @@
         "Coupled VNAV approaches",
         "Electronic stability protection"
       ],
-      "stc_aircraft": [
-        "Cessna 172",
-        "Cessna 182",
-        "Piper PA-28",
-        "Mooney M20"
-      ],
-      "link": "/collections/garmin-avionics"
+      "stc_aircraft": ["Cessna 172", "Cessna 182", "Piper PA-28", "Mooney M20"],
+      "link": "/collections/avionics-certified"
     },
     {
       "name": "GNX 375",
@@ -131,10 +107,8 @@
         "ADS-B In weather and traffic",
         "1090ES transponder"
       ],
-      "stc_aircraft": [
-        "Most GA aircraft"
-      ],
-      "link": "/collections/garmin-avionics"
+      "stc_aircraft": ["Most GA aircraft"],
+      "link": "/collections/avionics-certified"
     }
   ]
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export type CredentialsBarProps = {
   certText?: string;
@@ -18,16 +18,16 @@ export type CredentialsBarProps = {
  * asset folder doesn't carry a licensed Garmin logo bitmap. Text is
  * ink-900, Inter, 0.22em tracking — consistent with the mockup's plate.
  *
- * Location (RWAS Avionics Desk · the Northern Plains) lives in the Masthead's right column,
+ * Location (RWAS Avionics Desk · KFSD · Sioux Falls, SD) lives in the Masthead's right column,
  * not here.
  */
 export default function CredentialsBar({
-  certText = "FAA Part 145 Repair Station \u00b7 Cert. RWSR491E",
-  dealerLabel = "Authorized",
-  dealerBrand = "Garmin",
-  dealerTrail = "Dealer",
-  membership1 = "AEA Member",
-  membership2 = "NBAA Member",
+  certText = 'FAA Part 145 Repair Station \u00b7 Cert. RWSR491E',
+  dealerLabel = 'Authorized',
+  dealerBrand = 'Garmin',
+  dealerTrail = 'Dealer',
+  membership1 = 'AEA Member',
+  membership2 = 'NBAA Member',
 }: CredentialsBarProps) {
   return (
     <div className="bs-credentials">
@@ -38,7 +38,11 @@ export default function CredentialsBar({
           <span className="bs-dealer-plate__label">{dealerLabel}</span>
           <span
             className="bs-dealer-plate__label"
-            style={{ fontWeight: 700, color: "var(--ink-900)", letterSpacing: "0.22em" }}
+            style={{
+              fontWeight: 700,
+              color: 'var(--ink-900)',
+              letterSpacing: '0.22em',
+            }}
           >
             {dealerBrand}
           </span>

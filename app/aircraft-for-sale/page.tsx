@@ -32,7 +32,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: { absolute: 'Aircraft for Sale — RWAS Marketplace' },
   description:
-    'Aircraft listings from RWAS in the Northern Plains. Cessna, Piper, Beechcraft, and more. Verified logbooks, trusted sellers, FAA Cert. Repair Station support.',
+    'Aircraft listings from RWAS at KFSD in Sioux Falls. Browse Cessna, Piper, Beechcraft, and more with repair-station and listing support.',
   alternates: {
     canonical: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
   },
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     url: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
     title: 'Aircraft for Sale — RWAS Marketplace',
     description:
-      'Browse aircraft listings backed by a FAA Part 145 repair station in the Northern Plains.',
+      'Browse aircraft listings backed by an FAA Part 145 repair station at KFSD in Sioux Falls.',
     images: [
       {
         url: 'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg',
@@ -55,8 +55,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Aircraft for Sale — RWAS Marketplace',
     description:
-      'Browse aircraft listings backed by a FAA Part 145 repair station in the Northern Plains.',
-    images: ['https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg'],
+      'Browse aircraft listings backed by an FAA Part 145 repair station at KFSD in Sioux Falls.',
+    images: [
+      'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg',
+    ],
   },
 };
 
@@ -89,7 +91,9 @@ export default async function AircraftForSalePage() {
       '@type': 'ListItem',
       position: index + 1,
       url: `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(listing.id)}`,
-      name: [listing.year, listing.make, listing.model].filter(Boolean).join(' ') || 'Aircraft listing',
+      name:
+        [listing.year, listing.make, listing.model].filter(Boolean).join(' ') ||
+        'Aircraft listing',
     })),
   };
 
@@ -149,15 +153,21 @@ export default async function AircraftForSalePage() {
         {/* ── HERO HEADLINE ─────────────────────────────────────────── */}
         <section className="hero-headline-group" aria-labelledby="a4s-hero">
           <span className="bs-kicker">RWAS Marketplace</span>
-          <span className="bs-script-accent">&mdash; vetted by a Part 145 shop &mdash;</span>
+          <span className="bs-script-accent">
+            &mdash; vetted by a Part 145 shop &mdash;
+          </span>
           <h1 id="a4s-hero" className="bs-headline bs-headline--hero">
             Aircraft for Sale.
           </h1>
           <p className="bs-subhead">
-            Pre-owned aircraft listings vetted by a FAA Part 145 repair station. Every listing comes with the option of a pre-buy inspection by the RWAS team.
+            Pre-owned aircraft listings vetted by a FAA Part 145 repair station.
+            Every listing comes with the option of a pre-buy inspection by the
+            RWAS team.
           </p>
           <div className="bs-byline">
-            Call <strong>(605) 299-8178</strong> &nbsp;&middot;&nbsp; Ask Captain Jerry &nbsp;&middot;&nbsp; RWAS Avionics Desk &middot; the Northern Plains
+            Call <strong>(605) 299-8178</strong> &nbsp;&middot;&nbsp; Ask
+            Captain Jerry &nbsp;&middot;&nbsp; RWAS Avionics Desk &middot; KFSD,
+            Sioux Falls
           </div>
           <div className="a4s-cta-row">
             <a className="a4s-cta-btn" href="#listings">
@@ -191,30 +201,36 @@ export default async function AircraftForSalePage() {
             <div className="a4s-how-step">
               <h3>1. Tell Captain Jerry</h3>
               <p>
-                Click <em>List Your Aircraft</em> and walk through a short 13-question intake. Takes about five minutes.
+                Click <em>List Your Aircraft</em> and walk through a short
+                13-question intake. Takes about five minutes.
               </p>
             </div>
             <div className="a4s-how-step">
               <h3>2. Add photos &amp; logs</h3>
               <p>
-                You&rsquo;ll get an email link to upload photos and logbook PDFs. Logbooks are optional but help buyers take you seriously.
+                You&rsquo;ll get an email link to upload photos and logbook
+                PDFs. Logbooks are optional but help buyers take you seriously.
               </p>
             </div>
             <div className="a4s-how-step">
               <h3>3. RWAS reviews</h3>
               <p>
-                We review every listing before it goes live to catch obvious data problems or safety concerns.
+                We review every listing before it goes live to catch obvious
+                data problems or safety concerns.
               </p>
             </div>
             <div className="a4s-how-step">
               <h3>4. Buyers contact you</h3>
               <p>
-                Interested buyers reach out directly. <a href="/services/pre-buy-inspection">Pre-buy inspections by RWAS</a> available &mdash; ask the buyer, not us; you decide.
+                Interested buyers reach out directly.{' '}
+                <a href="/services/pre-buy-inspection">
+                  Pre-buy inspections by RWAS
+                </a>{' '}
+                available &mdash; ask the buyer, not us; you decide.
               </p>
             </div>
           </div>
         </Specimen>
-
       </main>
 
       <BroadsheetFooter />

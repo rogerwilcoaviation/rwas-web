@@ -1,7 +1,15 @@
 #!/usr/bin/env node
-const base = (process.env.BASE_URL || process.argv[2] || 'https://www.rogerwilcoaviation.com').replace(/\/$/, '');
-const isLocalBase = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/i.test(base);
-const CONCURRENCY = Math.max(1, Number(process.env.SEO_SMOKE_CONCURRENCY || 16));
+const base = (
+  process.env.BASE_URL ||
+  process.argv[2] ||
+  'https://www.rogerwilcoaviation.com'
+).replace(/\/$/, '');
+const isLocalBase =
+  /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/i.test(base);
+const CONCURRENCY = Math.max(
+  1,
+  Number(process.env.SEO_SMOKE_CONCURRENCY || 16),
+);
 const REQUIRED_HEADERS = [
   'strict-transport-security',
   'x-content-type-options',
@@ -24,52 +32,137 @@ async function fetchNoRedirect(url) {
     const res = await fetch(url, { redirect: 'follow' });
     return { res, text: await res.text() };
   } catch (error) {
-    const detail = error?.cause?.code || error?.code || error?.message || String(error);
+    const detail =
+      error?.cause?.code || error?.code || error?.message || String(error);
     fail(`${url} fetch failed: ${detail}`);
   }
 }
 
 function tags(html, tag) {
   const re = new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi');
-  return Array.from(html.matchAll(re), (m) => m[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
+  return Array.from(html.matchAll(re), (m) =>
+    m[1]
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim(),
+  );
 }
 
 function hasMeta(html, pattern) {
   return pattern.test(html);
 }
 
+function attribute(tag, name) {
+  return tag.match(new RegExp(`\\b${name}=["']([^"']*)["']`, 'i'))?.[1] || '';
+}
+
+function metaContent(html, key, value) {
+  for (const match of html.matchAll(/<meta\b[^>]*>/gi)) {
+    const tag = match[0];
+    if (attribute(tag, key).toLowerCase() === value.toLowerCase()) {
+      return attribute(tag, 'content');
+    }
+  }
+  return '';
+}
+
+function decodeHtmlEntities(value = '') {
+  return value
+    .replace(/&quot;/gi, '"')
+    .replace(/&amp;/gi, '&')
+    .replace(/&#(?:x27|39);/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>');
+}
+
 function canonicalHref(html) {
   return (
-    html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)?.[1] ||
-    html.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["']canonical["']/i)?.[1] ||
+    html.match(
+      /<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i,
+    )?.[1] ||
+    html.match(
+      /<link[^>]+href=["']([^"']+)["'][^>]+rel=["']canonical["']/i,
+    )?.[1] ||
     ''
   );
 }
 
+function jsonLdErrors(html) {
+  const errors = [];
+  let index = 0;
+  for (const match of html.matchAll(
+    /<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi,
+  )) {
+    index += 1;
+    try {
+      JSON.parse(match[1]);
+    } catch (error) {
+      errors.push(`JSON-LD block ${index}: ${error.message}`);
+    }
+  }
+  return errors;
+}
+
 function canonicalMatchesUrl(canonical, url) {
-  if (canonical === url) return true;
+  const actual = new URL(canonical);
   const expected = new URL(url);
-  if (expected.pathname === '/' && !expected.search && !expected.hash) {
-    return canonical === `${expected.origin}/` || canonical === expected.origin;
+  const matchingOrigin =
+    actual.origin === expected.origin ||
+    (isLocalBase && actual.origin === 'https://www.rogerwilcoaviation.com');
+
+  if (
+    matchingOrigin &&
+    actual.pathname === expected.pathname &&
+    actual.search === expected.search &&
+    actual.hash === expected.hash
+  ) {
+    return true;
+  }
+  if (
+    matchingOrigin &&
+    expected.pathname === '/' &&
+    !expected.search &&
+    !expected.hash
+  ) {
+    return actual.pathname === '/' && !actual.search && !actual.hash;
   }
   return false;
 }
 
 const home = await fetchNoRedirect(`${base}/`);
 if (home.res.status !== 200) fail(`Home returned ${home.res.status}`);
+for (const [label, value] of [
+  [
+    'structured street address',
+    '"streetAddress":"Hangar 3, 3701 N. Aviation Avenue"',
+  ],
+  ['structured locality', '"addressLocality":"Sioux Falls"'],
+  ['structured postal code', '"postalCode":"57104"'],
+  ['structured opening time', '"opens":"07:00"'],
+  ['structured closing time', '"closes":"17:00"'],
+]) {
+  if (!home.text.includes(value)) fail(`Home is missing ${label}`);
+}
 if (!isLocalBase) {
   for (const header of REQUIRED_HEADERS) {
-    if (!home.res.headers.get(header)) fail(`Missing security header on home: ${header}`);
+    if (!home.res.headers.get(header))
+      fail(`Missing security header on home: ${header}`);
   }
 }
 
 const sitemapRes = await fetchNoRedirect(`${base}/sitemap.xml`);
-if (sitemapRes.res.status !== 200) fail(`Sitemap returned ${sitemapRes.res.status}`);
+if (sitemapRes.res.status !== 200)
+  fail(`Sitemap returned ${sitemapRes.res.status}`);
 
-const goneRes = await fetch(`${base}/pages/script-rwas`, { redirect: 'manual' });
-if (goneRes.status !== 410) fail(`/pages/script-rwas should return 410, got ${goneRes.status}`);
-if (!/noindex/i.test(goneRes.headers.get('x-robots-tag') || '')) {
-  fail('/pages/script-rwas missing X-Robots-Tag noindex');
+if (!isLocalBase) {
+  const goneRes = await fetch(`${base}/pages/script-rwas`, {
+    redirect: 'manual',
+  });
+  if (goneRes.status !== 410)
+    fail(`/pages/script-rwas should return 410, got ${goneRes.status}`);
+  if (!/noindex/i.test(goneRes.headers.get('x-robots-tag') || '')) {
+    fail('/pages/script-rwas missing X-Robots-Tag noindex');
+  }
 }
 
 const urls = Array.from(sitemapRes.text.matchAll(/<loc>(.*?)<\/loc>/g), (m) => {
@@ -83,40 +176,85 @@ const urls = Array.from(sitemapRes.text.matchAll(/<loc>(.*?)<\/loc>/g), (m) => {
   }
 }).filter(Boolean);
 if (!urls.length) fail('Sitemap has no URLs');
+if (!urls.includes(`${base}/contact`)) fail('Sitemap is missing /contact');
 
-if (urls.some((url) => url.includes('/services/aircraft-maintenance'))) {
-  const maintenanceRes = await fetch(`${base}/maintenance`, { redirect: 'manual' });
-  if (maintenanceRes.status !== 301) fail(`/maintenance should 301, got ${maintenanceRes.status}`);
+const today = new Date().toISOString().slice(0, 10);
+const currentDateLastmods = Array.from(
+  sitemapRes.text.matchAll(
+    new RegExp(`<lastmod>${today}(?:T[^<]+)?<\\/lastmod>`, 'g'),
+  ),
+).length;
+if (currentDateLastmods > 50) {
+  fail(`Sitemap has ${currentDateLastmods} URLs claiming today's lastmod date`);
+}
+
+if (
+  !isLocalBase &&
+  urls.some((url) => url.includes('/services/aircraft-maintenance'))
+) {
+  const maintenanceRes = await fetch(`${base}/maintenance`, {
+    redirect: 'manual',
+  });
+  if (maintenanceRes.status !== 301)
+    fail(`/maintenance should 301, got ${maintenanceRes.status}`);
   const maintenanceLocation = maintenanceRes.headers.get('location') || '';
   if (!maintenanceLocation.includes('/services/aircraft-maintenance')) {
-    fail(`/maintenance redirects to unexpected location: ${maintenanceLocation}`);
+    fail(
+      `/maintenance redirects to unexpected location: ${maintenanceLocation}`,
+    );
   }
 
-  const oldMaintenanceRes = await fetch(`${base}/services/aircraft-maintenance-yankton`, { redirect: 'manual' });
+  const oldMaintenanceRes = await fetch(
+    `${base}/services/aircraft-maintenance-yankton`,
+    { redirect: 'manual' },
+  );
   if (oldMaintenanceRes.status !== 301) {
-    fail(`/services/aircraft-maintenance-yankton should 301, got ${oldMaintenanceRes.status}`);
+    fail(
+      `/services/aircraft-maintenance-yankton should 301, got ${oldMaintenanceRes.status}`,
+    );
   }
-  const oldMaintenanceLocation = oldMaintenanceRes.headers.get('location') || '';
+  const oldMaintenanceLocation =
+    oldMaintenanceRes.headers.get('location') || '';
   if (!oldMaintenanceLocation.includes('/services/aircraft-maintenance')) {
-    fail(`/services/aircraft-maintenance-yankton redirects to unexpected location: ${oldMaintenanceLocation}`);
+    fail(
+      `/services/aircraft-maintenance-yankton redirects to unexpected location: ${oldMaintenanceLocation}`,
+    );
   }
 }
 
-const duplicateContactRes = await fetch(`${base}/contact.html`, { redirect: 'manual' });
-if (duplicateContactRes.status !== 301) fail(`/contact.html should 301, got ${duplicateContactRes.status}`);
-const duplicateContactLocation = duplicateContactRes.headers.get('location') || '';
-if (!duplicateContactLocation.includes('/contact')) {
-  fail(`/contact.html redirects to unexpected location: ${duplicateContactLocation}`);
-}
+if (!isLocalBase) {
+  const duplicateContactRes = await fetch(`${base}/contact.html`, {
+    redirect: 'manual',
+  });
+  if (duplicateContactRes.status !== 301)
+    fail(`/contact.html should 301, got ${duplicateContactRes.status}`);
+  const duplicateContactLocation =
+    duplicateContactRes.headers.get('location') || '';
+  if (!duplicateContactLocation.includes('/contact')) {
+    fail(
+      `/contact.html redirects to unexpected location: ${duplicateContactLocation}`,
+    );
+  }
 
-const newspaperIndexRes = await fetch(`${base}/newspaper/index.html`, { redirect: 'manual' });
-if (newspaperIndexRes.status !== 301) fail(`/newspaper/index.html should 301, got ${newspaperIndexRes.status}`);
-const newspaperIndexLocation = newspaperIndexRes.headers.get('location') || '';
-if (!newspaperIndexLocation.endsWith('/') && !newspaperIndexLocation.endsWith(base)) {
-  fail(`/newspaper/index.html redirects to unexpected location: ${newspaperIndexLocation}`);
+  const newspaperIndexRes = await fetch(`${base}/newspaper/index.html`, {
+    redirect: 'manual',
+  });
+  if (newspaperIndexRes.status !== 301)
+    fail(`/newspaper/index.html should 301, got ${newspaperIndexRes.status}`);
+  const newspaperIndexLocation =
+    newspaperIndexRes.headers.get('location') || '';
+  if (
+    !newspaperIndexLocation.endsWith('/') &&
+    !newspaperIndexLocation.endsWith(base)
+  ) {
+    fail(
+      `/newspaper/index.html redirects to unexpected location: ${newspaperIndexLocation}`,
+    );
+  }
 }
 
 const failures = [];
+const titles = new Map();
 
 async function checkUrl(url) {
   const { res, text } = await fetchNoRedirect(url);
@@ -126,14 +264,50 @@ async function checkUrl(url) {
   const title = tags(text, 'title')[0];
   const h1s = tags(text, 'h1');
   const canonical = canonicalHref(text);
+  const description = metaContent(text, 'name', 'description');
+  const ogTitle = metaContent(text, 'property', 'og:title');
+  const ogDescription = metaContent(text, 'property', 'og:description');
+  const ogImage = metaContent(text, 'property', 'og:image');
+  const decodedTitle = decodeHtmlEntities(title);
+  const decodedDescription = decodeHtmlEntities(description);
   const urlFailures = [];
   if (!title) urlFailures.push(`${url} missing <title>`);
-  if (!hasMeta(text, /<meta[^>]+name=["']description["']/i)) urlFailures.push(`${url} missing meta description`);
+  if (!hasMeta(text, /<meta[^>]+name=["']description["']/i))
+    urlFailures.push(`${url} missing meta description`);
   if (!canonical) urlFailures.push(`${url} missing canonical`);
   if (canonical && !canonicalMatchesUrl(canonical, url)) {
     urlFailures.push(`${url} canonical mismatch: ${canonical}`);
   }
   if (h1s.length !== 1) urlFailures.push(`${url} has ${h1s.length} H1 tags`);
+  if (!ogTitle) urlFailures.push(`${url} missing og:title`);
+  if (!ogDescription) urlFailures.push(`${url} missing og:description`);
+  if (!ogImage) urlFailures.push(`${url} missing og:image`);
+  if (ogImage && !/^https?:\/\//i.test(ogImage)) {
+    urlFailures.push(`${url} has a relative og:image: ${ogImage}`);
+  }
+  for (const error of jsonLdErrors(text)) {
+    urlFailures.push(`${url} has invalid ${error}`);
+  }
+  if (
+    url.includes('/products/') &&
+    /\SGarmin part number|\.[A-Z]|\SThis is a dealer-only/.test(description)
+  ) {
+    urlFailures.push(
+      `${url} has malformed product meta-description boundaries`,
+    );
+  }
+  if (decodedTitle.length > 60) {
+    urlFailures.push(`${url} title is ${decodedTitle.length} characters`);
+  }
+  if (decodedDescription.length > 160) {
+    urlFailures.push(
+      `${url} meta description is ${decodedDescription.length} characters`,
+    );
+  }
+  if (title) {
+    if (!titles.has(title)) titles.set(title, []);
+    titles.get(title).push(url);
+  }
   return urlFailures;
 }
 
@@ -151,7 +325,50 @@ async function worker() {
   }
 }
 
-await Promise.all(Array.from({ length: Math.min(CONCURRENCY, urls.length) }, worker));
+await Promise.all(
+  Array.from({ length: Math.min(CONCURRENCY, urls.length) }, worker),
+);
+
+const duplicateProductTitles = Array.from(titles.entries())
+  .map(([title, titleUrls]) => ({
+    title,
+    urls: titleUrls.filter((url) => url.includes('/products/')),
+  }))
+  .filter((group) => group.urls.length > 1);
+for (const group of duplicateProductTitles) {
+  failures.push(
+    `Duplicate product title (${group.urls.length}): ${group.title} :: ${group.urls.join(', ')}`,
+  );
+}
+
+const collections = await fetchNoRedirect(`${base}/collections`);
+if (
+  /\/products\/garmin-gfc-500-digital-autopilot["']/i.test(collections.text)
+) {
+  failures.push('/collections still links to the retired GFC 500 product URL');
+}
+if (!/\/services\/gfc-500-autopilot-installation["']/i.test(collections.text)) {
+  failures.push(
+    '/collections is missing the GFC 500 installation service link',
+  );
+}
+
+const missingPage = await fetchNoRedirect(`${base}/seo-audit-intentional-404`);
+if (missingPage.res.status !== 404)
+  failures.push(
+    `Intentional missing page returned ${missingPage.res.status}, expected 404`,
+  );
+const robotsValues = Array.from(
+  missingPage.text.matchAll(/<meta\b[^>]*name=["']robots["'][^>]*>/gi),
+).map((match) => attribute(match[0], 'content').toLowerCase());
+if (!robotsValues.some((value) => value.split(/[\s,]+/).includes('noindex'))) {
+  failures.push('404 page is missing a robots noindex directive');
+}
+if (robotsValues.some((value) => value.split(/[\s,]+/).includes('index'))) {
+  failures.push(
+    `404 page has a conflicting robots index directive: ${robotsValues.join(' | ')}`,
+  );
+}
 
 if (failures.length) {
   console.error(failures.join('\n'));

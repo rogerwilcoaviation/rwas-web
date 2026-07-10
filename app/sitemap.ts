@@ -5,47 +5,40 @@ import { getFeaturedCollections, getSeoProductHandles } from '@/lib/shopify';
 
 export const dynamic = 'force-static';
 
-type Priority = 1.0 | 0.9 | 0.8 | 0.7 | 0.6 | 0.5 | 0.4 | 0.3;
-type Freq = 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
-
-interface StaticRoute {
-  path: string;
-  priority: Priority;
-  changeFrequency: Freq;
-}
-
 // Only indexable, user-facing pages. Excludes internal tools (dashboard,
 // status, help, security), cart/checkout paths, and utility pages.
-const STATIC_ROUTES: StaticRoute[] = [
-  { path: '',                  priority: 1.0, changeFrequency: 'weekly'  },
-  { path: 'about',             priority: 0.9, changeFrequency: 'monthly' },
-  { path: 'shop-capabilities', priority: 0.9, changeFrequency: 'monthly' },
-  { path: 'garmin',            priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services', priority: 0.9, changeFrequency: 'monthly' },
-  { path: 'services/ndt-inspection', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services/papa-alpha-tools', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services/fiber-laser-fabrication', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services/garmin-installation-northern-plains', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services/rotax-repair', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services/aircraft-maintenance', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services/pre-buy-inspection', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services/gfc-500-autopilot-installation', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services/ads-b-installation', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services/g3x-touch-installation', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'services/gtn-xi-navigator-installation', priority: 0.8, changeFrequency: 'monthly' },
-  { path: 'panel-planner',     priority: 0.9, changeFrequency: 'monthly' },
-  { path: 'aircraft-for-sale', priority: 0.8, changeFrequency: 'daily'   },
-  { path: 'financing',         priority: 0.7, changeFrequency: 'monthly' },
-  { path: 'blog',              priority: 0.7, changeFrequency: 'weekly'  },
-  { path: 'privacy',           priority: 0.3, changeFrequency: 'yearly'  },
-  { path: 'terms',             priority: 0.3, changeFrequency: 'yearly'  },
-  { path: 'cookies',           priority: 0.3, changeFrequency: 'yearly'  },
+const STATIC_ROUTES = [
+  '',
+  'about',
+  'shop-capabilities',
+  'garmin',
+  'services',
+  'services/ndt-inspection',
+  'services/papa-alpha-tools',
+  'services/fiber-laser-fabrication',
+  'services/garmin-installation-northern-plains',
+  'services/rotax-repair',
+  'services/aircraft-maintenance',
+  'services/pre-buy-inspection',
+  'services/gfc-500-autopilot-installation',
+  'services/ads-b-installation',
+  'services/g3x-touch-installation',
+  'services/gtn-xi-navigator-installation',
+  'panel-planner',
+  'aircraft-for-sale',
+  'financing',
+  'blog',
+  'contact',
+  'privacy',
+  'terms',
+  'cookies',
 ];
 
 interface Article {
   id: string;
   status?: string;
   date?: string;
+  updated_at?: string;
 }
 
 interface SaleListing {
@@ -55,27 +48,38 @@ interface SaleListing {
   createdAt?: string;
 }
 
-async function getAircraftListingEntries(siteUrl: string, today: string): Promise<MetadataRoute.Sitemap> {
+async function getAircraftListingEntries(
+  siteUrl: string,
+): Promise<MetadataRoute.Sitemap> {
   try {
-    const response = await fetch('https://sale-api.rogerwilcoaviation.com/browse?include=sold', {
-      next: { revalidate: 300 },
-    });
+    const response = await fetch(
+      'https://sale-api.rogerwilcoaviation.com/browse?include=sold',
+      {
+        next: { revalidate: 300 },
+      },
+    );
     if (!response.ok) return [];
     const data = (await response.json()) as { listings?: SaleListing[] };
     return (data.listings || [])
-      .filter((listing) => listing.id && (!listing.status || listing.status === 'active' || listing.status === 'sold'))
+      .filter(
+        (listing) =>
+          listing.id &&
+          (!listing.status ||
+            listing.status === 'active' ||
+            listing.status === 'sold'),
+      )
       .map((listing) => ({
         url: `${siteUrl}/aircraft-for-sale/${encodeURIComponent(listing.id as string)}`,
-        lastModified: listing.updatedAt || listing.createdAt || today,
-        changeFrequency: 'daily' as Freq,
-        priority: 0.7 as Priority,
+        ...(listing.updatedAt || listing.createdAt
+          ? { lastModified: listing.updatedAt || listing.createdAt }
+          : {}),
       }));
   } catch {
     return [];
   }
 }
 
-async function getShopEntries(siteUrl: string, today: string): Promise<MetadataRoute.Sitemap> {
+async function getShopEntries(siteUrl: string): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
   try {
@@ -83,23 +87,14 @@ async function getShopEntries(siteUrl: string, today: string): Promise<MetadataR
     entries.push(
       {
         url: `${siteUrl}/collections`,
-        lastModified: today,
-        changeFrequency: 'weekly' as Freq,
-        priority: 0.7 as Priority,
       },
       ...collections.map((collection) => ({
         url: `${siteUrl}/collections/${collection.handle}`,
-        lastModified: today,
-        changeFrequency: 'weekly' as Freq,
-        priority: 0.7 as Priority,
       })),
     );
   } catch {
     entries.push({
       url: `${siteUrl}/collections`,
-      lastModified: today,
-      changeFrequency: 'weekly' as Freq,
-      priority: 0.7 as Priority,
     });
   }
 
@@ -108,9 +103,6 @@ async function getShopEntries(siteUrl: string, today: string): Promise<MetadataR
     entries.push(
       ...productHandles.map((handle) => ({
         url: `${siteUrl}/products/${handle}`,
-        lastModified: today,
-        changeFrequency: 'weekly' as Freq,
-        priority: 0.6 as Priority,
       })),
     );
   } catch {
@@ -122,31 +114,33 @@ async function getShopEntries(siteUrl: string, today: string): Promise<MetadataR
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = siteConfig.siteUrl.replace(/\/$/, '');
-  const today = new Date().toISOString().split('T')[0];
 
   // Static routes
-  const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((r) => ({
-    url: r.path ? `${siteUrl}/${r.path}` : `${siteUrl}/`,
-    lastModified: today,
-    changeFrequency: r.changeFrequency,
-    priority: r.priority,
+  const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map((path) => ({
+    url: path ? `${siteUrl}/${path}` : `${siteUrl}/`,
   }));
 
   // Blog articles (only published ones, at their real slug URLs)
-  const articles: Article[] = (blogData as { articles?: Article[] }).articles || [];
+  const articles: Article[] =
+    (blogData as { articles?: Article[] }).articles || [];
   const articleEntries: MetadataRoute.Sitemap = articles
     .filter((a) => a.status === 'published' && a.id)
     .map((a) => ({
       url: `${siteUrl}/blog/${a.id}`,
-      lastModified: a.date || today,
-      changeFrequency: 'yearly' as Freq,
-      priority: 0.6 as Priority,
+      ...(a.updated_at || a.date
+        ? { lastModified: a.updated_at || a.date }
+        : {}),
     }));
 
   const [aircraftEntries, shopEntries] = await Promise.all([
-    getAircraftListingEntries(siteUrl, today),
-    getShopEntries(siteUrl, today),
+    getAircraftListingEntries(siteUrl),
+    getShopEntries(siteUrl),
   ]);
 
-  return [...staticEntries, ...articleEntries, ...aircraftEntries, ...shopEntries];
+  return [
+    ...staticEntries,
+    ...articleEntries,
+    ...aircraftEntries,
+    ...shopEntries,
+  ];
 }

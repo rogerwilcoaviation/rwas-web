@@ -9,12 +9,14 @@ import {
   BroadsheetFooter,
   Specimen,
 } from '@/components/shared/broadsheet';
+import { genPageMetadata } from '@/app/seo';
 
-export const metadata = {
-  title: { absolute: 'RWAS Shop Capabilities — Avionics, A&P, NDT' },
+export const metadata = genPageMetadata({
+  title: 'RWAS Shop Capabilities — Sioux Falls Avionics, A&P & NDT',
   description:
-    'Garmin avionics, A&P maintenance, NDT, sheet metal, fiber laser, and fabrication support from RWAS in the Northern Plains.',
-};
+    'Garmin avionics, A&P maintenance, NDT, sheet metal, fiber laser, and fabrication from RWAS at KFSD in Sioux Falls, South Dakota.',
+  canonical: 'https://www.rogerwilcoaviation.com/shop-capabilities',
+});
 
 export default function ShopCapabilitiesPage() {
   return (
@@ -28,10 +30,13 @@ export default function ShopCapabilitiesPage() {
             '@graph': [
               {
                 '@type': 'Service',
-                '@id': 'https://www.rogerwilcoaviation.com/shop-capabilities#garmin',
+                '@id':
+                  'https://www.rogerwilcoaviation.com/shop-capabilities#garmin',
                 name: 'Garmin Avionics Installation',
                 serviceType: 'Avionics Installation',
-                provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
+                provider: {
+                  '@id': 'https://www.rogerwilcoaviation.com#organization',
+                },
                 areaServed: [
                   { '@type': 'State', name: 'South Dakota' },
                   { '@type': 'State', name: 'Nebraska' },
@@ -43,74 +48,222 @@ export default function ShopCapabilitiesPage() {
                   '@type': 'OfferCatalog',
                   name: 'Garmin Avionics',
                   itemListElement: [
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'G3X Touch Suite Installation' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'GTN 650Xi / 750Xi Navigator Installation' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'GFC 500 Autopilot Installation' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'ADS-B Out Compliance' } },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'G3X Touch Suite Installation',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'GTN 650Xi / 750Xi Navigator Installation',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'GFC 500 Autopilot Installation',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'ADS-B Out Compliance',
+                      },
+                    },
                   ],
                 },
               },
               {
                 '@type': 'Service',
-                '@id': 'https://www.rogerwilcoaviation.com/shop-capabilities#airframe-powerplant',
+                '@id':
+                  'https://www.rogerwilcoaviation.com/shop-capabilities#airframe-powerplant',
                 name: 'Airframe & Powerplant Maintenance',
                 serviceType: 'Aircraft Maintenance',
-                provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
+                provider: {
+                  '@id': 'https://www.rogerwilcoaviation.com#organization',
+                },
                 description:
                   'Comprehensive airframe and powerplant services for GA, corporate, and commercial operators. All work performed by certificated mechanics with full logbook documentation.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Airframe & Powerplant',
                   itemListElement: [
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Annual Inspections', description: 'Per FAR 43 with discrepancy reports' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Condition & Pre-Buy Inspections' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: '100-Hour Inspections', description: 'Part 91 and Part 135' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'AOG Go-Van Service' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Propeller Balancing' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Aircraft Weight Certification', description: 'Up to 30,000 lbs' } },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Annual Inspections',
+                        description: 'Per FAR 43 with discrepancy reports',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Condition & Pre-Buy Inspections',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: '100-Hour Inspections',
+                        description: 'Part 91 and Part 135',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'AOG Go-Van Service',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Propeller Balancing',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Aircraft Weight Certification',
+                        description: 'Up to 30,000 lbs',
+                      },
+                    },
                   ],
                 },
               },
               {
                 '@type': 'Service',
-                '@id': 'https://www.rogerwilcoaviation.com/shop-capabilities#ndt',
+                '@id':
+                  'https://www.rogerwilcoaviation.com/shop-capabilities#ndt',
                 name: 'Non-Destructive Testing & Inspection',
                 serviceType: 'NDT Inspection',
-                provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
+                provider: {
+                  '@id': 'https://www.rogerwilcoaviation.com#organization',
+                },
                 description:
                   'Level 3 NDT services with FAA Form 8130-3 return to service and Airworthiness Directive compliance.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'NDT Methods',
                   itemListElement: [
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Eddy Current Testing' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Dye Penetrant Testing', description: 'Per ASTM E1417' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Magnetic Particle Inspection' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Ultrasound Testing' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Visual Testing' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Rockwell Hardness Testing' } },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Eddy Current Testing',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Dye Penetrant Testing',
+                        description: 'Per ASTM E1417',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Magnetic Particle Inspection',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Ultrasound Testing',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Visual Testing',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Rockwell Hardness Testing',
+                      },
+                    },
                   ],
                 },
               },
               {
                 '@type': 'Service',
-                '@id': 'https://www.rogerwilcoaviation.com/shop-capabilities#fabrication',
+                '@id':
+                  'https://www.rogerwilcoaviation.com/shop-capabilities#fabrication',
                 name: 'Fabrication & Manufacturing',
                 serviceType: 'Aircraft Fabrication',
-                provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
+                provider: {
+                  '@id': 'https://www.rogerwilcoaviation.com#organization',
+                },
                 description:
                   'In-house CNC machining, fiber laser cutting, and fabrication capabilities for aircraft panels, structural components, and precision tooling.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Fabrication Capabilities',
                   itemListElement: [
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'CNC Router Fabrication' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Fiber Laser Cutting & Welding' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Aircraft Panel Fabrication' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Sheet Metal Repair & Replacement' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Multi-Color Powder Coating' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'UV Printing' } },
-                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'CO2 Laser Engraving' } },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'CNC Router Fabrication',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Fiber Laser Cutting & Welding',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Aircraft Panel Fabrication',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Sheet Metal Repair & Replacement',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'Multi-Color Powder Coating',
+                      },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: { '@type': 'Service', name: 'UV Printing' },
+                    },
+                    {
+                      '@type': 'Offer',
+                      itemOffered: {
+                        '@type': 'Service',
+                        name: 'CO2 Laser Engraving',
+                      },
+                    },
                   ],
                 },
               },
@@ -128,18 +281,24 @@ export default function ShopCapabilitiesPage() {
       <main className="bs-stage">
         {/* ── HERO HEADLINE ─────────────────────────────────────────── */}
         <section className="hero-headline-group" aria-labelledby="caps-hero">
-          <span className="bs-kicker">FAA Part 145 Repair Station &middot; Certificate #RWSR491E</span>
-          <span className="bs-script-accent">&mdash; Northern Plains shop floor &mdash;</span>
+          <span className="bs-kicker">
+            FAA Part 145 Repair Station &middot; Certificate #RWSR491E
+          </span>
+          <span className="bs-script-accent">
+            &mdash; KFSD shop floor in Sioux Falls &mdash;
+          </span>
           <h1 id="caps-hero" className="bs-headline bs-headline--hero">
             Full-spectrum aircraft maintenance,
             <br />
             <em>avionics &amp; fabrication.</em>
           </h1>
           <p className="bs-subhead">
-            Limited Airframe &middot; Limited Instrument &middot; Limited Radio &middot; NDT Inspection &amp; Testing
+            Limited Airframe &middot; Limited Instrument &middot; Limited Radio
+            &middot; NDT Inspection &amp; Testing
           </p>
           <div className="bs-byline">
-            RWAS Avionics Desk &middot; Serving SD &middot; NE &middot; IA &middot; MN &middot; ND
+            RWAS Avionics Desk &middot; Serving SD &middot; NE &middot; IA
+            &middot; MN &middot; ND
           </div>
         </section>
 
@@ -150,29 +309,53 @@ export default function ShopCapabilitiesPage() {
             {/* Garmin Avionics */}
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Garmin Avionics Installations</span>
-              <h2 className="bs-headline bs-headline--section">Certified Garmin Dealer</h2>
+              <h2 className="bs-headline bs-headline--section">
+                Certified Garmin Dealer
+              </h2>
               <hr className="section-rule" />
               <div className="bs-split">
                 <div className="bs-body">
                   <p>
-                    Certified Garmin dealer and installation center. Full glass cockpit upgrades including the G3X Touch suite with ADAHRS, EIS, and synthetic vision &mdash; plus navigator, autopilot, and ADS-B retrofits across the piston, turboprop, and experimental fleet.
+                    Certified Garmin dealer and installation center. Full glass
+                    cockpit upgrades including the G3X Touch suite with ADAHRS,
+                    EIS, and synthetic vision &mdash; plus navigator, autopilot,
+                    and ADS-B retrofits across the piston, turboprop, and
+                    experimental fleet.
                   </p>
                   <p>
-                    <a href="/services/garmin-installation-northern-plains">Read more about Garmin avionics installation at RWAS</a>
+                    <a href="/services/garmin-installation-northern-plains">
+                      Read more about Garmin avionics installation at RWAS
+                    </a>
                   </p>
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/services/g3x-touch-installation">G3X Touch Suite</a></p>
+                    <p className="bs-svc-name">
+                      <a href="/services/g3x-touch-installation">
+                        G3X Touch Suite
+                      </a>
+                    </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/services/gtn-xi-navigator-installation">GTN 650Xi / 750Xi</a></p>
+                    <p className="bs-svc-name">
+                      <a href="/services/gtn-xi-navigator-installation">
+                        GTN 650Xi / 750Xi
+                      </a>
+                    </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/services/gfc-500-autopilot-installation">GFC 500 Autopilot</a></p>
+                    <p className="bs-svc-name">
+                      <a href="/services/gfc-500-autopilot-installation">
+                        GFC 500 Autopilot
+                      </a>
+                    </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/services/ads-b-installation">ADS-B Out Compliance</a></p>
+                    <p className="bs-svc-name">
+                      <a href="/services/ads-b-installation">
+                        ADS-B Out Compliance
+                      </a>
+                    </p>
                   </li>
                 </ul>
               </div>
@@ -181,38 +364,64 @@ export default function ShopCapabilitiesPage() {
             {/* Airframe & Powerplant */}
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Airframe &amp; Powerplant</span>
-              <h2 className="bs-headline bs-headline--section">A&amp;P Maintenance</h2>
+              <h2 className="bs-headline bs-headline--section">
+                A&amp;P Maintenance
+              </h2>
               <hr className="section-rule" />
               <div className="bs-split">
                 <div className="bs-body">
                   <p>
-                    Comprehensive airframe and powerplant services for GA, corporate, and commercial operators. All work performed by certificated mechanics with full logbook documentation and FAA Form 8130-3 return to service when applicable.
+                    Comprehensive airframe and powerplant services for GA,
+                    corporate, and commercial operators. All work performed by
+                    certificated mechanics with full logbook documentation and
+                    FAA Form 8130-3 return to service when applicable.
                   </p>
                   <p>
-                    <a href="/services/aircraft-maintenance">Read more about aircraft maintenance and annual inspections at RWAS</a>
+                    <a href="/services/aircraft-maintenance">
+                      Read more about aircraft maintenance and annual
+                      inspections at RWAS
+                    </a>
                   </p>
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/services/aircraft-maintenance">Annual Inspections</a></p>
-                    <p className="bs-svc-desc">Per FAR 43 with discrepancy reports</p>
+                    <p className="bs-svc-name">
+                      <a href="/services/aircraft-maintenance">
+                        Annual Inspections
+                      </a>
+                    </p>
+                    <p className="bs-svc-desc">
+                      Per FAR 43 with discrepancy reports
+                    </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/services/pre-buy-inspection">Condition &amp; Pre-Buy Inspections</a></p>
+                    <p className="bs-svc-name">
+                      <a href="/services/pre-buy-inspection">
+                        Condition &amp; Pre-Buy Inspections
+                      </a>
+                    </p>
                   </li>
                   <li className="bs-svc">
                     <p className="bs-svc-name">100-Hour Inspections</p>
                     <p className="bs-svc-desc">Part 91 and Part 135</p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name">AOG &ldquo;Go-Van&rdquo; Service</p>
+                    <p className="bs-svc-name">
+                      AOG &ldquo;Go-Van&rdquo; Service
+                    </p>
                   </li>
                   <li className="bs-svc">
                     <p className="bs-svc-name">Propeller Balancing</p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/services/rotax-repair">Rotax Maintenance Support</a></p>
-                    <p className="bs-svc-desc">Light sport and experimental aircraft engine support</p>
+                    <p className="bs-svc-name">
+                      <a href="/services/rotax-repair">
+                        Rotax Maintenance Support
+                      </a>
+                    </p>
+                    <p className="bs-svc-desc">
+                      Light sport and experimental aircraft engine support
+                    </p>
                   </li>
                   <li className="bs-svc">
                     <p className="bs-svc-name">Aircraft Weight Certification</p>
@@ -225,30 +434,49 @@ export default function ShopCapabilitiesPage() {
             {/* NDT */}
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Non-Destructive Testing</span>
-              <h2 className="bs-headline bs-headline--section">NDT Inspection &amp; Testing</h2>
+              <h2 className="bs-headline bs-headline--section">
+                NDT Inspection &amp; Testing
+              </h2>
               <hr className="section-rule" />
               <div className="bs-split">
                 <div className="bs-body">
                   <p>
-                    Level 3 NDT services with FAA Form 8130-3 return to service and Airworthiness Directive compliance. Full range of inspection methods for structural integrity verification across metallic airframe, engine, and propeller components.
+                    Level 3 NDT services with FAA Form 8130-3 return to service
+                    and Airworthiness Directive compliance. Full range of
+                    inspection methods for structural integrity verification
+                    across metallic airframe, engine, and propeller components.
                   </p>
                   <p>
-                    <a href="/services/ndt-inspection">Read more about aircraft NDT inspection at RWAS</a>
+                    <a href="/services/ndt-inspection">
+                      Read more about aircraft NDT inspection at RWAS
+                    </a>
                   </p>
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc">
                     <p className="bs-svc-name">Eddy Current Testing</p>
-                    <p className="bs-svc-desc">Subsurface crack and corrosion detection</p>
+                    <p className="bs-svc-desc">
+                      Subsurface crack and corrosion detection
+                    </p>
                   </li>
                   <li className="bs-svc">
                     <p className="bs-svc-name">Dye Penetrant Testing</p>
-                    <p className="bs-svc-desc">Surface crack detection per ASTM E1417</p>
+                    <p className="bs-svc-desc">
+                      Surface crack detection per ASTM E1417
+                    </p>
                   </li>
-                  <li className="bs-svc"><p className="bs-svc-name">Magnetic Particle Inspection</p></li>
-                  <li className="bs-svc"><p className="bs-svc-name">Ultrasound Testing</p></li>
-                  <li className="bs-svc"><p className="bs-svc-name">Visual Testing</p></li>
-                  <li className="bs-svc"><p className="bs-svc-name">Rockwell Hardness Testing</p></li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">Magnetic Particle Inspection</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">Ultrasound Testing</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">Visual Testing</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">Rockwell Hardness Testing</p>
+                  </li>
                 </ul>
               </div>
             </Specimen>
@@ -256,33 +484,67 @@ export default function ShopCapabilitiesPage() {
             {/* Fabrication */}
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Fabrication &amp; Manufacturing</span>
-              <h2 className="bs-headline bs-headline--section">In-House Precision</h2>
+              <h2 className="bs-headline bs-headline--section">
+                In-House Precision
+              </h2>
               <hr className="section-rule" />
               <div className="bs-split">
                 <div className="bs-body">
                   <p>
-                    In-house CNC machining, laser cutting, and fabrication capabilities for aircraft panels, structural components, and precision tooling. Home of Papa-Alpha rigging reference tools for the Piper fleet.
+                    In-house CNC machining, laser cutting, and fabrication
+                    capabilities for aircraft panels, structural components, and
+                    precision tooling. Home of Papa-Alpha rigging reference
+                    tools for the Piper fleet.
                   </p>
                   <p>
-                    <a href="/services/fiber-laser-fabrication">Read more about aircraft fiber laser fabrication at RWAS</a>
-                    {' '}
-                    &middot;
-                    {' '}
-                    <a href="/services/papa-alpha-tools">Read the Papa-Alpha tools story</a>
+                    <a href="/services/fiber-laser-fabrication">
+                      Read more about aircraft fiber laser fabrication at RWAS
+                    </a>{' '}
+                    &middot;{' '}
+                    <a href="/services/papa-alpha-tools">
+                      Read the Papa-Alpha tools story
+                    </a>
                   </p>
                 </div>
                 <ul className="bs-svc-list">
-                  <li className="bs-svc"><p className="bs-svc-name">CNC Router Fabrication</p></li>
-                  <li className="bs-svc"><p className="bs-svc-name">Fiber Laser Cutting &amp; Welding</p></li>
-                  <li className="bs-svc"><p className="bs-svc-name">Aircraft Panel Fabrication</p></li>
-                  <li className="bs-svc"><p className="bs-svc-name">Sheet Metal Repair &amp; Replacement</p></li>
-                  <li className="bs-svc"><p className="bs-svc-name">Multi-Color Powder Coating</p></li>
-                  <li className="bs-svc"><p className="bs-svc-name">UV Printing</p></li>
-                  <li className="bs-svc"><p className="bs-svc-name">CO2 Laser Engraving</p></li>
-                  <li className="bs-svc"><p className="bs-svc-name">Computer Aided Design (CAD)</p></li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><a href="/collections/papa-alpha-tools">Papa-Alpha Reference Tools</a></p>
-                    <p className="bs-svc-desc">Precision Piper rigging tools &mdash; designed and manufactured in-house</p>
+                    <p className="bs-svc-name">CNC Router Fabrication</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">
+                      Fiber Laser Cutting &amp; Welding
+                    </p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">Aircraft Panel Fabrication</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">
+                      Sheet Metal Repair &amp; Replacement
+                    </p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">Multi-Color Powder Coating</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">UV Printing</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">CO2 Laser Engraving</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">Computer Aided Design (CAD)</p>
+                  </li>
+                  <li className="bs-svc">
+                    <p className="bs-svc-name">
+                      <a href="/collections/papa-alpha-tools">
+                        Papa-Alpha Reference Tools
+                      </a>
+                    </p>
+                    <p className="bs-svc-desc">
+                      Precision Piper rigging tools &mdash; designed and
+                      manufactured in-house
+                    </p>
                   </li>
                 </ul>
               </div>
@@ -296,17 +558,23 @@ export default function ShopCapabilitiesPage() {
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
-                Fiber laser &mdash; precision cutting &amp; welding, in-house at RWAS.
+                Fiber laser &mdash; precision cutting &amp; welding, in-house at
+                RWAS.
               </Specimen.Caption>
             </Specimen>
           </div>
 
           {/* RAIL ----------------------------------------------------- */}
-          <aside className="about-rail" aria-label="Schedule service &amp; credentials">
+          <aside
+            className="about-rail"
+            aria-label="Schedule service &amp; credentials"
+          >
             <Specimen as="section">
               <span className="bs-kicker">Schedule Service</span>
               <p>
-                Ready to schedule an inspection, get an avionics quote, or discuss a project? Use the Jerry popup in the navigation or contact our team directly.
+                Ready to schedule an inspection, get an avionics quote, or
+                discuss a project? Use the Jerry popup in the navigation or
+                contact our team directly.
               </p>
             </Specimen>
 
@@ -315,14 +583,20 @@ export default function ShopCapabilitiesPage() {
               <p>
                 <a
                   href="tel:+16052998178"
-                  style={{ color: 'var(--ink-900)', textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                  style={{
+                    color: 'var(--ink-900)',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '2px',
+                  }}
                 >
                   (605) 299-8178
                 </a>
                 <br />
                 RWAS Avionics Desk
                 <br />
-                the Northern Plains
+                Hangar 3, 3701 N. Aviation Avenue
+                <br />
+                Sioux Falls, SD 57104 &middot; KFSD
               </p>
             </Specimen>
 
@@ -347,36 +621,50 @@ export default function ShopCapabilitiesPage() {
 
             {/* Ask Jerry CTA */}
             <div className="jerry-card">
-              <span className="bs-script-accent">&mdash; on duty 24/7 &mdash;</span>
+              <span className="bs-script-accent">
+                &mdash; on duty 24/7 &mdash;
+              </span>
               <h4>Talk to Captain Jerry</h4>
               <p>Project scoping &amp; scheduling</p>
               <a className="cta" href="#ask-jerry">
                 Ask Jerry
               </a>
-              <div className="footnote">AI-powered intake &middot; Available 24/7</div>
+              <div className="footnote">
+                AI-powered intake &middot; Available 24/7
+              </div>
             </div>
 
             {/* R182 panel photo */}
-            <Specimen variant="hero" as="figure" className="about-fig about-fig--rail">
+            <Specimen
+              variant="hero"
+              as="figure"
+              className="about-fig about-fig--rail"
+            >
               <Specimen.Image
                 src="/newspaper/images/r182_panel.jpg"
                 alt="Full Garmin G500TXi Suite installation in a Cessna 182RG"
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 02">
-                Cessna 182RG &mdash; full Garmin G500TXi Suite installation by RWAS.
+                Cessna 182RG &mdash; full Garmin G500TXi Suite installation by
+                RWAS.
               </Specimen.Caption>
             </Specimen>
 
             {/* Papa-Alpha kit photo */}
-            <Specimen variant="hero" as="figure" className="about-fig about-fig--rail">
+            <Specimen
+              variant="hero"
+              as="figure"
+              className="about-fig about-fig--rail"
+            >
               <Specimen.Image
                 src="/newspaper/images/papa_alpha_kit.jpg"
                 alt="Papa-Alpha rigging reference tools"
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 03">
-                Papa-Alpha rigging reference tools &mdash; manufactured in-house.
+                Papa-Alpha rigging reference tools &mdash; manufactured
+                in-house.
               </Specimen.Caption>
             </Specimen>
           </aside>

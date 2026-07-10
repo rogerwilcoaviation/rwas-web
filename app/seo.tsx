@@ -3,9 +3,9 @@ import { siteConfig } from '@/data/config/site.settings';
 
 interface PageSEOProps {
   title: string;
-  description?: string;
+  description: string;
   image?: string;
-  canonical?: string;
+  canonical: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
@@ -17,30 +17,27 @@ export function genPageMetadata({
   canonical,
   ...rest
 }: PageSEOProps): Metadata {
+  const socialImage = image || siteConfig.socialBanner;
+
   return {
-    title,
+    title: { absolute: title },
     description,
     openGraph: {
-      title: `${title} | ${siteConfig.title}`,
-      description: description || siteConfig.description,
-      url: './',
+      title,
+      description,
+      url: canonical,
       siteName: siteConfig.title,
-      images: image ? [image] : [siteConfig.socialBanner],
+      images: [socialImage],
       locale: 'en_US',
       type: 'website',
     },
     twitter: {
-      title: `${title} | ${siteConfig.title}`,
+      title,
+      description,
       card: 'summary_large_image',
-      images: image ? [image] : [siteConfig.socialBanner],
+      images: [socialImage],
     },
-    ...(canonical
-      ? {
-          alternates: {
-            canonical,
-          },
-        }
-      : {}),
+    alternates: { canonical },
     ...rest,
   };
 }

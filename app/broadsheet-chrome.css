@@ -1415,6 +1415,8 @@ body {
   font-size: 24px;
   font-weight: 900;
   line-height: 0.95;
+  color: inherit;
+  text-decoration: none;
   text-transform: uppercase;
 }
 .broadsheet .laser-rail-promo__copy {
@@ -1901,14 +1903,19 @@ body {
     height: 64px;
   }
   .broadsheet .bs-masthead__brand {
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: clamp(30px, 9vw, 36px);
     font-weight: 700;
     letter-spacing: -0.01em;
   }
   .broadsheet .bs-masthead__tagline,
   .broadsheet .bs-masthead__cert {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      sans-serif;
     font-size: 9px;
     letter-spacing: 0.16em;
   }

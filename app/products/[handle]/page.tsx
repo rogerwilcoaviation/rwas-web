@@ -22,7 +22,9 @@
 import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
-import PdpPriceCard, { type PdpVariant } from '@/components/shopify/PdpPriceCard';
+import PdpPriceCard, {
+  type PdpVariant,
+} from '@/components/shopify/PdpPriceCard';
 import {
   PAPA_ALPHA_RIGGING_CHART_ROWS,
   PAPA_ALPHA_RIGGING_KIT_CONTENTS,
@@ -38,7 +40,11 @@ import {
   PRIORITY_PRODUCT_HANDLES,
   type ShopifyProductDetail,
 } from '@/lib/shopify';
-import { productMetaDescription, productSeoTitle, truncateMeta } from '@/lib/seo';
+import {
+  productMetaDescription,
+  productSeoTitle,
+  truncateMeta,
+} from '@/lib/seo';
 import {
   BroadsheetLayout,
   Dateline,
@@ -48,12 +54,19 @@ import {
   BulletinBar,
   BroadsheetFooter,
 } from '@/components/shared/broadsheet';
-import { isShopifyPlaceholderImage, productImageAlt, productImageUrl } from '@/lib/product-image';
+import {
+  isShopifyPlaceholderImage,
+  productImageAlt,
+  productImageUrl,
+} from '@/lib/product-image';
 import { serviceLinksForProduct } from '@/lib/service-links';
 
 const SITE_ORIGIN = 'https://www.rogerwilcoaviation.com';
+const DEFAULT_SOCIAL_IMAGE = `${SITE_ORIGIN}/og-default.jpg`;
 
-function isProductImage(image: ShopifyProductDetail['featuredImage']): image is NonNullable<ShopifyProductDetail['featuredImage']> {
+function isProductImage(
+  image: ShopifyProductDetail['featuredImage'],
+): image is NonNullable<ShopifyProductDetail['featuredImage']> {
   return Boolean(image?.url);
 }
 
@@ -78,7 +91,10 @@ function sanitizeProductHtml(html: string): string {
   if (!html) return '';
   let out = html;
   // Remove <p>-wrapped rebate link
-  out = out.replace(/<p>\s*<a[^>]*BuyAndSaveRebateForm[^>]*>[\s\S]*?<\/a>\s*<\/p>/gi, '');
+  out = out.replace(
+    /<p>\s*<a[^>]*BuyAndSaveRebateForm[^>]*>[\s\S]*?<\/a>\s*<\/p>/gi,
+    '',
+  );
   // Remove bare rebate anchor
   out = out.replace(/<a[^>]*BuyAndSaveRebateForm[^>]*>[\s\S]*?<\/a>/gi, '');
   return out;
@@ -87,7 +103,9 @@ function sanitizeProductHtml(html: string): string {
 export async function generateStaticParams() {
   try {
     const handles = await getSeoProductHandles();
-    return Array.from(new Set([...PRIORITY_PRODUCT_HANDLES, ...handles])).map((handle) => ({ handle }));
+    return Array.from(new Set([...PRIORITY_PRODUCT_HANDLES, ...handles])).map(
+      (handle) => ({ handle }),
+    );
   } catch {
     return FALLBACK_PRODUCT_HANDLES.map((handle) => ({ handle }));
   }
@@ -103,15 +121,23 @@ export async function generateMetadata({
   try {
     const product = await getProductByHandle(handle);
     if (!product) return { title: 'Product not found' };
-    const description =
+    const description = truncateMeta(
       papaAlphaApplicabilityIntro(product) ||
-      (isPa31RudderTrimProduct(product) ? PA31_RUDDER_TRIM_INTRO : productMetaDescription(product));
+        (isPa31RudderTrimProduct(product)
+          ? PA31_RUDDER_TRIM_INTRO
+          : productMetaDescription(product)),
+    );
     const url = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;
     const imageCandidates = productImageCandidates(product);
-    const metaImage =
-      imageCandidates.find((image) => !isShopifyPlaceholderImage(image.url, image.altText));
-    const imageUrl = metaImage?.url;
-    const title = productSeoTitle(product.title, product.productType);
+    const metaImage = imageCandidates.find(
+      (image) => !isShopifyPlaceholderImage(image.url, image.altText),
+    );
+    const imageUrl = metaImage?.url || DEFAULT_SOCIAL_IMAGE;
+    const imageAlt = metaImage
+      ? productImageAlt(metaImage.url, metaImage.altText, product.title)
+      : 'Roger Wilco Aviation Services';
+    const sku = product.variants.find((variant) => variant.sku)?.sku;
+    const title = productSeoTitle(product.title, product.productType, sku);
     return {
       title: { absolute: title },
       description,
@@ -121,13 +147,13 @@ export async function generateMetadata({
         url,
         title,
         description,
-        images: imageUrl ? [{ url: imageUrl, alt: productImageAlt(metaImage.url, metaImage.altText, product.title) }] : undefined,
+        images: [{ url: imageUrl, alt: imageAlt }],
       },
       twitter: {
         card: 'summary_large_image',
         title,
         description,
-        images: imageUrl ? [imageUrl] : undefined,
+        images: [imageUrl],
       },
     };
   } catch {
@@ -146,7 +172,9 @@ function formatPrice(amount: string, currencyCode: string) {
 function isPlaceholderOption(option: { name: string; values: string[] }) {
   const name = option.name.trim().toLowerCase();
   const values = option.values.map((value) => value.trim().toLowerCase());
-  return name === 'title' && values.length === 1 && values[0] === 'default title';
+  return (
+    name === 'title' && values.length === 1 && values[0] === 'default title'
+  );
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -197,7 +225,8 @@ function gateFromProduct(
   // Check-stock pill and the 'RWAS does not hold Garmin stock' notice.
   const stockCheckRequired = collectionOtc
     ? false
-    : lower.includes('stock-check-required') || (isGarmin && !perProductOtcEligible);
+    : lower.includes('stock-check-required') ||
+      (isGarmin && !perProductOtcEligible);
   const otc: Gating['otc'] = otcEligible
     ? 'eligible'
     : perProductOtcDisabled
@@ -206,43 +235,65 @@ function gateFromProduct(
   return { otc, stockCheckRequired, mapLocked, isGarmin };
 }
 
-const D2_WATCH_BRIEFINGS: Record<string, {
-  caseSize: string;
-  finish: string;
-  band: string;
-  display: string;
-  battery: string;
-  saleNote: string;
-  technical: Record<string, string>;
-  highlights: Array<{ label: string; copy: string }>;
-}> = {
+const D2_WATCH_BRIEFINGS: Record<
+  string,
+  {
+    caseSize: string;
+    finish: string;
+    band: string;
+    display: string;
+    battery: string;
+    saleNote: string;
+    technical: Record<string, string>;
+    highlights: Array<{ label: string; copy: string }>;
+  }
+> = {
   'd2-mach-2-47-mm-titanium-oxford-brown-leather-band': {
     caseSize: '47 mm',
     finish: 'Titanium case',
     band: 'Oxford Brown leather band',
     display: 'AMOLED display with sapphire lens',
     battery: 'Up to 24 days in smartwatch mode',
-    saleNote: 'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
+    saleNote:
+      'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
     technical: {
       'Case size': '47 mm',
       'Case / bezel': 'Titanium case and bezel',
       Lens: 'Sapphire lens',
       Band: 'Oxford Brown leather band',
       Display: 'AMOLED aviation smartwatch display',
-      Battery: 'Up to 24 days in smartwatch mode; GPS endurance varies by GNSS and display settings',
-      'Aviation navigation': 'Direct-to, nearest-airport reference, moving-map style awareness, HSI course guidance and UTC/time-zone tools',
-      'Airport / weather tools': 'Airport information plus METAR/TAF and aviation weather awareness when paired/connected',
-      'Pilot tools': 'Flight logging support, timers, configurable aviation data fields, barometric/altitude awareness and UTC/time-zone references',
-      'Garmin ecosystem': 'Garmin Pilot and flyGarmin ecosystem support where available',
-      Connectivity: 'Bluetooth, Wi-Fi and ANT+ smartwatch connectivity; no built-in inReach satellite/LTE on this model',
-      'Health / training': 'Garmin wellness, sleep, training and activity tracking features',
-      'Ground features': 'Garmin Pay, music support and smart notifications when paired with a compatible phone',
-      Fulfillment: 'Special-order Garmin item; Garmin delivers to RWAS, then RWAS delivers to the customer',
+      Battery:
+        'Up to 24 days in smartwatch mode; GPS endurance varies by GNSS and display settings',
+      'Aviation navigation':
+        'Direct-to, nearest-airport reference, moving-map style awareness, HSI course guidance and UTC/time-zone tools',
+      'Airport / weather tools':
+        'Airport information plus METAR/TAF and aviation weather awareness when paired/connected',
+      'Pilot tools':
+        'Flight logging support, timers, configurable aviation data fields, barometric/altitude awareness and UTC/time-zone references',
+      'Garmin ecosystem':
+        'Garmin Pilot and flyGarmin ecosystem support where available',
+      Connectivity:
+        'Bluetooth, Wi-Fi and ANT+ smartwatch connectivity; no built-in inReach satellite/LTE on this model',
+      'Health / training':
+        'Garmin wellness, sleep, training and activity tracking features',
+      'Ground features':
+        'Garmin Pay, music support and smart notifications when paired with a compatible phone',
+      Fulfillment:
+        'Special-order Garmin item; Garmin delivers to RWAS, then RWAS delivers to the customer',
     },
     highlights: [
-      { label: 'Flight-ready tools', copy: 'Moving-map style aviation tools, nearest-airport/direct-to functions, HSI course guidance, timers and UTC/time-zone references.' },
-      { label: 'Weather before launch', copy: 'Pilot-focused weather views including METAR/TAF awareness, NEXRAD, winds and temperature overlays when paired with the Garmin ecosystem.' },
-      { label: 'Daily performance watch', copy: 'Health monitoring, training readiness, suggested workouts and travel recovery tools in a dress-watch aviation package.' },
+      {
+        label: 'Flight-ready tools',
+        copy: 'Moving-map style aviation tools, nearest-airport/direct-to functions, HSI course guidance, timers and UTC/time-zone references.',
+      },
+      {
+        label: 'Weather before launch',
+        copy: 'Pilot-focused weather views including METAR/TAF awareness, NEXRAD, winds and temperature overlays when paired with the Garmin ecosystem.',
+      },
+      {
+        label: 'Daily performance watch',
+        copy: 'Health monitoring, training readiness, suggested workouts and travel recovery tools in a dress-watch aviation package.',
+      },
     ],
   },
   'd2-mach-2-51-mm-carbon-gray-dlc-titanium-vented-titanium-bracelet': {
@@ -251,27 +302,46 @@ const D2_WATCH_BRIEFINGS: Record<string, {
     band: 'Vented titanium bracelet',
     display: '1.4-inch AMOLED display with sapphire lens',
     battery: 'Up to 24 days in smartwatch mode',
-    saleNote: 'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
+    saleNote:
+      'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
     technical: {
       'Case size': '51 mm',
       'Case / bezel': 'Carbon Gray DLC titanium case and bezel',
       Lens: 'Sapphire lens',
       Band: 'Vented titanium bracelet',
       Display: '1.4-inch AMOLED aviation smartwatch display',
-      Battery: 'Up to 24 days in smartwatch mode; GPS endurance varies by GNSS and display settings',
-      'Aviation navigation': 'Direct-to, nearest-airport reference, moving-map style awareness, HSI course guidance and UTC/time-zone tools',
-      'Airport / weather tools': 'Airport information plus METAR/TAF and aviation weather awareness when paired/connected',
-      'Pilot tools': 'Flight logging support, timers, configurable aviation data fields, barometric/altitude awareness, UTC/time-zone references and red-shift/flashlight utility',
-      'Garmin ecosystem': 'Garmin Pilot and flyGarmin ecosystem support where available',
-      Connectivity: 'Bluetooth, Wi-Fi and ANT+ smartwatch connectivity; no built-in inReach satellite/LTE on this model',
-      'Health / training': 'Garmin wellness, sleep, training and activity tracking features',
-      'Ground features': 'Built-in LED flashlight, Garmin Pay, music support and smart notifications when paired with a compatible phone',
-      Fulfillment: 'Special-order Garmin item; Garmin delivers to RWAS, then RWAS delivers to the customer',
+      Battery:
+        'Up to 24 days in smartwatch mode; GPS endurance varies by GNSS and display settings',
+      'Aviation navigation':
+        'Direct-to, nearest-airport reference, moving-map style awareness, HSI course guidance and UTC/time-zone tools',
+      'Airport / weather tools':
+        'Airport information plus METAR/TAF and aviation weather awareness when paired/connected',
+      'Pilot tools':
+        'Flight logging support, timers, configurable aviation data fields, barometric/altitude awareness, UTC/time-zone references and red-shift/flashlight utility',
+      'Garmin ecosystem':
+        'Garmin Pilot and flyGarmin ecosystem support where available',
+      Connectivity:
+        'Bluetooth, Wi-Fi and ANT+ smartwatch connectivity; no built-in inReach satellite/LTE on this model',
+      'Health / training':
+        'Garmin wellness, sleep, training and activity tracking features',
+      'Ground features':
+        'Built-in LED flashlight, Garmin Pay, music support and smart notifications when paired with a compatible phone',
+      Fulfillment:
+        'Special-order Garmin item; Garmin delivers to RWAS, then RWAS delivers to the customer',
     },
     highlights: [
-      { label: 'Premium cockpit watch', copy: 'Larger 51 mm case, titanium bracelet, UTC bezel styling and aviation-first widgets for pilots who want a more substantial watch.' },
-      { label: 'Advanced flight awareness', copy: 'Airport data, moving-map style navigation, weather awareness and flight logging support through Garmin’s aviation ecosystem.' },
-      { label: 'Everyday capability', copy: 'Built-in LED flashlight, red shift mode, fitness metrics and long battery life for travel days as well as flight days.' },
+      {
+        label: 'Premium cockpit watch',
+        copy: 'Larger 51 mm case, titanium bracelet, UTC bezel styling and aviation-first widgets for pilots who want a more substantial watch.',
+      },
+      {
+        label: 'Advanced flight awareness',
+        copy: 'Airport data, moving-map style navigation, weather awareness and flight logging support through Garmin’s aviation ecosystem.',
+      },
+      {
+        label: 'Everyday capability',
+        copy: 'Built-in LED flashlight, red shift mode, fitness metrics and long battery life for travel days as well as flight days.',
+      },
     ],
   },
   'd2-mach-2-pro-51-mm-carbon-gray-dlc-titanium-chestnut-leather-band': {
@@ -280,33 +350,53 @@ const D2_WATCH_BRIEFINGS: Record<string, {
     band: 'Chestnut leather band',
     display: '1.4-inch AMOLED display with sapphire lens',
     battery: 'Up to 24 days in smartwatch mode',
-    saleNote: 'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
+    saleNote:
+      'Garmin D2 Mach 2 promotion valid through June 29, 2026, while available through authorized Garmin aviation dealers.',
     technical: {
       'Case size': '51 mm',
       'Case / bezel': 'Carbon Gray DLC titanium case and bezel',
       Lens: 'Sapphire lens',
       Band: 'Chestnut leather band',
       Display: '1.4-inch AMOLED aviation smartwatch display',
-      Battery: 'Up to 24 days in smartwatch mode; GPS and inReach/LTE endurance vary by mode, coverage and settings',
-      'Aviation navigation': 'Dynamic flight mapping, Direct-to, nearest-airport navigation, HSI course guidance and UTC/time-zone tools',
-      'Airport / weather tools': 'Airport information plus METAR/TAF and aviation weather awareness when paired/connected',
-      'Pilot tools': 'Flight logging support, timers, configurable aviation data fields, barometric/altitude awareness, UTC/time-zone references, red-shift/flashlight utility and inReach status tools',
-      'Garmin ecosystem': 'PlaneSync compatibility, Garmin Pilot integration and flyGarmin ecosystem support where available',
-      Connectivity: 'Bluetooth, Wi-Fi, ANT+, LTE and inReach satellite connectivity between flights',
-      'inReach / SOS': 'Messaging, LiveTrack and SOS features require active Garmin subscription and are subject to coverage/regional availability',
-      'Flight-use caveat': 'Garmin notes satellite/LTE service is not for in-flight use; present it as between-flight/ground connectivity',
-      'Health / training': 'Garmin wellness, sleep, training and activity tracking features',
-      'Ground features': 'Built-in LED flashlight, Garmin Pay, music support and smart notifications when paired with a compatible phone',
-      Fulfillment: 'Special-order Garmin item; Garmin delivers to RWAS, then RWAS delivers to the customer',
+      Battery:
+        'Up to 24 days in smartwatch mode; GPS and inReach/LTE endurance vary by mode, coverage and settings',
+      'Aviation navigation':
+        'Dynamic flight mapping, Direct-to, nearest-airport navigation, HSI course guidance and UTC/time-zone tools',
+      'Airport / weather tools':
+        'Airport information plus METAR/TAF and aviation weather awareness when paired/connected',
+      'Pilot tools':
+        'Flight logging support, timers, configurable aviation data fields, barometric/altitude awareness, UTC/time-zone references, red-shift/flashlight utility and inReach status tools',
+      'Garmin ecosystem':
+        'PlaneSync compatibility, Garmin Pilot integration and flyGarmin ecosystem support where available',
+      Connectivity:
+        'Bluetooth, Wi-Fi, ANT+, LTE and inReach satellite connectivity between flights',
+      'inReach / SOS':
+        'Messaging, LiveTrack and SOS features require active Garmin subscription and are subject to coverage/regional availability',
+      'Flight-use caveat':
+        'Garmin notes satellite/LTE service is not for in-flight use; present it as between-flight/ground connectivity',
+      'Health / training':
+        'Garmin wellness, sleep, training and activity tracking features',
+      'Ground features':
+        'Built-in LED flashlight, Garmin Pay, music support and smart notifications when paired with a compatible phone',
+      Fulfillment:
+        'Special-order Garmin item; Garmin delivers to RWAS, then RWAS delivers to the customer',
     },
     highlights: [
-      { label: 'D2 Mach 2 Pro connectivity', copy: 'Adds Garmin inReach technology with LTE and satellite connectivity between flights for messaging, LiveTrack and SOS features.' },
-      { label: 'Ultimate aviator toolset', copy: 'Dynamic flight mapping, HSI guidance, nearest-airport navigation, PlaneSync compatibility and Garmin Pilot integration.' },
-      { label: 'Important service note', copy: 'inReach/LTE features require an active Garmin subscription and are intended for ground use between flights, subject to coverage and regional availability.' },
+      {
+        label: 'D2 Mach 2 Pro connectivity',
+        copy: 'Adds Garmin inReach technology with LTE and satellite connectivity between flights for messaging, LiveTrack and SOS features.',
+      },
+      {
+        label: 'Ultimate aviator toolset',
+        copy: 'Dynamic flight mapping, HSI guidance, nearest-airport navigation, PlaneSync compatibility and Garmin Pilot integration.',
+      },
+      {
+        label: 'Important service note',
+        copy: 'inReach/LTE features require an active Garmin subscription and are intended for ground use between flights, subject to coverage and regional availability.',
+      },
     ],
   },
 };
-
 
 const TECHNICAL_COMPARISON_ROWS = [
   'Case size',
@@ -343,12 +433,15 @@ const PAPA_ALPHA_APPLICABILITY_HANDLES = [
 const PA31_RUDDER_TRIM_INTRO =
   'Applicability guide for the Papa-Alpha PA-31 rudder trim rigging tool set. Match the aircraft model and serial-number range before ordering; serial ranges marked N/A do not use this rudder trim tool.';
 
-const PAPA_ALPHA_APPLICABILITY_CONFIG: Record<string, {
-  heading: string;
-  intro: string;
-  toolColumn: string;
-  primaryLabel: string;
-}> = {
+const PAPA_ALPHA_APPLICABILITY_CONFIG: Record<
+  string,
+  {
+    heading: string;
+    intro: string;
+    toolColumn: string;
+    primaryLabel: string;
+  }
+> = {
   'pa-28-32-34-44-aileron-and-flap-rigging-tool-1': {
     heading: 'Aileron and flap tool applicability',
     intro:
@@ -392,7 +485,10 @@ type PapaAlphaApplicabilityRow = {
   tool: string;
 };
 
-const PAPA_ALPHA_APPLICABILITY_TOOL_KEYS: Record<string, PapaAlphaChartToolKey> = {
+const PAPA_ALPHA_APPLICABILITY_TOOL_KEYS: Record<
+  string,
+  PapaAlphaChartToolKey
+> = {
   'pa-28-32-34-44-aileron-and-flap-rigging-tool-1': 'aileronFlap',
   'bell-crank-rigging-tool': 'bellcrank',
   'rigging-kit': 'kit',
@@ -404,7 +500,9 @@ function spreadsheetToolValue(value: string) {
   return value.trim() || 'N/A';
 }
 
-function papaAlphaSpreadsheetRowsForHandle(handle: string): PapaAlphaApplicabilityRow[] | null {
+function papaAlphaSpreadsheetRowsForHandle(
+  handle: string,
+): PapaAlphaApplicabilityRow[] | null {
   const toolKey = PAPA_ALPHA_APPLICABILITY_TOOL_KEYS[handle];
   if (!toolKey) return null;
 
@@ -415,27 +513,38 @@ function papaAlphaSpreadsheetRowsForHandle(handle: string): PapaAlphaApplicabili
   }));
 }
 
-const PA31_RUDDER_TRIM_ROWS: PapaAlphaApplicabilityRow[] = PAPA_ALPHA_RIGGING_CHART_ROWS
-  .filter((row) => row.model.startsWith('PA-31'))
-  .map((row) => ({
+const PA31_RUDDER_TRIM_ROWS: PapaAlphaApplicabilityRow[] =
+  PAPA_ALPHA_RIGGING_CHART_ROWS.filter((row) =>
+    row.model.startsWith('PA-31'),
+  ).map((row) => ({
     model: row.model,
     serials: row.serials || 'N/A',
     tool: spreadsheetToolValue(row.misc),
   }));
 
-function isPa31RudderTrimProduct(product: Pick<ShopifyProductDetail, 'handle' | 'title' | 'variants'>) {
+function isPa31RudderTrimProduct(
+  product: Pick<ShopifyProductDetail, 'handle' | 'title' | 'variants'>,
+) {
   return (
     product.handle === PA31_RUDDER_TRIM_HANDLE ||
     product.title.toLowerCase().includes('pa-31 rudder trim') ||
-    product.variants.some((variant) => variant.sku === 'RT-01' || variant.sku === 'RT-02')
+    product.variants.some(
+      (variant) => variant.sku === 'RT-01' || variant.sku === 'RT-02',
+    )
   );
 }
 
-function isPapaAlphaApplicabilityProduct(product: Pick<ShopifyProductDetail, 'handle'>) {
-  return PAPA_ALPHA_APPLICABILITY_HANDLES.includes(product.handle as (typeof PAPA_ALPHA_APPLICABILITY_HANDLES)[number]);
+function isPapaAlphaApplicabilityProduct(
+  product: Pick<ShopifyProductDetail, 'handle'>,
+) {
+  return PAPA_ALPHA_APPLICABILITY_HANDLES.includes(
+    product.handle as (typeof PAPA_ALPHA_APPLICABILITY_HANDLES)[number],
+  );
 }
 
-function papaAlphaApplicabilityIntro(product: Pick<ShopifyProductDetail, 'handle'>) {
+function papaAlphaApplicabilityIntro(
+  product: Pick<ShopifyProductDetail, 'handle'>,
+) {
   if (product.handle === PA31_RUDDER_TRIM_HANDLE) return PA31_RUDDER_TRIM_INTRO;
   return PAPA_ALPHA_APPLICABILITY_CONFIG[product.handle]?.intro;
 }
@@ -446,12 +555,18 @@ function toolClassName(tool: string) {
   return 'tool-one';
 }
 
-function splitModelAndSerial(value: string): Pick<PapaAlphaApplicabilityRow, 'model' | 'serials'> {
+function splitModelAndSerial(
+  value: string,
+): Pick<PapaAlphaApplicabilityRow, 'model' | 'serials'> {
   const tokens = value.trim().split(/\s+/);
   const serialIndex = tokens.findIndex((token, index) => {
     if (index === 0) return false;
     const clean = token.replace(/^[,(]+|[,.)]+$/g, '');
-    return clean === 'N/A' || /^[0-9]{2}[A-Z]*-[0-9A-Z]+$/i.test(clean) || /^[0-9]{6,}$/i.test(clean);
+    return (
+      clean === 'N/A' ||
+      /^[0-9]{2}[A-Z]*-[0-9A-Z]+$/i.test(clean) ||
+      /^[0-9]{6,}$/i.test(clean)
+    );
   });
 
   if (serialIndex < 0) {
@@ -469,7 +584,9 @@ function splitModelAndSerial(value: string): Pick<PapaAlphaApplicabilityRow, 'mo
   };
 }
 
-function toolTokensForProduct(product: Pick<ShopifyProductDetail, 'handle' | 'variants'>) {
+function toolTokensForProduct(
+  product: Pick<ShopifyProductDetail, 'handle' | 'variants'>,
+) {
   const variantTools = product.variants.flatMap((variant) => {
     const title = variant.title.trim();
     const sku = variant.sku?.trim();
@@ -478,7 +595,9 @@ function toolTokensForProduct(product: Pick<ShopifyProductDetail, 'handle' | 'va
       title.replace(/\bBell Crank\b/gi, 'Bellcrank'),
       title.replace(/\bBellcrank\b/gi, 'Bell Crank'),
     ];
-    return [...aliases, sku].filter((value): value is string => Boolean(value && value.toLowerCase() !== 'default title'));
+    return [...aliases, sku].filter((value): value is string =>
+      Boolean(value && value.toLowerCase() !== 'default title'),
+    );
   });
   const tableToolAliases =
     product.handle === 'pa-28-32-34-44-aileron-and-flap-rigging-tool-1'
@@ -487,14 +606,21 @@ function toolTokensForProduct(product: Pick<ShopifyProductDetail, 'handle' | 'va
           'PA-34-200T/220T Aileron And Flap Rigging Tool #2',
         ]
       : [];
-  return Array.from(new Set(['N/A', ...variantTools, ...tableToolAliases])).sort((a, b) => b.length - a.length);
+  return Array.from(
+    new Set(['N/A', ...variantTools, ...tableToolAliases]),
+  ).sort((a, b) => b.length - a.length);
 }
 
 function hasRowBoundaryAfter(value: string, index: number) {
   return /^\s*(?:PA-\d|$)/.test(value.slice(index));
 }
 
-function nextToolMatch(rowsText: string, startIndex: number, toolTokens: string[], allowKitCodes: boolean) {
+function nextToolMatch(
+  rowsText: string,
+  startIndex: number,
+  toolTokens: string[],
+  allowKitCodes: boolean,
+) {
   let best: { index: number; tool: string } | null = null;
   const lowerRowsText = rowsText.toLowerCase();
 
@@ -504,7 +630,11 @@ function nextToolMatch(rowsText: string, startIndex: number, toolTokens: string[
     while (index >= 0) {
       if (hasRowBoundaryAfter(rowsText, index + token.length)) {
         const tool = rowsText.slice(index, index + token.length);
-        if (!best || index < best.index || (index === best.index && token.length > best.tool.length)) {
+        if (
+          !best ||
+          index < best.index ||
+          (index === best.index && token.length > best.tool.length)
+        ) {
           best = { index, tool };
         }
         break;
@@ -559,7 +689,12 @@ function parsePapaAlphaApplicabilityRows(
   let cursor = 0;
 
   while (cursor < rowsText.length) {
-    const match = nextToolMatch(rowsText, cursor, toolTokens, product.handle === 'rigging-kit');
+    const match = nextToolMatch(
+      rowsText,
+      cursor,
+      toolTokens,
+      product.handle === 'rigging-kit',
+    );
     if (!match) break;
 
     const rowText = rowsText.slice(cursor, match.index).trim();
@@ -582,9 +717,13 @@ function parseRiggingKitContents(description: string) {
     .split(/\s+(?=KT-\d{2}\s)/)
     .map((entry) => {
       const match = entry.match(/^(KT-\d{2})\s+(.+)$/);
-      return match ? { kit: match[1], contents: match[2].replaceAll(',', ', ') } : null;
+      return match
+        ? { kit: match[1], contents: match[2].replaceAll(',', ', ') }
+        : null;
     })
-    .filter((entry): entry is { kit: string; contents: string } => Boolean(entry));
+    .filter((entry): entry is { kit: string; contents: string } =>
+      Boolean(entry),
+    );
 }
 
 function PapaAlphaApplicabilityGuide({
@@ -596,7 +735,8 @@ function PapaAlphaApplicabilityGuide({
   if (!config) return null;
 
   const rows = parsePapaAlphaApplicabilityRows(product);
-  const kitContents = product.handle === 'rigging-kit' ? PAPA_ALPHA_RIGGING_KIT_CONTENTS : [];
+  const kitContents =
+    product.handle === 'rigging-kit' ? PAPA_ALPHA_RIGGING_KIT_CONTENTS : [];
   const supportedRows = rows.filter((row) => row.tool !== 'N/A');
   const notApplicableRows = rows.length - supportedRows.length;
   const toolCounts = Array.from(
@@ -611,7 +751,10 @@ function PapaAlphaApplicabilityGuide({
   if (!rows.length) return null;
 
   return (
-    <section className="bs-pa31-applicability bs-pa-applicability" aria-label={`${config.heading} chart`}>
+    <section
+      className="bs-pa31-applicability bs-pa-applicability"
+      aria-label={`${config.heading} chart`}
+    >
       <div className="bs-section-kicker">Application chart</div>
       <h2>{config.heading}</h2>
       <p>{config.intro}</p>
@@ -631,11 +774,18 @@ function PapaAlphaApplicabilityGuide({
         </div>
       </div>
 
-      <div className="bs-pa31-chart bs-pa-chart" aria-label="Most common matching tools">
+      <div
+        className="bs-pa31-chart bs-pa-chart"
+        aria-label="Most common matching tools"
+      >
         {topToolCounts.map(([tool, count], index) => (
           <div
             className={`bs-pa31-chart-bar ${index === 0 ? 'tool-one' : index === 1 ? 'tool-two' : 'tool-neutral'}`}
-            style={{ '--bar-size': `${Math.max(2, (count / maxToolCount) * 12)}` } as CSSProperties}
+            style={
+              {
+                '--bar-size': `${Math.max(2, (count / maxToolCount) * 12)}`,
+              } as CSSProperties
+            }
             key={tool}
           >
             <span>{tool}</span>
@@ -643,7 +793,14 @@ function PapaAlphaApplicabilityGuide({
           </div>
         ))}
         {notApplicableRows ? (
-          <div className="bs-pa31-chart-bar na" style={{ '--bar-size': `${Math.max(2, (notApplicableRows / Math.max(rows.length, 1)) * 12)}` } as CSSProperties}>
+          <div
+            className="bs-pa31-chart-bar na"
+            style={
+              {
+                '--bar-size': `${Math.max(2, (notApplicableRows / Math.max(rows.length, 1)) * 12)}`,
+              } as CSSProperties
+            }
+          >
             <span>N/A</span>
             <b>{notApplicableRows}</b>
           </div>
@@ -662,10 +819,16 @@ function PapaAlphaApplicabilityGuide({
           <tbody>
             {rows.map((row) => (
               <tr key={`${row.model}-${row.serials}-${row.tool}`}>
-                <td><strong>{row.model}</strong></td>
+                <td>
+                  <strong>{row.model}</strong>
+                </td>
                 <td>{row.serials}</td>
                 <td>
-                  <span className={`bs-pa31-tool-pill ${toolClassName(row.tool)}`}>{row.tool}</span>
+                  <span
+                    className={`bs-pa31-tool-pill ${toolClassName(row.tool)}`}
+                  >
+                    {row.tool}
+                  </span>
                 </td>
               </tr>
             ))}
@@ -691,18 +854,28 @@ function PapaAlphaApplicabilityGuide({
 }
 
 function Pa31RudderTrimApplicability() {
-  const toolOneCount = PA31_RUDDER_TRIM_ROWS.filter((row) => row.tool.includes('#1')).length;
-  const toolTwoCount = PA31_RUDDER_TRIM_ROWS.filter((row) => row.tool.includes('#2')).length;
-  const notApplicableCount = PA31_RUDDER_TRIM_ROWS.filter((row) => row.tool === 'N/A').length;
+  const toolOneCount = PA31_RUDDER_TRIM_ROWS.filter((row) =>
+    row.tool.includes('#1'),
+  ).length;
+  const toolTwoCount = PA31_RUDDER_TRIM_ROWS.filter((row) =>
+    row.tool.includes('#2'),
+  ).length;
+  const notApplicableCount = PA31_RUDDER_TRIM_ROWS.filter(
+    (row) => row.tool === 'N/A',
+  ).length;
 
   return (
-    <section className="bs-pa31-applicability" aria-label="PA-31 rudder trim rigging tool applicability">
+    <section
+      className="bs-pa31-applicability"
+      aria-label="PA-31 rudder trim rigging tool applicability"
+    >
       <div className="bs-section-kicker">Application chart</div>
       <h2>PA-31 rudder trim tool applicability</h2>
       <p>
-        Use the aircraft model and serial-number range together. The chart below separates the PA-31
-        Rudder Trim Rigging Tool #1, the PA-31P Rudder Trim Rigging Tool #2, and serial ranges where
-        this rudder trim tool is not applicable.
+        Use the aircraft model and serial-number range together. The chart below
+        separates the PA-31 Rudder Trim Rigging Tool #1, the PA-31P Rudder Trim
+        Rigging Tool #2, and serial ranges where this rudder trim tool is not
+        applicable.
       </p>
 
       <div className="bs-pa31-summary" aria-label="Applicability summary">
@@ -721,13 +894,22 @@ function Pa31RudderTrimApplicability() {
       </div>
 
       <div className="bs-pa31-chart" aria-hidden="true">
-        <div className="bs-pa31-chart-bar tool-one" style={{ '--bar-size': `${toolOneCount}` } as CSSProperties}>
+        <div
+          className="bs-pa31-chart-bar tool-one"
+          style={{ '--bar-size': `${toolOneCount}` } as CSSProperties}
+        >
           <span>Tool #1</span>
         </div>
-        <div className="bs-pa31-chart-bar tool-two" style={{ '--bar-size': `${toolTwoCount}` } as CSSProperties}>
+        <div
+          className="bs-pa31-chart-bar tool-two"
+          style={{ '--bar-size': `${toolTwoCount}` } as CSSProperties}
+        >
           <span>Tool #2</span>
         </div>
-        <div className="bs-pa31-chart-bar na" style={{ '--bar-size': `${notApplicableCount}` } as CSSProperties}>
+        <div
+          className="bs-pa31-chart-bar na"
+          style={{ '--bar-size': `${notApplicableCount}` } as CSSProperties}
+        >
           <span>N/A</span>
         </div>
       </div>
@@ -744,10 +926,16 @@ function Pa31RudderTrimApplicability() {
           <tbody>
             {PA31_RUDDER_TRIM_ROWS.map((row) => (
               <tr key={`${row.model}-${row.serials}`}>
-                <td><strong>{row.model}</strong></td>
+                <td>
+                  <strong>{row.model}</strong>
+                </td>
                 <td>{row.serials}</td>
                 <td>
-                  <span className={`bs-pa31-tool-pill ${toolClassName(row.tool)}`}>{row.tool}</span>
+                  <span
+                    className={`bs-pa31-tool-pill ${toolClassName(row.tool)}`}
+                  >
+                    {row.tool}
+                  </span>
                 </td>
               </tr>
             ))}
@@ -783,14 +971,20 @@ export default async function ProductDetailPage({
         <main className="bs-stage">
           <section className="bs-hero">
             <div>
-              <div className="bs-product-dateline">Pilot Shop <span className="gilded">·</span> Detail</div>
-              <h2 className="bs-product-headline">Product temporarily unavailable</h2>
+              <div className="bs-product-dateline">
+                Pilot Shop <span className="gilded">·</span> Detail
+              </div>
+              <h2 className="bs-product-headline">
+                Product temporarily unavailable
+              </h2>
               <p className="bs-product-subhead">
-                We could not load this product from Shopify right now. Please try again shortly, or call
-                (605) 299-8178.
+                We could not load this product from Shopify right now. Please
+                try again shortly, or call (605) 299-8178.
               </p>
               <div className="bs-cta-row bs-cta-row--single">
-                <Link className="bs-cta-primary" href="/collections">Back to collections</Link>
+                <Link className="bs-cta-primary" href="/collections">
+                  Back to collections
+                </Link>
               </div>
             </div>
           </section>
@@ -808,46 +1002,69 @@ export default async function ProductDetailPage({
   );
   const imageCandidates = productImageCandidates(product);
   const heroImg =
-    imageCandidates.find((image) => !isShopifyPlaceholderImage(image.url, image.altText)) ??
-    imageCandidates[0];
+    imageCandidates.find(
+      (image) => !isShopifyPlaceholderImage(image.url, image.altText),
+    ) ?? imageCandidates[0];
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
   const primaryPrice = product.variants[0]?.price;
   const normalListPrice = product.variants[0]?.compareAtPrice;
-  const hasSalePrice = Boolean(normalListPrice && primaryPrice && Number(normalListPrice.amount) > Number(primaryPrice.amount));
+  const hasSalePrice = Boolean(
+    normalListPrice &&
+      primaryPrice &&
+      Number(normalListPrice.amount) > Number(primaryPrice.amount),
+  );
   const d2Briefing = D2_WATCH_BRIEFINGS[product.handle];
   const relatedServiceLinks = serviceLinksForProduct(product);
-  const visibleOptions = product.options.filter((opt) => !isPlaceholderOption(opt));
-  const familyTag = (product.tags || []).find((tag) => tag.toLowerCase().startsWith('family-'));
+  const visibleOptions = product.options.filter(
+    (opt) => !isPlaceholderOption(opt),
+  );
+  const familyTag = (product.tags || []).find((tag) =>
+    tag.toLowerCase().startsWith('family-'),
+  );
   let comparisonProducts: Awaited<ReturnType<typeof getProductsByTag>> = [];
   if (familyTag) {
     try {
-      comparisonProducts = (await getProductsByTag(familyTag, 8)).filter((item) => item.handle !== product.handle);
+      comparisonProducts = (await getProductsByTag(familyTag, 8)).filter(
+        (item) => item.handle !== product.handle,
+      );
     } catch {
       comparisonProducts = [];
     }
   }
 
   // Breadcrumb dateline
-  const productTypeLabel = product.productType || (gating.isGarmin ? 'Garmin' : 'Shop');
+  const productTypeLabel =
+    product.productType || (gating.isGarmin ? 'Garmin' : 'Shop');
   const showPa31RudderTrimApplicability = isPa31RudderTrimProduct(product);
   const showPapaAlphaApplicability = isPapaAlphaApplicabilityProduct(product);
-  const cleanDescText = showPa31RudderTrimApplicability || showPapaAlphaApplicability
-    ? papaAlphaApplicabilityIntro(product) || PA31_RUDDER_TRIM_INTRO
-    : (product.description || '')
-    .replace(/^[^\n]*Buy\s*&\s*Save rebate form\.?\s*\n*/i, '')
-    .replace(/Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi, '')
-    .trim();
+  const cleanDescText =
+    showPa31RudderTrimApplicability || showPapaAlphaApplicability
+      ? papaAlphaApplicabilityIntro(product) || PA31_RUDDER_TRIM_INTRO
+      : (product.description || '')
+          .replace(/^[^\n]*Buy\s*&\s*Save rebate form\.?\s*\n*/i, '')
+          .replace(
+            /Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi,
+            '',
+          )
+          .trim();
   const breadcrumbs = ['Pilot Shop', productTypeLabel, vendor].filter(Boolean);
 
   // Variant payload for the client component — keep only what we need.
   const variantPayload: PdpVariant[] = product.variants.map((v) => {
     const selectedOptions = v.selectedOptions.filter(
-      (opt) => !(opt.name.trim().toLowerCase() === 'title' && opt.value.trim().toLowerCase() === 'default title'),
+      (opt) =>
+        !(
+          opt.name.trim().toLowerCase() === 'title' &&
+          opt.value.trim().toLowerCase() === 'default title'
+        ),
     );
     return {
       id: v.id,
-      title: v.title.trim().toLowerCase() === 'default title' ? 'Standard configuration' : v.title,
+      title:
+        v.title.trim().toLowerCase() === 'default title'
+          ? 'Standard configuration'
+          : v.title,
       sku: v.sku,
       price: v.price,
       compareAtPrice: v.compareAtPrice,
@@ -873,9 +1090,24 @@ export default async function ProductDetailPage({
     '@type': 'BreadcrumbList',
     '@id': `${canonicalUrl}#breadcrumb`,
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
-      { '@type': 'ListItem', position: 2, name: 'Collections', item: 'https://www.rogerwilcoaviation.com/collections' },
-      { '@type': 'ListItem', position: 3, name: product.title, item: canonicalUrl },
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.rogerwilcoaviation.com/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Collections',
+        item: 'https://www.rogerwilcoaviation.com/collections',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: product.title,
+        item: canonicalUrl,
+      },
     ],
   };
   const productSchema = {
@@ -885,7 +1117,9 @@ export default async function ProductDetailPage({
     name: product.title,
     description: truncateMeta(cleanDescText || product.title, 500),
     sku: firstSku || undefined,
-    brand: product.vendor ? { '@type': 'Brand', name: product.vendor } : undefined,
+    brand: product.vendor
+      ? { '@type': 'Brand', name: product.vendor }
+      : undefined,
     category: product.productType || undefined,
     image: schemaImageUrls,
     url: canonicalUrl,
@@ -905,7 +1139,10 @@ export default async function ProductDetailPage({
             price: primaryPrice.amount,
             priceCurrency: primaryPrice.currencyCode,
           },
-          seller: { '@type': 'Organization', name: 'Roger Wilco Aviation Services' },
+          seller: {
+            '@type': 'Organization',
+            name: 'Roger Wilco Aviation Services',
+          },
         };
       }
       // Default path: full Offer with price, used for non-Garmin products
@@ -922,7 +1159,10 @@ export default async function ProductDetailPage({
             : 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',
         url: canonicalUrl,
-        seller: { '@type': 'Organization', name: 'Roger Wilco Aviation Services' },
+        seller: {
+          '@type': 'Organization',
+          name: 'Roger Wilco Aviation Services',
+        },
       };
     })(),
   };
@@ -949,27 +1189,72 @@ export default async function ProductDetailPage({
           <figure className="bs-photo-box">
             {heroImg ? (
               <>
-                <a className="bs-product-image-link" href="#product-image-zoom" aria-label={`Open larger image for ${product.title}`}>
+                <a
+                  className="bs-product-image-link"
+                  href="#product-image-zoom"
+                  aria-label={`Open larger image for ${product.title}`}
+                >
                   <img
-                    src={productImageUrl(heroImg.url, 800, heroImg.altText || product.title, handle)}
-                    alt={productImageAlt(heroImg.url, heroImg.altText, product.title)}
+                    src={productImageUrl(
+                      heroImg.url,
+                      800,
+                      heroImg.altText || product.title,
+                      handle,
+                    )}
+                    alt={productImageAlt(
+                      heroImg.url,
+                      heroImg.altText,
+                      product.title,
+                    )}
                     width={800}
                     height={600}
-                    style={{ width: '100%', height: 'auto', display: 'block', background: '#fff' }}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      display: 'block',
+                      background: '#fff',
+                    }}
                     fetchPriority="high"
                     decoding="async"
                     loading="eager"
                   />
                   <span>Click image to enlarge</span>
                 </a>
-                <div id="product-image-zoom" className="bs-product-image-lightbox" aria-label={`Expanded image for ${product.title}`}>
-                  <a className="bs-product-image-lightbox__backdrop" href="#" aria-label="Close expanded image" />
+                <div
+                  id="product-image-zoom"
+                  className="bs-product-image-lightbox"
+                  aria-label={`Expanded image for ${product.title}`}
+                >
+                  <a
+                    className="bs-product-image-lightbox__backdrop"
+                    href="#"
+                    aria-label="Close expanded image"
+                  />
                   <div className="bs-product-image-lightbox__panel">
-                    <a className="bs-product-image-lightbox__close" href="#" aria-label="Close expanded image">×</a>
+                    <a
+                      className="bs-product-image-lightbox__close"
+                      href="#"
+                      aria-label="Close expanded image"
+                    >
+                      ×
+                    </a>
                     <img
-                      src={productImageUrl(heroImg.url, 1600, heroImg.altText || product.title, handle)}
-                      alt={productImageAlt(heroImg.url, heroImg.altText, product.title)}
-                      style={{ maxWidth: '100%', height: 'auto', display: 'block' }}
+                      src={productImageUrl(
+                        heroImg.url,
+                        1600,
+                        heroImg.altText || product.title,
+                        handle,
+                      )}
+                      alt={productImageAlt(
+                        heroImg.url,
+                        heroImg.altText,
+                        product.title,
+                      )}
+                      style={{
+                        maxWidth: '100%',
+                        height: 'auto',
+                        display: 'block',
+                      }}
                       loading="lazy"
                       decoding="async"
                     />
@@ -1000,11 +1285,17 @@ export default async function ProductDetailPage({
               {breadcrumbs.map((b, i) => (
                 <span key={b + i}>
                   {b}
-                  {i < breadcrumbs.length - 1 ? <span className="gilded"> · </span> : null}
+                  {i < breadcrumbs.length - 1 ? (
+                    <span className="gilded"> · </span>
+                  ) : null}
                 </span>
               ))}
             </div>
-            <p className="bs-product-kicker">{d2Briefing ? 'Authorized Garmin aviation dealer offering' : 'From the workbench'}</p>
+            <p className="bs-product-kicker">
+              {d2Briefing
+                ? 'Authorized Garmin aviation dealer offering'
+                : 'From the workbench'}
+            </p>
             <h1 className="bs-product-headline">{product.title}</h1>
             {cleanDescText ? (
               <p className="bs-product-subhead">{cleanDescText}</p>
@@ -1013,7 +1304,9 @@ export default async function ProductDetailPage({
             <div className="bs-byline">
               <span>By the RWAS Pilot Shop Desk</span>
               <span className="sep">◆</span>
-              <span className="vendor-row">From <strong>{vendor}</strong></span>
+              <span className="vendor-row">
+                From <strong>{vendor}</strong>
+              </span>
               {firstSku ? (
                 <>
                   <span className="sep">◆</span>
@@ -1040,21 +1333,33 @@ export default async function ProductDetailPage({
             {!cleanDescText ? (
               <div
                 className="bs-body bs-body--rich"
-                dangerouslySetInnerHTML={{ __html: sanitizeProductHtml(product.descriptionHtml || product.description || '') }}
+                dangerouslySetInnerHTML={{
+                  __html: sanitizeProductHtml(
+                    product.descriptionHtml || product.description || '',
+                  ),
+                }}
               />
             ) : null}
 
-            {showPa31RudderTrimApplicability ? <Pa31RudderTrimApplicability /> : null}
-            {showPapaAlphaApplicability ? <PapaAlphaApplicabilityGuide product={product} /> : null}
+            {showPa31RudderTrimApplicability ? (
+              <Pa31RudderTrimApplicability />
+            ) : null}
+            {showPapaAlphaApplicability ? (
+              <PapaAlphaApplicabilityGuide product={product} />
+            ) : null}
 
             {d2Briefing ? (
-              <section className="bs-pilot-briefing" aria-label="Pilot briefing">
+              <section
+                className="bs-pilot-briefing"
+                aria-label="Pilot briefing"
+              >
                 <div className="bs-section-kicker">Pilot briefing</div>
                 <h2>Built for the flight deck, sold by an aviation shop</h2>
                 <p>
-                  RWAS presents the D2 Mach 2 line as an aviation product first: exact Garmin SKU,
-                  current promotional price, normal Garmin list price after the sale, and practical
-                  pilot notes before you buy.
+                  RWAS presents the D2 Mach 2 line as an aviation product first:
+                  exact Garmin SKU, current promotional price, normal Garmin
+                  list price after the sale, and practical pilot notes before
+                  you buy.
                 </p>
                 <div className="bs-brief-grid">
                   {d2Briefing.highlights.map((item) => (
@@ -1065,7 +1370,8 @@ export default async function ProductDetailPage({
                   ))}
                 </div>
                 <div className="bs-promo-note">
-                  <strong>Current Garmin promotion:</strong> {d2Briefing.saleNote}
+                  <strong>Current Garmin promotion:</strong>{' '}
+                  {d2Briefing.saleNote}
                 </div>
               </section>
             ) : null}
@@ -1074,25 +1380,34 @@ export default async function ProductDetailPage({
             <div className="bs-trust-strip">
               <div className="cell">
                 <span className="lab">Order &amp; fulfillment</span>
-                {gating.isGarmin && gating.otc === 'eligible' && !gating.stockCheckRequired ? (
+                {gating.isGarmin &&
+                gating.otc === 'eligible' &&
+                !gating.stockCheckRequired ? (
                   <>
-                    Garmin watches are sold at the current Garmin promotional sale price when applicable.
-                    Garmin delivers to RWAS first; RWAS then delivers to the customer and handles warranty claims.
+                    Garmin watches are sold at the current Garmin promotional
+                    sale price when applicable. Garmin delivers to RWAS first;
+                    RWAS then delivers to the customer and handles warranty
+                    claims.
                   </>
                 ) : gating.isGarmin ? (
                   <>
-                    Garmin components are ordered directly from Garmin in Kansas, shipped to our facility,
-                    then shipped directly to you. Turn-around time can vary.{' '}
-                    <strong>The best course of action is to call us to confirm availability.</strong>
+                    Garmin components are ordered directly from Garmin in
+                    Kansas, shipped to our facility, then shipped directly to
+                    you. Turn-around time can vary.{' '}
+                    <strong>
+                      The best course of action is to call us to confirm
+                      availability.
+                    </strong>
                   </>
                 ) : gating.otc === 'eligible' ? (
                   <>
-                    Based on inventory, Papa-Alpha parts can be shipped same day if ordered before 2pm local.
+                    Based on inventory, Papa-Alpha parts can be shipped same day
+                    if ordered before 2pm local.
                   </>
                 ) : (
                   <>
-                    Call (605) 299-8178 or email avionics@rwas.team to confirm availability and
-                    lead time before placing an order.
+                    Call (605) 299-8178 or email avionics@rwas.team to confirm
+                    availability and lead time before placing an order.
                   </>
                 )}
               </div>
@@ -1100,21 +1415,29 @@ export default async function ProductDetailPage({
                 <span className="lab">Warranty &amp; service</span>
                 {gating.isGarmin ? (
                   <>
-                    Warranty for Garmin product is shipped back to Garmin for repair or replacement.
-                    Warranty for labor of installation is life-time (conditions apply).
+                    Warranty for Garmin product is shipped back to Garmin for
+                    repair or replacement. Warranty for labor of installation is
+                    life-time (conditions apply).
                   </>
                 ) : (
-                  <>Manufacturer warranty. Service and support from our Part 145 repair station in the Northern Plains.</>
+                  <>
+                    Manufacturer warranty. Service and support from our Part 145
+                    repair station at KFSD in Sioux Falls.
+                  </>
                 )}
               </div>
               <div className="cell">
                 <span className="lab">Talk to a pilot</span>
-                Call (605) 299-8178 — staffed by pilots and A&amp;Ps, not a call center.
+                Call (605) 299-8178 — staffed by pilots and A&amp;Ps, not a call
+                center.
               </div>
             </div>
 
             {relatedServiceLinks.length ? (
-              <section className="bs-trust-strip" aria-label="Related RWAS services">
+              <section
+                className="bs-trust-strip"
+                aria-label="Related RWAS services"
+              >
                 {relatedServiceLinks.map((service) => (
                   <div className="cell" key={service.href}>
                     <span className="lab">Related service</span>
@@ -1134,33 +1457,70 @@ export default async function ProductDetailPage({
               <table>
                 <tbody>
                   {product.vendor ? (
-                    <tr><th>Manufacturer</th><td>{product.vendor}</td></tr>
+                    <tr>
+                      <th>Manufacturer</th>
+                      <td>{product.vendor}</td>
+                    </tr>
                   ) : null}
                   {product.productType ? (
-                    <tr><th>Type</th><td>{product.productType}</td></tr>
+                    <tr>
+                      <th>Type</th>
+                      <td>{product.productType}</td>
+                    </tr>
                   ) : null}
                   {firstSku ? (
-                    <tr><th>SKU</th><td>{firstSku}</td></tr>
+                    <tr>
+                      <th>SKU</th>
+                      <td>{firstSku}</td>
+                    </tr>
                   ) : null}
                   {d2Briefing ? (
                     <>
-                      <tr><th>Case Size</th><td>{d2Briefing.caseSize}</td></tr>
-                      <tr><th>Finish</th><td>{d2Briefing.finish}</td></tr>
-                      <tr><th>Band</th><td>{d2Briefing.band}</td></tr>
-                      <tr><th>Display</th><td>{d2Briefing.display}</td></tr>
-                      <tr><th>Battery</th><td>{d2Briefing.battery}</td></tr>
+                      <tr>
+                        <th>Case Size</th>
+                        <td>{d2Briefing.caseSize}</td>
+                      </tr>
+                      <tr>
+                        <th>Finish</th>
+                        <td>{d2Briefing.finish}</td>
+                      </tr>
+                      <tr>
+                        <th>Band</th>
+                        <td>{d2Briefing.band}</td>
+                      </tr>
+                      <tr>
+                        <th>Display</th>
+                        <td>{d2Briefing.display}</td>
+                      </tr>
+                      <tr>
+                        <th>Battery</th>
+                        <td>{d2Briefing.battery}</td>
+                      </tr>
                     </>
                   ) : null}
-                  {primaryPrice && !(gating.isGarmin && gating.otc !== 'eligible') ? (
+                  {primaryPrice &&
+                  !(gating.isGarmin && gating.otc !== 'eligible') ? (
                     <tr>
                       <th>{hasSalePrice ? 'Sale Price' : 'Price'}</th>
-                      <td><strong>{formatPrice(primaryPrice.amount, primaryPrice.currencyCode)}</strong></td>
+                      <td>
+                        <strong>
+                          {formatPrice(
+                            primaryPrice.amount,
+                            primaryPrice.currencyCode,
+                          )}
+                        </strong>
+                      </td>
                     </tr>
                   ) : null}
                   {hasSalePrice && normalListPrice ? (
                     <tr>
                       <th>Normal List Price After Sale</th>
-                      <td>{formatPrice(normalListPrice.amount, normalListPrice.currencyCode)}</td>
+                      <td>
+                        {formatPrice(
+                          normalListPrice.amount,
+                          normalListPrice.currencyCode,
+                        )}
+                      </td>
                     </tr>
                   ) : null}
                   {visibleOptions.map((opt) => (
@@ -1169,8 +1529,14 @@ export default async function ProductDetailPage({
                       <td>{opt.values.join(', ')}</td>
                     </tr>
                   ))}
-                  <tr><th>Installs at</th><td>RWAS Avionics Desk · the Northern Plains</td></tr>
-                  <tr><th>Certification</th><td>FAA Part 145 · RWSR491E</td></tr>
+                  <tr>
+                    <th>Installs at</th>
+                    <td>RWAS Avionics Desk · KFSD · Sioux Falls, SD</td>
+                  </tr>
+                  <tr>
+                    <th>Certification</th>
+                    <td>FAA Part 145 · RWSR491E</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -1178,11 +1544,15 @@ export default async function ProductDetailPage({
         </section>
 
         {comparisonProducts.length ? (
-          <section className="bs-comparison-section" aria-label="Related product comparison">
+          <section
+            className="bs-comparison-section"
+            aria-label="Related product comparison"
+          >
             <div className="bs-section-kicker">Compare related products</div>
             <h2>Side-by-side feature comparison</h2>
             <p>
-              Compare this item with related products in the same RWAS/Garmin family before you add it to the cart.
+              Compare this item with related products in the same RWAS/Garmin
+              family before you add it to the cart.
             </p>
             <div className="bs-comparison-scroll">
               <table className="bs-comparison-table">
@@ -1190,65 +1560,178 @@ export default async function ProductDetailPage({
                   <tr>
                     <th>Image</th>
                     <td className="current-product">
-                      {heroImg ? <img src={productImageUrl(heroImg.url, 120, heroImg.altText || product.title, handle)} alt={productImageAlt(heroImg.url, heroImg.altText, product.title)} loading="lazy" decoding="async" width={120} height={90} /> : '—'}
+                      {heroImg ? (
+                        <img
+                          src={productImageUrl(
+                            heroImg.url,
+                            120,
+                            heroImg.altText || product.title,
+                            handle,
+                          )}
+                          alt={productImageAlt(
+                            heroImg.url,
+                            heroImg.altText,
+                            product.title,
+                          )}
+                          loading="lazy"
+                          decoding="async"
+                          width={120}
+                          height={90}
+                        />
+                      ) : (
+                        '—'
+                      )}
                     </td>
                     {comparisonProducts.map((item) => (
-                      <td key={item.handle}>{item.featuredImage ? <img src={productImageUrl(item.featuredImage.url, 120, item.featuredImage.altText || item.title, item.handle)} alt={productImageAlt(item.featuredImage.url, item.featuredImage.altText, item.title)} loading="lazy" decoding="async" width={120} height={90} /> : '—'}</td>
+                      <td key={item.handle}>
+                        {item.featuredImage ? (
+                          <img
+                            src={productImageUrl(
+                              item.featuredImage.url,
+                              120,
+                              item.featuredImage.altText || item.title,
+                              item.handle,
+                            )}
+                            alt={productImageAlt(
+                              item.featuredImage.url,
+                              item.featuredImage.altText,
+                              item.title,
+                            )}
+                            loading="lazy"
+                            decoding="async"
+                            width={120}
+                            height={90}
+                          />
+                        ) : (
+                          '—'
+                        )}
+                      </td>
                     ))}
                   </tr>
                   <tr>
                     <th>Model</th>
-                    <td className="current-product"><strong>{product.title}</strong></td>
-                    {comparisonProducts.map((item) => <td key={item.handle}><strong>{item.title}</strong></td>)}
+                    <td className="current-product">
+                      <strong>{product.title}</strong>
+                    </td>
+                    {comparisonProducts.map((item) => (
+                      <td key={item.handle}>
+                        <strong>{item.title}</strong>
+                      </td>
+                    ))}
                   </tr>
                   <tr>
                     <th>SKU</th>
                     <td className="current-product">{firstSku || '—'}</td>
-                    {comparisonProducts.map((item) => <td key={item.handle}>{item.variants?.[0]?.sku || '—'}</td>)}
+                    {comparisonProducts.map((item) => (
+                      <td key={item.handle}>
+                        {item.variants?.[0]?.sku || '—'}
+                      </td>
+                    ))}
                   </tr>
                   <tr>
                     <th>Sale price</th>
-                    <td className="current-product"><strong>{primaryPrice ? formatPrice(primaryPrice.amount, primaryPrice.currencyCode) : 'Contact RWAS'}</strong></td>
+                    <td className="current-product">
+                      <strong>
+                        {primaryPrice
+                          ? formatPrice(
+                              primaryPrice.amount,
+                              primaryPrice.currencyCode,
+                            )
+                          : 'Contact RWAS'}
+                      </strong>
+                    </td>
                     {comparisonProducts.map((item) => {
-                      const price = item.variants?.[0]?.price || item.priceRange?.minVariantPrice;
-                      return <td key={item.handle}><strong>{price ? formatPrice(price.amount, price.currencyCode) : 'Contact RWAS'}</strong></td>;
+                      const price =
+                        item.variants?.[0]?.price ||
+                        item.priceRange?.minVariantPrice;
+                      return (
+                        <td key={item.handle}>
+                          <strong>
+                            {price
+                              ? formatPrice(price.amount, price.currencyCode)
+                              : 'Contact RWAS'}
+                          </strong>
+                        </td>
+                      );
                     })}
                   </tr>
                   <tr>
                     <th>Normal list price</th>
-                    <td className="current-product">{normalListPrice ? formatPrice(normalListPrice.amount, normalListPrice.currencyCode) : '—'}</td>
+                    <td className="current-product">
+                      {normalListPrice
+                        ? formatPrice(
+                            normalListPrice.amount,
+                            normalListPrice.currencyCode,
+                          )
+                        : '—'}
+                    </td>
                     {comparisonProducts.map((item) => {
                       const list = item.variants?.[0]?.compareAtPrice;
-                      return <td key={item.handle}>{list ? formatPrice(list.amount, list.currencyCode) : '—'}</td>;
+                      return (
+                        <td key={item.handle}>
+                          {list
+                            ? formatPrice(list.amount, list.currencyCode)
+                            : '—'}
+                        </td>
+                      );
                     })}
                   </tr>
                   <tr>
                     <th>Product type</th>
-                    <td className="current-product">{product.productType || '—'}</td>
-                    {comparisonProducts.map((item) => <td key={item.handle}>{item.productType || product.productType || '—'}</td>)}
+                    <td className="current-product">
+                      {product.productType || '—'}
+                    </td>
+                    {comparisonProducts.map((item) => (
+                      <td key={item.handle}>
+                        {item.productType || product.productType || '—'}
+                      </td>
+                    ))}
                   </tr>
                   {TECHNICAL_COMPARISON_ROWS.map((row) => (
                     <tr key={row}>
                       <th>{row}</th>
-                      <td className="current-product">{technicalComparisonValue(product.handle, row)}</td>
+                      <td className="current-product">
+                        {technicalComparisonValue(product.handle, row)}
+                      </td>
                       {comparisonProducts.map((item) => (
-                        <td key={item.handle}>{technicalComparisonValue(item.handle, row)}</td>
+                        <td key={item.handle}>
+                          {technicalComparisonValue(item.handle, row)}
+                        </td>
                       ))}
                     </tr>
                   ))}
                   <tr>
                     <th>Best fit</th>
-                    <td className="current-product">{d2Briefing?.highlights[0]?.copy || truncateMeta(cleanDescText || product.description, 180)}</td>
+                    <td className="current-product">
+                      {d2Briefing?.highlights[0]?.copy ||
+                        truncateMeta(cleanDescText || product.description, 180)}
+                    </td>
                     {comparisonProducts.map((item) => {
                       const brief = D2_WATCH_BRIEFINGS[item.handle];
-                      return <td key={item.handle}>{brief?.highlights[0]?.copy || truncateMeta(item.description || item.title, 180)}</td>;
+                      return (
+                        <td key={item.handle}>
+                          {brief?.highlights[0]?.copy ||
+                            truncateMeta(item.description || item.title, 180)}
+                        </td>
+                      );
                     })}
                   </tr>
                   <tr className="bs-comparison-select-row">
                     <th>Select</th>
-                    <td className="current-product"><span className="bs-current-selection">Current selection</span></td>
+                    <td className="current-product">
+                      <span className="bs-current-selection">
+                        Current selection
+                      </span>
+                    </td>
                     {comparisonProducts.map((item) => (
-                      <td key={item.handle}><Link className="bs-compare-link bs-select-model-link" href={`/products/${item.handle}`}>Select this model</Link></td>
+                      <td key={item.handle}>
+                        <Link
+                          className="bs-compare-link bs-select-model-link"
+                          href={`/products/${item.handle}`}
+                        >
+                          Select this model
+                        </Link>
+                      </td>
                     ))}
                   </tr>
                 </tbody>

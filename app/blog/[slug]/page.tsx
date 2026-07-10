@@ -46,7 +46,10 @@ function escapeHtml(text: string) {
 function formatInlineMarkdown(text: string) {
   return escapeHtml(text)
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
+    .replace(
+      /\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noreferrer">$1</a>',
+    );
 }
 
 function renderMarkdownBody(markdown?: string) {
@@ -62,19 +65,27 @@ function renderMarkdownBody(markdown?: string) {
     if (!paragraph.length) return;
     const cls = usedDrop ? 'np-body-text' : 'np-body-text np-drop';
     usedDrop = true;
-    blocks.push(`<p class="${cls}">${formatInlineMarkdown(paragraph.join(' '))}</p>`);
+    blocks.push(
+      `<p class="${cls}">${formatInlineMarkdown(paragraph.join(' '))}</p>`,
+    );
     paragraph = [];
   };
 
   const flushList = () => {
     if (!listItems.length) return;
-    blocks.push(`<ul style="margin:10px 0 10px 22px;">${listItems
-      .map((item) => `<li class="np-body-text" style="text-align:left; margin:4px 0;">${formatInlineMarkdown(item)}</li>`)
-      .join('')}</ul>`);
+    blocks.push(
+      `<ul style="margin:10px 0 10px 22px;">${listItems
+        .map(
+          (item) =>
+            `<li class="np-body-text" style="text-align:left; margin:4px 0;">${formatInlineMarkdown(item)}</li>`,
+        )
+        .join('')}</ul>`,
+    );
     listItems = [];
   };
 
-  const imageMatch = (line: string) => line.match(/^!\[([^\]]*)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)$/);
+  const imageMatch = (line: string) =>
+    line.match(/^!\[([^\]]*)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)$/);
 
   for (const raw of lines) {
     const trimmed = raw.trim();
@@ -88,19 +99,25 @@ function renderMarkdownBody(markdown?: string) {
       flushParagraph();
       flushList();
       const [, alt, src] = image;
-      blocks.push(`<figure style="margin:18px 0;"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" style="width:100%;border:1px solid #1a1a1a;display:block;" /><figcaption class="np-kicker" style="margin-top:6px;">${escapeHtml(alt)}</figcaption></figure>`);
+      blocks.push(
+        `<figure style="margin:18px 0;"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" style="width:100%;border:1px solid #1a1a1a;display:block;" /><figcaption class="np-kicker" style="margin-top:6px;">${escapeHtml(alt)}</figcaption></figure>`,
+      );
       continue;
     }
     if (/^###\s+/.test(trimmed)) {
       flushParagraph();
       flushList();
-      blocks.push(`<h3 class="np-headline-md" style="margin-top:14px;">${formatInlineMarkdown(trimmed.replace(/^###\s+/, ''))}</h3>`);
+      blocks.push(
+        `<h3 class="np-headline-md" style="margin-top:14px;">${formatInlineMarkdown(trimmed.replace(/^###\s+/, ''))}</h3>`,
+      );
       continue;
     }
     if (/^##\s+/.test(trimmed)) {
       flushParagraph();
       flushList();
-      blocks.push(`<h2 class="np-headline-xl" style="font-size:22px; margin-top:14px;">${formatInlineMarkdown(trimmed.replace(/^##\s+/, ''))}</h2>`);
+      blocks.push(
+        `<h2 class="np-headline-xl" style="font-size:22px; margin-top:14px;">${formatInlineMarkdown(trimmed.replace(/^##\s+/, ''))}</h2>`,
+      );
       continue;
     }
     if (/^-\s+/.test(trimmed)) {
@@ -116,7 +133,9 @@ function renderMarkdownBody(markdown?: string) {
   return blocks;
 }
 
-const publishedArticles = blogData.articles.filter((article) => article.status === 'published');
+const publishedArticles = blogData.articles.filter(
+  (article) => article.status === 'published',
+);
 const allArticles = blogData.articles;
 
 export async function generateStaticParams() {
@@ -142,11 +161,14 @@ export async function generateMetadata({
   const siteUrl = 'https://www.rogerwilcoaviation.com';
   const articleUrl = `${siteUrl}/blog/${article.id}`;
   const imageUrl = article.image
-    ? (article.image.startsWith('http') ? article.image : `${siteUrl}${article.image}`)
+    ? article.image.startsWith('http')
+      ? article.image
+      : `${siteUrl}${article.image}`
     : `${siteUrl}/newspaper/images/logo.png`;
 
   const seoTitle = truncateMeta(`${article.title} | RWAS`, 60);
   const seoDescription = truncateMeta(article.lead, 155);
+  const updatedTime = (article as { updated_at?: string }).updated_at;
 
   return {
     title: { absolute: seoTitle },
@@ -157,11 +179,21 @@ export async function generateMetadata({
       description: seoDescription,
       url: articleUrl,
       type: 'article',
-      publishedTime: article.date,
+      publishedTime:
+        (article as { published_at?: string }).published_at || article.date,
+      modifiedTime: updatedTime,
       authors: article.byline ? [article.byline] : undefined,
-      images: [{ url: imageUrl, alt: (article as { image_alt?: string }).image_alt || article.title }],
+      images: [
+        {
+          url: imageUrl,
+          alt: (article as { image_alt?: string }).image_alt || article.title,
+        },
+      ],
     },
-    robots: article.status === 'published' ? undefined : { index: false, follow: false },
+    robots:
+      article.status === 'published'
+        ? undefined
+        : { index: false, follow: false },
     twitter: {
       card: 'summary_large_image',
       title: article.title,
@@ -181,16 +213,23 @@ export default async function BlogArticlePage({
 
   if (!article) notFound();
 
-  const relatedArticles = publishedArticles.filter((entry) => entry.id !== article.id).slice(0, 4);
-  const markdownBlocks = renderMarkdownBody((article as { body_markdown?: string }).body_markdown);
+  const relatedArticles = publishedArticles
+    .filter((entry) => entry.id !== article.id)
+    .slice(0, 4);
+  const markdownBlocks = renderMarkdownBody(
+    (article as { body_markdown?: string }).body_markdown,
+  );
   const relatedServiceLinks = serviceLinksForBlogArticle(article);
 
   const siteUrl = 'https://www.rogerwilcoaviation.com';
   const articleUrl = `${siteUrl}/blog/${article.id}`;
   const imageUrl = article.image
-    ? (article.image.startsWith('http') ? article.image : `${siteUrl}${article.image}`)
+    ? article.image.startsWith('http')
+      ? article.image
+      : `${siteUrl}${article.image}`
     : `${siteUrl}/newspaper/images/logo.png`;
   const seoDescription = truncateMeta(article.lead, 155);
+  const updatedTime = (article as { updated_at?: string }).updated_at;
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -198,8 +237,12 @@ export default async function BlogArticlePage({
     headline: article.title,
     description: seoDescription,
     image: [imageUrl],
-    datePublished: (article as { published_at?: string }).published_at || article.date,
-    dateModified: (article as { published_at?: string }).published_at || article.date,
+    datePublished:
+      (article as { published_at?: string }).published_at || article.date,
+    dateModified:
+      updatedTime ||
+      (article as { published_at?: string }).published_at ||
+      article.date,
     author: {
       '@type': 'Organization',
       name: article.byline || 'Roger Wilco Aviation Services',
@@ -216,7 +259,9 @@ export default async function BlogArticlePage({
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
     articleSection: article.category,
-    keywords: (article as { tags?: string[] }).tags ? (article as { tags: string[] }).tags.join(', ') : undefined,
+    keywords: (article as { tags?: string[] }).tags
+      ? (article as { tags: string[] }).tags.join(', ')
+      : undefined,
     mentions: relatedServiceLinks.length
       ? relatedServiceLinks.map((service) => ({
           '@type': 'Service',
@@ -243,9 +288,19 @@ export default async function BlogArticlePage({
 
       <main className="bs-stage">
         {/* Article header — kicker, title, byline. Flows directly on watermark. */}
-        <header style={{ borderBottom: '2px solid var(--ink-900)', padding: '4px 0 18px' }}>
-          <span className="np-kicker">{article.category.replace(/-/g, ' ')}</span>
-          <h1 className="np-headline-xl" style={{ fontSize: '34px', margin: '6px 0' }}>
+        <header
+          style={{
+            borderBottom: '2px solid var(--ink-900)',
+            padding: '4px 0 18px',
+          }}
+        >
+          <span className="np-kicker">
+            {article.category.replace(/-/g, ' ')}
+          </span>
+          <h1
+            className="np-headline-xl"
+            style={{ fontSize: '34px', margin: '6px 0' }}
+          >
             {article.title}
           </h1>
           <div className="np-byline">
@@ -267,7 +322,12 @@ export default async function BlogArticlePage({
             {article.subtitle ? (
               <p
                 className="np-body-text"
-                style={{ fontStyle: 'italic', fontSize: '18px', lineHeight: 1.5, marginBottom: '14px' }}
+                style={{
+                  fontStyle: 'italic',
+                  fontSize: '18px',
+                  lineHeight: 1.5,
+                  marginBottom: '14px',
+                }}
               >
                 {article.subtitle}
               </p>
@@ -285,37 +345,63 @@ export default async function BlogArticlePage({
               </figure>
             ) : null}
 
-            {markdownBlocks.length ? (
-              markdownBlocks.map((block, index) => (
-                <div key={index} dangerouslySetInnerHTML={{ __html: block }} />
-              ))
-            ) : (
-              <>
-                <p className="np-body-text np-drop">{article.lead}</p>
-                {article.body.map((paragraph, index) => (
-                  <p key={index} className="np-body-text">{paragraph}</p>
+            <p className="np-body-text np-drop">{article.lead}</p>
+            {markdownBlocks.length
+              ? markdownBlocks.map((block, index) => (
+                  <div
+                    key={index}
+                    dangerouslySetInnerHTML={{ __html: block }}
+                  />
+                ))
+              : article.body.map((paragraph, index) => (
+                  <p key={index} className="np-body-text">
+                    {paragraph}
+                  </p>
                 ))}
-              </>
-            )}
 
             <div className="np-pull-quote" style={{ marginTop: '18px' }}>
-              &ldquo;For current pricing or installation scheduling, call RWAS at (605) 299-8178.&rdquo;
+              For current pricing or installation scheduling, call RWAS at{' '}
+              <a href="tel:+16052998178">(605) 299-8178</a> or{' '}
+              <Link href="/contact">contact the service desk</Link>.
             </div>
           </div>
 
           <div className="np-col-divider" />
 
           {/* Sidebar column — flat specimens filed inside the stage */}
-          <div style={{ padding: '0 0 0 22px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div
+            style={{
+              padding: '0 0 0 22px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '14px',
+            }}
+          >
             <Specimen variant="flat" as="aside">
               <div className="np-box-title">Article File</div>
               <p className="np-body-text" style={{ marginBottom: '8px' }}>
-                Author: {article.author}<br />
-                Source: {article.source || 'RWAS Desk'}<br />
-                Published: {article.published_at ? article.published_at.slice(0, 10) : article.date}
+                Author: {article.author}
+                <br />
+                Source: {article.source || 'RWAS Desk'}
+                <br />
+                Published:{' '}
+                {article.published_at
+                  ? article.published_at.slice(0, 10)
+                  : article.date}
+                {updatedTime ? (
+                  <>
+                    <br />
+                    Updated: {updatedTime.slice(0, 10)}
+                  </>
+                ) : null}
               </p>
               {article.source_url ? (
-                <a className="np-ad-btn" href={article.source_url} target="_blank" rel="noreferrer">
+                <a
+                  className="np-ad-btn"
+                  href={article.source_url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Source Reference
                 </a>
               ) : null}

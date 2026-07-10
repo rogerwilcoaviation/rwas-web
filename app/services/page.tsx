@@ -9,6 +9,7 @@ import {
   BroadsheetFooter,
   Specimen,
 } from '@/components/shared/broadsheet';
+import { genPageMetadata } from '@/app/seo';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/services';
 
@@ -19,27 +20,32 @@ const serviceGroups = [
       {
         name: 'Garmin avionics installation',
         href: '/services/garmin-installation-northern-plains',
-        description: 'Northern Plains Garmin dealer support for G3X Touch, GTN Xi, GFC 500, ADS-B, GI 275, G5, panel fabrication, and quote planning.',
+        description:
+          'Sioux Falls Garmin dealer support for G3X Touch, GTN Xi, GFC 500, ADS-B, GI 275, G5, panel fabrication, and quote planning.',
       },
       {
         name: 'G3X Touch installation',
         href: '/services/g3x-touch-installation',
-        description: 'Glass-panel planning, EIS, ADAHRS, Connext workflow, fabrication, configuration, and documentation support.',
+        description:
+          'Glass-panel planning, EIS, ADAHRS, Connext workflow, fabrication, configuration, and documentation support.',
       },
       {
         name: 'GTN Xi navigator installation',
         href: '/services/gtn-xi-navigator-installation',
-        description: 'GTN 650Xi and GTN 750Xi WAAS navigator installs, antenna planning, panel integration, testing, and logbook documentation.',
+        description:
+          'GTN 650Xi and GTN 750Xi WAAS navigator installs, antenna planning, panel integration, testing, and logbook documentation.',
       },
       {
         name: 'GFC 500 autopilot installation',
         href: '/services/gfc-500-autopilot-installation',
-        description: 'Eligibility review, quote planning, servo and control placement, integration review, installation, and return-to-service documentation.',
+        description:
+          'Eligibility review, quote planning, servo and control placement, integration review, installation, and return-to-service documentation.',
       },
       {
         name: 'ADS-B installation',
         href: '/services/ads-b-installation',
-        description: 'ADS-B Out compliance planning, Garmin transponder upgrades, GPS source review, antenna planning, configuration, and documentation.',
+        description:
+          'ADS-B Out compliance planning, Garmin transponder upgrades, GPS source review, antenna planning, configuration, and documentation.',
       },
     ],
   },
@@ -47,24 +53,28 @@ const serviceGroups = [
     label: 'Maintenance, inspection, and buyer support',
     services: [
       {
-        name: 'Aircraft maintenance in the Northern Plains',
+        name: 'Aircraft maintenance in Sioux Falls',
         href: '/services/aircraft-maintenance',
-        description: 'Annual inspections, 100-hour inspections, AOG coordination, prop balancing, aircraft weighing, and repair-station paperwork.',
+        description:
+          'Annual inspections, 100-hour inspections, AOG coordination, prop balancing, aircraft weighing, and repair-station paperwork.',
       },
       {
         name: 'Pre-buy inspection',
         href: '/services/pre-buy-inspection',
-        description: 'Logbook review, physical condition checks, avionics review, NDT coordination, and practical buyer decision support.',
+        description:
+          'Logbook review, physical condition checks, avionics review, NDT coordination, and practical buyer decision support.',
       },
       {
         name: 'Aircraft NDT inspection',
         href: '/services/ndt-inspection',
-        description: 'Eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing with FAA documentation support.',
+        description:
+          'Eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing with FAA documentation support.',
       },
       {
         name: 'Rotax repair support',
         href: '/services/rotax-repair',
-        description: 'Rotax aircraft engine maintenance support, inspection planning, troubleshooting, and documentation review.',
+        description:
+          'Rotax aircraft engine maintenance support, inspection planning, troubleshooting, and documentation review.',
       },
     ],
   },
@@ -74,12 +84,14 @@ const serviceGroups = [
       {
         name: 'Fiber laser fabrication',
         href: '/services/fiber-laser-fabrication',
-        description: 'Aircraft panel cutting, laser welding, powder coating, UV printing, bracket work, and precision shop fabrication.',
+        description:
+          'Aircraft panel cutting, laser welding, powder coating, UV printing, bracket work, and precision shop fabrication.',
       },
       {
         name: 'Papa-Alpha Piper rigging tools',
         href: '/services/papa-alpha-tools',
-        description: 'RWAS-designed Piper rigging reference tools for PA-series aircraft, built for practical flight-control setup work.',
+        description:
+          'RWAS-designed Piper rigging reference tools for PA-series aircraft, built for practical flight-control setup work.',
       },
     ],
   },
@@ -87,12 +99,12 @@ const serviceGroups = [
 
 const allServices = serviceGroups.flatMap((group) => group.services);
 
-export const metadata = {
-  title: { absolute: 'Aircraft Services - Avionics, Maintenance & NDT | RWAS' },
+export const metadata = genPageMetadata({
+  title: 'Aircraft Services in Sioux Falls | RWAS',
   description:
-    'RWAS aircraft services in the Northern Plains: Garmin avionics, annual inspections, NDT, fabrication, Rotax support, pre-buys, and Papa-Alpha tools.',
-  alternates: { canonical: pageUrl },
-};
+    'Aircraft services at KFSD in Sioux Falls: Garmin avionics, annual inspections, NDT, fabrication, Rotax support, pre-buys, and Papa-Alpha tools.',
+  canonical: pageUrl,
+});
 
 export default function ServicesPage() {
   return (
@@ -105,13 +117,62 @@ export default function ServicesPage() {
             '@type': 'FAQPage',
             '@id': `${pageUrl}#faq`,
             mainEntity: [
-              { '@type': 'Question', name: 'What does Roger Wilco Aviation Services do?', acceptedAnswer: { '@type': 'Answer', text: 'RWAS is an FAA-certificated repair station specializing in Garmin avionics installation, airframe and powerplant maintenance, non-destructive testing, and sheet metal fabrication. We also manufacture Papa-Alpha rigging reference tools for Piper aircraft.' } },
-              { '@type': 'Question', name: 'Where is Roger Wilco Aviation Services located?', acceptedAnswer: { '@type': 'Answer', text: 'RWAS serves aircraft owners across the Northern Plains. Contact the service desk for current scheduling and arrival details.' } },
-              { '@type': 'Question', name: 'What are your business hours?', acceptedAnswer: { '@type': 'Answer', text: 'Monday through Friday, 8:00 AM to 5:00 PM Central Time.' } },
-              { '@type': 'Question', name: 'What Garmin systems do you install?', acceptedAnswer: { '@type': 'Answer', text: 'We specialize in Garmin systems including the G3X Touch suite, G500/G600 TXi, GTN Xi navigators, GFC 500 autopilots, GI 275 displays, transponders, audio panels, ADS-B solutions, and full integrated panel installations.' } },
-              { '@type': 'Question', name: 'Can you work on my aircraft if I am not local?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Many customers fly their aircraft in for avionics installation and maintenance. We can coordinate logistics with you, your mechanic, or a ferry pilot, and we ship Papa-Alpha tools nationwide and internationally.' } },
-              { '@type': 'Question', name: 'Do you offer financing for avionics or maintenance work?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. RWAS offers financing options for avionics installations and maintenance projects including panel upgrades, autopilot installs, ADS-B upgrades, and major maintenance.' } },
-              { '@type': 'Question', name: 'Are you an FAA repair station?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. RWAS is an FAA-certificated repair station, Certificate No. RWSR491E, and a certified Garmin dealer.' } },
+              {
+                '@type': 'Question',
+                name: 'What does Roger Wilco Aviation Services do?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'RWAS is an FAA-certificated repair station specializing in Garmin avionics installation, airframe and powerplant maintenance, non-destructive testing, and sheet metal fabrication. We also manufacture Papa-Alpha rigging reference tools for Piper aircraft.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Where is Roger Wilco Aviation Services located?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'RWAS is at Hangar 3, 3701 N. Aviation Avenue, Sioux Falls, South Dakota 57104, at KFSD. The shop serves aircraft owners across the Northern Plains.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'What are your business hours?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Monday through Friday, 7:00 AM to 5:00 PM Central Time.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'What Garmin systems do you install?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'We specialize in Garmin systems including the G3X Touch suite, G500/G600 TXi, GTN Xi navigators, GFC 500 autopilots, GI 275 displays, transponders, audio panels, ADS-B solutions, and full integrated panel installations.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Can you work on my aircraft if I am not local?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Yes. Many customers fly their aircraft in for avionics installation and maintenance. We can coordinate logistics with you, your mechanic, or a ferry pilot, and we ship Papa-Alpha tools nationwide and internationally.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Do you offer financing for avionics or maintenance work?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Yes. RWAS offers financing options for avionics installations and maintenance projects including panel upgrades, autopilot installs, ADS-B upgrades, and major maintenance.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Are you an FAA repair station?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Yes. RWAS is an FAA-certificated repair station, Certificate No. RWSR491E, and a certified Garmin dealer.',
+                },
+              },
             ],
           }),
         }}
@@ -126,9 +187,12 @@ export default function ServicesPage() {
                 '@type': 'Service',
                 '@id': `${pageUrl}#service`,
                 name: 'Aircraft Services from Roger Wilco Aviation Services',
-                serviceType: 'Aircraft maintenance, avionics installation, NDT inspection, and fabrication',
+                serviceType:
+                  'Aircraft maintenance, avionics installation, NDT inspection, and fabrication',
                 url: pageUrl,
-                provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
+                provider: {
+                  '@id': 'https://www.rogerwilcoaviation.com#organization',
+                },
                 areaServed: [
                   { '@type': 'State', name: 'South Dakota' },
                   { '@type': 'State', name: 'Nebraska' },
@@ -139,7 +203,7 @@ export default function ServicesPage() {
                   { '@type': 'State', name: 'Montana' },
                 ],
                 description:
-                  'FAA Part 145 aircraft services from Roger Wilco Aviation Services for the Northern Plains, including Garmin avionics installation, maintenance, NDT inspection, fabrication, Rotax support, and pre-buy inspections.',
+                  'FAA Part 145 aircraft services at KFSD in Sioux Falls, serving the Northern Plains with Garmin avionics installation, maintenance, NDT inspection, fabrication, Rotax support, and pre-buy inspections.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'RWAS aircraft service catalog',
@@ -173,8 +237,18 @@ export default function ServicesPage() {
                 '@type': 'BreadcrumbList',
                 '@id': `${pageUrl}#breadcrumb`,
                 itemListElement: [
-                  { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
-                  { '@type': 'ListItem', position: 2, name: 'Services', item: pageUrl },
+                  {
+                    '@type': 'ListItem',
+                    position: 1,
+                    name: 'Home',
+                    item: 'https://www.rogerwilcoaviation.com/',
+                  },
+                  {
+                    '@type': 'ListItem',
+                    position: 2,
+                    name: 'Services',
+                    item: pageUrl,
+                  },
                 ],
               },
             ],
@@ -189,40 +263,63 @@ export default function ServicesPage() {
       <BulletinBar />
 
       <main className="bs-stage">
-        <figure className="fabrication-video fabrication-video--feature" aria-labelledby="services-laser-promo-title">
-          <Link className="fabrication-video__frame fabrication-video__frame--link" href="/services/fiber-laser-fabrication">
+        <figure
+          className="fabrication-video fabrication-video--feature"
+          aria-labelledby="services-laser-promo-title"
+        >
+          <div className="fabrication-video__frame">
             <video
               className="fabrication-video__media"
-              autoPlay
               muted
-              loop
-              preload="metadata"
+              controls
+              preload="none"
               poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg"
               playsInline
               aria-label="RWAS fiber laser fabrication video"
             >
-              <source src="/videos/fabrication/rwas-laser-steel-16x9-quote-pause-20260627.mp4" type="video/mp4" />
+              <source
+                src="/videos/fabrication/rwas-laser-steel-16x9-quote-pause-20260627.mp4"
+                type="video/mp4"
+              />
             </video>
-          </Link>
-          <figcaption className="fabrication-video__caption" id="services-laser-promo-title">
+          </div>
+          <figcaption
+            className="fabrication-video__caption"
+            id="services-laser-promo-title"
+          >
             <span>New shop capability</span>
-            <strong>The fiber laser has landed: cutting, welding, marking, and fabrication support now visible from the service desk.</strong>
+            <strong>
+              <Link href="/services/fiber-laser-fabrication">
+                The fiber laser has landed: cutting, welding, marking, and
+                fabrication support now visible from the service desk.
+              </Link>
+            </strong>
           </figcaption>
         </figure>
 
-        <section className="hero-headline-group" aria-labelledby="services-hero">
-          <span className="bs-kicker">FAA Part 145 Repair Station #RWSR491E</span>
-          <span className="bs-script-accent">&mdash; the Northern Plains aircraft services desk &mdash;</span>
+        <section
+          className="hero-headline-group"
+          aria-labelledby="services-hero"
+        >
+          <span className="bs-kicker">
+            FAA Part 145 Repair Station #RWSR491E
+          </span>
+          <span className="bs-script-accent">
+            &mdash; the KFSD aircraft services desk in Sioux Falls &mdash;
+          </span>
           <h1 id="services-hero" className="bs-headline bs-headline--hero">
             Aircraft services for owners who need
             <br />
             <em>the whole job handled.</em>
           </h1>
           <p className="bs-subhead">
-            Garmin avionics &middot; aircraft maintenance &middot; NDT inspection &middot; fabrication &middot; Rotax support &middot; pre-buy inspections
+            Garmin avionics &middot; aircraft maintenance &middot; NDT
+            inspection &middot; fabrication &middot; Rotax support &middot;
+            pre-buy inspections
           </p>
           <div className="bs-byline">
-            RWAS Avionics Desk &middot; Serving the Northern Plains
+            RWAS Avionics Desk &middot; KFSD, Sioux Falls &middot; Serving the
+            Northern Plains
           </div>
         </section>
 
@@ -230,14 +327,25 @@ export default function ServicesPage() {
           <div className="about-main">
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Service Directory</span>
-              <h2 className="bs-headline bs-headline--section">One accountable shop for avionics, airworthiness, inspection, and fabrication.</h2>
+              <h2 className="bs-headline bs-headline--section">
+                One accountable shop for avionics, airworthiness, inspection,
+                and fabrication.
+              </h2>
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  Roger Wilco Aviation Services is a working FAA Part 145 repair station for the Northern Plains. This page is the front desk for the shop's crawlable service pages: Garmin installation, aircraft maintenance, NDT, fabrication, Rotax support, pre-buy inspections, and RWAS-built Papa-Alpha tools.
+                  Roger Wilco Aviation Services is a working FAA Part 145 repair
+                  station at KFSD in Sioux Falls, serving aircraft owners across
+                  the Northern Plains. This page is the front desk for the
+                  shop's crawlable service pages: Garmin installation, aircraft
+                  maintenance, NDT, fabrication, Rotax support, pre-buy
+                  inspections, and RWAS-built Papa-Alpha tools.
                 </p>
                 <p>
-                  If you already know the system or service you need, choose the matching page below. If you are still deciding, send the aircraft, mission, location, photos, and logbook context through the contact form and the shop can route the request.
+                  If you already know the system or service you need, choose the
+                  matching page below. If you are still deciding, send the
+                  aircraft, mission, location, photos, and logbook context
+                  through the contact form and the shop can route the request.
                 </p>
               </div>
             </Specimen>
@@ -245,7 +353,9 @@ export default function ServicesPage() {
             {serviceGroups.map((group) => (
               <Specimen key={group.label} variant="hero" as="section">
                 <span className="bs-kicker">{group.label}</span>
-                <h2 className="bs-headline bs-headline--section">{group.label}</h2>
+                <h2 className="bs-headline bs-headline--section">
+                  {group.label}
+                </h2>
                 <hr className="section-rule" />
                 <ul className="bs-svc-list">
                   {group.services.map((service) => (
@@ -271,21 +381,31 @@ export default function ServicesPage() {
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
-                Service work at RWAS often blends avionics, fabrication, maintenance review, and documentation into one coordinated project.
+                Service work at RWAS often blends avionics, fabrication,
+                maintenance review, and documentation into one coordinated
+                project.
               </Specimen.Caption>
             </Specimen>
 
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Start Here</span>
-              <h2 className="bs-headline bs-headline--section">Give the shop enough context to route the request correctly.</h2>
+              <h2 className="bs-headline bs-headline--section">
+                Give the shop enough context to route the request correctly.
+              </h2>
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  Useful first contact details include aircraft make and model, N-number, current airport, desired work, known squawks, panel or damage photos, logbook notes, preferred schedule, and whether the aircraft can fly to the RWAS shop.
+                  Useful first contact details include aircraft make and model,
+                  N-number, current airport, desired work, known squawks, panel
+                  or damage photos, logbook notes, preferred schedule, and
+                  whether the aircraft can fly to the RWAS shop.
                 </p>
               </div>
               <p>
-                <Link className="bs-cta-primary" href="/contact?reason=service&source=services-hub">
+                <Link
+                  className="bs-cta-primary"
+                  href="/contact?reason=service&source=services-hub"
+                >
                   Contact the service desk
                 </Link>
                 <Link className="bs-cta-secondary" href="/shop-capabilities">
@@ -295,12 +415,13 @@ export default function ServicesPage() {
             </Specimen>
           </div>
 
-          <aside className="about-rail" aria-label="RWAS service quick reference">
+          <aside
+            className="about-rail"
+            aria-label="RWAS service quick reference"
+          >
             <Specimen as="section">
               <span className="bs-kicker">Service Desk</span>
-              <p>
-                Contact RWAS for current scheduling and arrival details.
-              </p>
+              <p>Contact RWAS for current scheduling and arrival details.</p>
             </Specimen>
 
             <Specimen as="section">
@@ -308,14 +429,22 @@ export default function ServicesPage() {
               <p>
                 <a
                   href="tel:+16052998178"
-                  style={{ color: 'var(--ink-900)', textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                  style={{
+                    color: 'var(--ink-900)',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '2px',
+                  }}
                 >
                   (605) 299-8178
                 </a>
                 <br />
                 <a
                   href="mailto:avionics@rwas.team"
-                  style={{ color: 'var(--ink-900)', textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                  style={{
+                    color: 'var(--ink-900)',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '2px',
+                  }}
                 >
                   avionics@rwas.team
                 </a>

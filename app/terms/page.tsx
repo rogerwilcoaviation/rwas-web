@@ -12,13 +12,14 @@ import {
   BulletinBar,
   BroadsheetFooter,
 } from '@/components/shared/broadsheet';
+import { genPageMetadata } from '@/app/seo';
 
-export const metadata = {
-  title: { absolute: 'Terms of Service | Roger Wilco Aviation Services' },
+export const metadata = genPageMetadata({
+  title: 'Terms of Service | Roger Wilco Aviation Services',
   description:
-    'Terms of service for Roger Wilco Aviation Services (rogerwilcoaviation.com). FAA Part 145 Repair Station in the Northern Plains.',
-  alternates: { canonical: 'https://www.rogerwilcoaviation.com/terms' },
-};
+    'Terms of service for Roger Wilco Aviation Services (rogerwilcoaviation.com), an FAA Part 145 repair station at KFSD in Sioux Falls.',
+  canonical: 'https://www.rogerwilcoaviation.com/terms',
+});
 
 const policyConfig = {
   lastUpdated: 'April 8, 2026',
@@ -37,14 +38,19 @@ export default function TermsPage() {
         {/* ── HERO HEADLINE ────────────────────────── */}
         <section className="hero-headline-group" aria-labelledby="terms-hero">
           <span className="bs-kicker">Policies &amp; Notices</span>
-          <span className="bs-script-accent">&mdash; the rules of the road &mdash;</span>
+          <span className="bs-script-accent">
+            &mdash; the rules of the road &mdash;
+          </span>
           <h1 id="terms-hero" className="bs-headline bs-headline--hero">
             Terms of Service
           </h1>
           <p className="bs-subhead">
-            We&rsquo;re committed to providing you with the best experience possible.
+            We&rsquo;re committed to providing you with the best experience
+            possible.
           </p>
-          <div className="bs-byline">Last updated {policyConfig.lastUpdated}</div>
+          <div className="bs-byline">
+            Last updated {policyConfig.lastUpdated}
+          </div>
         </section>
 
         <div className="mt-20 max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
@@ -54,8 +60,8 @@ export default function TermsPage() {
             <span className="font-bold">{siteMetadata.businessName}</span>.
             Throughout the site, the terms “we”, “us” and “our” refer to{' '}
             <span className="font-bold">{siteMetadata.businessName}</span>.{' '}
-            <span className="font-bold">{siteMetadata.businessName}</span> offers
-            this website, including all information, tools, and services
+            <span className="font-bold">{siteMetadata.businessName}</span>{' '}
+            offers this website, including all information, tools, and services
             available from this site to you, the user, conditioned upon your
             acceptance of all terms, conditions, policies, and notices stated
             here.
@@ -322,9 +328,7 @@ export default function TermsPage() {
               will be notified and must approve the additional cost before work
               continues.
             </li>
-            <li>
-              For longer jobs, progress payments may be required.
-            </li>
+            <li>For longer jobs, progress payments may be required.</li>
             <li>
               A late fee of 1.5 percent may be imposed if requested payments are
               delinquent by more than 30 days, and delinquency may affect
@@ -338,9 +342,7 @@ export default function TermsPage() {
         </div>
 
         <div className="max-w-screen-md mx-auto policy-card w-full rounded shadow-md p-6 mb-8">
-          <h2 className="text-lg font-semibold mb-4">
-            RWAS PAYMENT TERMS
-          </h2>
+          <h2 className="text-lg font-semibold mb-4">RWAS PAYMENT TERMS</h2>
           <ul className="list-disc pl-6 space-y-3 mb-4">
             <li>
               NDT estimates require a 50 percent down payment to be scheduled on
@@ -377,7 +379,8 @@ export default function TermsPage() {
               <span className="font-bold"> WFBIUS6S</span>.
             </li>
             <li>
-              Bank name: <span className="font-bold">Wells Fargo Bank, N.A.</span>
+              Bank name:{' '}
+              <span className="font-bold">Wells Fargo Bank, N.A.</span>
             </li>
             <li>
               Bank address:{' '}
@@ -414,7 +417,8 @@ export default function TermsPage() {
           </p>
 
           <p className="mb-0">
-            Happy with our work? Ask your RWAS contact for the current review link.
+            Happy with our work? Ask your RWAS contact for the current review
+            link.
           </p>
         </div>
 
@@ -678,11 +682,11 @@ export default function TermsPage() {
           </p>
 
           <p className="mb-4">
-            In no case shall {siteMetadata.businessName}, our directors, officers,
-            employees, affiliates, agents, contractors, interns, suppliers,
-            service providers, or licensors be liable for any injury, loss,
-            claim, or any direct, indirect, incidental, punitive, special, or
-            consequential damages of any kind, including, without limitation,
+            In no case shall {siteMetadata.businessName}, our directors,
+            officers, employees, affiliates, agents, contractors, interns,
+            suppliers, service providers, or licensors be liable for any injury,
+            loss, claim, or any direct, indirect, incidental, punitive, special,
+            or consequential damages of any kind, including, without limitation,
             lost profits, lost revenue, lost savings, loss of data, replacement
             costs, or any similar damages, whether based in contract, tort
             (including negligence), strict liability, or otherwise, arising from

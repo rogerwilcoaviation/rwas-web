@@ -10,15 +10,16 @@ import {
 } from '@/components/shared/broadsheet';
 import ContactForm from '@/components/shared/ContactForm';
 import '../contact.css';
+import { genPageMetadata } from '@/app/seo';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/contact';
 
-export const metadata = {
-  title: 'Contact RWAS',
+export const metadata = genPageMetadata({
+  title: 'Contact RWAS — Sioux Falls Avionics & Aircraft Service',
   description:
-    'Contact the Roger Wilco Aviation Services Avionics Desk in the Northern Plains. Quote requests, project inquiries, and general questions route to avionics@rwas.team.',
-  alternates: { canonical: pageUrl },
-};
+    'Contact Roger Wilco Aviation Services at KFSD in Sioux Falls for Garmin avionics, maintenance, NDT, fabrication, pre-buy inspections, and quotes.',
+  canonical: pageUrl,
+});
 
 // Dynamic = the form reads ?product=/?sku= from the URL on the client,
 // but the shell is pre-rendered in the broadsheet at build time.
@@ -40,14 +41,26 @@ export default function ContactPage() {
                 name: 'Contact Roger Wilco Aviation Services',
                 description:
                   'Contact Roger Wilco Aviation Services for aircraft maintenance, Garmin avionics installation, NDT, fabrication, pre-buy support, and general aircraft-service questions.',
-                about: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
+                about: {
+                  '@id': 'https://www.rogerwilcoaviation.com#organization',
+                },
               },
               {
                 '@type': 'BreadcrumbList',
                 '@id': `${pageUrl}#breadcrumb`,
                 itemListElement: [
-                  { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
-                  { '@type': 'ListItem', position: 2, name: 'Contact', item: pageUrl },
+                  {
+                    '@type': 'ListItem',
+                    position: 1,
+                    name: 'Home',
+                    item: 'https://www.rogerwilcoaviation.com/',
+                  },
+                  {
+                    '@type': 'ListItem',
+                    position: 2,
+                    name: 'Contact',
+                    item: pageUrl,
+                  },
                 ],
               },
             ],
@@ -62,16 +75,19 @@ export default function ContactPage() {
       <main className="bs-stage">
         <section className="hero-headline-group">
           <p className="bs-kicker">The Correspondence Desk</p>
-          <p className="bs-script-accent">&mdash; quote requests &amp; inquiries &mdash;</p>
+          <p className="bs-script-accent">
+            &mdash; quote requests &amp; inquiries &mdash;
+          </p>
           <h1 className="bs-headline bs-headline--hero">Contact RWAS.</h1>
           <p className="bs-subhead">
-            Every message below lands at <strong>avionics@rwas.team</strong> — read
-            by the shop, not by a phone tree. For quote requests, include your
-            aircraft make / model and N-number so we can pull records and reply
-            with real numbers.
+            Every message below lands at <strong>avionics@rwas.team</strong> —
+            read by the shop, not by a phone tree. For quote requests, include
+            your aircraft make / model and N-number so we can pull records and
+            reply with real numbers.
           </p>
           <p className="bs-byline">
-            RWAS Avionics Desk &middot; the Northern Plains &middot; (605) 299-8178
+            RWAS Avionics Desk &middot; KFSD, Sioux Falls &middot; (605)
+            299-8178
           </p>
         </section>
 
@@ -102,9 +118,13 @@ export default function ContactPage() {
               </dd>
             </div>
             <div>
-              <dt>Service desk</dt>
+              <dt>Shop location</dt>
               <dd>
-                Contact RWAS for current scheduling and arrival details.
+                <address style={{ fontStyle: 'normal' }}>
+                  Hangar 3, 3701 N. Aviation Avenue
+                  <br />
+                  Sioux Falls, SD 57104 &middot; KFSD
+                </address>
               </dd>
             </div>
           </dl>

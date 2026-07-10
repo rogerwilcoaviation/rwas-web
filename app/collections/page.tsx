@@ -1,5 +1,7 @@
 import CollectionCard from '@/components/shopify/CollectionCard';
-import PartFinder, { type PartFinderProduct } from '@/components/shopify/PartFinder';
+import PartFinder, {
+  type PartFinderProduct,
+} from '@/components/shopify/PartFinder';
 import {
   BroadsheetLayout,
   Dateline,
@@ -12,12 +14,14 @@ import {
 } from '@/components/shared/broadsheet';
 import { getFeaturedCollections, getPartFinderProducts } from '@/lib/shopify';
 import Link from 'next/link';
+import { genPageMetadata } from '@/app/seo';
 
-export const metadata = {
-  title: 'RWAS Collections',
+export const metadata = genPageMetadata({
+  title: 'Aviation Parts, Garmin Avionics & Piper Tools | RWAS',
   description:
     'Browse RWAS certified avionics, experimental avionics, pilot gear, Garmin install items, Papa-Alpha tools, service parts, and sale inventory.',
-};
+  canonical: 'https://www.rogerwilcoaviation.com/collections',
+});
 
 const POPULAR_PRODUCT_LINKS = [
   {
@@ -46,7 +50,7 @@ const POPULAR_PRODUCT_LINKS = [
     text: 'Aileron/flap rigging reference for PA-28/32/34/44 airframes.',
   },
   {
-    href: '/products/garmin-gfc-500-digital-autopilot',
+    href: '/services/gfc-500-autopilot-installation',
     label: 'Garmin GFC 500 Autopilot',
     text: 'Autopilot hardware context before installation planning.',
   },
@@ -85,7 +89,9 @@ export default async function CollectionsPage() {
       featuredImage: product.featuredImage,
       price: product.priceRange.minVariantPrice.amount,
       currencyCode: product.priceRange.minVariantPrice.currencyCode,
-      skus: product.variants.map((variant) => variant.sku || '').filter(Boolean),
+      skus: product.variants
+        .map((variant) => variant.sku || '')
+        .filter(Boolean),
     }));
   } catch {
     finderProducts = [];
@@ -101,17 +107,38 @@ export default async function CollectionsPage() {
       <main className="bs-stage">
         <section className="hero-headline-group">
           <p className="bs-kicker">Live collections</p>
-          <p className="bs-script-accent">&mdash; pulled straight from Shopify &mdash;</p>
-          <h1 className="bs-headline bs-headline--hero">Browse every RWAS collection in one place.</h1>
-          <p className="bs-subhead">
-            Certified and experimental avionics, pilot gear, lifestyle Garmin, service parts, Papa-Alpha tools, and sale inventory &mdash; all live with real product data behind them.
+          <p className="bs-script-accent">
+            &mdash; pulled straight from Shopify &mdash;
           </p>
-          <p className="bs-byline">RWAS Avionics Desk &middot; the Northern Plains</p>
-          <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Link href="/collections/avionics-certified" className="bs-cta-primary">
+          <h1 className="bs-headline bs-headline--hero">
+            Browse every RWAS collection in one place.
+          </h1>
+          <p className="bs-subhead">
+            Certified and experimental avionics, pilot gear, lifestyle Garmin,
+            service parts, Papa-Alpha tools, and sale inventory &mdash; all live
+            with real product data behind them.
+          </p>
+          <p className="bs-byline">
+            RWAS Avionics Desk &middot; KFSD, Sioux Falls
+          </p>
+          <div
+            style={{
+              marginTop: 16,
+              display: 'flex',
+              gap: 12,
+              flexWrap: 'wrap',
+            }}
+          >
+            <Link
+              href="/collections/avionics-certified"
+              className="bs-cta-primary"
+            >
               Start with certified retail
             </Link>
-            <Link href="/collections/papa-alpha-tools" className="bs-cta-secondary">
+            <Link
+              href="/collections/papa-alpha-tools"
+              className="bs-cta-secondary"
+            >
               See Papa-Alpha tools
             </Link>
             <Link href="/aircraft-for-sale" className="bs-cta-secondary">
@@ -123,9 +150,13 @@ export default async function CollectionsPage() {
         <Specimen variant="flat">
           <div style={{ marginBottom: 20 }}>
             <p className="bs-kicker">Popular starting points</p>
-            <h2 className="bs-headline" style={{ marginTop: 4 }}>Products pilots search first</h2>
+            <h2 className="bs-headline" style={{ marginTop: 4 }}>
+              Products pilots search first
+            </h2>
             <p className="bs-body" style={{ marginTop: 8 }}>
-              Direct links to high-intent Papa-Alpha and Garmin pages, so buyers and crawlers can reach core products without using the part finder.
+              Direct links to high-intent Papa-Alpha and Garmin pages, so buyers
+              and crawlers can reach core products without using the part
+              finder.
             </p>
           </div>
           <ul className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
@@ -136,7 +167,9 @@ export default async function CollectionsPage() {
                   className="block h-full border-l-4 border-black bg-white px-4 py-3 text-black transition hover:bg-neutral-100"
                 >
                   <span className="bs-kicker block">{item.label}</span>
-                  <span className="bs-body block" style={{ marginTop: 6 }}>{item.text}</span>
+                  <span className="bs-body block" style={{ marginTop: 6 }}>
+                    {item.text}
+                  </span>
                 </Link>
               </li>
             ))}
@@ -153,7 +186,8 @@ export default async function CollectionsPage() {
           <div style={{ marginBottom: 20 }}>
             <p className="bs-kicker">Featured collections</p>
             <p className="bs-body" style={{ marginTop: 4 }}>
-              Each card links into a live collection page. Prices, availability, and inventory mirror Shopify.
+              Each card links into a live collection page. Prices, availability,
+              and inventory mirror Shopify.
             </p>
           </div>
 
@@ -166,13 +200,27 @@ export default async function CollectionsPage() {
           ) : (
             <div>
               <p className="bs-kicker">Temporarily unavailable</p>
-              <h2 className="bs-headline" style={{ marginTop: 4 }}>Collections could not load</h2>
+              <h2 className="bs-headline" style={{ marginTop: 4 }}>
+                Collections could not load
+              </h2>
               <p className="bs-body" style={{ marginTop: 8 }}>
-                Shopify collection data did not return just now. Try again shortly, or reach out and we can pull a part by number.
+                Shopify collection data did not return just now. Try again
+                shortly, or reach out and we can pull a part by number.
               </p>
-              <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                <Link href="/shop-capabilities" className="bs-cta-primary">Shop capabilities</Link>
-                <Link href="/about" className="bs-cta-secondary">Contact RWAS</Link>
+              <div
+                style={{
+                  marginTop: 16,
+                  display: 'flex',
+                  gap: 12,
+                  flexWrap: 'wrap',
+                }}
+              >
+                <Link href="/shop-capabilities" className="bs-cta-primary">
+                  Shop capabilities
+                </Link>
+                <Link href="/about" className="bs-cta-secondary">
+                  Contact RWAS
+                </Link>
               </div>
             </div>
           )}

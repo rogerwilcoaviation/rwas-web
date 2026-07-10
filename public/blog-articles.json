@@ -575,14 +575,14 @@
       "id": "mandatory-service-bulletins-are-they-really-mandatory-20260415",
       "status": "published",
       "category": "service-bulletin",
-      "title": "Mandatory Service Bulletins: Are They Really Mandatory?",
+      "title": "Are Mandatory Service Bulletins Required?",
       "subtitle": "The regulatory, safety, and financial truth every aircraft owner needs to know.",
       "author": "Roger Wilco Aviation Services",
       "byline": "RWAS Maintenance Desk",
       "date": "2026-04-15",
       "source": "RWAS",
       "source_url": "https://www.rogerwilcoaviation.com",
-      "lead": "If you own or operate an aircraft, you have almost certainly received a service bulletin from the manufacturer labeled mandatory. The word carries weight. But is a manufacturers mandatory service bulletin actually mandatory? The answer depends on who you are, how you operate, and what lens you are looking through: regulatory, safety, or financial.",
+      "lead": "For most Part 91 aircraft owners, a manufacturer's mandatory service bulletin is not automatically a legal requirement unless an Airworthiness Directive or another approved requirement incorporates it. Commercial operations and adopted inspection programs can differ, and safety, warranty, insurance, and resale considerations may still make compliance prudent.",
       "body": [
         "A service bulletin is a technical document issued by an original equipment manufacturer. It notifies owners and operators of recommended inspections, maintenance actions, part replacements, or product improvements. Manufacturers categorize their bulletins as informational, optional, recommended, alert, and mandatory. The terminology varies because there is no FAA-standardized classification system for service bulletin severity levels.",
         "The critical distinction is that service bulletins are manufacturer documents, not FAA documents. The FAAs regulatory instrument for mandating corrective action is the Airworthiness Directive, governed under 14 CFR Part 39. That difference is the hinge on which this entire discussion turns.",
@@ -607,6 +607,7 @@
       "image": "/images/blog/mandatory-service-bulletins-cirrus-sr22.jpg",
       "image_alt": "Cirrus SR22 aircraft on the ramp.",
       "published_at": "2026-04-15T09:20:37.615307+00:00",
+      "updated_at": "2026-07-10T00:00:00-04:00",
       "social": {
         "facebook": {
           "status": "published",
@@ -626,14 +627,14 @@
       "id": "repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414",
       "status": "published",
       "category": "regulatory",
-      "title": "Repair Station vs. A&P Mechanic \u2014 What Aircraft Owners Should Know",
+      "title": "Part 145 Repair Station vs. A&P Mechanic",
       "subtitle": "Why FAA Part 145 oversight changes the quality system, accountability, and long-term value behind aircraft maintenance.",
       "author": "Roger Wilco Aviation Services",
       "byline": "RWAS Maintenance Desk",
       "date": "2026-04-14",
       "source": "RWAS",
       "source_url": "https://www.rogerwilcoaviation.com",
-      "lead": "Aircraft owners often hear about A&P mechanics, IAs, and repair stations as if they all mean the same thing. They do not. This article explains what a Part 145 Repair Station adds above ordinary maintenance authority, and why that extra structure matters for quality control, avionics work, documentation, and long-term ownership value.",
+      "lead": "An A&P is an individual FAA-certificated mechanic. A Part 145 repair station is an FAA-certificated organization with approved procedures, quality control, designated inspection authority, and documented capabilities. Both can perform valuable work; the difference is the organizational system behind the work and its records.",
       "body": [
         "An A&P mechanic \u2014 someone holding an Airframe and Powerplant certificate under 14 CFR Part 65 \u2014 is authorized to perform maintenance, preventive maintenance, and alterations on aircraft. They can inspect work they have performed and approve it for return to service. However, an individual A&P working alone operates without the structured oversight that comes with a certificated organization. There is no required quality system, no mandatory inspection procedures beyond what the mechanic personally follows, and no regulatory obligation to maintain a controlled reference library.",
         "An Inspection Authorization (IA) adds the ability to perform annual inspections and approve aircraft for return to service after major repairs or alterations. An IA holder must meet recurrent training and activity requirements to keep the authorization current. While this represents a higher level of individual qualification, it still does not carry the organizational infrastructure that a repair station provides. The IA holder is, by regulation, an individual \u2014 not a system.",
@@ -651,6 +652,7 @@
       "image": "/images/blog/repair-station-vs-ap-mechanic-corporate-hangar-1.jpg",
       "image_alt": "Corporate turboprop aircraft parked inside a spacious hangar.",
       "published_at": "2026-04-14T21:15:00Z",
+      "updated_at": "2026-07-10T00:00:00-04:00",
       "social": {
         "facebook": {
           "text": "What is the real difference between a certificated A&P mechanic and an FAA Part 145 Repair Station?\n\nWe just published a straight-ahead look at the regulatory, financial, and quality differences, and why that matters when you are choosing who touches your aircraft.\n\nAt Roger Wilco Aviation Services, every avionics install, inspection, and return-to-service event is backed by our Part 145 quality system, FAA Repair Station #RWSR491E.\n\nRead the full article:",

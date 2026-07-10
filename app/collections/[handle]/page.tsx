@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import CollectionProductBrowser from '@/components/shopify/CollectionProductBrowser';
-import PartFinder, { type PartFinderProduct } from '@/components/shopify/PartFinder';
+import PartFinder, {
+  type PartFinderProduct,
+} from '@/components/shopify/PartFinder';
 import { PapaAlphaLaunchFrame } from '@/components/shared/PapaAlphaLaunchFrame';
 import {
   BroadsheetLayout,
@@ -19,7 +21,11 @@ import {
   isSeoSafeProductHandle,
 } from '@/lib/shopify';
 import Link from 'next/link';
-import { collectionMetaDescription, collectionSeoTitle, truncateMeta } from '@/lib/seo';
+import {
+  collectionMetaDescription,
+  collectionSeoTitle,
+  truncateMeta,
+} from '@/lib/seo';
 import { serviceLinksForCollection } from '@/lib/service-links';
 
 const FALLBACK_COLLECTION_HANDLES = [
@@ -59,9 +65,15 @@ export async function generateMetadata({
       return { title: 'Collection not found' };
     }
 
-    const title = collectionSeoTitle(collection.title);
+    const title =
+      collection.handle === 'papa-alpha-tools'
+        ? 'Piper Rigging Tools — Papa-Alpha | RWAS'
+        : collectionSeoTitle(collection.title);
     const description = collectionMetaDescription(collection);
     const url = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
+    const imageUrl =
+      collection.image?.url ||
+      'https://www.rogerwilcoaviation.com/og-default.jpg';
     return {
       title: { absolute: title },
       description,
@@ -71,13 +83,18 @@ export async function generateMetadata({
         url,
         title,
         description,
-        images: collection.image?.url ? [{ url: collection.image.url, alt: collection.image.altText || collection.title }] : undefined,
+        images: [
+          {
+            url: imageUrl,
+            alt: collection.image?.altText || collection.title,
+          },
+        ],
       },
       twitter: {
         card: 'summary_large_image',
         title,
         description,
-        images: collection.image?.url ? [collection.image.url] : undefined,
+        images: [imageUrl],
       },
     };
   } catch {
@@ -110,16 +127,25 @@ export default async function CollectionDetailPage({
         <main className="bs-stage">
           <section className="hero-headline-group">
             <p className="bs-kicker">Collection</p>
-            <p className="bs-script-accent">&mdash; temporarily unavailable &mdash;</p>
-            <h1 className="bs-headline bs-headline--hero">Collection Not Found</h1>
+            <p className="bs-script-accent">
+              &mdash; temporarily unavailable &mdash;
+            </p>
+            <h1 className="bs-headline bs-headline--hero">
+              Collection Not Found
+            </h1>
             <p className="bs-subhead">
-              We could not load this collection from Shopify right now. Please try again shortly.
+              We could not load this collection from Shopify right now. Please
+              try again shortly.
             </p>
           </section>
           <Specimen variant="flat">
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <Link href="/collections" className="bs-cta-primary">Back to collections</Link>
-              <Link href="/shop-capabilities" className="bs-cta-secondary">Shop capabilities</Link>
+              <Link href="/collections" className="bs-cta-primary">
+                Back to collections
+              </Link>
+              <Link href="/shop-capabilities" className="bs-cta-secondary">
+                Shop capabilities
+              </Link>
             </div>
           </Specimen>
         </main>
@@ -129,32 +155,54 @@ export default async function CollectionDetailPage({
   }
 
   const indexableProducts = collection.products.filter((product) =>
-    isSeoSafeProductHandle(product.handle)
+    isSeoSafeProductHandle(product.handle),
   );
-  const finderProducts: PartFinderProduct[] = indexableProducts.map((product) => ({
-    id: product.id,
-    title: product.title,
-    handle: product.handle,
-    vendor: product.vendor,
-    productType: product.productType,
-    description: product.description,
-    tags: product.tags,
-    featuredImage: product.featuredImage,
-    price: product.priceRange.minVariantPrice.amount,
-    currencyCode: product.priceRange.minVariantPrice.currencyCode,
-    skus: (product.variants || []).map((variant) => variant.sku || '').filter(Boolean),
-  }));
+  const finderProducts: PartFinderProduct[] = indexableProducts.map(
+    (product) => ({
+      id: product.id,
+      title: product.title,
+      handle: product.handle,
+      vendor: product.vendor,
+      productType: product.productType,
+      description: product.description,
+      tags: product.tags,
+      featuredImage: product.featuredImage,
+      price: product.priceRange.minVariantPrice.amount,
+      currencyCode: product.priceRange.minVariantPrice.currencyCode,
+      skus: (product.variants || [])
+        .map((variant) => variant.sku || '')
+        .filter(Boolean),
+    }),
+  );
   const quoteOnly = isQuoteCollection(collection.handle);
-  const relatedServiceLinks = serviceLinksForCollection(collection.handle, collection.title);
+  const relatedServiceLinks = serviceLinksForCollection(
+    collection.handle,
+    collection.title,
+  );
   const canonicalUrl = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     '@id': `${canonicalUrl}#breadcrumb`,
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
-      { '@type': 'ListItem', position: 2, name: 'Collections', item: 'https://www.rogerwilcoaviation.com/collections' },
-      { '@type': 'ListItem', position: 3, name: collection.title, item: canonicalUrl },
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.rogerwilcoaviation.com/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Collections',
+        item: 'https://www.rogerwilcoaviation.com/collections',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: collection.title,
+        item: canonicalUrl,
+      },
     ],
   };
   const itemListSchema = {
@@ -190,15 +238,31 @@ export default async function CollectionDetailPage({
       <BulletinBar />
       <main className="bs-stage">
         <section className="hero-headline-group">
-          <p className="bs-kicker">Collection &middot; {indexableProducts.length} items</p>
-          <p className="bs-script-accent">&mdash; browse live inventory &mdash;</p>
+          <p className="bs-kicker">
+            Collection &middot; {indexableProducts.length} items
+          </p>
+          <p className="bs-script-accent">
+            &mdash; browse live inventory &mdash;
+          </p>
           <h1 className="bs-headline bs-headline--hero">{collection.title}</h1>
           <p className="bs-subhead">
-            {collection.description || 'Live product listing from the Shopify Storefront API.'}
+            {collection.description ||
+              'Live product listing from the Shopify Storefront API.'}
           </p>
-          <p className="bs-byline">RWAS Avionics Desk &middot; the Northern Plains</p>
-          <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Link href="/collections" className="bs-cta-secondary">Back to collections</Link>
+          <p className="bs-byline">
+            RWAS Avionics Desk &middot; KFSD, Sioux Falls
+          </p>
+          <div
+            style={{
+              marginTop: 16,
+              display: 'flex',
+              gap: 12,
+              flexWrap: 'wrap',
+            }}
+          >
+            <Link href="/collections" className="bs-cta-secondary">
+              Back to collections
+            </Link>
             <Link
               href={quoteOnly ? '/shop-capabilities' : '/cart'}
               className="bs-cta-primary"
@@ -210,7 +274,10 @@ export default async function CollectionDetailPage({
 
         {finderProducts.length ? (
           <Specimen variant="flat">
-            <PartFinder products={finderProducts} scopeLabel={collection.title} />
+            <PartFinder
+              products={finderProducts}
+              scopeLabel={collection.title}
+            />
           </Specimen>
         ) : null}
 
@@ -218,21 +285,32 @@ export default async function CollectionDetailPage({
           <>
             <Specimen variant="flat">
               <p className="bs-kicker">Launch video</p>
-              <p className="bs-script-accent">&mdash; complete Piper rigging kits &mdash;</p>
+              <p className="bs-script-accent">
+                &mdash; complete Piper rigging kits &mdash;
+              </p>
               <PapaAlphaLaunchFrame />
             </Specimen>
 
             <Specimen variant="flat">
               <p className="bs-kicker">Worldwide delivery</p>
-              <p className="bs-script-accent">&mdash; from the RWAS shop to wherever you fly &mdash;</p>
-              <h2 className="bs-headline" style={{ marginTop: 6, marginBottom: 12 }}>
+              <p className="bs-script-accent">
+                &mdash; from the RWAS shop to wherever you fly &mdash;
+              </p>
+              <h2
+                className="bs-headline"
+                style={{ marginTop: 6, marginBottom: 12 }}
+              >
                 We sell internationally all over the world.
               </h2>
               <p className="bs-body">
-                Crafted with CAD, CNC routing, and fiber laser cutting of aircraft-grade aluminum,
-                powder coated, and UV printed for reduced weight, durability, and precision.
+                Crafted with CAD, CNC routing, and fiber laser cutting of
+                aircraft-grade aluminum, powder coated, and UV printed for
+                reduced weight, durability, and precision.
               </p>
-              <p className="bs-byline" style={{ marginTop: 16, fontStyle: 'italic' }}>
+              <p
+                className="bs-byline"
+                style={{ marginTop: 16, fontStyle: 'italic' }}
+              >
                 Made by professional mechanics for professional mechanics.
               </p>
             </Specimen>
@@ -242,7 +320,10 @@ export default async function CollectionDetailPage({
         {relatedServiceLinks.length ? (
           <Specimen variant="flat" as="section">
             <p className="bs-kicker">Shop-supported services</p>
-            <h2 className="bs-headline" style={{ marginTop: 6, marginBottom: 12 }}>
+            <h2
+              className="bs-headline"
+              style={{ marginTop: 6, marginBottom: 12 }}
+            >
               Need the work behind the part?
             </h2>
             <ul className="bs-svc-list">

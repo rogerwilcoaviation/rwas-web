@@ -11,13 +11,14 @@ import {
 } from '@/components/shared/broadsheet';
 import BlogArticlesFeed from '@/components/home/BlogArticlesFeed';
 import AircraftSaleFeed from '@/components/home/AircraftSaleFeed';
+import { genPageMetadata } from '@/app/seo';
 
-export const metadata = {
-  title: 'Garmin Avionics & Aircraft Maintenance — the Northern Plains',
+export const metadata = genPageMetadata({
+  title: 'Garmin Avionics & Aircraft Maintenance — Sioux Falls, SD',
   description:
-    'FAA Part 145 repair station in the Northern Plains. Certified Garmin dealer: G3X Touch, GFC 500, annual inspections, NDT. Call (605) 299-8178.',
-  alternates: { canonical: 'https://www.rogerwilcoaviation.com/' },
-};
+    'FAA Part 145 repair station at KFSD in Sioux Falls. Certified Garmin dealer for G3X Touch, GFC 500, annual inspections, NDT, and fabrication.',
+  canonical: 'https://www.rogerwilcoaviation.com/',
+});
 
 /*
  * / (Home) — Ship 3 Tranche B production migration.
@@ -146,7 +147,7 @@ export default function Home() {
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Lead Story</span>
               <h1 className="bs-headline bs-headline--section">
-                Full-Spectrum Repair Station, Northern Plains
+                Full-Spectrum Repair Station in Sioux Falls
               </h1>
               <hr className="section-rule" />
 
@@ -174,12 +175,12 @@ export default function Home() {
               <div className="bs-body">
                 <p className="bs-drop">
                   Roger Wilco Aviation Services is an FAA-certificated repair
-                  station providing full-spectrum airframe, powerplant,
-                  avionics, and non-destructive testing services to general
-                  aviation, corporate, and commercial operators across the
-                  Northern Plains. Operating under Certificate No. RWSR491E, the
-                  station is authorized for a complete range of maintenance,
-                  repair, and alteration work.
+                  station at KFSD in Sioux Falls, providing full-spectrum
+                  airframe, powerplant, avionics, and non-destructive testing
+                  services to general aviation, corporate, and commercial
+                  operators across the Northern Plains. Operating under
+                  Certificate No. RWSR491E, the station is authorized for a
+                  complete range of maintenance, repair, and alteration work.
                 </p>
                 <p>
                   Under the direction of John Halsted &mdash; with more than 40
@@ -224,23 +225,32 @@ export default function Home() {
           {/* RIGHT RAIL ------------------------------------------------ */}
           <div>
             <Specimen variant="flat" as="aside" className="laser-rail-promo">
-              <a className="laser-rail-promo__link" href="/services/fiber-laser-fabrication">
+              <div className="laser-rail-promo__link">
                 <span className="bs-kicker">New shop capability</span>
                 <video
                   className="laser-rail-promo__media"
-                  autoPlay
                   muted
-                  loop
+                  controls
                   playsInline
-                  preload="metadata"
+                  preload="none"
                   poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg"
                   aria-label="RWAS fiber laser fabrication video"
                 >
-                  <source src="/videos/fabrication/rwas-laser-steel-16x9-20260626.mp4" type="video/mp4" />
+                  <source
+                    src="/videos/fabrication/rwas-laser-steel-16x9-20260626.mp4"
+                    type="video/mp4"
+                  />
                 </video>
-                <span className="laser-rail-promo__title">The fiber laser has landed.</span>
-                <span className="laser-rail-promo__copy">Cutting, welding, marking, and fabrication support in-house.</span>
-              </a>
+                <a
+                  className="laser-rail-promo__title"
+                  href="/services/fiber-laser-fabrication"
+                >
+                  The fiber laser has landed.
+                </a>
+                <span className="laser-rail-promo__copy">
+                  Cutting, welding, marking, and fabrication support in-house.
+                </span>
+              </div>
             </Specimen>
 
             {/* Blog articles feed (hydrated client-side) */}

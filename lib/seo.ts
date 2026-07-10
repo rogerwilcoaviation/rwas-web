@@ -14,6 +14,9 @@ export function stripHtml(input = '') {
 export function compactText(input = '') {
   return stripHtml(input)
     .replace(/Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi, '')
+    .replace(/(\S)(?=Garmin part number\b)/gi, '$1 ')
+    .replace(/(\S)(?=This is a dealer-only\b)/gi, '$1 ')
+    .replace(/([.!?])(?=[A-Z])/g, '$1 ')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -44,17 +47,17 @@ export function collectionMetaDescription(collection: {
   const handle = collection.handle || '';
   if (handle.includes('papa-alpha')) {
     return truncateMeta(
-      'Shop RWAS-built Papa-Alpha rigging tools for Piper PA-28, PA-30, PA-31, and PA-36 aircraft. Precision reference tools ship from the Northern Plains.',
+      'Shop RWAS-built Papa-Alpha rigging tools for Piper PA-28, PA-30, PA-31, and PA-36 aircraft. Precision reference tools ship from Sioux Falls, SD.',
     );
   }
   if (handle.includes('garmin')) {
     return truncateMeta(
-      `Browse ${title} from Roger Wilco Aviation Services, an authorized Garmin dealer and FAA Part 145 repair station in the Northern Plains.`,
+      `Browse ${title} from Roger Wilco Aviation Services, an authorized Garmin dealer and FAA Part 145 repair station at KFSD in Sioux Falls.`,
     );
   }
   if (handle.includes('sale')) {
     return truncateMeta(
-      'Browse current RWAS sale items, Garmin pilot gear, avionics accessories, and shop-supported aviation products from the Northern Plains.',
+      'Browse current RWAS sale items, Garmin pilot gear, avionics accessories, and shop-supported aviation products from Sioux Falls, South Dakota.',
     );
   }
   return truncateMeta(
@@ -79,25 +82,36 @@ export function productMetaDescription(product: {
   const normalizedTitle = title.toLowerCase();
   const normalizedDescription = description.toLowerCase();
   const modelMismatch =
-    normalizedTitle.includes('gea 110') && normalizedDescription.includes('gea™ 24');
+    normalizedTitle.includes('gea 110') &&
+    normalizedDescription.includes('gea™ 24');
 
-  if (!isThinMeta(description) && !modelMismatch) return truncateMeta(description);
+  if (!isThinMeta(description) && !modelMismatch)
+    return truncateMeta(description);
 
   return truncateMeta(
-    `${title} from ${vendor}, available through RWAS in the Northern Plains. ${type} support from an FAA Part 145 repair station and authorized Garmin dealer.${skuText}`,
+    `${title} from ${vendor}, available through RWAS at KFSD in Sioux Falls. ${type} support from an FAA Part 145 repair station and authorized Garmin dealer.${skuText}`,
   );
 }
 
-export function productSeoTitle(title: string, productType?: string | null) {
+export function productSeoTitle(
+  title: string,
+  productType?: string | null,
+  identifier?: string | null,
+) {
   const clean = compactText(title);
   const suffix = ' | RWAS';
+  const cleanIdentifier = compactText(identifier || '');
+  const identifierSuffix = cleanIdentifier ? ` — ${cleanIdentifier}` : '';
   const typedTitle =
-    clean.length < 20 && productType ? `${clean} ${compactText(productType)}` : clean;
-  const max = 60 - suffix.length;
-  if (typedTitle.length <= max) return `${typedTitle}${suffix}`;
+    clean.length < 20 && productType
+      ? `${clean} ${compactText(productType)}`
+      : clean;
+  const max = 60 - suffix.length - identifierSuffix.length;
+  if (typedTitle.length <= max)
+    return `${typedTitle}${identifierSuffix}${suffix}`;
   const clipped = typedTitle.slice(0, max - 1);
   const lastSpace = clipped.lastIndexOf(' ');
-  return `${(lastSpace > 28 ? clipped.slice(0, lastSpace) : clipped).trimEnd()}…${suffix}`;
+  return `${(lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped).trimEnd()}…${identifierSuffix}${suffix}`;
 }
 
 export function collectionSeoTitle(title: string) {

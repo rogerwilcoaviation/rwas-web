@@ -24,6 +24,7 @@ import {
   BroadsheetFooter,
   Specimen,
 } from '@/components/shared/broadsheet';
+import { truncateMeta } from '@/lib/seo';
 import { PhotoCarousel } from './photo-carousel';
 
 export const revalidate = 60;
@@ -50,7 +51,10 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
       listings?: Array<{ id?: string; status?: string }>;
     };
     return (data.listings || [])
-      .filter((l) => l.id && (!l.status || l.status === 'active' || l.status === 'sold'))
+      .filter(
+        (l) =>
+          l.id && (!l.status || l.status === 'active' || l.status === 'sold'),
+      )
       .map((l) => ({ id: l.id as string }));
   } catch {
     return [];
@@ -154,17 +158,25 @@ export async function generateMetadata({
     };
   }
   const sold = l.status === 'sold';
-  const title = `${sold ? 'SOLD — ' : ''}${headline(l)} — ${priceLabel(l)} — RWAS`;
-  const description =
-    (l.description && l.description.slice(0, 160)) ||
-    `${headline(l)} for sale at Roger Wilco Aviation Services, the Northern Plains. Tail ${l.nNumber || 'n/a'}.`;
+  const titleSuffix = ' | RWAS';
+  const titleBase = `${sold ? 'SOLD — ' : ''}${headline(l)} — ${priceLabel(l)}`;
+  const titleLimit = 60 - titleSuffix.length;
+  const title = `${
+    titleBase.length <= titleLimit
+      ? titleBase
+      : `${titleBase.slice(0, titleLimit - 1).trimEnd()}…`
+  }${titleSuffix}`;
+  const description = truncateMeta(
+    l.description ||
+      `${headline(l)} listed by Roger Wilco Aviation Services at KFSD in Sioux Falls. Tail ${l.nNumber || 'n/a'}.`,
+  );
   const url = `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(l.id)}`;
   const firstPhoto = (l.photos || [])[0];
   const imageUrl = firstPhoto
     ? `https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(firstPhoto.key)}?w=1600&q=82`
     : AIRCRAFT_LISTING_FALLBACK_IMAGE;
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: { canonical: url },
     openGraph: {
@@ -209,8 +221,14 @@ export default async function AircraftDetailPage({ params }: PageProps) {
     { name: 'Make', value: listing.make },
     { name: 'Model', value: listing.model },
     { name: 'Serial number', value: listing.serialNumber },
-    { name: 'Airframe total time', value: listing.totalTime ? `${listing.totalTime} hours` : undefined },
-    { name: 'Engine time', value: listing.engineTime ? `${listing.engineTime} hours` : undefined },
+    {
+      name: 'Airframe total time',
+      value: listing.totalTime ? `${listing.totalTime} hours` : undefined,
+    },
+    {
+      name: 'Engine time',
+      value: listing.engineTime ? `${listing.engineTime} hours` : undefined,
+    },
     { name: 'Engine model', value: listing.engineModel },
   ].filter((property) => property.value);
   const productJsonLd: Record<string, unknown> = {
@@ -229,8 +247,11 @@ export default async function AircraftDetailPage({ params }: PageProps) {
       value: property.value,
     })),
   };
-  if (listing.make) productJsonLd.brand = { '@type': 'Brand', name: listing.make };
-  productJsonLd.image = photoUrls.length ? photoUrls : [AIRCRAFT_LISTING_FALLBACK_IMAGE];
+  if (listing.make)
+    productJsonLd.brand = { '@type': 'Brand', name: listing.make };
+  productJsonLd.image = photoUrls.length
+    ? photoUrls
+    : [AIRCRAFT_LISTING_FALLBACK_IMAGE];
   if (listing.price && Number(listing.price) > 0) {
     productJsonLd.offers = {
       '@type': 'Offer',
@@ -241,15 +262,28 @@ export default async function AircraftDetailPage({ params }: PageProps) {
           ? 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',
       url: canonicalUrl,
-      seller: { '@type': 'Organization', name: 'Roger Wilco Aviation Services' },
+      seller: {
+        '@type': 'Organization',
+        name: 'Roger Wilco Aviation Services',
+      },
     };
   }
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
-      { '@type': 'ListItem', position: 2, name: 'Aircraft for Sale', item: 'https://www.rogerwilcoaviation.com/aircraft-for-sale' },
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.rogerwilcoaviation.com/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Aircraft for Sale',
+        item: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+      },
       { '@type': 'ListItem', position: 3, name: h, item: canonicalUrl },
     ],
   };
@@ -277,14 +311,19 @@ export default async function AircraftDetailPage({ params }: PageProps) {
     { label: 'Location', value: listing.sellerLocation },
   ];
   const specs = SPECS.filter(
-    (s) => s.value !== undefined && s.value !== null && String(s.value).trim() !== '',
+    (s) =>
+      s.value !== undefined &&
+      s.value !== null &&
+      String(s.value).trim() !== '',
   );
 
   return (
     <BroadsheetLayout>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify([productJsonLd, breadcrumbJsonLd]) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([productJsonLd, breadcrumbJsonLd]),
+        }}
       />
       <style>{`
         .a4s-back {
@@ -513,14 +552,25 @@ export default async function AircraftDetailPage({ params }: PageProps) {
               <PhotoCarousel photoUrls={photoUrls} alt={h} />
             </div>
             <div className="a4s-detail-summary">
-              {isSold ? <div className="a4s-sold-note">Sold - this aircraft has sold</div> : null}
+              {isSold ? (
+                <div className="a4s-sold-note">
+                  Sold - this aircraft has sold
+                </div>
+              ) : null}
               <div className="a4s-detail-subtitle">
-                {listing.nNumber ? `Tail ${listing.nNumber}` : 'Aircraft listing'}
+                {listing.nNumber
+                  ? `Tail ${listing.nNumber}`
+                  : 'Aircraft listing'}
               </div>
-              <h1 className="bs-headline bs-headline--section" style={{ margin: '0 0 6px' }}>
+              <h1
+                className="bs-headline bs-headline--section"
+                style={{ margin: '0 0 6px' }}
+              >
                 {h}
               </h1>
-              <div className="a4s-detail-price">{isSold ? 'Sold' : priceStr}</div>
+              <div className="a4s-detail-price">
+                {isSold ? 'Sold' : priceStr}
+              </div>
               {listing.sellerLocation ? (
                 <div className="a4s-detail-location">
                   Located in {listing.sellerLocation}
@@ -598,10 +648,26 @@ export default async function AircraftDetailPage({ params }: PageProps) {
             label: string;
             files: Array<{ key: string; name?: string; size?: number }>;
           }> = [
-            { key: 'airframe', label: 'Airframe Logbook', files: lb.airframe || [] },
-            { key: 'powerplant', label: 'Engine Logbook', files: lb.powerplant || [] },
-            { key: 'propeller', label: 'Propeller Logbook', files: lb.propeller || [] },
-            { key: 'adSbCompliance', label: 'AD / SB Compliance', files: lb.adSbCompliance || [] },
+            {
+              key: 'airframe',
+              label: 'Airframe Logbook',
+              files: lb.airframe || [],
+            },
+            {
+              key: 'powerplant',
+              label: 'Engine Logbook',
+              files: lb.powerplant || [],
+            },
+            {
+              key: 'propeller',
+              label: 'Propeller Logbook',
+              files: lb.propeller || [],
+            },
+            {
+              key: 'adSbCompliance',
+              label: 'AD / SB Compliance',
+              files: lb.adSbCompliance || [],
+            },
             { key: 'misc', label: 'Other Documents', files: lb.misc || [] },
           ].filter((s) => s.files.length > 0);
           if (!sections.length) return null;
@@ -682,7 +748,9 @@ export default async function AircraftDetailPage({ params }: PageProps) {
               <>
                 <dt>Phone</dt>
                 <dd>
-                  <a href={`tel:${listing.sellerPhone.replace(/[^0-9+]/g, '')}`}>
+                  <a
+                    href={`tel:${listing.sellerPhone.replace(/[^0-9+]/g, '')}`}
+                  >
                     {listing.sellerPhone}
                   </a>
                 </dd>
@@ -690,7 +758,12 @@ export default async function AircraftDetailPage({ params }: PageProps) {
             ) : null}
           </dl>
           <p className="a4s-seller-disclaimer">
-            RWAS introduces buyers and sellers. We are not the seller of record unless explicitly noted. <a href="/services/pre-buy-inspection">Pre-buy inspection by our FAA Part 145 repair station</a> is available on request &mdash; call (605) 299-8178.
+            RWAS introduces buyers and sellers. We are not the seller of record
+            unless explicitly noted.{' '}
+            <a href="/services/pre-buy-inspection">
+              Pre-buy inspection by our FAA Part 145 repair station
+            </a>{' '}
+            is available on request &mdash; call (605) 299-8178.
           </p>
         </Specimen>
       </main>

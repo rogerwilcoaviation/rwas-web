@@ -9,7 +9,7 @@ import { siteConfig } from '@/data/config/site.settings';
 import { ThemeProviders } from './theme-providers';
 import { Metadata } from 'next';
 import Script from 'next/script';
-import CartFloater from "@/components/shared/CartFloater";
+import CartFloater from '@/components/shared/CartFloater';
 import ClientVisualEffects from './client-visual-effects';
 import DeferredJerryWidget from '@/components/shared/DeferredJerryWidget';
 
@@ -30,7 +30,7 @@ const playfair = Playfair_Display({
   subsets: ['latin'],
   weight: ['700', '900'],
   display: 'optional',
-  preload: false,
+  preload: true,
   variable: '--font-playfair',
 });
 
@@ -80,7 +80,15 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     url: './',
     siteName: siteConfig.title,
-    images: [{ url: siteConfig.socialBanner, width: 800, height: 525, alt: siteConfig.title, type: 'image/jpeg' }],
+    images: [
+      {
+        url: siteConfig.socialBanner,
+        width: 800,
+        height: 525,
+        alt: siteConfig.title,
+        type: 'image/jpeg',
+      },
+    ],
     locale: 'en_US',
     type: 'website',
   },
@@ -91,11 +99,7 @@ export const metadata: Metadata = {
     },
   },
   robots: {
-    index: true,
-    follow: true,
     googleBot: {
-      index: true,
-      follow: true,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
@@ -104,7 +108,14 @@ export const metadata: Metadata = {
   twitter: {
     title: siteConfig.title,
     card: 'summary_large_image',
-    images: [{ url: siteConfig.socialBanner, width: 800, height: 525, alt: siteConfig.title }],
+    images: [
+      {
+        url: siteConfig.socialBanner,
+        width: 800,
+        height: 525,
+        alt: siteConfig.title,
+      },
+    ],
   },
 };
 
@@ -163,7 +174,7 @@ export default function RootLayout({
           content="#000"
         />
         <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
-        {/* Schema.org Organization without a public physical address. */}
+        {/* Schema.org Organization with the canonical public shop location. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -179,10 +190,18 @@ export default function RootLayout({
                   logo: `${siteConfig.siteUrl}/newspaper/images/logo.png`,
                   image: `${siteConfig.siteUrl}/newspaper/images/r182_panel.jpg`,
                   description:
-                    'FAA Part 145 Repair Station (Certificate RWSR491E) in the Northern Plains. Certified Garmin dealer specializing in G3X Touch, GFC 500, GTN navigators, annual inspections, NDT, sheet metal fabrication, and Papa-Alpha Piper rigging tools.',
+                    'FAA Part 145 Repair Station (Certificate RWSR491E) at KFSD in Sioux Falls, South Dakota. Certified Garmin dealer specializing in G3X Touch, GFC 500, GTN navigators, annual inspections, NDT, sheet metal fabrication, and Papa-Alpha Piper rigging tools.',
                   telephone: '+1-605-299-8178',
                   email: 'avionics@rwas.team',
                   priceRange: '$$',
+                  address: {
+                    '@type': 'PostalAddress',
+                    streetAddress: 'Hangar 3, 3701 N. Aviation Avenue',
+                    addressLocality: 'Sioux Falls',
+                    addressRegion: 'SD',
+                    postalCode: '57104',
+                    addressCountry: 'US',
+                  },
                   openingHoursSpecification: [
                     {
                       '@type': 'OpeningHoursSpecification',
@@ -193,7 +212,7 @@ export default function RootLayout({
                         'Thursday',
                         'Friday',
                       ],
-                      opens: '08:00',
+                      opens: '07:00',
                       closes: '17:00',
                     },
                   ],
@@ -248,16 +267,19 @@ export default function RootLayout({
 
       <body className="flex flex-col text-black antialiased dark:bg-gray-950 dark:text-white min-h-screen bs-body-cream">
         <DeferredJerryWidget />
-        <Script src="/rwas-analytics.js?v=20260607-track" strategy="afterInteractive" />
+        <Script
+          src="/rwas-analytics.js?v=20260607-track"
+          strategy="afterInteractive"
+        />
         <CartFloater />
         <ThemeProviders>
           <AnalyticsWrapper />
 
           <div className="w-full flex flex-col justify-between items-center font-sans">
             <ClientVisualEffects />
-              <main className="w-full flex flex-col items-stretch mb-auto">
-                {children}
-              </main>
+            <main className="w-full flex flex-col items-stretch mb-auto">
+              {children}
+            </main>
           </div>
         </ThemeProviders>
       </body>
