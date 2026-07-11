@@ -32,7 +32,7 @@ export default function CredentialsBar({
   return (
     <div className="bs-credentials">
       <div className="bs-credentials__inner">
-        <span>{certText}</span>
+        <span className="bs-credentials__cert">{certText}</span>
         <span className="bs-credentials__pip" aria-hidden="true"></span>
         <span className="bs-dealer-plate">
           <span className="bs-dealer-plate__label">{dealerLabel}</span>
@@ -48,10 +48,16 @@ export default function CredentialsBar({
           </span>
           <span className="bs-dealer-plate__label">{dealerTrail}</span>
         </span>
-        <span className="bs-credentials__pip" aria-hidden="true"></span>
-        <span>{membership1}</span>
-        <span className="bs-credentials__pip" aria-hidden="true"></span>
-        <span>{membership2}</span>
+        <span
+          className="bs-credentials__pip bs-credentials__membership"
+          aria-hidden="true"
+        ></span>
+        <span className="bs-credentials__membership">{membership1}</span>
+        <span
+          className="bs-credentials__pip bs-credentials__membership"
+          aria-hidden="true"
+        ></span>
+        <span className="bs-credentials__membership">{membership2}</span>
       </div>
     </div>
   );

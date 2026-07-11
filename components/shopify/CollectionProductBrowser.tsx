@@ -2,7 +2,11 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { isShopifyPlaceholderImage, productImageAlt, productImageUrl } from '@/lib/product-image';
+import {
+  isShopifyPlaceholderImage,
+  productImageAlt,
+  productImageUrl,
+} from '@/lib/product-image';
 
 type CollectionBrowserImage = {
   url: string;
@@ -32,7 +36,9 @@ const INITIAL_PRODUCT_LIMIT = 24;
 const PRODUCT_PAGE_SIZE = 24;
 
 function tagValue(tags: string[] | undefined, prefix: string) {
-  return tags?.find((tag) => tag.startsWith(prefix))?.slice(prefix.length) || '';
+  return (
+    tags?.find((tag) => tag.startsWith(prefix))?.slice(prefix.length) || ''
+  );
 }
 
 function labelFromSlug(value: string) {
@@ -61,13 +67,18 @@ function labelFromSlug(value: string) {
   return value
     .split('-')
     .filter(Boolean)
-    .map((part) => special[part] || part.charAt(0).toUpperCase() + part.slice(1))
+    .map(
+      (part) => special[part] || part.charAt(0).toUpperCase() + part.slice(1),
+    )
     .join(' ')
     .replace(/\bADS B\b/g, 'ADS-B');
 }
 
 function normalize(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
 }
 
 function formatPrice(amount: string, currencyCode: string) {
@@ -91,14 +102,15 @@ function productFamily(product: CollectionBrowserProduct) {
 function purchaseMode(product: CollectionBrowserProduct, quoteOnly: boolean) {
   const tags = product.tags?.map((tag) => tag.toLowerCase()) || [];
   const price = Number(product.priceRange.minVariantPrice.amount || '0');
-  if (quoteOnly || tags.includes('garmin-dealer-only') || price <= 0) return 'quote-request';
+  if (quoteOnly || tags.includes('garmin-dealer-only') || price <= 0)
+    return 'quote-request';
   if (tags.includes('otc-eligible')) return 'otc-ready';
   return 'shopify-product';
 }
 
 function countOptions(
   products: CollectionBrowserProduct[],
-  getValue: (product: CollectionBrowserProduct) => string
+  getValue: (product: CollectionBrowserProduct) => string,
 ) {
   const counts = new Map<string, number>();
   for (const product of products) {
@@ -134,7 +146,9 @@ function FilterButton({
       ].join(' ')}
     >
       <span className="font-semibold">{label}</span>
-      <span className={active ? 'text-[#f5f3ef]/70' : 'text-black/45'}>{count}</span>
+      <span className={active ? 'text-[#f5f3ef]/70' : 'text-black/45'}>
+        {count}
+      </span>
     </button>
   );
 }
@@ -150,29 +164,48 @@ function ProductTile({
 }) {
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
-    product.priceRange.minVariantPrice.currencyCode
+    product.priceRange.minVariantPrice.currencyCode,
   );
   const mode = purchaseMode(product, quoteOnly);
   const badge =
     mode === 'quote-request'
       ? 'Quote-request item'
       : mode === 'otc-ready'
-      ? 'OTC-ready item'
-      : 'Shopify product';
+        ? 'OTC-ready item'
+        : 'Shopify product';
   const displayImage =
-    product.images?.find((image) => !isShopifyPlaceholderImage(image.url, image.altText)) ??
-    product.variants?.map((variant) => variant.image).find((image) => image?.url && !isShopifyPlaceholderImage(image.url, image.altText)) ??
+    product.images?.find(
+      (image) => !isShopifyPlaceholderImage(image.url, image.altText),
+    ) ??
+    product.variants
+      ?.map((variant) => variant.image)
+      .find(
+        (image) =>
+          image?.url && !isShopifyPlaceholderImage(image.url, image.altText),
+      ) ??
     product.featuredImage;
 
   return (
     <article className="overflow-hidden rounded-[1.25rem] border border-black/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-      <Link href={`/products/${encodeURIComponent(product.handle)}`} className="group block">
+      <Link
+        href={`/products/${encodeURIComponent(product.handle)}`}
+        className="group block"
+      >
         <div className="relative aspect-[4/3] bg-[#f5f3ef]">
           {displayImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={productImageUrl(displayImage.url, 600, displayImage.altText || product.title, product.handle)}
-              alt={productImageAlt(displayImage.url, displayImage.altText, product.title)}
+              src={productImageUrl(
+                displayImage.url,
+                600,
+                displayImage.altText || product.title,
+                product.handle,
+              )}
+              alt={productImageAlt(
+                displayImage.url,
+                displayImage.altText,
+                product.title,
+              )}
               loading={eager ? 'eager' : 'lazy'}
               fetchPriority={eager ? 'high' : 'low'}
               decoding="async"
@@ -182,7 +215,7 @@ function ProductTile({
         </div>
       </Link>
       <div className="space-y-3 p-5">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary-700">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary-900">
           {badge}
         </p>
         <h3 className="line-clamp-3 text-lg font-bold leading-snug text-[#111111]">
@@ -228,25 +261,34 @@ export default function CollectionProductBrowser({
     () =>
       products.map((product) => ({
         product,
-        search: normalize([
-          product.title,
-          product.handle,
-          product.vendor,
-          product.productType,
-          productSubcategory(product),
-          productFamily(product),
-        ].filter(Boolean).join(' ')),
+        search: normalize(
+          [
+            product.title,
+            product.handle,
+            product.vendor,
+            product.productType,
+            productSubcategory(product),
+            productFamily(product),
+          ]
+            .filter(Boolean)
+            .join(' '),
+        ),
       })),
-    [products]
+    [products],
   );
 
   const filtered = useMemo(() => {
     const terms = normalize(query).split(/\s+/).filter(Boolean);
     return indexed
       .filter(({ product, search }) => {
-        if (subcategory !== 'all' && productSubcategory(product) !== subcategory) return false;
+        if (
+          subcategory !== 'all' &&
+          productSubcategory(product) !== subcategory
+        )
+          return false;
         if (family !== 'all' && productFamily(product) !== family) return false;
-        if (purchase !== 'all' && purchaseMode(product, quoteOnly) !== purchase) return false;
+        if (purchase !== 'all' && purchaseMode(product, quoteOnly) !== purchase)
+          return false;
         return terms.every((term) => search.includes(term));
       })
       .map(({ product }) => product);
@@ -267,20 +309,29 @@ export default function CollectionProductBrowser({
       {
         key: 'purchase' as const,
         title: 'Purchase Type',
-        options: countOptions(products, (product) => purchaseMode(product, quoteOnly)),
+        options: countOptions(products, (product) =>
+          purchaseMode(product, quoteOnly),
+        ),
       },
     ],
-    [products, quoteOnly]
+    [products, quoteOnly],
   );
 
-  const activeByKey: Record<FilterKey, string> = { subcategory, family, purchase };
+  const activeByKey: Record<FilterKey, string> = {
+    subcategory,
+    family,
+    purchase,
+  };
   const setByKey: Record<FilterKey, (value: string) => void> = {
     subcategory: setSubcategory,
     family: setFamily,
     purchase: setPurchase,
   };
   const hasActiveFilters =
-    subcategory !== 'all' || family !== 'all' || purchase !== 'all' || query.trim().length > 0;
+    subcategory !== 'all' ||
+    family !== 'all' ||
+    purchase !== 'all' ||
+    query.trim().length > 0;
   const visibleProducts = filtered.slice(0, visibleLimit);
   const hasMoreProducts = visibleLimit < filtered.length;
 
@@ -292,7 +343,8 @@ export default function CollectionProductBrowser({
           {collectionTitle}
         </h2>
         <p className="mt-3 text-sm leading-6 text-black/60">
-          {filtered.length.toLocaleString()} of {products.length.toLocaleString()} products shown.
+          {filtered.length.toLocaleString()} of{' '}
+          {products.length.toLocaleString()} products shown.
         </p>
       </div>
       <label className="block">
@@ -364,7 +416,8 @@ export default function CollectionProductBrowser({
         <section aria-label={`${collectionTitle} products`}>
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <p className="bs-body" style={{ margin: 0 }}>
-              Showing {visibleProducts.length.toLocaleString()} of {filtered.length.toLocaleString()} products
+              Showing {visibleProducts.length.toLocaleString()} of{' '}
+              {filtered.length.toLocaleString()} products
             </p>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/45">
               {collectionHandle}
@@ -386,7 +439,9 @@ export default function CollectionProductBrowser({
                 <div className="mt-8 flex justify-center">
                   <button
                     type="button"
-                    onClick={() => setVisibleLimit((limit) => limit + PRODUCT_PAGE_SIZE)}
+                    onClick={() =>
+                      setVisibleLimit((limit) => limit + PRODUCT_PAGE_SIZE)
+                    }
                     className="inline-flex items-center justify-center rounded-md border border-[#111111] bg-white px-5 py-3 text-sm font-semibold text-[#111111] transition hover:bg-[#f5f3ef]"
                   >
                     Load more products

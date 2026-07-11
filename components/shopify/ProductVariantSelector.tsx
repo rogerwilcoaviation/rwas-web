@@ -1,6 +1,10 @@
 'use client';
 
-import { ShopifyProductDetail, ShopifyVariant, isQuoteProduct } from '@/lib/shopify';
+import {
+  ShopifyProductDetail,
+  ShopifyVariant,
+  isQuoteProduct,
+} from '@/lib/shopify';
 import { useMemo, useState } from 'react';
 import AddToCartButton from './AddToCartButton';
 import QuoteRequestForm from './QuoteRequestForm';
@@ -13,22 +17,33 @@ function formatPrice(amount: string, currencyCode: string) {
   }).format(Number(amount));
 }
 
-export default function ProductVariantSelector({ product }: { product: ShopifyProductDetail }) {
-  const [selectedVariantId, setSelectedVariantId] = useState(product.variants[0]?.id);
+export default function ProductVariantSelector({
+  product,
+}: {
+  product: ShopifyProductDetail;
+}) {
+  const [selectedVariantId, setSelectedVariantId] = useState(
+    product.variants[0]?.id,
+  );
 
   const selectedVariant = useMemo(
-    () => product.variants.find((variant) => variant.id === selectedVariantId) || product.variants[0],
-    [product.variants, selectedVariantId]
+    () =>
+      product.variants.find((variant) => variant.id === selectedVariantId) ||
+      product.variants[0],
+    [product.variants, selectedVariantId],
   );
 
   if (!selectedVariant) return null;
 
-  const quoteOnly = isQuoteProduct({ variants: [selectedVariant], productType: product.productType });
+  const quoteOnly = isQuoteProduct({
+    variants: [selectedVariant],
+    productType: product.productType,
+  });
 
   return (
     <div className="space-y-6 rounded-[1.5rem] border border-black/10 bg-white p-6 shadow-sm">
       <div>
-        <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-700">
+        <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-900">
           Variant options
         </p>
         <div className="mt-4 space-y-3">
@@ -47,7 +62,9 @@ export default function ProductVariantSelector({ product }: { product: ShopifyPr
               >
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <p className="font-semibold text-[#111111]">{variant.title}</p>
+                    <p className="font-semibold text-[#111111]">
+                      {variant.title}
+                    </p>
                     <p className="mt-1 text-sm text-black/60">
                       {variant.selectedOptions
                         .filter((option) => option.name !== 'Title')
@@ -57,7 +74,10 @@ export default function ProductVariantSelector({ product }: { product: ShopifyPr
                   </div>
                   <div className="text-right">
                     <p className="font-semibold text-[#111111]">
-                      {formatPrice(variant.price.amount, variant.price.currencyCode)}
+                      {formatPrice(
+                        variant.price.amount,
+                        variant.price.currencyCode,
+                      )}
                     </p>
                     <p className="mt-1 text-xs uppercase tracking-[0.2em] text-black/50">
                       {variant.availableForSale ? 'Available' : 'Unavailable'}
@@ -73,13 +93,20 @@ export default function ProductVariantSelector({ product }: { product: ShopifyPr
       <div className="rounded-2xl border border-black/10 bg-[#f5f3ef] p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-black/50">Selected SKU</p>
-            <p className="text-lg font-semibold text-[#111111]">{selectedVariant.sku || 'Not listed'}</p>
+            <p className="text-sm uppercase tracking-[0.2em] text-black/50">
+              Selected SKU
+            </p>
+            <p className="text-lg font-semibold text-[#111111]">
+              {selectedVariant.sku || 'Not listed'}
+            </p>
           </div>
           <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-black/50">Inventory</p>
+            <p className="text-sm uppercase tracking-[0.2em] text-black/50">
+              Inventory
+            </p>
             <p className="text-lg font-semibold text-[#111111]">
-              {selectedVariant.quantityAvailable && selectedVariant.quantityAvailable > 0
+              {selectedVariant.quantityAvailable &&
+              selectedVariant.quantityAvailable > 0
                 ? `${selectedVariant.quantityAvailable} available`
                 : selectedVariant.availableForSale
                   ? 'Available to order'
@@ -90,9 +117,15 @@ export default function ProductVariantSelector({ product }: { product: ShopifyPr
       </div>
 
       {quoteOnly ? (
-        <QuoteRequestForm productTitle={product.title} sku={selectedVariant.sku} />
+        <QuoteRequestForm
+          productTitle={product.title}
+          sku={selectedVariant.sku}
+        />
       ) : (
-        <AddToCartButton merchandiseId={selectedVariant.id} disabled={!selectedVariant.availableForSale} />
+        <AddToCartButton
+          merchandiseId={selectedVariant.id}
+          disabled={!selectedVariant.availableForSale}
+        />
       )}
     </div>
   );

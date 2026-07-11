@@ -21,28 +21,28 @@
 
 :root {
   /* ─────────────────────────── Ink ramp (the dark surface — never navy) */
-  --ink-900: #0F1418;   /* primary text, strong borders, specimen hard shadow */
-  --ink-800: #1A2128;   /* secondary text, footer surface */
-  --ink-700: #2A333C;   /* = --rule; hairline borders, tertiary text */
-  --ink-600: #3F4A55;   /* quiet labels */
-  --ink-500: #5C6873;   /* faintest ink */
+  --ink-900: #0f1418; /* primary text, strong borders, specimen hard shadow */
+  --ink-800: #1a2128; /* secondary text, footer surface */
+  --ink-700: #2a333c; /* = --rule; hairline borders, tertiary text */
+  --ink-600: #3f4a55; /* quiet labels */
+  --ink-500: #5c6873; /* faintest ink */
 
   /* ─────────────────────────── Gold ramp (never on ink except --gold-light) */
-  --gold-900: #5C4416;
-  --gold-800: #7A5A1E;  /* section kickers, accent text on light grounds */
-  --gold-700: #9E7826;  /* rules, double-rules, CTA fill, pips */
-  --gold-600: #C19A3F;  /* CTA hover */
-  --gold-500: #D4B86A;
-  --gold-light: #E6CF8F; /* only gold permitted on --ink-900 surfaces */
+  --gold-900: #5c4416;
+  --gold-800: #7a5a1e; /* section kickers, accent text on light grounds */
+  --gold-700: #9e7826; /* rules, double-rules, CTA fill, pips */
+  --gold-600: #c19a3f; /* CTA hover */
+  --gold-500: #d4b86a;
+  --gold-light: #e6cf8f; /* only gold permitted on --ink-900 surfaces */
 
   /* ─────────────────────────── Grounds */
-  --cream:     #F4EFE3;  /* page body background — mid cream */
-  --bone:      #FBF7EC;  /* Specimen card fill, masthead fill, trust strip cells */
-  --parchment: #EFE7D2;  /* callout blocks, OTC-style notice backgrounds */
+  --cream: #f4efe3; /* page body background — mid cream */
+  --bone: #fbf7ec; /* Specimen card fill, masthead fill, trust strip cells */
+  --parchment: #efe7d2; /* callout blocks, OTC-style notice backgrounds */
 
   /* ─────────────────────────── Rules */
-  --rule:      #2A333C;  /* = ink-700; Specimen borders, primary hairlines */
-  --rule-soft: #C8BFA8;  /* column rules, dashed separators, byline divisions */
+  --rule: #2a333c; /* = ink-700; Specimen borders, primary hairlines */
+  --rule-soft: #c8bfa8; /* column rules, dashed separators, byline divisions */
 
   /* ─────────────────────────── Specimen card (the 3D lift) */
   --specimen-bg: var(--bone);
@@ -52,29 +52,29 @@
   --specimen-pad-flat: 18px 20px;
 
   /* ─────────────────────────── Typography stack tokens */
-  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
-  --font-body:    var(--font-source-serif), "Source Serif 4", Georgia, serif;
-  --font-ui:      var(--font-inter), "Inter", system-ui, -apple-system, sans-serif;
-  --font-script:  var(--font-caveat), "Caveat", cursive;
+  --font-display: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  --font-body: var(--font-source-serif), 'Source Serif 4', Georgia, serif;
+  --font-ui: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
+  --font-script: var(--font-source-serif), 'Source Serif 4', Georgia, serif;
 
   /* ─────────────────────────── Type scale (sampled from D2 PDP) */
-  --fs-brand:       40px;   /* masthead brand (Playfair 900) */
-  --fs-hero:        34px;   /* product/page hero headline */
-  --fs-headline:    22px;   /* section headline */
-  --fs-subhead:     18px;   /* subheads, captions */
-  --fs-body:        15px;   /* body copy */
-  --fs-small:       13px;   /* disclaimers, micro copy */
-  --fs-label:       12px;   /* uppercase UI labels, CTAs */
-  --fs-micro:       11px;   /* credentials, timestamps */
+  --fs-brand: 40px; /* masthead brand (Playfair 900) */
+  --fs-hero: 34px; /* product/page hero headline */
+  --fs-headline: 22px; /* section headline */
+  --fs-subhead: 18px; /* subheads, captions */
+  --fs-body: 15px; /* body copy */
+  --fs-small: 13px; /* disclaimers, micro copy */
+  --fs-label: 12px; /* uppercase UI labels, CTAs */
+  --fs-micro: 11px; /* credentials, timestamps */
 
   /* UI tracking (Inter is used with wide letterspacing for label/kicker work) */
-  --tracking-ui:    .22em;
-  --tracking-kicker: .18em;
+  --tracking-ui: 0.22em;
+  --tracking-kicker: 0.18em;
 
   /* ─────────────────────────── Borders & hairlines */
-  --hairline:      1px solid var(--rule);
+  --hairline: 1px solid var(--rule);
   --hairline-soft: 1px solid var(--rule-soft);
-  --rule-double:   6px double var(--gold-700);
+  --rule-double: 6px double var(--gold-700);
   --rule-top-accent: 2px solid var(--gold-700);
 
   /* ─────────────────────────── Spacing scale */
@@ -87,7 +87,7 @@
   --space-7: 48px;
 
   /* ─────────────────────────── Watermark opacity */
-  --watermark-opacity: .25;
+  --watermark-opacity: 0.25;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -114,10 +114,11 @@
 }
 
 .broadsheet::before {
-  content: "";
+  content: '';
   position: fixed;
   inset: 0;
-  background: url('/newspaper/images/enr_h05.webp') center center / cover no-repeat;
+  background: url('/newspaper/images/enr_h05.webp') center center / cover
+    no-repeat;
   opacity: var(--watermark-opacity);
   z-index: 0;
   pointer-events: none;
@@ -207,8 +208,13 @@
   color: var(--ink-900);
   line-height: 1.1;
 }
-.bs-headline--hero    { font-size: var(--fs-hero); font-weight: 900; }
-.bs-headline--section { font-size: var(--fs-headline); }
+.bs-headline--hero {
+  font-size: var(--fs-hero);
+  font-weight: 900;
+}
+.bs-headline--section {
+  font-size: var(--fs-headline);
+}
 
 /* Body copy */
 .bs-body {
@@ -246,7 +252,9 @@
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: background .15s, color .15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 .bs-cta-primary:hover {
   background: var(--gold-800);
@@ -267,7 +275,9 @@
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: background .15s, color .15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 .bs-cta-secondary:hover {
   background: var(--ink-900);
@@ -509,52 +519,79 @@
 
 .weather-snow--near {
   background-image:
-    radial-gradient(circle, rgba(255,255,255,.95) 0 1.8px, transparent 2.4px),
-    radial-gradient(circle, rgba(255,255,255,.85) 0 1.2px, transparent 2px),
-    radial-gradient(circle, rgba(255,255,255,.70) 0 2.2px, transparent 3px);
-  background-size: 86px 86px, 132px 132px, 174px 174px;
-  background-position: 0 0, 38px 54px, 90px 20px;
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.95) 0 1.8px,
+      transparent 2.4px
+    ),
+    radial-gradient(circle, rgba(255, 255, 255, 0.85) 0 1.2px, transparent 2px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.7) 0 2.2px, transparent 3px);
+  background-size:
+    86px 86px,
+    132px 132px,
+    174px 174px;
+  background-position:
+    0 0,
+    38px 54px,
+    90px 20px;
   animation: weather-snow-fall-near 18s linear infinite;
-  filter: drop-shadow(0 0 2px rgba(70, 101, 125, .24));
+  filter: drop-shadow(0 0 2px rgba(70, 101, 125, 0.24));
 }
 
 .weather-snow--far {
   background-image:
-    radial-gradient(circle, rgba(255,255,255,.55) 0 1px, transparent 1.8px),
-    radial-gradient(circle, rgba(255,255,255,.45) 0 1.4px, transparent 2.2px);
-  background-size: 64px 64px, 118px 118px;
-  background-position: 18px 12px, 74px 46px;
+    radial-gradient(circle, rgba(255, 255, 255, 0.55) 0 1px, transparent 1.8px),
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.45) 0 1.4px,
+      transparent 2.2px
+    );
+  background-size:
+    64px 64px,
+    118px 118px;
+  background-position:
+    18px 12px,
+    74px 46px;
   animation: weather-snow-fall-far 30s linear infinite;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .weather-rain--near {
   background-image: repeating-linear-gradient(
     105deg,
-    rgba(120,160,190,0) 0 12px,
-    rgba(120,160,190,.32) 12px 13px,
-    rgba(120,160,190,0) 13px 22px
+    rgba(120, 160, 190, 0) 0 12px,
+    rgba(120, 160, 190, 0.32) 12px 13px,
+    rgba(120, 160, 190, 0) 13px 22px
   );
   animation: weather-rain-drive 700ms linear infinite;
-  opacity: .62;
+  opacity: 0.62;
 }
 
 .weather-rain--far {
   background-image: repeating-linear-gradient(
     105deg,
-    rgba(36,79,147,0) 0 18px,
-    rgba(36,79,147,.18) 18px 19px,
-    rgba(36,79,147,0) 19px 32px
+    rgba(36, 79, 147, 0) 0 18px,
+    rgba(36, 79, 147, 0.18) 18px 19px,
+    rgba(36, 79, 147, 0) 19px 32px
   );
   animation: weather-rain-drive 1200ms linear infinite;
-  opacity: .48;
+  opacity: 0.48;
 }
 
 .weather-lightning {
   inset: 0;
   background:
-    radial-gradient(circle at 70% 12%, rgba(255,255,255,.72), transparent 22%),
-    linear-gradient(115deg, transparent 0 47%, rgba(255,255,255,.74) 48% 49%, transparent 51% 100%);
+    radial-gradient(
+      circle at 70% 12%,
+      rgba(255, 255, 255, 0.72),
+      transparent 22%
+    ),
+    linear-gradient(
+      115deg,
+      transparent 0 47%,
+      rgba(255, 255, 255, 0.74) 48% 49%,
+      transparent 51% 100%
+    );
   mix-blend-mode: screen;
   opacity: 0;
   animation: weather-lightning-flash 8s steps(1, end) infinite;
@@ -563,54 +600,101 @@
 .weather-ice--veil {
   inset: 0;
   background:
-    radial-gradient(circle at 18% 14%, rgba(255,255,255,.50), transparent 18%),
-    radial-gradient(circle at 82% 28%, rgba(210,238,247,.38), transparent 20%),
-    linear-gradient(135deg, rgba(255,255,255,.30), rgba(157,178,189,.08));
-  backdrop-filter: saturate(.88) blur(.35px);
-  opacity: .52;
+    radial-gradient(
+      circle at 18% 14%,
+      rgba(255, 255, 255, 0.5),
+      transparent 18%
+    ),
+    radial-gradient(
+      circle at 82% 28%,
+      rgba(210, 238, 247, 0.38),
+      transparent 20%
+    ),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(157, 178, 189, 0.08));
+  backdrop-filter: saturate(0.88) blur(0.35px);
+  opacity: 0.52;
 }
 
 .weather-ice--crystals {
   background-image:
-    linear-gradient(45deg, rgba(255,255,255,.34) 0 1px, transparent 1px 42px),
-    linear-gradient(135deg, rgba(108,166,200,.25) 0 1px, transparent 1px 56px);
-  background-size: 84px 84px, 112px 112px;
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.34) 0 1px,
+      transparent 1px 42px
+    ),
+    linear-gradient(
+      135deg,
+      rgba(108, 166, 200, 0.25) 0 1px,
+      transparent 1px 56px
+    );
+  background-size:
+    84px 84px,
+    112px 112px;
   animation: weather-ice-drift 22s linear infinite;
-  opacity: .44;
+  opacity: 0.44;
 }
 
 @keyframes weather-snow-fall-near {
-  from { transform: translate3d(-1%, -8%, 0); }
-  to { transform: translate3d(8%, 28%, 0); }
+  from {
+    transform: translate3d(-1%, -8%, 0);
+  }
+  to {
+    transform: translate3d(8%, 28%, 0);
+  }
 }
 
 @keyframes weather-snow-fall-far {
-  from { transform: translate3d(3%, -10%, 0); }
-  to { transform: translate3d(-5%, 24%, 0); }
+  from {
+    transform: translate3d(3%, -10%, 0);
+  }
+  to {
+    transform: translate3d(-5%, 24%, 0);
+  }
 }
 
 @keyframes weather-rain-drive {
-  from { transform: translate3d(0, -5%, 0); }
-  to { transform: translate3d(-4%, 7%, 0); }
+  from {
+    transform: translate3d(0, -5%, 0);
+  }
+  to {
+    transform: translate3d(-4%, 7%, 0);
+  }
 }
 
 @keyframes weather-lightning-flash {
-  0%, 92%, 100% { opacity: 0; }
-  93% { opacity: .88; }
-  94% { opacity: .08; }
-  95% { opacity: .72; }
-  96% { opacity: 0; }
+  0%,
+  92%,
+  100% {
+    opacity: 0;
+  }
+  93% {
+    opacity: 0.88;
+  }
+  94% {
+    opacity: 0.08;
+  }
+  95% {
+    opacity: 0.72;
+  }
+  96% {
+    opacity: 0;
+  }
 }
 
 @keyframes weather-ice-drift {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-7%, 5%, 0); }
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-7%, 5%, 0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .weather-effects { display: none; }
+  .weather-effects {
+    display: none;
+  }
 }
-
 
 /* More festive Christmas presentation — still decorative/color-only chrome. */
 .theme-christmas .broadsheet .bs-dateline {
@@ -620,8 +704,16 @@
 
 .theme-christmas .broadsheet .bs-masthead {
   background:
-    linear-gradient(180deg, rgba(255,249,232,.96), rgba(246,238,219,.98)),
-    repeating-linear-gradient(45deg, rgba(200,32,46,.10) 0 12px, rgba(6,32,21,.08) 12px 24px);
+    linear-gradient(
+      180deg,
+      rgba(255, 249, 232, 0.96),
+      rgba(246, 238, 219, 0.98)
+    ),
+    repeating-linear-gradient(
+      45deg,
+      rgba(200, 32, 46, 0.1) 0 12px,
+      rgba(6, 32, 21, 0.08) 12px 24px
+    );
   border-top-color: #c8202e;
   border-bottom-color: #e7b23a;
 }
@@ -665,7 +757,7 @@
 
 .weather-flag--stripes {
   inset: 0;
-  opacity: .105;
+  opacity: 0.105;
   background: repeating-linear-gradient(
     180deg,
     #b31942 0 7.69%,
@@ -679,7 +771,7 @@
   left: 0;
   width: min(44vw, 520px);
   height: min(31vw, 360px);
-  opacity: .16;
+  opacity: 0.16;
   background: #0a3161;
   clip-path: polygon(0 0, 100% 0, 82% 100%, 0 100%);
 }
@@ -689,7 +781,7 @@
   left: 18px;
   width: min(36vw, 430px);
   height: min(24vw, 280px);
-  opacity: .22;
+  opacity: 0.22;
   background-image: radial-gradient(circle, #fff 0 1.3px, transparent 1.8px);
   background-size: 26px 22px;
   transform: skewX(-6deg);
@@ -701,24 +793,52 @@
   border-radius: 999px;
   opacity: 0;
   background:
-    radial-gradient(circle, rgba(255,255,255,.95) 0 2px, transparent 3px),
-    conic-gradient(from 0deg, transparent 0 8deg, rgba(255,255,255,.9) 8deg 10deg, transparent 10deg 28deg, #b31942 28deg 31deg, transparent 31deg 52deg, #f6d66f 52deg 55deg, transparent 55deg 82deg, #0a3161 82deg 85deg, transparent 85deg 360deg);
-  filter: drop-shadow(0 0 10px rgba(255,255,255,.35));
+    radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 2px, transparent 3px),
+    conic-gradient(
+      from 0deg,
+      transparent 0 8deg,
+      rgba(255, 255, 255, 0.9) 8deg 10deg,
+      transparent 10deg 28deg,
+      #b31942 28deg 31deg,
+      transparent 31deg 52deg,
+      #f6d66f 52deg 55deg,
+      transparent 55deg 82deg,
+      #0a3161 82deg 85deg,
+      transparent 85deg 360deg
+    );
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.35));
   animation: holiday-firework-bloom 5.5s ease-out infinite;
 }
 
-.weather-firework--one { top: 9%; left: 60%; animation-delay: .2s; }
-.weather-firework--two { top: 24%; left: 14%; transform: scale(.82); animation-delay: 1.7s; }
-.weather-firework--three { top: 38%; right: 10%; transform: scale(.68); animation-delay: 3.1s; }
+.weather-firework--one {
+  top: 9%;
+  left: 60%;
+  animation-delay: 0.2s;
+}
+.weather-firework--two {
+  top: 24%;
+  left: 14%;
+  transform: scale(0.82);
+  animation-delay: 1.7s;
+}
+.weather-firework--three {
+  top: 38%;
+  right: 10%;
+  transform: scale(0.68);
+  animation-delay: 3.1s;
+}
 
 .weather-sparkle--patriotic {
   inset: 0;
-  opacity: .42;
+  opacity: 0.42;
   background-image:
-    radial-gradient(circle, rgba(255,255,255,.95) 0 1px, transparent 2px),
-    radial-gradient(circle, rgba(179,25,66,.75) 0 1.2px, transparent 2.2px),
-    radial-gradient(circle, rgba(10,49,97,.75) 0 1.2px, transparent 2.2px);
-  background-size: 96px 96px, 134px 134px, 176px 176px;
+    radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1px, transparent 2px),
+    radial-gradient(circle, rgba(179, 25, 66, 0.75) 0 1.2px, transparent 2.2px),
+    radial-gradient(circle, rgba(10, 49, 97, 0.75) 0 1.2px, transparent 2.2px);
+  background-size:
+    96px 96px,
+    134px 134px,
+    176px 176px;
   animation: holiday-sparkle-drift 24s linear infinite;
 }
 
@@ -730,20 +850,23 @@
     radial-gradient(ellipse at 30% 35%, #b85f24 0 4px, transparent 5px),
     radial-gradient(ellipse at 70% 65%, #df8a3d 0 3px, transparent 4px),
     radial-gradient(ellipse at 40% 70%, #74320f 0 3px, transparent 4px);
-  background-size: 110px 130px, 170px 150px, 210px 190px;
+  background-size:
+    110px 130px,
+    170px 150px,
+    210px 190px;
   animation: holiday-leaves-fall 28s linear infinite;
-  opacity: .42;
+  opacity: 0.42;
 }
 
 .weather-leaves--far {
-  opacity: .25;
+  opacity: 0.25;
   animation-duration: 42s;
-  transform: scale(.85);
+  transform: scale(0.85);
 }
 
 .weather-easter--pastels {
   inset: 0;
-  opacity: .20;
+  opacity: 0.2;
   background:
     radial-gradient(circle at 18% 18%, #ddb6e2, transparent 17%),
     radial-gradient(circle at 78% 22%, #e8efd6, transparent 18%),
@@ -752,13 +875,19 @@
 
 .weather-easter--eggs {
   inset: -15%;
-  opacity: .30;
+  opacity: 0.3;
   background-image:
     radial-gradient(ellipse 8px 12px at center, #c99bd0 0 58%, transparent 62%),
     radial-gradient(ellipse 7px 11px at center, #e8efd6 0 58%, transparent 62%),
     radial-gradient(ellipse 7px 11px at center, #f5e3f6 0 58%, transparent 62%);
-  background-size: 130px 150px, 180px 170px, 230px 210px;
-  background-position: 10px 20px, 80px 60px, 140px 30px;
+  background-size:
+    130px 150px,
+    180px 170px,
+    230px 210px;
+  background-position:
+    10px 20px,
+    80px 60px,
+    140px 30px;
   animation: holiday-easter-float 36s linear infinite;
 }
 
@@ -771,9 +900,17 @@
 .theme-memorial-day .broadsheet .bs-masthead,
 .theme-veterans-day .broadsheet .bs-masthead {
   background:
-    linear-gradient(180deg, rgba(255,253,243,.96), rgba(243,241,232,.97)),
-    repeating-linear-gradient(180deg, rgba(179,25,66,.10) 0 10px, rgba(255,255,255,.10) 10px 20px),
-    linear-gradient(90deg, rgba(10,49,97,.16), transparent 38%);
+    linear-gradient(
+      180deg,
+      rgba(255, 253, 243, 0.96),
+      rgba(243, 241, 232, 0.97)
+    ),
+    repeating-linear-gradient(
+      180deg,
+      rgba(179, 25, 66, 0.1) 0 10px,
+      rgba(255, 255, 255, 0.1) 10px 20px
+    ),
+    linear-gradient(90deg, rgba(10, 49, 97, 0.16), transparent 38%);
   border-bottom-color: #b31942;
 }
 
@@ -784,8 +921,16 @@
 
 .theme-thanksgiving .broadsheet .bs-masthead {
   background:
-    linear-gradient(180deg, rgba(251,239,217,.96), rgba(241,223,197,.97)),
-    repeating-linear-gradient(35deg, rgba(199,110,44,.12) 0 18px, rgba(116,50,15,.08) 18px 36px);
+    linear-gradient(
+      180deg,
+      rgba(251, 239, 217, 0.96),
+      rgba(241, 223, 197, 0.97)
+    ),
+    repeating-linear-gradient(
+      35deg,
+      rgba(199, 110, 44, 0.12) 0 18px,
+      rgba(116, 50, 15, 0.08) 18px 36px
+    );
   border-bottom-color: #c76e2c;
 }
 
@@ -796,31 +941,66 @@
 
 .theme-easter .broadsheet .bs-masthead {
   background:
-    linear-gradient(180deg, rgba(255,249,237,.96), rgba(245,240,223,.97)),
-    radial-gradient(circle at 18% 22%, rgba(201,155,208,.18), transparent 18%),
-    radial-gradient(circle at 74% 18%, rgba(232,239,214,.28), transparent 20%);
+    linear-gradient(
+      180deg,
+      rgba(255, 249, 237, 0.96),
+      rgba(245, 240, 223, 0.97)
+    ),
+    radial-gradient(
+      circle at 18% 22%,
+      rgba(201, 155, 208, 0.18),
+      transparent 18%
+    ),
+    radial-gradient(
+      circle at 74% 18%,
+      rgba(232, 239, 214, 0.28),
+      transparent 20%
+    );
   border-bottom-color: #c99bd0;
 }
 
 @keyframes holiday-firework-bloom {
-  0%, 72%, 100% { opacity: 0; transform: scale(.08) rotate(0deg); }
-  77% { opacity: .95; transform: scale(.82) rotate(12deg); }
-  88% { opacity: .22; transform: scale(1.18) rotate(28deg); }
+  0%,
+  72%,
+  100% {
+    opacity: 0;
+    transform: scale(0.08) rotate(0deg);
+  }
+  77% {
+    opacity: 0.95;
+    transform: scale(0.82) rotate(12deg);
+  }
+  88% {
+    opacity: 0.22;
+    transform: scale(1.18) rotate(28deg);
+  }
 }
 
 @keyframes holiday-sparkle-drift {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(6%, 4%, 0); }
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(6%, 4%, 0);
+  }
 }
 
 @keyframes holiday-leaves-fall {
-  from { transform: translate3d(-2%, -10%, 0) rotate(0deg); }
-  to { transform: translate3d(7%, 24%, 0) rotate(12deg); }
+  from {
+    transform: translate3d(-2%, -10%, 0) rotate(0deg);
+  }
+  to {
+    transform: translate3d(7%, 24%, 0) rotate(12deg);
+  }
 }
 
 @keyframes holiday-easter-float {
-  from { transform: translate3d(0, 8%, 0); }
-  to { transform: translate3d(-5%, -6%, 0); }
+  from {
+    transform: translate3d(0, 8%, 0);
+  }
+  to {
+    transform: translate3d(-5%, -6%, 0);
+  }
 }
 
 /* Thanksgiving turkeys + Veterans Day branch flags. */
@@ -837,27 +1017,91 @@
   display: inline-block;
   font-size: clamp(22px, 3.3vw, 44px);
   line-height: 1;
-  filter: drop-shadow(0 2px 2px rgba(33,20,12,.28));
-  opacity: .78;
+  filter: drop-shadow(0 2px 2px rgba(33, 20, 12, 0.28));
+  opacity: 0.78;
   animation: holiday-turkey-fall 18s linear infinite;
 }
 
-.weather-turkey--1 { left: 4%; animation-delay: 0s; animation-duration: 19s; }
-.weather-turkey--2 { left: 11%; animation-delay: -7s; animation-duration: 24s; }
-.weather-turkey--3 { left: 18%; animation-delay: -13s; animation-duration: 21s; }
-.weather-turkey--4 { left: 26%; animation-delay: -4s; animation-duration: 27s; }
-.weather-turkey--5 { left: 33%; animation-delay: -16s; animation-duration: 20s; }
-.weather-turkey--6 { left: 41%; animation-delay: -10s; animation-duration: 25s; }
-.weather-turkey--7 { left: 48%; animation-delay: -2s; animation-duration: 22s; }
-.weather-turkey--8 { left: 56%; animation-delay: -15s; animation-duration: 26s; }
-.weather-turkey--9 { left: 63%; animation-delay: -8s; animation-duration: 19s; }
-.weather-turkey--10 { left: 70%; animation-delay: -1s; animation-duration: 28s; }
-.weather-turkey--11 { left: 78%; animation-delay: -12s; animation-duration: 23s; }
-.weather-turkey--12 { left: 86%; animation-delay: -5s; animation-duration: 21s; }
-.weather-turkey--13 { left: 92%; animation-delay: -18s; animation-duration: 29s; }
-.weather-turkey--14 { left: 6%; animation-delay: -21s; animation-duration: 31s; }
-.weather-turkey--15 { left: 52%; animation-delay: -24s; animation-duration: 30s; }
-.weather-turkey--16 { left: 82%; animation-delay: -27s; animation-duration: 32s; }
+.weather-turkey--1 {
+  left: 4%;
+  animation-delay: 0s;
+  animation-duration: 19s;
+}
+.weather-turkey--2 {
+  left: 11%;
+  animation-delay: -7s;
+  animation-duration: 24s;
+}
+.weather-turkey--3 {
+  left: 18%;
+  animation-delay: -13s;
+  animation-duration: 21s;
+}
+.weather-turkey--4 {
+  left: 26%;
+  animation-delay: -4s;
+  animation-duration: 27s;
+}
+.weather-turkey--5 {
+  left: 33%;
+  animation-delay: -16s;
+  animation-duration: 20s;
+}
+.weather-turkey--6 {
+  left: 41%;
+  animation-delay: -10s;
+  animation-duration: 25s;
+}
+.weather-turkey--7 {
+  left: 48%;
+  animation-delay: -2s;
+  animation-duration: 22s;
+}
+.weather-turkey--8 {
+  left: 56%;
+  animation-delay: -15s;
+  animation-duration: 26s;
+}
+.weather-turkey--9 {
+  left: 63%;
+  animation-delay: -8s;
+  animation-duration: 19s;
+}
+.weather-turkey--10 {
+  left: 70%;
+  animation-delay: -1s;
+  animation-duration: 28s;
+}
+.weather-turkey--11 {
+  left: 78%;
+  animation-delay: -12s;
+  animation-duration: 23s;
+}
+.weather-turkey--12 {
+  left: 86%;
+  animation-delay: -5s;
+  animation-duration: 21s;
+}
+.weather-turkey--13 {
+  left: 92%;
+  animation-delay: -18s;
+  animation-duration: 29s;
+}
+.weather-turkey--14 {
+  left: 6%;
+  animation-delay: -21s;
+  animation-duration: 31s;
+}
+.weather-turkey--15 {
+  left: 52%;
+  animation-delay: -24s;
+  animation-duration: 30s;
+}
+.weather-turkey--16 {
+  left: 82%;
+  animation-delay: -27s;
+  animation-duration: 32s;
+}
 
 .weather-branch-flag {
   position: absolute;
@@ -867,56 +1111,101 @@
   justify-content: center;
   min-width: 104px;
   padding: 8px 12px;
-  border: 1px solid rgba(255,255,255,.75);
+  border: 1px solid rgba(255, 255, 255, 0.75);
   color: #fff;
   font-family: var(--font-ui);
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: .12em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  box-shadow: 0 4px 12px rgba(7,21,44,.18);
-  opacity: .70;
+  box-shadow: 0 4px 12px rgba(7, 21, 44, 0.18);
+  opacity: 0.7;
   animation: holiday-branch-flag-fall 24s linear infinite;
 }
 
 .weather-branch-flag::before {
-  content: "";
+  content: '';
   width: 14px;
   height: 14px;
   margin-right: 7px;
   border-radius: 999px;
-  background: rgba(255,255,255,.92);
+  background: rgba(255, 255, 255, 0.92);
 }
 
-.weather-branch-flag--1 { left: 4%; background: #2d5a27; animation-delay: 0s; }
-.weather-branch-flag--2 { left: 19%; background: #00205b; animation-delay: -5s; }
-.weather-branch-flag--3 { left: 35%; background: #00308f; animation-delay: -10s; }
-.weather-branch-flag--4 { left: 52%; background: #b31942; animation-delay: -15s; }
-.weather-branch-flag--5 { left: 68%; background: #005ea8; animation-delay: -20s; }
-.weather-branch-flag--6 { left: 82%; background: #1f2937; animation-delay: -12s; }
+.weather-branch-flag--1 {
+  left: 4%;
+  background: #2d5a27;
+  animation-delay: 0s;
+}
+.weather-branch-flag--2 {
+  left: 19%;
+  background: #00205b;
+  animation-delay: -5s;
+}
+.weather-branch-flag--3 {
+  left: 35%;
+  background: #00308f;
+  animation-delay: -10s;
+}
+.weather-branch-flag--4 {
+  left: 52%;
+  background: #b31942;
+  animation-delay: -15s;
+}
+.weather-branch-flag--5 {
+  left: 68%;
+  background: #005ea8;
+  animation-delay: -20s;
+}
+.weather-branch-flag--6 {
+  left: 82%;
+  background: #1f2937;
+  animation-delay: -12s;
+}
 
 .theme-veterans-day .broadsheet .bs-masthead {
   background:
-    linear-gradient(180deg, rgba(255,250,240,.97), rgba(242,239,229,.97)),
-    repeating-linear-gradient(90deg, rgba(10,49,97,.13) 0 20px, rgba(179,25,66,.10) 20px 40px, rgba(255,255,255,.08) 40px 60px);
+    linear-gradient(
+      180deg,
+      rgba(255, 250, 240, 0.97),
+      rgba(242, 239, 229, 0.97)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(10, 49, 97, 0.13) 0 20px,
+      rgba(179, 25, 66, 0.1) 20px 40px,
+      rgba(255, 255, 255, 0.08) 40px 60px
+    );
   border-bottom-color: #0a3161;
 }
 
 .theme-veterans-day .broadsheet .bs-masthead__brand {
   color: #0a3161;
-  text-shadow: 1px 1px 0 rgba(179,25,66,.18);
+  text-shadow: 1px 1px 0 rgba(179, 25, 66, 0.18);
 }
 
 @keyframes holiday-turkey-fall {
-  0% { transform: translate3d(0, -10vh, 0) rotate(-10deg); }
-  45% { transform: translate3d(26px, 48vh, 0) rotate(11deg); }
-  100% { transform: translate3d(-18px, 124vh, 0) rotate(-8deg); }
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(-10deg);
+  }
+  45% {
+    transform: translate3d(26px, 48vh, 0) rotate(11deg);
+  }
+  100% {
+    transform: translate3d(-18px, 124vh, 0) rotate(-8deg);
+  }
 }
 
 @keyframes holiday-branch-flag-fall {
-  0% { transform: translate3d(0, -12vh, 0) rotate(-3deg); }
-  50% { transform: translate3d(16px, 52vh, 0) rotate(3deg); }
-  100% { transform: translate3d(-12px, 124vh, 0) rotate(-2deg); }
+  0% {
+    transform: translate3d(0, -12vh, 0) rotate(-3deg);
+  }
+  50% {
+    transform: translate3d(16px, 52vh, 0) rotate(3deg);
+  }
+  100% {
+    transform: translate3d(-12px, 124vh, 0) rotate(-2deg);
+  }
 }
 
 /* Preview/admin theme badge. Hidden with ?themeBadge=0. */
@@ -929,10 +1218,10 @@
   gap: 2px;
   max-width: min(280px, calc(100vw - 28px));
   padding: 10px 12px;
-  border: 1px solid var(--rule, #2A333C);
-  background: color-mix(in srgb, var(--bone, #FBF7EC) 92%, white 8%);
-  color: var(--ink-900, #0F1418);
-  box-shadow: 3px 3px 0 var(--ink-900, #0F1418);
+  border: 1px solid var(--rule, #2a333c);
+  background: color-mix(in srgb, var(--bone, #fbf7ec) 92%, white 8%);
+  color: var(--ink-900, #0f1418);
+  box-shadow: 3px 3px 0 var(--ink-900, #0f1418);
   font-family: var(--font-ui, Inter, system-ui, sans-serif);
   pointer-events: none;
 }
@@ -940,14 +1229,14 @@
 .theme-preview-badge span {
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: .12em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .theme-preview-badge small {
-  color: var(--gold-800, #7A5A1E);
+  color: var(--gold-800, #7a5a1e);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: .08em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }

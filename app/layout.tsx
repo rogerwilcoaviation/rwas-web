@@ -1,10 +1,4 @@
-import {
-  Nunito_Sans,
-  Playfair_Display,
-  Source_Serif_4,
-  Inter,
-  Caveat,
-} from 'next/font/google';
+import { Playfair_Display, Source_Serif_4, Inter } from 'next/font/google';
 import { siteConfig } from '@/data/config/site.settings';
 import { ThemeProviders } from './theme-providers';
 import { Metadata } from 'next';
@@ -19,12 +13,6 @@ import '@/css/globals.css';
 import './broadsheet-tokens.css';
 import './broadsheet-chrome.css';
 import { AnalyticsWrapper } from '@/components/shared/Analytics';
-
-const baseFont = Nunito_Sans({
-  subsets: ['latin'],
-  display: 'optional',
-  variable: '--font-space-default',
-});
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -48,14 +36,6 @@ const inter = Inter({
   display: 'optional',
   preload: false,
   variable: '--font-inter',
-});
-
-const caveat = Caveat({
-  subsets: ['latin'],
-  weight: ['500', '700'],
-  display: 'optional',
-  preload: false,
-  variable: '--font-caveat',
 });
 
 const globalColors = colors;
@@ -127,7 +107,7 @@ export default function RootLayout({
   return (
     <html
       lang={siteConfig.language}
-      className={`${baseFont.variable} ${playfair.variable} ${sourceSerif.variable} ${inter.variable} ${caveat.variable} scroll-smooth`}
+      className={`${playfair.variable} ${sourceSerif.variable} ${inter.variable} scroll-smooth`}
       suppressHydrationWarning
     >
       <head>

@@ -80,15 +80,9 @@ export type ShopifyPartFinderProduct = {
   id: string;
   title: string;
   handle: string;
-  description: string;
   vendor?: string;
   productType?: string;
-  tags?: string[];
-  featuredImage?: ShopifyImage | null;
-  priceRange: {
-    minVariantPrice: Money;
-  };
-  variants: ShopifyVariant[];
+  variants: Array<{ sku?: string | null }>;
 };
 
 export type ShopifyCartLine = {
@@ -116,6 +110,10 @@ export type ShopifyCart = {
     totalAmount: Money;
   };
   lines: ShopifyCartLine[];
+};
+
+type ShopifyCartQuery = Omit<ShopifyCart, 'lines'> & {
+  lines: { edges: Array<{ node: ShopifyCartLine }> };
 };
 
 type ShopifyResponse<T> = {
@@ -256,10 +254,14 @@ function sortProductsByImagePriority<T extends ShopifyCollectionProduct>(
     .map(({ product }) => product);
 }
 
-type ProductVisibilityText = Pick<
-  ShopifyCollectionProduct,
-  'title' | 'handle' | 'description' | 'productType' | 'tags' | 'variants'
->;
+type ProductVisibilityText = {
+  title: string;
+  handle: string;
+  description?: string;
+  productType?: string;
+  tags?: string[];
+  variants?: Array<{ sku?: string | null }>;
+};
 
 function normalizedProductText(product: ProductVisibilityText): string {
   return [
@@ -335,13 +337,13 @@ function mapVariants(edges: Array<{ node: ShopifyVariant }>) {
   return edges.map((edge) => edge.node);
 }
 
-function mapCart(cart: any): ShopifyCart {
+function mapCart(cart: ShopifyCartQuery): ShopifyCart {
   return {
     id: cart.id,
     checkoutUrl: cart.checkoutUrl,
     totalQuantity: cart.totalQuantity,
     cost: cart.cost,
-    lines: cart.lines.edges.map((edge: any) => edge.node),
+    lines: cart.lines.edges.map((edge) => edge.node),
   };
 }
 
@@ -622,8 +624,10 @@ export async function getPartFinderProducts(
         pageInfo: { hasNextPage: boolean; endCursor: string | null };
         edges: Array<{
           cursor: string;
-          node: ShopifyPartFinderProduct & {
-            variants: { edges: Array<{ node: ShopifyVariant }> };
+          node: Omit<ShopifyPartFinderProduct, 'variants'> & {
+            variants: {
+              edges: Array<{ node: { sku?: string | null } }>;
+            };
           };
         }>;
       };
@@ -641,44 +645,12 @@ export async function getPartFinderProducts(
                 id
                 title
                 handle
-                description
                 vendor
                 productType
-                tags
-                featuredImage {
-                  url
-                  altText
-                }
-                priceRange {
-                  minVariantPrice {
-                    amount
-                    currencyCode
-                  }
-                }
                 variants(first: 20) {
                   edges {
                     node {
-                      id
-                      title
-                      availableForSale
-                      quantityAvailable
                       sku
-                      selectedOptions {
-                        name
-                        value
-                      }
-                      price {
-                        amount
-                        currencyCode
-                      }
-                      compareAtPrice {
-                        amount
-                        currencyCode
-                      }
-                      image {
-                        url
-                        altText
-                      }
                     }
                   }
                 }
@@ -693,7 +665,7 @@ export async function getPartFinderProducts(
     all.push(
       ...data.products.edges.map((edge) => ({
         ...edge.node,
-        variants: mapVariants(edge.node.variants.edges),
+        variants: edge.node.variants.edges.map(({ node }) => node),
       })),
     );
     cursor = data.products.pageInfo.hasNextPage
@@ -1043,7 +1015,10 @@ export async function getProductHandles(limit = 3000): Promise<string[]> {
 
 export async function createCart(merchandiseId: string, quantity = 1) {
   const data = await shopifyFetch<{
-    cartCreate: { cart: any; userErrors: Array<{ message: string }> };
+    cartCreate: {
+      cart: ShopifyCartQuery;
+      userErrors: Array<{ message: string }>;
+    };
   }>(
     `#graphql
       mutation CartCreate($merchandiseId: ID!, $quantity: Int!) {
@@ -1102,7 +1077,10 @@ export async function addCartLine(
   quantity = 1,
 ) {
   const data = await shopifyFetch<{
-    cartLinesAdd: { cart: any; userErrors: Array<{ message: string }> };
+    cartLinesAdd: {
+      cart: ShopifyCartQuery;
+      userErrors: Array<{ message: string }>;
+    };
   }>(
     `#graphql
       mutation CartLinesAdd($cartId: ID!, $merchandiseId: ID!, $quantity: Int!) {
@@ -1157,7 +1135,7 @@ export async function addCartLine(
 
 export async function getCart(cartId: string) {
   const data = await shopifyFetch<{
-    cart: any | null;
+    cart: ShopifyCartQuery | null;
   }>(
     `#graphql
       query GetCart($cartId: ID!) {
@@ -1280,24 +1258,11 @@ const COLLECTION_DESCRIPTION_OVERRIDES: Record<string, string> = {
     'Current RWAS sale items, including Garmin pilot gear, avionics accessories, and shop-supported aviation products.',
 };
 
-function isPlaceholderCollectionDescription(description: string): boolean {
-  const clean = description.trim();
-  return (
-    !clean ||
-    /^browse this rwas collection\.?$/i.test(clean) ||
-    /passion for functionality and presentation/i.test(clean)
-  );
-}
-
 export function descriptionForCollection(
   handle: string,
   shopifyDescription: string,
 ): string {
-  if (isPlaceholderCollectionDescription(shopifyDescription)) {
-    return COLLECTION_DESCRIPTION_OVERRIDES[handle] || shopifyDescription;
-  }
-
-  return shopifyDescription;
+  return COLLECTION_DESCRIPTION_OVERRIDES[handle] ?? shopifyDescription;
 }
 
 export function imageForCollection(

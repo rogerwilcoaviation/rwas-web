@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export type BulletinBarProps = {
   kicker?: string;
@@ -7,12 +7,13 @@ export type BulletinBarProps = {
 };
 
 const DEFAULT_ITEMS: string[] = [
-  "Now booking May Garmin install slots \u2014 schedule early",
-  "GFC 500 installs: Bonanza, Mooney, Cessna \u2014 same-day quote",
-  "Papa-Alpha tools ship same day from the RWAS shop",
+  'Now booking Garmin install slots \u2014 schedule early',
+  'GFC 500 installs: Bonanza, Mooney, Cessna \u2014 same-day quote',
+  'Papa-Alpha tools ship same day from the RWAS shop',
 ];
 
-const DEFAULT_FOOTER = "Avionics desk: (605) 299-8178 \u00b7 avionics@rwas.team";
+const DEFAULT_FOOTER =
+  'Avionics desk: (605) 299-8178 \u00b7 avionics@rwas.team';
 
 /**
  * BulletinBar \u2014 ink-900 strip with outlined cream "Bulletin" pill and
@@ -20,20 +21,26 @@ const DEFAULT_FOOTER = "Avionics desk: (605) 299-8178 \u00b7 avionics@rwas.team"
  * The `footer` slot renders on its own centered line below the items row.
  */
 export default function BulletinBar({
-  kicker = "Bulletin",
+  kicker = 'Bulletin',
   items = DEFAULT_ITEMS,
   footer = DEFAULT_FOOTER,
 }: BulletinBarProps) {
   return (
-    <aside className="bs-bulletin" role="complementary" aria-label="Shop bulletin">
+    <aside
+      className="bs-bulletin"
+      role="complementary"
+      aria-label="Shop bulletin"
+    >
       <div className="bs-bulletin__inner">
         <span className="bs-bulletin__kicker">{kicker}</span>
         {items.map((item, idx) => (
           <React.Fragment key={idx}>
-            <span className="bs-bulletin__item">{item}</span>
+            <span className="bs-bulletin__item" data-bulletin-index={idx}>
+              {item}
+            </span>
             {idx < items.length - 1 ? (
               <span className="bs-bulletin__pip" aria-hidden="true">
-                {"\u25A0"}
+                {'\u25A0'}
               </span>
             ) : null}
           </React.Fragment>

@@ -48,7 +48,12 @@ export default function BlogArticlesFeed() {
 
   if (articles === null) {
     return (
-      <div aria-busy="true" aria-label="Loading latest articles" style={{ minHeight: '320px' }}>
+      <div
+        role="status"
+        aria-busy="true"
+        aria-label="Loading latest articles"
+        style={{ minHeight: '320px' }}
+      >
         <span className="bs-kicker">Loading&hellip;</span>
       </div>
     );

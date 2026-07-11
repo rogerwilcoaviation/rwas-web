@@ -263,6 +263,32 @@ export default function ServicesPage() {
       <BulletinBar />
 
       <main className="bs-stage">
+        <section
+          className="hero-headline-group"
+          aria-labelledby="services-hero"
+        >
+          <span className="bs-kicker">
+            FAA Part 145 Repair Station #RWSR491E
+          </span>
+          <span className="bs-script-accent">
+            &mdash; the KFSD aircraft services desk in Sioux Falls &mdash;
+          </span>
+          <h1 id="services-hero" className="bs-headline bs-headline--hero">
+            Aircraft services for owners who need
+            <br />
+            <em>the whole job handled.</em>
+          </h1>
+          <p className="bs-subhead">
+            Garmin avionics &middot; aircraft maintenance &middot; NDT
+            inspection &middot; fabrication &middot; Rotax support &middot;
+            pre-buy inspections
+          </p>
+          <div className="bs-byline">
+            RWAS Avionics Desk &middot; KFSD, Sioux Falls &middot; Serving the
+            Northern Plains
+          </div>
+        </section>
+
         <figure
           className="fabrication-video fabrication-video--feature"
           aria-labelledby="services-laser-promo-title"
@@ -296,32 +322,6 @@ export default function ServicesPage() {
             </strong>
           </figcaption>
         </figure>
-
-        <section
-          className="hero-headline-group"
-          aria-labelledby="services-hero"
-        >
-          <span className="bs-kicker">
-            FAA Part 145 Repair Station #RWSR491E
-          </span>
-          <span className="bs-script-accent">
-            &mdash; the KFSD aircraft services desk in Sioux Falls &mdash;
-          </span>
-          <h1 id="services-hero" className="bs-headline bs-headline--hero">
-            Aircraft services for owners who need
-            <br />
-            <em>the whole job handled.</em>
-          </h1>
-          <p className="bs-subhead">
-            Garmin avionics &middot; aircraft maintenance &middot; NDT
-            inspection &middot; fabrication &middot; Rotax support &middot;
-            pre-buy inspections
-          </p>
-          <div className="bs-byline">
-            RWAS Avionics Desk &middot; KFSD, Sioux Falls &middot; Serving the
-            Northern Plains
-          </div>
-        </section>
 
         <div className="about-grid">
           <div className="about-main">
@@ -427,24 +427,13 @@ export default function ServicesPage() {
             <Specimen as="section">
               <span className="bs-kicker">Quick Contact</span>
               <p>
-                <a
-                  href="tel:+16052998178"
-                  style={{
-                    color: 'var(--ink-900)',
-                    textDecoration: 'underline',
-                    textUnderlineOffset: '2px',
-                  }}
-                >
+                <a href="tel:+16052998178" className="bs-quick-contact-link">
                   (605) 299-8178
                 </a>
                 <br />
                 <a
                   href="mailto:avionics@rwas.team"
-                  style={{
-                    color: 'var(--ink-900)',
-                    textDecoration: 'underline',
-                    textUnderlineOffset: '2px',
-                  }}
+                  className="bs-quick-contact-link"
                 >
                   avionics@rwas.team
                 </a>

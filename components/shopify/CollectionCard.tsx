@@ -2,7 +2,11 @@ import { ShopifyCollectionSummary } from '@/lib/shopify';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function CollectionCard({ collection }: { collection: ShopifyCollectionSummary }) {
+export default function CollectionCard({
+  collection,
+}: {
+  collection: ShopifyCollectionSummary;
+}) {
   return (
     <Link
       href={`/collections/${collection.handle}`}
@@ -24,7 +28,7 @@ export default function CollectionCard({ collection }: { collection: ShopifyColl
         )}
       </div>
       <div className="space-y-3 p-6">
-        <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-700">
+        <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-900">
           Collection
         </p>
         <h3 className="text-2xl font-bold leading-tight text-[#111111]">

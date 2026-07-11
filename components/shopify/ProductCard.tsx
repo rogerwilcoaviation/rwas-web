@@ -6,7 +6,11 @@ import {
   isQuoteCollection,
 } from '@/lib/shopify';
 import Image from 'next/image';
-import { isShopifyPlaceholderImage, productImageAlt, productImageUrl } from '@/lib/product-image';
+import {
+  isShopifyPlaceholderImage,
+  productImageAlt,
+  productImageUrl,
+} from '@/lib/product-image';
 import Link from 'next/link';
 
 function formatPrice(amount: string, currencyCode: string) {
@@ -30,7 +34,8 @@ export default function ProductCard({
   // in app/products/[handle]/page.tsx still consults isOtcCollection /
   // isOtcEligible. Keeping the imports here so re-enabling on the grid is
   // a one-line change if the policy reverses.
-  void isOtcCollection; void isOtcEligible;
+  void isOtcCollection;
+  void isOtcEligible;
   const otcEligible = false;
   const dealerOnly =
     quoteOnly ||
@@ -40,11 +45,11 @@ export default function ProductCard({
     ? null
     : formatPrice(
         product.priceRange.minVariantPrice.amount,
-        product.priceRange.minVariantPrice.currencyCode
+        product.priceRange.minVariantPrice.currencyCode,
       );
   const productUrl = `/products/${encodeURIComponent(product.handle)}`;
   const quoteUrl = `/contact?reason=quote&product=${encodeURIComponent(
-    product.title
+    product.title,
   )}`;
 
   const addToCartHref = null;
@@ -65,11 +70,18 @@ export default function ProductCard({
   const badgeLabel = quoteOnly
     ? 'Quote-request item'
     : otcEligible
-    ? 'In stock \u00b7 OTC'
-    : 'Shopify product';
+      ? 'In stock \u00b7 OTC'
+      : 'Shopify product';
   const displayImage =
-    product.images?.find((image) => !isShopifyPlaceholderImage(image.url, image.altText)) ??
-    product.variants?.map((variant) => variant.image).find((image) => image?.url && !isShopifyPlaceholderImage(image.url, image.altText)) ??
+    product.images?.find(
+      (image) => !isShopifyPlaceholderImage(image.url, image.altText),
+    ) ??
+    product.variants
+      ?.map((variant) => variant.image)
+      .find(
+        (image) =>
+          image?.url && !isShopifyPlaceholderImage(image.url, image.altText),
+      ) ??
     product.featuredImage;
 
   return (
@@ -78,8 +90,17 @@ export default function ProductCard({
         <div className="relative aspect-[4/3] bg-[#f5f3ef]">
           {displayImage ? (
             <Image
-              src={productImageUrl(displayImage.url, 600, displayImage.altText || product.title, product.handle)}
-              alt={productImageAlt(displayImage.url, displayImage.altText, product.title)}
+              src={productImageUrl(
+                displayImage.url,
+                600,
+                displayImage.altText || product.title,
+                product.handle,
+              )}
+              alt={productImageAlt(
+                displayImage.url,
+                displayImage.altText,
+                product.title,
+              )}
               fill
               className="object-contain p-6 transition duration-300 group-hover:scale-[1.03]"
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 25vw"
@@ -90,7 +111,7 @@ export default function ProductCard({
       </Link>
       <div className="space-y-4 p-6">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-700">
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-900">
             {badgeLabel}
           </p>
           <h3 className="mt-2 line-clamp-3 text-xl font-bold leading-snug text-[#111111]">
@@ -102,7 +123,10 @@ export default function ProductCard({
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <Button asChild className="bg-[#111111] text-[#f5f3ef] hover:bg-black">
+          <Button
+            asChild
+            className="bg-[#111111] text-[#f5f3ef] hover:bg-black"
+          >
             <Link href={productUrl}>View product</Link>
           </Button>
           {secondaryCta ? (

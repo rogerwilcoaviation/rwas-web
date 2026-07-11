@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { productImageAlt, productImageUrl } from '@/lib/product-image';
 
 export type PartFinderProduct = {
   id: string;
@@ -10,25 +9,14 @@ export type PartFinderProduct = {
   handle: string;
   vendor?: string;
   productType?: string;
-  description?: string;
-  featuredImage?: { url: string; altText: string | null } | null;
-  price?: string;
-  currencyCode?: string;
-  tags?: string[];
   skus: string[];
 };
 
 function normalize(value: string) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
-}
-
-function formatPrice(amount?: string, currencyCode = 'USD') {
-  if (!amount) return null;
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currencyCode,
-    maximumFractionDigits: 0,
-  }).format(Number(amount));
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
 }
 
 export default function PartFinder({
@@ -45,14 +33,17 @@ export default function PartFinder({
     () =>
       products.map((product) => ({
         product,
-        haystack: normalize([
-          product.title,
-          product.handle,
-          product.vendor,
-          product.productType,
-          product.description,
-          ...product.skus,
-        ].filter(Boolean).join(' ')),
+        haystack: normalize(
+          [
+            product.title,
+            product.handle,
+            product.vendor,
+            product.productType,
+            ...product.skus,
+          ]
+            .filter(Boolean)
+            .join(' '),
+        ),
       })),
     [products],
   );
@@ -70,9 +61,12 @@ export default function PartFinder({
     <div className="bs-part-finder" aria-label="Find Component or Part">
       <div className="bs-part-finder__copy">
         <p className="bs-kicker">Find Component/Part</p>
-        <h2 className="bs-part-finder__title">Search by part number, SKU, component name, or Garmin model.</h2>
+        <h2 className="bs-part-finder__title">
+          Search by part number, SKU, component name, or Garmin model.
+        </h2>
         <p className="bs-body">
-          Searching {products.length.toLocaleString()} {scopeLabel} item{products.length === 1 ? '' : 's'}.
+          Searching {products.length.toLocaleString('en-US')} {scopeLabel} item
+          {products.length === 1 ? '' : 's'}.
         </p>
       </div>
       <label className="bs-part-finder__search">
@@ -87,32 +81,27 @@ export default function PartFinder({
       </label>
       <div className="bs-part-finder__results" aria-live="polite">
         {cleanQuery.length < 2 ? (
-          <p className="bs-body">Enter at least two characters to search the visible catalog.</p>
+          <p className="bs-body">
+            Enter at least two characters to search the visible catalog.
+          </p>
         ) : results.length ? (
           <ul>
             {results.map((product) => {
-              const dealerOnly =
-                product.tags?.some((tag) => tag.toLowerCase() === 'garmin-dealer-only') ||
-                Number(product.price || '0') === 0;
-              const price = dealerOnly ? null : formatPrice(product.price, product.currencyCode);
               return (
                 <li key={product.id}>
-                  <Link href={`/products/${encodeURIComponent(product.handle)}`}>
-                    {product.featuredImage ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={productImageUrl(product.featuredImage.url, 200, product.featuredImage.altText)}
-                        alt={productImageAlt(product.featuredImage.url, product.featuredImage.altText, product.title)}
-                        loading="lazy"
-                        fetchPriority="low"
-                        decoding="async"
-                      />
-                    ) : (
-                      <span className="bs-part-finder__noimage">—</span>
-                    )}
+                  <Link
+                    href={`/products/${encodeURIComponent(product.handle)}`}
+                  >
                     <span>
                       <strong>{product.title}</strong>
-                      <em>{[product.skus.filter(Boolean).join(' / '), product.productType, price].filter(Boolean).join(' · ')}</em>
+                      <em>
+                        {[
+                          product.skus.filter(Boolean).join(' / '),
+                          product.productType,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ')}
+                      </em>
                     </span>
                   </Link>
                 </li>
@@ -120,7 +109,10 @@ export default function PartFinder({
             })}
           </ul>
         ) : (
-          <p className="bs-body">No exact catalog match found. Try a shorter part number or component family.</p>
+          <p className="bs-body">
+            No exact catalog match found. Try a shorter part number or component
+            family.
+          </p>
         )}
       </div>
     </div>

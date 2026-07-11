@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export type NavItem = {
   href: string;
@@ -12,18 +12,18 @@ export type BroadsheetNavProps = {
 };
 
 const DEFAULT_ITEMS: NavItem[] = [
-  { href: "/", label: "Home" },
-  { href: "#ask-jerry", label: "Ask Jerry", accent: true },
-  { href: "/panel-planner", label: "Build My Panel", accent: true },
-  { href: "/collections/on-sale", label: "On Sale" },
-  { href: "/collections", label: "Garmin" },
-  { href: "/collections/papa-alpha-tools", label: "Papa-Alpha Tools" },
-  { href: "/aircraft-for-sale", label: "Aircraft 4 Sale" },
-  { href: "/financing", label: "Financing" },
-  { href: "/services", label: "Services" },
-  { href: "/blog", label: "Blog Articles" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: '/', label: 'Home' },
+  { href: '#ask-jerry', label: 'Ask Jerry', accent: true },
+  { href: '/panel-planner', label: 'Build My Panel', accent: true },
+  { href: '/collections/on-sale', label: 'On Sale' },
+  { href: '/collections', label: 'Garmin' },
+  { href: '/collections/papa-alpha-tools', label: 'Papa-Alpha Tools' },
+  { href: '/aircraft-for-sale', label: 'Aircraft 4 Sale' },
+  { href: '/financing', label: 'Financing' },
+  { href: '/services', label: 'Services' },
+  { href: '/blog', label: 'Blog Articles' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
 ];
 
 /**
@@ -34,21 +34,37 @@ export default function BroadsheetNav({
   items = DEFAULT_ITEMS,
   activeHref,
 }: BroadsheetNavProps) {
+  const renderItems = () =>
+    items.map((item) => {
+      const classes = [
+        item.accent ? 'bs-nav__accent' : '',
+        activeHref && activeHref === item.href ? 'bs-nav__active' : '',
+      ]
+        .filter(Boolean)
+        .join(' ');
+
+      return (
+        <a
+          key={item.href + item.label}
+          href={item.href}
+          className={classes || undefined}
+          aria-current={activeHref === item.href ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      );
+    });
+
   return (
     <nav className="bs-nav" aria-label="Primary">
-      {items.map((item) => {
-        const classes = [
-          item.accent ? "bs-nav__accent" : "",
-          activeHref && activeHref === item.href ? "bs-nav__active" : "",
-        ]
-          .filter(Boolean)
-          .join(" ");
-        return (
-          <a key={item.href + item.label} href={item.href} className={classes || undefined}>
-            {item.label}
-          </a>
-        );
-      })}
+      <div className="bs-nav__desktop">{renderItems()}</div>
+      <details className="bs-nav__mobile">
+        <summary>
+          <span>Menu</span>
+          <small>Services · Store · Contact</small>
+        </summary>
+        <div className="bs-nav__mobile-links">{renderItems()}</div>
+      </details>
     </nav>
   );
 }

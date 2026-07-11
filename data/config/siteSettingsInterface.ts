@@ -1,7 +1,4 @@
-import { AnalyticsConfig } from '@shipixen/pliny/analytics';
-import { CommentsConfig } from '@shipixen/pliny/comments';
-import { NewsletterConfig } from '@shipixen/pliny/newsletter';
-import { SearchConfig } from '@shipixen/pliny/search';
+type OptionalFeatureConfig = boolean | Record<string, unknown>;
 
 export interface SiteMetadata {
   title: string;
@@ -30,8 +27,8 @@ export interface SiteMetadata {
 export interface SiteConfig extends SiteMetadata {
   allArticlesPath: string;
   disableAnalytics: boolean;
-  analytics?: AnalyticsConfig | undefined;
-  comments?: CommentsConfig | undefined;
-  newsletter?: NewsletterConfig | undefined;
-  search?: SearchConfig | undefined;
+  analytics?: Record<string, unknown>;
+  comments?: OptionalFeatureConfig;
+  newsletter?: Record<string, unknown>;
+  search?: OptionalFeatureConfig;
 }
