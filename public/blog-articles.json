@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-17T16:37:08.622621+00:00",
+    "last_updated": "2026-07-17T20:30:29.544766+00:00",
     "total_articles": 26,
     "categories": [
       "regulatory",
@@ -90,7 +90,7 @@
     },
     {
       "id": "garmin-sb-26089a-gps-175-gnc-355-and-gnx-375-software-330-20260717",
-      "status": "draft",
+      "status": "published",
       "category": "service-bulletin",
       "title": "Garmin SB 26089A: GPS 175, GNC 355 and GNX 375 Software 3.30",
       "subtitle": "Mandatory compliance is required by January 29, 2027 for affected units at software version 3.22 or earlier.",
@@ -125,7 +125,9 @@
         }
       },
       "image": "/images/blog/introducing-axis-a-new-generation-of-flight-displays.jpg",
-      "image_alt": "Garmin AXIS flight displays installed in a certified-aircraft cockpit."
+      "image_alt": "Garmin AXIS flight displays installed in a certified-aircraft cockpit.",
+      "approved_at": "2026-07-17T20:30:29.520293+00:00",
+      "published_at": "2026-07-17T20:30:29.544766+00:00"
     },
     {
       "id": "introducing-axis-a-new-generation-of-flight-displays-20260708",
