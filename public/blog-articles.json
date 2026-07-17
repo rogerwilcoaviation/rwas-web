@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-17T20:30:29.544766+00:00",
+    "last_updated": "2026-07-17T22:42:57Z",
     "total_articles": 26,
     "categories": [
       "regulatory",
@@ -53,7 +53,7 @@
     },
     {
       "id": "garmin-sb-26019a-gtn-xi-software-2104-20260717",
-      "status": "draft",
+      "status": "published",
       "category": "service-bulletin",
       "title": "Garmin SB 26019A: GTN Xi Software 21.04",
       "subtitle": "Garmin recommends the GTN Xi update at the next maintenance interval.",
@@ -88,7 +88,9 @@
         }
       },
       "image": "/images/blog/garmin-g500-txi-with-gtn-xi-panel.jpg",
-      "image_alt": "Garmin G500 TXi flight displays installed with GTN Xi navigators in a piston-aircraft panel."
+      "image_alt": "Garmin G500 TXi flight displays installed with GTN Xi navigators in a piston-aircraft panel.",
+      "approved_at": "2026-07-17T22:42:57Z",
+      "published_at": "2026-07-17T22:42:57Z"
     },
     {
       "id": "garmin-sb-26089a-gps-175-gnc-355-and-gnx-375-software-330-20260717",
