@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-07-08T15:36:45.316036+00:00",
-    "total_articles": 23,
+    "last_updated": "2026-07-17T16:33:22.241214+00:00",
+    "total_articles": 25,
     "categories": [
       "regulatory",
       "product-update",
@@ -11,6 +11,80 @@
     ]
   },
   "articles": [
+    {
+      "id": "garmin-sb-26019a-gtn-xi-software-2104-20260717",
+      "status": "draft",
+      "category": "service-bulletin",
+      "title": "Garmin SB 26019A: GTN Xi Software 21.04",
+      "subtitle": "Garmin recommends the GTN Xi update at the next maintenance interval.",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Desk",
+      "date": "2026-07-17",
+      "source": "Garmin Service Bulletin 26019A",
+      "source_url": "https://www8.garmin.com/support/download_details.jsp?id=15519",
+      "lead": "Garmin Service Bulletin 26019A introduces GTN Xi main software version 21.04 and recommends compliance at the next maintenance interval for covered non-certified-aircraft installations.",
+      "body": [
+        "The release corrects the autopilot Approach Mode capture issue described in Garmin Service Advisory 26009, restores RNP information in off-route holds and improves arrival and departure procedure synchronization between GTN Xi and compatible GTN, GPS 175, GNC 355 and GNX 375 navigators.",
+        "Garmin identifies the change from version 21.03 as minor under 14 CFR 21.619 and states that the modification is not warranty reimbursable. The update uses a software loader card; Garmin cautions against microSD adapters because they can damage the card slot.",
+        "The bulletin is specifically written for non-certified aircraft and does not authorize owner/operator preventive maintenance on FAA-certified aircraft. RWAS can verify applicability, coordinate the software load and complete the required return-to-service documentation. Contact RWAS at (605) 299-8178."
+      ],
+      "tags": [
+        "garmin",
+        "gtn-xi",
+        "gtn-650xi",
+        "gtn-750xi",
+        "service-bulletin",
+        "software-update",
+        "autopilot"
+      ],
+      "social": {
+        "facebook": {
+          "text": "Garmin Service Bulletin 26019A introduces GTN Xi main software version 21.04 and recommends compliance at the next maintenance interval for covered non-certified-aircraft installations.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Gtnxi #Gtn650Xi #Gtn750Xi #Servicebulletin #Softwareupdate #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA",
+          "status": "pending"
+        },
+        "instagram": {
+          "text": "Garmin Service Bulletin 26019A introduces GTN Xi main software version 21.04 and recommends compliance at the next maintenance interval for...\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Gtnxi #Gtn650Xi #Gtn750Xi #Servicebulletin #Softwareupdate #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA #Avionics #PilotLife #GeneralAviation",
+          "status": "pending"
+        }
+      }
+    },
+    {
+      "id": "garmin-sb-26089a-gps-175-gnc-355-and-gnx-375-software-330-20260717",
+      "status": "draft",
+      "category": "service-bulletin",
+      "title": "Garmin SB 26089A: GPS 175, GNC 355 and GNX 375 Software 3.30",
+      "subtitle": "Mandatory compliance is required by January 29, 2027 for affected units at software version 3.22 or earlier.",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Desk",
+      "date": "2026-07-17",
+      "source": "Garmin Service Bulletin 26089A",
+      "source_url": "https://www8.garmin.com/support/download_details.jsp?id=15283",
+      "lead": "Garmin Service Bulletin 26089A calls for affected GPS 175, GNC 355 and GNX 375 navigators running main software version 3.22 or earlier to be upgraded to version 3.30 no later than January 29, 2027. Garmin classifies compliance as mandatory for the non-certified-aircraft installations covered by the bulletin.",
+      "body": [
+        "Version 3.30 adds AXIS Flight Display support, radio control from GTN Xi, TXi and AXIS, coordinated Smart Alert popups, and several operational refinements. It also corrects the visual-approach vertical-guidance issue described in Service Alert 26050, improves navigator synchronization and preserves stored flight-plan catalog data during upgrade.",
+        "GNX 375 installations also receive transponder software version 2.90. Garmin estimates one hour of labor per installed unit and states that the modification is not warranty reimbursable.",
+        "The bulletin is specifically written for non-certified aircraft. It is not an owner/operator preventive-maintenance authorization for FAA-certified aircraft. RWAS can verify installed software, determine applicability and perform the update under the appropriate maintenance authority. Contact RWAS at (605) 299-8178."
+      ],
+      "tags": [
+        "garmin",
+        "gps-175",
+        "gnc-355",
+        "gnx-375",
+        "service-bulletin",
+        "software-update",
+        "axis"
+      ],
+      "social": {
+        "facebook": {
+          "text": "Garmin Service Bulletin 26089A calls for affected GPS 175, GNC 355 and GNX 375 navigators running main software version 3.22 or earlier to be upgraded to version 3.30 no later than January 29, 2027. Garmin classifies compliance as mandatory for the non-certified-aircraft installations covered by the bulletin.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Gps175 #Gnc355 #Gnx375 #Servicebulletin #Softwareupdate #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA",
+          "status": "pending"
+        },
+        "instagram": {
+          "text": "Garmin Service Bulletin 26089A calls for affected GPS 175, GNC 355 and GNX 375 navigators running main software version 3.22 or earlier to...\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Gps175 #Gnc355 #Gnx375 #Servicebulletin #Softwareupdate #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA #Avionics #PilotLife #GeneralAviation",
+          "status": "pending"
+        }
+      }
+    },
     {
       "id": "introducing-axis-a-new-generation-of-flight-displays-20260708",
       "status": "published",
