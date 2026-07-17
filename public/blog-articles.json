@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-17T22:42:57Z",
+    "last_updated": "2026-07-17T22:56:04Z",
     "total_articles": 26,
     "categories": [
       "regulatory",
@@ -13,7 +13,7 @@
   "articles": [
     {
       "id": "garmin-sb-26091a-part-23-gtx-3x5r-software-approval-20260717",
-      "status": "draft",
+      "status": "published",
       "category": "service-bulletin",
       "title": "Garmin SB 26091A: Part 23 GTX 3X5(R) Software Approval",
       "subtitle": "AML STC SA01714WI Revision 24 approves GTX 3X5 main software 2.90 and ADS-B software 3.62.",
