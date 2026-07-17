@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-07-17T16:33:22.241214+00:00",
-    "total_articles": 25,
+    "last_updated": "2026-07-17T16:37:08.622621+00:00",
+    "total_articles": 26,
     "categories": [
       "regulatory",
       "product-update",
@@ -11,6 +11,44 @@
     ]
   },
   "articles": [
+    {
+      "id": "garmin-sb-26091a-part-23-gtx-3x5r-software-approval-20260717",
+      "status": "draft",
+      "category": "service-bulletin",
+      "title": "Garmin SB 26091A: Part 23 GTX 3X5(R) Software Approval",
+      "subtitle": "AML STC SA01714WI Revision 24 approves GTX 3X5 main software 2.90 and ADS-B software 3.62.",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Desk",
+      "date": "2026-07-17",
+      "source": "Garmin Service Bulletin 26091A",
+      "source_url": "https://support.garmin.com/en-US/aviation/faq/95Qz6TxdYw9YlU1m3CQhZ9/",
+      "lead": "Garmin Service Bulletin 26091A provides the Part 23 approval path for GTX 3X5(R) transponders installed under ADS-B AML STC SA01714WI. Master Data List Revision 24 approves GTX 3X5 main software version 2.90 and ADS-B software version 3.62, with compliance optional at the owner\u2019s discretion.",
+      "body": [
+        "Main software 2.90 adds AXIS Flight Display interface support and improves the robustness of existing interface formats. ADS-B software 3.62 adds AXIS support, improves traffic aural-alert robustness, strengthens Bluetooth connections with Apple products and improves traffic-target handling so the most relevant targets remain prioritized even when many targets are being tracked.",
+        "Garmin identifies one hour of labor per unit. Before return to service, the owner/operator must receive the applicable GTX 33X/3X5 ADS-B AFMS Revision 6 and the STC SA01714WI maintenance manual/ICA Revision 8 if those documents have not already been provided. The current GTX 3X5 Series Pilot\u2019s Guide Revision G also applies.",
+        "This bulletin is specifically for affected Part 23 installations under SA01714WI and states that implementation is through Garmin\u2019s authorized dealer and service-center network. RWAS can verify the installation basis, determine applicability, load the approved software and complete the required documentation. Contact RWAS at (605) 299-8178."
+      ],
+      "tags": [
+        "garmin",
+        "gtx-3x5",
+        "gtx-345",
+        "ads-b",
+        "axis",
+        "service-bulletin",
+        "software-update",
+        "stc"
+      ],
+      "social": {
+        "facebook": {
+          "text": "Garmin Service Bulletin 26091A provides the Part 23 approval path for GTX 3X5(R) transponders installed under ADS-B AML STC SA01714WI. Master Data List Revision 24 approves GTX 3X5 main software version 2.90 and ADS-B software version 3.62, with compliance optional at the owner\u2019s discretion.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Gtx3X5 #Gtx345 #Adsb #Axis #Servicebulletin #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA",
+          "status": "pending"
+        },
+        "instagram": {
+          "text": "Garmin Service Bulletin 26091A provides the Part 23 approval path for GTX 3X5(R) transponders installed under ADS-B AML STC SA01714WI....\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Gtx3X5 #Gtx345 #Adsb #Axis #Servicebulletin #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA #Avionics #PilotLife #GeneralAviation",
+          "status": "pending"
+        }
+      }
+    },
     {
       "id": "garmin-sb-26019a-gtn-xi-software-2104-20260717",
       "status": "draft",
