@@ -42,6 +42,7 @@ import os
 import sys
 import urllib.request
 import urllib.parse
+import time
 from datetime import datetime, timezone
 
 REPO_ROOT = os.path.expanduser("~/projects/rwas-web")
@@ -168,7 +169,7 @@ def publish_instagram(article_id):
         print(f"ERROR: Instagram post status is '{post.get('status')}', expected 'approved'")
         return False
 
-    article_image = art.get("image", "")
+    article_image = post.get("image_url") or art.get("image", "")
     if article_image:
         image_url = article_image if article_image.startswith(("http://", "https://")) else f"https://www.rogerwilcoaviation.com{article_image}"
     else:
@@ -192,6 +193,24 @@ def publish_instagram(article_id):
         with urllib.request.urlopen(req) as resp:
             result = json.loads(resp.read())
             container_id = result.get("id")
+
+        # Meta may accept the container before the image has finished
+        # processing. Publishing immediately then returns error 9007. Poll
+        # until the container is ready instead of creating a failed post.
+        status_url = (
+            f"https://graph.facebook.com/v19.0/{container_id}"
+            f"?fields=status_code&access_token={urllib.parse.quote(token)}"
+        )
+        for _ in range(12):
+            with urllib.request.urlopen(status_url) as status_resp:
+                status = json.loads(status_resp.read()).get("status_code")
+            if status == "FINISHED":
+                break
+            if status == "ERROR":
+                raise RuntimeError(f"Instagram container {container_id} failed processing")
+            time.sleep(5)
+        else:
+            raise RuntimeError(f"Instagram container {container_id} was not ready after 60 seconds")
 
         # Step 2: Publish the container
         pub_url = f"https://graph.facebook.com/v19.0/{account_id}/media_publish"

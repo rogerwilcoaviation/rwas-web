@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-17T22:56:04Z",
+    "last_updated": "2026-07-18T16:25:31.390692+00:00",
     "total_articles": 26,
     "categories": [
       "regulatory",
@@ -41,11 +41,18 @@
       "social": {
         "facebook": {
           "text": "Garmin Service Bulletin 26091A provides the Part 23 approval path for GTX 3X5(R) transponders installed under ADS-B AML STC SA01714WI. Master Data List Revision 24 approves GTX 3X5 main software version 2.90 and ADS-B software version 3.62, with compliance optional at the owner\u2019s discretion.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Gtx3X5 #Gtx345 #Adsb #Axis #Servicebulletin #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA",
-          "status": "pending"
+          "status": "published",
+          "approved_at": "2026-07-18T16:22:07.325931+00:00",
+          "published_at": "2026-07-18T16:22:16.018918+00:00",
+          "post_id": "106057782039473_1025776666876205"
         },
         "instagram": {
           "text": "Garmin Service Bulletin 26091A provides the Part 23 approval path for GTX 3X5(R) transponders installed under ADS-B AML STC SA01714WI....\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Gtx3X5 #Gtx345 #Adsb #Axis #Servicebulletin #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA #Avionics #PilotLife #GeneralAviation",
-          "status": "pending"
+          "image_url": "https://www.rogerwilcoaviation.com/images/social/garmin-axis-instagram-20260708.jpg",
+          "status": "published",
+          "approved_at": "2026-07-18T16:22:07.364907+00:00",
+          "published_at": "2026-07-18T16:25:17.231800+00:00",
+          "media_id": "18095529638368621"
         }
       },
       "image": "/images/blog/introducing-axis-a-new-generation-of-flight-displays.jpg",
@@ -80,11 +87,17 @@
       "social": {
         "facebook": {
           "text": "Garmin Service Bulletin 26019A introduces GTN Xi main software version 21.04 and recommends compliance at the next maintenance interval for covered non-certified-aircraft installations.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Gtnxi #Gtn650Xi #Gtn750Xi #Servicebulletin #Softwareupdate #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA",
-          "status": "pending"
+          "status": "published",
+          "approved_at": "2026-07-18T16:22:07.405987+00:00",
+          "published_at": "2026-07-18T16:22:26.446542+00:00",
+          "post_id": "106057782039473_1025776783542860"
         },
         "instagram": {
           "text": "Garmin Service Bulletin 26019A introduces GTN Xi main software version 21.04 and recommends compliance at the next maintenance interval for...\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Gtnxi #Gtn650Xi #Gtn750Xi #Servicebulletin #Softwareupdate #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA #Avionics #PilotLife #GeneralAviation",
-          "status": "pending"
+          "status": "published",
+          "approved_at": "2026-07-18T16:22:07.450381+00:00",
+          "published_at": "2026-07-18T16:23:54.102950+00:00",
+          "media_id": "18123622570666795"
         }
       },
       "image": "/images/blog/garmin-g500-txi-with-gtn-xi-panel.jpg",
@@ -121,11 +134,18 @@
       "social": {
         "facebook": {
           "text": "Garmin Service Bulletin 26089A calls for affected GPS 175, GNC 355 and GNX 375 navigators running main software version 3.22 or earlier to be upgraded to version 3.30 no later than January 29, 2027. Garmin classifies compliance as mandatory for the non-certified-aircraft installations covered by the bulletin.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Gps175 #Gnc355 #Gnx375 #Servicebulletin #Softwareupdate #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA",
-          "status": "pending"
+          "status": "published",
+          "approved_at": "2026-07-18T16:22:07.493261+00:00",
+          "published_at": "2026-07-18T16:22:38.787719+00:00",
+          "post_id": "106057782039473_1025776976876174"
         },
         "instagram": {
           "text": "Garmin Service Bulletin 26089A calls for affected GPS 175, GNC 355 and GNX 375 navigators running main software version 3.22 or earlier to...\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Gps175 #Gnc355 #Gnx375 #Servicebulletin #Softwareupdate #GarminAvionics #RogerWilcoAviation #SiouxFalls #FlyGA #Avionics #PilotLife #GeneralAviation",
-          "status": "pending"
+          "image_url": "https://www.rogerwilcoaviation.com/images/social/garmin-axis-instagram-20260708.jpg",
+          "status": "published",
+          "approved_at": "2026-07-18T16:22:07.535501+00:00",
+          "published_at": "2026-07-18T16:25:31.390676+00:00",
+          "media_id": "18481882216102662"
         }
       },
       "image": "/images/blog/introducing-axis-a-new-generation-of-flight-displays.jpg",
