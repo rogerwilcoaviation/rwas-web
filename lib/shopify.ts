@@ -185,7 +185,7 @@ const PRODUCT_TYPE_COLLECTIONS: Record<
   { title: string; productType: string }
 > = {
   'avionics-certified': {
-    title: 'Avionics Certified Retail',
+    title: 'Avionics Retail',
     productType: 'Avionics — Certified',
   },
   'avionics-experimental': {
@@ -565,11 +565,24 @@ export async function getCollectionByHandle(
       const fallback = productTypeCollectionSummary(handle);
       const productType = PRODUCT_TYPE_COLLECTIONS[handle]?.productType;
       if (!fallback || !productType) return null;
+      const productTypes =
+        handle === 'avionics-certified'
+          ? [
+              productType,
+              PRODUCT_TYPE_COLLECTIONS['avionics-experimental'].productType,
+            ]
+          : [productType];
+      const productGroups = await Promise.all(
+        productTypes.map((type) => getProductsByProductType(type)),
+      );
+      const productsByHandle = new Map(
+        productGroups.flat().map((product) => [product.handle, product]),
+      );
       return {
         ...fallback,
         products: filterCollectionProductsForHandle(
           handle,
-          await getProductsByProductType(productType),
+          Array.from(productsByHandle.values()),
         ),
       };
     }
@@ -1243,19 +1256,20 @@ export function isOtcEligible(
  * Display-title override for Shopify collections. Lets rwas-web present
  * a cleaner name to customers without touching Shopify's collection title.
  *
- * Current overrides: none. Shopify collection titles already match the
- * Phase 3 structure.
+ * The retail collection contains approved certified OTC products plus all
+ * experimental products, so its public title is broader than Shopify's
+ * legacy collection title.
  */
 export function displayTitleForCollection(
   handle: string,
   shopifyTitle: string,
 ): string {
-  return shopifyTitle;
+  return handle === 'avionics-certified' ? 'Avionics Retail' : shopifyTitle;
 }
 
 const COLLECTION_DESCRIPTION_OVERRIDES: Record<string, string> = {
   'avionics-certified':
-    'Garmin-certified avionics approved for over-the-counter retail sale through Roger Wilco Aviation Services. Current retail prices are shown. For package and special pricing please contact us.',
+    'Garmin avionics approved for direct retail sale, including certified over-the-counter products and all experimental/LSA products. Current retail prices are shown. For package and special pricing please contact us.',
   'avionics-experimental':
     'Garmin avionics and related components for experimental, LSA, and builder-supported installations, including G3X Touch and compatible accessories.',
   'pilot-gear':
@@ -1285,7 +1299,7 @@ export function imageForCollection(
     'avionics-certified': {
       url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth_ad7c40ee-efc6-4cb2-bcc8-67b2140557d4.png?v=1754905863',
       altText:
-        'Certified Garmin avionics supported by Roger Wilco Aviation Services',
+        'Certified and experimental Garmin avionics sold by Roger Wilco Aviation Services',
     },
     'avionics-experimental': {
       url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth_cdc37a0b-a976-4c50-93e4-59d3c68337c1.png?v=1754906168',

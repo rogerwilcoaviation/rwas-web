@@ -348,7 +348,7 @@ export default async function CollectionDetailPage({
               {quoteOnly
                 ? 'These are install-only or quote-driven items. Use the request-quote CTA to start the conversation.'
                 : collection.handle === 'avionics-certified'
-                  ? 'These Garmin products are approved for over-the-counter retail sale. Current retail prices are shown. For package and special pricing please contact us.'
+                  ? 'This collection includes approved certified over-the-counter products plus all experimental and LSA avionics available for direct retail sale. Current retail prices are shown. For package and special pricing please contact us.'
                   : 'These products are browsable directly from live Shopify data.'}
             </p>
           </div>

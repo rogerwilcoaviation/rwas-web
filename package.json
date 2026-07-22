@@ -18,7 +18,8 @@
     "seo:smoke": "node scripts/seo-smoke-check.mjs",
     "seo:gsc-baseline": "node scripts/gsc-query-baseline.mjs",
     "seo:catalog-audit": "node scripts/catalog-index-audit.mjs",
-    "catalog:garmin-otc": "node scripts/reconcile-garmin-otc-retail.mjs"
+    "catalog:garmin-otc": "node scripts/reconcile-garmin-otc-retail.mjs",
+    "catalog:experimental-retail": "node scripts/reconcile-experimental-retail.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
