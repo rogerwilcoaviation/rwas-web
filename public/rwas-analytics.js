@@ -28,7 +28,9 @@
 
   function send(event, feature, path, extra) {
     try {
-      var endpoint = '/api/rum';
+      // Interaction events belong in the D1-backed daily report. Web-vital
+      // measurements use the RUM endpoint and must not inflate click counts.
+      var endpoint = event === 'web_vital' ? '/api/rum' : '/api/track';
       var body = {
         sessionId: getSessionId(),
         event: event || 'feature',

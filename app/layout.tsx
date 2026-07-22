@@ -248,7 +248,7 @@ export default function RootLayout({
       <body className="flex flex-col text-black antialiased dark:bg-gray-950 dark:text-white min-h-screen bs-body-cream">
         <DeferredJerryWidget />
         <Script
-          src="/rwas-analytics.js?v=20260607-track"
+          src="/rwas-analytics.js?v=20260721-track-fix"
           strategy="afterInteractive"
         />
         <CartFloater />
