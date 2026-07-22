@@ -22,7 +22,7 @@ export const metadata = genPageMetadata({
 });
 
 const policyConfig = {
-  lastUpdated: 'April 8, 2026',
+  lastUpdated: 'July 22, 2026',
 };
 
 export default function TermsPage() {
@@ -100,9 +100,10 @@ export default function TermsPage() {
           </p>
 
           <p className="mb-4">
-            Our website is hosted on Vercel Inc. They provide us with the online
-            platform that allows us to deploy our products and services and
-            offer them to you.
+            Our public website is delivered through Cloudflare, and online
+            shopping and payment processing are provided through Shopify. These
+            service providers supply the infrastructure used to offer our
+            products and services to you.
           </p>
         </div>
 
@@ -363,51 +364,22 @@ export default function TermsPage() {
               Credit card transactions include a 3.5 percent transaction fee.
             </li>
             <li>
-              Wire transfers include a $25 bank charge. Please use the wire
-              instructions below.
+              Wire transfers include a $25 bank charge. Current wire
+              instructions are provided only on an authorized RWAS invoice or
+              directly by an RWAS representative.
             </li>
           </ul>
 
-          <h3 className="text-base font-semibold mb-3">WIRE INSTRUCTIONS</h3>
-          <ul className="list-disc pl-6 space-y-3 mb-4">
-            <li>
-              For domestic wire transfers, the ABA or routing transit number is
-              <span className="font-bold"> 121000248</span>.
-            </li>
-            <li>
-              For international wire transfers, the SWIFT or BIC code is
-              <span className="font-bold"> WFBIUS6S</span>.
-            </li>
-            <li>
-              Bank name:{' '}
-              <span className="font-bold">Wells Fargo Bank, N.A.</span>
-            </li>
-            <li>
-              Bank address:{' '}
-              <span className="font-bold">
-                420 Montgomery Street, San Francisco, CA 94104
-              </span>{' '}
-              (regardless of where the account is located)
-            </li>
-            <li>
-              Beneficiary account number:{' '}
-              <span className="font-bold">6542446213</span>
-            </li>
-            <li>
-              Beneficiary name and address:{' '}
-              <span className="font-bold">
-                Roger Wilco Aviation Services LLC, RWAS Avionics Desk
-              </span>
-            </li>
-          </ul>
-
+          <h3 className="text-base font-semibold mb-3">
+            VERIFY WIRE INSTRUCTIONS
+          </h3>
           <p className="mb-4">
-            Please note there is a $25 fee for wire transfers. SWIFT or BIC
-            routing generally routes wires correctly without the need for
-            intermediary bank details. In some instances, the sender may need
-            intermediary bank information to send the wire. If that happens,
-            please review the Foreign Currency Incoming Wires Instructions or
-            contact us for the correct intermediary bank details.
+            Never rely on banking instructions copied from this website or sent
+            in an unexpected email. Before initiating a wire, call RWAS at the
+            phone number published on this website and independently verify the
+            beneficiary, routing information, account information, and amount
+            with an authorized RWAS representative. RWAS will not notify you of
+            a change to banking instructions solely by email.
           </p>
 
           <p className="mb-4">

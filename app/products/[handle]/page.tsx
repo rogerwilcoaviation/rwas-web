@@ -1008,6 +1008,7 @@ export default async function ProductDetailPage({
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
   const primaryPrice = product.variants[0]?.price;
+  const hasSingleVariant = product.variants.length === 1;
   const normalListPrice = product.variants[0]?.compareAtPrice;
   const hasSalePrice = Boolean(
     normalListPrice &&
@@ -1307,7 +1308,7 @@ export default async function ProductDetailPage({
               <span className="vendor-row">
                 From <strong>{vendor}</strong>
               </span>
-              {firstSku ? (
+              {hasSingleVariant && firstSku ? (
                 <>
                   <span className="sep">◆</span>
                   <span>SKU {firstSku}</span>
@@ -1468,7 +1469,7 @@ export default async function ProductDetailPage({
                       <td>{product.productType}</td>
                     </tr>
                   ) : null}
-                  {firstSku ? (
+                  {hasSingleVariant && firstSku ? (
                     <tr>
                       <th>SKU</th>
                       <td>{firstSku}</td>
@@ -1498,7 +1499,8 @@ export default async function ProductDetailPage({
                       </tr>
                     </>
                   ) : null}
-                  {primaryPrice &&
+                  {hasSingleVariant &&
+                  primaryPrice &&
                   !(gating.isGarmin && gating.otc !== 'eligible') ? (
                     <tr>
                       <th>{hasSalePrice ? 'Sale Price' : 'Price'}</th>

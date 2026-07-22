@@ -57,6 +57,12 @@ export function productImageUrl(
   altText?: string | null,
   handle?: string | null
 ): string {
+  if (
+    handle === 'rigging-kit' &&
+    (!url || /Rudder_Tool_2/i.test(url))
+  ) {
+    return '/newspaper/images/papa_alpha_kit_collection.jpg';
+  }
   if (!url) return placeholderImageUrl(url, altText, handle);
   if (isShopifyPlaceholderImage(url, altText)) {
     return placeholderImageUrl(url, altText, handle);
