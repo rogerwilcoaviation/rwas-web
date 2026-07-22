@@ -41,8 +41,9 @@ jobs:
         env:
           NODE_VERSION: '22'
 
-      - name: Deploy to Cloudflare Pages
-        id: cf-deploy
+      - name: Deploy production to Cloudflare Pages
+        if: github.ref == 'refs/heads/main'
+        id: cf-deploy-production
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -50,7 +51,18 @@ jobs:
           command: >-
             pages deploy .vercel/output/static
             --project-name=rwas-web
-            --branch=${{ github.ref == 'refs/heads/main' && 'main' || github.head_ref || github.ref_name }}
+
+      - name: Deploy preview to Cloudflare Pages
+        if: github.ref != 'refs/heads/main'
+        id: cf-deploy-preview
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: >-
+            pages deploy .vercel/output/static
+            --project-name=rwas-web
+            --branch=${{ github.head_ref || github.ref_name }}
 
       - name: Smoke-test production (main only)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -66,6 +78,22 @@ jobs:
               exit 1
             fi
             echo "SEO smoke failed while the edge is propagating; retrying in 10s... ($attempt/12)"
+            sleep 10
+          done
+          echo "=== Retail collection ==="
+          for attempt in {1..12}; do
+            retail_html=$(curl -fsSL https://www.rogerwilcoaviation.com/collections/avionics-certified)
+            if grep -q 'Avionics Retail' <<< "$retail_html" \
+              && grep -q 'g3x-touch-display-gdu-460' <<< "$retail_html" \
+              && grep -q 'g5-electronic-flight-instrument-for-experimental-lsa-aircraft' <<< "$retail_html" \
+              && grep -q 'For package and special pricing please contact us' <<< "$retail_html"; then
+              break
+            fi
+            if [ "$attempt" -eq 12 ]; then
+              echo "Retail collection smoke failed after edge propagation retries."
+              exit 1
+            fi
+            echo "Retail collection is still propagating; retrying in 10s... ($attempt/12)"
             sleep 10
           done
           echo "=== /aircraft-for-sale ==="
