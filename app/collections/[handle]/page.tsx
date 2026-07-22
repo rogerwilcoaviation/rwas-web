@@ -250,7 +250,9 @@ export default async function CollectionDetailPage({
               'Live product listing from the Shopify Storefront API.'}
           </p>
           <p className="bs-byline">
-            RWAS Avionics Desk &middot; KFSD, Sioux Falls
+            {collection.handle === 'avionics-certified'
+              ? 'For package and special pricing please contact us'
+              : 'RWAS Avionics Desk · KFSD, Sioux Falls'}
           </p>
           <div
             style={{
@@ -345,7 +347,9 @@ export default async function CollectionDetailPage({
             <p className="bs-body" style={{ marginTop: 4 }}>
               {quoteOnly
                 ? 'These are install-only or quote-driven items. Use the request-quote CTA to start the conversation.'
-                : 'These products are browsable directly from live Shopify data.'}
+                : collection.handle === 'avionics-certified'
+                  ? 'These Garmin products are approved for over-the-counter retail sale. Current retail prices are shown. For package and special pricing please contact us.'
+                  : 'These products are browsable directly from live Shopify data.'}
             </p>
           </div>
 

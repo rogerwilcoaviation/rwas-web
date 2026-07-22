@@ -171,7 +171,7 @@ function ProductTile({
     mode === 'quote-request'
       ? 'Quote-request item'
       : mode === 'otc-ready'
-        ? 'OTC-ready item'
+        ? 'Retail · OTC eligible'
         : 'Shopify product';
   const displayImage =
     product.images?.find(
@@ -227,7 +227,7 @@ function ProductTile({
           <span>{labelFromSlug(productFamily(product))}</span>
         </div>
         {price && mode !== 'quote-request' ? (
-          <p className="text-sm text-black/60">From {price}</p>
+          <p className="text-sm text-black/60">Retail price: {price}</p>
         ) : null}
         <Link
           href={`/products/${encodeURIComponent(product.handle)}`}

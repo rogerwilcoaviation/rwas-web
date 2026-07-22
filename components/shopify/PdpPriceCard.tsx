@@ -39,6 +39,7 @@ export type PdpPriceCardProps = {
   stockCheckRequired: boolean;
   isGarmin: boolean;
   mapLocked: boolean;
+  showQuoteRetailPrice?: boolean;
 };
 
 function formatPrice(amount: string, currencyCode: string) {
@@ -82,14 +83,25 @@ function compactVariantLabel(v: PdpVariant) {
   if (!sku) return compact || 'Standard configuration';
 
   compact = compact
-    .replace(new RegExp(`^(?:Kit|Tool)?\\s*${escapeRegExp(sku)}\\b\\s*-?\\s*`, 'i'), '')
+    .replace(
+      new RegExp(`^(?:Kit|Tool)?\\s*${escapeRegExp(sku)}\\b\\s*-?\\s*`, 'i'),
+      '',
+    )
     .trim();
 
   return compact ? `${sku} - ${compact}` : sku;
 }
 
 export default function PdpPriceCard(props: PdpPriceCardProps) {
-  const { productTitle, variants, otc, stockCheckRequired, isGarmin, mapLocked } = props;
+  const {
+    productTitle,
+    variants,
+    otc,
+    stockCheckRequired,
+    isGarmin,
+    mapLocked,
+    showQuoteRetailPrice = false,
+  } = props;
 
   const [selectedId, setSelectedId] = useState<string>(variants[0]?.id || '');
   const [loading, setLoading] = useState(false);
@@ -98,11 +110,12 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
 
   const selected = useMemo(
     () => variants.find((v) => v.id === selectedId) || variants[0],
-    [variants, selectedId]
+    [variants, selectedId],
   );
 
   const otcEligible = otc === 'eligible';
   const isNonOtcGarmin = isGarmin && !otcEligible;
+  const showGarminRetailPrice = isGarmin && otcEligible;
 
   // Stock pill: never call Garmin items "in stock". Garmin products are
   // special-order/direct-fulfillment: Garmin delivers to RWAS, then RWAS
@@ -118,9 +131,16 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
     ? formatPrice(selected.price.amount, selected.price.currencyCode)
     : 'Contact for pricing';
   const normalListPrice = selected?.compareAtPrice
-    ? formatPrice(selected.compareAtPrice.amount, selected.compareAtPrice.currencyCode)
+    ? formatPrice(
+        selected.compareAtPrice.amount,
+        selected.compareAtPrice.currencyCode,
+      )
     : null;
-  const hasSalePrice = Boolean(normalListPrice && selected?.price && Number(selected.compareAtPrice?.amount) > Number(selected.price.amount));
+  const hasSalePrice = Boolean(
+    normalListPrice &&
+      selected?.price &&
+      Number(selected.compareAtPrice?.amount) > Number(selected.price.amount),
+  );
 
   const multiVariant = variants.length > 1;
   const contactHref = selected?.sku
@@ -157,7 +177,9 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
       window.dispatchEvent(new Event('rwas-cart-updated'));
       setNotice('Added to cart. You can keep shopping.');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to add item to cart.');
+      setError(
+        err instanceof Error ? err.message : 'Unable to add item to cart.',
+      );
     } finally {
       setLoading(false);
     }
@@ -165,19 +187,31 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
 
   return (
     <div className="bs-price-card">
-      {!isNonOtcGarmin ? (
+      {!isNonOtcGarmin || showQuoteRetailPrice ? (
         <>
-          <div className="label">{hasSalePrice ? 'Sale Price' : 'Price'}</div>
+          <div className="label">
+            {showQuoteRetailPrice || showGarminRetailPrice
+              ? 'Retail Price'
+              : hasSalePrice
+                ? 'Sale Price'
+                : 'Price'}
+          </div>
           <div className="price-row">
-            <div className="price"><strong>{displayPrice}</strong></div>
+            <div className="price">
+              <strong>{displayPrice}</strong>
+            </div>
             {stockPill ? (
-              <span className={`stock${otcEligible ? ' stock--ok' : ''}`}>{stockPill}</span>
+              <span className={`stock${otcEligible ? ' stock--ok' : ''}`}>
+                {stockPill}
+              </span>
             ) : null}
           </div>
           {hasSalePrice ? (
             <div className="map-line">
               <span className="seal">Normal Garmin List Price</span>
-              <span className="map-line-copy">After the sale: {normalListPrice}</span>
+              <span className="map-line-copy">
+                After the sale: {normalListPrice}
+              </span>
             </div>
           ) : null}
         </>
@@ -223,17 +257,33 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
             onClick={handleAddToCart}
             disabled={loading || !selected?.availableForSale}
           >
-            {loading ? 'Adding…' : selected?.availableForSale ? 'Add to Cart' : 'Unavailable'}
+            {loading
+              ? 'Adding…'
+              : selected?.availableForSale
+                ? 'Add to Cart'
+                : 'Unavailable'}
           </button>
         ) : isNonOtcGarmin ? (
           <Link className="bs-cta-primary" href={contactHref}>
-            Call RWAS for Pricing and Installation
+            {showQuoteRetailPrice
+              ? 'Call for Package and Sale Pricing'
+              : 'Call RWAS for Pricing and Installation'}
           </Link>
         ) : null}
       </div>
 
+      {showGarminRetailPrice ? (
+        <Link className="bs-cta-secondary" href={contactHref}>
+          For package and special pricing please contact us
+        </Link>
+      ) : null}
+
       {error ? <div className="bs-cta-error">{error}</div> : null}
-      {notice ? <div className="bs-cta-notice" role="status">{notice}</div> : null}
+      {notice ? (
+        <div className="bs-cta-notice" role="status">
+          {notice}
+        </div>
+      ) : null}
 
       {/* bs-otc "RWAS does not hold Garmin stock" notice removed per product
           direction (2026-04-21). */}

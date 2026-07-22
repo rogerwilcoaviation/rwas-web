@@ -288,6 +288,19 @@ function filterCollectionProductsForHandle(
   products: ShopifyCollectionProduct[],
 ): ShopifyCollectionProduct[] {
   if (handle === 'garmin-dealer-install') return products;
+  if (handle === 'avionics-certified') {
+    return products.filter((product) => {
+      const tags = (product.tags || []).map((tag) => tag.toLowerCase());
+      const retailPrice = Number(product.priceRange.minVariantPrice.amount);
+      return (
+        tags.includes('otc-eligible') &&
+        !tags.includes('otc-disabled') &&
+        !tags.includes('garmin-dealer-only') &&
+        Number.isFinite(retailPrice) &&
+        retailPrice > 0
+      );
+    });
+  }
   return products.filter((product) => !isGmc605InstallOnlyProduct(product));
 }
 
@@ -1208,7 +1221,6 @@ export function isOtcCollection(handle: string): boolean {
     handle === 'avionics-experimental' ||
     handle === 'pilot-gear' ||
     handle === 'watches-accessories' ||
-    handle === 'garmin-dealer-install' ||
     handle === 'on-sale' ||
     handle === 'papa-alpha-tools'
   );
@@ -1243,7 +1255,7 @@ export function displayTitleForCollection(
 
 const COLLECTION_DESCRIPTION_OVERRIDES: Record<string, string> = {
   'avionics-certified':
-    'Retail-certified Garmin avionics supported by Roger Wilco Aviation Services, including navigators, displays, autopilots, transponders, audio panels, LRUs, and related installation products.',
+    'Garmin-certified avionics approved for over-the-counter retail sale through Roger Wilco Aviation Services. Current retail prices are shown. For package and special pricing please contact us.',
   'avionics-experimental':
     'Garmin avionics and related components for experimental, LSA, and builder-supported installations, including G3X Touch and compatible accessories.',
   'pilot-gear':
@@ -1306,7 +1318,7 @@ export function imageForCollection(
 }
 
 export function isQuoteCollection(handle: string) {
-  return handle === 'avionics-certified';
+  return handle === 'garmin-dealer-install';
 }
 
 export function isQuoteProduct(product: {

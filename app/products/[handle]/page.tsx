@@ -946,6 +946,82 @@ function Pa31RudderTrimApplicability() {
   );
 }
 
+const DUAL_G5_KIT_GROUPS = [
+  {
+    title: 'Flight displays',
+    items: [
+      '2 × certified G5 installation kits with lightning protection modules — K10-00280-11',
+      '2 × G5 backup batteries — included with the G5 assemblies',
+    ],
+  },
+  {
+    title: 'Sensors',
+    items: [
+      '1 × GMU 11 magnetometer, FAA-PMA — 010-01788-01',
+      '1 × GMU 11 installation kit — 011-04349-90',
+      '1 × GTP 59 outside-air-temperature probe — 011-00978-00',
+      '1 × GPS antenna, BNC — 010-12444-10',
+    ],
+  },
+  {
+    title: 'Interfaces & connectors',
+    items: [
+      '1 × GAD 13 adapter, FAA-PMA — 010-02203-00',
+      '1 × 9-pin connector kit with CAN terminator, PMA — 011-03002-10',
+      '1 × GAD 29D ARINC 429 adapter, FAA-PMA — 010-01172-21',
+      '1 × GAD 29 connector kit — 011-03271-00',
+    ],
+  },
+  {
+    title: 'Registration & media',
+    items: [
+      '1 × G5 STC product registration / permission letter — 010-12493-20',
+      '1 × G5 microSD card — 010-12493-30',
+    ],
+  },
+];
+
+function DualG5KitDetails() {
+  return (
+    <section className="bs-pilot-briefing" aria-label="Dual G5 kit details">
+      <div className="bs-section-kicker">Complete package</div>
+      <h2>Everything included in Garmin kit K10-00280-51</h2>
+      <p>
+        A certified dual-display package for an electronic attitude indicator
+        and HSI configuration, supplied with the required sensors, interfaces,
+        registration media, and installation hardware.
+      </p>
+
+      <div className="bs-brief-grid">
+        {DUAL_G5_KIT_GROUPS.map((group) => (
+          <div className="bs-brief-card" key={group.title}>
+            <span>{group.title}</span>
+            <ul>
+              {group.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div className="bs-promo-note">
+        <strong>Special order:</strong> RWAS orders the package from Garmin,
+        receives it at our facility, and then ships it to you. For package and
+        special pricing please contact us. We will also confirm Garmin
+        availability and estimated transit time.
+      </div>
+
+      <div className="bs-promo-note">
+        <strong>Equipment only:</strong> Installation is not included. A
+        certificated-aircraft installation must be completed and returned to
+        service by appropriately authorized personnel using Garmin-approved data
+        and confirming STC/AML eligibility.
+      </div>
+    </section>
+  );
+}
+
 export default async function ProductDetailPage({
   params,
 }: {
@@ -1039,8 +1115,11 @@ export default async function ProductDetailPage({
     product.productType || (gating.isGarmin ? 'Garmin' : 'Shop');
   const showPa31RudderTrimApplicability = isPa31RudderTrimProduct(product);
   const showPapaAlphaApplicability = isPapaAlphaApplicabilityProduct(product);
-  const cleanDescText =
-    showPa31RudderTrimApplicability || showPapaAlphaApplicability
+  const showDualG5KitDetails =
+    product.handle === 'garmin-dual-g5-ai-hsi-kit-k10-00280-51';
+  const cleanDescText = showDualG5KitDetails
+    ? 'A complete certified dual-display package for an electronic attitude indicator and HSI configuration.'
+    : showPa31RudderTrimApplicability || showPapaAlphaApplicability
       ? papaAlphaApplicabilityIntro(product) || PA31_RUDDER_TRIM_INTRO
       : (product.description || '')
           .replace(/^[^\n]*Buy\s*&\s*Save rebate form\.?\s*\n*/i, '')
@@ -1324,6 +1403,7 @@ export default async function ProductDetailPage({
               stockCheckRequired={gating.stockCheckRequired}
               isGarmin={gating.isGarmin}
               mapLocked={gating.mapLocked}
+              showQuoteRetailPrice={showDualG5KitDetails}
             />
           </div>
         </section>
@@ -1348,6 +1428,7 @@ export default async function ProductDetailPage({
             {showPapaAlphaApplicability ? (
               <PapaAlphaApplicabilityGuide product={product} />
             ) : null}
+            {showDualG5KitDetails ? <DualG5KitDetails /> : null}
 
             {d2Briefing ? (
               <section
@@ -1385,10 +1466,10 @@ export default async function ProductDetailPage({
                 gating.otc === 'eligible' &&
                 !gating.stockCheckRequired ? (
                   <>
-                    Garmin watches are sold at the current Garmin promotional
-                    sale price when applicable. Garmin delivers to RWAS first;
-                    RWAS then delivers to the customer and handles warranty
-                    claims.
+                    Garmin retail products are sold at the current Garmin
+                    promotional sale price when applicable. Garmin delivers to
+                    RWAS first; RWAS then delivers to the customer and handles
+                    warranty claims.
                   </>
                 ) : gating.isGarmin ? (
                   <>
@@ -1532,8 +1613,8 @@ export default async function ProductDetailPage({
                     </tr>
                   ))}
                   <tr>
-                    <th>Installs at</th>
-                    <td>RWAS Avionics Desk · KFSD · Sioux Falls, SD</td>
+                    <th>Service area</th>
+                    <td>We come to you</td>
                   </tr>
                   <tr>
                     <th>Certification</th>
