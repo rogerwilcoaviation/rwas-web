@@ -19,6 +19,7 @@
     "seo:gsc-baseline": "node scripts/gsc-query-baseline.mjs",
     "seo:catalog-audit": "node scripts/catalog-index-audit.mjs",
     "catalog:garmin-otc": "node scripts/reconcile-garmin-otc-retail.mjs",
+    "catalog:garmin-placement": "node scripts/reconcile-garmin-catalog-placement.mjs",
     "catalog:experimental-retail": "node scripts/reconcile-experimental-retail.mjs"
   },
   "dependencies": {

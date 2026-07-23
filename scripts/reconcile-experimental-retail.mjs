@@ -332,7 +332,7 @@ function buildAudit(products, priceAuthority) {
         : [DEALER_INSTALL_COLLECTION_HANDLE, ACCESSORIES_COLLECTION_HANDLE];
     const prohibitedCollections =
       classification === 'experimental'
-        ? []
+        ? [LEGACY_EXPERIMENTAL_COLLECTION_HANDLE, CERTIFIED_COLLECTION_HANDLE]
         : [
             RETAIL_COLLECTION_HANDLE,
             EXPERIMENTAL_COLLECTION_HANDLE,
