@@ -21,6 +21,9 @@ const redirects = {
   '/collections/garmin-cycling-fitness': '/collections',
   '/collections/garmin-golf': '/collections',
   '/collections/garmin-outdoor-dog-tracking': '/collections',
+  '/collections/garmin-equine': '/collections',
+  '/collections/garmin-outdoor-navigation': '/collections',
+  '/collections/garmin-powersports': '/collections',
   '/maintenance': '/services/aircraft-maintenance',
   '/services/aircraft-maintenance-yankton': '/services/aircraft-maintenance',
 };

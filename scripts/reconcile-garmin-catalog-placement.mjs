@@ -31,6 +31,11 @@ const TYPES = {
   unclassified: 'Garmin Aviation',
 };
 
+const REQUIRED_STOREFRONT_PUBLICATIONS = [
+  'Online Store',
+  'Roger Wilco Aviation Services (RWAS)',
+];
+
 const APPROVED_CERTIFIED_OTC = new Set([
   '010-02232-51',
   '010-01822-50',
@@ -277,9 +282,25 @@ function makePlanRecord(product) {
     nextTags: [...product.tags],
     addCollections: new Set(),
     removeCollections: new Set(),
-    publish: false,
+    currentPublications: new Set(
+      product.resourcePublicationsV2.nodes.map(
+        (resourcePublication) => resourcePublication.publication.name,
+      ),
+    ),
+    publishTo: new Map(),
     reasons: [],
   };
+}
+
+function ensureRequiredStorefrontPublications(record, publications) {
+  for (const publication of publications) {
+    if (!record.currentPublications.has(publication.name)) {
+      record.publishTo.set(publication.id, publication.name);
+    }
+  }
+  if (record.publishTo.size) {
+    record.reasons.push('required RWAS storefront publication');
+  }
 }
 
 function setTargetType(record, productType, reason) {
@@ -389,11 +410,11 @@ function finalizeRecord(record) {
     Object.keys(record.productUpdate).length > 0 ||
     record.addCollections.size > 0 ||
     record.removeCollections.size > 0 ||
-    record.publish;
+    record.publishTo.size > 0;
   return changed ? record : null;
 }
 
-function buildPlan(products, collections) {
+function buildPlan(products, collections, publications) {
   const changes = [];
   const blockers = [];
 
@@ -434,7 +455,6 @@ function buildPlan(products, collections) {
         collections,
         'Garmin watch/accessory evidence',
       );
-      record.publish = !product.publishedAt;
     } else if (catalogSyncDatabase) {
       applyDealerPlacement(
         record,
@@ -442,7 +462,6 @@ function buildPlan(products, collections) {
         'Garmin aviation data-card/enablement evidence',
         true,
       );
-      record.publish = !product.publishedAt;
     } else if (unplaced) {
       const classification = classifyUnplaced(product);
       if (classification === 'excluded-consumer') {
@@ -457,7 +476,6 @@ function buildPlan(products, collections) {
           collections,
           'Garmin watch/accessory evidence',
         );
-        record.publish = !product.publishedAt;
       } else if (classification === 'database') {
         applyDealerPlacement(
           record,
@@ -465,21 +483,18 @@ function buildPlan(products, collections) {
           'Garmin aviation data-card/enablement evidence',
           true,
         );
-        record.publish = !product.publishedAt;
       } else if (classification === 'pilot-documentation') {
         applyPilotPlacement(
           record,
           collections,
           'Garmin pilot-facing portable/documentation evidence',
         );
-        record.publish = !product.publishedAt;
       } else if (classification === 'dealer-install') {
         applyDealerPlacement(
           record,
           collections,
           'Garmin certified install/LRU/installation-hardware evidence',
         );
-        record.publish = !product.publishedAt;
       } else {
         blockers.push({
           sku: record.sku,
@@ -487,6 +502,20 @@ function buildPlan(products, collections) {
           state: 'unclassified-active-garmin-product',
         });
       }
+    }
+
+    const nextStatus = record.productUpdate.status || record.currentStatus;
+    const nextProductType =
+      record.productUpdate.productType || record.currentProductType;
+    const isCatalogSyncProduct = product.tags.some((tag) =>
+      tag.toLowerCase().startsWith('catalog-sync:'),
+    );
+    if (
+      isCatalogSyncProduct &&
+      nextStatus === 'ACTIVE' &&
+      ![TYPES.unclassified, TYPES.excluded].includes(nextProductType)
+    ) {
+      ensureRequiredStorefrontPublications(record, publications);
     }
 
     if (!excluded && !unplaced && !catalogSyncWatch && !catalogSyncDatabase) {
@@ -586,7 +615,7 @@ function publicChange(record) {
     tagsChanged: Boolean(record.productUpdate.tags),
     addCollections: [...record.addCollections].sort(),
     removeCollections: [...record.removeCollections].sort(),
-    publish: record.publish,
+    publishTo: [...record.publishTo.values()].sort(),
     reasons: [...new Set(record.reasons)],
   };
 }
@@ -675,6 +704,9 @@ async function getProducts() {
             vendor
             productType
             tags
+            resourcePublicationsV2(first: 50, onlyPublished: true) {
+              nodes { publication { id name } }
+            }
             collections(first: 100) { nodes { id handle title } }
             variants(first: 100) { nodes { id sku price } }
           }
@@ -690,15 +722,25 @@ async function getProducts() {
   return products;
 }
 
-async function getOnlineStorePublication() {
+async function getRequiredStorefrontPublications() {
   const data = await shopifyGraphql(`query PlacementPublications {
     publications(first: 50) { nodes { id name } }
   }`);
-  return (
-    data.publications.nodes.find(
-      (publication) => publication.name === 'Online Store',
-    ) || null
+  const byName = new Map(
+    data.publications.nodes.map((publication) => [
+      publication.name,
+      publication,
+    ]),
   );
+  const missing = REQUIRED_STOREFRONT_PUBLICATIONS.filter(
+    (name) => !byName.has(name),
+  );
+  if (missing.length) {
+    throw new Error(
+      `Missing required Shopify publications: ${missing.join(', ')}`,
+    );
+  }
+  return REQUIRED_STOREFRONT_PUBLICATIONS.map((name) => byName.get(name));
 }
 
 async function updateProduct(record) {
@@ -761,8 +803,8 @@ async function deleteCollection(handle, collections) {
   assertNoUserErrors(result, 'collectionDelete');
 }
 
-async function publishProduct(record, publication) {
-  if (!record.publish) return;
+async function publishProduct(record) {
+  if (!record.publishTo.size) return;
   const result = await shopifyGraphql(
     `mutation PublishGarminPlacementProduct($id: ID!, $input: [PublicationInput!]!) {
       publishablePublish(id: $id, input: $input) {
@@ -770,7 +812,12 @@ async function publishProduct(record, publication) {
         userErrors { field message }
       }
     }`,
-    { id: record.id, input: [{ publicationId: publication.id }] },
+    {
+      id: record.id,
+      input: [...record.publishTo.keys()].map((publicationId) => ({
+        publicationId,
+      })),
+    },
   );
   assertNoUserErrors(result, 'publishablePublish');
 }
@@ -783,10 +830,10 @@ function chunk(values, size) {
   return chunks;
 }
 
-async function applyPlan(plan, collections, publication) {
+async function applyPlan(plan, collections) {
   for (const [index, record] of plan.changes.entries()) {
     await updateProduct(record);
-    await publishProduct(record, publication);
+    await publishProduct(record);
     if ((index + 1) % 50 === 0) {
       process.stderr.write(
         `Applied product updates ${index + 1}/${plan.changes.length}\n`,
@@ -948,10 +995,10 @@ function delay(milliseconds) {
 async function main() {
   const apply = process.argv.includes('--apply');
   loadEnv(SHOPIFY_ENV_PATH);
-  const [collections, products, publication] = await Promise.all([
+  const [collections, products, publications] = await Promise.all([
     getCollections(),
     getProducts(),
-    getOnlineStorePublication(),
+    getRequiredStorefrontPublications(),
   ]);
 
   for (const handle of Object.values(COLLECTIONS)) {
@@ -961,7 +1008,7 @@ async function main() {
   }
 
   const beforeAudit = auditState(products, collections);
-  const plan = buildPlan(products, collections);
+  const plan = buildPlan(products, collections, publications);
   if (plan.blockers.length) {
     throw new Error(
       `Unsafe catalog state: ${plan.blockers
@@ -969,11 +1016,7 @@ async function main() {
         .join(', ')}`,
     );
   }
-  if (plan.changes.some((record) => record.publish) && !publication) {
-    throw new Error('Online Store publication was not found');
-  }
-
-  if (apply) await applyPlan(plan, collections, publication);
+  if (apply) await applyPlan(plan, collections);
 
   let afterProducts = products;
   let afterCollections = collections;
@@ -985,7 +1028,7 @@ async function main() {
         getProducts(),
         getCollections(),
       ]);
-      afterPlan = buildPlan(afterProducts, afterCollections);
+      afterPlan = buildPlan(afterProducts, afterCollections, publications);
       afterAudit = auditState(afterProducts, afterCollections);
       if (
         !afterPlan.changes.length &&
