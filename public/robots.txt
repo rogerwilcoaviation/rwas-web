@@ -18,7 +18,7 @@ User-agent: CCBot
 Disallow: /
 
 User-agent: ClaudeBot
-Disallow: /
+Allow: /
 
 User-agent: FacebookBot
 Disallow: /
@@ -27,7 +27,7 @@ User-agent: Google-Extended
 Disallow: /
 
 User-agent: GPTBot
-Disallow: /
+Allow: /
 
 User-agent: ImagesiftBot
 Disallow: /
@@ -40,6 +40,12 @@ Disallow: /
 
 User-agent: omgilibot
 Disallow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
 
 Sitemap: https://www.rogerwilcoaviation.com/sitemap.xml
 Host: https://www.rogerwilcoaviation.com
