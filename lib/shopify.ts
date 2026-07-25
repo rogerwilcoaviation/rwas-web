@@ -1,3 +1,5 @@
+import { formatCatalogCopy } from '@/lib/seo';
+
 type Money = {
   amount: string;
   currencyCode: string;
@@ -996,10 +998,10 @@ export async function getProductByHandle(
 
   return {
     id: data.product.id,
-    title: data.product.title,
+    title: formatCatalogCopy(data.product.title),
     handle: data.product.handle,
-    description: data.product.description,
-    descriptionHtml: data.product.descriptionHtml,
+    description: formatCatalogCopy(data.product.description),
+    descriptionHtml: formatCatalogCopy(data.product.descriptionHtml),
     availableForSale: data.product.availableForSale,
     tags: data.product.tags,
     vendor: data.product.vendor,

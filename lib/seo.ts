@@ -21,6 +21,23 @@ export function compactText(input = '') {
     .trim();
 }
 
+/** Normalize punctuation spacing in copy imported from Shopify. */
+export function formatCatalogCopy(input = '') {
+  return input
+    .split(/(<[^>]+>)/g)
+    .map((part) =>
+      part.startsWith('<')
+        ? part
+        : part
+            .replace(/,(?=[A-Za-z])/g, ', ')
+            .replace(/([.!?])(?=[A-Z])/g, '$1 ')
+            .replace(/\b(SKU:\s*[^,]+),(?=[A-Z])/g, '$1, ')
+            .replace(/\s+/g, ' '),
+    )
+    .join('')
+    .trim();
+}
+
 export function truncateMeta(input: string, max = 155) {
   const clean = compactText(input);
   if (clean.length <= max) return clean;
