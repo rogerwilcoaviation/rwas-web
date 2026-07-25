@@ -161,11 +161,15 @@ export async function generateMetadata({
   const titleSuffix = ' | RWAS';
   const titleBase = `${sold ? 'SOLD — ' : ''}${headline(l)} — ${priceLabel(l)}`;
   const titleLimit = 60 - titleSuffix.length;
-  const title = `${
+  const titleCore =
     titleBase.length <= titleLimit
       ? titleBase
-      : `${titleBase.slice(0, titleLimit - 1).trimEnd()}…`
-  }${titleSuffix}`;
+      : titleBase
+          .slice(0, titleLimit)
+          .replace(/\s+[^\s]*$/u, '')
+          .replace(/[—,:;\-/]+$/u, '')
+          .trimEnd();
+  const title = `${titleCore}${titleSuffix}`;
   const description = truncateMeta(
     l.description ||
       `${headline(l)} listed by Roger Wilco Aviation Services at KYKN in Yankton. Tail ${l.nNumber || 'n/a'}.`,
