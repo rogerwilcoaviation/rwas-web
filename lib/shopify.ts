@@ -633,9 +633,20 @@ export async function getSeoProductHandles(): Promise<string[]> {
       : [],
   );
 
-  return Array.from(new Set([...PRIORITY_PRODUCT_HANDLES, ...handles])).filter(
-    isSeoSafeProductHandle,
+  const uniqueHandles = Array.from(
+    new Set([...PRIORITY_PRODUCT_HANDLES, ...handles]),
   );
+  const unsafeHandles = uniqueHandles.filter(
+    (handle) => !isSeoSafeProductHandle(handle),
+  );
+  if (unsafeHandles.length) {
+    throw new Error(
+      `Shopify products have non-ASCII handles that cannot be exported safely: ${unsafeHandles
+        .slice(0, 10)
+        .join(', ')}`,
+    );
+  }
+  return uniqueHandles;
 }
 
 export async function getPartFinderProducts(

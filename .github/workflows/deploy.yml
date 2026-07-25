@@ -36,6 +36,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
       - name: Build (next-on-pages)
         run: npm run pages:build
         env:
@@ -94,6 +97,18 @@ jobs:
               exit 1
             fi
             echo "Retail collection is still propagating; retrying in 10s... ($attempt/12)"
+            sleep 10
+          done
+          echo "=== Garmin storefront catalog ==="
+          for attempt in {1..12}; do
+            if npm run catalog:production-smoke; then
+              break
+            fi
+            if [ "$attempt" -eq 12 ]; then
+              echo "Garmin storefront catalog smoke failed after edge propagation retries."
+              exit 1
+            fi
+            echo "Garmin storefront catalog is still propagating; retrying in 10s... ($attempt/12)"
             sleep 10
           done
           echo "=== /aircraft-for-sale ==="

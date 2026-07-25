@@ -43,6 +43,18 @@ function tagValue(tags: string[] | undefined, prefix: string) {
 
 function labelFromSlug(value: string) {
   if (!value) return 'General';
+  const customerLabels: Record<string, string> = {
+    'audio-comms': 'Audio & Communications',
+    'connectors-electrical': 'Connectors & Electrical',
+    'engine-airframe-lrus': 'Engine & Airframe LRUs',
+    'experimental-install-kits': 'Experimental Installation Kits',
+    'experimental-manual-review': 'Experimental Avionics',
+    'install-hardware-fallback': 'Installation Hardware',
+    'instruments-indicators': 'Instruments & Indicators',
+    'navigators-comms': 'Navigators & COM Radios',
+  };
+  if (customerLabels[value]) return customerLabels[value];
+
   const special: Record<string, string> = {
     ads: 'ADS',
     b: 'B',

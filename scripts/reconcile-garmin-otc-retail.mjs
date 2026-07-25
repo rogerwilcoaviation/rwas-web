@@ -141,25 +141,45 @@ async function shopifyGraphql(query, variables = {}) {
     );
   }
 
-  const response = await fetch(
-    `https://${domain}/admin/api/${version}/graphql.json`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Access-Token': token,
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    const response = await fetch(
+      `https://${domain}/admin/api/${version}/graphql.json`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Access-Token': token,
+        },
+        body: JSON.stringify({ query, variables }),
       },
-      body: JSON.stringify({ query, variables }),
-    },
-  );
-  if (!response.ok) {
-    throw new Error(`Shopify Admin API returned HTTP ${response.status}`);
+    );
+    if (response.status === 429) {
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.min(1000 * 2 ** attempt, 15000)),
+      );
+      continue;
+    }
+    if (!response.ok) {
+      throw new Error(`Shopify Admin API returned HTTP ${response.status}`);
+    }
+    const payload = await response.json();
+    if (payload.errors?.length) {
+      const throttled = payload.errors.some((error) =>
+        String(error.message || error)
+          .toLowerCase()
+          .includes('throttled'),
+      );
+      if (throttled) {
+        await new Promise((resolve) =>
+          setTimeout(resolve, Math.min(1000 * 2 ** attempt, 15000)),
+        );
+        continue;
+      }
+      throw new Error(JSON.stringify(payload.errors));
+    }
+    return payload.data;
   }
-  const payload = await response.json();
-  if (payload.errors?.length) {
-    throw new Error(JSON.stringify(payload.errors));
-  }
-  return payload.data;
+  throw new Error('Shopify Admin throttling retries exhausted');
 }
 
 function assertNoUserErrors(result, field) {

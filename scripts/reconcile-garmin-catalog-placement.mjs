@@ -82,6 +82,21 @@ const OFFICIAL_EXPERIMENTAL = new Set([
 // families. RWAS deliberately removed those families from this aviation store
 // in May 2026; incorrect Certified/Dealer/Pilot typing brought them back.
 const EXCLUDED_MISPLACED_SKUS = new Set([
+  '010-13088-00',
+  '010-11550-00',
+  '010-13096-00',
+  '010-11551-01',
+  '010-11595-00',
+  '010-11752-00',
+  '010-11934-00',
+  '010-12746-02',
+  '010-12747-02',
+  '010-12748-02',
+  '010-12749-02',
+  '010-12750-02',
+  '010-11288-07',
+  '010-12036-02',
+  '010-11875-00',
   '010-02573-30',
   '010-02573-10',
   '010-02573-00',
@@ -156,6 +171,12 @@ const RETIRED_CONSUMER_TYPES = new Set([
   'Garmin Golf',
   'Garmin Equine',
   'Garmin Powersports',
+]);
+const PUBLIC_CATALOG_TYPES = new Set([
+  TYPES.experimental,
+  TYPES.dealer,
+  TYPES.pilot,
+  TYPES.watches,
 ]);
 
 const WATCH_PATTERN =
@@ -255,8 +276,26 @@ function classifyUnplaced(product) {
 function isNonAviationMapCard(product) {
   const sku = firstSku(product);
   return (
-    sku.startsWith('010-C') &&
-    /microSD|TOPO|Trailhead|BlueChart/i.test(product.title)
+    sku.startsWith('010-') &&
+    /City Navigator|\bTOPO\b|Trailhead|BlueChart/i.test(product.title)
+  );
+}
+
+function isSeoSafeProductHandle(handle) {
+  return /^[a-z0-9][a-z0-9-]*$/.test(handle);
+}
+
+function isPublicCatalogProduct(product) {
+  if (PUBLIC_CATALOG_TYPES.has(product.productType)) return true;
+  if (product.productType !== TYPES.certified) return false;
+  const tags = new Set(product.tags.map((tag) => tag.toLowerCase()));
+  const price = Number(product.variants.nodes[0]?.price || 0);
+  return (
+    tags.has('otc-eligible') &&
+    !tags.has('otc-disabled') &&
+    !tags.has('garmin-dealer-only') &&
+    Number.isFinite(price) &&
+    price > 0
   );
 }
 
@@ -900,6 +939,11 @@ function auditState(products, collections) {
   const activeExcludedMisplacements = active.filter((product) =>
     EXCLUDED_MISPLACED_SKUS.has(firstSku(product)),
   );
+  const activeUnsafePublicHandles = active.filter(
+    (product) =>
+      isPublicCatalogProduct(product) &&
+      !isSeoSafeProductHandle(product.handle),
+  );
   const experimentalProducts = active.filter(
     (product) => product.productType === TYPES.experimental,
   );
@@ -947,6 +991,7 @@ function auditState(products, collections) {
     activeNonAviationMapCards: activeNonAviationMaps.length,
     activeRetiredConsumerProducts: activeRetiredConsumerProducts.length,
     activeExactConsumerMisplacements: activeExcludedMisplacements.length,
+    activeUnsafePublicProductHandles: activeUnsafePublicHandles.length,
     retailRenderedProducts: retailRendered.length,
     expectedRetailProducts: approvedRetailSkus.size,
     retailUnexpectedSkus: retailUnexpected,
@@ -970,6 +1015,7 @@ function auditState(products, collections) {
     activeNonAviationMapCards: summary.activeNonAviationMapCards,
     activeRetiredConsumerProducts: summary.activeRetiredConsumerProducts,
     activeExactConsumerMisplacements: summary.activeExactConsumerMisplacements,
+    activeUnsafePublicProductHandles: summary.activeUnsafePublicProductHandles,
     retailUnexpectedSkus: summary.retailUnexpectedSkus.length,
     retailMissingSkus: summary.retailMissingSkus.length,
     experimentalUnexpectedSkus: summary.experimentalUnexpectedSkus.length,

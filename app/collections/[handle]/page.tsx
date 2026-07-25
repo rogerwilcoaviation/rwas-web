@@ -154,9 +154,18 @@ export default async function CollectionDetailPage({
     );
   }
 
-  const indexableProducts = collection.products.filter((product) =>
-    isSeoSafeProductHandle(product.handle),
+  const unsafeProducts = collection.products.filter(
+    (product) => !isSeoSafeProductHandle(product.handle),
   );
+  if (unsafeProducts.length) {
+    throw new Error(
+      `Collection ${collection.handle} contains non-ASCII Shopify handles: ${unsafeProducts
+        .slice(0, 10)
+        .map((product) => product.handle)
+        .join(', ')}`,
+    );
+  }
+  const indexableProducts = collection.products;
   const finderProducts: PartFinderProduct[] = indexableProducts.map(
     (product) => ({
       id: product.id,
