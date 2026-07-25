@@ -421,6 +421,17 @@ function technicalComparisonValue(handle: string, row: string) {
   return D2_WATCH_BRIEFINGS[handle]?.technical[row] || '—';
 }
 
+function populatedTechnicalComparisonRows(
+  currentHandle: string,
+  relatedHandles: string[],
+) {
+  return TECHNICAL_COMPARISON_ROWS.filter((row) =>
+    [currentHandle, ...relatedHandles].some(
+      (handle) => technicalComparisonValue(handle, row) !== '—',
+    ),
+  );
+}
+
 const PA31_RUDDER_TRIM_HANDLE = 'pa-31-rudder-trim-rigging-tool';
 const PAPA_ALPHA_APPLICABILITY_HANDLES = [
   'pa-28-32-34-44-aileron-and-flap-rigging-tool-1',
@@ -1504,7 +1515,7 @@ export default async function ProductDetailPage({
                 ) : (
                   <>
                     Manufacturer warranty. Service and support from our Part 145
-                    repair station at KFSD in Sioux Falls.
+                    repair station at KYKN in Yankton.
                   </>
                 )}
               </div>
@@ -1770,7 +1781,10 @@ export default async function ProductDetailPage({
                       </td>
                     ))}
                   </tr>
-                  {TECHNICAL_COMPARISON_ROWS.map((row) => (
+                  {populatedTechnicalComparisonRows(
+                    product.handle,
+                    comparisonProducts.map((item) => item.handle),
+                  ).map((row) => (
                     <tr key={row}>
                       <th>{row}</th>
                       <td className="current-product">
