@@ -63,6 +63,17 @@ type CartOperation = {
   userErrors?: Array<{ message: string }>;
 };
 
+const MAX_LINE_QUANTITY = 100;
+
+function validQuantity(value: unknown, { allowZero = false } = {}) {
+  return (
+    typeof value === 'number' &&
+    Number.isInteger(value) &&
+    value >= (allowZero ? 0 : 1) &&
+    value <= MAX_LINE_QUANTITY
+  );
+}
+
 const CART_FIELDS = `
   id
   checkoutUrl
@@ -212,6 +223,12 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
     if (!merchandiseId) {
       return jsonResponse({ error: 'merchandiseId is required' }, 400);
     }
+    if (!validQuantity(quantity)) {
+      return jsonResponse(
+        { error: `quantity must be an integer from 1 to ${MAX_LINE_QUANTITY}` },
+        400,
+      );
+    }
 
     type CartPayload = {
       cartCreate?: CartOperation;
@@ -225,11 +242,10 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
         quantity,
       })) as CartPayload | undefined;
       if (data?.cartLinesAdd?.userErrors?.length) {
-        const fresh = (await shopify(env, CART_CREATE, {
-          merchandiseId,
-          quantity,
-        })) as CartPayload | undefined;
-        cart = fresh?.cartCreate?.cart;
+        return jsonResponse(
+          { error: data.cartLinesAdd.userErrors.map((e) => e.message).join('; ') },
+          400,
+        );
       } else {
         cart = data?.cartLinesAdd?.cart;
       }
@@ -238,6 +254,12 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
         merchandiseId,
         quantity,
       })) as CartPayload | undefined;
+      if (data?.cartCreate?.userErrors?.length) {
+        return jsonResponse(
+          { error: data.cartCreate.userErrors.map((e) => e.message).join('; ') },
+          400,
+        );
+      }
       cart = data?.cartCreate?.cart;
     }
 
@@ -256,9 +278,15 @@ export const onRequestPatch = async ({ request, env }: Ctx) => {
       lineId?: string;
       quantity?: number;
     };
-    if (!body.cartId || !body.lineId || typeof body.quantity !== 'number') {
+    if (
+      !body.cartId ||
+      !body.lineId ||
+      !validQuantity(body.quantity, { allowZero: true })
+    ) {
       return jsonResponse(
-        { error: 'cartId, lineId, and quantity are required' },
+        {
+          error: `cartId, lineId, and quantity are required; quantity must be an integer from 0 to ${MAX_LINE_QUANTITY}`,
+        },
         400,
       );
     }
@@ -266,7 +294,7 @@ export const onRequestPatch = async ({ request, env }: Ctx) => {
     const data = (await shopify(env, CART_LINES_UPDATE, {
       cartId: body.cartId,
       lineId: body.lineId,
-      quantity: Math.max(0, Math.floor(body.quantity)),
+      quantity: body.quantity,
     })) as { cartLinesUpdate?: CartOperation } | undefined;
     const errs = data?.cartLinesUpdate?.userErrors;
     if (errs && errs.length) {
