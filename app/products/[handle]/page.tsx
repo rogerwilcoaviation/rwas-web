@@ -35,6 +35,7 @@ import {
   getProductByHandle,
   getSeoProductHandles,
   getProductsByTag,
+  isDealerInstallProductType,
   isOtcCollection,
   isOtcEligible,
   PRIORITY_PRODUCT_HANDLES,
@@ -186,6 +187,7 @@ type Gating = {
   stockCheckRequired: boolean;
   mapLocked: boolean;
   isGarmin: boolean;
+  isDealerInstall: boolean;
 };
 
 function gateFromProduct(
@@ -209,6 +211,7 @@ function gateFromProduct(
   // applies to PDPs too. When OTC is re-enabled, this delegates back to the
   // tag-based logic without further changes here.
   const perProductOtcEligible = isOtcEligible({ tags: lower });
+  const isDealerInstall = isDealerInstallProductType(productType);
   const perProductOtcDisabled = lower.includes('otc-disabled');
   const mapLocked = lower.includes('garmin-map-locked');
 
@@ -232,7 +235,7 @@ function gateFromProduct(
     : perProductOtcDisabled
       ? 'disabled'
       : 'unknown';
-  return { otc, stockCheckRequired, mapLocked, isGarmin };
+  return { otc, stockCheckRequired, mapLocked, isGarmin, isDealerInstall };
 }
 
 const D2_WATCH_BRIEFINGS: Record<
@@ -1415,6 +1418,7 @@ export default async function ProductDetailPage({
               isGarmin={gating.isGarmin}
               mapLocked={gating.mapLocked}
               showQuoteRetailPrice={showDualG5KitDetails}
+              isDealerInstall={gating.isDealerInstall}
             />
           </div>
         </section>
@@ -1593,7 +1597,8 @@ export default async function ProductDetailPage({
                   ) : null}
                   {hasSingleVariant &&
                   primaryPrice &&
-                  !(gating.isGarmin && gating.otc !== 'eligible') ? (
+                  !(gating.isGarmin && gating.otc !== 'eligible') ||
+                  gating.isDealerInstall ? (
                     <tr>
                       <th>{hasSalePrice ? 'Sale Price' : 'Price'}</th>
                       <td>

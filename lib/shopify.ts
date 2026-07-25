@@ -1236,6 +1236,15 @@ export function isOtcCollection(handle: string): boolean {
   );
 }
 
+export const DEALER_INSTALL_PRODUCT_TYPES = new Set([
+  'Avionics — Certified',
+  'Garmin Dealer Install',
+]);
+
+export function isDealerInstallProductType(productType?: string | null) {
+  return Boolean(productType && DEALER_INSTALL_PRODUCT_TYPES.has(productType));
+}
+
 export function isOtcEligible(
   product: { tags?: string[] } | null | undefined,
 ): boolean {

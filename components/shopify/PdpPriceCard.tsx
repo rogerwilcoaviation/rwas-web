@@ -40,6 +40,7 @@ export type PdpPriceCardProps = {
   isGarmin: boolean;
   mapLocked: boolean;
   showQuoteRetailPrice?: boolean;
+  isDealerInstall?: boolean;
 };
 
 function formatPrice(amount: string, currencyCode: string) {
@@ -101,6 +102,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
     isGarmin,
     mapLocked,
     showQuoteRetailPrice = false,
+    isDealerInstall = false,
   } = props;
 
   const [selectedId, setSelectedId] = useState<string>(variants[0]?.id || '');
@@ -114,7 +116,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
   );
 
   const otcEligible = otc === 'eligible';
-  const isNonOtcGarmin = isGarmin && !otcEligible;
+  const isNonOtcGarmin = isGarmin && !otcEligible && !isDealerInstall;
   const showGarminRetailPrice = isGarmin && otcEligible;
 
   // Stock pill: never call Garmin items "in stock". Garmin products are
@@ -187,7 +189,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
 
   return (
     <div className="bs-price-card">
-      {!isNonOtcGarmin || showQuoteRetailPrice ? (
+      {!isNonOtcGarmin || showQuoteRetailPrice || isDealerInstall ? (
         <>
           <div className="label">
             {showQuoteRetailPrice || showGarminRetailPrice
@@ -224,7 +226,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
         </div>
       ) : null}
 
-      {multiVariant && !isNonOtcGarmin ? (
+      {multiVariant && (!isNonOtcGarmin || isDealerInstall) ? (
         <div className="bs-variant-row">
           <label className="bs-variant-label" htmlFor="pdp-variant-select">
             Configuration
@@ -250,7 +252,11 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
       ) : null}
 
       <div className="bs-cta-row bs-cta-row--single">
-        {otcEligible ? (
+        {isDealerInstall ? (
+          <Link className="bs-cta-primary" href={contactHref}>
+            Contact us for package pricing
+          </Link>
+        ) : otcEligible ? (
           <button
             type="button"
             className="bs-cta-primary"

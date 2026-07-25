@@ -107,6 +107,10 @@ const CART_FIELDS = `
 
 const CART_QUERY = `query Cart($cartId: ID!) { cart(id: $cartId) { ${CART_FIELDS} } }`;
 
+const MERCHANDISE_PRODUCT_QUERY = `query MerchandiseProduct($id: ID!) {
+  productVariant(id: $id) { product { productType title handle } }
+}`;
+
 const CART_CREATE = `
   mutation CartCreate($merchandiseId: ID!, $quantity: Int!) {
     cartCreate(input: { lines: [{ merchandiseId: $merchandiseId, quantity: $quantity }] }) {
@@ -170,6 +174,25 @@ async function shopify(
   return json.data;
 }
 
+async function assertCartEligible(env: Env, merchandiseId: string) {
+  const data = (await shopify(env, MERCHANDISE_PRODUCT_QUERY, {
+    id: merchandiseId,
+  })) as {
+    productVariant?: {
+      product?: { productType?: string | null; title?: string | null } | null;
+    } | null;
+  } | undefined;
+  const productType = data?.productVariant?.product?.productType;
+  if (
+    productType === 'Avionics — Certified' ||
+    productType === 'Garmin Dealer Install'
+  ) {
+    throw new Error(
+      `Cart unavailable for dealer-install product type "${productType}". Contact us for package pricing.`,
+    );
+  }
+}
+
 function flattenCart(c: StorefrontCart | null | undefined) {
   if (!c) {
     return null;
@@ -228,6 +251,15 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
         { error: `quantity must be an integer from 1 to ${MAX_LINE_QUANTITY}` },
         400,
       );
+    }
+    try {
+      await assertCartEligible(env, merchandiseId);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      if (/dealer-install product type/i.test(message)) {
+        return jsonResponse({ error: message }, 400);
+      }
+      throw err;
     }
 
     type CartPayload = {

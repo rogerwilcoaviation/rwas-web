@@ -7,6 +7,8 @@ import {
   productImageAlt,
   productImageUrl,
 } from '@/lib/product-image';
+import AddToCartButton from '@/components/shopify/AddToCartButton';
+import { isDealerInstallProductType } from '@/lib/shopify';
 
 type CollectionBrowserImage = {
   url: string;
@@ -22,7 +24,12 @@ export type CollectionBrowserProduct = {
   tags?: string[];
   featuredImage?: CollectionBrowserImage | null;
   images?: CollectionBrowserImage[];
-  variants?: Array<{ image?: CollectionBrowserImage | null }>;
+  variants?: Array<{
+    id: string;
+    sku?: string | null;
+    availableForSale?: boolean;
+    image?: CollectionBrowserImage | null;
+  }>;
   priceRange: {
     minVariantPrice: {
       amount: string;
@@ -179,6 +186,11 @@ function ProductTile({
     product.priceRange.minVariantPrice.currencyCode,
   );
   const mode = purchaseMode(product, quoteOnly);
+  const dealerInstall = isDealerInstallProductType(product.productType);
+  const firstVariant = product.variants?.[0];
+  const contactHref = firstVariant?.sku
+    ? `/contact?sku=${encodeURIComponent(firstVariant.sku)}&product=${encodeURIComponent(product.title)}`
+    : `/contact?product=${encodeURIComponent(product.title)}`;
   const badge =
     mode === 'quote-request'
       ? 'Quote-request item'
@@ -241,12 +253,27 @@ function ProductTile({
         {price && mode !== 'quote-request' ? (
           <p className="text-sm text-black/60">Retail price: {price}</p>
         ) : null}
-        <Link
-          href={`/products/${encodeURIComponent(product.handle)}`}
-          className="inline-flex items-center justify-center rounded-md bg-[#111111] px-4 py-2 text-sm font-medium text-[#f5f3ef] transition hover:bg-black"
-        >
-          View product
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href={`/products/${encodeURIComponent(product.handle)}`}
+            className="inline-flex items-center justify-center rounded-md bg-[#111111] px-4 py-2 text-sm font-medium text-[#f5f3ef] transition hover:bg-black"
+          >
+            View product
+          </Link>
+          {dealerInstall ? (
+            <Link
+              href={contactHref}
+              className="inline-flex items-center justify-center rounded-md border border-[#C49A2A] px-4 py-2 text-sm font-medium text-[#111111] transition hover:bg-[#C49A2A]/10"
+            >
+              Contact us for package pricing
+            </Link>
+          ) : firstVariant ? (
+            <AddToCartButton
+              merchandiseId={firstVariant.id}
+              disabled={firstVariant.availableForSale === false}
+            />
+          ) : null}
+        </div>
       </div>
     </article>
   );
