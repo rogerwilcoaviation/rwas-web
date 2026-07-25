@@ -175,21 +175,30 @@ async function shopify(
 }
 
 async function assertCartEligible(env: Env, merchandiseId: string) {
-  const data = (await shopify(env, MERCHANDISE_PRODUCT_QUERY, {
-    id: merchandiseId,
-  })) as {
-    node?: {
-      product?: { productType?: string | null; title?: string | null } | null;
-    } | null;
-  } | undefined;
-  const productType = data?.node?.product?.productType;
-  if (
-    productType === 'Avionics — Certified' ||
-    productType === 'Garmin Dealer Install'
-  ) {
-    throw new Error(
-      `Cart unavailable for dealer-install product type "${productType}". Contact us for package pricing.`,
-    );
+  try {
+    const data = (await shopify(env, MERCHANDISE_PRODUCT_QUERY, {
+      id: merchandiseId,
+    })) as {
+      node?: {
+        product?: { productType?: string | null; title?: string | null } | null;
+      } | null;
+    } | undefined;
+    const productType = data?.node?.product?.productType;
+    if (
+      productType === 'Avionics — Certified' ||
+      productType === 'Garmin Dealer Install'
+    ) {
+      throw new Error(
+        `Cart unavailable for dealer-install product type "${productType}". Contact us for package pricing.`,
+      );
+    }
+  } catch (err) {
+    if (err instanceof Error && /dealer-install product type/i.test(err.message)) {
+      throw err;
+    }
+    // Product metadata is advisory. A transient lookup/API-schema failure must
+    // not take down checkout or block the many products that remain buyable.
+    console.error('Cart product-type lookup failed; allowing cart operation', err);
   }
 }
 
