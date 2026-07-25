@@ -21,7 +21,7 @@ const serviceGroups = [
         name: 'Garmin avionics installation',
         href: '/services/garmin-installation-northern-plains',
         description:
-          'Sioux Falls Garmin dealer support for G3X Touch, GTN Xi, GFC 500, ADS-B, GI 275, G5, panel fabrication, and quote planning.',
+          'Yankton Garmin dealer support for G3X Touch, GTN Xi, GFC 500, ADS-B, GI 275, G5, panel fabrication, and quote planning.',
       },
       {
         name: 'G3X Touch installation',
@@ -53,7 +53,7 @@ const serviceGroups = [
     label: 'Maintenance, inspection, and buyer support',
     services: [
       {
-        name: 'Aircraft maintenance in Sioux Falls',
+        name: 'Aircraft maintenance in Yankton',
         href: '/services/aircraft-maintenance',
         description:
           'Annual inspections, 100-hour inspections, AOG coordination, prop balancing, aircraft weighing, and repair-station paperwork.',
@@ -100,9 +100,9 @@ const serviceGroups = [
 const allServices = serviceGroups.flatMap((group) => group.services);
 
 export const metadata = genPageMetadata({
-  title: 'Aircraft Services in Sioux Falls | RWAS',
+  title: 'Aircraft Services in Yankton | RWAS',
   description:
-    'Aircraft services at KFSD in Sioux Falls: Garmin avionics, annual inspections, NDT, fabrication, Rotax support, pre-buys, and Papa-Alpha tools.',
+    'Aircraft services at KYKN in Yankton: Garmin avionics, annual inspections, NDT, fabrication, Rotax support, pre-buys, and Papa-Alpha tools.',
   canonical: pageUrl,
 });
 
@@ -130,7 +130,7 @@ export default function ServicesPage() {
                 name: 'Where is Roger Wilco Aviation Services located?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'RWAS is at Hangar 3, 3701 N. Aviation Avenue, Sioux Falls, South Dakota 57104, at KFSD. The shop serves aircraft owners across the Northern Plains.',
+                  text: 'RWAS is at 700 East 31st Street, Yankton, South Dakota 57078, at KYKN. The shop serves aircraft owners across the Northern Plains.',
                 },
               },
               {
@@ -203,7 +203,7 @@ export default function ServicesPage() {
                   { '@type': 'State', name: 'Montana' },
                 ],
                 description:
-                  'FAA Part 145 aircraft services at KFSD in Sioux Falls, serving the Northern Plains with Garmin avionics installation, maintenance, NDT inspection, fabrication, Rotax support, and pre-buy inspections.',
+                  'FAA Part 145 aircraft services at KYKN in Yankton, serving the Northern Plains with Garmin avionics installation, maintenance, NDT inspection, fabrication, Rotax support, and pre-buy inspections.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'RWAS aircraft service catalog',
@@ -271,7 +271,7 @@ export default function ServicesPage() {
             FAA Part 145 Repair Station #RWSR491E
           </span>
           <span className="bs-script-accent">
-            &mdash; the KFSD aircraft services desk in Sioux Falls &mdash;
+            &mdash; the KYKN aircraft services desk in Yankton &mdash;
           </span>
           <h1 id="services-hero" className="bs-headline bs-headline--hero">
             Aircraft services for owners who need
@@ -284,7 +284,7 @@ export default function ServicesPage() {
             pre-buy inspections
           </p>
           <div className="bs-byline">
-            RWAS Avionics Desk &middot; KFSD, Sioux Falls &middot; Serving the
+            RWAS Avionics Desk &middot; KYKN, Yankton &middot; Serving the
             Northern Plains
           </div>
         </section>
@@ -335,7 +335,7 @@ export default function ServicesPage() {
               <div className="bs-body">
                 <p>
                   Roger Wilco Aviation Services is a working FAA Part 145 repair
-                  station at KFSD in Sioux Falls, serving aircraft owners across
+                  station at KYKN in Yankton, serving aircraft owners across
                   the Northern Plains. This page is the front desk for the
                   shop's crawlable service pages: Garmin installation, aircraft
                   maintenance, NDT, fabrication, Rotax support, pre-buy

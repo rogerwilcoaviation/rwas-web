@@ -15,9 +15,9 @@ import { genPageMetadata } from '@/app/seo';
 const pageUrl = 'https://www.rogerwilcoaviation.com/contact';
 
 export const metadata = genPageMetadata({
-  title: 'Contact RWAS — Sioux Falls Avionics & Aircraft Service',
+  title: 'Contact RWAS — Yankton Avionics & Aircraft Service',
   description:
-    'Contact Roger Wilco Aviation Services at KFSD in Sioux Falls for Garmin avionics, maintenance, NDT, fabrication, pre-buy inspections, and quotes.',
+    'Contact Roger Wilco Aviation Services at KYKN in Yankton for Garmin avionics, maintenance, NDT, fabrication, pre-buy inspections, and quotes.',
   canonical: pageUrl,
 });
 
@@ -86,7 +86,7 @@ export default function ContactPage() {
             reply with real numbers.
           </p>
           <p className="bs-byline">
-            RWAS Avionics Desk &middot; KFSD, Sioux Falls &middot; (605)
+            RWAS Avionics Desk &middot; KYKN, Yankton &middot; (605)
             299-8178
           </p>
         </section>
@@ -121,9 +121,9 @@ export default function ContactPage() {
               <dt>Shop location</dt>
               <dd>
                 <address style={{ fontStyle: 'normal' }}>
-                  Hangar 3, 3701 N. Aviation Avenue
+                  700 East 31st Street
                   <br />
-                  Sioux Falls, SD 57104 &middot; KFSD
+                  Yankton, SD 57078 &middot; KYKN
                 </address>
               </dd>
             </div>

@@ -14,9 +14,9 @@ import AircraftSaleFeed from '@/components/home/AircraftSaleFeed';
 import { genPageMetadata } from '@/app/seo';
 
 export const metadata = genPageMetadata({
-  title: 'Garmin Avionics & Aircraft Maintenance — Sioux Falls, SD',
+  title: 'Garmin Avionics & Aircraft Maintenance — Yankton, SD',
   description:
-    'FAA Part 145 repair station at KFSD in Sioux Falls. Certified Garmin dealer for G3X Touch, GFC 500, annual inspections, NDT, and fabrication.',
+    'FAA Part 145 repair station at KYKN in Yankton. Certified Garmin dealer for G3X Touch, GFC 500, annual inspections, NDT, and fabrication.',
   canonical: 'https://www.rogerwilcoaviation.com/',
 });
 
@@ -147,7 +147,7 @@ export default function Home() {
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Lead Story</span>
               <h1 className="bs-headline bs-headline--section">
-                Full-Spectrum Repair Station in Sioux Falls
+                Full-Spectrum Repair Station in Yankton
               </h1>
               <hr className="section-rule" />
 
@@ -175,7 +175,7 @@ export default function Home() {
               <div className="bs-body">
                 <p className="bs-drop">
                   Roger Wilco Aviation Services is an FAA-certificated repair
-                  station at KFSD in Sioux Falls, providing full-spectrum
+                  station at KYKN in Yankton, providing full-spectrum
                   airframe, powerplant, avionics, and non-destructive testing
                   services to general aviation, corporate, and commercial
                   operators across the Northern Plains. Operating under

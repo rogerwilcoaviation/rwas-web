@@ -15,7 +15,7 @@ export type MastheadProps = {
  * Matches the approved D2 PDP mockup (.np-masthead).
  *
  * Three-column grid: logo | brand+tagline (centered) | cert identifier (right).
- * The right column carries the cert number and public operating base (KFSD · Sioux Falls, SD);
+ * The right column carries the cert number and public operating base (KYKN · Yankton, SD);
  * all other credentials (FAA Part 145, Garmin dealer, AEA, NBAA) live in
  * the CredentialsBar directly below.
  */
@@ -25,7 +25,7 @@ export default function Masthead({
   brand = 'Roger Wilco Aviation Services',
   tagline = 'FAA CERT. REPAIR STATION \u00b7 AVIONICS \u00b7 AIRFRAME & POWERPLANT \u00b7 NDT \u00b7 FABRICATION',
   certMain = 'Cert. No. RWSR491E',
-  certLocation = 'RWAS Avionics Desk \u00b7 KFSD \u00b7 Sioux Falls, SD',
+  certLocation = 'RWAS Avionics Desk \u00b7 KYKN \u00b7 Yankton, SD',
 }: MastheadProps) {
   return (
     <header className="bs-masthead">

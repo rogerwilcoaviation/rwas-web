@@ -15,9 +15,9 @@ const pageUrl =
   'https://www.rogerwilcoaviation.com/services/garmin-installation-northern-plains';
 
 export const metadata = genPageMetadata({
-  title: 'Garmin Avionics Installation in Sioux Falls | RWAS',
+  title: 'Garmin Avionics Installation in Yankton | RWAS',
   description:
-    'Certified Garmin avionics installation at KFSD in Sioux Falls: G3X Touch, GTN Xi, GFC 500, ADS-B, panel fabrication, and quote planning.',
+    'Certified Garmin avionics installation at KYKN in Yankton: G3X Touch, GTN Xi, GFC 500, ADS-B, panel fabrication, and quote planning.',
   canonical: pageUrl,
 });
 
@@ -33,7 +33,7 @@ export default function GarminInstallationNorthernPlainsPage() {
               {
                 '@type': 'Service',
                 '@id': `${pageUrl}#service`,
-                name: 'Garmin Avionics Installation in Sioux Falls',
+                name: 'Garmin Avionics Installation in Yankton',
                 serviceType: 'Garmin avionics installation',
                 url: pageUrl,
                 provider: {
@@ -47,7 +47,7 @@ export default function GarminInstallationNorthernPlainsPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Garmin avionics installation, panel planning, aircraft review, and quote support at KFSD in Sioux Falls from a certified Garmin dealer and FAA Part 145 repair station.',
+                  'Garmin avionics installation, panel planning, aircraft review, and quote support at KYKN in Yankton from a certified Garmin dealer and FAA Part 145 repair station.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Garmin avionics installation services',
@@ -142,7 +142,7 @@ export default function GarminInstallationNorthernPlainsPage() {
             #RWSR491E
           </span>
           <span className="bs-script-accent">
-            &mdash; certified Garmin installation at KFSD in Sioux Falls &mdash;
+            &mdash; certified Garmin installation at KYKN in Yankton &mdash;
           </span>
           <h1
             id="garmin-install-hero"
@@ -174,7 +174,7 @@ export default function GarminInstallationNorthernPlainsPage() {
                 <p>
                   Roger Wilco Aviation Services gives aircraft owners a
                   certified Garmin dealer and FAA-certificated repair station at
-                  KFSD in Sioux Falls. Instead of ferrying a piston single or
+                  KYKN in Yankton. Instead of ferrying a piston single or
                   light twin across multiple states for a panel upgrade, owners
                   can work with a shop built around Garmin avionics, aircraft
                   maintenance, panel fabrication, and return-to-service

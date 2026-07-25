@@ -10,6 +10,7 @@ export const dynamic = 'force-static';
 const STATIC_ROUTES = [
   '',
   'about',
+  'locations/yankton',
   'shop-capabilities',
   'garmin',
   'services',

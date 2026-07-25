@@ -198,7 +198,7 @@ for (const requiredText of [
     throw new Error(`K10-00280-51 page is missing: ${requiredText}`);
   }
 }
-if (/Installs at.{0,160}(KFSD|Sioux Falls)/i.test(k10)) {
+if (/Installs at.{0,160}(KYKN|Yankton)/i.test(k10)) {
   throw new Error('K10-00280-51 exposes the prohibited install location');
 }
 for (const internalLabel of [

@@ -15,9 +15,9 @@ const pageUrl =
   'https://www.rogerwilcoaviation.com/services/pre-buy-inspection';
 
 export const metadata = genPageMetadata({
-  title: 'Aircraft Pre-Buy Inspection in Sioux Falls | RWAS',
+  title: 'Aircraft Pre-Buy Inspection in Yankton | RWAS',
   description:
-    'Aircraft pre-buy inspections at KFSD in Sioux Falls: logbook review, physical inspection, avionics review, NDT coordination, and buyer guidance.',
+    'Aircraft pre-buy inspections at KYKN in Yankton: logbook review, physical inspection, avionics review, NDT coordination, and buyer guidance.',
   canonical: pageUrl,
 });
 
@@ -47,7 +47,7 @@ export default function PreBuyInspectionPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Aircraft pre-buy inspection support, logbook review, physical inspection, avionics review, NDT coordination, and buyer decision support at KFSD in Sioux Falls.',
+                  'Aircraft pre-buy inspection support, logbook review, physical inspection, avionics review, NDT coordination, and buyer decision support at KYKN in Yankton.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Pre-buy inspection services',

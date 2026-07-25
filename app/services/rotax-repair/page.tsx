@@ -14,9 +14,9 @@ import { genPageMetadata } from '@/app/seo';
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/rotax-repair';
 
 export const metadata = genPageMetadata({
-  title: 'Rotax Aircraft Engine Maintenance in Sioux Falls | RWAS',
+  title: 'Rotax Aircraft Engine Maintenance in Yankton | RWAS',
   description:
-    'Rotax aircraft engine maintenance at KFSD in Sioux Falls: inspection planning, troubleshooting, documentation review, and repair-station coordination.',
+    'Rotax aircraft engine maintenance at KYKN in Yankton: inspection planning, troubleshooting, documentation review, and repair-station coordination.',
   canonical: pageUrl,
 });
 
@@ -46,7 +46,7 @@ export default function RotaxRepairPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Rotax aircraft engine maintenance support, inspection coordination, troubleshooting, and documentation at KFSD in Sioux Falls, serving the Northern Plains.',
+                  'Rotax aircraft engine maintenance support, inspection coordination, troubleshooting, and documentation at KYKN in Yankton, serving the Northern Plains.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Rotax maintenance support',

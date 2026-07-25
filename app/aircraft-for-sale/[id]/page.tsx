@@ -168,7 +168,7 @@ export async function generateMetadata({
   }${titleSuffix}`;
   const description = truncateMeta(
     l.description ||
-      `${headline(l)} listed by Roger Wilco Aviation Services at KFSD in Sioux Falls. Tail ${l.nNumber || 'n/a'}.`,
+      `${headline(l)} listed by Roger Wilco Aviation Services at KYKN in Yankton. Tail ${l.nNumber || 'n/a'}.`,
   );
   const url = `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(l.id)}`;
   const firstPhoto = (l.photos || [])[0];

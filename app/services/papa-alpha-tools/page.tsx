@@ -48,7 +48,7 @@ export default function PapaAlphaToolsPage() {
                 url: pageUrl,
                 logo: 'https://www.rogerwilcoaviation.com/newspaper/images/logo.png',
                 description:
-                  'Precision Piper rigging reference tools designed and manufactured by Roger Wilco Aviation Services in Sioux Falls, South Dakota.',
+                  'Precision Piper rigging reference tools designed and manufactured by Roger Wilco Aviation Services in Yankton, South Dakota.',
               },
               {
                 '@type': 'ItemList',

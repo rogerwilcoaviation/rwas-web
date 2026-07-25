@@ -1,7 +1,7 @@
 const metadata = {
   title: 'Roger Wilco Aviation Services',
   description:
-    'FAA Part 145 repair station at KFSD in Sioux Falls. Certified Garmin dealer offering G3X Touch, GFC 500, annual inspections, NDT, and fabrication.',
+    'FAA Part 145 repair station at KYKN in Yankton. Certified Garmin dealer offering G3X Touch, GFC 500, annual inspections, NDT, and fabrication.',
   domain: 'rogerwilcoaviation.com',
   logoTitle: 'Roger Wilco Aviation Services',
   businessName: 'Roger Wilco Aviation Services',

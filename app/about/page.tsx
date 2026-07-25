@@ -14,9 +14,9 @@ import Link from 'next/link';
 import { genPageMetadata } from '@/app/seo';
 
 export const metadata = genPageMetadata({
-  title: 'About RWAS — FAA Part 145 Repair Station in Sioux Falls',
+  title: 'About RWAS — FAA Part 145 Repair Station in Yankton',
   description:
-    'FAA Part 145 repair station RWSR491E at KFSD in Sioux Falls, supporting Garmin avionics, A&P maintenance, NDT, and fabrication.',
+    'FAA Part 145 repair station RWSR491E at KYKN in Yankton, supporting Garmin avionics, A&P maintenance, NDT, and fabrication.',
   canonical: 'https://www.rogerwilcoaviation.com/about',
 });
 
@@ -47,11 +47,11 @@ export default function AboutPage() {
           <h1 id="about-hero" className="bs-headline bs-headline--hero">
             Full-spectrum aviation services,
             <br />
-            built in Sioux Falls for aircraft owners across the Northern Plains.
+            built in Yankton for aircraft owners across the Northern Plains.
           </h1>
           <p className="bs-subhead">
             FAA Part 145 Repair Station &middot; Certificate No. RWSR491E
-            &middot; RWAS Avionics Desk &middot; KFSD, Sioux Falls
+            &middot; RWAS Avionics Desk &middot; KYKN, Yankton
           </p>
           <div className="bs-byline">
             Founded 2022 &nbsp;&middot;&nbsp; Avionics &middot; Airframe
@@ -61,7 +61,7 @@ export default function AboutPage() {
           <div className="bs-body">
             <p>
               Roger Wilco Aviation Services is an FAA-certificated repair
-              station at KFSD in Sioux Falls, providing full-spectrum airframe,
+              station at KYKN in Yankton, providing full-spectrum airframe,
               powerplant, avionics, and non-destructive testing services to
               general aviation, corporate, and commercial operators across the
               Northern Plains. The station is authorized under Certificate No.
@@ -223,9 +223,9 @@ export default function AboutPage() {
             <Specimen as="section">
               <span className="bs-kicker">Shop Location</span>
               <address style={{ fontStyle: 'normal' }}>
-                Hangar 3, 3701 N. Aviation Avenue
+                700 East 31st Street
                 <br />
-                Sioux Falls, SD 57104 &middot; KFSD
+                Yankton, SD 57078 &middot; KYKN
               </address>
             </Specimen>
 

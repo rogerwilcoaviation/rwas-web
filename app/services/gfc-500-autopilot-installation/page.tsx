@@ -15,9 +15,9 @@ const pageUrl =
   'https://www.rogerwilcoaviation.com/services/gfc-500-autopilot-installation';
 
 export const metadata = genPageMetadata({
-  title: 'Garmin GFC 500 Autopilot Installation in Sioux Falls | RWAS',
+  title: 'Garmin GFC 500 Autopilot Installation in Yankton | RWAS',
   description:
-    'Garmin GFC 500 autopilot installation at KFSD in Sioux Falls: eligibility, quote planning, integration, testing, and documentation.',
+    'Garmin GFC 500 autopilot installation at KYKN in Yankton: eligibility, quote planning, integration, testing, and documentation.',
   canonical: pageUrl,
 });
 
@@ -47,7 +47,7 @@ export default function Gfc500AutopilotInstallationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Garmin GFC 500 autopilot installation planning, eligibility review, quote support, panel integration, and return-to-service documentation at KFSD in Sioux Falls.',
+                  'Garmin GFC 500 autopilot installation planning, eligibility review, quote support, panel integration, and return-to-service documentation at KYKN in Yankton.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'GFC 500 installation workflow',

@@ -17,7 +17,7 @@ import { genPageMetadata } from '@/app/seo';
 export const metadata = genPageMetadata({
   title: 'Terms of Service | Roger Wilco Aviation Services',
   description:
-    'Terms of service for Roger Wilco Aviation Services (rogerwilcoaviation.com), an FAA Part 145 repair station at KFSD in Sioux Falls.',
+    'Terms of service for Roger Wilco Aviation Services (rogerwilcoaviation.com), an FAA Part 145 repair station at KYKN in Yankton.',
   canonical: 'https://www.rogerwilcoaviation.com/terms',
 });
 

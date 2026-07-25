@@ -13,9 +13,9 @@ import { genPageMetadata } from '@/app/seo';
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/ndt-inspection';
 
 export const metadata = genPageMetadata({
-  title: 'Aircraft NDT Inspection in Sioux Falls | RWAS',
+  title: 'Aircraft NDT Inspection in Yankton | RWAS',
   description:
-    'Aircraft NDT inspection at KFSD in Sioux Falls: eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing.',
+    'Aircraft NDT inspection at KYKN in Yankton: eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing.',
   canonical: pageUrl,
 });
 
@@ -45,7 +45,7 @@ export default function NdtInspectionPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Aircraft non-destructive testing at KFSD in Sioux Falls from Roger Wilco Aviation Services, FAA Part 145 repair station RWSR491E.',
+                  'Aircraft non-destructive testing at KYKN in Yankton from Roger Wilco Aviation Services, FAA Part 145 repair station RWSR491E.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'NDT inspection methods',

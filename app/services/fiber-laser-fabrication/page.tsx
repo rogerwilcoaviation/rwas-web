@@ -20,12 +20,12 @@ const socialImageUrl =
   'https://www.rogerwilcoaviation.com/images/social/rwas-laser-steel-1x1-20260626.jpg';
 
 export const metadata = {
-  title: { absolute: 'Aircraft Fiber Laser Fabrication in Sioux Falls | RWAS' },
+  title: { absolute: 'Aircraft Fiber Laser Fabrication in Yankton | RWAS' },
   description:
-    'Aircraft fiber laser fabrication in Sioux Falls: panel cutting, laser welding, powder coating, UV printing, CAD/CNC workflow, and sheet metal support.',
+    'Aircraft fiber laser fabrication in Yankton: panel cutting, laser welding, powder coating, UV printing, CAD/CNC workflow, and sheet metal support.',
   alternates: { canonical: pageUrl },
   openGraph: {
-    title: 'Aircraft Fiber Laser Fabrication in Sioux Falls | RWAS',
+    title: 'Aircraft Fiber Laser Fabrication in Yankton | RWAS',
     description:
       'See RWAS in-house aircraft fabrication capability: fiber laser cutting, panel work, marking, finishing, and repair-station workflow.',
     url: pageUrl,
@@ -66,7 +66,7 @@ export default function FiberLaserFabricationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'In-house aircraft fabrication support at KFSD in Sioux Falls, including fiber laser cutting, laser welding, aircraft panel fabrication, sheet metal support, powder coating, UV printing, and CAD/CNC workflow.',
+                  'In-house aircraft fabrication support at KYKN in Yankton, including fiber laser cutting, laser welding, aircraft panel fabrication, sheet metal support, powder coating, UV printing, and CAD/CNC workflow.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Aircraft fabrication capabilities',

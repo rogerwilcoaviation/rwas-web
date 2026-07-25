@@ -134,10 +134,10 @@ if (home.res.status !== 200) fail(`Home returned ${home.res.status}`);
 for (const [label, value] of [
   [
     'structured street address',
-    '"streetAddress":"Hangar 3, 3701 N. Aviation Avenue"',
+    '"streetAddress":"700 East 31st Street"',
   ],
-  ['structured locality', '"addressLocality":"Sioux Falls"'],
-  ['structured postal code', '"postalCode":"57104"'],
+  ['structured locality', '"addressLocality":"Yankton"'],
+  ['structured postal code', '"postalCode":"57078"'],
   ['structured opening time', '"opens":"07:00"'],
   ['structured closing time', '"closes":"17:00"'],
 ]) {

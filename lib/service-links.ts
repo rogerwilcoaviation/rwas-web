@@ -37,9 +37,9 @@ const links: SeoServiceLink[] = [
   },
   {
     href: '/services/aircraft-maintenance',
-    label: 'Aircraft maintenance in Sioux Falls',
+    label: 'Aircraft maintenance in Yankton',
     description:
-      'Annual inspections, troubleshooting, AOG coordination, and repair-station documentation at KFSD.',
+      'Annual inspections, troubleshooting, AOG coordination, and repair-station documentation at KYKN.',
   },
   {
     href: '/services/pre-buy-inspection',

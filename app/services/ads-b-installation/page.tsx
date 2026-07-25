@@ -15,9 +15,9 @@ const pageUrl =
   'https://www.rogerwilcoaviation.com/services/ads-b-installation';
 
 export const metadata = genPageMetadata({
-  title: 'ADS-B Out Installation in Sioux Falls | RWAS',
+  title: 'ADS-B Out Installation in Yankton | RWAS',
   description:
-    'ADS-B Out installation at KFSD in Sioux Falls: Garmin transponder upgrades, GPS source review, antenna planning, configuration, testing, and paperwork.',
+    'ADS-B Out installation at KYKN in Yankton: Garmin transponder upgrades, GPS source review, antenna planning, configuration, testing, and paperwork.',
   canonical: pageUrl,
 });
 
@@ -47,7 +47,7 @@ export default function AdsBInstallationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'ADS-B Out installation, transponder upgrade planning, antenna review, GPS source review, configuration, testing, and documentation support at KFSD in Sioux Falls.',
+                  'ADS-B Out installation, transponder upgrade planning, antenna review, GPS source review, configuration, testing, and documentation support at KYKN in Yankton.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'ADS-B installation workflow',

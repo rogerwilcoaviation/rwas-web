@@ -15,7 +15,7 @@ import { genPageMetadata } from '@/app/seo';
 export const metadata = genPageMetadata({
   title: 'Avionics & Aircraft Maintenance Financing | RWAS',
   description:
-    'Finance Garmin avionics upgrades or major aircraft maintenance with RWAS. Estimate payments and discuss flexible terms with our Sioux Falls repair station.',
+    'Finance Garmin avionics upgrades or major aircraft maintenance with RWAS. Estimate payments and discuss flexible terms with our Yankton repair station.',
   canonical: 'https://www.rogerwilcoaviation.com/financing',
 });
 

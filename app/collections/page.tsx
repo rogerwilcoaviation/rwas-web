@@ -114,7 +114,7 @@ export default async function CollectionsPage() {
             with real product data behind them.
           </p>
           <p className="bs-byline">
-            RWAS Avionics Desk &middot; KFSD, Sioux Falls
+            RWAS Avionics Desk &middot; KYKN, Yankton
           </p>
           <div
             style={{

@@ -15,9 +15,9 @@ const pageUrl =
   'https://www.rogerwilcoaviation.com/services/aircraft-maintenance';
 
 export const metadata = genPageMetadata({
-  title: 'Aircraft Maintenance in Sioux Falls | RWAS',
+  title: 'Aircraft Maintenance in Yankton | RWAS',
   description:
-    'Aircraft maintenance at KFSD in Sioux Falls: annual and 100-hour inspections, pre-buy support, AOG service, prop balancing, and aircraft weighing.',
+    'Aircraft maintenance at KYKN in Yankton: annual and 100-hour inspections, pre-buy support, AOG service, prop balancing, and aircraft weighing.',
   canonical: pageUrl,
 });
 
@@ -33,7 +33,7 @@ export default function AircraftMaintenancePage() {
               {
                 '@type': 'Service',
                 '@id': `${pageUrl}#service`,
-                name: 'Aircraft maintenance and annual inspections in Sioux Falls',
+                name: 'Aircraft maintenance and annual inspections in Yankton',
                 serviceType: 'Aircraft maintenance',
                 url: pageUrl,
                 provider: {
@@ -47,7 +47,7 @@ export default function AircraftMaintenancePage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Aircraft maintenance, annual inspections, 100-hour inspections, pre-buy support, AOG service, propeller balancing, aircraft weight certification, and logbook documentation at KFSD in Sioux Falls, serving the Northern Plains.',
+                  'Aircraft maintenance, annual inspections, 100-hour inspections, pre-buy support, AOG service, propeller balancing, aircraft weight certification, and logbook documentation at KYKN in Yankton, serving the Northern Plains.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Aircraft maintenance services',
@@ -116,7 +116,7 @@ export default function AircraftMaintenancePage() {
                   {
                     '@type': 'ListItem',
                     position: 3,
-                    name: 'Aircraft Maintenance in Sioux Falls',
+                    name: 'Aircraft Maintenance in Yankton',
                     item: pageUrl,
                   },
                 ],

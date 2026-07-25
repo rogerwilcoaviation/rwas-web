@@ -32,7 +32,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: { absolute: 'Aircraft for Sale — RWAS Marketplace' },
   description:
-    'Aircraft listings from RWAS at KFSD in Sioux Falls. Browse Cessna, Piper, Beechcraft, and more with repair-station and listing support.',
+    'Aircraft listings from RWAS at KYKN in Yankton. Browse Cessna, Piper, Beechcraft, and more with repair-station and listing support.',
   alternates: {
     canonical: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
   },
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     url: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
     title: 'Aircraft for Sale — RWAS Marketplace',
     description:
-      'Browse aircraft listings backed by an FAA Part 145 repair station at KFSD in Sioux Falls.',
+      'Browse aircraft listings backed by an FAA Part 145 repair station at KYKN in Yankton.',
     images: [
       {
         url: 'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Aircraft for Sale — RWAS Marketplace',
     description:
-      'Browse aircraft listings backed by an FAA Part 145 repair station at KFSD in Sioux Falls.',
+      'Browse aircraft listings backed by an FAA Part 145 repair station at KYKN in Yankton.',
     images: [
       'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg',
     ],
@@ -166,8 +166,8 @@ export default async function AircraftForSalePage() {
           </p>
           <div className="bs-byline">
             Call <strong>(605) 299-8178</strong> &nbsp;&middot;&nbsp; Ask
-            Captain Jerry &nbsp;&middot;&nbsp; RWAS Avionics Desk &middot; KFSD,
-            Sioux Falls
+            Captain Jerry &nbsp;&middot;&nbsp; RWAS Avionics Desk &middot; KYKN,
+            Yankton
           </div>
           <div className="a4s-cta-row">
             <a className="a4s-cta-btn" href="#listings">

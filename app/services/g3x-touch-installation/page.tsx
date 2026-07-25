@@ -15,9 +15,9 @@ const pageUrl =
   'https://www.rogerwilcoaviation.com/services/g3x-touch-installation';
 
 export const metadata = genPageMetadata({
-  title: 'Garmin G3X Touch Installation in Sioux Falls | RWAS',
+  title: 'Garmin G3X Touch Installation in Yankton | RWAS',
   description:
-    'Garmin G3X Touch installation at KFSD in Sioux Falls: glass panel planning, EIS, ADAHRS, Connext, fabrication, testing, and documentation.',
+    'Garmin G3X Touch installation at KYKN in Yankton: glass panel planning, EIS, ADAHRS, Connext, fabrication, testing, and documentation.',
   canonical: pageUrl,
 });
 
@@ -47,7 +47,7 @@ export default function G3xTouchInstallationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Garmin G3X Touch installation planning, panel design, ADAHRS and EIS integration, Connext workflow review, fabrication support, testing, and documentation at KFSD in Sioux Falls.',
+                  'Garmin G3X Touch installation planning, panel design, ADAHRS and EIS integration, Connext workflow review, fabrication support, testing, and documentation at KYKN in Yankton.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'G3X Touch installation workflow',

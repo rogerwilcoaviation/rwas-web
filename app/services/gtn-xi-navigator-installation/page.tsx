@@ -15,9 +15,9 @@ const pageUrl =
   'https://www.rogerwilcoaviation.com/services/gtn-xi-navigator-installation';
 
 export const metadata = genPageMetadata({
-  title: 'Garmin GTN 650Xi / 750Xi Installation in Sioux Falls | RWAS',
+  title: 'Garmin GTN 650Xi / 750Xi Installation in Yankton | RWAS',
   description:
-    'Garmin GTN 650Xi and 750Xi installation at KFSD in Sioux Falls: WAAS integration, antennas, panel work, testing, and documentation.',
+    'Garmin GTN 650Xi and 750Xi installation at KYKN in Yankton: WAAS integration, antennas, panel work, testing, and documentation.',
   canonical: pageUrl,
 });
 
@@ -47,7 +47,7 @@ export default function GtnXiNavigatorInstallationPage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Garmin GTN 650Xi and GTN 750Xi navigator installation planning, WAAS GPS/NAV/COMM integration, antenna and wiring review, autopilot and display integration, configuration, testing, and documentation at KFSD in Sioux Falls.',
+                  'Garmin GTN 650Xi and GTN 750Xi navigator installation planning, WAAS GPS/NAV/COMM integration, antenna and wiring review, autopilot and display integration, configuration, testing, and documentation at KYKN in Yankton.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'GTN Xi navigator installation workflow',

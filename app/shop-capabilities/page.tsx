@@ -12,9 +12,9 @@ import {
 import { genPageMetadata } from '@/app/seo';
 
 export const metadata = genPageMetadata({
-  title: 'RWAS Shop Capabilities — Sioux Falls Avionics, A&P & NDT',
+  title: 'RWAS Shop Capabilities — Yankton Avionics, A&P & NDT',
   description:
-    'Garmin avionics, A&P maintenance, NDT, sheet metal, fiber laser, and fabrication from RWAS at KFSD in Sioux Falls, South Dakota.',
+    'Garmin avionics, A&P maintenance, NDT, sheet metal, fiber laser, and fabrication from RWAS at KYKN in Yankton, South Dakota.',
   canonical: 'https://www.rogerwilcoaviation.com/shop-capabilities',
 });
 
@@ -285,7 +285,7 @@ export default function ShopCapabilitiesPage() {
             FAA Part 145 Repair Station &middot; Certificate #RWSR491E
           </span>
           <span className="bs-script-accent">
-            &mdash; KFSD shop floor in Sioux Falls &mdash;
+            &mdash; KYKN shop floor in Yankton &mdash;
           </span>
           <h1 id="caps-hero" className="bs-headline bs-headline--hero">
             Full-spectrum aircraft maintenance,
@@ -594,9 +594,9 @@ export default function ShopCapabilitiesPage() {
                 <br />
                 RWAS Avionics Desk
                 <br />
-                Hangar 3, 3701 N. Aviation Avenue
+                700 East 31st Street
                 <br />
-                Sioux Falls, SD 57104 &middot; KFSD
+                Yankton, SD 57078 &middot; KYKN
               </p>
             </Specimen>
 

@@ -261,7 +261,7 @@ export default async function CollectionDetailPage({
           <p className="bs-byline">
             {collection.handle === 'avionics-certified'
               ? 'For package and special pricing please contact us'
-              : 'RWAS Avionics Desk · KFSD, Sioux Falls'}
+              : 'RWAS Avionics Desk · KYKN, Yankton'}
           </p>
           <div
             style={{
