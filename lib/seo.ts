@@ -126,17 +126,16 @@ export function productSeoTitle(
   const titleMax = 60 - suffix.length;
   const withIdentifierMax = titleMax - identifierSuffix.length;
   if (identifierSuffix && typedTitle.length > withIdentifierMax) {
-    const clipped = typedTitle.slice(0, titleMax - 1);
+    const clipped = typedTitle.slice(0, titleMax);
     const lastSpace = clipped.lastIndexOf(' ');
-    const cleanClip =
-      (lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped).trimEnd();
-    return `${cleanClip}…${suffix}`;
+    const cleanClip = (lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped).trimEnd();
+    return `${cleanClip}${suffix}`;
   }
   if (typedTitle.length <= withIdentifierMax)
     return `${typedTitle}${identifierSuffix}${suffix}`;
-  const clipped = typedTitle.slice(0, titleMax - 1);
+  const clipped = typedTitle.slice(0, titleMax);
   const lastSpace = clipped.lastIndexOf(' ');
-  return `${(lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped).trimEnd()}…${suffix}`;
+  return `${(lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped).trimEnd()}${suffix}`;
 }
 
 export function collectionSeoTitle(title: string) {
