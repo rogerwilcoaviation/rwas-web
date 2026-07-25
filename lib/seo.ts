@@ -64,17 +64,17 @@ export function collectionMetaDescription(collection: {
   const handle = collection.handle || '';
   if (handle.includes('papa-alpha')) {
     return truncateMeta(
-      'Shop RWAS-built Papa-Alpha rigging tools for Piper PA-28, PA-30, PA-31, and PA-36 aircraft. Precision reference tools ship from Sioux Falls, SD.',
+      'Shop RWAS-built Papa-Alpha rigging tools for Piper PA-28, PA-30, PA-31, and PA-36 aircraft. Precision reference tools ship from Yankton, SD.',
     );
   }
   if (handle.includes('garmin')) {
     return truncateMeta(
-      `Browse ${title} from Roger Wilco Aviation Services, an authorized Garmin dealer and FAA Part 145 repair station at KFSD in Sioux Falls.`,
+      `Browse ${title} from Roger Wilco Aviation Services, an authorized Garmin dealer and FAA Part 145 repair station at KYKN in Yankton.`,
     );
   }
   if (handle.includes('sale')) {
     return truncateMeta(
-      'Browse current RWAS sale items, Garmin pilot gear, avionics accessories, and shop-supported aviation products from Sioux Falls, South Dakota.',
+      'Browse current RWAS sale items, Garmin pilot gear, avionics accessories, and shop-supported aviation products from Yankton, South Dakota.',
     );
   }
   return truncateMeta(
@@ -106,7 +106,7 @@ export function productMetaDescription(product: {
     return truncateMeta(description);
 
   return truncateMeta(
-    `${title} from ${vendor}, available through RWAS at KFSD in Sioux Falls. ${type} support from an FAA Part 145 repair station and authorized Garmin dealer.${skuText}`,
+    `${title} from ${vendor}, available through RWAS at KYKN in Yankton. ${type} support from an FAA Part 145 repair station and authorized Garmin dealer.${skuText}`,
   );
 }
 
@@ -123,12 +123,20 @@ export function productSeoTitle(
     clean.length < 20 && productType
       ? `${clean} ${compactText(productType)}`
       : clean;
-  const max = 60 - suffix.length - identifierSuffix.length;
-  if (typedTitle.length <= max)
+  const titleMax = 60 - suffix.length;
+  const withIdentifierMax = titleMax - identifierSuffix.length;
+  if (identifierSuffix && typedTitle.length > withIdentifierMax) {
+    const clipped = typedTitle.slice(0, titleMax - 1);
+    const lastSpace = clipped.lastIndexOf(' ');
+    const cleanClip =
+      (lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped).trimEnd();
+    return `${cleanClip}…${suffix}`;
+  }
+  if (typedTitle.length <= withIdentifierMax)
     return `${typedTitle}${identifierSuffix}${suffix}`;
-  const clipped = typedTitle.slice(0, max - 1);
+  const clipped = typedTitle.slice(0, titleMax - 1);
   const lastSpace = clipped.lastIndexOf(' ');
-  return `${(lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped).trimEnd()}…${identifierSuffix}${suffix}`;
+  return `${(lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped).trimEnd()}…${suffix}`;
 }
 
 export function collectionSeoTitle(title: string) {
