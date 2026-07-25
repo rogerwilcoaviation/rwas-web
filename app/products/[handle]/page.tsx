@@ -179,9 +179,16 @@ function isPlaceholderOption(option: { name: string; values: string[] }) {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
- * Tag-based gating — brand-agnostic. A Garmin product tagged `otc-eligible`
- * takes the add-to-cart path just like a Papa-Alpha tool.
+ * Product-type gating — brand-agnostic. OTC catalog types take the
+ * add-to-cart path regardless of legacy Garmin tag coverage.
  * ────────────────────────────────────────────────────────────────────────── */
+const OTC_PRODUCT_TYPES = new Set([
+  'Pilot Gear',
+  'Watches & Accessories',
+  'Papa-Alpha Tools',
+  'Avionics — Experimental',
+]);
+
 type Gating = {
   otc: 'eligible' | 'disabled' | 'unknown';
   stockCheckRequired: boolean;
@@ -211,6 +218,11 @@ function gateFromProduct(
   // applies to PDPs too. When OTC is re-enabled, this delegates back to the
   // tag-based logic without further changes here.
   const perProductOtcEligible = isOtcEligible({ tags: lower });
+  // Shopify's legacy Garmin tags are not a reliable commerce signal: many
+  // saleable watches/accessories have only taxonomy tags. Product type is the
+  // authoritative OTC boundary for the PDP. Keep certified avionics and
+  // dealer-install types outside this allowlist so they remain quote-only.
+  const productTypeOtcEligible = OTC_PRODUCT_TYPES.has(productType || '');
   const isDealerInstall = isDealerInstallProductType(productType);
   const perProductOtcDisabled = lower.includes('otc-disabled');
   const mapLocked = lower.includes('garmin-map-locked');
@@ -221,12 +233,13 @@ function gateFromProduct(
   // collection grids (see project_rwas_otc_add_to_cart memory).
   const collectionOtc = collections.some((handle) => isOtcCollection(handle));
 
-  const otcEligible = collectionOtc || perProductOtcEligible;
+  const otcEligible =
+    productTypeOtcEligible || collectionOtc || perProductOtcEligible;
   // Only a collection-level OTC override (e.g. garmin-watches) clears the
   // stock-check-required rule. A per-product `otc-eligible` tag on its own
   // (e.g., Garmin G5 kits that also carry `stock-check-required`) keeps the
   // Check-stock pill and the 'RWAS does not hold Garmin stock' notice.
-  const stockCheckRequired = collectionOtc
+  const stockCheckRequired = productTypeOtcEligible || collectionOtc
     ? false
     : lower.includes('stock-check-required') ||
       (isGarmin && !perProductOtcEligible);
