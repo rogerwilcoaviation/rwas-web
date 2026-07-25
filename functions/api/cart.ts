@@ -108,7 +108,7 @@ const CART_FIELDS = `
 const CART_QUERY = `query Cart($cartId: ID!) { cart(id: $cartId) { ${CART_FIELDS} } }`;
 
 const MERCHANDISE_PRODUCT_QUERY = `query MerchandiseProduct($id: ID!) {
-  productVariant(id: $id) { product { productType title handle } }
+  node(id: $id) { ... on ProductVariant { product { productType title handle } } }
 }`;
 
 const CART_CREATE = `
@@ -178,11 +178,11 @@ async function assertCartEligible(env: Env, merchandiseId: string) {
   const data = (await shopify(env, MERCHANDISE_PRODUCT_QUERY, {
     id: merchandiseId,
   })) as {
-    productVariant?: {
+    node?: {
       product?: { productType?: string | null; title?: string | null } | null;
     } | null;
   } | undefined;
-  const productType = data?.productVariant?.product?.productType;
+  const productType = data?.node?.product?.productType;
   if (
     productType === 'Avionics — Certified' ||
     productType === 'Garmin Dealer Install'
