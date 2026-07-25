@@ -47,7 +47,8 @@ function formatPrice(amount: string, currencyCode: string) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currencyCode,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(Number(amount));
 }
 
