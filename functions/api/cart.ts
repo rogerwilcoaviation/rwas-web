@@ -267,7 +267,11 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
     return jsonResponse({ cart: flattenCart(cart) });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Cart request failed';
-    return jsonResponse({ error: message }, 500);
+    // Shopify reports malformed merchandise IDs and rejected quantities as
+    // GraphQL errors rather than userErrors. They are client input errors,
+    // not an upstream outage.
+    const clientInput = /variant|merchandise|quantity|invalid id|must be a valid/i.test(message);
+    return jsonResponse({ error: message }, clientInput ? 400 : 502);
   }
 };
 
