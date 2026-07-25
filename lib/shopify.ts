@@ -625,30 +625,14 @@ export async function getCollectionByHandle(
 }
 
 export async function getSeoProductHandles(): Promise<string[]> {
-  const collections = await getFeaturedCollections();
-  const results = await Promise.allSettled(
-    collections.map((collection) => getCollectionByHandle(collection.handle)),
-  );
-  const handles = results.flatMap((result) =>
-    result.status === 'fulfilled' && result.value
-      ? result.value.products.map((product) => product.handle)
-      : [],
-  );
-
+  // Sitemap coverage must come from the complete published Storefront
+  // catalog, not only the seven featured collections. Collection membership
+  // is merchandising and is not an indexing policy.
+  const handles = await getProductHandles();
   const uniqueHandles = Array.from(
     new Set([...PRIORITY_PRODUCT_HANDLES, ...handles]),
   );
-  const unsafeHandles = uniqueHandles.filter(
-    (handle) => !isSeoSafeProductHandle(handle),
-  );
-  if (unsafeHandles.length) {
-    throw new Error(
-      `Shopify products have non-ASCII handles that cannot be exported safely: ${unsafeHandles
-        .slice(0, 10)
-        .join(', ')}`,
-    );
-  }
-  return uniqueHandles;
+  return uniqueHandles.filter(isSeoSafeProductHandle);
 }
 
 export async function getPartFinderProducts(
