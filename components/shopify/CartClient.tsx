@@ -173,7 +173,7 @@ export default function CartClient() {
             className="bs-body"
             style={{ maxWidth: 560, margin: '12px auto 24px' }}
           >
-            Start with the RWAS collections &mdash; Garmin certified avionics, Papa-Alpha tools, or the on-sale rack &mdash; and add a few products to your cart.
+            Start with the RWAS collections &mdash; Garmin certified avionics, watches, pilot gear, or Papa-Alpha tools &mdash; and add a few products to your cart.
           </p>
           <div
             style={{

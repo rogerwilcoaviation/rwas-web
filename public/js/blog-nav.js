@@ -9,7 +9,6 @@
   var navLinks = [
     { text: 'Home', href: '/' },
     { text: 'Ask Jerry', href: '/#ask-jerry' },
-    { text: 'On Sale', href: '/collections/on-sale' },
     { text: 'Garmin', href: '/collections/avionics-certified' },
     { text: 'Papa-Alpha Tools', href: '/collections/papa-alpha-tools' },
     { text: 'Aircraft 4 Sale', href: '/aircraft-for-sale' },

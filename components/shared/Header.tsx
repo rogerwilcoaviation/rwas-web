@@ -31,10 +31,6 @@ const collectionLinks = [
     href: '/aircraft-for-sale',
     label: 'Aircraft 4 Sale',
   },
-  {
-    href: '/collections/on-sale',
-    label: 'On Sale',
-  },
 ];
 
 export const Header = ({ className }: { className?: string }) => {

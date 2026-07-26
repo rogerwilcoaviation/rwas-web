@@ -128,9 +128,6 @@ async function getState() {
               id
               title
               handle
-              variants(first: 50) {
-                nodes { sku compareAtPrice }
-              }
             }
           }
         }
@@ -179,9 +176,7 @@ function audit(state) {
       failures.push(`obsolete collection remains: ${handle}`);
   }
 
-  const nonSaleProducts = (sale?.products.nodes || []).filter((product) =>
-    product.variants.nodes.every((variant) => !variant.compareAtPrice),
-  );
+  const saleProducts = sale?.products.nodes || [];
   const mediaPlans = [];
   for (const [handle, policy] of PRODUCT_MEDIA_POLICY) {
     const product = products.get(handle);
@@ -234,7 +229,7 @@ function audit(state) {
     saleCollectionId: sale?.id || null,
     saleDescription: sale?.descriptionHtml || null,
     saleProductCount: sale?.productsCount.count || 0,
-    nonSaleProducts: nonSaleProducts.map((product) => ({
+    saleProducts: saleProducts.map((product) => ({
       id: product.id,
       title: product.title,
       handle: product.handle,
@@ -243,17 +238,17 @@ function audit(state) {
   };
 }
 
-async function removeNonSaleProducts(plan) {
-  if (!plan.nonSaleProducts.length) return;
+async function emptySaleCollection(plan) {
+  if (!plan.saleProducts.length) return;
   const result = await shopifyGraphql(
-    `mutation RemoveNonSaleProducts($id: ID!, $productIds: [ID!]!) {
+    `mutation EmptySaleCollection($id: ID!, $productIds: [ID!]!) {
       collectionRemoveProducts(id: $id, productIds: $productIds) {
         userErrors { field message }
       }
     }`,
     {
       id: plan.saleCollectionId,
-      productIds: plan.nonSaleProducts.map((product) => product.id),
+      productIds: plan.saleProducts.map((product) => product.id),
     },
   );
   assertNoUserErrors(result, 'collectionRemoveProducts');
@@ -282,9 +277,9 @@ async function reconcileMedia(mediaPlan) {
 
 function verificationFailures(plan) {
   const failures = [...plan.failures];
-  if (plan.nonSaleProducts.length) {
+  if (plan.saleProducts.length) {
     failures.push(
-      `${plan.nonSaleProducts.length} non-sale products remain in On Sale`,
+      `${plan.saleProducts.length} products remain in the disabled On Sale collection`,
     );
   }
   for (const media of plan.mediaPlans) {
@@ -317,7 +312,7 @@ async function main() {
     if (before.failures.length) {
       throw new Error(`Precondition failures: ${before.failures.join('; ')}`);
     }
-    await removeNonSaleProducts(before);
+    await emptySaleCollection(before);
     for (const mediaPlan of before.mediaPlans) {
       await reconcileMedia(mediaPlan);
     }

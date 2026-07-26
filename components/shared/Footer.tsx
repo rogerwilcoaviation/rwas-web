@@ -25,10 +25,6 @@ const collectionLinks = [
     href: '/collections/papa-alpha-tools',
     label: 'Papa-Alpha tools',
   },
-  {
-    href: '/collections/on-sale',
-    label: 'On Sale',
-  },
 ];
 
 export const Footer = ({ className }: { className?: string }) => {
