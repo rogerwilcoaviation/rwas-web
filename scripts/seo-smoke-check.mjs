@@ -134,7 +134,7 @@ if (home.res.status !== 200) fail(`Home returned ${home.res.status}`);
 for (const [label, value] of [
   [
     'structured street address',
-    '"streetAddress":"3309 Douglas Avenue"',
+    '"streetAddress":"3309 Douglas Avenue Unit #3"',
   ],
   ['structured locality', '"addressLocality":"Yankton"'],
   ['structured postal code', '"postalCode":"57078"'],

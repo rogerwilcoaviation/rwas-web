@@ -223,7 +223,7 @@ export default function AboutPage() {
             <Specimen as="section">
               <span className="bs-kicker">Repair Station Headquarters</span>
               <address style={{ fontStyle: 'normal' }}>
-                3309 Douglas Avenue
+                3309 Douglas Avenue Unit #3
                 <br />
                 Yankton, SD 57078
               </address>

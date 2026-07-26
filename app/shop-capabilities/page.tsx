@@ -596,7 +596,7 @@ export default function ShopCapabilitiesPage() {
                 <br />
                 Repair Station Headquarters
                 <br />
-                3309 Douglas Avenue
+                3309 Douglas Avenue Unit #3
                 <br />
                 Yankton, SD 57078
               </p>

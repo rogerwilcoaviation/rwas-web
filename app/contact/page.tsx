@@ -121,7 +121,7 @@ export default function ContactPage() {
               <dt>Repair Station Headquarters</dt>
               <dd>
                 <address style={{ fontStyle: 'normal' }}>
-                  3309 Douglas Avenue
+                  3309 Douglas Avenue Unit #3
                   <br />
                   Yankton, SD 57078
                 </address>

@@ -176,7 +176,7 @@ export default function RootLayout({
                   priceRange: '$$',
                   address: {
                     '@type': 'PostalAddress',
-                    streetAddress: '3309 Douglas Avenue',
+                    streetAddress: '3309 Douglas Avenue Unit #3',
                     addressLocality: 'Yankton',
                     addressRegion: 'SD',
                     postalCode: '57078',
