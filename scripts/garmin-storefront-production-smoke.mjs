@@ -274,11 +274,24 @@ const k10 = await renderedPage(
 );
 for (const requiredText of [
   'Garmin Dual G5 AI/HSI Kit for Certificated Aircraft',
+  '$6,995',
+  'Add to Cart',
   'For package and special pricing please contact us',
   'Service area We come to you',
 ]) {
   if (!k10.includes(requiredText)) {
     throw new Error(`K10-00280-51 page is missing: ${requiredText}`);
+  }
+}
+
+const gdu450 = await renderedPage('/products/g3x-touch-display-gdu-450');
+for (const requiredText of [
+  'Avionics — Experimental',
+  '$4,350',
+  'Add to Cart',
+]) {
+  if (!gdu450.includes(requiredText)) {
+    throw new Error(`GDU 450 page is missing: ${requiredText}`);
   }
 }
 if (/Installs at.{0,160}(KFSD|Sioux Falls|KYKN|Yankton)/i.test(k10)) {
