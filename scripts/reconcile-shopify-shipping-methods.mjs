@@ -12,6 +12,8 @@ const DOMESTIC_ZONE_ID = 'gid://shopify/DeliveryZone/431550267611';
 const INTERNATIONAL_ZONE_ID = 'gid://shopify/DeliveryZone/431550300379';
 const UPS_CARRIER_SERVICE_ID =
   'gid://shopify/DeliveryCarrierService/75727962331';
+const DOMESTIC_FREE_SHIPPING_DISCOUNT_ID =
+  'gid://shopify/DiscountAutomaticNode/1564909175003';
 
 function loadEnv(path) {
   for (const rawLine of fs.readFileSync(path, 'utf8').split(/\r?\n/)) {
@@ -132,6 +134,42 @@ async function getProfile() {
   return profile;
 }
 
+async function getAutomaticFreeShippingDiscounts() {
+  const data = await shopifyGraphql(`query ShippingDiscountAudit {
+    discountNodes(first: 100, query: "status:active") {
+      nodes {
+        id
+        discount {
+          __typename
+          ... on DiscountAutomaticFreeShipping {
+            title
+            status
+            summary
+            minimumRequirement {
+              ... on DiscountMinimumSubtotal {
+                greaterThanOrEqualToSubtotal { amount currencyCode }
+              }
+            }
+            destinationSelection {
+              __typename
+              ... on DiscountCountries {
+                countries
+                includeRestOfWorld
+              }
+              ... on DiscountCountryAll { allCountries }
+            }
+          }
+        }
+      }
+    }
+  }`);
+  return data.discountNodes.nodes
+    .filter(
+      (node) => node.discount.__typename === 'DiscountAutomaticFreeShipping',
+    )
+    .map((node) => ({ id: node.id, ...node.discount }));
+}
+
 function flattenMethods(profile) {
   return profile.profileLocationGroups.flatMap((group) => {
     const activeLocations = group.locationGroup.locations.nodes.filter(
@@ -188,7 +226,7 @@ function isPrimaryInternational(method) {
   );
 }
 
-function audit(profile) {
+function audit(profile, automaticFreeShippingDiscounts) {
   const methods = flattenMethods(profile);
   const customerEligibleMethods = methods.filter(
     (method) => method.activeLocationCount > 0 && method.active,
@@ -224,9 +262,26 @@ function audit(profile) {
   const amazonPrimeMethods = methods.filter(
     (method) => method.name === 'Amazon Prime',
   );
+  // Amazon MCF recreates this app-owned definition when it is renamed or
+  // deleted. It is safe only while its location group has no active online
+  // fulfillment locations, so fail the audit if it ever becomes eligible.
   const customerEligibleAmazonPrime = amazonPrimeMethods.filter(
     (method) => method.activeLocationCount > 0 && method.active,
   );
+  const domesticFreeShipping = automaticFreeShippingDiscounts.find(
+    (discount) => discount.id === DOMESTIC_FREE_SHIPPING_DISCOUNT_ID,
+  );
+  const domesticFreeShippingIsScoped =
+    domesticFreeShipping?.status === 'ACTIVE' &&
+    domesticFreeShipping.minimumRequirement?.greaterThanOrEqualToSubtotal
+      ?.amount === '400.0' &&
+    domesticFreeShipping.minimumRequirement?.greaterThanOrEqualToSubtotal
+      ?.currencyCode === 'USD' &&
+    domesticFreeShipping.destinationSelection?.__typename ===
+      'DiscountCountries' &&
+    domesticFreeShipping.destinationSelection.includeRestOfWorld === false &&
+    domesticFreeShipping.destinationSelection.countries.length === 1 &&
+    domesticFreeShipping.destinationSelection.countries[0] === 'US';
 
   const economyHasExpectedRate =
     economy?.active &&
@@ -254,16 +309,25 @@ function audit(profile) {
   if (customerEligibleAmazonPrime.length) {
     failures.push('Amazon Prime is attached to an active fulfillment location');
   }
+  if (!domesticFreeShipping) {
+    failures.push(
+      `Missing domestic free-shipping discount ${DOMESTIC_FREE_SHIPPING_DISCOUNT_ID}`,
+    );
+  }
 
   return {
     methodDefinitionsToDelete: staleCarrierMethods.map((method) => method.id),
     createDomesticUps: !domesticUps,
+    updateDomesticFreeShipping: Boolean(
+      domesticFreeShipping && !domesticFreeShippingIsScoped,
+    ),
     failures,
     customerEligibleMethods: publicMethods(customerEligibleMethods),
     staleCarrierMethods: publicMethods(staleCarrierMethods),
     appManagedInactiveMethods: publicMethods(
       amazonPrimeMethods.filter((method) => method.activeLocationCount === 0),
     ),
+    automaticFreeShippingDiscounts,
   };
 }
 
@@ -294,17 +358,44 @@ async function applyPlan(plan) {
       },
     ];
   }
-  if (!Object.keys(profile).length) return;
-  const result = await shopifyGraphql(
-    `mutation ReconcileCustomerShippingMethods($id: ID!, $profile: DeliveryProfileInput!) {
-      deliveryProfileUpdate(id: $id, profile: $profile) {
-        profile { id name }
-        userErrors { field message }
-      }
-    }`,
-    { id: GENERAL_PROFILE_ID, profile },
-  );
-  assertNoUserErrors(result, 'deliveryProfileUpdate');
+  if (!Object.keys(profile).length && !plan.updateDomesticFreeShipping) return;
+  if (Object.keys(profile).length) {
+    const result = await shopifyGraphql(
+      `mutation ReconcileCustomerShippingMethods($id: ID!, $profile: DeliveryProfileInput!) {
+        deliveryProfileUpdate(id: $id, profile: $profile) {
+          profile { id name }
+          userErrors { field message }
+        }
+      }`,
+      { id: GENERAL_PROFILE_ID, profile },
+    );
+    assertNoUserErrors(result, 'deliveryProfileUpdate');
+  }
+  if (plan.updateDomesticFreeShipping) {
+    const result = await shopifyGraphql(
+      `mutation ScopeAutomaticFreeShipping(
+        $id: ID!
+        $discount: DiscountAutomaticFreeShippingInput!
+      ) {
+        discountAutomaticFreeShippingUpdate(
+          id: $id
+          freeShippingAutomaticDiscount: $discount
+        ) {
+          automaticDiscountNode { id }
+          userErrors { field message }
+        }
+      }`,
+      {
+        id: DOMESTIC_FREE_SHIPPING_DISCOUNT_ID,
+        discount: {
+          destination: {
+            countries: { add: ['US'], includeRestOfWorld: false },
+          },
+        },
+      },
+    );
+    assertNoUserErrors(result, 'discountAutomaticFreeShippingUpdate');
+  }
 }
 
 function delay(milliseconds) {
@@ -315,10 +406,14 @@ async function verifyAfterApply() {
   let after = null;
   for (let attempt = 0; attempt < 4; attempt += 1) {
     if (attempt) await delay(5000);
-    after = audit(await getProfile());
+    after = audit(
+      await getProfile(),
+      await getAutomaticFreeShippingDiscounts(),
+    );
     if (
       !after.methodDefinitionsToDelete.length &&
       !after.createDomesticUps &&
+      !after.updateDomesticFreeShipping &&
       !after.failures.length
     ) {
       return after;
@@ -330,6 +425,9 @@ async function verifyAfterApply() {
       ? ['stale carrier methods remain']
       : []),
     ...(after.createDomesticUps ? ['Domestic UPS participant is missing'] : []),
+    ...(after.updateDomesticFreeShipping
+      ? ['Free shipping remains eligible outside the United States']
+      : []),
   ];
   throw new Error(`Shipping verification failed: ${failures.join('; ')}`);
 }
@@ -337,7 +435,10 @@ async function verifyAfterApply() {
 async function main() {
   const apply = process.argv.includes('--apply');
   loadEnv(SHOPIFY_ENV_PATH);
-  const before = audit(await getProfile());
+  const before = audit(
+    await getProfile(),
+    await getAutomaticFreeShippingDiscounts(),
+  );
   if (before.failures.length) {
     throw new Error(`Shipping audit failed: ${before.failures.join('; ')}`);
   }
