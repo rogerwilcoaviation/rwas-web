@@ -123,7 +123,7 @@ export default function ContactPage() {
                 <address style={{ fontStyle: 'normal' }}>
                   700 East 31st Street
                   <br />
-                  Yankton, SD 57078 &middot; KYKN
+                  Yankton, South Dakota 57078 &middot; KYKN
                 </address>
               </dd>
             </div>
