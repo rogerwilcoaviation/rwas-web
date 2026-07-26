@@ -126,10 +126,12 @@ export function productSeoTitle(
   const titleMax = 60 - suffix.length;
   const withIdentifierMax = titleMax - identifierSuffix.length;
   if (identifierSuffix && typedTitle.length > withIdentifierMax) {
-    const clipped = typedTitle.slice(0, titleMax);
+    const clipped = typedTitle.slice(0, withIdentifierMax);
     const lastSpace = clipped.lastIndexOf(' ');
-    const cleanClip = (lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped).trimEnd();
-    return `${cleanClip}${suffix}`;
+    const cleanClip = (
+      lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped
+    ).trimEnd();
+    return `${cleanClip}${identifierSuffix}${suffix}`;
   }
   if (typedTitle.length <= withIdentifierMax)
     return `${typedTitle}${identifierSuffix}${suffix}`;
