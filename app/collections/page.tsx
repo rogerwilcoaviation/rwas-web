@@ -110,13 +110,10 @@ export default async function CollectionsPage() {
           </h1>
           <p className="bs-subhead">
             Certified and experimental avionics, pilot gear, Garmin watches and
-            accessories, dealer-install hardware, service parts, and
-            Papa-Alpha tools &mdash; all live with real product data behind
-            them.
+            accessories, dealer-install hardware, service parts, and Papa-Alpha
+            tools &mdash; all live with real product data behind them.
           </p>
-          <p className="bs-byline">
-            RWAS Avionics Desk &middot; KYKN, Yankton
-          </p>
+          <p className="bs-byline">RWAS Avionics Desk &middot; KYKN, Yankton</p>
           <div
             style={{
               marginTop: 16,
