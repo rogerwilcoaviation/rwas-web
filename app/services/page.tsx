@@ -130,7 +130,7 @@ export default function ServicesPage() {
                 name: 'Where is Roger Wilco Aviation Services located?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'RWAS is at 700 East 31st Street, Yankton, South Dakota 57078, at KYKN. The shop serves aircraft owners across the Northern Plains.',
+                  text: 'RWAS Repair Station Headquarters is at 3309 Douglas Avenue, Yankton, SD 57078. The shop serves aircraft owners across the Northern Plains.',
                 },
               },
               {

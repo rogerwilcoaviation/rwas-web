@@ -118,12 +118,12 @@ export default function ContactPage() {
               </dd>
             </div>
             <div>
-              <dt>Shop location</dt>
+              <dt>Repair Station Headquarters</dt>
               <dd>
                 <address style={{ fontStyle: 'normal' }}>
-                  700 East 31st Street
+                  3309 Douglas Avenue
                   <br />
-                  Yankton, South Dakota 57078 &middot; KYKN
+                  Yankton, SD 57078
                 </address>
               </dd>
             </div>

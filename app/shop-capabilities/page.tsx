@@ -594,9 +594,11 @@ export default function ShopCapabilitiesPage() {
                 <br />
                 RWAS Avionics Desk
                 <br />
-                700 East 31st Street
+                Repair Station Headquarters
                 <br />
-                Yankton, SD 57078 &middot; KYKN
+                3309 Douglas Avenue
+                <br />
+                Yankton, SD 57078
               </p>
             </Specimen>
 

@@ -15,7 +15,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/locations/yankton';
 export const metadata = {
   title: { absolute: 'Aircraft Maintenance & Avionics Shop - Yankton, SD | RWAS' },
   description:
-    'RWAS is an FAA Part 145 repair station at 700 East 31st Street in Yankton, SD, supporting Garmin avionics, maintenance, NDT, fabrication, and pre-buys.',
+    'RWAS Repair Station Headquarters is at 3309 Douglas Avenue in Yankton, SD, supporting Garmin avionics, maintenance, NDT, fabrication, and pre-buys.',
   alternates: { canonical: pageUrl },
 };
 
@@ -35,7 +35,7 @@ export default function YanktonLocationPage() {
                 url: pageUrl,
                 address: {
                   '@type': 'PostalAddress',
-                  streetAddress: '700 East 31st Street',
+                  streetAddress: '3309 Douglas Avenue',
                   addressLocality: 'Yankton',
                   addressRegion: 'SD',
                   postalCode: '57078',
@@ -51,7 +51,7 @@ export default function YanktonLocationPage() {
                 email: 'avionics@rwas.team',
                 address: {
                   '@type': 'PostalAddress',
-                  streetAddress: '700 East 31st Street',
+                  streetAddress: '3309 Douglas Avenue',
                   addressLocality: 'Yankton',
                   addressRegion: 'SD',
                   postalCode: '57078',
@@ -91,7 +91,7 @@ export default function YanktonLocationPage() {
             Garmin installation &middot; annual inspections &middot; NDT &middot; fabrication &middot; Papa-Alpha tools &middot; pre-buy support
           </p>
           <div className="bs-byline">
-            700 East 31st Street &middot; Yankton, SD 57078 &middot; (605) 299-8178
+            Repair Station Headquarters &middot; 3309 Douglas Avenue &middot; Yankton, SD 57078 &middot; (605) 299-8178
           </div>
         </section>
 
@@ -103,7 +103,7 @@ export default function YanktonLocationPage() {
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  Roger Wilco Aviation Services operates from 700 East 31st Street in Yankton, South Dakota. The shop is built for aircraft owners who need avionics, airframe, powerplant, NDT, fabrication, and documentation coordinated by one accountable team instead of scattered across disconnected vendors.
+                  Roger Wilco Aviation Services operates its Repair Station Headquarters at 3309 Douglas Avenue in Yankton, South Dakota. The shop is built for aircraft owners who need avionics, airframe, powerplant, NDT, fabrication, and documentation coordinated by one accountable team instead of scattered across disconnected vendors.
                 </p>
                 <p>
                   RWAS supports owners across South Dakota, Nebraska, Iowa, Minnesota, North Dakota, Wyoming, and Montana with FAA Part 145 repair-station discipline, Garmin dealer access, in-house panel fabrication, and practical aircraft-maintenance judgment.
@@ -179,9 +179,9 @@ export default function YanktonLocationPage() {
 
           <aside className="about-rail" aria-label="Yankton location quick reference">
             <Specimen as="section">
-              <span className="bs-kicker">Shop Address</span>
+              <span className="bs-kicker">Repair Station Headquarters</span>
               <p>
-                700 East 31st Street
+                3309 Douglas Avenue
                 <br />
                 Yankton, South Dakota 57078
               </p>

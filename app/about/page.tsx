@@ -221,11 +221,11 @@ export default function AboutPage() {
             aria-label="Contact &amp; quick reference"
           >
             <Specimen as="section">
-              <span className="bs-kicker">Shop Location</span>
+              <span className="bs-kicker">Repair Station Headquarters</span>
               <address style={{ fontStyle: 'normal' }}>
-                700 East 31st Street
+                3309 Douglas Avenue
                 <br />
-                Yankton, SD 57078 &middot; KYKN
+                Yankton, SD 57078
               </address>
             </Specimen>
 
