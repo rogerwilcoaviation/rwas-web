@@ -22,8 +22,11 @@ const CERTIFIED_COLLECTION_HANDLE = 'garmin-avionics';
 // GDU 450/460/470 model names appear in multiple certification contexts, while
 // Garmin assigns the unit-only SKUs below to its experimental product line.
 const EXPERIMENTAL_SKUS = new Set([
+  '010-01087-21',
   '010-01056-00',
   '010-01057-00',
+  '010-01318-01',
+  '010-01471-01',
   '010-01485-01',
   '010-01765-00',
   '011-02347-00',
@@ -33,6 +36,14 @@ const EXPERIMENTAL_SKUS = new Set([
   'K00-00514-10',
   'K10-00016-13',
   'K10-00016-14',
+]);
+
+// Current Garmin direct list prices for experimental audio products that are
+// absent from the dealer-sheet authority. These exact current part numbers
+// are independently verified against Garmin's public product pages.
+const PUBLIC_EXPERIMENTAL_LIST_PRICES = new Map([
+  ['010-01087-21', 1960],
+  ['010-01318-01', 1950],
 ]);
 
 const SENSOR_INSTALL_POLICY = {
@@ -210,7 +221,7 @@ function assertNoUserErrors(result, field) {
   if (errors.length) throw new Error(JSON.stringify(errors));
 }
 
-async function findCollection(handle) {
+async function findCollection(handle, required = true) {
   const data = await shopifyGraphql(
     `query CollectionByHandle($query: String!) {
       collections(first: 10, query: $query) {
@@ -230,7 +241,9 @@ async function findCollection(handle) {
   const collection = data.collections.nodes.find(
     (node) => node.handle === handle,
   );
-  if (!collection) throw new Error(`Missing Shopify collection: ${handle}`);
+  if (!collection && required) {
+    throw new Error(`Missing Shopify collection: ${handle}`);
+  }
   return collection;
 }
 
@@ -328,7 +341,7 @@ function buildAudit(products, priceAuthority) {
         : dealerInstallDescription(product, sku, policy);
     const requiredCollections =
       classification === 'experimental'
-        ? [RETAIL_COLLECTION_HANDLE, EXPERIMENTAL_COLLECTION_HANDLE]
+        ? [EXPERIMENTAL_COLLECTION_HANDLE]
         : [DEALER_INSTALL_COLLECTION_HANDLE, ACCESSORIES_COLLECTION_HANDLE];
     const prohibitedCollections =
       classification === 'experimental'
@@ -353,9 +366,12 @@ function buildAudit(products, priceAuthority) {
       const authority = variant.sku
         ? priceAuthority.rows[variant.sku]
         : undefined;
+      const publicListPrice = variant.sku
+        ? PUBLIC_EXPERIMENTAL_LIST_PRICES.get(variant.sku)
+        : undefined;
       const expectedPrice =
-        classification === 'experimental' && authority?.list_price
-          ? money(authority.list_price)
+        classification === 'experimental'
+          ? money(authority?.list_price || publicListPrice || currentPrice)
           : currentPrice;
       return {
         variantId: variant.id,
@@ -365,7 +381,9 @@ function buildAudit(products, priceAuthority) {
         priceSource:
           classification === 'experimental' && authority?.list_price
             ? 'garmin-price-authority'
-            : 'shopify-current-price',
+            : classification === 'experimental' && publicListPrice
+              ? 'garmin-public-list-price'
+              : 'shopify-current-price',
         positivePrice:
           Number.isFinite(Number(currentPrice)) && Number(currentPrice) > 0,
         priceChange: currentPrice !== expectedPrice,
@@ -569,10 +587,15 @@ async function main() {
   const collectionEntries = await Promise.all(
     collectionHandles.map(async (handle) => [
       handle,
-      await findCollection(handle),
+      await findCollection(
+        handle,
+        handle !== LEGACY_EXPERIMENTAL_COLLECTION_HANDLE,
+      ),
     ]),
   );
-  const collections = Object.fromEntries(collectionEntries);
+  const collections = Object.fromEntries(
+    collectionEntries.filter(([, collection]) => collection),
+  );
   const products = await getManagedProducts();
   if (!products.length) throw new Error('No managed products found');
 

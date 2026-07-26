@@ -133,6 +133,9 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
   const displayPrice = selected?.price
     ? formatPrice(selected.price.amount, selected.price.currencyCode)
     : 'Contact for pricing';
+  const zeroPrice = Boolean(
+    selected?.price && Number(selected.price.amount) === 0,
+  );
   const normalListPrice = selected?.compareAtPrice
     ? formatPrice(
         selected.compareAtPrice.amount,
@@ -190,7 +193,8 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
 
   return (
     <div className="bs-price-card">
-      {!isNonOtcGarmin || showQuoteRetailPrice || isDealerInstall ? (
+      {!zeroPrice &&
+      (!isNonOtcGarmin || showQuoteRetailPrice || isDealerInstall) ? (
         <>
           <div className="label">
             {showQuoteRetailPrice || showGarminRetailPrice
@@ -220,7 +224,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
         </>
       ) : null}
 
-      {mapLocked && !isNonOtcGarmin && !hasSalePrice ? (
+      {!zeroPrice && mapLocked && !isNonOtcGarmin && !hasSalePrice ? (
         <div className="map-line">
           <span className="seal">Garmin List Price</span>
           Sold at MAP — no markup, no markdown.
@@ -253,7 +257,11 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
       ) : null}
 
       <div className="bs-cta-row bs-cta-row--single">
-        {isDealerInstall ? (
+        {zeroPrice ? (
+          <Link className="bs-cta-primary" href={contactHref}>
+            Contact us for package pricing
+          </Link>
+        ) : isDealerInstall ? (
           <Link className="bs-cta-primary" href={contactHref}>
             Contact us for package pricing
           </Link>

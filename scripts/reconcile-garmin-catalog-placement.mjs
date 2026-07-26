@@ -21,6 +21,11 @@ const COLLECTIONS = {
   genericGarmin: 'garmin-products',
 };
 
+// These legacy collections are intentionally deleted once their memberships
+// have been migrated. Their absence is the desired steady state, not a failed
+// prerequisite for later catalog rescans.
+const OPTIONAL_COLLECTIONS = new Set([COLLECTIONS.legacyExperimental]);
+
 const TYPES = {
   certified: 'Avionics — Certified',
   experimental: 'Avionics — Experimental',
@@ -65,8 +70,11 @@ const APPROVED_CERTIFIED_OTC = new Set([
 ]);
 
 const OFFICIAL_EXPERIMENTAL = new Set([
+  '010-01087-21',
   '010-01056-00',
   '010-01057-00',
+  '010-01318-01',
+  '010-01471-01',
   '010-01485-01',
   '010-01765-00',
   '011-02347-00',
@@ -253,7 +261,10 @@ function sameTags(left, right) {
 
 function isManualCollection(handle, collections) {
   const collection = collections.get(handle);
-  if (!collection) throw new Error(`Missing required collection: ${handle}`);
+  if (!collection) {
+    if (OPTIONAL_COLLECTIONS.has(handle)) return false;
+    throw new Error(`Missing required collection: ${handle}`);
+  }
   return !collection.ruleSet;
 }
 
@@ -374,6 +385,11 @@ function normalizeRetailTags(record) {
     addTag(tags, 'garmin');
     addTag(tags, 'experimental-retail');
     addTag(tags, 'otc-eligible');
+  } else if ([TYPES.pilot, TYPES.watches].includes(record.currentProductType)) {
+    tags = removeTags(
+      tags,
+      new Set(['garmin-retail-policy-2026', 'experimental-retail']),
+    );
   } else {
     tags = removeTags(tags, RETAIL_POLICY_TAGS);
   }
@@ -907,7 +923,8 @@ function auditState(products, collections) {
     const tags = new Set(product.tags.map((tag) => tag.toLowerCase()));
     const price = Number(product.variants.nodes[0]?.price || 0);
     return (
-      collectionHandles(product).has(COLLECTIONS.retail) &&
+      (collectionHandles(product).has(COLLECTIONS.retail) ||
+        product.productType === TYPES.experimental) &&
       tags.has('otc-eligible') &&
       !tags.has('otc-disabled') &&
       !tags.has('garmin-dealer-only') &&
@@ -1048,7 +1065,7 @@ async function main() {
   ]);
 
   for (const handle of Object.values(COLLECTIONS)) {
-    if (!collections.has(handle)) {
+    if (!collections.has(handle) && !OPTIONAL_COLLECTIONS.has(handle)) {
       throw new Error(`Missing required Shopify collection: ${handle}`);
     }
   }

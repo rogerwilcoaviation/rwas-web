@@ -162,8 +162,6 @@ export const FALLBACK_PRODUCT_HANDLES = [
   ...PRIORITY_PRODUCT_HANDLES,
   'garmin-g5-dg-hsi-stcd-for-certified-aircraft-with-lpm',
   'garmin-g5-primary-electronic-attitude-display-stcd-for-certified-aircraft-with-lpm',
-  'garmin-gea-71b-enhanced',
-  'garmin-gfc-500-digital-autopilot',
 ] as const;
 
 export function isSeoSafeProductHandle(handle: string): boolean {

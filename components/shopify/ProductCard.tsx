@@ -58,11 +58,13 @@ export default function ProductCard({
   // button. Quote-only (`garmin-avionics`, the Dealer-Only collection) used
   // to surface a 'Request quote' button — removed per user direction
   // 2026-04-21 PM ("Remove 'request a quote' from the front facing page").
-  // Add-to-cart is gated off site-wide via the hardcoded `otcEligible = false`
-  // above. Both fallthroughs are retained as no-ops so re-enabling either
-  // is a one-line change.
-  void quoteUrl;
+  // Add-to-cart remains gated off site-wide via the hardcoded
+  // `otcEligible = false` above. Dealer-install products still get a direct
+  // package-pricing contact path instead of a dead-end product card.
   let secondaryCta: { label: string; href: string } | null = null;
+  if (dealerOnly) {
+    secondaryCta = { label: 'Contact us for package pricing', href: quoteUrl };
+  }
   if (addToCartHref) {
     secondaryCta = { label: 'Add to cart', href: addToCartHref };
   }
