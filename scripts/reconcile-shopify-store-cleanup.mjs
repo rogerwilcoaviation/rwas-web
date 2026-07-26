@@ -75,22 +75,36 @@ async function shopifyGraphql(query, variables = {}) {
   if (!domain || !token) {
     throw new Error(`Missing Shopify Admin credentials in ${SHOPIFY_ENV_PATH}`);
   }
-  const response = await fetch(
-    `https://${domain}/admin/api/${version}/graphql.json`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Access-Token': token,
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    const response = await fetch(
+      `https://${domain}/admin/api/${version}/graphql.json`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Access-Token': token,
+        },
+        body: JSON.stringify({ query, variables }),
       },
-      body: JSON.stringify({ query, variables }),
-    },
-  );
-  const payload = await response.json();
-  if (!response.ok || payload.errors?.length) {
-    throw new Error(JSON.stringify(payload.errors || payload));
+    );
+    const payload = await response.json();
+    const throttled =
+      response.status === 429 ||
+      payload.errors?.some((error) =>
+        String(error.message || error)
+          .toLowerCase()
+          .includes('throttled'),
+      );
+    if (throttled) {
+      await delay(Math.min(1000 * 2 ** attempt, 15000));
+      continue;
+    }
+    if (!response.ok || payload.errors?.length) {
+      throw new Error(JSON.stringify(payload.errors || payload));
+    }
+    return payload.data;
   }
-  return payload.data;
+  throw new Error('Shopify Admin throttling retries exhausted');
 }
 
 function assertNoUserErrors(result, field) {
