@@ -6,16 +6,12 @@ const SHOPIFY_ENV_PATH =
   process.env.RWAS_SHOPIFY_ENV_PATH ||
   '/Users/rwas/.openclaw/workspace/configs/shopify.env';
 const GENERAL_PROFILE_ID = 'gid://shopify/DeliveryProfile/104778727643';
-const PROHIBITED_METHOD_NAMES = new Set([
-  'usps',
-  'ups_shipping',
-  'Amazon Prime',
-]);
-const REQUIRED_METHOD_NAMES = new Set([
-  'Economy',
-  'International Flat Rate',
-  'Standard Shipping',
-]);
+const PRIMARY_LOCATION_GROUP_ID =
+  'gid://shopify/DeliveryLocationGroup/106175070427';
+const DOMESTIC_ZONE_ID = 'gid://shopify/DeliveryZone/431550267611';
+const INTERNATIONAL_ZONE_ID = 'gid://shopify/DeliveryZone/431550300379';
+const UPS_CARRIER_SERVICE_ID =
+  'gid://shopify/DeliveryCarrierService/75727962331';
 
 function loadEnv(path) {
   for (const rawLine of fs.readFileSync(path, 'utf8').split(/\r?\n/)) {
@@ -64,28 +60,45 @@ function assertNoUserErrors(result, field) {
 
 async function getProfile() {
   const data = await shopifyGraphql(`query ShippingMethodAudit {
-    deliveryProfiles(first: 20) {
+    deliveryProfiles(first: 5) {
       nodes {
         id
         name
         profileLocationGroups {
-          locationGroup { id }
-          locationGroupZones(first: 50) {
+          locationGroup {
+            id
+            locations(first: 20) {
+              nodes { id name isActive fulfillsOnlineOrders }
+            }
+          }
+          locationGroupZones(first: 20) {
             nodes {
               zone { id name }
               methodDefinitions(first: 50) {
                 nodes {
                   id
                   name
+                  description
                   active
                   rateProvider {
                     ... on DeliveryParticipant {
                       id
+                      adaptToNewServicesFlag
                       carrierService { id name active }
+                      participantServices { name active }
                     }
                     ... on DeliveryRateDefinition {
                       id
                       price { amount currencyCode }
+                    }
+                  }
+                  methodConditions {
+                    id
+                    field
+                    operator
+                    conditionCriteria {
+                      ... on MoneyV2 { amount currencyCode }
+                      ... on Weight { unit value }
                     }
                   }
                 }
@@ -106,86 +119,137 @@ async function getProfile() {
 }
 
 function flattenMethods(profile) {
-  return profile.profileLocationGroups.flatMap((group) =>
-    group.locationGroupZones.nodes.flatMap((zone) =>
+  return profile.profileLocationGroups.flatMap((group) => {
+    const activeLocations = group.locationGroup.locations.nodes.filter(
+      (location) => location.isActive && location.fulfillsOnlineOrders,
+    );
+    return group.locationGroupZones.nodes.flatMap((zone) =>
       zone.methodDefinitions.nodes.map((method) => ({
         locationGroupId: group.locationGroup.id,
+        activeLocationCount: activeLocations.length,
         zoneId: zone.zone.id,
         zone: zone.zone.name,
         ...method,
       })),
-    ),
-  );
+    );
+  });
 }
 
 function publicMethods(methods) {
   return methods.map((method) => ({
     id: method.id,
     locationGroupId: method.locationGroupId,
+    activeLocationCount: method.activeLocationCount,
     zoneId: method.zoneId,
     zone: method.zone,
     name: method.name,
+    description: method.description,
     active: method.active,
     carrierService: method.rateProvider?.carrierService?.name || null,
+    carrierServiceActive:
+      method.rateProvider?.carrierService?.active ?? null,
+    participantServices: method.rateProvider?.participantServices || [],
     price: method.rateProvider?.price?.amount || null,
+    conditions: method.methodConditions.map((condition) => ({
+      field: condition.field,
+      operator: condition.operator,
+      amount: condition.conditionCriteria?.amount || null,
+      currencyCode: condition.conditionCriteria?.currencyCode || null,
+      weight: condition.conditionCriteria?.value || null,
+      weightUnit: condition.conditionCriteria?.unit || null,
+    })),
   }));
+}
+
+function isPrimaryDomestic(method) {
+  return (
+    method.locationGroupId === PRIMARY_LOCATION_GROUP_ID &&
+    method.zoneId === DOMESTIC_ZONE_ID
+  );
+}
+
+function isPrimaryInternational(method) {
+  return (
+    method.locationGroupId === PRIMARY_LOCATION_GROUP_ID &&
+    method.zoneId === INTERNATIONAL_ZONE_ID
+  );
 }
 
 function audit(profile) {
   const methods = flattenMethods(profile);
-  const names = new Set(methods.map((method) => method.name));
-  const missingRequired = [...REQUIRED_METHOD_NAMES].filter(
-    (name) => !names.has(name),
+  const customerEligibleMethods = methods.filter(
+    (method) => method.activeLocationCount > 0 && method.active,
   );
-  if (missingRequired.length) {
-    throw new Error(
-      `Required shipping methods missing: ${missingRequired.join(', ')}`,
-    );
-  }
-  const prohibited = methods.filter((method) =>
-    PROHIBITED_METHOD_NAMES.has(method.name),
+  const domesticUps = methods.find(
+    (method) =>
+      isPrimaryDomestic(method) &&
+      method.rateProvider?.carrierService?.id === UPS_CARRIER_SERVICE_ID &&
+      method.rateProvider.carrierService.active &&
+      method.active,
   );
-  const orphanedCarrierMethods = prohibited.filter((method) =>
-    ['usps', 'ups_shipping'].includes(method.name),
+  const economy = methods.find(
+    (method) => isPrimaryDomestic(method) && method.name === 'Economy',
   );
-  for (const method of orphanedCarrierMethods) {
-    if (!method.rateProvider?.carrierService) {
-      throw new Error(`${method.name} is no longer a carrier-backed method`);
-    }
-  }
-  const amazonMethods = prohibited.filter(
+  const internationalFlatRate = methods.find(
+    (method) =>
+      isPrimaryInternational(method) &&
+      method.name === 'International Flat Rate',
+  );
+
+  // These were legacy provider definitions in the International zone. Their
+  // internal identifiers could not be renamed and were displayed verbatim in
+  // Admin. Keep the restored UPS participant only in Domestic, where checkout
+  // displays its returned service labels (for example, UPS Ground).
+  const staleCarrierMethods = methods.filter(
+    (method) =>
+      ['usps', 'ups_shipping'].includes(method.name) &&
+      !(
+        isPrimaryDomestic(method) &&
+        method.rateProvider?.carrierService?.id === UPS_CARRIER_SERVICE_ID
+      ),
+  );
+  const amazonPrimeMethods = methods.filter(
     (method) => method.name === 'Amazon Prime',
   );
-  const standardsByZone = new Map();
-  for (const method of methods.filter(
-    (candidate) => candidate.name === 'Standard Shipping',
-  )) {
-    const key = `${method.locationGroupId}\n${method.zoneId}`;
-    if (!standardsByZone.has(key)) standardsByZone.set(key, []);
-    standardsByZone.get(key).push(method);
-  }
-  const duplicateStandardMethods = [...standardsByZone.values()].flatMap(
-    (zoneMethods) => zoneMethods.slice(1),
+  const customerEligibleAmazonPrime = amazonPrimeMethods.filter(
+    (method) => method.activeLocationCount > 0 && method.active,
   );
+
+  const economyHasExpectedRate =
+    economy?.active &&
+    economy.rateProvider?.price?.amount === '0.0' &&
+    economy.methodConditions.some(
+      (condition) =>
+        condition.field === 'TOTAL_PRICE' &&
+        condition.operator === 'GREATER_THAN_OR_EQUAL_TO' &&
+        condition.conditionCriteria?.amount === '400.0' &&
+        condition.conditionCriteria?.currencyCode === 'USD',
+    );
+  const internationalHasExpectedRate =
+    internationalFlatRate?.active &&
+    internationalFlatRate.rateProvider?.price?.amount === '75.0' &&
+    internationalFlatRate.rateProvider?.price?.currencyCode === 'USD' &&
+    internationalFlatRate.methodConditions.length === 0;
+
+  const failures = [];
+  if (!economyHasExpectedRate) {
+    failures.push('Domestic Economy must be free for orders of at least $400');
+  }
+  if (!internationalHasExpectedRate) {
+    failures.push('International Flat Rate must be $75 without conditions');
+  }
+  if (customerEligibleAmazonPrime.length) {
+    failures.push('Amazon Prime is attached to an active fulfillment location');
+  }
+
   return {
-    // Amazon's app-managed definition is removed rather than renamed because
-    // Shopify implements the rename as a new flat-rate definition; the app then
-    // recreates Amazon Prime and leaves duplicate Standard Shipping methods.
-    methodDefinitionsToDelete: [
-      ...orphanedCarrierMethods,
-      ...amazonMethods,
-      ...duplicateStandardMethods,
-    ].map((method) => method.id),
-    prohibitedMethods: publicMethods(prohibited),
-    duplicateStandardMethods: publicMethods(duplicateStandardMethods),
-    preservedMethods: publicMethods(
-      methods.filter(
-        (method) =>
-          !PROHIBITED_METHOD_NAMES.has(method.name) &&
-          !duplicateStandardMethods.some(
-            (duplicate) => duplicate.id === method.id,
-          ),
-      ),
+    methodDefinitionsToDelete: staleCarrierMethods.map((method) => method.id),
+    createDomesticUps: !domesticUps,
+    failures,
+    customerEligibleMethods: publicMethods(customerEligibleMethods),
+    staleCarrierMethods: publicMethods(staleCarrierMethods),
+    appManagedInactiveMethods: publicMethods(
+      amazonPrimeMethods.filter((method) => method.activeLocationCount === 0),
     ),
   };
 }
@@ -195,6 +259,28 @@ async function applyPlan(plan) {
   if (plan.methodDefinitionsToDelete.length) {
     profile.methodDefinitionsToDelete = plan.methodDefinitionsToDelete;
   }
+  if (plan.createDomesticUps) {
+    profile.locationGroupsToUpdate = [
+      {
+        id: PRIMARY_LOCATION_GROUP_ID,
+        zonesToUpdate: [
+          {
+            id: DOMESTIC_ZONE_ID,
+            methodDefinitionsToCreate: [
+              {
+                name: 'UPS',
+                active: true,
+                participant: {
+                  carrierServiceId: UPS_CARRIER_SERVICE_ID,
+                  adaptToNewServices: true,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ];
+  }
   if (!Object.keys(profile).length) return;
   const result = await shopifyGraphql(
     `mutation ReconcileCustomerShippingMethods($id: ID!, $profile: DeliveryProfileInput!) {
@@ -203,10 +289,7 @@ async function applyPlan(plan) {
         userErrors { field message }
       }
     }`,
-    {
-      id: GENERAL_PROFILE_ID,
-      profile,
-    },
+    { id: GENERAL_PROFILE_ID, profile },
   );
   assertNoUserErrors(result, 'deliveryProfileUpdate');
 }
@@ -216,51 +299,39 @@ function delay(milliseconds) {
 }
 
 async function verifyAfterApply() {
-  let lastMethods = [];
+  let after = null;
   for (let attempt = 0; attempt < 4; attempt += 1) {
     if (attempt) await delay(5000);
-    const profile = await getProfile();
-    lastMethods = flattenMethods(profile);
-    const names = new Set(lastMethods.map((method) => method.name));
-    const failures = [];
-    for (const required of REQUIRED_METHOD_NAMES) {
-      if (!names.has(required)) failures.push(`missing ${required}`);
-    }
-    for (const prohibited of PROHIBITED_METHOD_NAMES) {
-      if (names.has(prohibited)) failures.push(`prohibited ${prohibited}`);
-    }
-    const duplicates = new Map();
-    for (const method of lastMethods.filter(
-      (candidate) => candidate.name === 'Standard Shipping',
-    )) {
-      const key = `${method.locationGroupId}\n${method.zoneId}`;
-      duplicates.set(key, (duplicates.get(key) || 0) + 1);
-    }
-    if ([...duplicates.values()].some((count) => count > 1)) {
-      failures.push('duplicate Standard Shipping methods');
-    }
-    if (!failures.length) {
-      return { failures: [], methods: publicMethods(lastMethods) };
-    }
-    if (attempt === 3) {
-      return { failures, methods: publicMethods(lastMethods) };
+    after = audit(await getProfile());
+    if (
+      !after.methodDefinitionsToDelete.length &&
+      !after.createDomesticUps &&
+      !after.failures.length
+    ) {
+      return after;
     }
   }
+  const failures = [
+    ...after.failures,
+    ...(after.methodDefinitionsToDelete.length
+      ? ['stale carrier methods remain']
+      : []),
+    ...(after.createDomesticUps ? ['Domestic UPS participant is missing'] : []),
+  ];
+  throw new Error(`Shipping verification failed: ${failures.join('; ')}`);
 }
 
 async function main() {
   const apply = process.argv.includes('--apply');
   loadEnv(SHOPIFY_ENV_PATH);
   const before = audit(await getProfile());
+  if (before.failures.length) {
+    throw new Error(`Shipping audit failed: ${before.failures.join('; ')}`);
+  }
   let after = null;
   if (apply) {
     await applyPlan(before);
     after = await verifyAfterApply();
-    if (after.failures.length) {
-      throw new Error(
-        `Shipping verification failed: ${after.failures.join('; ')}`,
-      );
-    }
   }
   process.stdout.write(
     `${JSON.stringify({ mode: apply ? 'apply' : 'dry-run', before, after }, null, 2)}\n`,
