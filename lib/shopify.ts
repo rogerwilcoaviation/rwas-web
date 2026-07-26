@@ -149,7 +149,6 @@ const FEATURED_COLLECTION_HANDLES = [
   'watches-accessories',
   'garmin-dealer-install',
   'papa-alpha-tools',
-  'on-sale',
 ] as const;
 
 export const PRIORITY_PRODUCT_HANDLES = [
