@@ -128,6 +128,89 @@ async function renderedPage(pathname) {
   return visibleText(await response.text());
 }
 
+async function cartRequest(method, body) {
+  const response = await fetch(`${BASE_URL}/api/cart`, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  return { status: response.status, body: await response.json() };
+}
+
+async function cartEligibleProduct(handle, expectedProductType) {
+  const data = await storefrontGraphql(
+    `query CartSmokeProduct($handle: String!) {
+      product(handle: $handle) {
+        title
+        handle
+        productType
+        variants(first: 1) { nodes { id } }
+      }
+    }`,
+    { handle },
+  );
+  const product = data.product;
+  const merchandiseId = product?.variants?.nodes?.[0]?.id;
+  if (!product || !merchandiseId) {
+    throw new Error(`Missing cart smoke product: ${handle}`);
+  }
+  if (product.productType !== expectedProductType) {
+    throw new Error(
+      `${handle} has product type ${product.productType}; expected ${expectedProductType}`,
+    );
+  }
+
+  const created = await cartRequest('POST', { merchandiseId, quantity: 1 });
+  if (created.status !== 200 || !created.body.cart) {
+    throw new Error(
+      `${handle} cart create failed with HTTP ${created.status}: ${created.body.error || 'missing cart'}`,
+    );
+  }
+  const cart = created.body.cart;
+  try {
+    if (
+      cart.totalQuantity !== 1 ||
+      new URL(cart.checkoutUrl).hostname !== 'checkout.rogerwilcoaviation.com'
+    ) {
+      throw new Error(`${handle} returned an invalid checkout cart`);
+    }
+  } finally {
+    const lineIds = cart.lines.map((line) => line.id);
+    const cleanup = await cartRequest('DELETE', { cartId: cart.id, lineIds });
+    if (cleanup.status !== 200 || cleanup.body.cart?.totalQuantity !== 0) {
+      throw new Error(`${handle} smoke cart cleanup failed`);
+    }
+  }
+}
+
+async function dealerInstallCartBlocked() {
+  const data = await storefrontGraphql(`query DealerCartSmokeProduct {
+    products(first: 1, query: "product_type:'Garmin Dealer Install'", sortKey: ID) {
+      nodes {
+        handle
+        productType
+        variants(first: 1) { nodes { id } }
+      }
+    }
+  }`);
+  const product = data.products.nodes[0];
+  const merchandiseId = product?.variants?.nodes?.[0]?.id;
+  if (!product || !merchandiseId) {
+    throw new Error('Missing dealer-install cart smoke product');
+  }
+  const result = await cartRequest('POST', { merchandiseId, quantity: 1 });
+  if (
+    result.status !== 400 ||
+    !/dealer-install product type Garmin Dealer Install/i.test(
+      result.body.error || '',
+    )
+  ) {
+    throw new Error(
+      `Dealer-install cart gate failed with HTTP ${result.status}`,
+    );
+  }
+}
+
 async function collectionPageCount(handle) {
   const text = await renderedPage(`/collections/${handle}`);
   const match = text.match(/Collection · ([0-9,]+) items/);
@@ -213,6 +296,16 @@ for (const internalLabel of [
   }
 }
 
+await dealerInstallCartBlocked();
+await cartEligibleProduct(
+  'garmin-dual-g5-ai-hsi-kit-k10-00280-51',
+  'Avionics — Certified',
+);
+await cartEligibleProduct(
+  'g3x-touch-display-gdu-450',
+  'Avionics — Experimental',
+);
+
 process.stdout.write(
   `${JSON.stringify(
     {
@@ -223,6 +316,7 @@ process.stdout.write(
       customerLabelsVerified: true,
       retailPricingMessageVerified: true,
       k10ProductCopyVerified: true,
+      cartEligibilityVerified: true,
     },
     null,
     2,

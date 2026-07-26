@@ -178,27 +178,35 @@ async function assertCartEligible(env: Env, merchandiseId: string) {
   try {
     const data = (await shopify(env, MERCHANDISE_PRODUCT_QUERY, {
       id: merchandiseId,
-    })) as {
-      node?: {
-        product?: { productType?: string | null; title?: string | null } | null;
-      } | null;
-    } | undefined;
+    })) as
+      | {
+          node?: {
+            product?: {
+              productType?: string | null;
+              title?: string | null;
+            } | null;
+          } | null;
+        }
+      | undefined;
     const productType = data?.node?.product?.productType;
-    if (
-      productType === 'Avionics — Certified' ||
-      productType === 'Garmin Dealer Install'
-    ) {
+    if (productType === 'Garmin Dealer Install') {
       throw new Error(
         `Cart unavailable for dealer-install product type "${productType}". Contact us for package pricing.`,
       );
     }
   } catch (err) {
-    if (err instanceof Error && /dealer-install product type/i.test(err.message)) {
+    if (
+      err instanceof Error &&
+      /dealer-install product type/i.test(err.message)
+    ) {
       throw err;
     }
     // Product metadata is advisory. A transient lookup/API-schema failure must
     // not take down checkout or block the many products that remain buyable.
-    console.error('Cart product-type lookup failed; allowing cart operation', err);
+    console.error(
+      'Cart product-type lookup failed; allowing cart operation',
+      err,
+    );
   }
 }
 
@@ -284,7 +292,11 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
       })) as CartPayload | undefined;
       if (data?.cartLinesAdd?.userErrors?.length) {
         return jsonResponse(
-          { error: data.cartLinesAdd.userErrors.map((e) => e.message).join('; ') },
+          {
+            error: data.cartLinesAdd.userErrors
+              .map((e) => e.message)
+              .join('; '),
+          },
           400,
         );
       } else {
@@ -297,7 +309,9 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
       })) as CartPayload | undefined;
       if (data?.cartCreate?.userErrors?.length) {
         return jsonResponse(
-          { error: data.cartCreate.userErrors.map((e) => e.message).join('; ') },
+          {
+            error: data.cartCreate.userErrors.map((e) => e.message).join('; '),
+          },
           400,
         );
       }
@@ -311,7 +325,8 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
     // Shopify reports malformed merchandise IDs and rejected quantities as
     // GraphQL errors rather than userErrors. They are client input errors,
     // not an upstream outage.
-    const clientInput = /variant|merchandise|quantity|invalid id|must be a valid/i.test(message);
+    const clientInput =
+      /variant|merchandise|quantity|invalid id|must be a valid/i.test(message);
     return jsonResponse({ error: message }, clientInput ? 400 : 502);
   }
 };
