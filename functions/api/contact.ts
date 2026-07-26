@@ -16,6 +16,9 @@
  *   CONTACT_TO_EMAIL       — plain.  Defaults to "service@rwas.team".
  *   CONTACT_FROM_EMAIL     — plain.  Defaults to "RWAS Correspondence <noreply@rwas.team>".
  *                            MUST be on a Resend-verified domain.
+ *   TEAMS_RELAY_TOKEN      — secret. Bearer token for the authenticated Teams bridge.
+ *   CONTACT_TEAMS_RELAY_URL — plain. Defaults to "https://teamsbot.rwas.team/post".
+ *   CONTACT_TEAMS_TARGET   — plain. Defaults to "Shop Talk".
  *
  * Response shape:
  *   200: { ticketId: string, to: string }
@@ -29,6 +32,9 @@ type Env = {
   TURNSTILE_SECRET_KEY?: string;
   CONTACT_TO_EMAIL?: string;
   CONTACT_FROM_EMAIL?: string;
+  TEAMS_RELAY_TOKEN?: string;
+  CONTACT_TEAMS_RELAY_URL?: string;
+  CONTACT_TEAMS_TARGET?: string;
 };
 
 type Ctx = { request: Request; env: Env };
@@ -297,6 +303,67 @@ async function sendViaResend(
   }
 }
 
+function buildTeamsBody(p: ContactPayload, ticketId: string): string {
+  const reasonLabel = REASON_LABELS[p.reason || 'general'] || 'General inquiry';
+  const lines = [
+    `NEW WEBSITE INQUIRY — ${ticketId}`,
+    `Reason: ${reasonLabel}`,
+    p.product ? `Product: ${p.product}` : '',
+    p.sku ? `SKU: ${p.sku}` : '',
+    `Name: ${p.name || ''}`,
+    `Email: ${p.email || ''}`,
+    p.phone ? `Phone: ${p.phone}` : '',
+    p.preferredContact ? `Prefers: ${p.preferredContact}` : '',
+    p.bestTimeToCall ? `Best time: ${p.bestTimeToCall}` : '',
+    p.aircraftMakeModel ? `Aircraft: ${p.aircraftMakeModel}` : '',
+    p.nNumber ? `N-Number: ${p.nNumber}` : '',
+    p.source ? `Source: ${p.source}` : '',
+    '',
+    'Message:',
+    p.message || '',
+  ];
+  return lines.filter((line, index) => line || index === lines.length - 3).join('\n');
+}
+
+async function sendToTeams(
+  env: Env,
+  p: ContactPayload,
+  ticketId: string,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!env.TEAMS_RELAY_TOKEN) {
+    return { ok: false, error: 'Teams relay not configured' };
+  }
+  const url =
+    env.CONTACT_TEAMS_RELAY_URL || 'https://teamsbot.rwas.team/post';
+  const target = env.CONTACT_TEAMS_TARGET || 'Shop Talk';
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.TEAMS_RELAY_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        channel: target,
+        text: buildTeamsBody(p, ticketId),
+      }),
+    });
+    if (!res.ok) {
+      const detail = await res.text();
+      return {
+        ok: false,
+        error: `Teams relay ${res.status}: ${detail.slice(0, 200)}`,
+      };
+    }
+    return { ok: true };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : 'Teams send failed',
+    };
+  }
+}
+
 export const onRequestPost = async ({ request, env }: Ctx) => {
   let payload: ContactPayload;
   try {
@@ -332,12 +399,20 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
     }
   }
 
-  // 3. Send
+  // 3. Deliver both notifications concurrently.
   const ticketId = generateTicketId();
-  const send = await sendViaResend(env, payload, ticketId);
-  if (!send.ok) {
+  const [emailSend, teamsSend] = await Promise.all([
+    sendViaResend(env, payload, ticketId),
+    sendToTeams(env, payload, ticketId),
+  ]);
+  if (!emailSend.ok || !teamsSend.ok) {
     // Log to CF logs but don't leak internal errors to clients
-    console.error('contact-form send failed', send.error);
+    if (!emailSend.ok) {
+      console.error('contact-form email send failed', emailSend.error);
+    }
+    if (!teamsSend.ok) {
+      console.error('contact-form Teams send failed', teamsSend.error);
+    }
     return jsonResponse(
       {
         error:
