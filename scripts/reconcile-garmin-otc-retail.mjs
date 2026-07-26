@@ -37,6 +37,7 @@ const OTC_RETAIL_PRODUCTS = [
   { sku: '010-01074-10', family: 'GAP 26' },
   { sku: '010-01074-20', family: 'GAP 26' },
   { sku: '010-01074-60', family: 'GAP 26' },
+  { sku: '010-01560-31', family: 'GDL 82' },
   { sku: '010-02325-00', family: 'GI 275 Base' },
   { sku: '010-02325-10', family: 'GI 275 Base' },
   { sku: '010-02325-20', family: 'GI 275 Base' },
@@ -64,12 +65,15 @@ const OTC_RETAIL_PRODUCTS = [
   { sku: '010-02544-31', family: 'GSB 15' },
 ];
 
-const CATALOG_GAPS = [
-  {
-    family: 'GDL 82',
-    reason: 'No current saleable primary-unit SKU with retail-price evidence',
+const PUBLIC_PRICE_AUTHORITIES = {
+  '010-01560-31': {
+    list_price: 2475,
+    source: 'Garmin GDL 82 product page',
+    url: 'https://www.garmin.com/en-US/p/540911/pn/010-01560-31/',
+    priceType: 'MAP',
+    accessed: '2026-07-26',
   },
-];
+};
 
 const REQUIRED_TAGS = ['garmin', 'garmin-retail-policy-2026', 'otc-eligible'];
 const CONFLICTING_TAGS = new Set([
@@ -111,6 +115,32 @@ const DUAL_G5_DESCRIPTION = `
 <p>This is a <strong>special-order equipment package</strong>. RWAS receives the package from Garmin and then ships it to you. We confirm Garmin availability and estimated transit time after ordering.</p>
 <p>This listing is for <strong>equipment only</strong>; installation is not included. Installation in a certificated aircraft must be completed and returned to service by appropriately authorized personnel using Garmin-approved data and confirming STC/AML eligibility.</p>
 `.trim();
+
+const GDL_82_DESCRIPTION = `
+<p><strong>Garmin GDL 82 ADS-B Out Datalink</strong> provides a compact, remote-mounted path to rule-compliant 978 MHz ADS-B Out for compatible U.S. aircraft operating below 18,000 feet.</p>
+<p><strong>Retail price:</strong> The current Garmin MAP is shown on this page. For package and special pricing please contact us.</p>
+<p><strong>Garmin part number:</strong> 010-01560-31</p>
+<h3>Standard kit</h3>
+<ul>
+  <li>GDL 82 with built-in GPS/SBAS</li>
+  <li>GA 35 WAAS antenna</li>
+  <li>Connector kit</li>
+</ul>
+<h3>Compatibility and operation</h3>
+<ul>
+  <li>Integrates in-line with a compatible existing Mode A/C transponder and transponder antenna</li>
+  <li>AutoSquawk technology synchronizes the transponder squawk code</li>
+  <li>Anonymous mode support is available when operating VFR with a compatible installation</li>
+</ul>
+<h3>Ordering and installation</h3>
+<p>This is a <strong>special-order equipment package</strong>. Garmin currently indicates an estimated availability window of 5–8 weeks; RWAS confirms availability and estimated transit time after ordering.</p>
+<p>This listing is for <strong>equipment only</strong>; installation is not included. Installation and return to service must be completed by appropriately authorized personnel using Garmin-approved data and confirming aircraft eligibility.</p>
+`.trim();
+
+const POLICY_DESCRIPTIONS = {
+  'K10-00280-51': DUAL_G5_DESCRIPTION,
+  '010-01560-31': GDL_82_DESCRIPTION,
+};
 
 function loadEnv(path) {
   const contents = fs.readFileSync(path, 'utf8');
@@ -258,7 +288,8 @@ async function findSku(sku) {
 async function buildAudit(priceAuthority, collection) {
   const records = [];
   for (const policy of OTC_RETAIL_PRODUCTS) {
-    const authority = priceAuthority.rows[policy.sku];
+    const authority =
+      PUBLIC_PRICE_AUTHORITIES[policy.sku] || priceAuthority.rows[policy.sku];
     if (!authority || !Number.isFinite(Number(authority.list_price))) {
       records.push({
         ...policy,
@@ -301,8 +332,8 @@ async function buildAudit(priceAuthority, collection) {
       retailPrice: money(variant.price) !== expectedPrice,
       retailCollection: !inRetailCollection,
       description:
-        policy.sku === 'K10-00280-51' &&
-        product.descriptionHtml.trim() !== DUAL_G5_DESCRIPTION,
+        Boolean(POLICY_DESCRIPTIONS[policy.sku]) &&
+        product.descriptionHtml.trim() !== POLICY_DESCRIPTIONS[policy.sku],
     };
 
     records.push({
@@ -334,8 +365,8 @@ async function updateProduct(record) {
     productType: 'Avionics — Certified',
     tags: record.nextTags,
   };
-  if (record.sku === 'K10-00280-51') {
-    product.descriptionHtml = DUAL_G5_DESCRIPTION;
+  if (POLICY_DESCRIPTIONS[record.sku]) {
+    product.descriptionHtml = POLICY_DESCRIPTIONS[record.sku];
   }
 
   const result = await shopifyGraphql(
@@ -445,6 +476,9 @@ async function main() {
       source: priceAuthority.source,
       modified: priceAuthority.modified,
       sha256: priceAuthority.sha256,
+      publicSources: Object.entries(PUBLIC_PRICE_AUTHORITIES).map(
+        ([sku, authority]) => ({ sku, ...authority }),
+      ),
     },
     retailCollection: {
       handle: collection.handle,
@@ -453,7 +487,7 @@ async function main() {
     policySkuCount: OTC_RETAIL_PRODUCTS.length,
     mutationsApplied,
     results: after.map(publicRecord),
-    catalogGaps: CATALOG_GAPS,
+    catalogGaps: [],
   };
   process.stdout.write(`${JSON.stringify(output, null, 2)}\n`);
 

@@ -343,6 +343,20 @@ for (const requiredText of [
     throw new Error(`GDU 450 page is missing: ${requiredText}`);
   }
 }
+
+const gdl82 = await renderedPage('/products/garmin-gdl-82-ads-b-out-datalink');
+for (const requiredText of [
+  'Garmin GDL 82 ADS-B Out Datalink',
+  '$2,475',
+  'Add to Cart',
+  'For package and special pricing please contact us',
+  'Service area We come to you',
+  '5–8 weeks',
+]) {
+  if (!gdl82.includes(requiredText)) {
+    throw new Error(`GDL 82 page is missing: ${requiredText}`);
+  }
+}
 if (/Installs at.{0,160}(KFSD|Sioux Falls|KYKN|Yankton)/i.test(k10)) {
   throw new Error('K10-00280-51 exposes the prohibited install location');
 }
@@ -368,6 +382,10 @@ await cartEligibleProduct(
   'g3x-touch-display-gdu-450',
   'Avionics — Experimental',
 );
+await cartEligibleProduct(
+  'garmin-gdl-82-ads-b-out-datalink',
+  'Avionics — Certified',
+);
 
 process.stdout.write(
   `${JSON.stringify(
@@ -379,6 +397,7 @@ process.stdout.write(
       customerLabelsVerified: true,
       retailPricingMessageVerified: true,
       k10ProductCopyVerified: true,
+      gdl82ProductCopyVerified: true,
       cartEligibilityVerified: true,
       restrictedCertifiedCartVerified: true,
     },
