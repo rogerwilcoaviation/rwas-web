@@ -48,11 +48,11 @@ const rwasCart = `if(rwasUrl.pathname==="/api/cart"){const j=(b,s=200)=>new Resp
 const rwasCartFixed = rwasCart
   .replace(
     'const q={cart:',
-    'const q={product:"query MerchandiseProduct($id: ID!) { node(id: $id) { ... on ProductVariant { product { productType title handle } } } }",cart:',
+    'const q={product:"query MerchandiseProduct($id: ID!) { node(id: $id) { ... on ProductVariant { product { productType title handle tags } } } }",cart:',
   )
   .replace(
     'if(!merchandiseId)return j({error:"merchandiseId is required"},400);',
-    'if(!merchandiseId)return j({error:"merchandiseId is required"},400);if(typeof quantity!=="number"||!Number.isInteger(quantity)||quantity<1||quantity>100)return j({error:"quantity must be an integer from 1 to 100"},400);let pt="";try{const md=await shop(q.product,{id:merchandiseId});pt=md?.node?.product?.productType||""}catch{}if(pt==="Garmin Dealer Install")return j({error:"Cart unavailable for dealer-install product type "+pt+". Contact us for package pricing."},400);',
+    'if(!merchandiseId)return j({error:"merchandiseId is required"},400);if(typeof quantity!=="number"||!Number.isInteger(quantity)||quantity<1||quantity>100)return j({error:"quantity must be an integer from 1 to 100"},400);let pt="",tags=[];try{const md=await shop(q.product,{id:merchandiseId});pt=md?.node?.product?.productType||"";tags=(md?.node?.product?.tags||[]).map(x=>String(x).trim().toLowerCase())}catch{}const restricted=tags.some(x=>["garmin-dealer-only","otc-disabled","stock-check-required"].includes(x)),unapproved=pt==="Avionics — Certified"&&!tags.includes("otc-eligible");if(pt==="Garmin Dealer Install"||restricted||unapproved)return j({error:"Cart unavailable for non-OTC Garmin avionics"+(pt?" ("+pt+")":"")+". Contact us for package pricing."},400);',
   )
   .replace(
     'if(d?.cartLinesAdd?.userErrors?.length){const f=await shop(q.create,{merchandiseId,quantity});cart=f?.cartCreate?.cart}',

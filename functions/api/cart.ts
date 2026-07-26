@@ -108,7 +108,7 @@ const CART_FIELDS = `
 const CART_QUERY = `query Cart($cartId: ID!) { cart(id: $cartId) { ${CART_FIELDS} } }`;
 
 const MERCHANDISE_PRODUCT_QUERY = `query MerchandiseProduct($id: ID!) {
-  node(id: $id) { ... on ProductVariant { product { productType title handle } } }
+  node(id: $id) { ... on ProductVariant { product { productType title handle tags } } }
 }`;
 
 const CART_CREATE = `
@@ -184,21 +184,31 @@ async function assertCartEligible(env: Env, merchandiseId: string) {
             product?: {
               productType?: string | null;
               title?: string | null;
+              tags?: string[] | null;
             } | null;
           } | null;
         }
       | undefined;
-    const productType = data?.node?.product?.productType;
-    if (productType === 'Garmin Dealer Install') {
+    const product = data?.node?.product;
+    const productType = product?.productType;
+    const tags = new Set(
+      (product?.tags || []).map((tag) => tag.trim().toLowerCase()),
+    );
+    const dealerInstall = productType === 'Garmin Dealer Install';
+    const explicitlyRestricted = [
+      'garmin-dealer-only',
+      'otc-disabled',
+      'stock-check-required',
+    ].some((tag) => tags.has(tag));
+    const unapprovedCertified =
+      productType === 'Avionics — Certified' && !tags.has('otc-eligible');
+    if (dealerInstall || explicitlyRestricted || unapprovedCertified) {
       throw new Error(
-        `Cart unavailable for dealer-install product type "${productType}". Contact us for package pricing.`,
+        `Cart unavailable for non-OTC Garmin avionics${productType ? ` (${productType})` : ''}. Contact us for package pricing.`,
       );
     }
   } catch (err) {
-    if (
-      err instanceof Error &&
-      /dealer-install product type/i.test(err.message)
-    ) {
+    if (err instanceof Error && /non-OTC Garmin avionics/i.test(err.message)) {
       throw err;
     }
     // Product metadata is advisory. A transient lookup/API-schema failure must

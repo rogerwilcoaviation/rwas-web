@@ -36,6 +36,10 @@ const EXPERIMENTAL_SKUS = new Set([
   'K00-00514-10',
   'K10-00016-13',
   'K10-00016-14',
+  // Garmin identifies these exact part numbers as GTR 205x experimental
+  // products; do not conflate them with the certificated GTR 205 family.
+  '010-03395-01',
+  '010-03396-01',
 ]);
 
 // Current Garmin direct list prices for experimental audio products that are

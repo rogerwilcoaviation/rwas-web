@@ -10,10 +10,21 @@ const PRICE_AUTHORITY_PATH =
   '/Users/rwas/.openclaw/cache/garmin-pricing/latest.json';
 const RETAIL_COLLECTION_HANDLE = 'avionics-certified';
 
+const POLICY_SOURCE = {
+  title: '2026 Americas Aviation Dealer Requirements',
+  page: 8,
+  section: 'Installed Products excluded under the Garmin Installation Policy',
+  asOf: '2026-01-01',
+  sha256: '436346b360216e824d949d671df443d6a48111429cbe1216924938181c16070f',
+};
+
 const OTC_RETAIL_PRODUCTS = [
+  { sku: '010-02232-00', family: 'GNC 355' },
+  { sku: '010-02232-50', family: 'GNC 355' },
   { sku: '010-02232-51', family: 'GNC 355' },
   { sku: '010-01822-50', family: 'GPS 175' },
   { sku: '010-01823-50', family: 'GNX 375' },
+  { sku: '010-01823-51', family: 'GNX 375' },
   { sku: 'K10-00280-01', family: 'G5 Certified' },
   { sku: 'K10-00280-21', family: 'G5 Certified' },
   { sku: 'K10-00280-31', family: 'G5 Certified' },
@@ -22,6 +33,10 @@ const OTC_RETAIL_PRODUCTS = [
   { sku: '010-02203-K0', family: 'GAD 13 / GTP 59 kit' },
   { sku: '010-01074-70', family: 'GAP 26' },
   { sku: '010-01074-71', family: 'GAP 26' },
+  { sku: '010-01074-00', family: 'GAP 26' },
+  { sku: '010-01074-10', family: 'GAP 26' },
+  { sku: '010-01074-20', family: 'GAP 26' },
+  { sku: '010-01074-60', family: 'GAP 26' },
   { sku: '010-02325-00', family: 'GI 275 Base' },
   { sku: '010-02325-10', family: 'GI 275 Base' },
   { sku: '010-02325-20', family: 'GI 275 Base' },
@@ -32,23 +47,26 @@ const OTC_RETAIL_PRODUCTS = [
   { sku: 'K10-00276-05', family: 'GTX 335 with WAAS kit' },
   { sku: '010-01083-01', family: 'GTX 325' },
   { sku: '010-01319-02', family: 'GMA 345' },
+  { sku: '010-01319-10', family: 'GMA 342' },
   { sku: '010-01319-13', family: 'GMA 342' },
   { sku: '010-02480-01', family: 'GTR 205' },
+  { sku: '010-02480-02', family: 'GTR 205' },
   { sku: '010-01788-00', family: 'GMU 11' },
   { sku: '010-01788-01', family: 'GMU 11' },
+  { sku: '010-02481-01', family: 'GNC 215' },
+  { sku: '010-02481-02', family: 'GNC 215' },
+  { sku: '010-02544-41', family: 'GSB 15' },
+  { sku: '010-02544-51', family: 'GSB 15' },
+  { sku: '010-02201-10', family: 'GSB 15' },
+  { sku: '010-02201-11', family: 'GSB 15' },
+  { sku: '010-02201-00', family: 'GSB 15' },
+  { sku: '010-02544-21', family: 'GSB 15' },
+  { sku: '010-02544-31', family: 'GSB 15' },
 ];
 
 const CATALOG_GAPS = [
   {
     family: 'GDL 82',
-    reason: 'No current saleable primary-unit SKU with retail-price evidence',
-  },
-  {
-    family: 'GNC 215',
-    reason: 'No current saleable primary-unit SKU with retail-price evidence',
-  },
-  {
-    family: 'GSB 15',
     reason: 'No current saleable primary-unit SKU with retail-price evidence',
   },
 ];
@@ -229,6 +247,7 @@ async function findSku(sku) {
 
   const matches = [];
   for (const product of data.products.nodes) {
+    if (product.status !== 'ACTIVE') continue;
     for (const variant of product.variants.nodes) {
       if (variant.sku === sku) matches.push({ product, variant });
     }
@@ -421,6 +440,7 @@ async function main() {
 
   const output = {
     mode: apply ? 'apply' : 'dry-run',
+    policySource: POLICY_SOURCE,
     priceAuthority: {
       source: priceAuthority.source,
       modified: priceAuthority.modified,

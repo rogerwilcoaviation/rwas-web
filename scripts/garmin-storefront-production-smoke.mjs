@@ -201,12 +201,61 @@ async function dealerInstallCartBlocked() {
   const result = await cartRequest('POST', { merchandiseId, quantity: 1 });
   if (
     result.status !== 400 ||
-    !/dealer-install product type Garmin Dealer Install/i.test(
+    !/non-OTC Garmin avionics.*Garmin Dealer Install/i.test(
       result.body.error || '',
     )
   ) {
     throw new Error(
       `Dealer-install cart gate failed with HTTP ${result.status}`,
+    );
+  }
+}
+
+async function unapprovedCertifiedCartBlocked() {
+  let cursor = null;
+  let product = null;
+  do {
+    const data = await storefrontGraphql(
+      `query RestrictedCertifiedCartSmoke($after: String) {
+        products(first: 100, after: $after, query: "product_type:'Avionics — Certified'", sortKey: ID) {
+          pageInfo { hasNextPage endCursor }
+          nodes {
+            handle
+            productType
+            tags
+            variants(first: 1) { nodes { id } }
+          }
+        }
+      }`,
+      { after: cursor },
+    );
+    product = data.products.nodes.find((candidate) => {
+      const tags = new Set(
+        candidate.tags.map((tag) => tag.trim().toLowerCase()),
+      );
+      return (
+        !tags.has('otc-eligible') &&
+        (tags.has('otc-disabled') || tags.has('stock-check-required'))
+      );
+    });
+    cursor = data.products.pageInfo.hasNextPage
+      ? data.products.pageInfo.endCursor
+      : null;
+  } while (!product && cursor);
+
+  const merchandiseId = product?.variants?.nodes?.[0]?.id;
+  if (!product || !merchandiseId) {
+    throw new Error('Missing restricted certified cart smoke product');
+  }
+  const result = await cartRequest('POST', { merchandiseId, quantity: 1 });
+  if (
+    result.status !== 400 ||
+    !/non-OTC Garmin avionics.*Avionics — Certified/i.test(
+      result.body.error || '',
+    )
+  ) {
+    throw new Error(
+      `Restricted certified cart gate failed with HTTP ${result.status}`,
     );
   }
 }
@@ -310,6 +359,7 @@ for (const internalLabel of [
 }
 
 await dealerInstallCartBlocked();
+await unapprovedCertifiedCartBlocked();
 await cartEligibleProduct(
   'garmin-dual-g5-ai-hsi-kit-k10-00280-51',
   'Avionics — Certified',
@@ -330,6 +380,7 @@ process.stdout.write(
       retailPricingMessageVerified: true,
       k10ProductCopyVerified: true,
       cartEligibilityVerified: true,
+      restrictedCertifiedCartVerified: true,
     },
     null,
     2,

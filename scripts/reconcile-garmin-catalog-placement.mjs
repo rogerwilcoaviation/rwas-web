@@ -41,10 +41,18 @@ const REQUIRED_STOREFRONT_PUBLICATIONS = [
   'Roger Wilco Aviation Services (RWAS)',
 ];
 
+// Source: 2026 Americas Aviation Dealer Requirements, p. 8,
+// "Installed Products excluded under the Garmin Installation Policy."
+// SHA-256: 436346b360216e824d949d671df443d6a48111429cbe1216924938181c16070f
+// The exact SKU set below is the intersection of those approved families,
+// active Shopify products, and the current Garmin list-price authority.
 const APPROVED_CERTIFIED_OTC = new Set([
+  '010-02232-00',
+  '010-02232-50',
   '010-02232-51',
   '010-01822-50',
   '010-01823-50',
+  '010-01823-51',
   'K10-00280-01',
   'K10-00280-21',
   'K10-00280-31',
@@ -53,6 +61,10 @@ const APPROVED_CERTIFIED_OTC = new Set([
   '010-02203-K0',
   '010-01074-70',
   '010-01074-71',
+  '010-01074-00',
+  '010-01074-10',
+  '010-01074-20',
+  '010-01074-60',
   '010-02325-00',
   '010-02325-10',
   '010-02325-20',
@@ -63,10 +75,21 @@ const APPROVED_CERTIFIED_OTC = new Set([
   'K10-00276-05',
   '010-01083-01',
   '010-01319-02',
+  '010-01319-10',
   '010-01319-13',
   '010-02480-01',
+  '010-02480-02',
   '010-01788-00',
   '010-01788-01',
+  '010-02481-01',
+  '010-02481-02',
+  '010-02544-41',
+  '010-02544-51',
+  '010-02201-10',
+  '010-02201-11',
+  '010-02201-00',
+  '010-02544-21',
+  '010-02544-31',
 ]);
 
 const OFFICIAL_EXPERIMENTAL = new Set([
@@ -84,6 +107,8 @@ const OFFICIAL_EXPERIMENTAL = new Set([
   'K00-00514-10',
   'K10-00016-13',
   'K10-00016-14',
+  '010-03395-01',
+  '010-03396-01',
 ]);
 
 // Garmin identifies these exact current products as consumer marine/outdoor
@@ -375,12 +400,18 @@ function removeManualCollection(record, handle, collections) {
 
 function normalizeRetailTags(record) {
   let tags = [...record.nextTags];
-  if (APPROVED_CERTIFIED_OTC.has(record.sku)) {
+  if (
+    record.currentStatus === 'ACTIVE' &&
+    APPROVED_CERTIFIED_OTC.has(record.sku)
+  ) {
     tags = removeTags(tags, RETAIL_CONFLICT_TAGS);
     addTag(tags, 'garmin');
     addTag(tags, 'garmin-retail-policy-2026');
     addTag(tags, 'otc-eligible');
-  } else if (OFFICIAL_EXPERIMENTAL.has(record.sku)) {
+  } else if (
+    record.currentStatus === 'ACTIVE' &&
+    OFFICIAL_EXPERIMENTAL.has(record.sku)
+  ) {
     tags = removeTags(tags, RETAIL_CONFLICT_TAGS);
     addTag(tags, 'garmin');
     addTag(tags, 'experimental-retail');
@@ -1112,8 +1143,17 @@ async function main() {
   }
   const output = {
     mode: apply ? 'apply' : 'dry-run',
-    sourcePolicy:
-      'RWAS aviation-store taxonomy plus exact Garmin OTC and experimental SKU evidence',
+    sourcePolicy: {
+      title: '2026 Americas Aviation Dealer Requirements',
+      page: 8,
+      section:
+        'Installed Products excluded under the Garmin Installation Policy',
+      asOf: '2026-01-01',
+      sha256:
+        '436346b360216e824d949d671df443d6a48111429cbe1216924938181c16070f',
+      scope:
+        'Exact certified OTC SKUs plus Garmin-supported experimental products and RWAS aviation-store taxonomy',
+    },
     before: beforeAudit.summary,
     plannedProductChanges: plan.changes.length,
     plannedCollectionsToDelete: plan.collectionsToDelete,
