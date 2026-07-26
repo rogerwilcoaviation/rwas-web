@@ -19,7 +19,7 @@ import { genPageMetadata } from '@/app/seo';
 export const metadata = genPageMetadata({
   title: 'Aviation Parts, Garmin Avionics & Piper Tools | RWAS',
   description:
-    'Browse RWAS certified avionics, experimental avionics, pilot gear, Garmin install items, Papa-Alpha tools, service parts, and sale inventory.',
+    'Browse RWAS certified and experimental avionics, pilot gear, Garmin watches and accessories, dealer-install items, service parts, and Papa-Alpha tools.',
   canonical: 'https://www.rogerwilcoaviation.com/collections',
 });
 
@@ -109,9 +109,10 @@ export default async function CollectionsPage() {
             Browse every RWAS collection in one place.
           </h1>
           <p className="bs-subhead">
-            Certified and experimental avionics, pilot gear, lifestyle Garmin,
-            service parts, Papa-Alpha tools, and sale inventory &mdash; all live
-            with real product data behind them.
+            Certified and experimental avionics, pilot gear, Garmin watches and
+            accessories, dealer-install hardware, service parts, and
+            Papa-Alpha tools &mdash; all live with real product data behind
+            them.
           </p>
           <p className="bs-byline">
             RWAS Avionics Desk &middot; KYKN, Yankton
