@@ -1,17 +1,8 @@
 {
-  "generatedAt": "2026-07-25T16:36:11.655Z",
+  "generatedAt": "2026-07-26T22:49:56.374Z",
   "scope": "active Shopify products queried by vendor:Garmin",
-  "activeGarminProducts": 1954,
+  "activeGarminProducts": 1927,
   "mismatches": [
-    {
-      "handle": "kit-g5-for-certificated-aircraft-w-lpm-dual-ai-dg",
-      "sku": "K10-00280-01/K10-00280-31",
-      "shopifyPrice": 6099,
-      "statedListPrice": 3095,
-      "delta": 3004,
-      "productType": "Avionics — Certified",
-      "title": "Garmin G5 Stack w/LPM (AI & HSI)"
-    },
     {
       "handle": "inreach-mini-2",
       "sku": "010-02602-00",
@@ -1665,14 +1656,6 @@
       "title": "EGT/Primary EGT Probe"
     },
     {
-      "handle": "enablement-coupon-gts-processor-tcas-i-to-tcas-ii",
-      "sku": "010-01037-A3",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "Enablement Coupon,GTS Processor,TCAS I to TCAS II"
-    },
-    {
       "handle": "engagement-screw-h-mounting-rack",
       "sku": "233-00142-00",
       "shopifyPrice": "15.00",
@@ -2067,89 +2050,89 @@
     {
       "handle": "g1000-nxi-pc-trainer-for-beechcraft-baron-g58-v20-05",
       "sku": "010-12675-10",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "G1000 NXi PC Trainer for Beechcraft Baron G58, v20.05"
     },
     {
       "handle": "g1000-nxi-pc-trainer-for-cessna-nav-iii-v20-05",
       "sku": "010-12675-05",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "G1000 NXi PC Trainer for Cessna NAV III, v20.05"
     },
     {
       "handle": "g1000-nxi-pc-trainer-for-diamond-da42ng",
       "sku": "010-12675-22",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "G1000 NXi PC Trainer for Diamond DA42NG"
     },
     {
       "handle": "g1000-nxi-pc-trainer-for-epic-e1000",
       "sku": "010-12675-18",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "G1000 NXi PC Trainer for Epic E1000"
     },
     {
       "handle": "g1000-nxi-pc-trainer-for-king-air-v20-05",
       "sku": "010-12675-02",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "G1000 NXi PC Trainer for King Air, v20.05"
     },
     {
       "handle": "g1000-nxi-pc-trainer-for-mustang-510",
       "sku": "010-12675-24",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "G1000 NXi PC Trainer for Mustang 510"
     },
     {
       "handle": "g1000-nxi-pc-trainer-for-piper-archer-v20-02",
       "sku": "010-12675-09",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "G1000 NXi PC Trainer for Piper Archer, v20.02"
     },
     {
       "handle": "g1000-nxi-pc-trainer-for-piper-archer-v20-81",
       "sku": "010-12675-14",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "G1000 NXi PC Trainer for Piper Archer, v20.81"
     },
     {
       "handle": "g1000-nxi-pc-trainer-for-piper-m350-v20-81",
       "sku": "010-12675-12",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "G1000 NXi PC Trainer for Piper M350, v20.81"
     },
     {
       "handle": "g1000-nxi-pc-trainer-quest-kodiak-100-v20-10",
       "sku": "010-12675-15",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "G1000 NXi PC Trainer Quest Kodiak 100, v20.10"
     },
     {
       "handle": "g1000h-nxi-pc-trainer-for-bell-407gxi",
       "sku": "010-12675-23",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "G1000H NXi PC Trainer for Bell 407GXi"
     },
     {
@@ -2697,14 +2680,6 @@
       "title": "GDL 69A SXM, unit only"
     },
     {
-      "handle": "gdl-88-internal-waas-unit-only",
-      "sku": "010-00860-00",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDL 88,Internal WAAS,Unit Only"
-    },
-    {
       "handle": "gdl69ah-sxm-standard-remote",
       "sku": "010-01294-36",
       "shopifyPrice": "6650.00",
@@ -2775,70 +2750,6 @@
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "GDL® 69A SXM"
-    },
-    {
-      "handle": "gdl®-88",
-      "sku": "010-00859-30",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDL® 88"
-    },
-    {
-      "handle": "gdl®-88-diversity",
-      "sku": "010-00861-30",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDL® 88 Diversity"
-    },
-    {
-      "handle": "gdl®-88-diversity-with-internal-waas",
-      "sku": "010-00862-30",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDL® 88 Diversity with Internal WAAS"
-    },
-    {
-      "handle": "gdl®-88-with-internal-waas",
-      "sku": "010-00860-30",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDL® 88 with Internal WAAS"
-    },
-    {
-      "handle": "gdl®-88h-for-rotorcraft",
-      "sku": "010-00859-E0",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDL® 88H (for Rotorcraft)"
-    },
-    {
-      "handle": "gdl®-88h-diversity-with-internal-waas",
-      "sku": "010-00862-E0",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDL® 88H Diversity with Internal WAAS"
-    },
-    {
-      "handle": "gdl®-88h-with-internal-waas",
-      "sku": "010-00860-E0",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDL® 88H with Internal WAAS"
-    },
-    {
-      "handle": "gdl®-88hd-diversity",
-      "sku": "010-00861-E0",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDL® 88HD Diversity"
     },
     {
       "handle": "gdu-1050",
@@ -2953,14 +2864,6 @@
       "title": "GDU 1550"
     },
     {
-      "handle": "gdu-370",
-      "sku": "010-00667-10",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDU 370"
-    },
-    {
       "handle": "gdu-700-1060-adc-g500-txi-unit-only",
       "sku": "010-01326-01",
       "shopifyPrice": "3335.00",
@@ -2991,14 +2894,6 @@
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GDU 700L,EIS TXi,BLACK,Standard"
-    },
-    {
-      "handle": "gdu-700l-eis-txi-gray-standard",
-      "sku": "010-01219-13",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDU 700L,EIS TXi,GRAY,Standard"
     },
     {
       "handle": "gdu-700l-g600-txi-black-ahrs-standard",
@@ -3039,14 +2934,6 @@
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GDU 700P,EIS TXi,BLACK,Standard"
-    },
-    {
-      "handle": "gdu-700p-eis-txi-gray-standard",
-      "sku": "010-01218-13",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDU 700P,EIS TXi,GRAY,Standard"
     },
     {
       "handle": "gdu-700p-g500-txi-black-ahrs-standard",
@@ -3697,14 +3584,6 @@
       "title": "GMA 245, Standard"
     },
     {
-      "handle": "gma-245r-mkr-standard-pma",
-      "sku": "010-01471-11",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GMA 245R MKR, Standard, PMA"
-    },
-    {
       "handle": "gma-342-standard",
       "sku": "010-01319-13",
       "shopifyPrice": "2195.00",
@@ -3817,28 +3696,20 @@
       "title": "GMA™ 1360"
     },
     {
-      "handle": "gma™-245-unit-only",
-      "sku": "010-01318-00",
-      "shopifyPrice": "0.00",
+      "handle": "garmin-gma-245",
+      "sku": "010-01318-01",
+      "shopifyPrice": "1950.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GMA™ 245, Unit Only"
+      "productType": "Avionics — Experimental",
+      "title": "Garmin GMA 245 Audio Panel"
     },
     {
-      "handle": "gma™-245r",
+      "handle": "garmin-gma-245r",
       "sku": "010-01471-01",
       "shopifyPrice": "1800.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GMA™ 245R"
-    },
-    {
-      "handle": "gma™-245r-unit-only",
-      "sku": "010-01471-00",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GMA™ 245R, Unit Only"
+      "productType": "Avionics — Experimental",
+      "title": "Garmin GMA 245R Remote Audio Panel"
     },
     {
       "handle": "gma™-342",
@@ -3899,7 +3770,7 @@
     {
       "handle": "gmc-305-control-panel",
       "sku": "010-01169-00",
-      "shopifyPrice": "1200.00",
+      "shopifyPrice": "1165.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC 305 Control Panel"
@@ -3907,7 +3778,7 @@
     {
       "handle": "gmc-507-no-pma",
       "sku": "010-01946-00",
-      "shopifyPrice": "1520.00",
+      "shopifyPrice": "1475.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC 507, No PMA"
@@ -3995,7 +3866,7 @@
     {
       "handle": "gmc305-w-yd",
       "sku": "010-01169-20",
-      "shopifyPrice": "1200.00",
+      "shopifyPrice": "1165.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC305 w/YD"
@@ -4097,7 +3968,7 @@
       "title": "GNC255B,NV,Standard"
     },
     {
-      "handle": "gnc®-215-standard-kit",
+      "handle": "gnc-215-standard-kit",
       "sku": "010-02481-01",
       "shopifyPrice": "5595.00",
       "template": "no-stated-list-price",
@@ -4105,7 +3976,7 @@
       "title": "GNC® 215, Standard Kit"
     },
     {
-      "handle": "gnc®-215-standard-kit-helo",
+      "handle": "gnc-215-standard-kit-helo",
       "sku": "010-02481-02",
       "shopifyPrice": "5895.00",
       "template": "no-stated-list-price",
@@ -4285,7 +4156,7 @@
       "sku": "010-02544-41",
       "shopifyPrice": "450.00",
       "template": "no-stated-list-price",
-      "productType": "Garmin Dealer Install",
+      "productType": "Avionics — Certified",
       "title": "GSB™ 15, Dual Type-C, Rear Power Input, Standard"
     },
     {
@@ -4293,7 +4164,7 @@
       "sku": "010-02544-51",
       "shopifyPrice": "450.00",
       "template": "no-stated-list-price",
-      "productType": "Garmin Dealer Install",
+      "productType": "Avionics — Certified",
       "title": "GSB™ 15, Dual Type-C, Side Power Input, Standard"
     },
     {
@@ -4301,7 +4172,7 @@
       "sku": "010-02201-10",
       "shopifyPrice": "350.00",
       "template": "no-stated-list-price",
-      "productType": "Garmin Dealer Install",
+      "productType": "Avionics — Certified",
       "title": "GSB™ 15, Dual USB Type-A, Rear Power Input, Standard"
     },
     {
@@ -4309,7 +4180,7 @@
       "sku": "010-02201-11",
       "shopifyPrice": "350.00",
       "template": "no-stated-list-price",
-      "productType": "Garmin Dealer Install",
+      "productType": "Avionics — Certified",
       "title": "GSB™ 15, Dual USB Type-A, Side Power Input, Standard"
     },
     {
@@ -4317,7 +4188,7 @@
       "sku": "010-02201-00",
       "shopifyPrice": "325.00",
       "template": "no-stated-list-price",
-      "productType": "Garmin Dealer Install",
+      "productType": "Avionics — Certified",
       "title": "GSB™ 15, Rear Power Input, Unit Only"
     },
     {
@@ -4325,7 +4196,7 @@
       "sku": "010-02544-21",
       "shopifyPrice": "450.00",
       "template": "no-stated-list-price",
-      "productType": "Garmin Dealer Install",
+      "productType": "Avionics — Certified",
       "title": "GSB™ 15, Type-A and Type-C, Rear Power Input, Standard"
     },
     {
@@ -4333,7 +4204,7 @@
       "sku": "010-02544-31",
       "shopifyPrice": "450.00",
       "template": "no-stated-list-price",
-      "productType": "Garmin Dealer Install",
+      "productType": "Avionics — Certified",
       "title": "GSB™ 15, Type-A and Type-C, Side Power Input, Standard"
     },
     {
@@ -4769,12 +4640,12 @@
       "title": "GTR 20, Standard, PMA"
     },
     {
-      "handle": "gtr-200b-standard-pma",
-      "sku": "010-01087-41",
-      "shopifyPrice": "0.00",
+      "handle": "garmin-gtr-200b",
+      "sku": "010-01087-21",
+      "shopifyPrice": "1960.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GTR 200B, Standard, PMA"
+      "productType": "Avionics — Experimental",
+      "title": "Garmin GTR 200B COMM Radio"
     },
     {
       "handle": "gtr-205-standard-kit",
@@ -4797,7 +4668,7 @@
       "sku": "010-03395-01",
       "shopifyPrice": "2345.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Avionics — Experimental",
       "title": "GTR 205x"
     },
     {
@@ -4805,7 +4676,7 @@
       "sku": "010-03396-01",
       "shopifyPrice": "1845.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Avionics — Experimental",
       "title": "GTR 205xR"
     },
     {
@@ -4895,14 +4766,6 @@
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTX 330D Transponder"
-    },
-    {
-      "handle": "gtx-335",
-      "sku": "010-01214-41",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GTX 335"
     },
     {
       "handle": "gtx-335-nvg-compatible",
@@ -7233,11 +7096,11 @@
       "title": "Panel Assy,GCU475,w/Label"
     },
     {
-      "handle": "pc-trainer-for-the-g1000®-nxi-integrated-flight-deck-beechcraft-bonanza-g36-v20-05",
+      "handle": "pc-trainer-for-the-g1000-nxi-integrated-flight-deck-beechcraft-bonanza-g36-v20-05",
       "sku": "010-12675-08",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "PC Trainer for the G1000® NXI integrated Flight Deck (Beechcraft Bonanza G36, v20.05)"
     },
     {
@@ -7249,11 +7112,11 @@
       "title": "PC Trainer for the G1000® NXI integrated Flight Deck (Cessna Caravan, v20.05)"
     },
     {
-      "handle": "pc-trainer-for-the-g1000®-nxi-integrated-flight-deck-piper-seminole-v20-02",
+      "handle": "pc-trainer-for-the-g1000-nxi-integrated-flight-deck-piper-seminole-v20-02",
       "sku": "010-12675-06",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "60.00",
       "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
+      "productType": "Pilot Gear",
       "title": "PC Trainer for the G1000® NXi Integrated Flight Deck (Piper Seminole, v20.02)"
     },
     {
@@ -11281,14 +11144,6 @@
       "title": "GDU 470, GPS Display, AM, PMA, Standard"
     },
     {
-      "handle": "gdu-700l-g600-txi-gray-ahrs-standard",
-      "sku": "010-01219-A1",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GDU 700L, G600 TXi, GRAY, AHRS, Standard"
-    },
-    {
       "handle": "gdu-700l-g600-txi-gray-standard",
       "sku": "010-01219-83",
       "shopifyPrice": "13250.00",
@@ -11571,7 +11426,7 @@
     {
       "handle": "kit-gfc600-2-axis-w-p-t-pa-46-piston-gmc605c",
       "sku": "010-01993-33",
-      "shopifyPrice": "22465.00",
+      "shopifyPrice": "21190.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, GFC600, 2 Axis w/ P.T., PA-46 Piston, GMC605C"
@@ -11579,7 +11434,7 @@
     {
       "handle": "kit-gfc600-3-axis-w-p-t-pa-46-piston-gmc605c",
       "sku": "010-01993-35",
-      "shopifyPrice": "28120.00",
+      "shopifyPrice": "27850.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, GFC600, 3 Axis w/ P.T., PA-46 Piston, GMC605C"
@@ -11611,7 +11466,7 @@
     {
       "handle": "kit-gfc600-4-servo-pa-46-meridian-gmc605c",
       "sku": "010-01993-37",
-      "shopifyPrice": "28120.00",
+      "shopifyPrice": "27850.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, GFC600, 4 Servo, PA-46 Meridian, GMC605C"
@@ -11723,7 +11578,7 @@
     {
       "handle": "kit-lru-gfc600-3-axis-with-1-continuous-travel",
       "sku": "010-01993-03",
-      "shopifyPrice": "22375.00",
+      "shopifyPrice": "22165.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, LRU, GFC600, 3 Axis with 1 Continuous Travel"
@@ -11747,7 +11602,7 @@
     {
       "handle": "kit-lru-gfc600-3-servo-with-2-gta",
       "sku": "010-01993-08",
-      "shopifyPrice": "39115.00",
+      "shopifyPrice": "38745.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, LRU, GFC600, 3 Servo with 2 GTA"
@@ -11779,7 +11634,7 @@
     {
       "handle": "kit-lru-gfc600-4-axis-gmc605c",
       "sku": "010-01993-21",
-      "shopifyPrice": "28120.00",
+      "shopifyPrice": "27850.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, LRU, GFC600, 4 Axis, GMC605C"
@@ -11803,7 +11658,7 @@
     {
       "handle": "kit-lru-gfc600-4-servo-gsa80-gsm-gmc605c",
       "sku": "010-01993-29",
-      "shopifyPrice": "50520.00",
+      "shopifyPrice": "50035.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, LRU, GFC600, 4 Servo GSA80/GSM, GMC605C"
@@ -11895,14 +11750,6 @@
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "LRU Kit, G500/G600 TXi, GMU44B, GSU 75"
-    },
-    {
-      "handle": "lru-kit-g500h-txi-gsu-75h",
-      "sku": "010-02105-00",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "LRU Kit, G500H TXi, GSU 75H"
     },
     {
       "handle": "lru-kit-g500h-txi-gsu-75h-gmu-44b",
@@ -12009,14 +11856,6 @@
       "title": "SL60 Readout Filter"
     },
     {
-      "handle": "garmin-avionics-design-studio-by-rwas",
-      "sku": "0001",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Garmin Dealer Install",
-      "title": "Garmin Avionics Design Studio by RWAS"
-    },
-    {
       "handle": "inreach-messenger-plus-1",
       "sku": "",
       "shopifyPrice": "499.99",
@@ -12025,57 +11864,9 @@
       "title": "inReach® Messenger Plus"
     },
     {
-      "handle": "d2-air-x10",
-      "sku": "010-02173-41",
-      "shopifyPrice": "479.00",
-      "template": "no-stated-list-price",
-      "productType": "Watches & Accessories",
-      "title": "D2™ Air X10 (Black)"
-    },
-    {
-      "handle": "d2-air-x10-ivory",
-      "sku": "010-02496-03",
-      "shopifyPrice": "479.00",
-      "template": "no-stated-list-price",
-      "productType": "Watches & Accessories",
-      "title": "D2™ Air X10 (Ivory)"
-    },
-    {
-      "handle": "gsb-15",
-      "sku": "010-02201-11",
-      "shopifyPrice": "325.00",
-      "template": "no-stated-list-price",
-      "productType": "Garmin Dealer Install",
-      "title": "GSB™ 15"
-    },
-    {
-      "handle": "gfc-500-digital-autopilot-package",
-      "sku": "",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GFC™ 500 Digital Autopilot package"
-    },
-    {
-      "handle": "gfc-600-digital-autopilot",
-      "sku": "",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GFC™ 600 Digital Autopilot"
-    },
-    {
-      "handle": "garmin-gea-71b-enhanced",
-      "sku": "",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "Garmin GEA 71B Enhanced"
-    },
-    {
       "handle": "garmin-gsa80-unit-only-010-00302-20",
       "sku": "010-00302-20",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "9990.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSA80 Unit Only"
@@ -12083,7 +11874,7 @@
     {
       "handle": "garmin-gsa80-unit-only-010-00302-21",
       "sku": "010-00302-21",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "9990.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSA80 Unit Only"
@@ -12091,7 +11882,7 @@
     {
       "handle": "garmin-gsa81-unit-only-010-00303-20",
       "sku": "010-00303-20",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "8805.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSA81,Unit Only"
@@ -12115,7 +11906,7 @@
     {
       "handle": "garmin-gsm85a-spiral-med-torque-010-00556-01",
       "sku": "010-00556-01",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6225.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM85A,Spiral,Med Torque"
@@ -12123,7 +11914,7 @@
     {
       "handle": "garmin-gsm85a-med-torque-spir-1-16-010-00556-02",
       "sku": "010-00556-02",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6225.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM85A,Med Torque,Spir 1/16"
@@ -12131,7 +11922,7 @@
     {
       "handle": "garmin-gsm85a-high-torque-universal-010-00556-04",
       "sku": "010-00556-04",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6225.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM85A,High Torque,Universal"
@@ -12139,7 +11930,7 @@
     {
       "handle": "garmin-gsm85a-med-torque-universal-010-00556-05",
       "sku": "010-00556-05",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6225.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM85A,Med Torque,Universal"
@@ -12147,7 +11938,7 @@
     {
       "handle": "garmin-gsm85a-low-torque-universal-010-00556-06",
       "sku": "010-00556-06",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6225.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM85A,Low Torque,Universal"
@@ -12155,7 +11946,7 @@
     {
       "handle": "garmin-gsm85a-3-32-spiral-mt-preset-010-00556-a2",
       "sku": "010-00556-A2",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "3225.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM85A,3/32 Spiral,MT,preset"
@@ -12163,7 +11954,7 @@
     {
       "handle": "garmin-gsm86-idler-pulley-unit-only-010-00714-01",
       "sku": "010-00714-01",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5635.00",
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "GSM86,Idler Pulley,Unit Only"
@@ -12171,7 +11962,7 @@
     {
       "handle": "garmin-gsm-86-72-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-05",
       "sku": "010-00714-05",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM 86, 72 in-lb clutch, 3/32\" spiral capstan, Unit Only"
@@ -12179,7 +11970,7 @@
     {
       "handle": "garmin-gsm-86-no-back-seals-unit-only-010-00714-15",
       "sku": "010-00714-15",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "GSM 86,No Back Seals,Unit Only"
@@ -12187,7 +11978,7 @@
     {
       "handle": "garmin-gsm-86-103-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-19",
       "sku": "010-00714-19",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM 86, 103 in-lb clutch, 3/32\" spiral capstan, Unit Only"
@@ -12195,7 +11986,7 @@
     {
       "handle": "garmin-gsm-86-72-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-20",
       "sku": "010-00714-20",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM 86, 72 in-lb clutch, 3/32\" spiral capstan, Unit Only"
@@ -12203,7 +11994,7 @@
     {
       "handle": "garmin-gsm-86-52-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-21",
       "sku": "010-00714-21",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM 86, 52 in-lb clutch, 3/32\" spiral capstan, Unit Only"
@@ -12211,7 +12002,7 @@
     {
       "handle": "garmin-gsm-86-52-in-lb-clutch-1-16-straight-grooves-unit-only-010-00714-22",
       "sku": "010-00714-22",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM 86, 52 in-lb clutch, 1/16\" Straight Grooves, Unit Only"
@@ -12219,7 +12010,7 @@
     {
       "handle": "garmin-gsm-86-90-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-23",
       "sku": "010-00714-23",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM 86, 90 in-lb clutch, 3/32, Spiral Capstan, Unit Only"
@@ -12227,7 +12018,7 @@
     {
       "handle": "garmin-gsm-86-81-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-24",
       "sku": "010-00714-24",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM 86, 81 in-lb clutch, 3/32\" spiral capstan, Unit Only"
@@ -12235,7 +12026,7 @@
     {
       "handle": "garmin-gsm-86-32-in-lb-clutch-1-16-straight-grooves-unit-only-010-00714-25",
       "sku": "010-00714-25",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM 86, 32 in-lb clutch, 1/16\" Straight Grooves, Unit Only"
@@ -12243,7 +12034,7 @@
     {
       "handle": "garmin-gsm-86-32-in-lb-1-16-spiral-clutch-capstan-unit-only-010-00714-26",
       "sku": "010-00714-26",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM 86, 32 in-lb, 1/16\" Spiral, Clutch Capstan, Unit Only"
@@ -12251,7 +12042,7 @@
     {
       "handle": "garmin-gsm-86-52-in-lb-1-16-spiral-clutch-capstan-unit-only-010-00714-27",
       "sku": "010-00714-27",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM 86, 52 in-lb, 1/16\" Spiral, Clutch Capstan, Unit Only"
@@ -12259,7 +12050,7 @@
     {
       "handle": "garmin-gsm-86-52-in-lb-clutch-25-pitch-sprocket-unit-only-010-00714-32",
       "sku": "010-00714-32",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "GSM 86, 52 in-lb clutch, .25\" pitch sprocket, Unit Only"
@@ -12267,7 +12058,7 @@
     {
       "handle": "garmin-gsm-86-135-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-33",
       "sku": "010-00714-33",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "5585.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSM 86,135 in-lb clutch, 3/32\" spiral capstan, Unit Only"
@@ -12275,7 +12066,7 @@
     {
       "handle": "garmin-gad43-gyro-adapter-upgraded-010-00724-03",
       "sku": "010-00724-03",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "3650.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GAD43 Gyro Adapter, Upgraded"
@@ -12347,7 +12138,7 @@
     {
       "handle": "garmin-top-assy-gsa-28-unit-only-010-01068-20",
       "sku": "010-01068-20",
-      "shopifyPrice": "1180.00",
+      "shopifyPrice": "1140.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "TOP ASSY, GSA 28, UNIT ONLY"
@@ -12379,7 +12170,7 @@
     {
       "handle": "garmin-gmc605-color-ias-unit-only-010-01075-12",
       "sku": "010-01075-12",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "12315.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC605 Color, IAS, Unit Only"
@@ -12387,7 +12178,7 @@
     {
       "handle": "garmin-gmc605-color-ias-standard-010-01075-13",
       "sku": "010-01075-13",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "12040.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC605 Color, IAS, Standard"
@@ -12395,7 +12186,7 @@
     {
       "handle": "garmin-gmc605-color-gray-unit-only-010-01075-14",
       "sku": "010-01075-14",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "14160.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC605 Color, Gray, Unit only"
@@ -12403,7 +12194,7 @@
     {
       "handle": "garmin-gmc605-color-gray-standard-010-01075-15",
       "sku": "010-01075-15",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "14820.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC605 Color, Gray, Standard"
@@ -12411,7 +12202,7 @@
     {
       "handle": "garmin-gmc605-color-black-flc-unit-only-010-01075-16",
       "sku": "010-01075-16",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "13255.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC605 Color, Black, FLC, Unit Only"
@@ -12419,7 +12210,7 @@
     {
       "handle": "garmin-gmc605-color-black-flc-standard-010-01075-17",
       "sku": "010-01075-17",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "12960.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC605 Color, Black, FLC, Standard"
@@ -12427,7 +12218,7 @@
     {
       "handle": "garmin-gmc605h-w-o-fd-nv-unit-only-010-01075-22",
       "sku": "010-01075-22",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "15265.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC605H, w/o FD, NV, Unit Only"
@@ -12435,7 +12226,7 @@
     {
       "handle": "garmin-gtx335-nv-unit-only-010-01214-20",
       "sku": "010-01214-20",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "4595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTX335,NV,Unit Only"
@@ -12443,7 +12234,7 @@
     {
       "handle": "garmin-gtx335-gps-unit-only-010-01214-40",
       "sku": "010-01214-40",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "4295.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTX335,GPS,Unit Only"
@@ -12459,7 +12250,7 @@
     {
       "handle": "garmin-gtx335r-gps-unit-only-010-01215-40",
       "sku": "010-01215-40",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "4295.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTX335R,GPS,Unit Only"
@@ -12475,7 +12266,7 @@
     {
       "handle": "garmin-gtx345-standard-kit-010-01216-01",
       "sku": "010-01216-01",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTX345,Standard Kit"
@@ -12483,7 +12274,7 @@
     {
       "handle": "garmin-gtx345-nv-unit-only-nab-010-01216-25",
       "sku": "010-01216-25",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "7595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTX345,NV,Unit Only,nAB"
@@ -12491,7 +12282,7 @@
     {
       "handle": "garmin-gtx345-gps-unit-only-010-01216-40",
       "sku": "010-01216-40",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTX345,GPS,Unit Only"
@@ -12499,7 +12290,7 @@
     {
       "handle": "garmin-gtx345-gps-unit-only-nab-010-01216-45",
       "sku": "010-01216-45",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTX345,GPS,Unit Only,nAB"
@@ -12515,7 +12306,7 @@
     {
       "handle": "garmin-gtx-345r-unit-only-nf-010-01217-0a",
       "sku": "010-01217-0A",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6495.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTX 345R,Unit Only,nF"
@@ -12523,7 +12314,7 @@
     {
       "handle": "garmin-gtx345r-gps-unit-only-010-01217-40",
       "sku": "010-01217-40",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTX345R,GPS,Unit Only"
@@ -12531,7 +12322,7 @@
     {
       "handle": "garmin-gtx345r-gps-unit-only-nab-010-01217-45",
       "sku": "010-01217-45",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTX345R,GPS,Unit Only,nAB"
@@ -12555,7 +12346,7 @@
     {
       "handle": "garmin-gla-85-unit-only-010-01242-00",
       "sku": "010-01242-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "24215.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GLA 85, Unit Only"
@@ -12563,7 +12354,7 @@
     {
       "handle": "garmin-gla-85-unit-only-10-mm-010-01242-01",
       "sku": "010-01242-01",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "25860.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GLA 85, Unit Only, 10 mm"
@@ -12571,7 +12362,7 @@
     {
       "handle": "garmin-gla-85-unit-only-12-mm-010-01242-02",
       "sku": "010-01242-02",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "25860.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GLA 85, Unit Only, 12 mm"
@@ -12579,7 +12370,7 @@
     {
       "handle": "garmin-gla-85-unit-only-20-mm-010-01242-03",
       "sku": "010-01242-03",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "25860.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GLA 85, Unit Only, 20 mm"
@@ -12587,7 +12378,7 @@
     {
       "handle": "garmin-gfs-83-clutchless-unit-only-010-01243-11",
       "sku": "010-01243-11",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "24055.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GFS 83, Clutchless, Unit Only"
@@ -12595,7 +12386,7 @@
     {
       "handle": "garmin-gfs-83-clutchless-unit-only-010-01243-12",
       "sku": "010-01243-12",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "24055.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GFS 83, Clutchless, Unit Only"
@@ -12603,39 +12394,15 @@
     {
       "handle": "garmin-gfs-83-clutchless-high-torque-unit-only-010-01243-14",
       "sku": "010-01243-14",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "24675.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GFS 83, Clutchless High Torque, Unit Only"
     },
     {
-      "handle": "garmin-gma345-unit-only-010-01319-00",
-      "sku": "010-01319-00",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GMA345, Unit Only"
-    },
-    {
       "handle": "garmin-gma-345-010-01319-03",
       "sku": "010-01319-03",
       "shopifyPrice": "2495.00",
-      "template": "promotion-template",
-      "productType": "Avionics — Certified",
-      "title": "GMA™ 345"
-    },
-    {
-      "handle": "garmin-gma345-unit-only-010-01319-20",
-      "sku": "010-01319-20",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "GMA345, Unit Only"
-    },
-    {
-      "handle": "garmin-gma-345-010-01319-21",
-      "sku": "010-01319-21",
-      "shopifyPrice": "0.00",
       "template": "promotion-template",
       "productType": "Avionics — Certified",
       "title": "GMA™ 345"
@@ -12651,7 +12418,7 @@
     {
       "handle": "garmin-flight-stream-510-unit-only-010-01322-00",
       "sku": "010-01322-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "1895.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Flight Stream 510,Unit Only"
@@ -12659,7 +12426,7 @@
     {
       "handle": "garmin-flight-stream-510-standard-010-01322-01",
       "sku": "010-01322-01",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "1895.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Flight Stream 510, Standard"
@@ -12667,7 +12434,7 @@
     {
       "handle": "garmin-flight-stream-510-unit-only-010-01322-05",
       "sku": "010-01322-05",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "1895.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Flight Stream 510, Unit Only"
@@ -12699,7 +12466,7 @@
     {
       "handle": "garmin-gsa-87-unit-only-010-01469-02",
       "sku": "010-01469-02",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "7630.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GSA 87, Unit Only"
@@ -12971,7 +12738,7 @@
     {
       "handle": "garmin-gmc-307-unit-only-010-01595-00",
       "sku": "010-01595-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "1525.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC 307, Unit Only"
@@ -12979,7 +12746,7 @@
     {
       "handle": "garmin-gmc-307-no-yd-unit-only-010-01595-20",
       "sku": "010-01595-20",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "1525.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GMC 307, No YD, Unit Only"
@@ -12987,7 +12754,7 @@
     {
       "handle": "garmin-kit-gps-175-ga-35-stc-product-registration-international-010-01822-60",
       "sku": "010-01822-60",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "6250.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, GPS 175, GA 35, STC Product Registration, International"
@@ -12995,7 +12762,7 @@
     {
       "handle": "garmin-gnx375-unit-only-010-01823-00",
       "sku": "010-01823-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "8595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GNX375, Unit Only"
@@ -13027,7 +12794,7 @@
     {
       "handle": "garmin-kit-gfc600-2-axis-w-p-t-pa-46-piston-010-01993-13",
       "sku": "010-01993-13",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "22465.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, GFC600, 2 Axis w/ P.T., PA-46 Piston"
@@ -13051,7 +12818,7 @@
     {
       "handle": "garmin-kit-lru-gfc600-2-axis-gmc605c-010-01993-22",
       "sku": "010-01993-22",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "15785.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, LRU, GFC600, 2 Axis, GMC605C"
@@ -13059,7 +12826,7 @@
     {
       "handle": "garmin-kit-lru-gfc600-4-axis-with-gta-82-gmc605c-010-01993-24",
       "sku": "010-01993-24",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "28815.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, LRU, GFC600, 4 Axis, with GTA 82, GMC605C"
@@ -13075,7 +12842,7 @@
     {
       "handle": "garmin-kit-lru-gfc600-5-servos-with-2-continuous-travel-gmc605c-010-01993-27",
       "sku": "010-01993-27",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "31855.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, LRU, GFC600, 5 Servos with 2 Continuous Travel, GMC605C"
@@ -13083,7 +12850,7 @@
     {
       "handle": "garmin-kit-lru-gfc600-3-servo-with-2-gta-gmc605c-010-01993-28",
       "sku": "010-01993-28",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "39115.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, LRU, GFC600, 3 Servo with 2 GTA, GMC605C"
@@ -13115,7 +12882,7 @@
     {
       "handle": "garmin-gtn635xi-black-unit-only-010-01998-00",
       "sku": "010-01998-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "10995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN635Xi,Black,Unit Only"
@@ -13123,7 +12890,7 @@
     {
       "handle": "garmin-gtn635xi-black-standard-010-01998-01",
       "sku": "010-01998-01",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "13040.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN635Xi,Black,Standard"
@@ -13131,7 +12898,7 @@
     {
       "handle": "garmin-gtn635xi-black-unit-only-010-01998-04",
       "sku": "010-01998-04",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "10995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN635Xi,Black,Unit Only"
@@ -13139,7 +12906,7 @@
     {
       "handle": "garmin-gtn650xi-black-unit-only-010-01999-00",
       "sku": "010-01999-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "11995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN650Xi,Black,Unit Only"
@@ -13147,7 +12914,7 @@
     {
       "handle": "garmin-gtn650xi-black-standard-010-01999-01",
       "sku": "010-01999-01",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "14040.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN650Xi,Black,Standard"
@@ -13155,7 +12922,7 @@
     {
       "handle": "garmin-gtn650xi-helicopter-black-standard-010-01999-02",
       "sku": "010-01999-02",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "14600.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN650Xi,Helicopter,Black,Standard"
@@ -13163,7 +12930,7 @@
     {
       "handle": "garmin-gtn650xi-black-unit-only-w-info-kit-010-01999-03",
       "sku": "010-01999-03",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "12995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN650Xi,Black,Unit Only w/Info Kit"
@@ -13171,7 +12938,7 @@
     {
       "handle": "garmin-gtn650xi-black-unit-only-010-01999-04",
       "sku": "010-01999-04",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "11995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN650Xi,Black,Unit Only"
@@ -13179,7 +12946,7 @@
     {
       "handle": "garmin-gtn650xi-gray-standard-010-01999-31",
       "sku": "010-01999-31",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "15040.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN650Xi,Gray,Standard"
@@ -13187,7 +12954,7 @@
     {
       "handle": "garmin-gtn650xi-gray-unit-only-w-info-kit-010-01999-33",
       "sku": "010-01999-33",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "13995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN650Xi,Gray,Unit Only w/Info Kit"
@@ -13195,7 +12962,7 @@
     {
       "handle": "garmin-gtn650xi-gray-unit-only-010-01999-34",
       "sku": "010-01999-34",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "12995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN650Xi,Gray,Unit Only"
@@ -13203,7 +12970,7 @@
     {
       "handle": "garmin-gtn650xi-nv-black-unit-only-010-01999-60",
       "sku": "010-01999-60",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "15995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN650Xi,NV,Black,Unit Only"
@@ -13211,7 +12978,7 @@
     {
       "handle": "garmin-gtn650xi-nv-helicopter-black-standard-010-01999-62",
       "sku": "010-01999-62",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "18600.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN650Xi,NV,Helicopter,Black,Standard"
@@ -13219,7 +12986,7 @@
     {
       "handle": "garmin-gtn650xi-nv-black-unit-only-010-01999-64",
       "sku": "010-01999-64",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "15995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN650Xi,NV,Black,Unit Only"
@@ -13307,7 +13074,7 @@
     {
       "handle": "garmin-kit-lru-gfc600h-3-axis-w-o-fd-010-02323-00",
       "sku": "010-02323-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "81140.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, LRU, GFC600H, 3 Axis, w/o FD"
@@ -13315,7 +13082,7 @@
     {
       "handle": "garmin-kit-lru-gfc-600h-gsu75h-010-02323-04",
       "sku": "010-02323-04",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "17710.00",
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "Kit, LRU, GFC 600H, GSU75H"
@@ -14481,22 +14248,6 @@
       "title": "Kit, STC Documentation, Cirrus SR2X G1000 NXi Upgrade"
     },
     {
-      "handle": "garmin-kit-gdu-1050a-cirrus-sr2x-g1000-nxi-upgrade-k00-01491-01",
-      "sku": "K00-01491-01",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "Kit,GDU 1050A, Cirrus SR2X G1000 NXi Upgrade"
-    },
-    {
-      "handle": "garmin-kit-gdu-1250a-cirrus-sr2x-g1000-nxi-upgrade-k00-01491-02",
-      "sku": "K00-01491-02",
-      "shopifyPrice": "0.00",
-      "template": "no-stated-list-price",
-      "productType": "Avionics — Certified",
-      "title": "Kit, GDU 1250A, Cirrus SR2X G1000 NXi Upgrade"
-    },
-    {
       "handle": "garmin-kit-faa-datacom-gtn-xi-k00-01497-00",
       "sku": "K00-01497-00",
       "shopifyPrice": "15495.00",
@@ -14515,7 +14266,7 @@
     {
       "handle": "garmin-kit-gifd-tcas-ii-system-gts-8000-w-dual-gtx-3000-k10-00187-10",
       "sku": "K10-00187-10",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "99995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit,GIFD TCAS II System,GTS 8000 w/dual GTX 3000"
@@ -14523,7 +14274,7 @@
     {
       "handle": "garmin-kit-tcas-lru-xls-g5000-stc-k10-00207-08",
       "sku": "K10-00207-08",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "51995.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "Kit, TCAS LRU, XLS G5000 STC"
@@ -14531,7 +14282,7 @@
     {
       "handle": "garmin-gtn-750-simulator-complete-system-k10-00241-00",
       "sku": "K10-00241-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "25595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN 750 Simulator, Complete System"
@@ -14539,7 +14290,7 @@
     {
       "handle": "garmin-gtn-750xi-simulator-complete-system-k10-00241-50",
       "sku": "K10-00241-50",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "25595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN 750Xi Simulator, Complete System"
@@ -14547,7 +14298,7 @@
     {
       "handle": "garmin-gtn-725-simulator-complete-system-k10-00242-00",
       "sku": "K10-00242-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "23595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN 725 Simulator, Complete System"
@@ -14555,7 +14306,7 @@
     {
       "handle": "garmin-gtn-725xi-simulator-complete-system-k10-00242-50",
       "sku": "K10-00242-50",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "23595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN 725Xi Simulator, Complete System"
@@ -14563,7 +14314,7 @@
     {
       "handle": "garmin-gtn-650-simulator-complete-system-k10-00243-00",
       "sku": "K10-00243-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "19595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN 650 Simulator, Complete System"
@@ -14571,7 +14322,7 @@
     {
       "handle": "garmin-gtn-650xi-simulator-complete-system-k10-00243-50",
       "sku": "K10-00243-50",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "19595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN 650Xi Simulator, Complete System"
@@ -14579,7 +14330,7 @@
     {
       "handle": "garmin-gtn-635-simulator-complete-system-k10-00244-00",
       "sku": "K10-00244-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "18595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN 635 Simulator, Complete System"
@@ -14587,7 +14338,7 @@
     {
       "handle": "garmin-gtn-635xi-simulator-complete-system-k10-00244-50",
       "sku": "K10-00244-50",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "18595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN 635Xi Simulator, Complete System"
@@ -14595,7 +14346,7 @@
     {
       "handle": "garmin-gtn-625-simulator-complete-system-k10-00245-00",
       "sku": "K10-00245-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "17595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN 625 Simulator, Complete System"
@@ -14603,7 +14354,7 @@
     {
       "handle": "garmin-gtn-625xi-simulator-complete-system-k10-00245-50",
       "sku": "K10-00245-50",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "17595.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN 625Xi Simulator, Complete System"
@@ -14611,7 +14362,7 @@
     {
       "handle": "garmin-gtn-nvg-750h-simulator-complete-system-k10-00253-00",
       "sku": "K10-00253-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "29695.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN NVG 750H Simulator, Complete System"
@@ -14619,7 +14370,7 @@
     {
       "handle": "garmin-gtn-nvg-750h-xi-simulator-complete-system-k10-00253-50",
       "sku": "K10-00253-50",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "29695.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN NVG 750H Xi Simulator, Complete System"
@@ -14627,7 +14378,7 @@
     {
       "handle": "garmin-gtn-nvg-650h-simulator-complete-system-k10-00254-00",
       "sku": "K10-00254-00",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "24195.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN NVG 650H Simulator, Complete System"
@@ -14635,7 +14386,7 @@
     {
       "handle": "garmin-gtn-nvg-650h-xi-simulator-complete-system-k10-00254-50",
       "sku": "K10-00254-50",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "24195.00",
       "template": "no-stated-list-price",
       "productType": "Avionics — Certified",
       "title": "GTN NVG 650H Xi Simulator, Complete System"
@@ -14651,7 +14402,7 @@
     {
       "handle": "garmin-kit-gfc600-install-pitch-trim-servo-182-k11-00018-11",
       "sku": "K11-00018-11",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "1970.00",
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "Kit, GFC600 Install, Pitch Trim Servo, 182"
@@ -14659,7 +14410,7 @@
     {
       "handle": "garmin-kit-gfc600-install-525-k11-00018-32",
       "sku": "K11-00018-32",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "21765.00",
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "Kit, GFC600 INSTALL, 525"
@@ -14667,7 +14418,7 @@
     {
       "handle": "garmin-kit-52-gfc600-install-4-servo-k11-00018-52",
       "sku": "K11-00018-52",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "21765.00",
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "Kit 52, GFC600 INSTALL, 4 SERVO"
@@ -14675,7 +14426,7 @@
     {
       "handle": "garmin-kit-gfc600-install-3-servo-k11-00018-53",
       "sku": "K11-00018-53",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "8960.00",
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "Kit, GFC600 INSTALL,3 SERVO"
@@ -14683,7 +14434,7 @@
     {
       "handle": "garmin-kit-54-gfc600-install-ima-37-yaw-damp-servo-k11-00018-54",
       "sku": "K11-00018-54",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "1630.00",
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "Kit 54, GFC600 Install (IMA -37), YAW DAMP SERVO"
@@ -14731,7 +14482,7 @@
     {
       "handle": "garmin-kit-gfc600h-install-ahrs-as350-k11-00039-01",
       "sku": "K11-00039-01",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "1215.00",
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "Kit, GFC600H INSTALL, AHRS, AS350"
@@ -14747,7 +14498,7 @@
     {
       "handle": "garmin-kit-03-gfc500-auxiliary-install-k11-00045-03",
       "sku": "K11-00045-03",
-      "shopifyPrice": "0.00",
+      "shopifyPrice": "555.00",
       "template": "no-stated-list-price",
       "productType": "Garmin Dealer Install",
       "title": "Kit 03, GFC500, Auxiliary Install"
@@ -15311,11 +15062,19 @@
       "template": "no-stated-list-price",
       "productType": "Watches & Accessories",
       "title": "tactix® 8 – 51 mm, AMOLED, Cerakote, Includes Applied Ballistics Ultralight™ Solver and Slate Gray Cerakote® Coating"
+    },
+    {
+      "handle": "garmin-gdl-82-ads-b-out-datalink",
+      "sku": "010-01560-31",
+      "shopifyPrice": "2475.00",
+      "template": "no-stated-list-price",
+      "productType": "Avionics — Certified",
+      "title": "Garmin GDL 82 ADS-B Out Datalink"
     }
   ],
   "counts": {
-    "mismatches": 3,
-    "noStatedListPrice": 1910,
-    "promotionTemplate": 173
+    "mismatches": 2,
+    "noStatedListPrice": 1881,
+    "promotionTemplate": 172
   }
 }

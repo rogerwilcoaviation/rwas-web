@@ -163,11 +163,14 @@ export async function generateMetadata({
 }
 
 function formatPrice(amount: string, currencyCode: string) {
+  const numericAmount = Number(amount);
+  const hasCents = Math.round(numericAmount * 100) % 100 !== 0;
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currencyCode,
-    maximumFractionDigits: 0,
-  }).format(Number(amount));
+    minimumFractionDigits: hasCents ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(numericAmount);
 }
 
 function isPlaceholderOption(option: { name: string; values: string[] }) {
@@ -239,10 +242,11 @@ function gateFromProduct(
   // stock-check-required rule. A per-product `otc-eligible` tag on its own
   // (e.g., Garmin G5 kits that also carry `stock-check-required`) keeps the
   // Check-stock pill and the 'RWAS does not hold Garmin stock' notice.
-  const stockCheckRequired = productTypeOtcEligible || collectionOtc
-    ? false
-    : lower.includes('stock-check-required') ||
-      (isGarmin && !perProductOtcEligible);
+  const stockCheckRequired =
+    productTypeOtcEligible || collectionOtc
+      ? false
+      : lower.includes('stock-check-required') ||
+        (isGarmin && !perProductOtcEligible);
   const otc: Gating['otc'] = otcEligible
     ? 'eligible'
     : perProductOtcDisabled
@@ -1608,9 +1612,9 @@ export default async function ProductDetailPage({
                       </tr>
                     </>
                   ) : null}
-                  {hasSingleVariant &&
-                  primaryPrice &&
-                  !(gating.isGarmin && gating.otc !== 'eligible') ||
+                  {(hasSingleVariant &&
+                    primaryPrice &&
+                    !(gating.isGarmin && gating.otc !== 'eligible')) ||
                   gating.isDealerInstall ? (
                     <tr>
                       <th>{hasSalePrice ? 'Sale Price' : 'Price'}</th>

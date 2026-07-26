@@ -23,6 +23,7 @@
     "catalog:garmin-handles": "node scripts/normalize-garmin-product-handles.mjs",
     "catalog:production-smoke": "node scripts/garmin-storefront-production-smoke.mjs",
     "catalog:garmin-list-price-audit": "node scripts/audit-garmin-list-prices.mjs",
+    "catalog:former-sale-list-prices": "node scripts/reconcile-former-sale-list-prices.mjs",
     "catalog:experimental-retail": "node scripts/reconcile-experimental-retail.mjs"
   },
   "dependencies": {

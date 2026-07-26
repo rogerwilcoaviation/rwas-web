@@ -14,11 +14,14 @@ import {
 import Link from 'next/link';
 
 function formatPrice(amount: string, currencyCode: string) {
+  const numericAmount = Number(amount);
+  const hasCents = Math.round(numericAmount * 100) % 100 !== 0;
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currencyCode,
-    maximumFractionDigits: 0,
-  }).format(Number(amount));
+    minimumFractionDigits: hasCents ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(numericAmount);
 }
 
 export default function ProductCard({

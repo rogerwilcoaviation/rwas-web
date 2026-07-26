@@ -102,10 +102,12 @@ function normalize(value: string) {
 function formatPrice(amount: string, currencyCode: string) {
   const numeric = Number(amount || '0');
   if (!Number.isFinite(numeric) || numeric <= 0) return null;
+  const hasCents = Math.round(numeric * 100) % 100 !== 0;
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currencyCode,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: hasCents ? 2 : 0,
+    maximumFractionDigits: 2,
   }).format(numeric);
 }
 
