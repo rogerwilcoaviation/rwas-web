@@ -14,11 +14,14 @@ type WindowWithIdleCallback = Window & {
   cancelIdleCallback?: (handle: number) => void;
 };
 
+// minDelayMs keeps the fetch off the critical path without stranding the user on a
+// skeleton. First paint completes ~70-170ms; anything above ~500ms here reads as
+// "broken" to a visitor who does not scroll. Do not raise this without measuring.
 export function deferUntilIdle(
   task: () => void,
   {
-    minDelayMs = 8000,
-    timeoutMs = 15000,
+    minDelayMs = 200,
+    timeoutMs = 2500,
     events = ['scroll', 'pointerdown', 'touchstart'],
   }: DeferredTaskOptions = {}
 ) {
