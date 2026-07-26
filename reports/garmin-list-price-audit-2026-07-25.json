@@ -1,27 +1,8 @@
 {
-  "generatedAt": "2026-07-26T22:49:56.374Z",
+  "generatedAt": "2026-07-26T23:01:17.556Z",
   "scope": "active Shopify products queried by vendor:Garmin",
   "activeGarminProducts": 1927,
-  "mismatches": [
-    {
-      "handle": "inreach-mini-2",
-      "sku": "010-02602-00",
-      "shopifyPrice": 349.99,
-      "statedListPrice": 399.99,
-      "delta": -50,
-      "productType": "Pilot Gear",
-      "title": "inReach® Mini 2"
-    },
-    {
-      "handle": "garmin-gwx-75-weather-radar",
-      "sku": "010-01589-01",
-      "shopifyPrice": 28000,
-      "statedListPrice": 26995,
-      "delta": 1005,
-      "productType": "Avionics — Certified",
-      "title": "Garmin GWX 75 Weather Radar 12 inch"
-    }
-  ],
+  "mismatches": [],
   "noStatedListPrice": [
     {
       "handle": "1-inch-ball-and-socket-mount",
@@ -15073,7 +15054,7 @@
     }
   ],
   "counts": {
-    "mismatches": 2,
+    "mismatches": 0,
     "noStatedListPrice": 1881,
     "promotionTemplate": 172
   }
