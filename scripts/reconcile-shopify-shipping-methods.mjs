@@ -146,8 +146,7 @@ function publicMethods(methods) {
     description: method.description,
     active: method.active,
     carrierService: method.rateProvider?.carrierService?.name || null,
-    carrierServiceActive:
-      method.rateProvider?.carrierService?.active ?? null,
+    carrierServiceActive: method.rateProvider?.carrierService?.active ?? null,
     participantServices: method.rateProvider?.participantServices || [],
     price: method.rateProvider?.price?.amount || null,
     conditions: method.methodConditions.map((condition) => ({

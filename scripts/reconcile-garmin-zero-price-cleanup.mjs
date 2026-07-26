@@ -265,7 +265,7 @@ async function getCollections() {
   );
 }
 
-function makePlan(products) {
+function makePlan(products, collections) {
   const active = products.filter((product) => product.status === 'ACTIVE');
   const zeroPrice = active.filter((product) =>
     product.variants.nodes.some((variant) => Number(variant.price) === 0),
@@ -421,7 +421,63 @@ function makePlan(products) {
     });
   }
 
-  return actions;
+  return actions.filter((action) => actionNeedsChange(action, collections));
+}
+
+function actionNeedsChange(action, collections) {
+  const product = action.product;
+  const productUpdate = action.productUpdate;
+  for (const field of [
+    'status',
+    'title',
+    'handle',
+    'productType',
+    'descriptionHtml',
+  ]) {
+    if (
+      Object.hasOwn(productUpdate, field) &&
+      productUpdate[field] !== product[field]
+    ) {
+      return true;
+    }
+  }
+  if (productUpdate.tags && !sameTags(productUpdate.tags, product.tags)) {
+    return true;
+  }
+
+  if (action.variantUpdate) {
+    if (
+      action.variantUpdate.sku &&
+      action.variantUpdate.sku !== action.variant.sku
+    ) {
+      return true;
+    }
+    if (
+      Object.hasOwn(action.variantUpdate, 'price') &&
+      Number(action.variantUpdate.price) !== Number(action.variant.price)
+    ) {
+      return true;
+    }
+  }
+
+  const memberships = new Set(
+    product.collections.nodes.map((collection) => collection.handle),
+  );
+  if (
+    action.addCollections.some(
+      (handle) => !collections.get(handle)?.ruleSet && !memberships.has(handle),
+    )
+  ) {
+    return true;
+  }
+  if (
+    action.removeCollections.some(
+      (handle) => !collections.get(handle)?.ruleSet && memberships.has(handle),
+    )
+  ) {
+    return true;
+  }
+  return false;
 }
 
 function publicAction(action) {
@@ -572,7 +628,7 @@ async function main() {
     getProducts('vendor:Garmin'),
     getCollections(),
   ]);
-  const actions = makePlan(products);
+  const actions = makePlan(products, collections);
   let verification = null;
   if (apply) {
     await applyActions(actions, collections);
