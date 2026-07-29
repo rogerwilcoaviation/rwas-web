@@ -43,4 +43,4 @@ Once the link is confirmed, add it to the CRM/email signature snippets and use `
 
 ## Status - 2026-05-25
 
-GBP currently shows 3 Google reviews and 417 customer interactions. The review-request link is blocked until Google Business Profile video verification is completed after the Sioux Falls address change. Address, description, and 12 service entries have been staged but are not public until verification clears.
+The Google Business Profile location must be verified against the owner-approved Yankton/KYKN NAP before review requests resume. If Google requires video verification after the correction, follow `docs/seo/gbp-video-verification.md`. Do not treat a saved profile edit as public until the live profile is checked.

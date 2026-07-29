@@ -18,6 +18,8 @@ const REQUIRED_HEADERS = [
   'permissions-policy',
   'content-security-policy',
 ];
+const FORBIDDEN_LOCATION_PATTERN =
+  /Sioux(?:[\s\u00a0-]|&nbsp;|&#0*32;|&#x0*20;)*Falls|\bKFSD\b|Joe(?:[\s\u00a0-]|&nbsp;|&#0*32;|&#x0*20;)*Foss/i;
 
 function fail(message) {
   throw new Error(message);
@@ -131,6 +133,9 @@ function canonicalMatchesUrl(canonical, url) {
 
 const home = await fetchNoRedirect(`${base}/`);
 if (home.res.status !== 200) fail(`Home returned ${home.res.status}`);
+if (FORBIDDEN_LOCATION_PATTERN.test(home.text)) {
+  fail('Home contains a former RWAS location reference');
+}
 for (const [label, value] of [
   [
     'structured street address',
@@ -220,6 +225,25 @@ if (
       `/services/aircraft-maintenance-yankton redirects to unexpected location: ${oldMaintenanceLocation}`,
     );
   }
+
+  for (const [legacyPath, expectedPath] of [
+    ['/locations/sioux-falls', '/locations/yankton'],
+    [
+      '/services/aircraft-maintenance-sioux-falls',
+      '/services/aircraft-maintenance',
+    ],
+  ]) {
+    const legacyRes = await fetch(`${base}${legacyPath}`, {
+      redirect: 'manual',
+    });
+    if (legacyRes.status !== 301) {
+      fail(`${legacyPath} should 301, got ${legacyRes.status}`);
+    }
+    const legacyLocation = legacyRes.headers.get('location') || '';
+    if (!legacyLocation.includes(expectedPath)) {
+      fail(`${legacyPath} redirects to unexpected location: ${legacyLocation}`);
+    }
+  }
 }
 
 if (!isLocalBase) {
@@ -271,6 +295,9 @@ async function checkUrl(url) {
   const decodedTitle = decodeHtmlEntities(title);
   const decodedDescription = decodeHtmlEntities(description);
   const urlFailures = [];
+  if (FORBIDDEN_LOCATION_PATTERN.test(text)) {
+    urlFailures.push(`${url} contains a former RWAS location reference`);
+  }
   if (!title) urlFailures.push(`${url} missing <title>`);
   if (!hasMeta(text, /<meta[^>]+name=["']description["']/i))
     urlFailures.push(`${url} missing meta description`);
@@ -328,6 +355,23 @@ async function worker() {
 await Promise.all(
   Array.from({ length: Math.min(CONCURRENCY, urls.length) }, worker),
 );
+
+for (const path of [
+  '/blog-articles.json',
+  '/feed.xml',
+  '/llms.txt',
+  '/garmin',
+  '/newspaper',
+]) {
+  const artifact = await fetchNoRedirect(`${base}${path}`);
+  if (artifact.res.status !== 200) {
+    failures.push(`${path} returned ${artifact.res.status}`);
+    continue;
+  }
+  if (FORBIDDEN_LOCATION_PATTERN.test(artifact.text)) {
+    failures.push(`${path} contains a former RWAS location reference`);
+  }
+}
 
 const duplicateProductTitles = Array.from(titles.entries())
   .map(([title, titleUrls]) => ({

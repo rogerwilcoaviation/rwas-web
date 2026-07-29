@@ -28,6 +28,9 @@ const redirects = {
   '/collections/garmin-outdoor-navigation': '/collections',
   '/collections/garmin-powersports': '/collections',
   '/maintenance': '/services/aircraft-maintenance',
+  '/locations/sioux-falls': '/locations/yankton',
+  '/services/aircraft-maintenance-sioux-falls':
+    '/services/aircraft-maintenance',
   '/services/aircraft-maintenance-yankton': '/services/aircraft-maintenance',
 };
 

@@ -4,7 +4,7 @@ Use this after the GSC export, not before. The site now has the foundational com
 
 ## Near-Term Page/Content Candidates
 
-1. Garmin installer Sioux Falls / KFSD
+1. Garmin installer Yankton / KYKN
    - Strengthen `/services/garmin-installation-northern-plains` or create a short support page only if GSC shows this query family.
 2. GFC 500 eligibility and install planning
    - Add aircraft-eligibility examples, downtime expectations, and what owners should send for a quote.
@@ -27,4 +27,4 @@ Use this after the GSC export, not before. The site now has the foundational com
 
 - Do not publish thin weekly posts just to publish.
 - Do not chase national Garmin SKU rankings as the primary growth strategy.
-- Do not write KFSD relocation copy that outpaces approved operational reality.
+- Do not publish location or relocation copy that differs from the owner-approved Yankton/KYKN operating base.

@@ -1,11 +1,12 @@
 # Google Business Profile Checklist
 
-This is intentionally last because GBP changes require manual owner/account access and should match legal/operational reality.
+GBP changes require manual owner/account access and must match legal and operational reality.
 
 ## Core Profile
 
 - Business name: Roger Wilco Aviation Services LLC
-- Address: Hangar 3, 3701 N. Aviation Avenue, Sioux Falls, SD 57104
+- Address: 3309 Douglas Avenue Unit #3, Yankton, SD 57078
+- Airport: KYKN
 - Phone: (605) 299-8178
 - Website: https://www.rogerwilcoaviation.com/
 - Hours: Monday-Friday, 7:00 AM-5:00 PM CT, unless operations says otherwise
@@ -19,24 +20,15 @@ Primary category should match what Google allows and what RWAS wants to win loca
 - Aircraft supply store
 - Aircraft dealer, only if aircraft sales/listing operations are intended as public GBP positioning
 
-Do not invent categories. Choose only from Google’s live category picker.
+Do not invent categories. Choose only from Google's live category picker.
 
 ## Description Draft
 
-Roger Wilco Aviation Services LLC is an FAA Part 145 repair station at Hangar 3 in Sioux Falls, South Dakota. RWAS supports Garmin avionics installation, aircraft maintenance, annual inspections, NDT inspection, fiber laser fabrication, Rotax support, pre-buy inspections, and Papa-Alpha Piper rigging tools for aircraft owners across the Northern Plains.
+Roger Wilco Aviation Services LLC is an FAA Part 145 repair station at KYKN in Yankton, South Dakota. RWAS supports Garmin avionics installation, aircraft maintenance, annual inspections, NDT inspection, fiber laser fabrication, Rotax support, pre-buy inspections, and Papa-Alpha Piper rigging tools for aircraft owners across the Northern Plains.
 
-## Manual GBP Pass - 2026-05-25
+## Location Correction - 2026-07-29
 
-- Profile account: John Halsted / `jchalsted@gmail.com`.
-- Visible profile state before edits: 417 customer interactions, 5.0 rating, 3 Google reviews.
-- Categories visible in GBP: primary `Aircraft maintenance company`, secondary `Repair service`.
-- Address was changed in GBP from `700 East 31st Street, Yankton, SD 57078` to `3701 N. Aviation Avenue, Hangar 3, Sioux Falls, SD 57104`.
-- Google accepted the address edit into pending review and did not show an immediate hard rejection.
-- Description was updated in the profile editor to the Sioux Falls / Hangar 3 version with Part 145, Garmin, NDT, fabrication, and Papa-Alpha language.
-- All 12 service entries in the checklist below were staged under the primary `Aircraft maintenance company` category. Google shows these edits will be visible after verification.
-- Attempting to open the review-request link showed a verification gate: Google says the profile is not visible until verification is complete.
-- Required verification method shown by Google: submit one continuous business video showing surrounding area, permanent business-name signage/fixture, and access to staff-only areas or proof of management.
-- Video-verification runbook: `docs/seo/gbp-video-verification.md`.
+The owner reconfirmed Yankton, South Dakota and KYKN as the correct RWAS operating-base signal. Any previously staged profile edit using a different location is superseded and must be replaced with the canonical details above. Public GBP status must be verified after the correction; do not treat a saved edit as a public update.
 
 ## Services To Add
 
@@ -56,7 +48,7 @@ Roger Wilco Aviation Services LLC is an FAA Part 145 repair station at Hangar 3 
 ## Q&A Seeds
 
 Q: Does RWAS install Garmin avionics?  
-A: Yes. RWAS is a certified Garmin dealer and supports Garmin panel planning, installation, testing, and documentation from its Sioux Falls shop.
+A: Yes. RWAS is a certified Garmin dealer and supports Garmin panel planning, installation, testing, and documentation from its Yankton shop at KYKN.
 
 Q: Does RWAS perform annual inspections?  
 A: Yes. RWAS supports annual inspections, 100-hour inspections, maintenance troubleshooting, and repair-station documentation.
@@ -65,11 +57,11 @@ Q: Does RWAS offer aircraft NDT inspection?
 A: Yes. RWAS supports eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing.
 
 Q: Where is RWAS located?  
-A: RWAS operates from Hangar 3, 3701 N. Aviation Avenue, Sioux Falls, South Dakota 57104.
+A: RWAS operates at 3309 Douglas Avenue Unit #3, Yankton, South Dakota 57078, serving KYKN.
 
 ## Photo Shot List
 
-- Exterior hangar/signage
+- Exterior signage
 - Front door/customer arrival view
 - Shop floor
 - Avionics panel work

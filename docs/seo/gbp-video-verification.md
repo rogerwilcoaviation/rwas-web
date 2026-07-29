@@ -1,6 +1,6 @@
 # Google Business Profile Video Verification
 
-Status: required before the Sioux Falls address, description, services, and review-request link become public.
+Use this runbook only if Google requires video verification for the canonical Yankton/KYKN profile.
 
 Profile account used during manual edits:
 
@@ -10,20 +10,20 @@ Profile account used during manual edits:
 
 Google requires one continuous business video showing:
 
-- the surrounding area, such as street signs, airport/hangar context, or neighboring businesses,
+- the surrounding area, such as street signs, airport context, or neighboring businesses,
 - permanent business name signage or a durable fixture tying RWAS to the location,
 - proof of management or staff-only access, such as unlocking the entrance, opening a staff-only area, or showing business equipment that customers cannot access.
 
-Do not splice clips. Do not upload a screen recording. The video should be recorded at the business location from the Google Business Profile verification flow.
+Do not splice clips. Do not upload a screen recording. Record the video at the business location from the Google Business Profile verification flow.
 
 ## Recommended Shot Order
 
-1. Start outside at Sioux Falls Regional Airport / Hangar 3 context.
-2. Show `3701 N. Aviation Avenue` or other visible location proof if available.
-3. Show the Hangar 3 exterior and the RWAS business-name sign, placard, door label, vehicle decal, or other permanent fixture.
+1. Start outside the RWAS Yankton location or in recognizable KYKN context.
+2. Show `3309 Douglas Avenue` or other visible location proof if available.
+3. Show the RWAS business-name sign, placard, door label, vehicle decal, or another permanent fixture.
 4. Walk to the RWAS-controlled entrance without cutting the video.
 5. Unlock or open a staff-only entrance, cabinet, shop area, or other non-public access point.
-6. Show RWAS-controlled business equipment or materials inside the space, such as avionics workbench, NDT/fabrication equipment, Papa-Alpha tooling, paperwork station, or branded materials.
+6. Show RWAS-controlled business equipment or materials, such as an avionics workbench, NDT/fabrication equipment, Papa-Alpha tooling, paperwork station, or branded materials.
 7. End after the management/access proof is visible.
 
 ## What To Avoid
@@ -35,14 +35,13 @@ Do not splice clips. Do not upload a screen recording. The video should be recor
 
 ## After Approval
 
-Once Google accepts the video verification:
-
 1. Confirm public profile NAP:
    - Roger Wilco Aviation Services LLC
-   - Hangar 3, 3701 N. Aviation Avenue
-   - Sioux Falls, SD 57104
+   - 3309 Douglas Avenue Unit #3
+   - Yankton, SD 57078
+   - Airport: KYKN
    - (605) 299-8178
-2. Confirm the public description reflects the Sioux Falls / Hangar 3 copy.
-3. Confirm all 12 services are visible.
+2. Confirm the public description reflects Yankton/KYKN.
+3. Confirm all approved services are visible.
 4. Capture the Google review-request link and paste it into `docs/seo/review-acquisition-system.md`.
 5. Update `docs/seo/citation-tracker.md` and begin third-party citation corrections.
