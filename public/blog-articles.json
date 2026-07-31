@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-07-31T18:03:27.558066+00:00",
+    "last_updated": "2026-07-31T18:06:48.166250+00:00",
     "total_articles": 27,
     "categories": [
       "regulatory",
@@ -45,8 +45,10 @@
         "instagram": {
           "text": "Three points of contact\u2014or the flap isn't neutral.\n\nRWAS A&P/IA Dane Allison walks through the purpose-built tools mechanics use to inspect and rig Piper flaps, ailerons, stabilators, and rudders against the applicable maintenance data.\n\nRead the full article at rogerwilcoaviation.com/blog.\n\n(605) 299-8178 | Yankton, SD | KYKN\n\n#PiperAircraft #AircraftMaintenance #AircraftRigging #AnnualInspection #PapaAlphaTools #GeneralAviation #RogerWilcoAviation",
           "image_url": "https://www.rogerwilcoaviation.com/images/blog/piper-rigging/flap-aileron-rigging-tool-instagram.jpg",
-          "status": "approved",
-          "approved_at": "2026-07-31T18:03:20.062961+00:00"
+          "status": "published",
+          "approved_at": "2026-07-31T18:03:20.062961+00:00",
+          "published_at": "2026-07-31T18:06:48.166209+00:00",
+          "media_id": "18109758217795214"
         }
       },
       "image": "/images/blog/piper-rigging/flap-aileron-rigging-tool.jpg",
