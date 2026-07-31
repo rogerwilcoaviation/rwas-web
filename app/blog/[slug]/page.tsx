@@ -243,11 +243,22 @@ export default async function BlogArticlePage({
       updatedTime ||
       (article as { published_at?: string }).published_at ||
       article.date,
-    author: {
-      '@type': 'Organization',
-      name: article.byline || 'Roger Wilco Aviation Services',
-      url: siteUrl,
-    },
+    author:
+      article.author === 'Roger Wilco Aviation Services'
+        ? {
+            '@type': 'Organization',
+            name: article.byline || 'Roger Wilco Aviation Services',
+            url: siteUrl,
+          }
+        : {
+            '@type': 'Person',
+            name: article.author,
+            affiliation: {
+              '@type': 'Organization',
+              name: 'Roger Wilco Aviation Services',
+              url: siteUrl,
+            },
+          },
     publisher: {
       '@type': 'Organization',
       name: 'Roger Wilco Aviation Services',
