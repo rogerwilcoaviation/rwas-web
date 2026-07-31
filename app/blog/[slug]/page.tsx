@@ -102,7 +102,7 @@ function renderMarkdownBody(markdown?: string) {
       const isAuthorThumbnail = src.endsWith('/dane-allison.jpg');
       blocks.push(
         isAuthorThumbnail
-          ? `<figure style="width:140px;max-width:35%;margin:10px 0 18px;"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" style="width:100%;border:1px solid #1a1a1a;display:block;" /><figcaption class="np-kicker" style="margin-top:6px;">${escapeHtml(alt)}</figcaption></figure>`
+          ? `<figure style="float:right;width:140px;max-width:35%;margin:0 0 18px 24px;"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" style="width:100%;border:1px solid #1a1a1a;display:block;" /><figcaption class="np-kicker" style="margin-top:6px;">${escapeHtml(alt)}</figcaption></figure>`
           : `<figure style="margin:18px 0;"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" style="width:100%;border:1px solid #1a1a1a;display:block;" /><figcaption class="np-kicker" style="margin-top:6px;">${escapeHtml(alt)}</figcaption></figure>`,
       );
       continue;
