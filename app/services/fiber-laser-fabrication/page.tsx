@@ -127,7 +127,7 @@ export default function FiberLaserFabricationPage() {
                 description:
                   'A Roger Wilco Aviation Services shop reel showing in-house fabrication, laser work, aircraft support, and repair-station capabilities.',
                 thumbnailUrl: posterUrl,
-                uploadDate: '2026-06-26',
+                uploadDate: '2026-06-26T00:00:00-05:00',
                 duration: 'PT39S',
                 contentUrl: videoUrl,
                 embedUrl: `${pageUrl}#fabrication-video`,
