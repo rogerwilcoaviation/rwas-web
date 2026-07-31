@@ -117,8 +117,7 @@ def publish_facebook(article_id):
         print(f"ERROR: Facebook post status is '{post.get('status')}', expected 'approved'")
         return False
 
-    article_url = f"https://www.rogerwilcoaviation.com/blog/{article_id}"
-    message = post["text"] + f"\n\nRead more: {article_url}"
+    message = post["text"]
     image_path = art.get("image", "")
     image_url = ""
     if image_path:
