@@ -42,6 +42,7 @@ import os
 import sys
 import urllib.request
 import urllib.parse
+import urllib.error
 import time
 from datetime import datetime, timezone
 
@@ -118,13 +119,39 @@ def publish_facebook(article_id):
         return False
 
     message = post["text"]
+    image_urls = post.get("image_urls", [])
     image_path = art.get("image", "")
     image_url = ""
     if image_path:
         image_url = image_path if image_path.startswith("http://") or image_path.startswith("https://") else f"https://rogerwilcoaviation.com{image_path}"
 
     try:
-        if image_url:
+        if len(image_urls) > 1:
+            photo_ids = []
+            for photo_url in image_urls:
+                url = f"https://graph.facebook.com/v19.0/{page_id}/photos"
+                params = urllib.parse.urlencode({
+                    "url": photo_url,
+                    "published": "false",
+                    "access_token": token,
+                }).encode()
+                req = urllib.request.Request(url, data=params, method="POST")
+                with urllib.request.urlopen(req) as resp:
+                    photo_ids.append(json.loads(resp.read())["id"])
+
+            url = f"https://graph.facebook.com/v19.0/{page_id}/feed"
+            params = urllib.parse.urlencode({
+                "message": message,
+                "attached_media": json.dumps(
+                    [{"media_fbid": photo_id} for photo_id in photo_ids]
+                ),
+                "access_token": token,
+            }).encode()
+            req = urllib.request.Request(url, data=params, method="POST")
+            with urllib.request.urlopen(req) as resp:
+                result = json.loads(resp.read())
+                post_id = result.get("id", "unknown")
+        elif image_url:
             url = f"https://graph.facebook.com/v19.0/{page_id}/photos"
             params = urllib.parse.urlencode({"url": image_url, "caption": message, "access_token": token}).encode()
             req = urllib.request.Request(url, data=params, method="POST")
@@ -145,6 +172,10 @@ def publish_facebook(article_id):
         save_data(data)
         print(f"OK: Published to Facebook. Post ID: {post_id}")
         return True
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode("utf-8", errors="replace")
+        print(f"ERROR: Facebook publish failed: HTTP {e.code}: {detail}")
+        return False
     except Exception as e:
         print(f"ERROR: Facebook publish failed: {e}")
         return False
@@ -179,23 +210,7 @@ def publish_instagram(article_id):
 
     caption = post["text"]
 
-    # Step 1: Create media container
-    create_url = f"https://graph.facebook.com/v19.0/{account_id}/media"
-    params = urllib.parse.urlencode({
-        "image_url": image_url,
-        "caption": caption,
-        "access_token": token
-    }).encode()
-
-    try:
-        req = urllib.request.Request(create_url, data=params, method="POST")
-        with urllib.request.urlopen(req) as resp:
-            result = json.loads(resp.read())
-            container_id = result.get("id")
-
-        # Meta may accept the container before the image has finished
-        # processing. Publishing immediately then returns error 9007. Poll
-        # until the container is ready instead of creating a failed post.
+    def wait_for_container(container_id):
         status_url = (
             f"https://graph.facebook.com/v19.0/{container_id}"
             f"?fields=status_code&access_token={urllib.parse.quote(token)}"
@@ -204,12 +219,52 @@ def publish_instagram(article_id):
             with urllib.request.urlopen(status_url) as status_resp:
                 status = json.loads(status_resp.read()).get("status_code")
             if status == "FINISHED":
-                break
+                return
             if status == "ERROR":
                 raise RuntimeError(f"Instagram container {container_id} failed processing")
             time.sleep(5)
+        raise RuntimeError(f"Instagram container {container_id} was not ready after 60 seconds")
+
+    # Step 1: Create a single-image container or a carousel container.
+    create_url = f"https://graph.facebook.com/v19.0/{account_id}/media"
+
+    try:
+        image_urls = post.get("image_urls", [])
+        if len(image_urls) > 1:
+            child_ids = []
+            for child_url in image_urls:
+                child_params = urllib.parse.urlencode({
+                    "image_url": child_url,
+                    "is_carousel_item": "true",
+                    "access_token": token,
+                }).encode()
+                req = urllib.request.Request(create_url, data=child_params, method="POST")
+                with urllib.request.urlopen(req) as resp:
+                    child_id = json.loads(resp.read())["id"]
+                wait_for_container(child_id)
+                child_ids.append(child_id)
+
+            parent_params = urllib.parse.urlencode({
+                "media_type": "CAROUSEL",
+                "children": ",".join(child_ids),
+                "caption": caption,
+                "access_token": token,
+            }).encode()
+            req = urllib.request.Request(create_url, data=parent_params, method="POST")
+            with urllib.request.urlopen(req) as resp:
+                container_id = json.loads(resp.read())["id"]
         else:
-            raise RuntimeError(f"Instagram container {container_id} was not ready after 60 seconds")
+            params = urllib.parse.urlencode({
+                "image_url": image_url,
+                "caption": caption,
+                "access_token": token
+            }).encode()
+            req = urllib.request.Request(create_url, data=params, method="POST")
+            with urllib.request.urlopen(req) as resp:
+                container_id = json.loads(resp.read())["id"]
+
+        # Meta may accept a container before its media has finished processing.
+        wait_for_container(container_id)
 
         # Step 2: Publish the container
         pub_url = f"https://graph.facebook.com/v19.0/{account_id}/media_publish"
