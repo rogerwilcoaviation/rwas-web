@@ -84,13 +84,16 @@ jobs:
             echo "SEO smoke failed while the edge is propagating; retrying in 10s... ($attempt/12)"
             sleep 10
           done
-          echo "=== Retail collection ==="
+          echo "=== Certified retail and experimental avionics collection ==="
           for attempt in {1..12}; do
             retail_html=$(curl -fsSL https://www.rogerwilcoaviation.com/collections/avionics-certified)
-            if grep -q 'Avionics Retail' <<< "$retail_html" \
+            if grep -q 'Certified Retail and Experimental Avionics' <<< "$retail_html" \
               && grep -q 'g3x-touch-display-gdu-460' <<< "$retail_html" \
               && grep -q 'g5-electronic-flight-instrument-for-experimental-lsa-aircraft' <<< "$retail_html" \
-              && grep -q 'For package and special pricing please contact us' <<< "$retail_html"; then
+              && grep -q 'Product Type' <<< "$retail_html" \
+              && grep -q 'Experimental Products' <<< "$retail_html" \
+              && grep -q 'Certified Retail' <<< "$retail_html" \
+              && grep -q 'Accessories' <<< "$retail_html"; then
               break
             fi
             if [ "$attempt" -eq 12 ]; then
