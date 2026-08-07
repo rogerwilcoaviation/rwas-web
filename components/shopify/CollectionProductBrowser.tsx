@@ -125,7 +125,7 @@ function purchaseMode(product: CollectionBrowserProduct, quoteOnly: boolean) {
   if (quoteOnly || tags.includes('garmin-dealer-only') || price <= 0)
     return 'quote-request';
   if (tags.includes('otc-eligible')) return 'otc-ready';
-  return 'shopify-product';
+  return 'retail-product';
 }
 
 function countOptions(
@@ -197,7 +197,7 @@ function ProductTile({
       ? 'Quote-request item'
       : mode === 'otc-ready'
         ? 'Retail · OTC eligible'
-        : 'Shopify product';
+        : null;
   const displayImage =
     product.images?.find(
       (image) => !isShopifyPlaceholderImage(image.url, image.altText),
@@ -240,9 +240,11 @@ function ProductTile({
         </div>
       </Link>
       <div className="space-y-3 p-5">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary-900">
-          {badge}
-        </p>
+        {badge ? (
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary-900">
+            {badge}
+          </p>
+        ) : null}
         <h3 className="line-clamp-3 text-lg font-bold leading-snug text-[#111111]">
           {product.title}
         </h3>
