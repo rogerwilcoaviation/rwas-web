@@ -296,9 +296,11 @@ export default function ServicesPage() {
           <div className="fabrication-video__frame">
             <video
               className="fabrication-video__media"
+              autoPlay
+              loop
               muted
               controls
-              preload="none"
+              preload="auto"
               poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg"
               playsInline
               aria-label="RWAS fiber laser fabrication video"
