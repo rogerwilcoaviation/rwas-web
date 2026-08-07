@@ -6,6 +6,7 @@ const workerPath = resolve('.vercel/output/static/_worker.js/index.js');
 const redirects = {
   '/contact.html': '/contact',
   '/newspaper/index.html': '/',
+  '/aircraft4sale': '/aircraft-for-sale',
   '/collections/garmin-avionics': '/collections/avionics-certified',
   '/collections/garmin-avionics-certified-retail':
     '/collections/avionics-certified',
