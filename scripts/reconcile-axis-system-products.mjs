@@ -184,7 +184,9 @@ function loadEnv() {
 function parse(source, kind) {
   return source.trim().split('\n').map((line) => {
     const [step, sku, price, title] = line.split('|');
-    return { step, sku, price, title, kind };
+    const system =
+      kind === 'certified' ? 'Certified AXIS System' : 'Experimental AXIS System';
+    return { step, sku, price, title: `${system} — ${title}`, kind };
   });
 }
 
