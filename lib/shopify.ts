@@ -1307,8 +1307,9 @@ export function imageForCollection(
         'Experimental and LSA Garmin avionics supported by Roger Wilco Aviation Services',
     },
     'pilot-gear': {
-      url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth.png?v=1754905659',
-      altText: 'Pilot gear and aviation wearables from Garmin',
+      url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/GDL52Front.png?v=1786107930',
+      altText:
+        'Garmin GDL 52 portable ADS-B and SiriusXM receiver for pilots',
     },
     'watches-accessories': {
       url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth.png?v=1754905659',
@@ -1328,6 +1329,10 @@ export function imageForCollection(
       altText: 'Current Garmin sale inventory supported by RWAS',
     },
   };
+  // Pilot Gear uses John-approved GDL 52 artwork. Keep this explicit so a
+  // stale Shopify Storefront collection-image cache cannot restore the old
+  // generic banner after an Admin API update.
+  if (handle === 'pilot-gear') return fallbackByHandle[handle];
   return shopifyImage || fallbackByHandle[handle];
 }
 
