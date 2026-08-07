@@ -42,6 +42,9 @@ function placeholderImageUrl(
   handle?: string | null
 ): string {
   const haystack = `${handle || ''} ${url || ''} ${altText || ''}`;
+  if (/garmin-general-no-product-image-available/i.test(url || '')) {
+    return '/images/products/garmin-general-no-product-image-available.jpg';
+  }
   if (/papa-alpha|papa alpha|rigging-tool/i.test(haystack)) {
     return '/newspaper/images/papa_alpha_kit_collection.jpg';
   }
