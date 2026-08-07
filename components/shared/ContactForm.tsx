@@ -56,7 +56,16 @@ const contactSchema = z.object({
   name: z.string().min(2, 'Please enter your name.').max(120),
   email: z.string().email('Please enter a valid email.').max(254),
   phone: z.string().max(40).optional().or(z.literal('')),
-  aircraftMakeModel: z.string().max(120).optional().or(z.literal('')),
+  aircraftYear: z
+    .string()
+    .regex(/^\d{4}$/, 'Please enter the four-digit aircraft year.'),
+  aircraftMake: z.string().trim().min(2, 'Please enter the aircraft make.').max(80),
+  aircraftModel: z.string().trim().min(1, 'Please enter the aircraft model.').max(80),
+  aircraftSerialNumber: z
+    .string()
+    .trim()
+    .min(1, 'Please enter the aircraft serial number.')
+    .max(80),
   nNumber: z
     .string()
     .max(10)
@@ -331,13 +340,64 @@ export default function ContactForm() {
           </div>
 
           <div className="rwas-field">
-            <label htmlFor="aircraftMakeModel">Aircraft make / model</label>
+            <label htmlFor="aircraftYear">Aircraft year *</label>
             <input
-              id="aircraftMakeModel"
+              id="aircraftYear"
               type="text"
-              placeholder="e.g. Cessna 182P"
-              {...register('aircraftMakeModel')}
+              inputMode="numeric"
+              autoComplete="off"
+              placeholder="e.g. 1980"
+              maxLength={4}
+              {...register('aircraftYear')}
+              aria-invalid={Boolean(errors.aircraftYear)}
             />
+            {errors.aircraftYear ? (
+              <p className="rwas-field__error">{errors.aircraftYear.message}</p>
+            ) : null}
+          </div>
+
+          <div className="rwas-field">
+            <label htmlFor="aircraftMake">Aircraft make *</label>
+            <input
+              id="aircraftMake"
+              type="text"
+              placeholder="e.g. Cessna"
+              {...register('aircraftMake')}
+              aria-invalid={Boolean(errors.aircraftMake)}
+            />
+            {errors.aircraftMake ? (
+              <p className="rwas-field__error">{errors.aircraftMake.message}</p>
+            ) : null}
+          </div>
+
+          <div className="rwas-field">
+            <label htmlFor="aircraftModel">Aircraft model *</label>
+            <input
+              id="aircraftModel"
+              type="text"
+              placeholder="e.g. R182"
+              {...register('aircraftModel')}
+              aria-invalid={Boolean(errors.aircraftModel)}
+            />
+            {errors.aircraftModel ? (
+              <p className="rwas-field__error">{errors.aircraftModel.message}</p>
+            ) : null}
+          </div>
+
+          <div className="rwas-field">
+            <label htmlFor="aircraftSerialNumber">Aircraft serial number *</label>
+            <input
+              id="aircraftSerialNumber"
+              type="text"
+              placeholder="Enter the manufacturer serial number"
+              {...register('aircraftSerialNumber')}
+              aria-invalid={Boolean(errors.aircraftSerialNumber)}
+            />
+            {errors.aircraftSerialNumber ? (
+              <p className="rwas-field__error">
+                {errors.aircraftSerialNumber.message}
+              </p>
+            ) : null}
           </div>
 
           <div className="rwas-field">
@@ -429,8 +489,9 @@ export default function ContactForm() {
             {submitState.status === 'submitting' ? 'Sending…' : 'Send to RWAS'}
           </button>
           <p className="rwas-contact-form__fineprint">
-            Routed to <strong>avionics@rwas.team</strong>. We never share your
-            contact information.
+            Routed to <strong>avionics@rwas.team</strong>. RWAS does not sell
+            your private information, including your email address or phone
+            number. See our <a href="/privacy">Privacy Policy</a>.
           </p>
         </div>
       </form>

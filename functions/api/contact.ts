@@ -43,7 +43,10 @@ type ContactPayload = {
   name?: string;
   email?: string;
   phone?: string;
-  aircraftMakeModel?: string;
+  aircraftYear?: string;
+  aircraftMake?: string;
+  aircraftModel?: string;
+  aircraftSerialNumber?: string;
   nNumber?: string;
   preferredContact?: string;
   bestTimeToCall?: string;
@@ -138,6 +141,14 @@ function validate(payload: ContactPayload): string | null {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
     return 'Email looks invalid.';
   }
+  if (!/^\d{4}$/.test(payload.aircraftYear || '')) {
+    return 'A four-digit aircraft year is required.';
+  }
+  if (!payload.aircraftMake?.trim()) return 'Aircraft make is required.';
+  if (!payload.aircraftModel?.trim()) return 'Aircraft model is required.';
+  if (!payload.aircraftSerialNumber?.trim()) {
+    return 'Aircraft serial number is required.';
+  }
   if (!payload.message || payload.message.length < 10) {
     return 'Please include a short message so we can help.';
   }
@@ -181,12 +192,13 @@ function buildPlainTextBody(p: ContactPayload, ticketId: string): string {
   lines.push(`Prefers:   ${p.preferredContact || 'either'}`);
   if (p.bestTimeToCall) lines.push(`Best time: ${p.bestTimeToCall}`);
   lines.push('');
-  if (p.aircraftMakeModel || p.nNumber) {
-    lines.push('--- Aircraft ---');
-    if (p.aircraftMakeModel) lines.push(`Make/Model: ${p.aircraftMakeModel}`);
-    if (p.nNumber) lines.push(`N-Number:   ${p.nNumber}`);
-    lines.push('');
-  }
+  lines.push('--- Aircraft ---');
+  lines.push(`Year:          ${p.aircraftYear || ''}`);
+  lines.push(`Make:          ${p.aircraftMake || ''}`);
+  lines.push(`Model:         ${p.aircraftModel || ''}`);
+  lines.push(`Serial Number: ${p.aircraftSerialNumber || ''}`);
+  if (p.nNumber) lines.push(`N-Number:      ${p.nNumber}`);
+  lines.push('');
   lines.push('--- Message ---');
   lines.push(p.message || '');
   lines.push('');
@@ -232,7 +244,10 @@ function buildHtmlBody(p: ContactPayload, ticketId: string): string {
             ${row('Phone', p.phone)}
             ${row('Prefers', p.preferredContact)}
             ${row('Best time', p.bestTimeToCall)}
-            ${row('Aircraft', p.aircraftMakeModel)}
+            ${row('Aircraft year', p.aircraftYear)}
+            ${row('Aircraft make', p.aircraftMake)}
+            ${row('Aircraft model', p.aircraftModel)}
+            ${row('Serial number', p.aircraftSerialNumber)}
             ${row('N-Number', p.nNumber)}
             ${row('Source', p.source)}
           </table>
@@ -315,7 +330,8 @@ function buildTeamsBody(p: ContactPayload, ticketId: string): string {
     p.phone ? `Phone: ${p.phone}` : '',
     p.preferredContact ? `Prefers: ${p.preferredContact}` : '',
     p.bestTimeToCall ? `Best time: ${p.bestTimeToCall}` : '',
-    p.aircraftMakeModel ? `Aircraft: ${p.aircraftMakeModel}` : '',
+    `Aircraft: ${[p.aircraftYear, p.aircraftMake, p.aircraftModel].filter(Boolean).join(' ')}`,
+    `Serial Number: ${p.aircraftSerialNumber || ''}`,
     p.nNumber ? `N-Number: ${p.nNumber}` : '',
     p.source ? `Source: ${p.source}` : '',
     '',
