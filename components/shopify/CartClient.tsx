@@ -107,7 +107,7 @@ export default function CartClient() {
         const payload = await res.json();
         setCart(payload.cart || null);
 
-        window.dispatchEvent(new Event("rwas-cart-updated"));
+        window.dispatchEvent(new Event('rwas-cart-updated'));
         if (!payload.cart || (payload.cart.lines || []).length === 0) {
           window.localStorage.removeItem(CART_STORAGE_KEY);
         }
@@ -138,7 +138,7 @@ export default function CartClient() {
         const payload = await res.json();
         setCart(payload.cart || null);
 
-        window.dispatchEvent(new Event("rwas-cart-updated"));
+        window.dispatchEvent(new Event('rwas-cart-updated'));
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {
@@ -165,15 +165,22 @@ export default function CartClient() {
       <Specimen variant="flat">
         <div style={{ padding: '40px 24px', textAlign: 'center' }}>
           <p className="bs-kicker">Your cart is empty</p>
-          <p className="bs-script-accent">&mdash; nothing on order yet &mdash;</p>
-          <h2 className="bs-headline bs-headline--section" style={{ marginTop: 8 }}>
+          <p className="bs-script-accent">
+            &mdash; nothing on order yet &mdash;
+          </p>
+          <h2
+            className="bs-headline bs-headline--section"
+            style={{ marginTop: 8 }}
+          >
             Don’t fly single-pilot, Roger Wilco is your trusted copilot
           </h2>
           <p
             className="bs-body"
             style={{ maxWidth: 560, margin: '12px auto 24px' }}
           >
-            Start with the RWAS collections &mdash; Garmin certified avionics, watches, pilot gear, or Papa-Alpha tools &mdash; and add a few products to your cart.
+            Start with the RWAS collections &mdash; Garmin certified avionics,
+            watches, pilot gear, or Papa-Alpha tools &mdash; and add a few
+            products to your cart.
           </p>
           <div
             style={{
@@ -211,8 +218,7 @@ export default function CartClient() {
           const lineTotal =
             Number(line.merchandise.price.amount) * line.quantity;
           const variantLabel =
-            line.merchandise.title &&
-            line.merchandise.title !== 'Default Title'
+            line.merchandise.title && line.merchandise.title !== 'Default Title'
               ? line.merchandise.title
               : null;
           return (
@@ -244,12 +250,12 @@ export default function CartClient() {
                       src={productImageUrl(
                         line.merchandise.product.featuredImage.url,
                         240,
-                        line.merchandise.product.featuredImage.altText
+                        line.merchandise.product.featuredImage.altText,
                       )}
                       alt={productImageAlt(
                         line.merchandise.product.featuredImage.url,
                         line.merchandise.product.featuredImage.altText,
-                        line.merchandise.product.title
+                        line.merchandise.product.title,
                       )}
                       fill
                       sizes="120px"
@@ -258,7 +264,14 @@ export default function CartClient() {
                   ) : null}
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 6,
+                    minWidth: 0,
+                  }}
+                >
                   <Link
                     href={`/products/${encodeURIComponent(line.merchandise.product.handle)}`}
                     className="bs-product-headline"
@@ -312,7 +325,9 @@ export default function CartClient() {
                       <button
                         type="button"
                         disabled={isBusy}
-                        onClick={() => updateQuantity(line.id, line.quantity - 1)}
+                        onClick={() =>
+                          updateQuantity(line.id, line.quantity - 1)
+                        }
                         aria-label={
                           line.quantity === 1
                             ? `Remove ${line.merchandise.product.title}`
@@ -349,7 +364,9 @@ export default function CartClient() {
                       <button
                         type="button"
                         disabled={isBusy}
-                        onClick={() => updateQuantity(line.id, line.quantity + 1)}
+                        onClick={() =>
+                          updateQuantity(line.id, line.quantity + 1)
+                        }
                         aria-label={`Increase quantity of ${line.merchandise.product.title}`}
                         style={{
                           padding: '6px 14px',
@@ -462,7 +479,7 @@ export default function CartClient() {
                 fontSize: '0.85rem',
               }}
             >
-              Shipping &amp; tax are calculated at the Shopify checkout.
+              Shipping &amp; tax are calculated at secure checkout.
             </p>
 
             <a
@@ -474,7 +491,7 @@ export default function CartClient() {
                 textDecoration: 'none',
               }}
             >
-              Proceed to Shopify checkout
+              Proceed to secure checkout
             </a>
 
             <Link

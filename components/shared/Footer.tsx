@@ -1,4 +1,8 @@
-import { LandingFooter, LandingFooterColumn, LandingFooterLink } from '@/components/landing';
+import {
+  LandingFooter,
+  LandingFooterColumn,
+  LandingFooterLink,
+} from '@/components/landing';
 
 const collectionLinks = [
   {
@@ -58,9 +62,7 @@ export const Footer = ({ className }: { className?: string }) => {
         ))}
       </LandingFooterColumn>
       <LandingFooterColumn title="Company">
-        <LandingFooterLink href="/about">
-          About
-        </LandingFooterLink>
+        <LandingFooterLink href="/about">About</LandingFooterLink>
         <LandingFooterLink href="/locations/yankton">
           Yankton location
         </LandingFooterLink>
@@ -103,14 +105,14 @@ export const Footer = ({ className }: { className?: string }) => {
         <LandingFooterLink href="/services/rotax-repair">
           Rotax maintenance
         </LandingFooterLink>
-        <LandingFooterLink href="/contact">
-          Contact
-        </LandingFooterLink>
+        <LandingFooterLink href="/contact">Contact</LandingFooterLink>
       </LandingFooterColumn>
       <LandingFooterColumn title="Commerce">
-        <LandingFooterLink href="/collections">Browse collections</LandingFooterLink>
+        <LandingFooterLink href="/collections">
+          Browse collections
+        </LandingFooterLink>
         <LandingFooterLink href="https://www.rogerwilcoaviation.com/cart">
-          View Shopify cart
+          View cart
         </LandingFooterLink>
         <LandingFooterLink href="/contact?reason=quote">
           Request a quote

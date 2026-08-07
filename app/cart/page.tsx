@@ -11,7 +11,7 @@ import CartClient from '@/components/shopify/CartClient';
 
 export const metadata = {
   title: 'RWAS Cart',
-  description: 'Review your RWAS Shopify cart and continue to checkout.',
+  description: 'Review your RWAS cart and continue to secure checkout.',
   robots: { index: false, follow: false },
 };
 
@@ -26,10 +26,13 @@ export default function CartPage() {
       <main className="bs-stage">
         <section className="hero-headline-group">
           <p className="bs-kicker">The Order Desk</p>
-          <p className="bs-script-accent">&mdash; review &amp; complete your selection &mdash;</p>
+          <p className="bs-script-accent">
+            &mdash; review &amp; complete your selection &mdash;
+          </p>
           <h1 className="bs-headline bs-headline--hero">Your cart.</h1>
           <p className="bs-subhead">
-            Adjust quantities, remove items, then hand off to Shopify checkout when ready.
+            Adjust quantities, remove items, then continue to secure checkout
+            when ready.
           </p>
           <p className="bs-byline">
             RWAS Avionics Desk &middot; the Northern Plains

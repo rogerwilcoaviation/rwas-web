@@ -1085,8 +1085,8 @@ export default async function ProductDetailPage({
                 Product temporarily unavailable
               </h2>
               <p className="bs-product-subhead">
-                We could not load this product from Shopify right now. Please
-                try again shortly, or call (605) 299-8178.
+                We could not load this product right now. Please try again
+                shortly, or call (605) 299-8178.
               </p>
               <div className="bs-cta-row bs-cta-row--single">
                 <Link className="bs-cta-primary" href="/collections">
@@ -1152,16 +1152,16 @@ export default async function ProductDetailPage({
   const cleanDescText = isAxisSystemListing
     ? ''
     : showDualG5KitDetails
-    ? 'A complete certified dual-display package for an electronic attitude indicator and HSI configuration.'
-    : showPa31RudderTrimApplicability || showPapaAlphaApplicability
-      ? papaAlphaApplicabilityIntro(product) || PA31_RUDDER_TRIM_INTRO
-      : (product.description || '')
-          .replace(/^[^\n]*Buy\s*&\s*Save rebate form\.?\s*\n*/i, '')
-          .replace(
-            /Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi,
-            '',
-          )
-          .trim();
+      ? 'A complete certified dual-display package for an electronic attitude indicator and HSI configuration.'
+      : showPa31RudderTrimApplicability || showPapaAlphaApplicability
+        ? papaAlphaApplicabilityIntro(product) || PA31_RUDDER_TRIM_INTRO
+        : (product.description || '')
+            .replace(/^[^\n]*Buy\s*&\s*Save rebate form\.?\s*\n*/i, '')
+            .replace(
+              /Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi,
+              '',
+            )
+            .trim();
   const breadcrumbs = ['Pilot Shop', productTypeLabel, vendor].filter(Boolean);
 
   // Variant payload for the client component — keep only what we need.
