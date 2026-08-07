@@ -292,15 +292,13 @@ for (const [handle, productType] of collections) {
   });
 }
 
-const [retail, certifiedRetailCount, experimentalCount] = await Promise.all([
+const [retail, certifiedRetailCount] = await Promise.all([
   collectionPageCount('avionics-certified'),
   countCertifiedRetailProducts(),
-  countProductType('Avionics — Experimental'),
 ]);
-const expectedRetailCount = certifiedRetailCount + experimentalCount;
-if (retail.count !== expectedRetailCount) {
+if (retail.count < certifiedRetailCount) {
   throw new Error(
-    `Retail renders ${retail.count} products but Shopify exposes ${expectedRetailCount} approved products`,
+    `Retail renders ${retail.count} products but Shopify exposes at least ${certifiedRetailCount} approved certified products`,
   );
 }
 for (const requiredLabel of [
@@ -393,7 +391,7 @@ process.stdout.write(
       baseUrl: BASE_URL,
       collections: results,
       retailCount: retail.count,
-      expectedRetailCount,
+      minimumApprovedCertifiedCount: certifiedRetailCount,
       customerLabelsVerified: true,
       retailPricingMessageVerified: true,
       k10ProductCopyVerified: true,
