@@ -14,9 +14,9 @@
   "articles": [
     {
       "id": "build-your-garmin-axis-panel-with-rwas-20260807",
-      "status": "draft",
+      "status": "published",
       "category": "product-update",
-      "title": "Build Your Garmin AXIS Panel with the New RWAS Build-A-System Planner",
+      "title": "Axis Build-A-System Planner by RWAS",
       "subtitle": "Compare certified and experimental AXIS components, follow Garmin's system-building sequence, and send your completed panel plan to RWAS for a compatibility review and special pricing.",
       "author": "Roger Wilco Aviation Services",
       "byline": "RWAS Avionics Desk",
@@ -37,16 +37,17 @@
       ],
       "social": {
         "facebook": {
-          "text": "Draft pending article approval.",
-          "status": "pending"
+          "text": "Axis Build-A-System Planner by RWAS\n\nPlanning a Garmin AXIS panel? Start with the aircraft, not the boxes.\n\nThe new RWAS interactive planner walks owners through certified or experimental AXIS system choices in Garmin's build sequence, shows a running retail hardware total, and sends the completed build to RWAS for compatibility review and special pricing.\n\nBuild your system and read the full article:\nhttps://www.rogerwilcoaviation.com/blog/build-your-garmin-axis-panel-with-rwas-20260807\n\n#GarminAviation #Avionics #AircraftUpgrade #CertifiedAircraft #ExperimentalAircraft #RWAS",
+          "status": "approved"
         },
         "instagram": {
-          "text": "Draft pending article approval.",
-          "status": "pending"
+          "text": "Axis Build-A-System Planner by RWAS\n\nPlanning a Garmin AXIS panel? Start with the aircraft, not the boxes.\n\nChoose the certified or experimental path, follow Garmin's build sequence, see a running retail hardware total, and submit the completed build to RWAS for compatibility review and special pricing.\n\nRead the article and build your system:\nhttps://www.rogerwilcoaviation.com/blog/build-your-garmin-axis-panel-with-rwas-20260807\n\n#GarminAviation #Avionics #AircraftUpgrade #CertifiedAircraft #ExperimentalAircraft #RWAS",
+          "status": "approved",
+          "image_url": "https://www.rogerwilcoaviation.com/images/blog/axis-build-planner-display-family-20260807.jpg"
         }
       },
-      "image": "/images/blog/axis-build-planner-cockpit-20260807.jpg",
-      "image_alt": "Garmin AXIS flight displays installed in a modern aircraft cockpit.",
+      "image": "/images/blog/axis-build-planner-display-family-20260807.jpg",
+      "image_alt": "Garmin AXIS flight display family with 8-inch landscape, 11.6-inch landscape, and 8-inch portrait formats.",
       "video_url": "https://www.youtube.com/embed/FDOAZaxjL-I",
       "video_title": "Garmin AXIS Flight Displays: The Center of Your Panel"
     },
