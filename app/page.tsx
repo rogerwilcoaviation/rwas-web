@@ -147,48 +147,68 @@ export default function Home() {
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Lead Story</span>
               <h1 className="bs-headline bs-headline--section">
-                Full-Spectrum Repair Station in Yankton
+                Introducing the AXIS Build-A-System Planner
               </h1>
               <hr className="section-rule" />
 
-              {/* Hero photo — Cessna 182RG G500TXi install */}
+              {/* Hero photo — Garmin AXIS flight display family */}
               <Specimen
                 variant="flat"
                 as="figure"
                 className="bs-specimen-figure"
               >
                 <Specimen.Image
-                  src="/newspaper/images/r182_panel.webp"
-                  alt="Full Garmin G500TXi Suite installation in a Cessna 182RG"
-                  width={1200}
-                  height={750}
+                  src="/images/axis/garmin-axis-flight-displays-build-system.jpg"
+                  alt="Garmin AXIS 8-inch portrait, 11.6-inch, and 8-inch landscape flight displays"
+                  width={1600}
+                  height={731}
                   fetchPriority="high"
                   decoding="async"
                 />
                 <Specimen.CaptionRule />
                 <Specimen.Caption numeral="FIG. 02">
-                  Cessna 182RG &mdash; full Garmin G500TXi Suite installation by
-                  RWAS.
+                  Garmin AXIS flight displays &mdash; available for certified
+                  and experimental panel builds through RWAS.
                 </Specimen.Caption>
               </Specimen>
 
               <div className="bs-body">
                 <p className="bs-drop">
-                  Roger Wilco Aviation Services is an FAA-certificated repair
-                  station at KYKN in Yankton, providing full-spectrum
-                  airframe, powerplant, avionics, and non-destructive testing
-                  services to general aviation, corporate, and commercial
-                  operators across the Northern Plains. Operating under
-                  Certificate No. RWSR491E, the station is authorized for a
-                  complete range of maintenance, repair, and alteration work.
+                  The new RWAS AXIS Build-A-System Planner gives aircraft owners
+                  a guided way to design a Garmin AXIS panel before requesting a
+                  formal quote. Choose the certified or experimental path, work
+                  through Garmin&rsquo;s recommended build sequence, compare
+                  compatible displays and supporting hardware, and watch the
+                  retail total update as the system takes shape.
                 </p>
                 <p>
-                  Under the direction of John Halsted &mdash; with more than 40
-                  years of aviation experience &mdash; RWAS delivers sheet metal
-                  fabrication, structural repair, and complete Garmin avionics
-                  installations including the G3X Touch suite, GTN navigator
-                  series, and GFC 500 autopilot.
+                  Each completed build can be submitted directly to Roger Wilco
+                  Aviation Services for compatibility review and special
+                  pricing. RWAS will review the aircraft, mission, certification
+                  path, installation requirements, and selected equipment before
+                  preparing the next step.
                 </p>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 10,
+                    marginTop: 16,
+                  }}
+                >
+                  <a
+                    href="/axis-system-planner/certified"
+                    className="bs-cta-primary"
+                  >
+                    Build a Certified AXIS System
+                  </a>
+                  <a
+                    href="/axis-system-planner/experimental"
+                    className="bs-cta-secondary"
+                  >
+                    Build an Experimental AXIS System
+                  </a>
+                </div>
               </div>
             </Specimen>
 
