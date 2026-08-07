@@ -76,7 +76,7 @@ export default function ProductCard({
     ? 'Quote-request item'
     : otcEligible
       ? 'In stock \u00b7 OTC'
-      : 'Shopify product';
+      : null;
   const displayImage =
     product.images?.find(
       (image) => !isShopifyPlaceholderImage(image.url, image.altText),
@@ -116,10 +116,14 @@ export default function ProductCard({
       </Link>
       <div className="space-y-4 p-6">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-900">
-            {badgeLabel}
-          </p>
-          <h3 className="mt-2 line-clamp-3 text-xl font-bold leading-snug text-[#111111]">
+          {badgeLabel ? (
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-primary-900">
+              {badgeLabel}
+            </p>
+          ) : null}
+          <h3
+            className={`${badgeLabel ? 'mt-2 ' : ''}line-clamp-3 text-xl font-bold leading-snug text-[#111111]`}
+          >
             {product.title}
           </h3>
           {price ? (
