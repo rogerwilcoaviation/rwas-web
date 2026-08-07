@@ -1,7 +1,4 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { deferUntilIdle } from '@/components/shared/deferUntilIdle';
+import articleData from '../../public/blog-articles.json';
 
 type Article = {
   id: string;
@@ -21,43 +18,10 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export default function BlogArticlesFeed() {
-  const [articles, setArticles] = useState<Article[] | null>(null);
-
-  useEffect(() => {
-    let alive = true;
-    const cancelDeferredFetch = deferUntilIdle(() => {
-      fetch('/blog-articles.json')
-        .then((r) => r.json())
-        .then((data: { articles?: Article[] }) => {
-          if (!alive) return;
-          const list = (data.articles || [])
-            .filter((a) => a.status === 'published')
-            .sort((a, b) => b.date.localeCompare(a.date))
-            .slice(0, 3);
-          setArticles(list);
-        })
-        .catch(() => {
-          if (alive) setArticles([]);
-        });
-    });
-    return () => {
-      alive = false;
-      cancelDeferredFetch();
-    };
-  }, []);
-
-  if (articles === null) {
-    return (
-      <div
-        role="status"
-        aria-busy="true"
-        aria-label="Loading latest articles"
-        style={{ minHeight: '320px' }}
-      >
-        <span className="bs-kicker">Loading&hellip;</span>
-      </div>
-    );
-  }
+  const articles = ((articleData as { articles?: Article[] }).articles || [])
+    .filter((article) => article.status === 'published')
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, 3);
 
   if (!articles.length) {
     return null;

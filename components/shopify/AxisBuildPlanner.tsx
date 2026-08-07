@@ -234,14 +234,22 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
             </ul>
           </div>
         ) : null}
-        <a
-          href={`/contact?reason=quote&product=${encodeURIComponent(`AXIS ${kind === 'certified' ? 'Certified' : 'Experimental'} System Build`)}&source=axis-build-planner&draft=axis`}
-          onClick={submitBuild}
-          aria-disabled={!selectedItems.length}
-          className={`bs-cta-primary mt-6 inline-flex ${selectedItems.length ? '' : 'pointer-events-none opacity-50'}`}
-        >
-          Submit Your Build to RWAS for Special Pricing
-        </a>
+        {selectedItems.length ? (
+          <a
+            href={`/contact?reason=quote&product=${encodeURIComponent(`AXIS ${kind === 'certified' ? 'Certified' : 'Experimental'} System Build`)}&source=axis-build-planner&draft=axis`}
+            onClick={submitBuild}
+            className="bs-cta-primary mt-6 inline-flex"
+          >
+            Submit Your Build to RWAS for Special Pricing
+          </a>
+        ) : (
+          <span
+            aria-disabled="true"
+            className="bs-cta-primary mt-6 inline-flex cursor-not-allowed opacity-50"
+          >
+            Select hardware before submitting
+          </span>
+        )}
         <p className="mt-3 text-sm text-neutral-600">
           Your submitted build is delivered to the RWAS Avionics Desk by email
           and to Shop Talk in Microsoft Teams.

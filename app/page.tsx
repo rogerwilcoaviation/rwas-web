@@ -22,9 +22,8 @@ export const metadata = genPageMetadata({
 
 /*
  * / (Home) — Ship 3 Tranche B production migration.
- * Dynamic feeds (#aircraft-sale-feed and #blog-articles-feed) are hydrated
- * client-side from the legacy JSON/API endpoints, rendered with the bs-*
- * broadsheet chrome classes.
+ * Homepage aircraft and article feeds are server-rendered so customers and
+ * search crawlers receive useful links even when client JavaScript is delayed.
  */
 export default function Home() {
   return (

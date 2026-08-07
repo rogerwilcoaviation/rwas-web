@@ -28,6 +28,7 @@ import {
   truncateMeta,
 } from '@/lib/seo';
 import { serviceLinksForCollection } from '@/lib/service-links';
+import { isShopifyPlaceholderImage } from '@/lib/product-image';
 
 const FALLBACK_COLLECTION_HANDLES = [
   'avionics-certified',
@@ -68,7 +69,7 @@ export async function generateMetadata({
 
     const title =
       collection.handle === 'papa-alpha-tools'
-        ? 'Piper Rigging Tools — Papa-Alpha | RWAS'
+        ? 'Shop Piper Rigging Tools — Papa-Alpha | RWAS'
         : collectionSeoTitle(collection.title);
     const description = collectionMetaDescription(collection);
     const url = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
@@ -155,8 +156,8 @@ export default async function CollectionDetailPage({
               Collection Not Found
             </h1>
             <p className="bs-subhead">
-              We could not load this collection from Shopify right now. Please
-              try again shortly.
+              We could not load this collection right now. Please try again
+              shortly.
             </p>
           </section>
           <Specimen variant="flat">
@@ -194,16 +195,44 @@ export default async function CollectionDetailPage({
       handle: product.handle,
       vendor: product.vendor,
       productType: product.productType,
-      description: product.description,
-      tags: product.tags,
-      featuredImage: product.featuredImage,
-      price: product.priceRange.minVariantPrice.amount,
-      currencyCode: product.priceRange.minVariantPrice.currencyCode,
       skus: (product.variants || [])
         .map((variant) => variant.sku || '')
         .filter(Boolean),
     }),
   );
+  const browserProducts = indexableProducts.map((product) => {
+    const displayImage =
+      product.images?.find(
+        (image) => !isShopifyPlaceholderImage(image.url, image.altText),
+      ) ??
+      product.variants
+        ?.map((variant) => variant.image)
+        .find(
+          (image) =>
+            image?.url && !isShopifyPlaceholderImage(image.url, image.altText),
+        ) ??
+      product.featuredImage;
+    const firstVariant = product.variants?.[0];
+    return {
+      id: product.id,
+      title: product.title,
+      handle: product.handle,
+      vendor: product.vendor,
+      productType: product.productType,
+      tags: product.tags,
+      featuredImage: displayImage,
+      variants: firstVariant
+        ? [
+            {
+              id: firstVariant.id,
+              sku: firstVariant.sku,
+              availableForSale: firstVariant.availableForSale,
+            },
+          ]
+        : [],
+      priceRange: product.priceRange,
+    };
+  });
   const quoteOnly = isQuoteCollection(collection.handle);
   const relatedServiceLinks = serviceLinksForCollection(
     collection.handle,
@@ -277,7 +306,7 @@ export default async function CollectionDetailPage({
           <h1 className="bs-headline bs-headline--hero">{collection.title}</h1>
           <p className="bs-subhead">
             {collection.description ||
-              'Live product listing from the Shopify Storefront API.'}
+              'Current products, availability, and purchase options from RWAS.'}
           </p>
           <p className="bs-byline">
             {collection.handle === 'avionics-certified'
@@ -379,13 +408,13 @@ export default async function CollectionDetailPage({
                 ? 'These are install-only or quote-driven items. Use the request-quote CTA to start the conversation.'
                 : collection.handle === 'avionics-certified'
                   ? 'Choose Experimental Products, Certified Retail, or Accessories below. Current retail prices are shown; contact RWAS for package and special pricing.'
-                  : 'These products are browsable directly from live Shopify data.'}
+                  : 'Browse current products, availability, and purchase options below.'}
             </p>
           </div>
 
           {indexableProducts.length ? (
             <CollectionProductBrowser
-              products={indexableProducts}
+              products={browserProducts}
               collectionTitle={collection.title}
               collectionHandle={collection.handle}
               quoteOnly={quoteOnly}
@@ -393,6 +422,33 @@ export default async function CollectionDetailPage({
           ) : (
             <p className="bs-body">No products in this collection yet.</p>
           )}
+
+          {indexableProducts.length > 24 ? (
+            <details className="mt-10 rounded-xl border border-black/15 bg-[#f8f4e8] p-5">
+              <summary className="cursor-pointer font-bold text-[#111111]">
+                Complete product index (
+                {indexableProducts.length.toLocaleString('en-US')})
+              </summary>
+              <p className="bs-body mt-3">
+                Browse every item in this collection alphabetically. This index
+                remains usable when filtering scripts are unavailable.
+              </p>
+              <ul className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
+                {[...indexableProducts]
+                  .sort((a, b) => a.title.localeCompare(b.title))
+                  .map((product) => (
+                    <li key={product.id}>
+                      <Link
+                        href={`/products/${encodeURIComponent(product.handle)}`}
+                        className="underline decoration-black/30 underline-offset-2 hover:decoration-[#C49A2A]"
+                      >
+                        {product.title}
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+            </details>
+          ) : null}
         </Specimen>
       </main>
       <BroadsheetFooter />

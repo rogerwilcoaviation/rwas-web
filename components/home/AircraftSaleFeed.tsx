@@ -1,8 +1,4 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { deferUntilIdle } from '@/components/shared/deferUntilIdle';
 
 type Listing = {
   id: string;
@@ -16,12 +12,6 @@ type Listing = {
   logbooks?: Record<string, unknown[] | null>;
 };
 
-type FeedState =
-  | { status: 'loading' }
-  | { status: 'error' }
-  | { status: 'empty' }
-  | { status: 'ready'; listings: Listing[] };
-
 const LOADING_STYLE: React.CSSProperties = {
   fontStyle: 'italic',
   fontSize: '12px',
@@ -29,88 +19,33 @@ const LOADING_STYLE: React.CSSProperties = {
   padding: '8px 0',
 };
 
-export default function AircraftSaleFeed() {
-  const [state, setState] = useState<FeedState>({ status: 'loading' });
-
-  useEffect(() => {
-    let alive = true;
-    const cancelDeferredFetch = deferUntilIdle(() => {
-      fetch('https://sale-api.rogerwilcoaviation.com/browse?include=sold')
-        .then((r) => r.json())
-        .then((data: { listings?: Listing[] }) => {
-          if (!alive) return;
-          // Sold aircraft stay listed (John, 2026-07-26) — they carry a SOLD
-          // ribbon rather than disappearing. Active listings sort first so the
-          // buyable inventory leads.
-          const listings = (data.listings || [])
-            .filter((l) => !l.status || l.status === 'active' || l.status === 'sold')
-            .sort((a, b) => {
-              const aSold = a.status === 'sold' ? 1 : 0;
-              const bSold = b.status === 'sold' ? 1 : 0;
-              return aSold - bSold;
-            })
-            .slice(0, 4);
-          if (!listings.length) {
-            setState({ status: 'empty' });
-          } else {
-            setState({ status: 'ready', listings });
-          }
-        })
-        .catch(() => {
-          if (alive) setState({ status: 'error' });
-        });
-    });
-    return () => {
-      alive = false;
-      cancelDeferredFetch();
-    };
-  }, []);
-
-  if (state.status === 'loading') {
-    return (
-      <div
-        role="status"
-        aria-busy="true"
-        aria-label="Loading aircraft listings"
-        style={{
-          display: 'grid',
-          gap: '8px',
-          minHeight: '260px',
-          padding: '4px 0',
-        }}
-      >
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            style={{
-              height: i === 0 ? '120px' : '52px',
-              borderRadius: '2px',
-              background:
-                'linear-gradient(90deg, #ececec 25%, #f5f5f5 50%, #ececec 75%)',
-              backgroundSize: '200% 100%',
-              animation: 'bsShimmer 1.2s ease-in-out infinite',
-              width: i === 2 ? '70%' : '100%',
-            }}
-          />
-        ))}
-        <style>
-          {
-            '@keyframes bsShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}'
-          }
-        </style>
-      </div>
+async function getHomepageListings(): Promise<Listing[]> {
+  try {
+    const response = await fetch(
+      'https://sale-api.rogerwilcoaviation.com/browse?include=sold',
+      { next: { revalidate: 60 } },
     );
+    if (!response.ok) return [];
+    const data = (await response.json()) as { listings?: Listing[] };
+    // Sold aircraft stay listed (John, 2026-07-26) and follow active inventory.
+    return (data.listings || [])
+      .filter(
+        (listing) =>
+          !listing.status ||
+          listing.status === 'active' ||
+          listing.status === 'sold',
+      )
+      .sort((a, b) => Number(a.status === 'sold') - Number(b.status === 'sold'))
+      .slice(0, 4);
+  } catch {
+    return [];
   }
+}
 
-  if (state.status === 'error') {
-    return (
-      <div style={{ fontStyle: 'italic', fontSize: '12px', color: '#888' }}>
-        Could not load listings.
-      </div>
-    );
-  }
+export default async function AircraftSaleFeed() {
+  const listings = await getHomepageListings();
 
-  if (state.status === 'empty') {
+  if (!listings.length) {
     return (
       <div style={LOADING_STYLE}>
         No aircraft currently listed.{' '}
@@ -126,7 +61,7 @@ export default function AircraftSaleFeed() {
 
   return (
     <>
-      {state.listings.map((l) => {
+      {listings.map((l) => {
         const priceRaw = l.price ? String(l.price).replace(/[^0-9]/g, '') : '';
         const price = priceRaw
           ? '$' + parseInt(priceRaw, 10).toLocaleString()
@@ -149,10 +84,7 @@ export default function AircraftSaleFeed() {
             className="bs-listing"
             aria-label={`${(l.make || '') + ' ' + (l.model || '')}, ${isSold ? 'sold' : price}`}
           >
-            <div
-              className="bs-listing__img"
-              style={{ position: 'relative' }}
-            >
+            <div className="bs-listing__img" style={{ position: 'relative' }}>
               {isSold && (
                 <span
                   style={{
