@@ -51,8 +51,11 @@ function formatInlineMarkdown(text: string) {
       (_match, label: string, href: string) => {
         const isAxisPlanner = href.includes('/axis-system-planner/');
         const className = isAxisPlanner ? ' class="np-axis-planner-cta"' : '';
+        const inlineStyle = isAxisPlanner
+          ? ' style="display:inline-flex;align-items:center;justify-content:space-between;gap:18px;width:100%;max-width:430px;box-sizing:border-box;padding:13px 16px;border:2px solid #151515;background:#d8a928;color:#151515;font-family:Arial,sans-serif;font-size:14px;font-weight:800;line-height:1.2;letter-spacing:.04em;text-decoration:none;text-transform:uppercase;box-shadow:4px 4px 0 #151515;"'
+          : '';
         const arrow = isAxisPlanner ? '<span aria-hidden="true">\u2192</span>' : '';
-        return `<a href="${href}"${className} target="_blank" rel="noreferrer">${label}${arrow}</a>`;
+        return `<a href="${href}"${className}${inlineStyle} target="_blank" rel="noreferrer">${label}${arrow}</a>`;
       },
     );
 }
