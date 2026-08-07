@@ -7,7 +7,7 @@ const ENV_PATH =
   '/Users/rwas/.openclaw/workspace/configs/shopify.env';
 
 const VIDEO =
-  '<iframe width="560" height="315" src="https://www.youtube.com/embed/icZaA26jAKw?si=Wk9yWojXFjnuTzQv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+  '<iframe width="560" height="315" src="https://www.youtube.com/embed/wSNBjrGqaRg?si=lhtGPB4emBmDOCUj" title="AXIS Flight Displays MFD Demonstration | Garmin" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
 
 const IMAGES = [
   'https://res.garmin.com/www/aviation/80686/80686-hero-desktop.jpg',
