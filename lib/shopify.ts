@@ -1298,9 +1298,9 @@ export function imageForCollection(
 ): ShopifyImage | null | undefined {
   const fallbackByHandle: Record<string, ShopifyImage> = {
     'avionics-certified': {
-      url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth_ad7c40ee-efc6-4cb2-bcc8-67b2140557d4.png?v=1754905863',
+      url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/certified-retail-experimental-avionics-garmin-display.jpg?v=1786110414',
       altText:
-        'Certified and experimental Garmin avionics sold by Roger Wilco Aviation Services',
+        'Garmin integrated flight display for certified retail and experimental avionics',
     },
     'avionics-experimental': {
       url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth_cdc37a0b-a976-4c50-93e4-59d3c68337c1.png?v=1754906168',
@@ -1330,10 +1330,12 @@ export function imageForCollection(
       altText: 'Current Garmin sale inventory supported by RWAS',
     },
   };
-  // Pilot Gear uses John-approved GDL 52 artwork. Keep this explicit so a
-  // stale Shopify Storefront collection-image cache cannot restore the old
-  // generic banner after an Admin API update.
-  if (handle === 'pilot-gear') return fallbackByHandle[handle];
+  // These collections use John-approved artwork. Keep the overrides explicit
+  // so stale Shopify Storefront collection-image caches cannot restore the
+  // previous generic banners after an Admin API update.
+  if (handle === 'avionics-certified' || handle === 'pilot-gear') {
+    return fallbackByHandle[handle];
+  }
   return shopifyImage || fallbackByHandle[handle];
 }
 
