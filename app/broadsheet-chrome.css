@@ -1807,6 +1807,58 @@ body {
   opacity: 1;
   text-decoration: underline;
 }
+
+/* AXIS article planner links are primary actions, not incidental citations. */
+.broadsheet .np-axis-planner-cta-list {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 22px !important;
+  padding: 0;
+  list-style: none;
+}
+
+.broadsheet .np-axis-planner-cta-list > li {
+  margin: 0 !important;
+}
+
+.broadsheet .np-axis-planner-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-width: min(100%, 430px);
+  padding: 13px 16px;
+  border: 2px solid #151515;
+  background: #d8a928;
+  color: #151515 !important;
+  font-family: var(--font-sans, Arial, sans-serif);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-decoration: none !important;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 #151515;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+
+.broadsheet .np-axis-planner-cta:hover,
+.broadsheet .np-axis-planner-cta:focus-visible {
+  background: #f1c84b;
+  box-shadow: 2px 2px 0 #151515;
+  transform: translate(2px, 2px);
+}
+
+.broadsheet .np-axis-planner-cta:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+.broadsheet .np-axis-planner-cta span {
+  flex: 0 0 auto;
+  font-size: 22px;
+  line-height: 0.8;
+}
 .broadsheet .bs-footer__sep {
   color: var(--gold-700);
   opacity: 0.7;

@@ -48,7 +48,12 @@ function formatInlineMarkdown(text: string) {
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(
       /\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noreferrer">$1</a>',
+      (_match, label: string, href: string) => {
+        const isAxisPlanner = href.includes('/axis-system-planner/');
+        const className = isAxisPlanner ? ' class="np-axis-planner-cta"' : '';
+        const arrow = isAxisPlanner ? '<span aria-hidden="true">\u2192</span>' : '';
+        return `<a href="${href}"${className} target="_blank" rel="noreferrer">${label}${arrow}</a>`;
+      },
     );
 }
 
@@ -73,8 +78,11 @@ function renderMarkdownBody(markdown?: string) {
 
   const flushList = () => {
     if (!listItems.length) return;
+    const isPlannerCtaList = listItems.every((item) =>
+      item.includes('/axis-system-planner/'),
+    );
     blocks.push(
-      `<ul style="margin:10px 0 10px 22px;">${listItems
+      `<ul${isPlannerCtaList ? ' class="np-axis-planner-cta-list"' : ''} style="margin:10px 0 10px 22px;">${listItems
         .map(
           (item) =>
             `<li class="np-body-text" style="text-align:left; margin:4px 0;">${formatInlineMarkdown(item)}</li>`,
