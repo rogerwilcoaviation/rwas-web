@@ -575,6 +575,16 @@ function buildPlan(products, collections, publications) {
   const blockers = [];
 
   for (const product of products) {
+    // AXIS Build-A-System listings are intentionally certification-specific.
+    // The same Garmin package SKU can carry different certified MSRP and
+    // experimental pricing, so the dedicated AXIS reconciler owns their
+    // product type, tags, collections, and pricing.
+    if (
+      product.handle.startsWith('garmin-axis-certified-') ||
+      product.handle.startsWith('garmin-axis-experimental-')
+    ) {
+      continue;
+    }
     const record = makePlanRecord(product);
     normalizeRetailTags(record);
 
