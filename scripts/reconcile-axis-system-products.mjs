@@ -256,19 +256,29 @@ function audit(items, state) {
   return items.map((item) => {
     const handle = handleFor(item);
     const product = state.products.get(handle);
-    const expectedCollection = item.kind === 'certified' ? 'garmin-dealer-install' : 'avionics-experimental';
+    const expectedCollections = item.kind === 'certified'
+      ? ['garmin-dealer-install']
+      : ['avionics-experimental'];
     const expectedType = item.kind === 'certified' ? 'Garmin Dealer Install' : 'Avionics — Experimental';
-    const tags = ['Garmin', 'AXIS', `garmin-family:axis`, `garmin-subcategory:axis-step-${item.step.toLowerCase()}-${slug(stepLabel(item.step))}`, item.kind === 'certified' ? 'dealer-install-only' : 'experimental-retail'];
+    const tags = [
+      'Garmin',
+      'AXIS',
+      'garmin-family:axis',
+      `garmin-subcategory:axis-step-${item.step.toLowerCase()}-${slug(stepLabel(item.step))}`,
+      ...(item.kind === 'certified'
+        ? ['dealer-install-only']
+        : ['experimental-retail', 'otc-eligible']),
+    ];
     const variant = product?.variants.nodes[0];
     const changes = [];
     if (!product) changes.push('create');
     else {
       if (product.title !== item.title || product.productType !== expectedType || product.status !== 'ACTIVE' || product.descriptionHtml !== description(item)) changes.push('product');
       if (variant?.sku !== item.sku || Number(variant?.price) !== Number(item.price)) changes.push('variant');
-      if (!product.collections.nodes.some((node) => node.handle === expectedCollection)) changes.push('collection');
+      if (expectedCollections.some((handle) => !product.collections.nodes.some((node) => node.handle === handle))) changes.push('collection');
       if (product.media.nodes.length < IMAGES.length) changes.push('media');
     }
-    return { ...item, handle, expectedCollection, expectedType, tags, product, variant, changes };
+    return { ...item, handle, expectedCollections, expectedType, tags, product, variant, changes };
   });
 }
 
@@ -330,9 +340,11 @@ async function apply(records, state) {
     await updateVariant(product.id, variantId, record);
     await updateSku(inventoryItemId, record.sku);
     if (record.changes.includes('collection') || record.changes.includes('create')) {
-      const collection = state.collections.get(record.expectedCollection);
-      if (!collection) throw new Error(`Required collection missing: ${record.expectedCollection}`);
-      if (!collection.ruleSet) await addCollection(product.id, collection.id);
+      for (const handle of record.expectedCollections) {
+        const collection = state.collections.get(handle);
+        if (!collection) throw new Error(`Required collection missing: ${handle}`);
+        if (!collection.ruleSet) await addCollection(product.id, collection.id);
+      }
     }
     if (record.changes.includes('media') || record.changes.includes('create')) await addMedia(product.id, record);
     await publish(product.id, state.publications);
