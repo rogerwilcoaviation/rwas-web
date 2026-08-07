@@ -100,6 +100,56 @@ export default async function CollectionsPage() {
       <CredentialsBar />
       <BulletinBar />
       <main className="bs-stage">
+        {finderProducts.length ? (
+          <Specimen variant="flat">
+            <PartFinder products={finderProducts} scopeLabel="RWAS catalog" />
+          </Specimen>
+        ) : null}
+
+        <Specimen variant="flat">
+          <div style={{ marginBottom: 20 }}>
+            <p className="bs-kicker">Featured collections</p>
+            <p className="bs-body" style={{ marginTop: 4 }}>
+              Each card links into a live collection page with current prices,
+              availability, and inventory.
+            </p>
+          </div>
+
+          {collections.length ? (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {collections.map((collection) => (
+                <CollectionCard key={collection.id} collection={collection} />
+              ))}
+            </div>
+          ) : (
+            <div>
+              <p className="bs-kicker">Temporarily unavailable</p>
+              <h2 className="bs-headline" style={{ marginTop: 4 }}>
+                Collections could not load
+              </h2>
+              <p className="bs-body" style={{ marginTop: 8 }}>
+                Collection data did not return just now. Try again shortly, or
+                reach out and we can pull a part by number.
+              </p>
+              <div
+                style={{
+                  marginTop: 16,
+                  display: 'flex',
+                  gap: 12,
+                  flexWrap: 'wrap',
+                }}
+              >
+                <Link href="/shop-capabilities" className="bs-cta-primary">
+                  Shop capabilities
+                </Link>
+                <Link href="/about" className="bs-cta-secondary">
+                  Contact RWAS
+                </Link>
+              </div>
+            </div>
+          )}
+        </Specimen>
+
         <section className="hero-headline-group">
           <p className="bs-kicker">Live collections</p>
           <h1 className="bs-headline bs-headline--hero">
@@ -164,56 +214,6 @@ export default async function CollectionsPage() {
               </li>
             ))}
           </ul>
-        </Specimen>
-
-        {finderProducts.length ? (
-          <Specimen variant="flat">
-            <PartFinder products={finderProducts} scopeLabel="RWAS catalog" />
-          </Specimen>
-        ) : null}
-
-        <Specimen variant="flat">
-          <div style={{ marginBottom: 20 }}>
-            <p className="bs-kicker">Featured collections</p>
-            <p className="bs-body" style={{ marginTop: 4 }}>
-              Each card links into a live collection page with current prices,
-              availability, and inventory.
-            </p>
-          </div>
-
-          {collections.length ? (
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {collections.map((collection) => (
-                <CollectionCard key={collection.id} collection={collection} />
-              ))}
-            </div>
-          ) : (
-            <div>
-              <p className="bs-kicker">Temporarily unavailable</p>
-              <h2 className="bs-headline" style={{ marginTop: 4 }}>
-                Collections could not load
-              </h2>
-              <p className="bs-body" style={{ marginTop: 8 }}>
-                Collection data did not return just now. Try again shortly, or
-                reach out and we can pull a part by number.
-              </p>
-              <div
-                style={{
-                  marginTop: 16,
-                  display: 'flex',
-                  gap: 12,
-                  flexWrap: 'wrap',
-                }}
-              >
-                <Link href="/shop-capabilities" className="bs-cta-primary">
-                  Shop capabilities
-                </Link>
-                <Link href="/about" className="bs-cta-secondary">
-                  Contact RWAS
-                </Link>
-              </div>
-            </div>
-          )}
         </Specimen>
       </main>
       <BroadsheetFooter />
