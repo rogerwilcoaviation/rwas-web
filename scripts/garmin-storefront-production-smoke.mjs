@@ -310,9 +310,7 @@ for (const requiredLabel of [
     throw new Error(`Retail collection is missing label: ${requiredLabel}`);
   }
 }
-if (
-  !retail.text.includes('For package and special pricing please contact us')
-) {
+if (!retail.text.includes('contact RWAS for package and special pricing')) {
   throw new Error('Retail collection is missing the package-pricing message');
 }
 
