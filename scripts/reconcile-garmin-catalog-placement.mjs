@@ -181,6 +181,7 @@ const PORTABLE_MOUNT_SKUS = new Set([
 // words such as "mount", "connector kit", or "mounting kit" that would
 // otherwise resemble installation hardware.
 const PILOT_GEAR_PRODUCT_HANDLES = new Set([
+  'gdl-52',
   'garmin-ac-adapter-010-11385-04',
   'garmin-ac-adapter-010-12180-01',
   'ac-adapter-with-international-adapter',
