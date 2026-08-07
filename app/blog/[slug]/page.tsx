@@ -136,6 +136,15 @@ function renderMarkdownBody(markdown?: string) {
   return blocks;
 }
 
+function youtubeEmbedUrl(value?: string) {
+  if (!value) return null;
+
+  const match = value.match(
+    /(?:youtube\.com\/(?:embed\/|watch\?v=)|youtu\.be\/)([A-Za-z0-9_-]{11})/,
+  );
+  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
+}
+
 const publishedArticles = blogData.articles.filter(
   (article) => article.status === 'published',
 );
@@ -221,6 +230,9 @@ export default async function BlogArticlePage({
     .slice(0, 4);
   const markdownBlocks = renderMarkdownBody(
     (article as { body_markdown?: string }).body_markdown,
+  );
+  const videoEmbedUrl = youtubeEmbedUrl(
+    (article as { video_url?: string }).video_url,
   );
   const relatedServiceLinks = serviceLinksForBlogArticle(article);
 
@@ -360,6 +372,41 @@ export default async function BlogArticlePage({
             ) : null}
 
             <p className="np-body-text np-drop">{article.lead}</p>
+            {videoEmbedUrl ? (
+              <figure style={{ margin: '18px 0' }}>
+                <div
+                  style={{
+                    position: 'relative',
+                    width: '100%',
+                    paddingBottom: '56.25%',
+                    border: '1px solid var(--ink-900)',
+                    background: '#000',
+                  }}
+                >
+                  <iframe
+                    src={videoEmbedUrl}
+                    title={
+                      (article as { video_title?: string }).video_title ||
+                      `${article.title} video`
+                    }
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      width: '100%',
+                      height: '100%',
+                      border: 0,
+                    }}
+                  />
+                </div>
+                <figcaption className="np-kicker" style={{ marginTop: '6px' }}>
+                  Garmin AXIS Flight Displays: The Center of Your Panel
+                </figcaption>
+              </figure>
+            ) : null}
             {markdownBlocks.length
               ? markdownBlocks.map((block, index) => (
                   <div
