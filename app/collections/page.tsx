@@ -100,12 +100,6 @@ export default async function CollectionsPage() {
       <CredentialsBar />
       <BulletinBar />
       <main className="bs-stage">
-        {finderProducts.length ? (
-          <Specimen variant="flat">
-            <PartFinder products={finderProducts} scopeLabel="RWAS catalog" />
-          </Specimen>
-        ) : null}
-
         <Specimen variant="flat">
           <div style={{ marginBottom: 20 }}>
             <p className="bs-kicker">Featured collections</p>
@@ -215,6 +209,12 @@ export default async function CollectionsPage() {
             ))}
           </ul>
         </Specimen>
+
+        {finderProducts.length ? (
+          <Specimen variant="flat">
+            <PartFinder products={finderProducts} scopeLabel="RWAS catalog" />
+          </Specimen>
+        ) : null}
       </main>
       <BroadsheetFooter />
     </BroadsheetLayout>
