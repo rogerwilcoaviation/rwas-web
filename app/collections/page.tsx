@@ -113,6 +113,27 @@ export default async function CollectionsPage() {
             </p>
             <div
               style={{
+                width: '100%',
+                maxWidth: 900,
+                aspectRatio: '16 / 9',
+                marginTop: 18,
+                overflow: 'hidden',
+                border: '1px solid #111318',
+                background: '#000',
+              }}
+            >
+              <iframe
+                src="https://www.youtube.com/embed/FDOAZaxjL-I?si=2Hn1VYL0ROfB3OqX"
+                title="Garmin AXIS Build-A-System video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                loading="lazy"
+                style={{ width: '100%', height: '100%', border: 0 }}
+              />
+            </div>
+            <div
+              style={{
                 marginTop: 18,
                 display: 'flex',
                 gap: 12,
