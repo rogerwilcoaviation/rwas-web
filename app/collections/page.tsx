@@ -102,9 +102,6 @@ export default async function CollectionsPage() {
       <main className="bs-stage">
         <section className="hero-headline-group">
           <p className="bs-kicker">Live collections</p>
-          <p className="bs-script-accent">
-            &mdash; pulled straight from Shopify &mdash;
-          </p>
           <h1 className="bs-headline bs-headline--hero">
             Browse every RWAS collection in one place.
           </h1>
