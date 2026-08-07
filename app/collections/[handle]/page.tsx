@@ -21,6 +21,7 @@ import {
   isSeoSafeProductHandle,
 } from '@/lib/shopify';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import {
   collectionMetaDescription,
   collectionSeoTitle,
@@ -109,9 +110,29 @@ export default async function CollectionDetailPage({
 }) {
   const { handle } = await params;
 
+  if (handle === 'avionics-experimental') {
+    redirect('/collections/avionics-certified');
+  }
+
   let collection: Awaited<ReturnType<typeof getCollectionByHandle>> = null;
   try {
     collection = await getCollectionByHandle(handle);
+    if (collection && handle === 'avionics-certified') {
+      const experimentalCollection = await getCollectionByHandle(
+        'avionics-experimental',
+      );
+      if (experimentalCollection) {
+        const productsByHandle = new Map(
+          [...collection.products, ...experimentalCollection.products].map(
+            (product) => [product.handle, product],
+          ),
+        );
+        collection = {
+          ...collection,
+          products: Array.from(productsByHandle.values()),
+        };
+      }
+    }
   } catch {
     collection = null;
   }
@@ -260,7 +281,7 @@ export default async function CollectionDetailPage({
           </p>
           <p className="bs-byline">
             {collection.handle === 'avionics-certified'
-              ? 'For package and special pricing please contact us'
+              ? 'Certified retail · Experimental avionics · Accessories'
               : 'RWAS Avionics Desk · KYKN, Yankton'}
           </p>
           <div
@@ -357,7 +378,7 @@ export default async function CollectionDetailPage({
               {quoteOnly
                 ? 'These are install-only or quote-driven items. Use the request-quote CTA to start the conversation.'
                 : collection.handle === 'avionics-certified'
-                  ? 'This collection includes approved certified over-the-counter products plus all experimental and LSA avionics available for direct retail sale. Current retail prices are shown. For package and special pricing please contact us.'
+                  ? 'Choose Experimental Products, Certified Retail, or Accessories below. Current retail prices are shown; contact RWAS for package and special pricing.'
                   : 'These products are browsable directly from live Shopify data.'}
             </p>
           </div>

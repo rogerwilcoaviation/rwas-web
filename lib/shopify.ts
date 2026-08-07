@@ -144,7 +144,6 @@ const API_VERSION = process.env.SHOPIFY_STOREFRONT_API_VERSION || '2026-01';
 
 const FEATURED_COLLECTION_HANDLES = [
   'avionics-certified',
-  'avionics-experimental',
   'pilot-gear',
   'watches-accessories',
   'garmin-dealer-install',
@@ -184,7 +183,7 @@ const PRODUCT_TYPE_COLLECTIONS: Record<
   { title: string; productType: string }
 > = {
   'avionics-certified': {
-    title: 'Avionics Retail',
+    title: 'Certified Retail and Experimental Avionics',
     productType: 'Avionics — Certified',
   },
   'avionics-experimental': {
@@ -1264,12 +1263,14 @@ export function displayTitleForCollection(
   handle: string,
   shopifyTitle: string,
 ): string {
-  return handle === 'avionics-certified' ? 'Avionics Retail' : shopifyTitle;
+  return handle === 'avionics-certified'
+    ? 'Certified Retail and Experimental Avionics'
+    : shopifyTitle;
 }
 
 const COLLECTION_DESCRIPTION_OVERRIDES: Record<string, string> = {
   'avionics-certified':
-    'Garmin avionics approved for direct retail sale, including certified over-the-counter products and all experimental/LSA products. Current retail prices are shown. For package and special pricing please contact us.',
+    'Certified retail avionics, experimental and LSA avionics, and compatible accessories in one collection. Use the product-type selector to browse each group. Current retail prices are shown; contact RWAS for package and special pricing.',
   'avionics-experimental':
     'Garmin avionics and related components for experimental, LSA, and builder-supported installations, including G3X Touch and compatible accessories.',
   'pilot-gear':

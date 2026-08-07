@@ -150,9 +150,10 @@ export default async function CollectionsPage() {
             Browse every RWAS collection in one place.
           </h1>
           <p className="bs-subhead">
-            Certified and experimental avionics, pilot gear, Garmin watches and
-            accessories, dealer-install hardware, service parts, and Papa-Alpha
-            tools &mdash; all live with real product data behind them.
+            Certified retail and experimental avionics, pilot gear, Garmin
+            watches and accessories, dealer-install hardware, service parts,
+            and Papa-Alpha tools &mdash; all live with real product data behind
+            them.
           </p>
           <p className="bs-byline">RWAS Avionics Desk &middot; KYKN, Yankton</p>
           <div
@@ -167,7 +168,7 @@ export default async function CollectionsPage() {
               href="/collections/avionics-certified"
               className="bs-cta-primary"
             >
-              Start with certified retail
+              Certified &amp; experimental avionics
             </Link>
             <Link
               href="/collections/papa-alpha-tools"

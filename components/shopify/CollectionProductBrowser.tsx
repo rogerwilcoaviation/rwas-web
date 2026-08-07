@@ -37,7 +37,7 @@ export type CollectionBrowserProduct = {
   };
 };
 
-type FilterKey = 'subcategory' | 'family' | 'purchase';
+type FilterKey = 'catalogGroup' | 'subcategory' | 'family' | 'purchase';
 const INITIAL_PRODUCT_LIMIT = 24;
 const PRODUCT_PAGE_SIZE = 24;
 
@@ -126,6 +126,39 @@ function purchaseMode(product: CollectionBrowserProduct, quoteOnly: boolean) {
     return 'quote-request';
   if (tags.includes('otc-eligible')) return 'otc-ready';
   return 'retail-product';
+}
+
+function productCatalogGroup(product: CollectionBrowserProduct) {
+  const tags = product.tags?.map((tag) => tag.toLowerCase()) || [];
+  const subcategory = productSubcategory(product);
+  const accessorySubcategories = new Set([
+    'accessories',
+    'antennas',
+    'cables',
+    'connectors-electrical',
+    'data-cards-databases',
+    'documentation',
+    'experimental-install-kits',
+    'install-kits',
+    'mounts',
+  ]);
+  const accessory =
+    accessorySubcategories.has(subcategory) ||
+    subcategory.includes('install-kit') ||
+    subcategory.includes('engine-sensor') ||
+    subcategory.includes('system-sensor') ||
+    subcategory.includes('additional-options') ||
+    tags.some(
+      (tag) =>
+        tag === 'accessory' ||
+        tag === 'accessories' ||
+        tag === 'garmin-category:accessories',
+    );
+  if (accessory) return 'accessories';
+  if (product.productType === 'Avionics — Experimental') {
+    return 'experimental-products';
+  }
+  return 'certified-retail';
 }
 
 function countOptions(
@@ -296,6 +329,7 @@ export default function CollectionProductBrowser({
   const [subcategory, setSubcategory] = useState('all');
   const [family, setFamily] = useState('all');
   const [purchase, setPurchase] = useState('all');
+  const [catalogGroup, setCatalogGroup] = useState('all');
   const [query, setQuery] = useState('');
   const [visibleLimit, setVisibleLimit] = useState(INITIAL_PRODUCT_LIMIT);
 
@@ -311,6 +345,7 @@ export default function CollectionProductBrowser({
             product.productType,
             productSubcategory(product),
             productFamily(product),
+            productCatalogGroup(product),
           ]
             .filter(Boolean)
             .join(' '),
@@ -324,6 +359,11 @@ export default function CollectionProductBrowser({
     return indexed
       .filter(({ product, search }) => {
         if (
+          catalogGroup !== 'all' &&
+          productCatalogGroup(product) !== catalogGroup
+        )
+          return false;
+        if (
           subcategory !== 'all' &&
           productSubcategory(product) !== subcategory
         )
@@ -334,10 +374,19 @@ export default function CollectionProductBrowser({
         return terms.every((term) => search.includes(term));
       })
       .map(({ product }) => product);
-  }, [family, indexed, purchase, query, quoteOnly, subcategory]);
+  }, [catalogGroup, family, indexed, purchase, query, quoteOnly, subcategory]);
 
   const filterGroups = useMemo(
     () => [
+      ...(collectionHandle === 'avionics-certified'
+        ? [
+            {
+              key: 'catalogGroup' as const,
+              title: 'Product Type',
+              options: countOptions(products, productCatalogGroup),
+            },
+          ]
+        : []),
       {
         key: 'subcategory' as const,
         title: 'Subcategory',
@@ -356,20 +405,23 @@ export default function CollectionProductBrowser({
         ),
       },
     ],
-    [products, quoteOnly],
+    [collectionHandle, products, quoteOnly],
   );
 
   const activeByKey: Record<FilterKey, string> = {
+    catalogGroup,
     subcategory,
     family,
     purchase,
   };
   const setByKey: Record<FilterKey, (value: string) => void> = {
+    catalogGroup: setCatalogGroup,
     subcategory: setSubcategory,
     family: setFamily,
     purchase: setPurchase,
   };
   const hasActiveFilters =
+    catalogGroup !== 'all' ||
     subcategory !== 'all' ||
     family !== 'all' ||
     purchase !== 'all' ||
@@ -426,6 +478,7 @@ export default function CollectionProductBrowser({
         <button
           type="button"
           onClick={() => {
+            setCatalogGroup('all');
             setSubcategory('all');
             setFamily('all');
             setPurchase('all');

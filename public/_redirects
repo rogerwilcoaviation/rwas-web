@@ -28,7 +28,8 @@
 /collections/garmin-outdoor-navigation /collections 301
 /collections/garmin-powersports /collections 301
 /collections/garmin-products /collections 301
-/collections/retail-experimental /collections/avionics-experimental 301
+/collections/avionics-experimental /collections/avionics-certified 301
+/collections/retail-experimental /collections/avionics-certified 301
 /collections/rigging-tools /collections/papa-alpha-tools 301
 /collections/on-sale/Garmin-Product-On-Sale /collections/on-sale 301
 
@@ -60,7 +61,8 @@
 /collections/garmin-outdoor-navigation/ /collections 301
 /collections/garmin-powersports/ /collections 301
 /collections/garmin-products/ /collections 301
-/collections/retail-experimental/ /collections/avionics-experimental 301
+/collections/avionics-experimental/ /collections/avionics-certified 301
+/collections/retail-experimental/ /collections/avionics-certified 301
 /collections/rigging-tools/ /collections/papa-alpha-tools 301
 /collections/on-sale/Garmin-Product-On-Sale/ /collections/on-sale 301
 
