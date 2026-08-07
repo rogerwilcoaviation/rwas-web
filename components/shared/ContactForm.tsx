@@ -68,13 +68,13 @@ const contactSchema = z.object({
     .max(80),
   nNumber: z
     .string()
+    .trim()
+    .min(1, 'Please enter the aircraft N-number.')
     .max(10)
     .regex(
-      /^[A-Za-z0-9-]*$/i,
+      /^[A-Za-z0-9-]+$/i,
       'N-numbers are letters, numbers, and dashes only.',
-    )
-    .optional()
-    .or(z.literal('')),
+    ),
   preferredContact: z.enum(['email', 'phone', 'either']).default('either'),
   bestTimeToCall: z.string().max(120).optional().or(z.literal('')),
   reason: z
@@ -401,7 +401,7 @@ export default function ContactForm() {
           </div>
 
           <div className="rwas-field">
-            <label htmlFor="nNumber">N-number</label>
+            <label htmlFor="nNumber">N-number *</label>
             <input
               id="nNumber"
               type="text"

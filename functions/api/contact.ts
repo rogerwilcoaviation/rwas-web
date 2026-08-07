@@ -155,7 +155,8 @@ function validate(payload: ContactPayload): string | null {
   if (payload.message.length > 4000) {
     return 'Message is too long (max 4000 characters).';
   }
-  if (payload.nNumber && !/^[A-Za-z0-9-]{1,10}$/i.test(payload.nNumber)) {
+  if (!payload.nNumber) return 'Aircraft N-number is required.';
+  if (!/^[A-Za-z0-9-]{1,10}$/i.test(payload.nNumber)) {
     return 'N-number has unexpected characters.';
   }
   // honeypot: if populated, silently accept then drop
