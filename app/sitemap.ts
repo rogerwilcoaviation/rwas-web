@@ -28,6 +28,7 @@ const STATIC_ROUTES = [
   'panel-planner',
   'axis-system-planner/certified',
   'axis-system-planner/experimental',
+  'product-index',
   'aircraft-for-sale',
   'financing',
   'blog',

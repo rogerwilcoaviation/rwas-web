@@ -270,6 +270,11 @@ export default async function CollectionsPage() {
         {finderProducts.length ? (
           <Specimen variant="flat">
             <PartFinder products={finderProducts} scopeLabel="RWAS catalog" />
+            <div className="mt-5">
+              <Link href="/product-index" className="bs-cta-secondary">
+                Browse the complete product index
+              </Link>
+            </div>
           </Specimen>
         ) : null}
       </main>

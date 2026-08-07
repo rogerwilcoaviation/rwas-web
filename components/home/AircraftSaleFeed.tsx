@@ -82,7 +82,6 @@ export default async function AircraftSaleFeed() {
             key={l.id}
             href={`/aircraft-for-sale/${l.id}`}
             className="bs-listing"
-            aria-label={`${(l.make || '') + ' ' + (l.model || '')}, ${isSold ? 'sold' : price}`}
           >
             <div className="bs-listing__img" style={{ position: 'relative' }}>
               {isSold && (

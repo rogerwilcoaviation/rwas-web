@@ -199,7 +199,7 @@ function FilterButton({
       ].join(' ')}
     >
       <span className="font-semibold">{label}</span>
-      <span className={active ? 'text-[#f5f3ef]/70' : 'text-black/45'}>
+      <span className={active ? 'text-[#f5f3ef]/70' : 'text-black/65'}>
         {count}
       </span>
     </button>
@@ -281,7 +281,7 @@ function ProductTile({
         <h3 className="line-clamp-3 text-lg font-bold leading-snug text-[#111111]">
           {product.title}
         </h3>
-        <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-black/45">
+        <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-black/65">
           <span>{labelFromSlug(productSubcategory(product))}</span>
           <span aria-hidden="true">/</span>
           <span>{labelFromSlug(productFamily(product))}</span>
@@ -514,7 +514,7 @@ export default function CollectionProductBrowser({
               Showing {visibleProducts.length.toLocaleString()} of{' '}
               {filtered.length.toLocaleString()} products
             </p>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/45">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/65">
               {collectionHandle}
             </p>
           </div>

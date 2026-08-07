@@ -9,6 +9,7 @@ export type BroadsheetFooterProps = {
 type PolicyLink = { href: string; label: string };
 
 const DEFAULT_POLICIES: PolicyLink[] = [
+  { href: '/locations/yankton', label: 'Yankton Location' },
   { href: '/terms', label: 'Terms' },
   { href: '/privacy', label: 'Privacy' },
   { href: '/cookies', label: 'Cookies' },

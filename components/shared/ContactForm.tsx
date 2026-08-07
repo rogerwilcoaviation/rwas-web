@@ -297,6 +297,7 @@ export default function ContactForm() {
               id="name"
               type="text"
               autoComplete="name"
+              required
               {...register('name')}
               aria-invalid={Boolean(errors.name)}
             />
@@ -311,6 +312,7 @@ export default function ContactForm() {
               id="email"
               type="email"
               autoComplete="email"
+              required
               {...register('email')}
               aria-invalid={Boolean(errors.email)}
             />
@@ -348,6 +350,7 @@ export default function ContactForm() {
               autoComplete="off"
               placeholder="e.g. 1980"
               maxLength={4}
+              required
               {...register('aircraftYear')}
               aria-invalid={Boolean(errors.aircraftYear)}
             />
@@ -362,6 +365,7 @@ export default function ContactForm() {
               id="aircraftMake"
               type="text"
               placeholder="e.g. Cessna"
+              required
               {...register('aircraftMake')}
               aria-invalid={Boolean(errors.aircraftMake)}
             />
@@ -376,6 +380,7 @@ export default function ContactForm() {
               id="aircraftModel"
               type="text"
               placeholder="e.g. R182"
+              required
               {...register('aircraftModel')}
               aria-invalid={Boolean(errors.aircraftModel)}
             />
@@ -390,6 +395,7 @@ export default function ContactForm() {
               id="aircraftSerialNumber"
               type="text"
               placeholder="Enter the manufacturer serial number"
+              required
               {...register('aircraftSerialNumber')}
               aria-invalid={Boolean(errors.aircraftSerialNumber)}
             />
@@ -406,6 +412,7 @@ export default function ContactForm() {
               id="nNumber"
               type="text"
               placeholder="e.g. N12345"
+              required
               {...register('nNumber')}
               aria-invalid={Boolean(errors.nNumber)}
             />
@@ -460,6 +467,7 @@ export default function ContactForm() {
             id="message"
             rows={6}
             placeholder="Tell us about the airplane, the mission, and what you're trying to accomplish. The more context we have, the sharper the quote."
+            required
             {...register('message')}
             aria-invalid={Boolean(errors.message)}
           />
