@@ -55,26 +55,30 @@ declare global {
 const contactSchema = z.object({
   name: z.string().min(2, 'Please enter your name.').max(120),
   email: z.string().email('Please enter a valid email.').max(254),
-  phone: z
-    .string()
-    .max(40)
-    .optional()
-    .or(z.literal('')),
+  phone: z.string().max(40).optional().or(z.literal('')),
   aircraftMakeModel: z.string().max(120).optional().or(z.literal('')),
   nNumber: z
     .string()
     .max(10)
-    .regex(/^[A-Za-z0-9-]*$/i, 'N-numbers are letters, numbers, and dashes only.')
+    .regex(
+      /^[A-Za-z0-9-]*$/i,
+      'N-numbers are letters, numbers, and dashes only.',
+    )
     .optional()
     .or(z.literal('')),
   preferredContact: z.enum(['email', 'phone', 'either']).default('either'),
   bestTimeToCall: z.string().max(120).optional().or(z.literal('')),
-  reason: z.enum(['quote', 'general', 'service', 'papa-alpha', 'aircraft-sales']).default('general'),
+  reason: z
+    .enum(['quote', 'general', 'service', 'papa-alpha', 'aircraft-sales'])
+    .default('general'),
   product: z.string().max(240).optional().or(z.literal('')),
   sku: z.string().max(120).optional().or(z.literal('')),
   // Lead-source attribution (e.g. "home-cta", "pdp-quote"). Never shown to user.
   source: z.string().max(120).optional().or(z.literal('')),
-  message: z.string().min(10, 'A sentence or two helps us reply faster.').max(4000),
+  message: z
+    .string()
+    .min(10, 'A sentence or two helps us reply faster.')
+    .max(4000),
   // honeypot: bots fill this; real humans never see it
   website: z.string().max(0).optional(),
 });
@@ -91,8 +95,7 @@ const REASON_LABELS: Record<ContactFormValues['reason'], string> = {
 };
 
 export default function ContactForm() {
-  const TURNSTILE_SITE_KEY =
-    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
+  const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
 
   const [submitState, setSubmitState] = useState<
     | { status: 'idle' }
@@ -126,7 +129,9 @@ export default function ContactForm() {
     const params = new URLSearchParams(window.location.search);
     const product = params.get('product');
     const sku = params.get('sku');
-    const reasonParam = params.get('reason') as ContactFormValues['reason'] | null;
+    const reasonParam = params.get('reason') as
+      | ContactFormValues['reason']
+      | null;
 
     if (product) {
       setValue('product', product);
@@ -139,6 +144,13 @@ export default function ContactForm() {
     }
     const source = params.get('source');
     if (source) setValue('source', source);
+    if (params.get('draft') === 'axis') {
+      const draft = window.sessionStorage.getItem('rwas-contact-draft');
+      if (draft) {
+        setValue('message', draft.slice(0, 4000));
+        window.sessionStorage.removeItem('rwas-contact-draft');
+      }
+    }
   }, [setValue]);
 
   // --- Render Turnstile once the script loads ----------------------------
@@ -180,7 +192,8 @@ export default function ContactForm() {
       }
       setSubmitState({
         status: 'success',
-        ticketId: data.ticketId || `RWAS-${Date.now().toString(36).toUpperCase()}`,
+        ticketId:
+          data.ticketId || `RWAS-${Date.now().toString(36).toUpperCase()}`,
       });
       reset();
       if (window.turnstile && turnstileWidgetIdRef.current) {
@@ -246,7 +259,9 @@ export default function ContactForm() {
         noValidate
       >
         <header className="rwas-contact-form__intro">
-          <p className="bs-kicker">{REASON_LABELS[selectedReason] || 'Inquiry'}</p>
+          <p className="bs-kicker">
+            {REASON_LABELS[selectedReason] || 'Inquiry'}
+          </p>
           <h2 className="bs-section-head">
             {productContext
               ? `Quote request: ${productContext}`
@@ -352,13 +367,13 @@ export default function ContactForm() {
           <div className="rwas-field">
             <label htmlFor="reason">What can we help with?</label>
             <select id="reason" {...register('reason')}>
-              {(Object.keys(REASON_LABELS) as Array<ContactFormValues['reason']>).map(
-                (key) => (
-                  <option key={key} value={key}>
-                    {REASON_LABELS[key]}
-                  </option>
-                ),
-              )}
+              {(
+                Object.keys(REASON_LABELS) as Array<ContactFormValues['reason']>
+              ).map((key) => (
+                <option key={key} value={key}>
+                  {REASON_LABELS[key]}
+                </option>
+              ))}
             </select>
           </div>
         </div>

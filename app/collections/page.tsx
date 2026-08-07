@@ -101,6 +101,41 @@ export default async function CollectionsPage() {
       <BulletinBar />
       <main className="bs-stage">
         <Specimen variant="flat">
+          <div className="border-l-4 border-black pl-5">
+            <p className="bs-kicker">Plan a Garmin AXIS panel</p>
+            <h1 className="bs-headline" style={{ marginTop: 4 }}>
+              AXIS Build-A-System Planner
+            </h1>
+            <p className="bs-body" style={{ marginTop: 8, maxWidth: 820 }}>
+              Follow Garmin&rsquo;s certified or experimental build sequence,
+              choose hardware, see the running retail total, and submit the
+              system to RWAS for compatibility review and special pricing.
+            </p>
+            <div
+              style={{
+                marginTop: 18,
+                display: 'flex',
+                gap: 12,
+                flexWrap: 'wrap',
+              }}
+            >
+              <Link
+                href="/axis-system-planner/certified"
+                className="bs-cta-primary"
+              >
+                AXIS System for Certified
+              </Link>
+              <Link
+                href="/axis-system-planner/experimental"
+                className="bs-cta-secondary"
+              >
+                AXIS System for Experimental
+              </Link>
+            </div>
+          </div>
+        </Specimen>
+
+        <Specimen variant="flat">
           <div style={{ marginBottom: 20 }}>
             <p className="bs-kicker">Featured collections</p>
             <p className="bs-body" style={{ marginTop: 4 }}>
@@ -151,8 +186,8 @@ export default async function CollectionsPage() {
           </h1>
           <p className="bs-subhead">
             Certified retail and experimental avionics, pilot gear, Garmin
-            watches and accessories, dealer-install hardware, service parts,
-            and Papa-Alpha tools &mdash; all live with real product data behind
+            watches and accessories, dealer-install hardware, service parts, and
+            Papa-Alpha tools &mdash; all live with real product data behind
             them.
           </p>
           <p className="bs-byline">RWAS Avionics Desk &middot; KYKN, Yankton</p>
