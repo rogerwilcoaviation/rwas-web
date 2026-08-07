@@ -103,9 +103,9 @@ export default async function CollectionsPage() {
         <Specimen variant="flat">
           <div className="border-l-4 border-black pl-5">
             <p className="bs-kicker">Plan a Garmin AXIS panel</p>
-            <h1 className="bs-headline" style={{ marginTop: 4 }}>
+            <h2 className="bs-headline" style={{ marginTop: 4 }}>
               AXIS Build-A-System Planner
-            </h1>
+            </h2>
             <p className="bs-body" style={{ marginTop: 8, maxWidth: 820 }}>
               Follow Garmin&rsquo;s certified or experimental build sequence,
               choose hardware, see the running retail total, and submit the

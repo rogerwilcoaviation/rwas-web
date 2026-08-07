@@ -4,7 +4,7 @@ import AxisPlannerPage from '@/components/shopify/AxisPlannerPage';
 export const metadata = genPageMetadata({
   title: 'Garmin AXIS Experimental System Planner | RWAS',
   description:
-    'Build a preliminary Garmin AXIS system for an experimental aircraft, calculate hardware retail pricing, and submit the package to RWAS for review and special pricing.',
+    'Build a Garmin AXIS system for an experimental aircraft, calculate hardware retail pricing, and submit it to RWAS for review and special pricing.',
   canonical:
     'https://www.rogerwilcoaviation.com/axis-system-planner/experimental',
 });
