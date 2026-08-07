@@ -1148,7 +1148,10 @@ export default async function ProductDetailPage({
   const showPapaAlphaApplicability = isPapaAlphaApplicabilityProduct(product);
   const showDualG5KitDetails =
     product.handle === 'garmin-dual-g5-ai-hsi-kit-k10-00280-51';
-  const cleanDescText = showDualG5KitDetails
+  const isAxisSystemListing = product.handle.startsWith('garmin-axis-');
+  const cleanDescText = isAxisSystemListing
+    ? ''
+    : showDualG5KitDetails
     ? 'A complete certified dual-display package for an electronic attitude indicator and HSI configuration.'
     : showPa31RudderTrimApplicability || showPapaAlphaApplicability
       ? papaAlphaApplicabilityIntro(product) || PA31_RUDDER_TRIM_INTRO
