@@ -176,8 +176,8 @@ export default async function CollectionsPage() {
           <div style={{ marginBottom: 20 }}>
             <p className="bs-kicker">Featured collections</p>
             <p className="bs-body" style={{ marginTop: 4 }}>
-              Each card links into a live collection page. Prices, availability,
-              and inventory mirror Shopify.
+              Each card links into a live collection page with current prices,
+              availability, and inventory.
             </p>
           </div>
 
@@ -194,8 +194,8 @@ export default async function CollectionsPage() {
                 Collections could not load
               </h2>
               <p className="bs-body" style={{ marginTop: 8 }}>
-                Shopify collection data did not return just now. Try again
-                shortly, or reach out and we can pull a part by number.
+                Collection data did not return just now. Try again shortly, or
+                reach out and we can pull a part by number.
               </p>
               <div
                 style={{
