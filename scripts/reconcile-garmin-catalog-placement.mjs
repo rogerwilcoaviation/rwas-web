@@ -175,6 +175,37 @@ const PORTABLE_MOUNT_SKUS = new Set([
   '010-11385-01',
   '010-11385-02',
 ]);
+
+// John-approved direct-sale accessories. These are portable/cockpit/customer
+// accessories, not dealer-install equipment, even when their titles contain
+// words such as "mount", "connector kit", or "mounting kit" that would
+// otherwise resemble installation hardware.
+const PILOT_GEAR_PRODUCT_HANDLES = new Set([
+  'garmin-ac-adapter-010-11385-04',
+  'garmin-ac-adapter-010-12180-01',
+  'ac-adapter-with-international-adapter',
+  'acc-connector-kit-gdl-50r-52r',
+  'acc-connector-kit-gdl-39r',
+  'bracket-mount',
+  'battery-door-replacement',
+  'base-mount-gdl-52-series',
+  'cart-mount',
+  'charging-data-cable',
+  'dash-mount',
+  'dashboard-discs-large-and-small',
+  'dashboard-mount',
+  'data-power-cable',
+  'dual-port-usb-power-adapter-usb-a',
+  'flotation-lanyard',
+  'g5-mounting-ring',
+  'g5-recessed-adapter-plate',
+  'ga-24-mcx-siriusxm-antenna',
+  'garmin-cleaning-cloth',
+  'gsb-15-mounting-kit-3-125',
+  'gsb-15-decorative-cover-black-powder-coat',
+  'gsb-15-decorative-cover-unfinished',
+  'gsb-15-mounting-kit-2-25',
+]);
 const WATCH_CABLE_SKU = '010-11814-10';
 const BACKSHELL_SKU = '135-00028-03';
 const SURFACEWATCH_ENABLEMENT_SKU = '010-03905-08';
@@ -352,6 +383,10 @@ function makePlanRecord(product) {
     handle: product.handle,
     currentStatus: product.status,
     currentProductType: product.productType,
+    currentVariants: product.variants.nodes.map((variant) => ({
+      sku: normalizeSku(variant.sku),
+      price: Number(variant.price),
+    })),
     currentTags: product.tags,
     currentCollections: collectionHandles(product),
     productUpdate: {},
@@ -606,7 +641,13 @@ function buildPlan(products, collections, publications) {
     }
 
     if (!excluded && !unplaced && !catalogSyncWatch && !catalogSyncDatabase) {
-      if (PORTABLE_MOUNT_SKUS.has(record.sku)) {
+      if (PILOT_GEAR_PRODUCT_HANDLES.has(product.handle)) {
+        applyPilotPlacement(
+          record,
+          collections,
+          'John-approved Pilot Gear direct-sale accessory',
+        );
+      } else if (PORTABLE_MOUNT_SKUS.has(record.sku)) {
         applyPilotPlacement(
           record,
           collections,
@@ -697,6 +738,7 @@ function publicChange(record) {
     currentStatus: record.currentStatus,
     nextStatus: record.productUpdate.status || record.currentStatus,
     currentProductType: record.currentProductType,
+    currentVariants: record.currentVariants,
     nextProductType:
       record.productUpdate.productType || record.currentProductType,
     tagsChanged: Boolean(record.productUpdate.tags),
