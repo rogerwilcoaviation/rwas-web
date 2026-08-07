@@ -268,7 +268,6 @@ async function collectionPageCount(handle) {
 }
 
 const collections = [
-  ['avionics-experimental', 'Avionics — Experimental'],
   ['watches-accessories', 'Watches & Accessories'],
   ['pilot-gear', 'Pilot Gear'],
   ['garmin-dealer-install', 'Garmin Dealer Install'],
@@ -292,19 +291,20 @@ for (const [handle, productType] of collections) {
   });
 }
 
-const [retail, certifiedRetailCount] = await Promise.all([
+const [retail, certifiedRetailCount, experimentalRetailCount] = await Promise.all([
   collectionPageCount('avionics-certified'),
   countCertifiedRetailProducts(),
+  countProductType('Avionics — Experimental'),
 ]);
-if (retail.count < certifiedRetailCount) {
+if (retail.count < certifiedRetailCount + experimentalRetailCount) {
   throw new Error(
-    `Retail renders ${retail.count} products but Shopify exposes at least ${certifiedRetailCount} approved certified products`,
+    `Merged avionics collection renders ${retail.count} products but Shopify exposes at least ${certifiedRetailCount} approved certified and ${experimentalRetailCount} experimental products`,
   );
 }
 for (const requiredLabel of [
-  'Experimental Avionics',
-  'Installation Hardware',
-  'Engine & Airframe LRUs',
+  'Experimental Products',
+  'Certified Retail',
+  'Accessories',
 ]) {
   if (!retail.text.includes(requiredLabel)) {
     throw new Error(`Retail collection is missing label: ${requiredLabel}`);
