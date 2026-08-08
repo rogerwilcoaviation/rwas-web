@@ -7,6 +7,8 @@ const redirects = {
   '/contact.html': '/contact',
   '/newspaper/index.html': '/',
   '/aircraft4sale': '/aircraft-for-sale',
+  '/Home': '/',
+  '/contactContact': '/contact',
   '/collections/garmin-avionics': '/collections/avionics-certified',
   '/collections/garmin-avionics-certified-retail':
     '/collections/avionics-certified',
