@@ -3,7 +3,6 @@
 User-agent: *
 Content-signal: search=yes, ai-input=no, ai-train=no, use=reference
 Allow: /
-Disallow: /cart
 
 User-agent: Amazonbot
 Disallow: /
