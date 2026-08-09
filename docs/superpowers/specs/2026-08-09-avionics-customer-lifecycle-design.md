@@ -1,7 +1,7 @@
 # RWAS Avionics Customer Lifecycle Design
 
 **Date:** August 9, 2026  
-**Status:** Revised design pending final approval
+**Status:** Approved by owner on August 9, 2026; implementation remains subject to the controlled-manual, authority, validation, and rollout boundaries in Section 16
 **Scope:** Manufacturer-neutral avionics-upgrade customer journey, internal RWAS operating workflow, future webpage narrative, and future sales-film structure  
 **Primary location:** RWAS at KYKN, Yankton, South Dakota
 
