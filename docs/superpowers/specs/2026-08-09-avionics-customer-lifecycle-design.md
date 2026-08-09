@@ -1,7 +1,7 @@
 # RWAS Avionics Customer Lifecycle Design
 
 **Date:** August 9, 2026  
-**Status:** Approved design  
+**Status:** Revised design pending final approval
 **Scope:** Manufacturer-neutral avionics-upgrade customer journey, internal RWAS operating workflow, future webpage narrative, and future sales-film structure  
 **Primary location:** RWAS at KYKN, Yankton, South Dakota
 
@@ -18,6 +18,12 @@ The same lifecycle supports four audiences without creating four conflicting pro
 
 The workflow is manufacturer-neutral. Garmin equipment and systems are used as important examples because RWAS is an authorized Garmin dealer, but the master process applies to all supported avionics manufacturers.
 
+### Governing-document rule
+
+The customer lifecycle is an explanatory and coordination layer. Work performed under repair station certificate RWSR491E remains governed by the current controlled **RWAS Repair Station Manual and Quality Control Manual (RSM/QCM)**, Operations Specifications, Capability List, FAA-approved Training Program, Forms Manual, applicable regulations, and current technical data.
+
+If this lifecycle, a portal status, a marketing statement, or an implementation plan conflicts with a controlling manual or approved/acceptable technical data, the controlling requirement wins. The workflow must be corrected through the applicable document-control process before the conflicting behavior is used for repair-station work.
+
 ## 2. Approved design decisions
 
 - Use a synchronized **two-lane lifecycle**: customer experience and RWAS execution.
@@ -30,6 +36,9 @@ The workflow is manufacturer-neutral. Garmin equipment and systems are used as i
 - Include an in-flight customer familiarization and operational demonstration when aircraft condition, weather, pilot qualifications, and scope permit. Provide a ground-based alternative when flight is impractical.
 - Use a manufacturer-neutral delivery checklist with equipment-specific supplements.
 - Incorporate Garmin Customer Aircraft Delivery Checklist 190-03194-00 Revision 4 for applicable Garmin projects.
+- Use the current RSM/QCM and its companion controlled manuals as mandatory project gates from work acceptance through record retention.
+- Keep the work order, preliminary inspection, discrepancies, in-process inspections, final inspection, RTS, and retention records aligned with the Forms Manual and RSM/QCM.
+- Verify ratings, Operations Specifications, Capability List authority, current technical data, parts/materials, calibrated tools/equipment, facilities, and qualified personnel before repair-station work begins.
 - Provide structured follow-up at 48–72 hours, 30 days, and 90 days after delivery.
 - Use a cinematic customer-facing narrative that can become both a webpage and a 75–90 second sales film.
 
@@ -43,9 +52,13 @@ The project begins with how the customer flies, what the current aircraft does p
 
 The website, sales presentation, customer portal, work order, approvals, delivery checklist, and post-RTS support must describe the same lifecycle. Marketing must not promise a status, timeline, or deliverable that the operating process cannot support.
 
+The repair-station work order and controlled records remain authoritative. Customer-facing tools may summarize that record but must not replace, contradict, or silently advance it.
+
 ### 3.3 Clear authority boundaries
 
 The Project Advisor owns communication and continuity. Appropriately qualified personnel own technical work, inspection, and RTS decisions. A scheduled delivery date or completed installation does not itself constitute RTS.
+
+The Accountable Manager remains the customer liaison and retains the responsibilities assigned by the RSM/QCM. A Project Advisor operates only within duties delegated through RWAS procedures; the title does not create inspection, maintenance, or RTS authority.
 
 ### 3.4 No surprise work
 
@@ -79,6 +92,8 @@ These are functional roles. One person may hold multiple roles when qualified an
 - Owns intake, discovery, expectations, recaps, status communication, and decision routing.
 - Coordinates specialists without representing unapproved technical conclusions as final.
 - Maintains continuity through the 90-day follow-up.
+- Operates under the customer-liaison responsibility and delegations established by the Accountable Manager.
+- Does not accept work for the repair station, clear an inspection, determine airworthiness, or authorize RTS unless separately qualified and authorized to perform that function.
 
 ### Lead Avionics Technician or Project Engineer
 
@@ -90,6 +105,7 @@ These are functional roles. One person may hold multiple roles when qualified an
 
 - Converts the accepted project into a controlled work order.
 - Maintains scope, schedule, labor/parts coordination, discrepancies, customer approvals, and closeout readiness.
+- Uses the current controlled work-order method and Forms Manual; customer-facing software does not replace required work-order records.
 
 ### Parts Coordinator
 
@@ -104,18 +120,119 @@ These are functional roles. One person may hold multiple roles when qualified an
 
 - Performs required inspections and quality-control review within assigned authority.
 - Records findings and prevents incomplete work from advancing to release.
+- Performs receiving, preliminary, hidden-damage, in-process, and final inspections only within qualifications and assignments established by the RSM/QCM and repair-station roster.
 
 ### Authorized RTS Signer
 
 - Reviews the applicable work and records.
 - Approves return to service only when authorized and when all applicable requirements are satisfied.
+- Must be listed with the applicable authorization on the current repair-station personnel roster.
 
 ### Delivery Technician or Qualified Pilot
 
 - Conducts delivery-day system setup and operational demonstration.
 - Participates in the familiarization flight only within applicable qualifications, operating rules, and agreed scope.
 
-## 5. Master ten-phase lifecycle
+## 5. Controlled-manual framework
+
+### 5.1 Controlling repair-station documents
+
+The workflow must resolve the current effective revision and availability of the following document set before relying on it:
+
+| Controlled source | Project function |
+|---|---|
+| RWSR RSM/QCM Revision 1 | Repair-station policy, authority, personnel duties, quality-control sequence, technical-data control, tools, materials, inspection, RTS, and recordkeeping |
+| FAA Operations Specifications | Certificate privileges, ratings, limitations, and approved functions |
+| RWAS Capability List | Articles and functions authorized under applicable limited ratings |
+| RWAS Forms Manual | Required work-order, inspection, discrepancy, parts, audit, and RTS forms plus completion instructions |
+| FAA-approved RWAS Training Program | Initial/recurrent training requirements and personnel training records |
+| Current personnel roster and authorization records | Qualified personnel, inspection assignments, RII authority when applicable, and RTS authorization |
+| Applicable regulations and FAA instructions | Regulatory requirements and completion instructions for FAA records and forms |
+| Current project technical data | ADs, ICAs, maintenance/overhaul/standard-practice manuals, service publications, installation manuals, STC data, approved engineering data, AFMS, drawings, and instructions applicable to the work |
+| Air-carrier manuals and programs, when applicable | Additional customer/operator procedures for work under Parts 121, 125, 129, or 135 |
+| Tool, equipment, equivalency, and calibration records | Evidence that required tools and measuring/test equipment are available, suitable, and within calibration |
+| Approved contract-maintenance functions and contractor records, when applicable | Authority, qualification, surveillance, receiving inspection, and acceptance of outside work |
+| Manufacturer delivery supplements | Customer setup, pilot material, configuration, training, and delivery demonstration after the regulatory maintenance process is complete |
+
+The work-order file should include a **Project Technical Data Index** identifying each principal document used, its revision or effective status, the task or inspection it supports, and the person who verified applicability/currency when required.
+
+### 5.2 RSM/QCM quality-control sequence
+
+The following sequence is mandatory for repair-station work and is embedded across the customer lifecycle:
+
+1. **Capability and work acceptance** - Before work starts, the Chief Inspector verifies the customer request is clear and the work is within ratings/Operations Specifications, with parts/materials, current technical data, tools/equipment, facilities, and qualified personnel available.
+2. **Controlled work order** - Every job receives the required Maintenance or Avionics work order and worksheets. The work scope must be clear and concise.
+3. **Receiving inspection** - Incoming parts and materials are checked against purchase requirements, eligibility, condition, identification, shelf life, and supporting documentation. Questionable material is segregated or quarantined and handled through the applicable SUP process.
+4. **Preliminary inspection** - A qualified Inspector completes the applicable preliminary inspection using RWAV-10, evaluates the customer scope, aircraft/article condition, ADs, service publications, airworthiness limitations, life-limited parts, and the possible need for hidden-damage inspection.
+5. **Hidden-damage inspection** - When applicable, a qualified Inspector records the search inspection and writes corrective findings as work-order discrepancies.
+6. **Continuity and in-process inspection** - Required inspections are performed at the frequencies established by applicable current data. Completed steps and inspections are documented. Interrupted work receives a sufficient pass-down or stops until continuity can be restored.
+7. **Final inspection and RTS** - A qualified Inspector uses RWAV-100 to verify the customer work scope, repair-station limitations, technician task clearances, and required inspection completion. Only a roster-authorized person may approve RTS.
+8. **Record completion and retention** - The work-order file retains applicable planning, engineering, inspection, discrepancy, parts, task, configuration, FAA-form, and RTS records for not less than the period required by the current RSM/QCM.
+9. **Defect reporting and corrective action** - Reportable defects, malfunctions, recurring unairworthy conditions, or repair-station deficiencies follow the current RSM/QCM reporting and corrective-action process.
+
+### 5.3 Work-order system authority and continuity
+
+Under RSM/QCM Appendix A.1, QuantumMX is the current primary work-order source, and RW10/RW99 plus supplemental worksheets provide the required backup continuity while work is in progress. Those controlled records support estimates, invoices, task/discrepancy documentation, and RTS.
+
+The RWAS customer portal or developing RWAS Work Order System may mirror or improve the customer experience, but it must not become the primary repair-station work-order authority until the RSM/QCM, Forms Manual, training, validation, and any required FAA coordination are completed through the applicable controlled revision process. Until then:
+
+- The current RSM/QCM-designated work-order record controls.
+- Required RW10/RW99 backup records remain available during active work.
+- Customer approvals captured in another system are attached or referenced in the authoritative work-order file.
+- Status divergence is resolved in favor of the controlled work-order and inspection record.
+
+### 5.4 Manuals-available gate
+
+No task begins merely because a proposal was accepted or equipment arrived. Before the relevant task is performed, RWAS verifies that applicable current technical data is accessible in English and under repair-station control. At minimum, as applicable, this includes:
+
+- Airworthiness Directives
+- Instructions for Continued Airworthiness
+- Maintenance manuals
+- Overhaul manuals
+- Standard-practice manuals
+- Service Bulletins and other service publications
+- Installation manuals and post-installation checkout procedures
+- STC, approved engineering, or other approved/acceptable data
+- AFMS and aircraft-record requirements
+- Customer or air-carrier programs when applicable
+
+Out-of-date data is not used for production work. Borrowed, rented, or externally accessed data must be checked for currency before use. If applicable data cannot be confirmed current and available, the affected work does not start or continue.
+
+### 5.5 Forms and evidence map
+
+The implementation plan must resolve the current Forms Manual revision and use its instructions rather than recreating controlled forms from this summary.
+
+| Function | Current RSM/QCM reference or form |
+|---|---|
+| Capability List self-evaluation, when needed | RWAV-01 |
+| Raw materials/receiving processing, when applicable | RWAV-50 and supporting eligibility documents |
+| Preliminary and hidden-damage inspection | RWAV-10 |
+| Work-order continuity/backup | RW10, RW99, and supplemental work-order worksheets |
+| Discrepancy and corrective action | Current Forms Manual discrepancy/corrective-action records |
+| In-process task and inspection acceptance | Work-order/task records and applicable manufacturer checklists |
+| Final inspection | RWAV-100 |
+| Contract-source audit, when applicable | RW200 and approved contract-maintenance records |
+| Parts status and segregation | Current Forms Manual control, repairable, serviceable, and rejected tags |
+| RTS and aircraft records | Signed work order/maintenance release, logbook entry, and applicable FAA forms |
+
+Electronic representations may support these controls only when they preserve the required content, signatures/initials, authority, traceability, retention, and backup behavior established by the controlled manuals.
+
+### 5.6 Start-to-finish manual crosswalk
+
+| Customer lifecycle phase | Controlling internal workflow references |
+|---|---|
+| 1. Connect and Qualify | RSM/QCM certificate/ratings and Capability List policy; early screen against Operations Specifications, facilities, personnel, tools, materials, and technical data |
+| 2. Discover the Mission | RSM/QCM work-scope clarity and customer interview requirements; customer request becomes a clear maintenance/alteration objective |
+| 3. Create the Vision | Forms Manual intake/work-scope records; current aircraft/equipment data used to distinguish concept from approved configuration |
+| 4. Engineer the Solution | RSM/QCM capability acceptance, technical-data control, tool/equipment, special-tool, calibration, contract-maintenance, work-away, and air-carrier requirements as applicable |
+| 5. Approve and Schedule | RSM/QCM Section 3.2 Chief Inspector acceptance; Appendix A.1 controlled work order and RW10/RW99 backup; Forms Manual estimate/work-order procedures |
+| 6. Prepare and Induct | RSM/QCM receiving, preliminary, and hidden-damage inspections; RWAV-50/RWAV-10 and parts-status controls |
+| 7. Build and Communicate | RSM/QCM continuity of inspection, in-process inspection, technical-data currency, calibrated tools/equipment, parts segregation, task signatures, and discrepancy records |
+| 8. Verify and RTS | RSM/QCM final inspection/RTS, RWAV-100, approved-data checkout, task/inspection clearances, aircraft records, FAA forms, roster authority, and operational check when required |
+| 9. Deliver and Train | RSM/QCM customer maintenance-release/work-order records plus applicable AFMS, ICA, wiring/configuration package, and manufacturer delivery supplement |
+| 10. Support After RTS | RSM/QCM record retention, defect/malfunction reporting, deficiency correction, and retained corrective-action records when applicable |
+
+## 6. Master ten-phase lifecycle
 
 ### Phase 1: Connect and Qualify
 
@@ -131,6 +248,8 @@ These are functional roles. One person may hold multiple roles when qualified an
 - Capture lead source and contact consent.
 - Record basic aircraft and project information.
 - Confirm that the requested work appears to fit RWAS capabilities and service area.
+- Identify the likely certificate rating, Operations Specifications, Capability List, facility, personnel, tooling, and technical-data path that would govern the work.
+- Treat this as an early screen; the Chief Inspector's formal RSM/QCM work-acceptance verification remains required before work begins.
 - Route urgent maintenance or safety concerns outside the ordinary sales path when necessary.
 
 **Deliverable:** Qualified lead record.  
@@ -188,9 +307,11 @@ These are functional roles. One person may hold multiple roles when qualified an
 - Review retained equipment, removal scope, software, databases, and connected services.
 - Identify schedule, parts, certification, and installation risks.
 - Build the proposed configuration and explicit alternatives.
+- Build the preliminary Project Technical Data Index, including the RSM/QCM, Operations Specifications/Capability List basis, applicable aircraft and equipment manuals, installation/STC data, ICA, ADs, service publications, and anticipated checkout/record requirements.
+- Identify whether major-repair/major-alteration data, FAA forms, operational checks, air-carrier procedures, work-away authorization, contract maintenance, or special tooling will be required.
 
 **Deliverable:** Technically reviewed solution, assumptions, exclusions, alternatives, and risk list.  
-**Exit gate:** RWAS confirms the proposed solution is supportable enough to quote.
+**Exit gate:** RWAS confirms the proposed solution is supportable enough to quote and has identified the controlling authority and manual/data path.
 
 ### Phase 5: Approve and Schedule
 
@@ -206,7 +327,9 @@ These are functional roles. One person may hold multiple roles when qualified an
 - Confirm quote validity and equipment lead times.
 - Record accepted configuration and revision.
 - Record proposal acceptance and required initial payment milestone.
-- Open or advance the controlled work order.
+- Before repair-station work is initiated, obtain the Chief Inspector's RSM/QCM Section 3.2 verification that the customer request is clear and concise and that authority, parts/materials, current technical data, tools/equipment, facilities, and qualified personnel are available.
+- Generate the required Avionics work order using the current RSM/QCM-designated primary system.
+- Issue and retain the required RW10/RW99 backup work order and supplemental worksheets in accordance with the Forms Manual and Appendix A.1.
 
 **Generic payment milestones**
 
@@ -216,8 +339,8 @@ These are functional roles. One person may hold multiple roles when qualified an
 
 Percentages and exact payment terms are business-policy values outside this design.
 
-**Deliverable:** Accepted proposal and scheduled work order.  
-**Exit gate:** Acceptance, required payment milestone, and schedule are recorded.
+**Deliverable:** Accepted proposal, Chief Inspector work-acceptance evidence, and controlled work-order package.
+**Exit gate:** Acceptance, required payment milestone, schedule, work-order authority, current manuals/data, and backup continuity are recorded.
 
 ### Phase 6: Prepare and Induct
 
@@ -230,8 +353,11 @@ Percentages and exact payment terms are business-policy values outside this desi
 **RWAS execution before arrival**
 
 - Order, receive, inspect, trace, and stage the project equipment.
+- Perform receiving inspection through an authorized Inspector and applicable Forms Manual records; verify purchase-order conformity, part eligibility, identification, documentation, condition, and shelf-life status.
+- Segregate, tag, quarantine, or reject discrepant material. Apply the suspected-unapproved-parts process when status cannot be verified.
 - Confirm kit completeness and backorder status.
-- Prepare drawings, data, work instructions, and anticipated checkout requirements.
+- Confirm the revision/effective status and availability of the drawings, manuals, approved/acceptable data, work instructions, and checkout procedures in the Project Technical Data Index.
+- Confirm that required tools and test equipment are available, serviceable, and within calibration; document any approved equivalent or fabricated special-tool basis.
 - Prepare the customer account and training checklist applicable to the equipment.
 
 **RWAS execution at induction**
@@ -240,11 +366,13 @@ Percentages and exact payment terms are business-policy values outside this desi
 - Document aircraft condition and current configuration.
 - Reconcile the quoted assumptions with the actual aircraft.
 - Record pre-existing conditions and induction findings.
+- Have a qualified Inspector complete the preliminary inspection using RWAV-10, including the customer scope, overall condition, reported conditions, ADs, Service Bulletins, airworthiness limitations, life-limited parts, and possible hidden damage.
+- Perform and document a hidden-damage search inspection when required. Record corrective findings as work-order discrepancies.
 - Confirm customer account permissions when connected services require them.
 - Establish the authorized work baseline before removal or modification begins.
 
-**Deliverable:** Staged project, induction record, and confirmed aircraft baseline.  
-**Exit gate:** Aircraft condition and authorized scope are reconciled; unresolved findings are routed for decision.
+**Deliverable:** Receiving records, staged project, RWAV-10 preliminary/hidden-damage record, and confirmed aircraft baseline.
+**Exit gate:** Parts/materials are acceptable, aircraft condition and authorized scope are reconciled, required manuals/tools are available, and unresolved findings are routed for decision.
 
 ### Phase 7: Build and Communicate
 
@@ -263,6 +391,11 @@ Percentages and exact payment terms are business-policy values outside this desi
 - Install equipment, antennas, sensors, controls, circuit protection, and placards.
 - Configure systems and preserve configuration records.
 - Record labor, parts, inspections, tests, photographs, and work entries.
+- Perform and document progressive in-process inspections at the points and frequencies required by current applicable technical data.
+- Repeat and reinspect any step found to have been performed incorrectly.
+- Preserve continuity of inspection responsibility through documented task/inspection completion and a sufficient pass-down when work is interrupted or reassigned.
+- Use only serviceable, properly identified/segregated parts and appropriately calibrated/labeled measuring and test equipment for airworthiness determinations.
+- Record the applicable technical-data reference and revision/effective status for completed tasks and inspections.
 - Maintain tool, parts, and aircraft protection controls.
 - Keep the work order and customer-visible status aligned.
 
@@ -286,8 +419,8 @@ Every update answers:
 - Approve, decline, or request-discussion decision
 - Approver and timestamp
 
-**Deliverable:** Completed installation record with resolved customer decisions.  
-**Exit gate:** Installation is complete and no scope decision blocks checkout.
+**Deliverable:** Completed installation record, task clearances, in-process inspections, technical-data references, and resolved customer decisions.
+**Exit gate:** Installation is complete, required in-process inspections are accepted, and no scope, manual, tool, material, or customer decision blocks final checkout.
 
 ### Phase 8: Verify and Return to Service
 
@@ -302,16 +435,18 @@ Every update answers:
 - Complete required system checkout and post-installation procedures in applicable installation manuals and approved data.
 - Confirm software, configuration, labels, interfaces, alerts, sensors, and operating modes.
 - Close functional-test and inspection findings.
-- Complete logbook entries, weight and balance, Instructions for Continued Airworthiness, wiring package, AFMS, FAA forms, release documents, and other applicable records.
-- Perform required quality-control review.
-- Present the complete applicable work and records to an authorized RTS signer.
+- Have a qualified Inspector perform final inspection using RWAV-100, verifying that the customer work scope was completed within repair-station limitations, every task was accomplished or properly cleared by technician signature/initials, and every required inspection was satisfactorily completed and recorded.
+- Complete logbook entries, maintenance release, weight and balance, Instructions for Continued Airworthiness, wiring package, AFMS, FAA forms, release documents, and other applicable records using the current Forms Manual and governing FAA instructions.
+- Use only FAA-approved technical data for major repairs or major alterations and complete/distribute applicable FAA Form 337 records through the required process.
+- If the work could appreciably affect flight characteristics, complete and log the operational check by an appropriately rated pilot before release.
+- Present the article, final inspection, technical-data index, work order, discrepancies, task/inspection signatures, and applicable records to a roster-authorized RTS signer.
 
 **RTS rule**
 
 The customer portal may display **Return to Service Complete** only after the authorized RTS action is recorded. Installation completion, invoice status, or a planned delivery date cannot trigger that status.
 
-**Deliverable:** Completed tests, inspections, records, and authorized RTS approval.  
-**Exit gate:** An authorized person approves the aircraft for return to service within the applicable authority.
+**Deliverable:** Completed approved-data checkout, RWAV-100 final inspection, maintenance/FAA records, customer records package, and authorized RTS approval.
+**Exit gate:** A roster-authorized person approves the aircraft for return to service within the applicable authority, and the authoritative work-order record reflects that action.
 
 ### Phase 9: Deliver and Train
 
@@ -328,6 +463,7 @@ The customer portal may display **Return to Service Complete** only after the au
 - Confirm onboard documents, configuration media, databases, software, warranties, and connected services.
 - Conduct ground orientation and applicable operational demonstration.
 - Conduct the familiarization flight when conditions, qualifications, and scope permit.
+- Provide the customer the signed work-order or maintenance-release copy and the original/copies of applicable FAA or authorized-release documents required by the current RSM/QCM and governing instructions.
 - Record delivery completion and customer acknowledgment.
 
 **Familiarization limitation**
@@ -369,11 +505,13 @@ The familiarization flight is a customer familiarization and operational demonst
 - Software and database guidance
 - Maintenance and future-upgrade support
 - Access to the Project Advisor and retained project record
+- Defect, malfunction, recurring-condition, or repair-station-deficiency reporting and corrective action when the issue meets the current RSM/QCM criteria
+- Retention of the complete authoritative work-order file for at least the period required by the current RSM/QCM, currently not less than two years after work completion
 
 **Deliverable:** Logged follow-ups and owned resolution of open issues.  
 **Exit gate:** The 90-day review is complete, with unresolved items assigned and scheduled.
 
-## 6. Project Journey Record
+## 7. Project Journey Record
 
 Every project uses one continuous record connecting marketing intake, customer communication, the work order, delivery, and support.
 
@@ -385,16 +523,21 @@ Every project uses one continuous record connecting marketing intake, customer c
 4. Aircraft records, photos, and customer-supplied information
 5. Mission brief and measurable success criteria
 6. Panel Planner concept or equivalent outline and revisions
-7. Technical review, eligibility path, assumptions, alternatives, and risks
-8. Accepted proposal, exclusions, payment milestones, and schedule
-9. Parts, receiving, traceability, staging, and backorder status
-10. Aircraft induction condition and reconciled baseline
-11. Work entries, milestones, photographs, and inspections
-12. Discrepancies and customer approvals or declinations
-13. Test, configuration, and inspection records
-14. RTS documentation and authorized signoff
-15. Delivery, training, account, and configuration checklist
-16. 48–72-hour, 30-day, and 90-day follow-up records
+7. Ratings, Operations Specifications, Capability List, and Chief Inspector work-acceptance evidence
+8. Project Technical Data Index with applicability and revision/effective status
+9. Technical review, approval path, assumptions, alternatives, and risks
+10. Accepted proposal, exclusions, payment milestones, and schedule
+11. Authoritative work-order identifier plus RW10/RW99 and supplemental backup records
+12. Parts receiving, eligibility, traceability, tagging/segregation, staging, and backorder status
+13. Tool/equipment availability, calibration, and special-tool evidence
+14. RWAV-10 preliminary/hidden-damage inspection and reconciled aircraft baseline
+15. Work entries, task clearances, milestones, photographs, continuity/pass-downs, and in-process inspections
+16. Discrepancies, corrective actions, and customer approvals or declinations
+17. Approved-data checkout, configuration, functional-test, and inspection records
+18. RWAV-100 final inspection, maintenance records, FAA forms, and authorized RTS signoff
+19. Customer delivery package, training, account, and configuration checklist
+20. 48–72-hour, 30-day, and 90-day follow-up records
+21. Applicable defect reporting, deficiency correction, and retained closeout evidence
 
 ### Privacy and security requirements
 
@@ -404,8 +547,10 @@ Every project uses one continuous record connecting marketing intake, customer c
 - Keep customer PII and aircraft records out of public marketing artifacts unless separately approved.
 - Preserve the approver, timestamp, scope, and evidence for customer decisions.
 - Separate customer-visible status text from internal technical notes when necessary.
+- Preserve controlled records in English and for at least the retention period required by the current RSM/QCM.
+- Do not allow deletion, portal synchronization, or marketing export to alter the authoritative work-order and inspection history.
 
-## 7. Customer-facing status model
+## 8. Customer-facing status model
 
 The portal and communication templates use these plain-language statuses:
 
@@ -426,12 +571,16 @@ The portal and communication templates use these plain-language statuses:
 ### Status rules
 
 - **Your Decision Is Needed** identifies the decision, deadline if any, and affected work.
+- **Scheduled and Preparing** requires an accepted proposal and a controlled work-order path, but does not authorize maintenance by itself.
+- **Installation in Progress** requires the RSM/QCM work-acceptance gate, controlled work order, receiving controls, and completed applicable preliminary inspection.
+- **Testing and Inspection** requires completed/cleared installation tasks and applicable in-process inspection records.
 - A project can return from testing to installation when a test or inspection fails.
 - **Return to Service Complete** requires the recorded authorized RTS gate.
 - **Ready for Delivery** also requires the delivery package and orientation plan to be prepared.
 - **Post-Delivery Support** remains active through the 90-day review and any assigned open items.
+- A customer-facing status is a summary. If it diverges from the controlled work order or inspection record, RWAS corrects the status and follows the authoritative record.
 
-## 8. Communication commitments
+## 9. Communication commitments
 
 - Automatic inquiry acknowledgment
 - Project Advisor introduction and next action
@@ -448,7 +597,7 @@ The portal and communication templates use these plain-language statuses:
 
 Communication should be clear without exposing internal jargon. It should distinguish confirmed facts, estimates, assumptions, and decisions.
 
-## 9. Garmin Customer Aircraft Delivery Checklist integration
+## 10. Garmin Customer Aircraft Delivery Checklist integration
 
 **Source:** [Garmin Customer Aircraft Delivery Checklist](https://atlaske-content.garmin.com/filestorage//email/outbound/attachments/Customer_Aircraft_Delivery_Checklist_Time1761924992585.pdf), document 190-03194-00 Revision 4, dated October 2025.
 
@@ -530,23 +679,31 @@ Only installed and applicable functions are included. Examples include:
 - RWAS person completing the checklist
 - Completion date and retained checklist record
 
-## 10. Exception handling
+## 11. Exception handling
 
 | Situation | Required workflow response |
 |---|---|
+| Work outside ratings, Operations Specifications, or Capability List | Do not accept or begin the work under the repair-station certificate; follow the current capability/authorization process or refer/decline it. |
+| Current applicable technical data unavailable | Hold the affected task until current data is accessible in English and under repair-station control. |
+| Required tool unavailable or calibration expired | Remove the tool from airworthiness use or mark it as required by the RSM/QCM; obtain compliant equipment before the affected task continues. |
+| Receiving-inspection rejection or unverifiable part status | Segregate/quarantine the item, notify the responsible function, and follow discrepancy or SUP procedures. |
 | Missing aircraft information | Hold technical review and request the specific missing records, photos, or identifiers. |
 | Incompatible concept | Explain the conflict, preserve the customer’s goal, and present compliant alternatives. |
 | Equipment backorder | Show schedule impact and offer waiting, approved substitution, or revised timing. |
 | Induction discrepancy | Pause affected work, document the finding, and route it through approval. |
+| Accident history or suspected hidden damage | Require the applicable qualified hidden-damage search inspection and record findings on RWAV-10/work-order discrepancies. |
 | Unexpected airworthiness concern | Secure the aircraft, notify qualified personnel, and follow the applicable maintenance process. |
 | Customer nonresponse | Set Your Decision Is Needed, record contact attempts, and hold affected work. |
 | Functional-test failure | Return to troubleshooting or installation; do not advance toward RTS. |
 | Inspection finding | Correct or formally resolve the finding before release within the applicable process. |
 | Missing documentation | Block RTS until the required record is complete. |
+| Contract maintenance proposed | Verify the function is approved, the source is qualified, applicable surveillance/receiving requirements are met, and outside records are retained before use. |
+| Work away from the fixed location proposed | Apply the RSM/QCM site-evaluation, authority, notification/approval, resource, and recordkeeping process before work starts. |
+| Air-carrier customer | Obtain and follow the carrier’s applicable manuals/programs and retain required customer-specific records. |
 | Customer declines work | Record the decision and its effect on scope, configuration, operation, schedule, or delivery. |
 | Post-delivery issue | Triage by safety, operational, warranty, configuration, and training severity; assign a named owner. |
 
-## 11. Future customer webpage
+## 12. Future customer webpage
 
 ### Selected visual direction
 
@@ -559,15 +716,15 @@ Only installed and applicable functions are included. Examples include:
 2. **Imagine**  
    Mission discovery, every intake path, and one Project Advisor.
 3. **Design**  
-   Panel Planner, aircraft data, engineering review, tradeoffs, and alternatives.
+   Panel Planner, aircraft data, engineering review, tradeoffs, alternatives, and the applicable authority/manual/data path.
 4. **Approve**  
    Defined scope, assumptions, generic payment milestones, schedule, and no-surprise change control.
 5. **Prepare**  
-   Parts staging, aircraft-arrival planning, records, and induction.
+   Controlled work order, parts receiving/staging, aircraft-arrival planning, preliminary inspection, records, and induction.
 6. **Build**  
-   Fabrication, wiring, installation, craftsmanship, milestone updates, and customer decisions.
+   Fabrication, wiring, installation, craftsmanship, current technical data, in-process inspections, milestone updates, and customer decisions.
 7. **Verify and Fly**  
-   Testing, inspection, complete records, authorized RTS, delivery, training, and familiarization.
+   Approved-data testing, RWAS final inspection, complete records, authorized RTS, delivery, training, and familiarization.
 8. **Supported**  
    48–72-hour, 30-day, and 90-day follow-up plus ongoing support.
 
@@ -577,9 +734,9 @@ Only installed and applicable functions are included. Examples include:
 - **Secondary:** Talk With an RWAS Project Advisor — opens the standardized avionics discovery intake.
 - **Later-page CTA:** Submit Your Aircraft and Mission — begins the qualified project record.
 
-The page may explain the customer/RWAS two-lane detail through expandable sections, but it should not expose internal-only notes or imply that a concept is an installed quote or approved configuration.
+The page may explain the customer/RWAS two-lane detail through expandable sections, including a concise **Controlled From Start to Finish** feature. That feature should explain that RWAS verifies authority, current manuals/data, parts, calibrated tools, inspections, records, and authorized RTS without exposing internal-only notes or implying that a concept is an installed quote or approved configuration.
 
-## 12. Future 75–90 second sales film
+## 13. Future 75–90 second sales film
 
 The film shares the webpage’s eight promises.
 
@@ -588,9 +745,9 @@ The film shares the webpage’s eight promises.
 | The Vision | 0–8 seconds | Aircraft at dawn; dark panel powers up | Every great panel begins with the way the customer flies. |
 | Discovery | 8–18 seconds | Owner and advisor review the mission and Panel Planner | One advisor helps turn goals into a defined project. |
 | Engineering | 18–28 seconds | Concept transitions into reviewed system planning | RWAS checks eligibility, compatibility, structure, electrical requirements, and approval path. |
-| Commitment | 28–36 seconds | Customer reviews and approves a clear plan | Defined scope, schedule, milestones, and controlled changes. |
-| Craftsmanship | 36–53 seconds | Fabrication, wiring, harness, and installation montage | The vision becomes aircraft-quality work, with regular customer communication. |
-| Verification | 53–65 seconds | Power-up, configuration, testing, inspection, and records | The system is tested, inspected, documented, and approved for RTS by authorized personnel. |
+| Commitment | 28–36 seconds | Customer reviews and approves a clear plan | Defined scope, controlled work order, schedule, milestones, and controlled changes. |
+| Craftsmanship | 36–53 seconds | Receiving, preliminary inspection, fabrication, wiring, harness, and installation montage | The vision becomes aircraft-quality work under current manuals/data and in-process inspection, with regular customer communication. |
+| Verification | 53–65 seconds | Power-up, configuration, approved-data testing, RWAS final inspection, and records | The system is tested, inspected, documented, and approved for RTS by authorized personnel. |
 | Delivery | 65–78 seconds | Account setup, device pairing, customer training, and familiarization flight | RWAS transfers understanding, not just equipment. |
 | Supported | 78–90 seconds | Aircraft departure, advisor follow-up, and RWAS mark | Support continues at 48 hours, 30 days, 90 days, and beyond. |
 
@@ -598,25 +755,32 @@ The film shares the webpage’s eight promises.
 
 The main film can later produce shorter cutdowns for Panel Planner, craftsmanship, delivery/training, and post-RTS support.
 
-## 13. Quality measures
+## 14. Quality measures
 
 RWAS should track:
 
 - Inquiry-to-human-response time
 - Discovery-to-proposal time
 - Percentage of projects with complete aircraft information before technical review
+- Percentage of repair-station jobs with documented Chief Inspector capability/work-acceptance verification before work begins
+- Percentage of projects with a complete Project Technical Data Index and verified current applicable data
+- Receiving-inspection and parts-status record completeness
+- Required tool/equipment availability and calibration compliance
+- Preliminary, hidden-damage, continuity, and in-process inspection record completeness
 - Weekly update compliance
 - Number and age of customer decisions awaiting response
 - Schedule variance and documented cause
 - Change orders with complete customer approval evidence
 - First-pass system-checkout rate
-- Documentation completeness before RTS
+- RWAV-100 and complete documentation before RTS
+- Authoritative RTS status and customer-portal status reconciliation
+- Work-order backup and record-retention compliance
 - Delivery-checklist completion
 - 48–72-hour, 30-day, and 90-day follow-up completion
 - Post-delivery issues by category and time to resolution
 - Customer satisfaction, testimonials, and referrals
 
-## 14. Acceptance tests
+## 15. Acceptance tests
 
 The workflow is ready for implementation planning only when each scenario has a clear owner, record, customer message, and gate behavior.
 
@@ -657,18 +821,52 @@ The workflow is ready for implementation planning only when each scenario has a 
 - A named owner and response path are recorded.
 - Follow-up remains open until resolved or scheduled.
 
+### Scenario 7: Authority or current technical data cannot be confirmed
+
+- The Chief Inspector's acceptance review identifies a rating, capability, or manual/data gap.
+- The affected repair-station work does not begin.
+- The customer receives a clear status without an unsupported technical promise.
+- Work proceeds only after the controlling requirement is satisfied through the applicable process.
+
+### Scenario 8: Incoming part fails receiving inspection
+
+- The item is identified, segregated/quarantined, and prevented from installation.
+- Supporting documents and supplier resolution are recorded.
+- The SUP process is used if approval status cannot be verified.
+- The customer receives material schedule impact through the Project Advisor.
+
+### Scenario 9: Required test equipment is out of calibration
+
+- The equipment is not used for the airworthiness determination.
+- The affected test/inspection pauses until compliant equipment is available.
+- Replacement equipment and calibration status are recorded.
+
+### Scenario 10: Portal status conflicts with controlled records
+
+- A portal shows a later phase than the authoritative work order or inspection record.
+- The customer-facing status is corrected without altering controlled history.
+- The cause is recorded and the synchronization/control defect is corrected.
+
 ### Additional acceptance criteria
 
 - No stage can advance without its required exit gate.
+- The current RSM/QCM revision and List of Effective Pages are verified for the project process.
+- Operations Specifications, Capability List, Forms Manual, Training Program, personnel roster, and applicable technical data are available to the responsible personnel.
+- The Chief Inspector's RSM/QCM Section 3.2 acceptance gate precedes repair-station work.
+- Every job has the current RSM/QCM-designated primary work order plus required RW10/RW99 backup continuity.
+- Receiving, preliminary/hidden-damage, in-process, final, and RTS records use the current controlled forms/process.
 - The customer always knows the next step and whether a decision is required.
 - The Project Advisor remains visible throughout the lifecycle.
 - Customer-facing and internal status remain reconcilable.
 - No additional billable scope proceeds without approval evidence.
 - RTS status cannot be set without authorized RTS evidence.
+- Only qualified/authorized personnel perform or accept inspections and RTS functions.
+- Current applicable technical data and calibrated tools are verified before relevant tasks and inspections.
+- Applicable records are retained in English for not less than the current RSM/QCM period.
 - Garmin delivery activities are configuration-specific and do not replace approved checkout procedures.
 - Post-RTS support touches are scheduled at delivery and retained in the project record.
 
-## 15. Implementation boundaries
+## 16. Implementation boundaries
 
 This document defines the approved workflow and experience. It does not yet authorize or specify:
 
@@ -678,7 +876,10 @@ This document defines the approved workflow and experience. It does not yet auth
 - A warranty duration beyond applicable manufacturer and RWAS policy
 - Customer access to internal-only maintenance notes
 - Automatic RTS or release decisions
+- Replacement of QuantumMX or RW10/RW99 as the RSM/QCM-designated work-order/backup process
+- Revision of the RSM/QCM, Operations Specifications, Capability List, Forms Manual, Training Program, or personnel authorizations
+- Creation of an electronic controlled form without validating required content, signatures, authority, retention, and backup behavior
 - Public deployment of the webpage
 - Production of the sales film
 
-Those items require a separate implementation plan and, where applicable, business or regulatory approval.
+Those items require a separate implementation plan and, where applicable, controlled-manual revision, training, validation, FAA coordination, business approval, or regulatory approval. The implementation plan must not treat this customer-lifecycle design as authority to bypass those processes.
