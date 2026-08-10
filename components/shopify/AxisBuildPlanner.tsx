@@ -5,7 +5,7 @@ import {
   AXIS_STEPS,
   type AxisPlannerKind,
 } from '@/lib/axis-planner-data';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 type Selection = Record<string, number>;
 
@@ -80,6 +80,8 @@ function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
 
 export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
   const [selection, setSelection] = useState<Selection>({});
+  const [source, setSource] = useState('axis-build-planner');
+  const [attribution, setAttribution] = useState<Record<string, string>>({});
   const items = AXIS_ITEMS[kind];
   const steps = AXIS_STEPS[kind];
   const selectedItems = useMemo(
@@ -92,6 +94,23 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
   );
   const advisories = buildAdvisories(kind, selection);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSource(params.get('source') || 'axis-build-planner');
+    const preserved: Record<string, string> = {};
+    for (const key of [
+      'utm_source',
+      'utm_medium',
+      'utm_campaign',
+      'utm_content',
+      'utm_term',
+    ]) {
+      const value = params.get(key);
+      if (value) preserved[key] = value;
+    }
+    setAttribution(preserved);
+  }, []);
+
   const setQuantity = (sku: string, quantity: number) => {
     setSelection((current) => {
       const next = { ...current };
@@ -102,25 +121,61 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
   };
 
   const submitBuild = () => {
-    const lines = selectedItems.map(
+    // A new build gets a new key. The draft retains this key so retries of the
+    // same contact submission remain idempotent without blocking later builds.
+    const requestId = `rwas_axis_${Date.now().toString(36)}_${crypto.randomUUID().replace(/-/g, '')}`;
+    const components = selectedItems.map((item) => ({
+      title: item.title,
+      sku: item.sku,
+      quantity: selection[item.sku],
+      unitPrice: item.price,
+      extendedPrice: item.price * selection[item.sku],
+    }));
+    const lines = components.map(
       (item) =>
-        `${selection[item.sku]} × ${item.sku} — ${money.format(item.price * selection[item.sku])}`,
+        `${item.quantity} × ${item.title} (${item.sku}) — ${money.format(item.extendedPrice)} [unit ${money.format(item.unitPrice)}]`,
     );
     const message = [
-      `AXIS ${kind === 'certified' ? 'Certified' : 'Experimental'} Build-A-System Planner submission`,
+      `AXIS ${kind === 'certified' ? 'Certified' : 'Experimental'} preliminary build handoff`,
       '',
       ...lines,
       '',
+      `Garmin July 2026 guide-pricing reference: hardware list pricing shown in planner`,
       `Hardware retail total: ${money.format(total)}`,
+      `Planner kind: AXIS ${kind}`,
+      `Request/build ID: ${requestId}`,
+      `Source: ${source}`,
       '',
       advisories.length
         ? `Planner advisories:\n- ${advisories.join('\n- ')}`
         : 'Planner advisories: None shown.',
       '',
-      'Please review aircraft eligibility, compatibility, required installation hardware, labor and special package pricing.',
+      'This is preliminary hardware planning—not an approved configuration or installed quote. Please review aircraft eligibility, compatibility, required installation hardware, labor and special package pricing.',
     ].join('\n');
-    window.sessionStorage.setItem('rwas-contact-draft', message);
+    window.sessionStorage.setItem(
+      'rwas-contact-draft',
+      JSON.stringify({
+        requestId,
+        plannerKind: kind,
+        createdAt: new Date().toISOString(),
+        source,
+        pricingReference: 'Garmin July 2026 Build-A-System Guide',
+        message,
+        components,
+        advisories,
+        attribution,
+        total,
+      }),
+    );
   };
+
+  const contactParams = new URLSearchParams({
+    reason: 'quote',
+    product: `AXIS ${kind === 'certified' ? 'Certified' : 'Experimental'} System Build`,
+    source,
+    draft: 'axis',
+    ...attribution,
+  });
 
   return (
     <div className="space-y-7">
@@ -212,7 +267,7 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
         className="border-4 border-black bg-white p-5 md:p-7"
         aria-live="polite"
       >
-        <p className="bs-kicker">Build summary</p>
+        <p className="bs-kicker">Preliminary build summary</p>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-3 border-b-2 border-black pb-4">
           <h2 className="bs-section-head">Hardware retail total</h2>
           <p className="text-3xl font-black tabular-nums md:text-4xl">
@@ -236,11 +291,13 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
         ) : null}
         {selectedItems.length ? (
           <a
-            href={`/contact?reason=quote&product=${encodeURIComponent(`AXIS ${kind === 'certified' ? 'Certified' : 'Experimental'} System Build`)}&source=axis-build-planner&draft=axis`}
+            href={`/contact?${contactParams.toString()}`}
             onClick={submitBuild}
             className="bs-cta-primary mt-6 inline-flex"
           >
-            Submit Your Build to RWAS for Special Pricing
+            {advisories.length
+              ? 'Submit Preliminary Build with Advisories'
+              : 'Submit Preliminary Build to RWAS'}
           </a>
         ) : (
           <span
@@ -251,8 +308,9 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
           </span>
         )}
         <p className="mt-3 text-sm text-neutral-600">
-          Your submitted build is delivered to the RWAS Avionics Desk by email
-          and to Shop Talk in Microsoft Teams.
+          Selected equipment is sent to the RWAS service desk by email and,
+          after email delivery succeeds, to Shop Talk in Microsoft Teams. The
+          planner does not perform full compatibility validation.
         </p>
       </section>
     </div>

@@ -60,6 +60,350 @@ const rwasContactWithRequiredNNumber = rwasContact
     '',
   );
 
+// The generated worker must preserve the same delivery contract as the
+// standalone Pages Function: Resend gates success, Teams is best-effort, and
+// the planner request ID is reused as Resend's idempotency key.
+const rwasContactAligned = `
+if (rwasUrl.pathname === "/api/contact") {
+  const json = (body, status = 200) =>
+    new Response(JSON.stringify(body), {
+      status,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+      },
+    });
+  if (t.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: { Allow: "POST, OPTIONS", "Cache-Control": "no-store" },
+    });
+  }
+  if (t.method !== "POST") return json({ error: "Method not allowed" }, 405);
+
+  let payload;
+  try {
+    payload = await t.clone().json();
+  } catch {
+    return json({ error: "Invalid JSON body." }, 400);
+  }
+
+  const clean = (value, max = 240) =>
+    typeof value === "string" ? value.slice(0, max) : "";
+  const escapeHtml = (value) =>
+    clean(value, 20000)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  const number = (value) =>
+    typeof value === "number" && Number.isFinite(value) ? value : 0;
+  const requestId = /^[A-Za-z0-9_-]{8,120}$/.test(payload.requestId || "")
+    ? payload.requestId
+    : "rwas_" +
+      Date.now().toString(36) +
+      "_" +
+      crypto.randomUUID().replace(/-/g, "");
+
+  if (payload.website) {
+    return json({ ticketId: requestId, requestId, to: "service@rwas.team" });
+  }
+  if (!payload.name || payload.name.length < 2) {
+    return json({ error: "Name is required." }, 400);
+  }
+  if (
+    !payload.email ||
+    !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(payload.email)
+  ) {
+    return json({ error: "Please enter a valid email." }, 400);
+  }
+
+  const quote = payload.reason === "quote";
+  const allowedStatuses = [
+    "registered",
+    "under-construction",
+    "identifiers-not-assigned",
+  ];
+  if (
+    payload.aircraftStatus &&
+    !allowedStatuses.includes(payload.aircraftStatus)
+  ) {
+    return json({ error: "Please choose a valid aircraft status." }, 400);
+  }
+  if (
+    quote &&
+    (!clean(payload.aircraftMake, 80).trim() ||
+      !clean(payload.aircraftModel, 80).trim())
+  ) {
+    return json(
+      { error: "Aircraft make and model are required for quote requests." },
+      400,
+    );
+  }
+  if (quote && !payload.aircraftStatus) {
+    return json(
+      { error: "Please choose the aircraft status for this quote request." },
+      400,
+    );
+  }
+  if (
+    quote &&
+    payload.aircraftStatus === "registered" &&
+    (!/^\\d{4}$/.test(payload.aircraftYear || "") ||
+      !clean(payload.aircraftSerialNumber, 80).trim() ||
+      !clean(payload.nNumber, 10).trim())
+  ) {
+    return json(
+      {
+        error:
+          "Registered-aircraft quotes require year, serial number, and N-number.",
+      },
+      400,
+    );
+  }
+  if (payload.nNumber && !/^[A-Za-z0-9-]{1,10}$/i.test(payload.nNumber)) {
+    return json({ error: "N-number has unexpected characters." }, 400);
+  }
+  if (typeof payload.message !== "string" || payload.message.length < 10) {
+    return json(
+      { error: "Please include a short message so we can help." },
+      400,
+    );
+  }
+  if (payload.message.length > 4000) {
+    return json({ error: "Message is too long (max 4000 characters)." }, 400);
+  }
+  if (
+    (payload.components &&
+      (!Array.isArray(payload.components) || payload.components.length > 100)) ||
+    (payload.advisories &&
+      (!Array.isArray(payload.advisories) || payload.advisories.length > 30))
+  ) {
+    return json({ error: "Planner payload is too large." }, 400);
+  }
+
+  if (e.TURNSTILE_SECRET_KEY) {
+    const verificationBody = new URLSearchParams({
+      secret: e.TURNSTILE_SECRET_KEY,
+      response: payload.turnstileToken || "",
+    });
+    const ip = t.headers.get("CF-Connecting-IP");
+    if (ip) verificationBody.set("remoteip", ip);
+    let verified = false;
+    try {
+      const verification = await fetch(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: verificationBody.toString(),
+        },
+      );
+      verified = Boolean((await verification.json()).success);
+    } catch {}
+    if (!verified) {
+      return json(
+        {
+          error:
+            "Verification failed. Please refresh the page and try again, or email service@rwas.team directly.",
+        },
+        429,
+      );
+    }
+  }
+
+  if (!e.RESEND_API_KEY) {
+    return json(
+      {
+        error:
+          "We could not deliver your message right now. Please email service@rwas.team directly.",
+      },
+      502,
+    );
+  }
+
+  const labels = {
+    quote: "Quote request",
+    general: "General inquiry",
+    service: "Service / maintenance",
+    "papa-alpha": "Papa-Alpha tool inquiry",
+    "aircraft-sales": "Aircraft for sale",
+  };
+  const reason = labels[payload.reason || "general"] || "Inquiry";
+  const to = e.CONTACT_TO_EMAIL || "service@rwas.team";
+  const from =
+    e.CONTACT_FROM_EMAIL || "RWAS Correspondence <noreply@rwas.team>";
+  const aircraft = [
+    clean(payload.aircraftYear, 4),
+    clean(payload.aircraftMake, 80),
+    clean(payload.aircraftModel, 80),
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const attributionLines = [
+    payload.source ? "Source: " + clean(payload.source, 120) : "",
+    payload.utm_source
+      ? "UTM source: " + clean(payload.utm_source, 240)
+      : "",
+    payload.utm_medium
+      ? "UTM medium: " + clean(payload.utm_medium, 240)
+      : "",
+    payload.utm_campaign
+      ? "UTM campaign: " + clean(payload.utm_campaign, 240)
+      : "",
+    payload.utm_content
+      ? "UTM content: " + clean(payload.utm_content, 240)
+      : "",
+    payload.utm_term ? "UTM term: " + clean(payload.utm_term, 240) : "",
+  ].filter(Boolean);
+  const componentLines = Array.isArray(payload.components)
+    ? payload.components.map(
+        (item) =>
+          "- " +
+          clean(item && (item.title || item.sku || "Component"), 240) +
+          " (" +
+          clean(item && item.sku, 120) +
+          ") x " +
+          number(item && item.quantity) +
+          " | unit " +
+          number(item && item.unitPrice) +
+          " | extended " +
+          number(item && item.extendedPrice),
+      )
+    : [];
+  const advisoryLines = Array.isArray(payload.advisories)
+    ? payload.advisories.map((advisory) => "- " + clean(advisory, 400))
+    : [];
+  const text = [
+    "RWAS CORRESPONDENCE DESK — " + requestId,
+    "Request/build ID: " + requestId,
+    "Reason: " + reason,
+    payload.product ? "Product: " + clean(payload.product, 240) : "",
+    payload.sku ? "SKU: " + clean(payload.sku, 120) : "",
+    "Name: " + clean(payload.name, 120),
+    "Email: " + clean(payload.email, 254),
+    payload.phone ? "Phone: " + clean(payload.phone, 40) : "",
+    payload.preferredContact
+      ? "Prefers: " + clean(payload.preferredContact, 20)
+      : "",
+    payload.bestTimeToCall
+      ? "Best time: " + clean(payload.bestTimeToCall, 120)
+      : "",
+    aircraft ? "Aircraft: " + aircraft : "",
+    payload.aircraftSerialNumber
+      ? "Serial Number: " + clean(payload.aircraftSerialNumber, 80)
+      : "",
+    payload.nNumber ? "N-Number: " + clean(payload.nNumber, 10) : "",
+    payload.aircraftStatus
+      ? "Aircraft status: " + clean(payload.aircraftStatus, 40)
+      : "",
+    payload.plannerKind
+      ? "Planner: AXIS " + clean(payload.plannerKind, 20)
+      : "",
+    payload.createdAt ? "Build created: " + clean(payload.createdAt, 80) : "",
+    payload.pricingReference
+      ? "Pricing: " + clean(payload.pricingReference, 160)
+      : "",
+    ...attributionLines,
+    "",
+    "Message:",
+    clean(payload.message, 4000),
+    componentLines.length
+      ? "\\nSelected equipment:\\n" + componentLines.join("\\n")
+      : "",
+    advisoryLines.length
+      ? "\\nPlanner advisories:\\n" + advisoryLines.join("\\n")
+      : "",
+  ]
+    .filter((line) => line !== "")
+    .join("\\n");
+  const subject =
+    "[" +
+    requestId +
+    "] " +
+    (quote && payload.product
+      ? "Quote: " + clean(payload.product, 240)
+      : reason) +
+    " — from " +
+    clean(payload.name, 120) +
+    (payload.source ? " [src:" + clean(payload.source, 120) + "]" : "");
+  const emailBody = {
+    from,
+    to: [to],
+    reply_to: clean(payload.email, 254),
+    subject,
+    text,
+    html:
+      "<h2>" +
+      escapeHtml(reason) +
+      "</h2><pre style=\\\"font:14px/1.5 Arial,sans-serif;white-space:pre-wrap\\\">" +
+      escapeHtml(text) +
+      "</pre>",
+    tags: [
+      { name: "source", value: "rwas-contact-form" },
+      { name: "reason", value: clean(payload.reason || "general", 64) },
+    ],
+  };
+
+  const email = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + e.RESEND_API_KEY,
+      "Content-Type": "application/json",
+      "Idempotency-Key": requestId,
+    },
+    body: JSON.stringify(emailBody),
+  });
+  if (!email.ok) {
+    console.error("contact-form email send failed", requestId, email.status);
+    return json(
+      {
+        error:
+          "We could not deliver your message right now. Please email service@rwas.team directly.",
+      },
+      502,
+    );
+  }
+
+  if (e.TEAMS_RELAY_TOKEN) {
+    try {
+      const teams = await fetch(
+        e.CONTACT_TEAMS_RELAY_URL || "https://teamsbot.rwas.team/post",
+        {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + e.TEAMS_RELAY_TOKEN,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            channel: e.CONTACT_TEAMS_TARGET || "Shop Talk",
+            text: "NEW WEBSITE INQUIRY — " + requestId + "\\n" + text,
+            requestId,
+            idempotencyKey: requestId,
+          }),
+        },
+      );
+      if (!teams.ok) {
+        console.error(
+          "contact-form Teams send failed after email success",
+          requestId,
+          teams.status,
+        );
+      }
+    } catch (error) {
+      console.error(
+        "contact-form Teams send failed after email success",
+        requestId,
+        error,
+      );
+    }
+  }
+
+  return json({ ticketId: requestId, requestId, to });
+}
+`;
+
 // Keep the hand-injected Pages fallback aligned with functions/api/cart.ts. The
 // Next-on-Pages worker does not execute the TypeScript function directly.
 const rwasCartFixed = rwasCart
@@ -80,7 +424,7 @@ const rwasCartFixed = rwasCart
     'else{const d=await shop(q.create,{merchandiseId,quantity});if(d?.cartCreate?.userErrors?.length)return j({error:d.cartCreate.userErrors.map(x=>x.message).join("; ")},400);cart=d?.cartCreate?.cart}',
   );
 
-const injected = `${marker}${rwasOpsProxy}${rwasAnalytics}${rwasContact}${rwasCartFixed}const rwasPath=rwasUrl.pathname.replace(/\\/$/,"");if(${JSON.stringify(
+const injected = `${marker}${rwasOpsProxy}${rwasAnalytics}${rwasContactAligned}${rwasCartFixed}const rwasPath=rwasUrl.pathname.replace(/\\/$/,"");if(${JSON.stringify(
   gonePaths,
 )}.includes(rwasPath))return new Response("Gone",{status:410,headers:{"Cache-Control":"public, max-age=3600","X-Robots-Tag":"noindex, noarchive"}});const rwasTarget=${JSON.stringify(
   redirects,
@@ -99,13 +443,7 @@ if (
     `Expected one Cloudflare worker fetch marker in ${workerPath}; found ${markerMatches.length}`,
   );
 } else {
-  writeFileSync(
-    workerPath,
-    worker.replace(
-      marker,
-      injected.replace(rwasContact, rwasContactWithRequiredNNumber),
-    ),
-  );
+  writeFileSync(workerPath, worker.replace(marker, injected));
   console.log(
     `Injected ${Object.keys(redirects).length} RWAS collection redirects and ${gonePaths.length} gone URL into Cloudflare worker.`,
   );

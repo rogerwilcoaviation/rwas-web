@@ -14,7 +14,12 @@ export type BroadsheetNavProps = {
 const DEFAULT_ITEMS: NavItem[] = [
   { href: '/', label: 'Home' },
   { href: '#ask-jerry', label: 'Ask Jerry', accent: true },
-  { href: '/panel-planner', label: 'Build My Panel', accent: true },
+  {
+    href: '/axis-system-planner?source=homepage-navigation',
+    label: 'AXIS System Builder',
+    accent: true,
+  },
+  { href: '/panel-planner', label: 'Panel Layout Planner', accent: true },
   { href: '/collections', label: 'Garmin' },
   { href: '/collections/papa-alpha-tools', label: 'Papa-Alpha Tools' },
   { href: '/aircraft-for-sale', label: 'Aircraft 4 Sale' },

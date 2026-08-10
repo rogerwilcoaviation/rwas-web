@@ -141,13 +141,13 @@ export default async function CollectionsPage() {
               }}
             >
               <Link
-                href="/axis-system-planner/certified"
+                href="/axis-system-planner/certified?source=collections"
                 className="bs-cta-primary"
               >
                 AXIS System for Certified
               </Link>
               <Link
-                href="/axis-system-planner/experimental"
+                href="/axis-system-planner/experimental?source=collections"
                 className="bs-cta-secondary"
               >
                 AXIS System for Experimental

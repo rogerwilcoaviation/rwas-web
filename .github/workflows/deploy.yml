@@ -44,6 +44,9 @@ jobs:
         env:
           NODE_VERSION: '22'
 
+      - name: AXIS funnel smoke
+        run: node scripts/axis-funnel-smoke.mjs
+
       - name: Deploy production to Cloudflare Pages
         if: github.ref == 'refs/heads/main'
         id: cf-deploy-production

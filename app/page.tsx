@@ -181,8 +181,8 @@ export default function Home() {
                   retail total update as the system takes shape.
                 </p>
                 <p>
-                  Each completed build can be submitted directly to Roger Wilco
-                  Aviation Services for compatibility review and special
+                  Each preliminary build can be submitted directly to Roger
+                  Wilco Aviation Services for compatibility review and special
                   pricing. RWAS will review the aircraft, mission, certification
                   path, installation requirements, and selected equipment before
                   preparing the next step.
@@ -196,13 +196,13 @@ export default function Home() {
                   }}
                 >
                   <a
-                    href="/axis-system-planner/certified"
+                    href="/axis-system-planner/certified?source=homepage"
                     className="bs-cta-primary"
                   >
                     Build a Certified AXIS System
                   </a>
                   <a
-                    href="/axis-system-planner/experimental"
+                    href="/axis-system-planner/experimental?source=homepage"
                     className="bs-cta-secondary"
                   >
                     Build an Experimental AXIS System
