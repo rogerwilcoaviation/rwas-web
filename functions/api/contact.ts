@@ -58,6 +58,11 @@ type ContactPayload = {
   product?: string;
   sku?: string;
   source?: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_content?: string;
+  utm_term?: string;
   message?: string;
   requestId?: string;
   plannerKind?: 'certified' | 'experimental';
@@ -100,16 +105,6 @@ function escapeHtml(s: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
-}
-
-function generateTicketId(): string {
-  // RWAS-YYMMDD-XXXX — human-readable, roughly unique per submission
-  const now = new Date();
-  const yy = String(now.getUTCFullYear()).slice(-2);
-  const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
-  const dd = String(now.getUTCDate()).padStart(2, '0');
-  const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
-  return `RWAS-${yy}${mm}${dd}-${rand}`;
 }
 
 function generateRequestId(): string {
@@ -239,6 +234,11 @@ function buildPlainTextBody(
   if (p.product) lines.push(`Product:   ${p.product}`);
   if (p.sku) lines.push(`SKU:       ${p.sku}`);
   if (p.source) lines.push(`Source:    ${p.source}`);
+  if (p.utm_source) lines.push(`UTM source:   ${p.utm_source}`);
+  if (p.utm_medium) lines.push(`UTM medium:   ${p.utm_medium}`);
+  if (p.utm_campaign) lines.push(`UTM campaign: ${p.utm_campaign}`);
+  if (p.utm_content) lines.push(`UTM content:  ${p.utm_content}`);
+  if (p.utm_term) lines.push(`UTM term:     ${p.utm_term}`);
   if (p.plannerKind) lines.push(`Planner:   AXIS ${p.plannerKind}`);
   if (p.pricingReference) lines.push(`Pricing:   ${p.pricingReference}`);
   if (p.aircraftStatus) lines.push(`Status:    ${p.aircraftStatus}`);
@@ -324,6 +324,11 @@ function buildHtmlBody(
             ${row('Serial number', p.aircraftSerialNumber)}
             ${row('N-Number', p.nNumber)}
             ${row('Source', p.source)}
+            ${row('UTM source', p.utm_source)}
+            ${row('UTM medium', p.utm_medium)}
+            ${row('UTM campaign', p.utm_campaign)}
+            ${row('UTM content', p.utm_content)}
+            ${row('UTM term', p.utm_term)}
             ${row('Aircraft status', p.aircraftStatus)}
             ${row('Planner', p.plannerKind ? `AXIS ${p.plannerKind}` : undefined)}
             ${row('Pricing reference', p.pricingReference)}
@@ -426,6 +431,11 @@ function buildTeamsBody(
     `Serial Number: ${p.aircraftSerialNumber || ''}`,
     p.nNumber ? `N-Number: ${p.nNumber}` : '',
     p.source ? `Source: ${p.source}` : '',
+    p.utm_source ? `UTM source: ${p.utm_source}` : '',
+    p.utm_medium ? `UTM medium: ${p.utm_medium}` : '',
+    p.utm_campaign ? `UTM campaign: ${p.utm_campaign}` : '',
+    p.utm_content ? `UTM content: ${p.utm_content}` : '',
+    p.utm_term ? `UTM term: ${p.utm_term}` : '',
     p.aircraftStatus ? `Aircraft status: ${p.aircraftStatus}` : '',
     p.plannerKind ? `Planner: AXIS ${p.plannerKind}` : '',
     '',
@@ -495,7 +505,7 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
   if (validationError === '__HONEYPOT__') {
     // Silent success — bots shouldn't learn they were filtered
     return jsonResponse({
-      ticketId: generateTicketId(),
+      ticketId: requestId,
       requestId,
       to: 'service@rwas.team',
     });
@@ -523,7 +533,9 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
 
   // 3. Internal email is the customer-facing delivery gate. Teams is a
   // best-effort notification sent only after Resend accepts the email.
-  const ticketId = generateTicketId();
+  // Keep the Resend payload deterministic for this idempotency key so retries
+  // return the original provider result instead of conflicting.
+  const ticketId = requestId;
   const emailSend = await sendViaResend(env, payload, ticketId, requestId);
   if (!emailSend.ok) {
     console.error('contact-form email send failed', {

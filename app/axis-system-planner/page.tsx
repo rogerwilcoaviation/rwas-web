@@ -8,7 +8,9 @@ import {
   Masthead,
 } from '@/components/shared/broadsheet';
 import { genPageMetadata } from '@/app/seo';
+import AxisPlannerAttributedLink from '@/components/shopify/AxisPlannerAttributedLink';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/axis-system-planner';
 
@@ -50,18 +52,42 @@ export default function AxisSystemPlannerLanding() {
               installed quote.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
-              <Link
-                href="/axis-system-planner/certified?source=axis-landing"
-                className="bs-cta-primary"
+              <Suspense
+                fallback={
+                  <Link
+                    href="/axis-system-planner/certified?source=axis-landing"
+                    className="bs-cta-primary"
+                  >
+                    Certified aircraft
+                  </Link>
+                }
               >
-                Certified aircraft
-              </Link>
-              <Link
-                href="/axis-system-planner/experimental?source=axis-landing"
-                className="bs-cta-secondary"
+                <AxisPlannerAttributedLink
+                  href="/axis-system-planner/certified"
+                  defaultSource="axis-landing"
+                  className="bs-cta-primary"
+                >
+                  Certified aircraft
+                </AxisPlannerAttributedLink>
+              </Suspense>
+              <Suspense
+                fallback={
+                  <Link
+                    href="/axis-system-planner/experimental?source=axis-landing"
+                    className="bs-cta-secondary"
+                  >
+                    Experimental aircraft
+                  </Link>
+                }
               >
-                Experimental aircraft
-              </Link>
+                <AxisPlannerAttributedLink
+                  href="/axis-system-planner/experimental"
+                  defaultSource="axis-landing"
+                  className="bs-cta-secondary"
+                >
+                  Experimental aircraft
+                </AxisPlannerAttributedLink>
+              </Suspense>
             </div>
           </article>
           <article className="border-2 border-black bg-[#f2ecde] p-6">
@@ -72,12 +98,24 @@ export default function AxisSystemPlannerLanding() {
               customer Panel Planner. It remains a separate tool focused on
               layout and finish ideas.
             </p>
-            <Link
-              href="/panel-planner?source=panel-layout-cross-link"
-              className="bs-cta-secondary mt-5 inline-flex"
+            <Suspense
+              fallback={
+                <Link
+                  href="/panel-planner?source=panel-layout-cross-link"
+                  className="bs-cta-secondary mt-5 inline-flex"
+                >
+                  Open Panel Layout Planner
+                </Link>
+              }
             >
-              Open Panel Layout Planner
-            </Link>
+              <AxisPlannerAttributedLink
+                href="/panel-planner"
+                defaultSource="panel-layout-cross-link"
+                className="bs-cta-secondary mt-5 inline-flex"
+              >
+                Open Panel Layout Planner
+              </AxisPlannerAttributedLink>
+            </Suspense>
           </article>
         </section>
       </main>

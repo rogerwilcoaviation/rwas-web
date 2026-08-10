@@ -80,7 +80,6 @@ function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
 
 export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
   const [selection, setSelection] = useState<Selection>({});
-  const [requestId, setRequestId] = useState('');
   const [source, setSource] = useState('axis-build-planner');
   const [attribution, setAttribution] = useState<Record<string, string>>({});
   const items = AXIS_ITEMS[kind];
@@ -96,12 +95,6 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
   const advisories = buildAdvisories(kind, selection);
 
   useEffect(() => {
-    const existing = window.sessionStorage.getItem('rwas-axis-request-id');
-    const id =
-      existing ||
-      `rwas_axis_${Date.now().toString(36)}_${crypto.randomUUID().replace(/-/g, '')}`;
-    window.sessionStorage.setItem('rwas-axis-request-id', id);
-    setRequestId(id);
     const params = new URLSearchParams(window.location.search);
     setSource(params.get('source') || 'axis-build-planner');
     const preserved: Record<string, string> = {};
@@ -128,6 +121,9 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
   };
 
   const submitBuild = () => {
+    // A new build gets a new key. The draft retains this key so retries of the
+    // same contact submission remain idempotent without blocking later builds.
+    const requestId = `rwas_axis_${Date.now().toString(36)}_${crypto.randomUUID().replace(/-/g, '')}`;
     const components = selectedItems.map((item) => ({
       title: item.title,
       sku: item.sku,
@@ -167,6 +163,7 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
         message,
         components,
         advisories,
+        attribution,
         total,
       }),
     );

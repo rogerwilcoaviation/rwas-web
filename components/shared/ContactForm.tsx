@@ -31,6 +31,16 @@ import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+const ATTRIBUTION_KEYS = [
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_content',
+  'utm_term',
+] as const;
+
+type AttributionKey = (typeof ATTRIBUTION_KEYS)[number];
+
 // --- Turnstile typings (loaded as a global by CF script) ------------------
 declare global {
   interface Window {
@@ -80,6 +90,11 @@ const contactSchema = z
     sku: z.string().max(120).optional().or(z.literal('')),
     // Lead-source attribution (e.g. "home-cta", "pdp-quote"). Never shown to user.
     source: z.string().max(120).optional().or(z.literal('')),
+    utm_source: z.string().max(240).optional().or(z.literal('')),
+    utm_medium: z.string().max(240).optional().or(z.literal('')),
+    utm_campaign: z.string().max(240).optional().or(z.literal('')),
+    utm_content: z.string().max(240).optional().or(z.literal('')),
+    utm_term: z.string().max(240).optional().or(z.literal('')),
     requestId: z.string().max(120).optional().or(z.literal('')),
     plannerKind: z.enum(['certified', 'experimental']).optional(),
     createdAt: z.string().max(80).optional().or(z.literal('')),
@@ -163,6 +178,7 @@ type AxisContactDraft = {
   message: string;
   components?: ContactFormValues['components'];
   advisories?: string[];
+  attribution?: Partial<Record<AttributionKey, string>>;
   total?: number;
 };
 
@@ -225,6 +241,10 @@ export default function ContactForm() {
     }
     const source = params.get('source');
     if (source) setValue('source', source);
+    for (const key of ATTRIBUTION_KEYS) {
+      const value = params.get(key);
+      if (value) setValue(key, value);
+    }
     const draftValue = window.sessionStorage.getItem('rwas-contact-draft');
     if (
       draftValue &&
@@ -241,6 +261,12 @@ export default function ContactForm() {
           setValue('pricingReference', draft.pricingReference);
         if (draft.components) setValue('components', draft.components);
         if (draft.advisories) setValue('advisories', draft.advisories);
+        if (draft.attribution) {
+          for (const key of ATTRIBUTION_KEYS) {
+            const value = draft.attribution[key];
+            if (value && !params.get(key)) setValue(key, value);
+          }
+        }
       } catch {
         // Preserve and support the legacy plain-string draft format.
         setValue('message', draftValue.slice(0, 4000));
@@ -292,6 +318,7 @@ export default function ContactForm() {
       });
       reset();
       window.sessionStorage.removeItem('rwas-contact-draft');
+      window.sessionStorage.removeItem('rwas-axis-request-id');
       if (window.turnstile && turnstileWidgetIdRef.current) {
         window.turnstile.reset(turnstileWidgetIdRef.current);
       }
@@ -599,6 +626,13 @@ export default function ContactForm() {
         )}
         {/* Lead-source attribution — always hidden, populated from ?source= */}
         <input type="hidden" {...register('source')} />
+        {ATTRIBUTION_KEYS.map((key) => (
+          <input key={key} type="hidden" {...register(key)} />
+        ))}
+        <input type="hidden" {...register('requestId')} />
+        <input type="hidden" {...register('plannerKind')} />
+        <input type="hidden" {...register('createdAt')} />
+        <input type="hidden" {...register('pricingReference')} />
 
         <div className="rwas-field rwas-field--full">
           <label htmlFor="message">Message *</label>
