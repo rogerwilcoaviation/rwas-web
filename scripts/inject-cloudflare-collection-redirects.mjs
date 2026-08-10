@@ -60,6 +60,11 @@ const rwasContactWithRequiredNNumber = rwasContact
     '',
   );
 
+// The generated worker must preserve the same delivery contract as the
+// standalone Pages Function: Resend gates success, Teams is best-effort, and
+// the planner request ID is reused as Resend's idempotency key.
+const rwasContactAligned = `if(rwasUrl.pathname==="/api/contact"){const j=(b,s=200)=>new Response(JSON.stringify(b),{status:s,headers:{"Content-Type":"application/json","Cache-Control":"no-store"}});if(t.method==="OPTIONS")return new Response(null,{status:204,headers:{Allow:"POST, OPTIONS","Cache-Control":"no-store"}});if(t.method!=="POST")return j({error:"Method not allowed"},405);let p;try{p=await t.clone().json()}catch{return j({error:"Invalid JSON body."},400)}const id=/^[A-Za-z0-9_-]{8,120}$/.test(p.requestId||"")?p.requestId:"rwas_"+Date.now().toString(36)+"_"+crypto.randomUUID().replace(/-/g,"");if(p.website)return j({ticketId:id,requestId:id,to:"service@rwas.team"});if(!p.name||p.name.length<2)return j({error:"Name is required."},400);if(!p.email||!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(p.email))return j({error:"Please enter a valid email."},400);const quote=p.reason==="quote";if(quote&&(!String(p.aircraftMake||"").trim()||!String(p.aircraftModel||"").trim()))return j({error:"Aircraft make and model are required for quote requests."},400);if(quote&&!p.aircraftStatus)return j({error:"Please choose the aircraft status for this quote request."},400);if(quote&&p.aircraftStatus==="registered"&&(!/^\\d{4}$/.test(p.aircraftYear||"")||!String(p.aircraftSerialNumber||"").trim()||!String(p.nNumber||"").trim()))return j({error:"Registered-aircraft quotes require year, serial number, and N-number."},400);if(p.nNumber&&!/^[A-Za-z0-9-]{1,10}$/i.test(p.nNumber))return j({error:"N-number has unexpected characters."},400);if(!p.message||p.message.length<10)return j({error:"Please include a short message so we can help."},400);if(p.message.length>4000)return j({error:"Message is too long (max 4000 characters)."},400);if(e.TURNSTILE_SECRET_KEY){const v=new URLSearchParams({secret:e.TURNSTILE_SECRET_KEY,response:p.turnstileToken||""});const ip=t.headers.get("CF-Connecting-IP");if(ip)v.set("remoteip",ip);let ok=false;try{const vr=await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:v.toString()});ok=Boolean((await vr.json()).success)}catch{}if(!ok)return j({error:"Verification failed. Please refresh the page and try again, or email service@rwas.team directly."},429)}if(!e.RESEND_API_KEY)return j({error:"We could not deliver your message right now. Please email service@rwas.team directly."},502);const to=e.CONTACT_TO_EMAIL||"service@rwas.team",from=e.CONTACT_FROM_EMAIL||"RWAS Correspondence <noreply@rwas.team>",reason={quote:"Quote request",general:"General inquiry",service:"Service / maintenance","papa-alpha":"Papa-Alpha tool inquiry","aircraft-sales":"Aircraft for sale"}[p.reason||"general"]||"Inquiry",body={from,to:[to],reply_to:p.email,subject:"["+id+"] "+reason+" — from "+p.name,text:"RWAS CORRESPONDENCE DESK — "+id+"\\nRequest/build ID: "+id+"\\n"+p.message,html:"<h2>"+reason+"</h2><p>Request/build ID: "+id+"</p><p style=\\"white-space:pre-wrap\\">"+String(p.message).replace(/</g,"&lt;")+"</p>"};const email=await fetch("https://api.resend.com/emails",{method:"POST",headers:{Authorization:"Bearer "+e.RESEND_API_KEY,"Content-Type":"application/json","Idempotency-Key":id},body:JSON.stringify(body)});if(!email.ok){console.error("contact-form email send failed",id,email.status);return j({error:"We could not deliver your message right now. Please email service@rwas.team directly."},502)}if(e.TEAMS_RELAY_TOKEN)try{const teams=await fetch(e.CONTACT_TEAMS_RELAY_URL||"https://teamsbot.rwas.team/post",{method:"POST",headers:{Authorization:"Bearer "+e.TEAMS_RELAY_TOKEN,"Content-Type":"application/json"},body:JSON.stringify({channel:e.CONTACT_TEAMS_TARGET||"Shop Talk",text:"NEW WEBSITE INQUIRY — "+id+"\\nRequest/build ID: "+id+"\\n"+p.message})});if(!teams.ok)console.error("contact-form Teams send failed after email success",id,teams.status)}catch(err){console.error("contact-form Teams send failed after email success",id,err)}return j({ticketId:id,requestId:id,to})}`;
+
 // Keep the hand-injected Pages fallback aligned with functions/api/cart.ts. The
 // Next-on-Pages worker does not execute the TypeScript function directly.
 const rwasCartFixed = rwasCart
@@ -80,7 +85,7 @@ const rwasCartFixed = rwasCart
     'else{const d=await shop(q.create,{merchandiseId,quantity});if(d?.cartCreate?.userErrors?.length)return j({error:d.cartCreate.userErrors.map(x=>x.message).join("; ")},400);cart=d?.cartCreate?.cart}',
   );
 
-const injected = `${marker}${rwasOpsProxy}${rwasAnalytics}${rwasContact}${rwasCartFixed}const rwasPath=rwasUrl.pathname.replace(/\\/$/,"");if(${JSON.stringify(
+const injected = `${marker}${rwasOpsProxy}${rwasAnalytics}${rwasContactAligned}${rwasCartFixed}const rwasPath=rwasUrl.pathname.replace(/\\/$/,"");if(${JSON.stringify(
   gonePaths,
 )}.includes(rwasPath))return new Response("Gone",{status:410,headers:{"Cache-Control":"public, max-age=3600","X-Robots-Tag":"noindex, noarchive"}});const rwasTarget=${JSON.stringify(
   redirects,
@@ -99,13 +104,7 @@ if (
     `Expected one Cloudflare worker fetch marker in ${workerPath}; found ${markerMatches.length}`,
   );
 } else {
-  writeFileSync(
-    workerPath,
-    worker.replace(
-      marker,
-      injected.replace(rwasContact, rwasContactWithRequiredNNumber),
-    ),
-  );
+  writeFileSync(workerPath, worker.replace(marker, injected));
   console.log(
     `Injected ${Object.keys(redirects).length} RWAS collection redirects and ${gonePaths.length} gone URL into Cloudflare worker.`,
   );

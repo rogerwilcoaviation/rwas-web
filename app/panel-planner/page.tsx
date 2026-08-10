@@ -149,10 +149,14 @@ export default function PanelPlannerPage() {
               <a
                 href="/contact?reason=quote&source=panel-planner-page"
                 className="bs-cta-secondary"
-                target="_blank"
-                rel="noopener noreferrer"
               >
                 Ask RWAS First
+              </a>
+              <a
+                href="/axis-system-planner?source=panel-layout-cross-link"
+                className="bs-cta-secondary"
+              >
+                Open AXIS System Builder
               </a>
             </div>
             <p className="panel-planner-note">

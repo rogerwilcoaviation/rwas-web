@@ -80,14 +80,13 @@ export default function ContactPage() {
           </p>
           <h1 className="bs-headline bs-headline--hero">Contact RWAS.</h1>
           <p className="bs-subhead">
-            Every message below lands at <strong>avionics@rwas.team</strong> —
+            Every message below lands at <strong>service@rwas.team</strong> —
             read by the shop, not by a phone tree. For quote requests, include
-            your aircraft make / model and N-number so we can pull records and
-            reply with real numbers.
+            your aircraft make / model; registered-aircraft quotes also need the
+            year, serial number, and N-number.
           </p>
           <p className="bs-byline">
-            RWAS Avionics Desk &middot; KYKN, Yankton &middot; (605)
-            299-8178
+            RWAS Avionics Desk &middot; KYKN, Yankton &middot; (605) 299-8178
           </p>
         </section>
 
@@ -108,7 +107,7 @@ export default function ContactPage() {
             <div>
               <dt>Avionics email</dt>
               <dd>
-                <a href="mailto:avionics@rwas.team">avionics@rwas.team</a>
+                <a href="mailto:service@rwas.team">service@rwas.team</a>
               </dd>
             </div>
             <div>

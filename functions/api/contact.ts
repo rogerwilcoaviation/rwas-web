@@ -48,6 +48,10 @@ type ContactPayload = {
   aircraftModel?: string;
   aircraftSerialNumber?: string;
   nNumber?: string;
+  aircraftStatus?:
+    | 'registered'
+    | 'under-construction'
+    | 'identifiers-not-assigned';
   preferredContact?: string;
   bestTimeToCall?: string;
   reason?: string;
@@ -55,6 +59,18 @@ type ContactPayload = {
   sku?: string;
   source?: string;
   message?: string;
+  requestId?: string;
+  plannerKind?: 'certified' | 'experimental';
+  createdAt?: string;
+  pricingReference?: string;
+  advisories?: string[];
+  components?: Array<{
+    title?: string;
+    sku?: string;
+    quantity?: number;
+    unitPrice?: number;
+    extendedPrice?: number;
+  }>;
   website?: string; // honeypot
   turnstileToken?: string;
 };
@@ -94,6 +110,16 @@ function generateTicketId(): string {
   const dd = String(now.getUTCDate()).padStart(2, '0');
   const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
   return `RWAS-${yy}${mm}${dd}-${rand}`;
+}
+
+function generateRequestId(): string {
+  return `rwas_${Date.now().toString(36)}_${crypto.randomUUID().replace(/-/g, '')}`;
+}
+
+function requestIdFor(payload: ContactPayload): string {
+  return /^[A-Za-z0-9_-]{8,120}$/.test(payload.requestId || '')
+    ? (payload.requestId as string)
+    : generateRequestId();
 }
 
 async function verifyTurnstile(
@@ -141,13 +167,37 @@ function validate(payload: ContactPayload): string | null {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
     return 'Email looks invalid.';
   }
-  if (!/^\d{4}$/.test(payload.aircraftYear || '')) {
-    return 'A four-digit aircraft year is required.';
+  const reason = payload.reason || 'general';
+  const isQuote = reason === 'quote';
+  const isExperimentalProject = payload.plannerKind === 'experimental';
+  if (
+    payload.aircraftStatus &&
+    !['registered', 'under-construction', 'identifiers-not-assigned'].includes(
+      payload.aircraftStatus,
+    )
+  ) {
+    return 'Please choose a valid aircraft status.';
   }
-  if (!payload.aircraftMake?.trim()) return 'Aircraft make is required.';
-  if (!payload.aircraftModel?.trim()) return 'Aircraft model is required.';
-  if (!payload.aircraftSerialNumber?.trim()) {
-    return 'Aircraft serial number is required.';
+  if (isQuote && !payload.aircraftMake?.trim())
+    return 'Aircraft make is required for quote requests.';
+  if (isQuote && !payload.aircraftModel?.trim())
+    return 'Aircraft model is required for quote requests.';
+  if (isQuote && !payload.aircraftStatus)
+    return 'Please choose the aircraft status for this quote request.';
+  if (isQuote && payload.aircraftStatus === 'registered') {
+    if (!/^\d{4}$/.test(payload.aircraftYear || ''))
+      return 'A four-digit aircraft year is required for a registered-aircraft quote.';
+    if (!payload.aircraftSerialNumber?.trim())
+      return 'Aircraft serial number is required for a registered-aircraft quote.';
+    if (!payload.nNumber?.trim())
+      return 'Aircraft N-number is required for a registered-aircraft quote.';
+  }
+  if (
+    isQuote &&
+    isExperimentalProject &&
+    payload.aircraftStatus === 'under-construction'
+  ) {
+    // Experimental projects may be quoted before identifiers are assigned.
   }
   if (!payload.message || payload.message.length < 10) {
     return 'Please include a short message so we can help.';
@@ -155,8 +205,7 @@ function validate(payload: ContactPayload): string | null {
   if (payload.message.length > 4000) {
     return 'Message is too long (max 4000 characters).';
   }
-  if (!payload.nNumber) return 'Aircraft N-number is required.';
-  if (!/^[A-Za-z0-9-]{1,10}$/i.test(payload.nNumber)) {
+  if (payload.nNumber && !/^[A-Za-z0-9-]{1,10}$/i.test(payload.nNumber)) {
     return 'N-number has unexpected characters.';
   }
   // honeypot: if populated, silently accept then drop
@@ -176,15 +225,23 @@ function buildSubject(p: ContactPayload, ticketId: string): string {
   return `[${ticketId}] ${reasonLabel} — from ${who}${srcSuffix}`;
 }
 
-function buildPlainTextBody(p: ContactPayload, ticketId: string): string {
+function buildPlainTextBody(
+  p: ContactPayload,
+  ticketId: string,
+  requestId: string,
+): string {
   const lines: string[] = [];
   lines.push(`RWAS CORRESPONDENCE DESK — ${ticketId}`);
+  lines.push(`Request/build ID: ${requestId}`);
   lines.push('='.repeat(56));
   lines.push('');
   lines.push(`Reason:    ${REASON_LABELS[p.reason || 'general'] || 'General'}`);
   if (p.product) lines.push(`Product:   ${p.product}`);
   if (p.sku) lines.push(`SKU:       ${p.sku}`);
   if (p.source) lines.push(`Source:    ${p.source}`);
+  if (p.plannerKind) lines.push(`Planner:   AXIS ${p.plannerKind}`);
+  if (p.pricingReference) lines.push(`Pricing:   ${p.pricingReference}`);
+  if (p.aircraftStatus) lines.push(`Status:    ${p.aircraftStatus}`);
   lines.push('');
   lines.push('--- Contact ---');
   lines.push(`Name:      ${p.name || ''}`);
@@ -202,13 +259,29 @@ function buildPlainTextBody(p: ContactPayload, ticketId: string): string {
   lines.push('');
   lines.push('--- Message ---');
   lines.push(p.message || '');
+  if (p.components?.length) {
+    lines.push('', '--- Selected equipment ---');
+    p.components.forEach((item) =>
+      lines.push(
+        `${item.title || 'Component'} | SKU ${item.sku || ''} | Qty ${item.quantity || 0} | Unit ${item.unitPrice ?? 0} | Extended ${item.extendedPrice ?? 0}`,
+      ),
+    );
+  }
+  if (p.advisories?.length) {
+    lines.push('', '--- Planner advisories ---');
+    p.advisories.forEach((advisory) => lines.push(`- ${advisory}`));
+  }
   lines.push('');
   lines.push('--');
   lines.push('Reply directly to this email — it routes back to the submitter.');
   return lines.join('\n');
 }
 
-function buildHtmlBody(p: ContactPayload, ticketId: string): string {
+function buildHtmlBody(
+  p: ContactPayload,
+  ticketId: string,
+  requestId: string,
+): string {
   const row = (label: string, value?: string) =>
     value
       ? `<tr><td style="padding:4px 12px 4px 0;color:#6a6f80;font:11px/1.4 ui-sans-serif,system-ui;letter-spacing:0.12em;text-transform:uppercase;vertical-align:top;white-space:nowrap">${escapeHtml(
@@ -226,7 +299,7 @@ function buildHtmlBody(p: ContactPayload, ticketId: string): string {
         <tr><td style="padding:28px 32px 0 32px">
           <div style="font:11px/1.4 ui-sans-serif,system-ui;letter-spacing:0.28em;text-transform:uppercase;color:#8a6315">RWAS Correspondence Desk</div>
           <div style="font:700 24px/1.2 'Playfair Display',Georgia,serif;margin-top:6px">${escapeHtml(reasonLabel)}</div>
-          <div style="font:12px/1.4 ui-sans-serif,system-ui;color:#6a6f80;margin-top:4px">${escapeHtml(ticketId)}</div>
+          <div style="font:12px/1.4 ui-sans-serif,system-ui;color:#6a6f80;margin-top:4px">${escapeHtml(ticketId)} · ${escapeHtml(requestId)}</div>
         </td></tr>
         ${
           p.product
@@ -251,6 +324,9 @@ function buildHtmlBody(p: ContactPayload, ticketId: string): string {
             ${row('Serial number', p.aircraftSerialNumber)}
             ${row('N-Number', p.nNumber)}
             ${row('Source', p.source)}
+            ${row('Aircraft status', p.aircraftStatus)}
+            ${row('Planner', p.plannerKind ? `AXIS ${p.plannerKind}` : undefined)}
+            ${row('Pricing reference', p.pricingReference)}
           </table>
         </td></tr>
         <tr><td style="padding:16px 32px 8px 32px">
@@ -274,6 +350,7 @@ async function sendViaResend(
   env: Env,
   p: ContactPayload,
   ticketId: string,
+  requestId: string,
 ): Promise<{ ok: boolean; error?: string }> {
   const apiKey = env.RESEND_API_KEY;
   if (!apiKey) return { ok: false, error: 'mail provider not configured' };
@@ -286,13 +363,18 @@ async function sendViaResend(
     to: [to],
     reply_to: p.email,
     subject: buildSubject(p, ticketId),
-    text: buildPlainTextBody(p, ticketId),
-    html: buildHtmlBody(p, ticketId),
+    text: buildPlainTextBody(p, ticketId, requestId),
+    html: buildHtmlBody(p, ticketId, requestId),
     tags: [
       { name: 'source', value: 'rwas-contact-form' },
       { name: 'reason', value: p.reason || 'general' },
       ...(p.source
-        ? [{ name: 'lead_source', value: p.source.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 64) }]
+        ? [
+            {
+              name: 'lead_source',
+              value: p.source.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 64),
+            },
+          ]
         : []),
     ],
   };
@@ -303,12 +385,16 @@ async function sendViaResend(
       headers: {
         Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
+        'Idempotency-Key': requestId,
       },
       body: JSON.stringify(body),
     });
     if (!res.ok) {
       const detail = await res.text();
-      return { ok: false, error: `Resend ${res.status}: ${detail.slice(0, 200)}` };
+      return {
+        ok: false,
+        error: `Resend ${res.status}: ${detail.slice(0, 200)}`,
+      };
     }
     return { ok: true };
   } catch (err) {
@@ -319,10 +405,15 @@ async function sendViaResend(
   }
 }
 
-function buildTeamsBody(p: ContactPayload, ticketId: string): string {
+function buildTeamsBody(
+  p: ContactPayload,
+  ticketId: string,
+  requestId: string,
+): string {
   const reasonLabel = REASON_LABELS[p.reason || 'general'] || 'General inquiry';
   const lines = [
     `NEW WEBSITE INQUIRY — ${ticketId}`,
+    `Request/build ID: ${requestId}`,
     `Reason: ${reasonLabel}`,
     p.product ? `Product: ${p.product}` : '',
     p.sku ? `SKU: ${p.sku}` : '',
@@ -335,23 +426,31 @@ function buildTeamsBody(p: ContactPayload, ticketId: string): string {
     `Serial Number: ${p.aircraftSerialNumber || ''}`,
     p.nNumber ? `N-Number: ${p.nNumber}` : '',
     p.source ? `Source: ${p.source}` : '',
+    p.aircraftStatus ? `Aircraft status: ${p.aircraftStatus}` : '',
+    p.plannerKind ? `Planner: AXIS ${p.plannerKind}` : '',
     '',
     'Message:',
     p.message || '',
+    p.components?.length
+      ? `\nSelected equipment:\n${p.components.map((item) => `- ${item.title || item.sku || 'Component'} (${item.sku || 'no SKU'}) × ${item.quantity || 0}: ${item.extendedPrice ?? 0}`).join('\n')}`
+      : '',
+    p.advisories?.length ? `\nAdvisories:\n- ${p.advisories.join('\n- ')}` : '',
   ];
-  return lines.filter((line, index) => line || index === lines.length - 3).join('\n');
+  return lines
+    .filter((line, index) => line || index === lines.length - 3)
+    .join('\n');
 }
 
 async function sendToTeams(
   env: Env,
   p: ContactPayload,
   ticketId: string,
+  requestId: string,
 ): Promise<{ ok: boolean; error?: string }> {
   if (!env.TEAMS_RELAY_TOKEN) {
     return { ok: false, error: 'Teams relay not configured' };
   }
-  const url =
-    env.CONTACT_TEAMS_RELAY_URL || 'https://teamsbot.rwas.team/post';
+  const url = env.CONTACT_TEAMS_RELAY_URL || 'https://teamsbot.rwas.team/post';
   const target = env.CONTACT_TEAMS_TARGET || 'Shop Talk';
   try {
     const res = await fetch(url, {
@@ -362,7 +461,7 @@ async function sendToTeams(
       },
       body: JSON.stringify({
         channel: target,
-        text: buildTeamsBody(p, ticketId),
+        text: buildTeamsBody(p, ticketId, requestId),
       }),
     });
     if (!res.ok) {
@@ -389,11 +488,17 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
     return jsonResponse({ error: 'Invalid JSON body.' }, 400);
   }
 
+  const requestId = requestIdFor(payload);
+
   // 1. Validate shape
   const validationError = validate(payload);
   if (validationError === '__HONEYPOT__') {
     // Silent success — bots shouldn't learn they were filtered
-    return jsonResponse({ ticketId: generateTicketId(), to: 'service@rwas.team' });
+    return jsonResponse({
+      ticketId: generateTicketId(),
+      requestId,
+      to: 'service@rwas.team',
+    });
   }
   if (validationError) return jsonResponse({ error: validationError }, 400);
 
@@ -416,20 +521,15 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
     }
   }
 
-  // 3. Deliver both notifications concurrently.
+  // 3. Internal email is the customer-facing delivery gate. Teams is a
+  // best-effort notification sent only after Resend accepts the email.
   const ticketId = generateTicketId();
-  const [emailSend, teamsSend] = await Promise.all([
-    sendViaResend(env, payload, ticketId),
-    sendToTeams(env, payload, ticketId),
-  ]);
-  if (!emailSend.ok || !teamsSend.ok) {
-    // Log to CF logs but don't leak internal errors to clients
-    if (!emailSend.ok) {
-      console.error('contact-form email send failed', emailSend.error);
-    }
-    if (!teamsSend.ok) {
-      console.error('contact-form Teams send failed', teamsSend.error);
-    }
+  const emailSend = await sendViaResend(env, payload, ticketId, requestId);
+  if (!emailSend.ok) {
+    console.error('contact-form email send failed', {
+      requestId,
+      error: emailSend.error,
+    });
     return jsonResponse(
       {
         error:
@@ -439,8 +539,17 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
     );
   }
 
+  const teamsSend = await sendToTeams(env, payload, ticketId, requestId);
+  if (!teamsSend.ok) {
+    console.error('contact-form Teams send failed after email success', {
+      requestId,
+      error: teamsSend.error,
+    });
+  }
+
   return jsonResponse({
     ticketId,
+    requestId,
     to: env.CONTACT_TO_EMAIL || 'service@rwas.team',
   });
 };

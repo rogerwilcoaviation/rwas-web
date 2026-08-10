@@ -52,47 +52,119 @@ declare global {
 }
 
 // --- Schema ---------------------------------------------------------------
-const contactSchema = z.object({
-  name: z.string().min(2, 'Please enter your name.').max(120),
-  email: z.string().email('Please enter a valid email.').max(254),
-  phone: z.string().max(40).optional().or(z.literal('')),
-  aircraftYear: z
-    .string()
-    .regex(/^\d{4}$/, 'Please enter the four-digit aircraft year.'),
-  aircraftMake: z.string().trim().min(2, 'Please enter the aircraft make.').max(80),
-  aircraftModel: z.string().trim().min(1, 'Please enter the aircraft model.').max(80),
-  aircraftSerialNumber: z
-    .string()
-    .trim()
-    .min(1, 'Please enter the aircraft serial number.')
-    .max(80),
-  nNumber: z
-    .string()
-    .trim()
-    .min(1, 'Please enter the aircraft N-number.')
-    .max(10)
-    .regex(
-      /^[A-Za-z0-9-]+$/i,
-      'N-numbers are letters, numbers, and dashes only.',
-    ),
-  preferredContact: z.enum(['email', 'phone', 'either']).default('either'),
-  bestTimeToCall: z.string().max(120).optional().or(z.literal('')),
-  reason: z
-    .enum(['quote', 'general', 'service', 'papa-alpha', 'aircraft-sales'])
-    .default('general'),
-  product: z.string().max(240).optional().or(z.literal('')),
-  sku: z.string().max(120).optional().or(z.literal('')),
-  // Lead-source attribution (e.g. "home-cta", "pdp-quote"). Never shown to user.
-  source: z.string().max(120).optional().or(z.literal('')),
-  message: z
-    .string()
-    .min(10, 'A sentence or two helps us reply faster.')
-    .max(4000),
-  // honeypot: bots fill this; real humans never see it
-  website: z.string().max(0).optional(),
-});
+const contactSchema = z
+  .object({
+    name: z.string().min(2, 'Please enter your name.').max(120),
+    email: z.string().email('Please enter a valid email.').max(254),
+    phone: z.string().max(40).optional().or(z.literal('')),
+    aircraftYear: z.string().max(4).optional().or(z.literal('')),
+    aircraftMake: z.string().trim().max(80).optional().or(z.literal('')),
+    aircraftModel: z.string().trim().max(80).optional().or(z.literal('')),
+    aircraftSerialNumber: z
+      .string()
+      .trim()
+      .max(80)
+      .optional()
+      .or(z.literal('')),
+    nNumber: z.string().trim().max(10).optional().or(z.literal('')),
+    aircraftStatus: z
+      .enum(['registered', 'under-construction', 'identifiers-not-assigned'])
+      .optional()
+      .or(z.literal('')),
+    preferredContact: z.enum(['email', 'phone', 'either']).default('either'),
+    bestTimeToCall: z.string().max(120).optional().or(z.literal('')),
+    reason: z
+      .enum(['quote', 'general', 'service', 'papa-alpha', 'aircraft-sales'])
+      .default('general'),
+    product: z.string().max(240).optional().or(z.literal('')),
+    sku: z.string().max(120).optional().or(z.literal('')),
+    // Lead-source attribution (e.g. "home-cta", "pdp-quote"). Never shown to user.
+    source: z.string().max(120).optional().or(z.literal('')),
+    requestId: z.string().max(120).optional().or(z.literal('')),
+    plannerKind: z.enum(['certified', 'experimental']).optional(),
+    createdAt: z.string().max(80).optional().or(z.literal('')),
+    pricingReference: z.string().max(160).optional().or(z.literal('')),
+    advisories: z.array(z.string().max(400)).max(30).optional(),
+    components: z
+      .array(
+        z.object({
+          title: z.string().max(240),
+          sku: z.string().max(120),
+          quantity: z.number().int().min(1).max(6),
+          unitPrice: z.number().nonnegative(),
+          extendedPrice: z.number().nonnegative(),
+        }),
+      )
+      .max(100)
+      .optional(),
+    message: z
+      .string()
+      .min(10, 'A sentence or two helps us reply faster.')
+      .max(4000),
+    // honeypot: bots fill this; real humans never see it
+    website: z.string().max(0).optional(),
+  })
+  .superRefine((values, ctx) => {
+    if (values.reason !== 'quote') return;
+    if (!values.aircraftMake?.trim())
+      ctx.addIssue({
+        code: 'custom',
+        path: ['aircraftMake'],
+        message: 'Please enter the aircraft make for a quote.',
+      });
+    if (!values.aircraftModel?.trim())
+      ctx.addIssue({
+        code: 'custom',
+        path: ['aircraftModel'],
+        message: 'Please enter the aircraft model for a quote.',
+      });
+    if (!values.aircraftStatus)
+      ctx.addIssue({
+        code: 'custom',
+        path: ['aircraftStatus'],
+        message: 'Please choose the aircraft status.',
+      });
+    if (values.aircraftStatus === 'registered') {
+      if (!/^\d{4}$/.test(values.aircraftYear || ''))
+        ctx.addIssue({
+          code: 'custom',
+          path: ['aircraftYear'],
+          message: 'Registered-aircraft quotes need a four-digit year.',
+        });
+      if (!values.aircraftSerialNumber?.trim())
+        ctx.addIssue({
+          code: 'custom',
+          path: ['aircraftSerialNumber'],
+          message: 'Registered-aircraft quotes need a serial number.',
+        });
+      if (!values.nNumber?.trim())
+        ctx.addIssue({
+          code: 'custom',
+          path: ['nNumber'],
+          message: 'Registered-aircraft quotes need an N-number.',
+        });
+    }
+    if (values.nNumber && !/^[A-Za-z0-9-]+$/i.test(values.nNumber))
+      ctx.addIssue({
+        code: 'custom',
+        path: ['nNumber'],
+        message: 'N-numbers are letters, numbers, and dashes only.',
+      });
+  });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
+
+type AxisContactDraft = {
+  requestId: string;
+  plannerKind: 'certified' | 'experimental';
+  createdAt: string;
+  source: string;
+  pricingReference: string;
+  message: string;
+  components?: ContactFormValues['components'];
+  advisories?: string[];
+  total?: number;
+};
 
 // --- Reason presets (drive the kicker copy + subject line) ----------------
 const REASON_LABELS: Record<ContactFormValues['reason'], string> = {
@@ -153,11 +225,25 @@ export default function ContactForm() {
     }
     const source = params.get('source');
     if (source) setValue('source', source);
-    if (params.get('draft') === 'axis') {
-      const draft = window.sessionStorage.getItem('rwas-contact-draft');
-      if (draft) {
-        setValue('message', draft.slice(0, 4000));
-        window.sessionStorage.removeItem('rwas-contact-draft');
+    const draftValue = window.sessionStorage.getItem('rwas-contact-draft');
+    if (
+      draftValue &&
+      (params.get('draft') === 'axis' || draftValue.trim().startsWith('{'))
+    ) {
+      try {
+        const draft = JSON.parse(draftValue) as AxisContactDraft;
+        if (draft.message) setValue('message', draft.message.slice(0, 4000));
+        if (draft.source && !source) setValue('source', draft.source);
+        if (draft.requestId) setValue('requestId', draft.requestId);
+        if (draft.plannerKind) setValue('plannerKind', draft.plannerKind);
+        if (draft.createdAt) setValue('createdAt', draft.createdAt);
+        if (draft.pricingReference)
+          setValue('pricingReference', draft.pricingReference);
+        if (draft.components) setValue('components', draft.components);
+        if (draft.advisories) setValue('advisories', draft.advisories);
+      } catch {
+        // Preserve and support the legacy plain-string draft format.
+        setValue('message', draftValue.slice(0, 4000));
       }
     }
   }, [setValue]);
@@ -205,6 +291,7 @@ export default function ContactForm() {
           data.ticketId || `RWAS-${Date.now().toString(36).toUpperCase()}`,
       });
       reset();
+      window.sessionStorage.removeItem('rwas-contact-draft');
       if (window.turnstile && turnstileWidgetIdRef.current) {
         window.turnstile.reset(turnstileWidgetIdRef.current);
       }
@@ -213,12 +300,13 @@ export default function ContactForm() {
       const message =
         err instanceof Error
           ? err.message
-          : 'Something went wrong. Please email avionics@rwas.team directly.';
+          : 'Something went wrong. Please email service@rwas.team directly.';
       setSubmitState({ status: 'error', message });
     }
   };
 
   const selectedReason = watch('reason');
+  const selectedAircraftStatus = watch('aircraftStatus');
   const productContext = watch('product');
 
   // --- Success state: ticket-stub confirmation ---------------------------
@@ -230,15 +318,14 @@ export default function ContactForm() {
           Your inquiry is on the Avionics Desk.
         </h2>
         <p className="rwas-contact-confirm__body">
-          A confirmation has been sent to your email. The shop typically replies
-          within one business day. If it&rsquo;s urgent, call us at{' '}
-          <a href="tel:+16052998178">(605) 299-8178</a>.
+          The shop typically replies within one business day. If it&rsquo;s
+          urgent, call us at <a href="tel:+16052998178">(605) 299-8178</a>.
         </p>
         <dl className="rwas-contact-confirm__stub">
           <dt>Reference</dt>
           <dd>{submitState.ticketId}</dd>
           <dt>Routed to</dt>
-          <dd>avionics@rwas.team</dd>
+          <dd>service@rwas.team</dd>
         </dl>
         <button
           type="button"
@@ -342,7 +429,13 @@ export default function ContactForm() {
           </div>
 
           <div className="rwas-field">
-            <label htmlFor="aircraftYear">Aircraft year *</label>
+            <label htmlFor="aircraftYear">
+              Aircraft year
+              {selectedReason === 'quote' &&
+              selectedAircraftStatus === 'registered'
+                ? ' *'
+                : ''}
+            </label>
             <input
               id="aircraftYear"
               type="text"
@@ -350,7 +443,10 @@ export default function ContactForm() {
               autoComplete="off"
               placeholder="e.g. 1980"
               maxLength={4}
-              required
+              required={
+                selectedReason === 'quote' &&
+                selectedAircraftStatus === 'registered'
+              }
               {...register('aircraftYear')}
               aria-invalid={Boolean(errors.aircraftYear)}
             />
@@ -360,12 +456,14 @@ export default function ContactForm() {
           </div>
 
           <div className="rwas-field">
-            <label htmlFor="aircraftMake">Aircraft make *</label>
+            <label htmlFor="aircraftMake">
+              Aircraft make{selectedReason === 'quote' ? ' *' : ''}
+            </label>
             <input
               id="aircraftMake"
               type="text"
               placeholder="e.g. Cessna"
-              required
+              required={selectedReason === 'quote'}
               {...register('aircraftMake')}
               aria-invalid={Boolean(errors.aircraftMake)}
             />
@@ -375,27 +473,40 @@ export default function ContactForm() {
           </div>
 
           <div className="rwas-field">
-            <label htmlFor="aircraftModel">Aircraft model *</label>
+            <label htmlFor="aircraftModel">
+              Aircraft model{selectedReason === 'quote' ? ' *' : ''}
+            </label>
             <input
               id="aircraftModel"
               type="text"
               placeholder="e.g. R182"
-              required
+              required={selectedReason === 'quote'}
               {...register('aircraftModel')}
               aria-invalid={Boolean(errors.aircraftModel)}
             />
             {errors.aircraftModel ? (
-              <p className="rwas-field__error">{errors.aircraftModel.message}</p>
+              <p className="rwas-field__error">
+                {errors.aircraftModel.message}
+              </p>
             ) : null}
           </div>
 
           <div className="rwas-field">
-            <label htmlFor="aircraftSerialNumber">Aircraft serial number *</label>
+            <label htmlFor="aircraftSerialNumber">
+              Aircraft serial number
+              {selectedReason === 'quote' &&
+              selectedAircraftStatus === 'registered'
+                ? ' *'
+                : ''}
+            </label>
             <input
               id="aircraftSerialNumber"
               type="text"
               placeholder="Enter the manufacturer serial number"
-              required
+              required={
+                selectedReason === 'quote' &&
+                selectedAircraftStatus === 'registered'
+              }
               {...register('aircraftSerialNumber')}
               aria-invalid={Boolean(errors.aircraftSerialNumber)}
             />
@@ -407,17 +518,45 @@ export default function ContactForm() {
           </div>
 
           <div className="rwas-field">
-            <label htmlFor="nNumber">N-number *</label>
+            <label htmlFor="nNumber">
+              N-number
+              {selectedReason === 'quote' &&
+              selectedAircraftStatus === 'registered'
+                ? ' *'
+                : ''}
+            </label>
             <input
               id="nNumber"
               type="text"
               placeholder="e.g. N12345"
-              required
+              required={
+                selectedReason === 'quote' &&
+                selectedAircraftStatus === 'registered'
+              }
               {...register('nNumber')}
               aria-invalid={Boolean(errors.nNumber)}
             />
             {errors.nNumber ? (
               <p className="rwas-field__error">{errors.nNumber.message}</p>
+            ) : null}
+          </div>
+
+          <div className="rwas-field">
+            <label htmlFor="aircraftStatus">
+              Aircraft status{selectedReason === 'quote' ? ' *' : ''}
+            </label>
+            <select id="aircraftStatus" {...register('aircraftStatus')}>
+              <option value="">Not specified</option>
+              <option value="registered">Registered / operational</option>
+              <option value="under-construction">Under construction</option>
+              <option value="identifiers-not-assigned">
+                Registration / identifiers not assigned
+              </option>
+            </select>
+            {errors.aircraftStatus ? (
+              <p className="rwas-field__error">
+                {errors.aircraftStatus.message}
+              </p>
             ) : null}
           </div>
 
@@ -497,9 +636,10 @@ export default function ContactForm() {
             {submitState.status === 'submitting' ? 'Sending…' : 'Send to RWAS'}
           </button>
           <p className="rwas-contact-form__fineprint">
-            Routed to <strong>avionics@rwas.team</strong>. RWAS does not sell
-            your private information, including your email address or phone
-            number. See our <a href="/privacy">Privacy Policy</a>.
+            Routed to <strong>service@rwas.team</strong>. Direct avionics
+            questions may also use <strong>avionics@rwas.team</strong>. RWAS
+            does not sell your private information, including your email address
+            or phone number. See our <a href="/privacy">Privacy Policy</a>.
           </p>
         </div>
       </form>

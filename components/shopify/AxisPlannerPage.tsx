@@ -51,6 +51,11 @@ export default function AxisPlannerPage({ kind }: { kind: AxisPlannerKind }) {
             </Link>
           </div>
         </section>
+        <p className="bs-body mb-6 border-l-4 border-black bg-[#f2ecde] p-4">
+          This is preliminary hardware planning—not an approved configuration or
+          installed quote. The planner surfaces advisories but does not perform
+          full compatibility validation.
+        </p>
         <AxisBuildPlanner kind={kind} />
       </main>
       <BroadsheetFooter />

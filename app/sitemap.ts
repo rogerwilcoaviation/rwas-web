@@ -26,6 +26,7 @@ const STATIC_ROUTES = [
   'services/g3x-touch-installation',
   'services/gtn-xi-navigator-installation',
   'panel-planner',
+  'axis-system-planner',
   'axis-system-planner/certified',
   'axis-system-planner/experimental',
   'product-index',
