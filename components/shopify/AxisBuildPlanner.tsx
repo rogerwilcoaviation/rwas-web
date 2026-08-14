@@ -244,6 +244,9 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
                           <span className="block font-bold text-black">
                             {item.title}
                           </span>
+                          <span className="mt-1 block max-w-3xl text-sm leading-5 text-neutral-700">
+                            {item.description}
+                          </span>
                           <span className="mt-1 block font-mono text-xs uppercase tracking-wide text-neutral-600">
                             {item.sku}
                           </span>
