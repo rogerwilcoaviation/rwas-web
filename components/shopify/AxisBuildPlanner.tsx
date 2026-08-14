@@ -5,6 +5,7 @@ import {
   AXIS_STEPS,
   type AxisPlannerKind,
 } from '@/lib/axis-planner-data';
+import { GFC500_CERTIFIED_AIRCRAFT } from '@/lib/gfc500-certified-catalog';
 import { useEffect, useMemo, useState } from 'react';
 
 type Selection = Record<string, number>;
@@ -104,19 +105,35 @@ function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
 
 export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
   const [selection, setSelection] = useState<Selection>({});
+  const [gfcAircraftId, setGfcAircraftId] = useState('');
+  const [gfcConfigurationName, setGfcConfigurationName] = useState('');
   const [source, setSource] = useState('axis-build-planner');
   const [attribution, setAttribution] = useState<Record<string, string>>({});
   const items = AXIS_ITEMS[kind];
-  const steps = AXIS_STEPS[kind];
+  const steps = AXIS_STEPS[kind].filter(
+    (step) => kind !== 'certified' || step.id !== '5A',
+  );
+  const gfcAircraft = GFC500_CERTIFIED_AIRCRAFT.find(
+    (aircraft) => aircraft.id === gfcAircraftId,
+  );
+  const gfcConfiguration = gfcAircraft?.configurations.find(
+    (configuration) => configuration.name === gfcConfigurationName,
+  );
   const selectedItems = useMemo(
     () => items.filter((item) => selection[item.sku]),
     [items, selection],
   );
-  const total = selectedItems.reduce(
-    (sum, item) => sum + item.price * selection[item.sku],
-    0,
-  );
+  const total =
+    selectedItems.reduce(
+      (sum, item) => sum + item.price * selection[item.sku],
+      0,
+    ) + (gfcConfiguration?.listPrice || 0);
   const advisories = buildAdvisories(kind, selection);
+  if (kind === 'certified' && gfcAircraft && !gfcConfiguration) {
+    advisories.push(
+      'Select a GFC 500 servo configuration for the chosen aircraft eligibility group.',
+    );
+  }
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -155,6 +172,15 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
       unitPrice: item.price,
       extendedPrice: item.price * selection[item.sku],
     }));
+    if (gfcAircraft && gfcConfiguration) {
+      components.push({
+        title: `GFC 500 — ${gfcAircraft.label} — ${gfcConfiguration.name}`,
+        sku: `GARMIN-CATALOG-PAGE-${gfcAircraft.page}`,
+        quantity: 1,
+        unitPrice: gfcConfiguration.listPrice,
+        extendedPrice: gfcConfiguration.listPrice,
+      });
+    }
     const lines = components.map(
       (item) =>
         `${item.quantity} × ${item.title} (${item.sku}) — ${money.format(item.extendedPrice)} [unit ${money.format(item.unitPrice)}]`,
@@ -186,6 +212,8 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
         pricingReference: 'Garmin July 2026 Build-A-System Guide',
         message,
         components,
+        gfc500Aircraft: gfcAircraft || null,
+        gfc500Configuration: gfcConfiguration || null,
         advisories,
         attribution,
         total,
@@ -214,7 +242,14 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
       </div>
 
       {steps.map((step) => {
-        const stepItems = items.filter((item) => item.step === step.id);
+        const stepItems = items.filter(
+          (item) =>
+            item.step === step.id &&
+            !(
+              kind === 'certified' &&
+              (item.step === '5' || item.step === '5A')
+            ),
+        );
         return (
           <section key={step.id} className="border-2 border-black bg-white">
             <header className="border-b-2 border-black bg-neutral-100 px-5 py-4">
@@ -222,7 +257,115 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
               <h2 className="bs-section-head mt-1">{step.title}</h2>
               <p className="bs-body mt-2 max-w-4xl">{step.guidance}</p>
             </header>
-            {stepItems.length ? (
+            {kind === 'certified' && step.id === '5' ? (
+              <div className="space-y-5 px-5 py-5">
+                <label className="block max-w-3xl">
+                  <span className="block font-bold text-black">
+                    Aircraft eligibility group
+                  </span>
+                  <span className="mt-1 block text-sm leading-5 text-neutral-700">
+                    Choose the exact catalog group matching the aircraft model,
+                    series and equipment. Leave blank if no new GFC 500 is being
+                    quoted.
+                  </span>
+                  <select
+                    value={gfcAircraftId}
+                    onChange={(event) => {
+                      setGfcAircraftId(event.target.value);
+                      setGfcConfigurationName('');
+                    }}
+                    className="mt-2 w-full border-2 border-black bg-white px-3 py-2"
+                  >
+                    <option value="">No GFC 500 package selected</option>
+                    {GFC500_CERTIFIED_AIRCRAFT.map((aircraft) => (
+                      <option key={aircraft.id} value={aircraft.id}>
+                        {aircraft.label} — catalog page {aircraft.page}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                {gfcAircraft ? (
+                  <div className="border-2 border-black">
+                    <div className="border-b border-black bg-neutral-100 px-4 py-3">
+                      <p className="font-bold">Applicable models</p>
+                      <p className="mt-1 text-sm leading-5">
+                        {gfcAircraft.models}
+                      </p>
+                      {gfcAircraft.notes ? (
+                        <p className="mt-2 text-sm font-bold text-amber-900">
+                          {gfcAircraft.notes}
+                        </p>
+                      ) : null}
+                    </div>
+                    <fieldset className="divide-y divide-neutral-300">
+                      <legend className="sr-only">
+                        GFC 500 servo configuration
+                      </legend>
+                      {gfcAircraft.configurations.map((configuration) => (
+                        <label
+                          key={configuration.name}
+                          className="flex cursor-pointer items-start justify-between gap-4 px-4 py-4"
+                        >
+                          <span className="flex items-start gap-3">
+                            <input
+                              type="radio"
+                              name="gfc500-configuration"
+                              value={configuration.name}
+                              checked={
+                                gfcConfigurationName === configuration.name
+                              }
+                              onChange={() =>
+                                setGfcConfigurationName(configuration.name)
+                              }
+                              className="mt-1 h-5 w-5 border-2 border-black text-black focus:ring-black"
+                            />
+                            <span>
+                              <span className="block font-bold text-black">
+                                {configuration.name}
+                              </span>
+                              <span className="mt-1 block max-w-3xl text-sm leading-5 text-neutral-700">
+                                Catalog system price includes the GMC 507,
+                                required GSA 28 servos and the aircraft-specific
+                                Garmin installation kits listed for this
+                                configuration.
+                              </span>
+                              {gfcConfigurationName === configuration.name ? (
+                                <span className="mt-3 block border-l-2 border-black pl-3 text-xs leading-5 text-neutral-700">
+                                  {configuration.components.map((component) => (
+                                    <span key={component.sku} className="block">
+                                      {component.quantity} × {component.title} (
+                                      {component.sku}) —{' '}
+                                      {money.format(component.listPrice)} each
+                                    </span>
+                                  ))}
+                                  <span className="mt-1 block font-bold text-neutral-900">
+                                    Some catalog rows list serial-number or
+                                    installation alternatives. The system price
+                                    above is authoritative; RWAS will select the
+                                    applicable kit.
+                                  </span>
+                                </span>
+                              ) : null}
+                            </span>
+                          </span>
+                          <span className="min-w-24 text-right font-bold tabular-nums">
+                            {money.format(configuration.listPrice)}
+                          </span>
+                        </label>
+                      ))}
+                    </fieldset>
+                  </div>
+                ) : null}
+
+                <p className="border-l-4 border-amber-500 bg-amber-50 p-4 text-sm leading-5">
+                  Catalog pricing excludes the approved AHRS source because the
+                  selected AXIS system supplies it. RWAS must verify the current
+                  AML, MDL, equipment list, installation manual and
+                  aircraft-specific addendum before quoting or installation.
+                </p>
+              </div>
+            ) : stepItems.length ? (
               <ul className="divide-y divide-neutral-300">
                 {stepItems.map((item) => {
                   const quantity = selection[item.sku] || 0;
@@ -301,9 +444,9 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
           </p>
         </div>
         <p className="bs-body mt-4">
-          {selectedItems.length} selected component
-          {selectedItems.length === 1 ? '' : 's'} · Prices are reference list
-          prices and subject to change.
+          {selectedItems.length + (gfcConfiguration ? 1 : 0)} selected component
+          {selectedItems.length + (gfcConfiguration ? 1 : 0) === 1 ? '' : 's'} ·
+          Prices are reference list prices and subject to change.
         </p>
         {advisories.length ? (
           <div className="mt-5 border-l-4 border-amber-500 bg-amber-50 p-4">
@@ -315,7 +458,7 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
             </ul>
           </div>
         ) : null}
-        {selectedItems.length ? (
+        {selectedItems.length || gfcConfiguration ? (
           <a
             href={`/contact?${contactParams.toString()}`}
             onClick={submitBuild}

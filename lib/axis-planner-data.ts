@@ -389,13 +389,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '5',
       title: 'Autopilot',
       guidance:
-        'AXIS integrates with GFC 500 but does not replace the GMC 507 controller. Select one GSA 28 for each required pitch, roll, pitch-trim or yaw-damper axis. Eligibility, brackets and final hardware are aircraft-specific.',
-    },
-    {
-      id: '5A',
-      title: 'Autopilot Install Hardware',
-      guidance:
-        'Select one connector kit per GSA 28. Aircraft-specific servo mounts, brackets and harness hardware will be confirmed by RWAS during configuration review.',
+        'Select the aircraft-specific GFC 500 system from Garmin’s July Rev 1 2026 catalog. Each system price includes the GMC 507, applicable GSA 28 servos and the Garmin installation kits listed for that configuration.',
     },
     {
       id: '6',
