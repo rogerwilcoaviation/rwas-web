@@ -41,6 +41,10 @@ const CERTIFIED = `
 4|011-03941-00|190|GEA 110 Install Tray
 4A|K00-01010-11|1230|Engine Sensor Kit, 4-cylinder Lycoming/Continental
 4A|K00-01011-11|1615|Engine Sensor Kit, 6-cylinder Lycoming/Continental
+5|010-01946-01|3870|GMC 507 Autopilot Mode Controller, PMA
+5|010-01068-21|2220|GSA 28 Autopilot Servo, PMA — Pitch/Roll/Trim/Yaw
+5A|011-02950-00|80|GSA 28 Servo Connector Kit
+5A|011-02950-01|220|GSA 28 Right-angle Servo Connector Kit
 6|010-02002-05|20040|GTN 750Xi IFR GPS/NAV/COMM/MFD
 6|010-01999-05|14040|GTN 650Xi IFR GPS/NAV/COMM/MFD
 6|010-02232-51|8495|GNC 355 IFR GPS and COMM Radio
@@ -49,6 +53,8 @@ const CERTIFIED = `
 6|010-02481-01|5595|GNC 215 NAV/COMM Radio
 6|010-02480-01|2895|GTR 205 COMM Radio
 6|010-02479-00|2265|GTR 205R Remote COMM Radio
+6|010-01076-31|2400|GTR 20 Remote COMM Radio, PMA
+6|011-03241-01|105|GTR 20 Connector Kit, PMA
 6|010-01319-03|2495|GMA 345 Audio Panel
 6|010-01471-11|2550|GMA 245R PMA Remote Audio Panel
 7|010-01214-01|3895|GTX 335 ADS-B Out Transponder
@@ -60,19 +66,20 @@ const CERTIFIED = `
 7|010-01561-35|1575|GDL 52R PMA Remote SiriusXM and ADS-B Receiver
 7|011-04170-00|85|GDL Remote Mount Connector Kit, PMA
 7|010-12498-50|95|GA 24 TNC SiriusXM Antenna
-8|006-B5211-00|2200|AXIS ChartView Enablement
-8|006-B5211-01|2000|AXIS SurfaceWatch Enablement
-8|006-B5211-02|8500|AXIS TAWS-B Enablement
-8|010-02895-00|2145|GHA 15 PMA Height Advisor
-8|011-05278-00|525|GHA 15 Connector Kit
-8|011-06097-00|25|GHA 15 Install Kit
-8|011-06677-00|325|GHA 15 Levelling Install Kit
-8|010-02975-01|549|GCO 14 Carbon Monoxide Detector
-8|010-01172-21|875|GAD 29D PMA ARINC 429 Interface Adapter
-8|011-03271-00|100|GAD 29 Connector Kit
-8|010-01525-11|825|GAD 27 PMA Electrical Interface Adapter
-8|011-03877-01|160|GAD 27 Connector Kit
-8|010-01074-71|1400|GAP 26 PMA Self-Regulating Pitot Tube`;
+7A|010-00562-00|12895|GTS 820 Active Traffic System
+8A|006-B5211-00|2200|AXIS ChartView Enablement
+8A|006-B5211-01|2000|AXIS SurfaceWatch Enablement
+8A|006-B5211-02|8500|AXIS TAWS-B Enablement
+8B|010-02895-00|2145|GHA 15 PMA Height Advisor
+8B|011-05278-00|525|GHA 15 Connector Kit
+8B|011-06097-00|25|GHA 15 Install Kit
+8B|011-06677-00|325|GHA 15 Levelling Install Kit
+8B|010-02975-01|549|GCO 14 Carbon Monoxide Detector
+8B|010-01074-71|1400|GAP 26 PMA Self-Regulating Pitot Tube
+8C|010-01172-21|875|GAD 29D PMA ARINC 429 Interface Adapter
+8C|011-03271-00|100|GAD 29 Connector Kit
+8C|010-01525-11|825|GAD 27 PMA Electrical Interface Adapter
+8C|011-03877-01|160|GAD 27 Connector Kit`;
 
 const EXPERIMENTAL = `
 1|010-04143-00|4140|AXIS 8-inch Portrait Display — GDU 80PX
@@ -150,19 +157,20 @@ const EXPERIMENTAL = `
 7|010-01561-30|1365|GDL 52R Remote SiriusXM and ADS-B Receiver
 7|010-12498-60|70|GDL Remote Mount Connector Kit
 7|010-12498-50|95|GA 24 TNC SiriusXM Antenna
-8|006-B5211-00|2200|AXIS ChartView Enablement
-8|006-B5211-01|2000|AXIS SurfaceWatch Enablement
-8|006-B5211-02|8500|AXIS TAWS-B Enablement
-8|010-02942-00|1995|GHA 15 Height Advisor
-8|010-02975-01|549|GCO 14 Carbon Monoxide Detector
-8|010-01172-20|565|GAD 29C ARINC 429 Interface Adapter
-8|011-03271-00|90|GAD 29 Connector Kit
-8|010-01525-10|825|GAD 27 Electrical Interface Adapter
-8|011-03877-00|165|GAD 27 Connector Kit
-8|010-01074-00|340|GAP 26 Unheated Pitot Tube
-8|010-01074-10|465|GAP 26 Heated/Unregulated Pitot Tube
-8|010-01074-20|700|GAP 26 Heated/Regulated Pitot Tube
-8|010-01287-00|380|GI 260 Angle of Attack Indicator`;
+7A|010-00562-00|12895|GTS 820 Active Traffic System
+8A|006-B5211-00|2200|AXIS ChartView Enablement
+8A|006-B5211-01|2000|AXIS SurfaceWatch Enablement
+8A|006-B5211-02|8500|AXIS TAWS-B Enablement
+8B|010-02942-00|1995|GHA 15 Height Advisor
+8B|010-02975-01|549|GCO 14 Carbon Monoxide Detector
+8B|010-01074-00|340|GAP 26 Unheated Pitot Tube
+8B|010-01074-10|465|GAP 26 Heated/Unregulated Pitot Tube
+8B|010-01074-20|700|GAP 26 Heated/Regulated Pitot Tube
+8B|010-01287-00|380|GI 260 Angle of Attack Indicator
+8C|010-01172-20|565|GAD 29C ARINC 429 Interface Adapter
+8C|011-03271-00|90|GAD 29 Connector Kit
+8C|010-01525-10|825|GAD 27 Electrical Interface Adapter
+8C|011-03877-00|165|GAD 27 Connector Kit`;
 
 const parse = (source: string): AxisPlannerItem[] =>
   source
@@ -220,7 +228,13 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '5',
       title: 'Autopilot',
       guidance:
-        'AXIS integrates with GFC 500. Autopilot eligibility and the required servos, brackets and installation hardware are aircraft-specific and will be confirmed by RWAS.',
+        'AXIS integrates with GFC 500 but does not replace the GMC 507 controller. Select one GSA 28 for each required pitch, roll, pitch-trim or yaw-damper axis. Eligibility, brackets and final hardware are aircraft-specific.',
+    },
+    {
+      id: '5A',
+      title: 'Autopilot Install Hardware',
+      guidance:
+        'Select one connector kit per GSA 28. Aircraft-specific servo mounts, brackets and harness hardware will be confirmed by RWAS during configuration review.',
     },
     {
       id: '6',
@@ -235,10 +249,28 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
         'Select ADS-B Out/In and weather options. Remote GDL units require the connector kit; SiriusXM receivers require the GA 24 TNC antenna.',
     },
     {
-      id: '8',
-      title: 'Additional Options',
+      id: '7A',
+      title: 'Active Traffic',
       guidance:
-        'Add enablements and interfaces only where applicable. GAD 29 may be needed for an older navigator or to display navigation information on a G5.',
+        'GTS 8XX active traffic is compatible through the approved HSDB interface path. GTS 820 is the current model with a published July 2026 list price; only one ADS-B In source can be configured at a time.',
+    },
+    {
+      id: '8A',
+      title: 'Software Enablements',
+      guidance:
+        'Add database-driven display capabilities for the intended mission. Enablement eligibility depends on the selected display and installed navigation equipment.',
+    },
+    {
+      id: '8B',
+      title: 'Safety Sensors and Awareness',
+      guidance:
+        'Select radio-height advisory, carbon-monoxide detection and angle-of-attack hardware as applicable. Each sensor requires the installation hardware shown for that option.',
+    },
+    {
+      id: '8C',
+      title: 'Navigation and Electrical Interfaces',
+      guidance:
+        'GAD 29 may be needed for an older navigator or G5 navigation display. GAD 27 provides keep-alive power and optional landing/taxi-light wig-wag functions.',
     },
   ],
   experimental: [
@@ -309,10 +341,28 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
         'A GTX 45R with GPS can provide the ADS-B Out position source when no IFR GPS is installed. Remote GDLs require a connector kit; SiriusXM requires a GA 24 TNC antenna.',
     },
     {
-      id: '8',
-      title: 'Additional Options',
+      id: '7A',
+      title: 'Active Traffic',
       guidance:
-        'Add enablements, safety products and interfaces for the intended mission. GAD 29 may be required with an older GPS navigator or for navigation on G5.',
+        'GTS 8XX active traffic is compatible through HSDB. GTS 820 is the current model with a published July 2026 list price; avoid configuring conflicting traffic sources.',
+    },
+    {
+      id: '8A',
+      title: 'Software Enablements',
+      guidance:
+        'Add database-driven display capabilities for the intended mission. Enablement eligibility depends on the selected display and installed navigation equipment.',
+    },
+    {
+      id: '8B',
+      title: 'Safety Sensors and Awareness',
+      guidance:
+        'Select height advisory, carbon-monoxide detection and angle-of-attack hardware as applicable. Choose the GAP 26 model that matches the aircraft electrical and pitot-heat design.',
+    },
+    {
+      id: '8C',
+      title: 'Navigation and Electrical Interfaces',
+      guidance:
+        'GAD 29 may be required with an older GPS navigator or for navigation on G5. GAD 27 provides keep-alive power and optional landing/taxi-light wig-wag functions.',
     },
   ],
 };
