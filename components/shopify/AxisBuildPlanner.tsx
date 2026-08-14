@@ -68,12 +68,36 @@ function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
   );
   if (hasSirius && !has('010-12498-50'))
     notices.push('A SiriusXM-capable GDL requires a GA 24 TNC antenna.');
-  if (kind === 'experimental' && has('010-01068-20')) {
-    const servos = selection['010-01068-20'];
+  const servoSku = kind === 'certified' ? '010-01068-21' : '010-01068-20';
+  if (has(servoSku)) {
+    const servos = selection[servoSku];
     const connectorCount =
       (selection['011-02950-00'] || 0) + (selection['011-02950-01'] || 0);
-    if (connectorCount < servos)
+    if (connectorCount < servos) {
       notices.push('Select one GSA 28 connector kit for each autopilot servo.');
+    }
+  }
+  if (kind === 'certified' && has('010-01076-31') && !has('011-03241-01')) {
+    notices.push('The GTR 20 requires its PMA connector kit.');
+  }
+  if (has('010-00562-00')) {
+    const hasSupportedTrafficPath =
+      has('010-01216-06') ||
+      has('010-01217-06') ||
+      has('010-02002-05') ||
+      has('010-01999-05') ||
+      has('010-02326-10') ||
+      has('010-02326-20');
+    if (!hasSupportedTrafficPath) {
+      notices.push(
+        'GTS 820 requires an approved indirect HSDB interface path through compatible equipment such as GTX 345, GTN Xi or GI 275.',
+      );
+    }
+    if (hasRemoteGdl) {
+      notices.push(
+        'Review traffic-source compatibility: GTS 8XX cannot be combined with another ADS-B traffic source except an approved GTX 345 configuration.',
+      );
+    }
   }
   return notices;
 }
@@ -189,7 +213,7 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
         </p>
       </div>
 
-      {steps.map((step, index) => {
+      {steps.map((step) => {
         const stepItems = items.filter((item) => item.step === step.id);
         return (
           <section key={step.id} className="border-2 border-black bg-white">
@@ -254,9 +278,8 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
               </ul>
             ) : (
               <p className="bs-body px-5 py-4">
-                {kind === 'certified' && index === 5
-                  ? 'Autopilot components are aircraft-specific. RWAS will select the approved GFC 500 hardware during configuration review.'
-                  : 'RWAS will confirm the aircraft-specific components for this step.'}
+                RWAS will confirm the aircraft-specific components for this
+                step.
               </p>
             )}
           </section>
