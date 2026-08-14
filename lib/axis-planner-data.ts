@@ -5,6 +5,7 @@ export type AxisPlannerItem = {
   sku: string;
   price: number;
   title: string;
+  description: string;
 };
 
 export type AxisPlannerStep = {
@@ -172,13 +173,173 @@ const EXPERIMENTAL = `
 8C|010-01525-10|825|GAD 27 Electrical Interface Adapter
 8C|011-03877-00|165|GAD 27 Connector Kit`;
 
+const describeItem = ({
+  step,
+  title,
+}: {
+  step: string;
+  title: string;
+}): string => {
+  if (/AXIS .*Display/.test(title)) {
+    return 'Primary flight, multifunction and optional engine-information display; integrated GPS, radio and audio functions vary by model.';
+  }
+  if (/Display Install Kit|Install Kit, GDU/.test(title)) {
+    return 'Provides the display-specific connectors and installation hardware for the stated new-install or G3X Touch upgrade path.';
+  }
+  if (/GA 35S/.test(title)) {
+    return 'External GPS/WAAS antenna required for AXIS displays or transponders that contain an IFR GPS receiver.';
+  }
+  if (/Printed Material/.test(title)) {
+    return 'Aircraft-level documentation package and pilot training materials; select one for a new AXIS system installation.';
+  }
+  if (/LRU Kit/.test(title)) {
+    return 'Core flight-data sensor package providing attitude, air-data, magnetic-heading and outside-air-temperature inputs to AXIS.';
+  }
+  if (/GSU 25/.test(title)) {
+    return 'Remote ADAHRS supplying attitude and air-data information; use as the core or supplemental sensor permitted by the selected system.';
+  }
+  if (/GMU (11|22)/.test(title)) {
+    return 'Remote magnetometer that supplies magnetic-heading data to the compatible AXIS ADAHRS.';
+  }
+  if (/G5/.test(title) && !/GAD 13/.test(title)) {
+    return 'Electronic standby flight instrument displaying attitude, airspeed and altitude when configured for the AXIS installation.';
+  }
+  if (/GI 275 ADAHRS \+AP/.test(title)) {
+    return 'Battery-backed electronic standby ADI with the interface capability needed when retaining a compatible non-Garmin autopilot.';
+  }
+  if (/GI 275 ADAHRS/.test(title)) {
+    return 'Battery-backed electronic standby ADI for attitude, airspeed and altitude; appropriate when no legacy-autopilot interface is required.';
+  }
+  if (/GAD 13/.test(title)) {
+    return 'Interface and temperature-probe package that supplies outside-air-temperature data and related functions to a G5.';
+  }
+  if (/GEA 24B/.test(title)) {
+    return 'Engine and airframe interface that powers and reads piston-engine sensors for AXIS engine-information display.';
+  }
+  if (/GEA 110/.test(title)) {
+    return 'Firewall-forward engine and airframe interface for AXIS displays with integrated COMM or NAV/COMM capability.';
+  }
+  if (/Engine Sensor Kit/.test(title)) {
+    return 'Matched engine-monitoring probe package for the stated engine family and cylinder count, including core temperature and pressure sensing.';
+  }
+  if (/GPT .*Pressure Sensor/.test(title)) {
+    return 'Pressure transducer used by the engine-information system for an installation-assigned fluid or manifold-pressure channel.';
+  }
+  if (/Fuel Flow Sensor/.test(title)) {
+    return 'Measures fuel flow for AXIS engine gauges, fuel-computer calculations and flight data logging.';
+  }
+  if (/RPM Sensor/.test(title)) {
+    return 'Reads magneto rotation to provide engine RPM information to the AXIS engine display.';
+  }
+  if (/Thermocouple|Temperature RTD/.test(title)) {
+    return 'Engine-temperature probe for the stated measurement channel, connected through the selected GEA interface.';
+  }
+  if (/Ammeter Shunt/.test(title)) {
+    return 'Provides a calibrated millivolt signal so AXIS can display aircraft charging or load current.';
+  }
+  if (/GMC 507/.test(title) && !/Connector|Rack/.test(title)) {
+    return 'Dedicated GFC 500/500X autopilot mode controller for engaging and commanding lateral and vertical flight modes.';
+  }
+  if (
+    /GSA 28.*Servo/.test(title) &&
+    !/Connector|Installation Kit/.test(title)
+  ) {
+    return 'Autopilot servo used for a selected roll, pitch, pitch-trim or yaw-damper axis; quantity and mounts are aircraft-specific.';
+  }
+  if (/GTN 750Xi/.test(title)) {
+    return 'Large-screen IFR GPS/NAV/COMM navigator and MFD providing flight planning, procedures and radio control to AXIS.';
+  }
+  if (/GTN 650Xi/.test(title)) {
+    return 'Compact IFR GPS/NAV/COMM navigator providing flight planning, procedures and radio control to AXIS.';
+  }
+  if (/GNC 355/.test(title)) {
+    return 'IFR GPS navigator combined with a COMM radio for navigation, procedures and communication through the AXIS interface.';
+  }
+  if (/GNX 375/.test(title)) {
+    return 'IFR GPS navigator combined with an ADS-B In/Out transponder for navigation, traffic and weather integration.';
+  }
+  if (/GPS 175/.test(title)) {
+    return 'Touchscreen IFR GPS navigator supplying approved navigation and procedure guidance to AXIS.';
+  }
+  if (/GNC 215/.test(title)) {
+    return 'NAV/COMM radio providing VHF communication plus VOR/localizer/glideslope navigation controlled from compatible AXIS displays.';
+  }
+  if (/GTR (20|205)/.test(title) && !/Connector/.test(title)) {
+    return 'VHF COMM radio controlled from compatible AXIS displays; remote and panel-mount functions depend on the selected model.';
+  }
+  if (/GMA (245|345)/.test(title)) {
+    return 'Audio panel and intercom that routes radios, alerts, music and crew/passenger audio for the AXIS-equipped panel.';
+  }
+  if (/GTX (3(?:35|45)|35R|45R)/.test(title)) {
+    return 'ADS-B transponder providing the stated Out or In/Out capability; remote versions are controlled through compatible avionics.';
+  }
+  if (/GDL 50R/.test(title)) {
+    return 'Remote ADS-B In receiver supplying subscription-free traffic and FIS-B weather to AXIS.';
+  }
+  if (/GDL 51R/.test(title)) {
+    return 'Remote SiriusXM receiver supplying subscription weather and audio entertainment to compatible AXIS displays.';
+  }
+  if (/GDL 52R/.test(title)) {
+    return 'Combined remote ADS-B In and SiriusXM receiver supplying traffic, weather and entertainment to AXIS.';
+  }
+  if (/GA 24/.test(title)) {
+    return 'SiriusXM antenna required for a GDL 51R or GDL 52R satellite-weather installation.';
+  }
+  if (/GTS 820/.test(title)) {
+    return 'Active traffic receiver that interrogates nearby transponders and displays traffic through an approved indirect HSDB interface path.';
+  }
+  if (/ChartView/.test(title)) {
+    return 'Software enablement for displaying supported georeferenced approach charts on AXIS.';
+  }
+  if (/SurfaceWatch/.test(title)) {
+    return 'Software enablement providing runway monitoring and visual/aural alerts for certain surface-operation risks.';
+  }
+  if (/TAWS-B/.test(title)) {
+    return 'Software enablement adding Class B terrain-awareness alerting when the installation meets equipment and approval requirements.';
+  }
+  if (/GHA 15/.test(title) && !/Connector|Install Kit/.test(title)) {
+    return 'Radio-frequency height advisor that supplies height-above-ground information and low-altitude awareness to AXIS.';
+  }
+  if (/GCO 14/.test(title)) {
+    return 'Carbon-monoxide sensor that displays cabin CO levels and provides AXIS visual and aural alerts.';
+  }
+  if (/GAP 26/.test(title)) {
+    return 'Pitot/AOA probe that supplies angle-of-attack data through a compatible GSU 25; heat capability varies by model.';
+  }
+  if (/GI 260/.test(title)) {
+    return 'Dedicated external angle-of-attack indicator; optional when AOA is already displayed on AXIS.';
+  }
+  if (/GAD 29/.test(title) && !/Connector/.test(title)) {
+    return 'ARINC 429 interface adapter used with certain external navigators or to provide navigation data to a G5 standby.';
+  }
+  if (/GAD 27/.test(title) && !/Connector/.test(title)) {
+    return 'Electrical interface providing stabilized keep-alive power and optional landing/taxi-light wig-wag control.';
+  }
+  if (/Connector Kit/.test(title)) {
+    return 'Provides the approved mating connectors and backshell hardware needed to wire the named unit into the AXIS system.';
+  }
+  if (/Install Kit|Install Rack|Installation Kit/.test(title)) {
+    return 'Provides the mounting or installation hardware required for the named unit and stated aircraft application.';
+  }
+  if (step === '4A') {
+    return 'Engine or airframe sensor used by the selected GEA interface to provide the stated measurement to AXIS.';
+  }
+  return 'Garmin hardware or software option used to complete the selected AXIS system function; final applicability is configuration-specific.';
+};
+
 const parse = (source: string): AxisPlannerItem[] =>
   source
     .trim()
     .split('\n')
     .map((line) => {
       const [step, sku, price, title] = line.split('|');
-      return { step, sku, price: Number(price), title };
+      return {
+        step,
+        sku,
+        price: Number(price),
+        title,
+        description: describeItem({ step, title }),
+      };
     });
 
 export const AXIS_ITEMS: Record<AxisPlannerKind, AxisPlannerItem[]> = {
