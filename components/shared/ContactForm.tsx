@@ -347,6 +347,9 @@ export default function ContactForm() {
         <p className="rwas-contact-confirm__body">
           The shop typically replies within one business day. If it&rsquo;s
           urgent, call us at <a href="tel:+16052998178">(605) 299-8178</a>.
+          {submitState.ticketId.startsWith('rwas_axis_')
+            ? ' A copy of your AXIS build has also been emailed to you.'
+            : ''}
         </p>
         <dl className="rwas-contact-confirm__stub">
           <dt>Reference</dt>

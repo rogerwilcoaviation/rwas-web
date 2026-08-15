@@ -6,7 +6,7 @@ import {
   type AxisPlannerKind,
 } from '@/lib/axis-planner-data';
 import { GFC500_CERTIFIED_AIRCRAFT } from '@/lib/gfc500-certified-catalog';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, type MouseEvent } from 'react';
 
 type Selection = Record<string, number>;
 
@@ -161,7 +161,8 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
     });
   };
 
-  const submitBuild = () => {
+  const submitBuild = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
     // A new build gets a new key. The draft retains this key so retries of the
     // same contact submission remain idempotent without blocking later builds.
     const requestId = `rwas_axis_${Date.now().toString(36)}_${crypto.randomUUID().replace(/-/g, '')}`;
@@ -219,6 +220,28 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
         total,
       }),
     );
+    const panelComponents = components.filter((item) =>
+      /display|gdu|gtn|gnc|gps 175|gnx 375|gtr|gma|audio panel|gmc 507|gi 275|\bg5\b|transponder|control head/i.test(
+        item.title,
+      ),
+    );
+    const handoff = {
+      version: 1,
+      requestId,
+      kind,
+      returnUrl: `/contact?${contactParams.toString()}`,
+      components,
+      panelComponents,
+      advisories,
+      total,
+    };
+    const encoded = btoa(
+      String.fromCharCode(...new TextEncoder().encode(JSON.stringify(handoff))),
+    )
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+    window.location.href = `https://panelplanner.rwas.team/customer?axisBuild=${encoded}`;
   };
 
   const contactParams = new URLSearchParams({
@@ -460,13 +483,13 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
         ) : null}
         {selectedItems.length || gfcConfiguration ? (
           <a
-            href={`/contact?${contactParams.toString()}`}
+            href="https://panelplanner.rwas.team/customer"
             onClick={submitBuild}
             className="bs-cta-primary mt-6 inline-flex"
           >
             {advisories.length
-              ? 'Submit Preliminary Build with Advisories'
-              : 'Submit Preliminary Build to RWAS'}
+              ? 'Arrange Panel & Continue with Advisories'
+              : 'Arrange Panel & Continue'}
           </a>
         ) : (
           <span
@@ -478,8 +501,11 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
         )}
         <p className="mt-3 text-sm text-neutral-600">
           Selected equipment is sent to the RWAS service desk by email and,
-          after email delivery succeeds, to Shop Talk in Microsoft Teams. The
-          planner does not perform full compatibility validation.
+          after email delivery succeeds, to Shop Talk in Microsoft Teams. You
+          will also receive an email copy of the selected equipment, pricing,
+          and advisories. The planner does not perform full compatibility
+          validation; its panel preview is conceptual and is not an approved
+          fabrication or installation drawing.
         </p>
       </section>
     </div>

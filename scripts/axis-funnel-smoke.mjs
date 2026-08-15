@@ -18,6 +18,7 @@ const axisArticle = blog.articles.find(
 assert.match(contact, /'Idempotency-Key': requestId/);
 assert.match(contact, /const ticketId = requestId/);
 assert.match(contact, /const emailSend = await sendViaResend/);
+assert.match(contact, /sendAxisCustomerCopy\(env, payload, requestId\)/);
 assert.match(contact, /sendToTeams\(env, payload, ticketId, requestId\)/);
 assert.match(contact, /contact-form Teams send failed after email success/);
 assert.match(contact, /aircraftStatus/);
@@ -27,7 +28,8 @@ assert.match(form, /removeItem\('rwas-contact-draft'\)/);
 assert.match(form, /ATTRIBUTION_KEYS\.map/);
 assert.match(planner, /extendedPrice/);
 assert.match(planner, /Garmin July 2026 Build-A-System Guide/);
-assert.match(planner, /Submit Preliminary Build with Advisories/);
+assert.match(planner, /Arrange Panel & Continue with Advisories/);
+assert.match(planner, /panelplanner\.rwas\.team\/customer\?axisBuild=/);
 assert.match(
   planner,
   /const requestId = `rwas_axis_\$\{Date\.now\(\)\.toString\(36\)\}/,
@@ -167,7 +169,17 @@ try {
     resendRequests[0].headers['Idempotency-Key'],
     registeredBuild.requestId,
   );
-  assert.equal(resendRequests[0].body, resendRequests[1].body);
+  assert.equal(
+    resendRequests[1].headers['Idempotency-Key'],
+    `${registeredBuild.requestId}_customer`,
+  );
+  assert.equal(resendRequests[0].body, resendRequests[2].body);
+  assert.equal(resendRequests[1].body, resendRequests[3].body);
+  const customerReceipt = JSON.parse(resendRequests[1].body);
+  assert.deepEqual(customerReceipt.to, [registeredBuild.email]);
+  assert.match(customerReceipt.subject, /Your RWAS AXIS preliminary build/);
+  assert.match(customerReceipt.html, /Selected equipment/);
+  assert.doesNotMatch(customerReceipt.html, /concept board/i);
   for (const expected of [
     'Phone: 605-555-0100',
     'Aircraft: 1980 Cessna R182',

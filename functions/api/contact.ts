@@ -410,6 +410,105 @@ async function sendViaResend(
   }
 }
 
+function money(value: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+function buildAxisCustomerCopy(p: ContactPayload, requestId: string) {
+  const components = (p.components || []).filter(
+    (item) => item.title && (item.quantity || 0) > 0,
+  );
+  const total = components.reduce(
+    (sum, item) => sum + (item.extendedPrice || 0),
+    0,
+  );
+  const aircraft = [p.aircraftYear, p.aircraftMake, p.aircraftModel]
+    .filter(Boolean)
+    .join(' ');
+  const equipmentRows = components
+    .map(
+      (item) =>
+        `<tr><td style="padding:9px;border-bottom:1px solid #ddd">${item.quantity || 0} × ${escapeHtml(item.title || 'Component')}<br><span style="color:#666;font:12px monospace">${escapeHtml(item.sku || '')}</span></td><td style="padding:9px;border-bottom:1px solid #ddd;text-align:right;font-weight:bold">${escapeHtml(money(item.extendedPrice || 0))}</td></tr>`,
+    )
+    .join('');
+  const advisoryHtml = (p.advisories || [])
+    .map((item) => `<li style="margin:0 0 6px">${escapeHtml(item)}</li>`)
+    .join('');
+  const text = [
+    'Your RWAS AXIS preliminary build',
+    `Reference: ${requestId}`,
+    `Planner: AXIS ${p.plannerKind}`,
+    `Aircraft: ${aircraft || 'Not specified'}`,
+    '',
+    'Selected equipment:',
+    ...components.map(
+      (item) =>
+        `${item.quantity || 0} x ${item.title || 'Component'} (${item.sku || ''}) — ${money(item.extendedPrice || 0)}`,
+    ),
+    '',
+    `Hardware retail total: ${money(total)}`,
+    p.advisories?.length
+      ? `\nPlanner advisories:\n- ${p.advisories.join('\n- ')}`
+      : '',
+    '',
+    'This is a preliminary equipment-planning receipt, not an approved configuration, scaled panel layout, or installed quote. RWAS will verify aircraft eligibility, compatibility, installation hardware, panel space, labor, and final pricing.',
+  ]
+    .filter(Boolean)
+    .join('\n');
+  const html = `<!doctype html><html><body style="margin:0;background:#f4f1e9;color:#171717"><div style="max-width:760px;margin:auto;padding:28px;font:15px/1.5 Arial,sans-serif"><p style="margin:0;text-transform:uppercase;letter-spacing:2px;font-weight:bold">Roger Wilco Aviation Services</p><h1 style="font:800 30px/1.1 Arial,sans-serif;margin:8px 0 12px">Your AXIS preliminary build</h1><p>Thank you, ${escapeHtml(p.name || '')}. We received your build and will review it for aircraft eligibility, compatibility, required installation hardware, labor, and package pricing.</p><p><strong>Reference:</strong> ${escapeHtml(requestId)}</p><h2 style="font:800 21px Arial,sans-serif">Selected equipment</h2><table style="width:100%;border-collapse:collapse;background:white;border:2px solid #171717"><tbody>${equipmentRows}<tr><td style="padding:12px;font-weight:bold">Hardware retail total</td><td style="padding:12px;text-align:right;font-size:20px;font-weight:bold">${escapeHtml(money(total))}</td></tr></tbody></table>${advisoryHtml ? `<h2 style="font:800 21px Arial,sans-serif">Planner advisories</h2><ul>${advisoryHtml}</ul>` : ''}<p style="margin-top:24px;padding:15px;border-left:5px solid #c28b00;background:#fff8dd"><strong>Planning note:</strong> This is a preliminary equipment-planning receipt, not an approved configuration or installed quote. RWAS will verify final equipment placement after reviewing the aircraft panel.</p><p>Questions? Reply to this email or call <a href="tel:+16052998178">(605) 299-8178</a>.</p></div></body></html>`;
+  return { text, html };
+}
+
+async function sendAxisCustomerCopy(
+  env: Env,
+  p: ContactPayload,
+  requestId: string,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!p.plannerKind || !p.email || !p.components?.length) return { ok: true };
+  if (!env.RESEND_API_KEY)
+    return { ok: false, error: 'mail provider not configured' };
+  const to = env.CONTACT_TO_EMAIL || 'service@rwas.team';
+  const from =
+    env.CONTACT_FROM_EMAIL || 'RWAS Correspondence <noreply@rwas.team>';
+  const copy = buildAxisCustomerCopy(p, requestId);
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+        'Idempotency-Key': `${requestId}_customer`,
+      },
+      body: JSON.stringify({
+        from,
+        to: [p.email],
+        reply_to: to,
+        subject: `Your RWAS AXIS preliminary build — ${requestId}`,
+        ...copy,
+        tags: [
+          { name: 'source', value: 'rwas-axis-planner' },
+          { name: 'reason', value: 'customer-copy' },
+        ],
+      }),
+    });
+    return res.ok
+      ? { ok: true }
+      : {
+          ok: false,
+          error: `Resend ${res.status}: ${(await res.text()).slice(0, 200)}`,
+        };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : 'customer copy failed',
+    };
+  }
+}
+
 function buildTeamsBody(
   p: ContactPayload,
   ticketId: string,
@@ -548,6 +647,17 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
           'We could not deliver your message right now. Please email service@rwas.team directly.',
       },
       502,
+    );
+  }
+
+  const customerCopy = await sendAxisCustomerCopy(env, payload, requestId);
+  if (!customerCopy.ok) {
+    console.error(
+      'AXIS customer copy send failed after internal email success',
+      {
+        requestId,
+        error: customerCopy.error,
+      },
     );
   }
 

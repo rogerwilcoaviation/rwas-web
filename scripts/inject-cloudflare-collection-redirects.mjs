@@ -366,6 +366,119 @@ if (rwasUrl.pathname === "/api/contact") {
     );
   }
 
+  // AXIS planner submissions receive a separate customer-facing receipt. It
+  // intentionally presents a concept board rather than implying a scaled or
+  // installation-approved panel layout; the equipment builder does not collect
+  // panel dimensions or component positions.
+  if (payload.plannerKind && componentLines.length) {
+    const customerComponents = Array.isArray(payload.components)
+      ? payload.components
+          .map((item) => ({
+            title: clean(item && item.title, 240),
+            sku: clean(item && item.sku, 120),
+            quantity: number(item && item.quantity),
+            extendedPrice: number(item && item.extendedPrice),
+          }))
+          .filter((item) => item.title && item.quantity > 0)
+      : [];
+    const customerTotal = customerComponents.reduce(
+      (sum, item) => sum + item.extendedPrice,
+      0,
+    );
+    const customerMoney = (value) =>
+      new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(value);
+    const equipmentRows = customerComponents
+      .map(
+        (item) =>
+          '<tr><td style="padding:9px;border-bottom:1px solid #ddd">' +
+          item.quantity +
+          ' × ' +
+          escapeHtml(item.title) +
+          '<br><span style="color:#666;font:12px monospace">' +
+          escapeHtml(item.sku) +
+          '</span></td><td style="padding:9px;border-bottom:1px solid #ddd;text-align:right;font-weight:bold">' +
+          escapeHtml(customerMoney(item.extendedPrice)) +
+          '</td></tr>',
+      )
+      .join("");
+    const customerAdvisories = Array.isArray(payload.advisories)
+      ? payload.advisories
+          .map((item) => '<li style="margin:0 0 6px">' + escapeHtml(clean(item, 400)) + '</li>')
+          .join("")
+      : "";
+    const customerText = [
+      "Your RWAS AXIS preliminary build",
+      "Reference: " + requestId,
+      "Planner: AXIS " + clean(payload.plannerKind, 20),
+      "Aircraft: " + (aircraft || "Not specified"),
+      "",
+      "Selected equipment:",
+      ...customerComponents.map(
+        (item) =>
+          item.quantity +
+          " x " +
+          item.title +
+          " (" +
+          item.sku +
+          ") — " +
+          customerMoney(item.extendedPrice),
+      ),
+      "",
+      "Hardware retail total: " + customerMoney(customerTotal),
+      advisoryLines.length ? "\\nPlanner advisories:\\n" + advisoryLines.join("\\n") : "",
+      "",
+      "This is a preliminary equipment-planning receipt, not an approved configuration or installed quote. RWAS will verify aircraft eligibility, compatibility, installation hardware, panel space, labor, and final pricing.",
+    ]
+      .filter(Boolean)
+      .join("\\n");
+    const customerHtml =
+      '<!doctype html><html><body style="margin:0;background:#f4f1e9;color:#171717"><div style="max-width:760px;margin:auto;padding:28px;font:15px/1.5 Arial,sans-serif"><p style="margin:0;text-transform:uppercase;letter-spacing:2px;font-weight:bold">Roger Wilco Aviation Services</p><h1 style="font:800 30px/1.1 Arial,sans-serif;margin:8px 0 12px">Your AXIS preliminary build</h1><p>Thank you, ' +
+      escapeHtml(clean(payload.name, 120)) +
+      '. We received your build and will review it for aircraft eligibility, compatibility, required installation hardware, labor, and package pricing.</p><p><strong>Reference:</strong> ' +
+      escapeHtml(requestId) +
+      '</p><h2 style="font:800 21px Arial,sans-serif">Selected equipment</h2><table style="width:100%;border-collapse:collapse;background:white;border:2px solid #171717"><tbody>' +
+      equipmentRows +
+      '<tr><td style="padding:12px;font-weight:bold">Hardware retail total</td><td style="padding:12px;text-align:right;font-size:20px;font-weight:bold">' +
+      escapeHtml(customerMoney(customerTotal)) +
+      '</td></tr></tbody></table>' +
+      (customerAdvisories
+        ? '<h2 style="font:800 21px Arial,sans-serif">Planner advisories</h2><ul>' + customerAdvisories + '</ul>'
+        : "") +
+      '<p style="margin-top:24px;padding:15px;border-left:5px solid #c28b00;background:#fff8dd"><strong>Planning note:</strong> This is a preliminary equipment-planning receipt, not an approved configuration or installed quote. RWAS will verify final equipment placement after reviewing the aircraft panel.</p><p>Questions? Reply to this email or call <a href="tel:+16052998178">(605) 299-8178</a>.</p></div></body></html>';
+
+    try {
+      const customerEmail = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + e.RESEND_API_KEY,
+          "Content-Type": "application/json",
+          "Idempotency-Key": requestId + "_customer",
+        },
+        body: JSON.stringify({
+          from,
+          to: [clean(payload.email, 254)],
+          reply_to: to,
+          subject: "Your RWAS AXIS preliminary build — " + requestId,
+          text: customerText,
+          html: customerHtml,
+          tags: [
+            { name: "source", value: "rwas-axis-planner" },
+            { name: "reason", value: "customer-copy" },
+          ],
+        }),
+      });
+      if (!customerEmail.ok) {
+        console.error("AXIS customer copy send failed", requestId, customerEmail.status);
+      }
+    } catch (error) {
+      console.error("AXIS customer copy send failed", requestId, error);
+    }
+  }
+
   if (e.TEAMS_RELAY_TOKEN) {
     try {
       const teams = await fetch(
