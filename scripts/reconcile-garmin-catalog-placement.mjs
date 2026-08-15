@@ -182,7 +182,12 @@ const PORTABLE_MOUNT_SKUS = new Set([
 // otherwise resemble installation hardware.
 const PILOT_GEAR_PRODUCT_HANDLES = new Set([
   'gpsmap-h1-010-02920-00',
-  'montana-750i-010-02347-00',
+  'gpsmap®-86sci',
+  'gpsmap-86i-010-02236-00',
+  'gpsmap-h1i-plus-010-02921-00',
+  'montana-710-010-02963-00',
+  'montana-710i-010-02964-00',
+  'montana-760i-010-02964-10',
   'gdl-52',
   'garmin-ac-adapter-010-11385-04',
   'garmin-ac-adapter-010-12180-01',
