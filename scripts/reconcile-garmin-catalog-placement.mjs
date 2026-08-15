@@ -181,6 +181,8 @@ const PORTABLE_MOUNT_SKUS = new Set([
 // words such as "mount", "connector kit", or "mounting kit" that would
 // otherwise resemble installation hardware.
 const PILOT_GEAR_PRODUCT_HANDLES = new Set([
+  'gpsmap-h1-010-02920-00',
+  'montana-750i-010-02347-00',
   'gdl-52',
   'garmin-ac-adapter-010-11385-04',
   'garmin-ac-adapter-010-12180-01',
@@ -594,8 +596,12 @@ function buildPlan(products, collections, publications) {
       active &&
       product.productType === TYPES.unclassified &&
       product.collections.nodes.length === 0;
+    const johnApprovedPilotGear = PILOT_GEAR_PRODUCT_HANDLES.has(
+      product.handle,
+    );
     const excluded =
       active &&
+      !johnApprovedPilotGear &&
       (EXCLUDED_MISPLACED_SKUS.has(record.sku) ||
         isNonAviationMapCard(product) ||
         isRetiredConsumerProduct(product));
@@ -686,7 +692,7 @@ function buildPlan(products, collections, publications) {
     }
 
     if (!excluded && !unplaced && !catalogSyncWatch && !catalogSyncDatabase) {
-      if (PILOT_GEAR_PRODUCT_HANDLES.has(product.handle)) {
+      if (johnApprovedPilotGear) {
         applyPilotPlacement(
           record,
           collections,
