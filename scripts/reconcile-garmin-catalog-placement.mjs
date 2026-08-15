@@ -182,7 +182,7 @@ const PORTABLE_MOUNT_SKUS = new Set([
 // otherwise resemble installation hardware.
 const PILOT_GEAR_PRODUCT_HANDLES = new Set([
   'gpsmap-h1-010-02920-00',
-  'gpsmap®-86sci',
+  'gpsmap-86sci-010-02236-02',
   'gpsmap-86i-010-02236-00',
   'gpsmap-h1i-plus-010-02921-00',
   'montana-710-010-02963-00',
