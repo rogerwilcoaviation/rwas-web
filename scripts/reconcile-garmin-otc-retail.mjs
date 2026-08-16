@@ -19,6 +19,8 @@ const POLICY_SOURCE = {
 };
 
 const OTC_RETAIL_PRODUCTS = [
+  { sku: '233-20069-00', family: 'GFC 500 yaw cable assembly' },
+  { sku: '011-04888-01', family: 'GFC 500 .125 bridle cable clamp' },
   { sku: '010-02232-00', family: 'GNC 355' },
   { sku: '010-02232-50', family: 'GNC 355' },
   { sku: '010-02232-51', family: 'GNC 355' },
@@ -285,9 +287,13 @@ async function findSku(sku) {
   return matches;
 }
 
-async function buildAudit(priceAuthority, collection) {
+async function buildAudit(
+  priceAuthority,
+  collection,
+  policies = OTC_RETAIL_PRODUCTS,
+) {
   const records = [];
-  for (const policy of OTC_RETAIL_PRODUCTS) {
+  for (const policy of policies) {
     const authority =
       PUBLIC_PRICE_AUTHORITIES[policy.sku] || priceAuthority.rows[policy.sku];
     if (!authority || !Number.isFinite(Number(authority.list_price))) {
@@ -445,13 +451,26 @@ function publicRecord(record) {
 
 async function main() {
   const apply = process.argv.includes('--apply');
+  const requestedSkus = process.argv
+    .filter((argument) => argument.startsWith('--sku='))
+    .map((argument) => argument.slice('--sku='.length).trim().toUpperCase())
+    .filter(Boolean);
+  const policies = requestedSkus.length
+    ? OTC_RETAIL_PRODUCTS.filter((policy) => requestedSkus.includes(policy.sku))
+    : OTC_RETAIL_PRODUCTS;
+  const unknownSkus = requestedSkus.filter(
+    (sku) => !policies.some((policy) => policy.sku === sku),
+  );
+  if (unknownSkus.length) {
+    throw new Error(`Unknown OTC policy SKU(s): ${unknownSkus.join(', ')}`);
+  }
   loadEnv(SHOPIFY_ENV_PATH);
 
   const priceAuthority = JSON.parse(
     fs.readFileSync(PRICE_AUTHORITY_PATH, 'utf8'),
   );
   const collection = await findCollection();
-  const before = await buildAudit(priceAuthority, collection);
+  const before = await buildAudit(priceAuthority, collection, policies);
   const blockers = before.filter((record) =>
     ['missing-price-authority', 'ambiguous-sku'].includes(record.state),
   );
@@ -463,7 +482,9 @@ async function main() {
 
   let mutationsApplied = 0;
   if (apply) mutationsApplied = await applyAudit(before, collection);
-  const after = apply ? await buildAudit(priceAuthority, collection) : before;
+  const after = apply
+    ? await buildAudit(priceAuthority, collection, policies)
+    : before;
   const failedVerification = after.filter(
     (record) =>
       !['verified', 'missing-storefront-product'].includes(record.state),
@@ -484,7 +505,7 @@ async function main() {
       handle: collection.handle,
       title: collection.title,
     },
-    policySkuCount: OTC_RETAIL_PRODUCTS.length,
+    policySkuCount: policies.length,
     mutationsApplied,
     results: after.map(publicRecord),
     catalogGaps: [],
