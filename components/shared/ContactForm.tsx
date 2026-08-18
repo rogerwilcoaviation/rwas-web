@@ -96,7 +96,10 @@ const contactSchema = z
     utm_content: z.string().max(240).optional().or(z.literal('')),
     utm_term: z.string().max(240).optional().or(z.literal('')),
     requestId: z.string().max(120).optional().or(z.literal('')),
-    plannerKind: z.enum(['certified', 'experimental']).optional(),
+    plannerKind: z
+      .enum(['certified', 'experimental'])
+      .optional()
+      .or(z.literal('')),
     createdAt: z.string().max(80).optional().or(z.literal('')),
     pricingReference: z.string().max(160).optional().or(z.literal('')),
     advisories: z.array(z.string().max(400)).max(30).optional(),
@@ -168,6 +171,7 @@ const contactSchema = z
   });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
+type ContactFormInput = z.input<typeof contactSchema>;
 
 type AxisContactDraft = {
   requestId: string;
@@ -212,7 +216,7 @@ export default function ContactForm() {
     watch,
     formState: { errors },
     reset,
-  } = useForm<ContactFormValues>({
+  } = useForm<ContactFormInput, unknown, ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       preferredContact: 'either',
@@ -332,7 +336,7 @@ export default function ContactForm() {
     }
   };
 
-  const selectedReason = watch('reason');
+  const selectedReason = watch('reason') ?? 'general';
   const selectedAircraftStatus = watch('aircraftStatus');
   const productContext = watch('product');
 
