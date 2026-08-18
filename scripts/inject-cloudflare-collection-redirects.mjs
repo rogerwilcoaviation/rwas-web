@@ -385,6 +385,55 @@ if (rwasUrl.pathname === "/api/contact") {
     );
   }
 
+  // AXIS submissions require a separate customer receipt showing the exact
+  // equipment selected. The service-desk email above remains internal.
+  if (payload.plannerKind && componentLines.length) {
+    const customerText = [
+      "Your RWAS AXIS preliminary build",
+      "Reference: " + requestId,
+      "Aircraft: " + (aircraft || "Not specified"),
+      "",
+      "Selected equipment:",
+      ...componentLines,
+      advisoryLines.length ? "\\nPlanner advisories:\\n" + advisoryLines.join("\\n") : "",
+      "",
+      "This is preliminary hardware planning, not an approved configuration or installed quote. RWAS will verify aircraft eligibility, compatibility, installation hardware, labor, and final pricing.",
+    ].join("\\n");
+    let customerEmail;
+    try {
+      customerEmail = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + e.RESEND_API_KEY,
+          "Content-Type": "application/json",
+          "Idempotency-Key": requestId + "_customer",
+        },
+        body: JSON.stringify({
+          from,
+          to: [clean(payload.email, 254)],
+          reply_to: to,
+          subject: "Your RWAS AXIS preliminary build — " + requestId,
+          text: customerText,
+          html:
+            "<h2>Your RWAS AXIS preliminary build</h2><pre style=\\\"font:14px/1.5 Arial,sans-serif;white-space:pre-wrap\\\">" +
+            escapeHtml(customerText) +
+            "</pre>",
+          tags: [
+            { name: "source", value: "rwas-axis-planner" },
+            { name: "reason", value: "customer-copy" },
+          ],
+        }),
+      });
+    } catch (error) {
+      console.error("AXIS customer copy send failed", requestId, error);
+      return json({error:"We could not deliver all submission confirmations right now. Please try again or email service@rwas.team directly."},502);
+    }
+    if (!customerEmail.ok) {
+      console.error("AXIS customer copy send failed", requestId, customerEmail.status);
+      return json({error:"We could not deliver all submission confirmations right now. Please try again or email service@rwas.team directly."},502);
+    }
+  }
+
   if (e.TEAMS_RELAY_TOKEN) {
     try {
       const teams = await fetch(
@@ -409,6 +458,7 @@ if (rwasUrl.pathname === "/api/contact") {
           requestId,
           teams.status,
         );
+        return json({error:"We could not deliver all submission confirmations right now. Please try again or email service@rwas.team directly."},502);
       }
     } catch (error) {
       console.error(
@@ -416,7 +466,11 @@ if (rwasUrl.pathname === "/api/contact") {
         requestId,
         error,
       );
+      return json({error:"We could not deliver all submission confirmations right now. Please try again or email service@rwas.team directly."},502);
     }
+  } else if (payload.plannerKind && componentLines.length) {
+    console.error("contact-form Teams send failed after email success", requestId, "Teams relay not configured");
+    return json({error:"We could not deliver all submission confirmations right now. Please try again or email service@rwas.team directly."},502);
   }
 
   return json({ ticketId: requestId, requestId, to });

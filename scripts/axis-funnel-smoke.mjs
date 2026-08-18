@@ -112,14 +112,18 @@ const runtimeErrors = [];
 const resendRequests = [];
 const teamsRequests = [];
 let resendStatus = 200;
+let customerResendStatus = 200;
 let teamsStatus = 200;
 
 globalThis.fetch = async (url, init) => {
   const target = String(url);
   if (target.includes('api.resend.com')) {
     resendRequests.push(init);
+    const status = String(init.headers['Idempotency-Key']).endsWith('_customer')
+      ? customerResendStatus
+      : resendStatus;
     return new Response(JSON.stringify({ id: 'email_test' }), {
-      status: resendStatus,
+      status,
     });
   }
   if (target.includes('teamsbot.rwas.team')) {
@@ -183,7 +187,16 @@ try {
     resendRequests[0].headers['Idempotency-Key'],
     registeredBuild.requestId,
   );
-  assert.equal(resendRequests[0].body, resendRequests[1].body);
+  assert.equal(
+    resendRequests[1].headers['Idempotency-Key'],
+    `${registeredBuild.requestId}_customer`,
+  );
+  assert.equal(resendRequests[0].body, resendRequests[2].body);
+  assert.equal(resendRequests[1].body, resendRequests[3].body);
+  const customerReceipt = JSON.parse(resendRequests[1].body);
+  assert.deepEqual(customerReceipt.to, [registeredBuild.email]);
+  assert.match(customerReceipt.subject, /Your RWAS AXIS preliminary build/);
+  assert.match(customerReceipt.text, /Selected equipment/);
   for (const expected of [
     'Phone: 605-555-0100',
     'Aircraft: 1980 Cessna R182',
@@ -239,12 +252,21 @@ try {
     ...registeredBuild,
     requestId: 'rwas_axis_teams_failure_003',
   });
-  assert.equal(teamsFailureResponse.status, 200);
+  assert.equal(teamsFailureResponse.status, 502);
 
+  teamsStatus = 200;
+  customerResendStatus = 500;
+  const customerFailureResponse = await invokeRuntime({
+    ...registeredBuild,
+    requestId: 'rwas_axis_customer_failure_004',
+  });
+  assert.equal(customerFailureResponse.status, 502);
+
+  customerResendStatus = 200;
   resendStatus = 500;
   const resendFailureResponse = await invokeRuntime({
     ...registeredBuild,
-    requestId: 'rwas_axis_resend_failure_004',
+    requestId: 'rwas_axis_resend_failure_005',
   });
   assert.equal(resendFailureResponse.status, 502);
   assert.ok(teamsRequests.length >= 3);
