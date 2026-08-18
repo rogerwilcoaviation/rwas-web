@@ -99,9 +99,15 @@
 }
 
 .broadsheet .rwas-field input[aria-invalid='true'],
+.broadsheet .rwas-field select[aria-invalid='true'],
 .broadsheet .rwas-field textarea[aria-invalid='true'] {
   border-color: #8a2020;
   background: #fbf4f2;
+  box-shadow: 0 0 0 1px rgba(138, 32, 32, 0.18);
+}
+
+.broadsheet .rwas-field:has([aria-invalid='true']) label {
+  color: #8a2020;
 }
 
 .broadsheet .rwas-field__error {

@@ -572,7 +572,14 @@ export default function ContactForm() {
             <label htmlFor="aircraftStatus">
               Aircraft status{selectedReason === 'quote' ? ' *' : ''}
             </label>
-            <select id="aircraftStatus" {...register('aircraftStatus')}>
+            <select
+              id="aircraftStatus"
+              {...register('aircraftStatus')}
+              aria-invalid={Boolean(errors.aircraftStatus)}
+              aria-describedby={
+                errors.aircraftStatus ? 'aircraftStatus-error' : undefined
+              }
+            >
               <option value="">Not specified</option>
               <option value="registered">Registered / operational</option>
               <option value="under-construction">Under construction</option>
@@ -581,7 +588,11 @@ export default function ContactForm() {
               </option>
             </select>
             {errors.aircraftStatus ? (
-              <p className="rwas-field__error">
+              <p
+                id="aircraftStatus-error"
+                className="rwas-field__error"
+                role="alert"
+              >
                 {errors.aircraftStatus.message}
               </p>
             ) : null}

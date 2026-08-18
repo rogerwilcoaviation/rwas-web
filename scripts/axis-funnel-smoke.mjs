@@ -23,6 +23,14 @@ assert.match(contact, /const emailSend = await sendViaResend/);
 assert.match(contact, /sendToTeams\(env, payload, ticketId, requestId\)/);
 assert.match(contact, /contact-form Teams send failed after email success/);
 assert.match(contact, /aircraftStatus/);
+assert.match(
+  form,
+  /aria-invalid=\{Boolean\(errors\.aircraftStatus\)\}/,
+);
+assert.match(
+  read('app/contact.css'),
+  /select\[aria-invalid='true'\]/,
+);
 assert.match(contact, /UTM campaign/);
 assert.match(form, /legacy plain-string draft format/);
 assert.match(form, /removeItem\('rwas-contact-draft'\)/);
