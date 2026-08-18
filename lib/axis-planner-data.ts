@@ -80,7 +80,8 @@ const CERTIFIED = `
 8C|010-01172-21|875|GAD 29D PMA ARINC 429 Interface Adapter
 8C|011-03271-00|100|GAD 29 Connector Kit
 8C|010-01525-11|825|GAD 27 PMA Electrical Interface Adapter
-8C|011-03877-01|160|GAD 27 Connector Kit`;
+8C|011-03877-01|160|GAD 27 Connector Kit
+8D|6420093-5|969|Mid-Continent CHRONOS CH93MAX Digital Clock / MAX Power USB Charger`;
 
 const EXPERIMENTAL = `
 1|010-04143-00|4140|AXIS 8-inch Portrait Display — GDU 80PX
@@ -171,7 +172,8 @@ const EXPERIMENTAL = `
 8C|010-01172-20|565|GAD 29C ARINC 429 Interface Adapter
 8C|011-03271-00|90|GAD 29 Connector Kit
 8C|010-01525-10|825|GAD 27 Electrical Interface Adapter
-8C|011-03877-00|165|GAD 27 Connector Kit`;
+8C|011-03877-00|165|GAD 27 Connector Kit
+8D|6420093-5|969|Mid-Continent CHRONOS CH93MAX Digital Clock / MAX Power USB Charger`;
 
 const describeItem = ({
   step,
@@ -303,6 +305,9 @@ const describeItem = ({
   if (/GCO 14/.test(title)) {
     return 'Carbon-monoxide sensor that displays cabin CO levels and provides AXIS visual and aural alerts.';
   }
+  if (/CHRONOS CH93MAX/.test(title)) {
+    return 'TSO-certified eight-mode digital clock with local and UTC/Zulu time, flight/countdown timers, stopwatch, volts and temperature modes plus simultaneous USB-A and 60-watt USB-C PD charging. Requires 22–32 VDC aircraft power; connector kit is separate.';
+  }
   if (/GAP 26/.test(title)) {
     return 'Pitot/AOA probe that supplies angle-of-attack data through a compatible GSU 25; heat capability varies by model.';
   }
@@ -427,6 +432,12 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       guidance:
         'GAD 29 may be needed for an older navigator or G5 navigation display. GAD 27 provides keep-alive power and optional landing/taxi-light wig-wag functions.',
     },
+    {
+      id: '8D',
+      title: 'Panel Accessories',
+      guidance:
+        'Add optional panel-mounted accessories. CHRONOS CH93MAX combines an eight-mode clock with USB-A and USB-C PD charging and requires a 22–32 VDC electrical system; RWAS will confirm the separate connector kit and installation details.',
+    },
   ],
   experimental: [
     {
@@ -518,6 +529,12 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       title: 'Navigation and Electrical Interfaces',
       guidance:
         'GAD 29 may be required with an older GPS navigator or for navigation on G5. GAD 27 provides keep-alive power and optional landing/taxi-light wig-wag functions.',
+    },
+    {
+      id: '8D',
+      title: 'Panel Accessories',
+      guidance:
+        'Add optional panel-mounted accessories. CHRONOS CH93MAX combines an eight-mode clock with USB-A and USB-C PD charging and requires a 22–32 VDC electrical system; RWAS will confirm the separate connector kit and installation details.',
     },
   ],
 };

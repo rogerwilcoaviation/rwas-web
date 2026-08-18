@@ -44,6 +44,10 @@ assert.match(planner, /gfcAircraft\.configurations\.map/);
 assert.match(certifiedCatalog, /export const GFC500_CERTIFIED_AIRCRAFT/);
 assert.match(certifiedCatalog, /label: 'Cessna 182'/);
 assert.match(plannerData, /GFC 500X Autopilot/);
+assert.equal((plannerData.match(/8D\|6420093-5\|969\|/g) || []).length, 2);
+assert.equal((plannerData.match(/title: 'Panel Accessories'/g) || []).length, 2);
+assert.match(plannerData, /CHRONOS CH93MAX/);
+assert.match(plannerData, /22–32 VDC/);
 assert.match(
   planner,
   /const requestId = `rwas_axis_\$\{Date\.now\(\)\.toString\(36\)\}/,
