@@ -259,7 +259,7 @@ function buildPlainTextBody(
   lines.push('');
   lines.push('--- Message ---');
   lines.push(p.message || '');
-  if (p.components?.length) {
+  if (p.components?.length && !messageContainsAllComponents(p)) {
     lines.push('', '--- Selected equipment ---');
     p.components.forEach((item) =>
       lines.push(
@@ -267,7 +267,7 @@ function buildPlainTextBody(
       ),
     );
   }
-  if (p.advisories?.length) {
+  if (p.advisories?.length && !messageContainsAllAdvisories(p)) {
     lines.push('', '--- Planner advisories ---');
     p.advisories.forEach((advisory) => lines.push(`- ${advisory}`));
   }
@@ -275,6 +275,24 @@ function buildPlainTextBody(
   lines.push('--');
   lines.push('Reply directly to this email — it routes back to the submitter.');
   return lines.join('\n');
+}
+
+function messageContainsAllComponents(p: ContactPayload): boolean {
+  if (!p.components?.length) return false;
+  const message = (p.message || '').toLowerCase();
+  return p.components.every((item) => {
+    const sku = (item.sku || '').trim().toLowerCase();
+    const title = (item.title || '').trim().toLowerCase();
+    return Boolean((sku && message.includes(sku)) || (title && message.includes(title)));
+  });
+}
+
+function messageContainsAllAdvisories(p: ContactPayload): boolean {
+  if (!p.advisories?.length) return false;
+  const message = (p.message || '').toLowerCase();
+  return p.advisories.every((advisory) =>
+    message.includes(advisory.trim().toLowerCase()),
+  );
 }
 
 function buildHtmlBody(
@@ -441,10 +459,12 @@ function buildTeamsBody(
     '',
     'Message:',
     p.message || '',
-    p.components?.length
+    p.components?.length && !messageContainsAllComponents(p)
       ? `\nSelected equipment:\n${p.components.map((item) => `- ${item.title || item.sku || 'Component'} (${item.sku || 'no SKU'}) × ${item.quantity || 0}: ${item.extendedPrice ?? 0}`).join('\n')}`
       : '',
-    p.advisories?.length ? `\nAdvisories:\n- ${p.advisories.join('\n- ')}` : '',
+    p.advisories?.length && !messageContainsAllAdvisories(p)
+      ? `\nAdvisories:\n- ${p.advisories.join('\n- ')}`
+      : '',
   ];
   return lines
     .filter((line, index) => line || index === lines.length - 3)

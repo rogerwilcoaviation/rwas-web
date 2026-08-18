@@ -275,6 +275,25 @@ if (rwasUrl.pathname === "/api/contact") {
   const advisoryLines = Array.isArray(payload.advisories)
     ? payload.advisories.map((advisory) => "- " + clean(advisory, 400))
     : [];
+  const messageText = clean(payload.message, 4000);
+  const normalizedMessage = messageText.toLowerCase();
+  const messageHasAllComponents =
+    Array.isArray(payload.components) &&
+    payload.components.length > 0 &&
+    payload.components.every((item) => {
+      const sku = clean(item && item.sku, 120).trim().toLowerCase();
+      const title = clean(item && item.title, 240).trim().toLowerCase();
+      return Boolean(
+        (sku && normalizedMessage.includes(sku)) ||
+          (title && normalizedMessage.includes(title)),
+      );
+    });
+  const messageHasAllAdvisories =
+    Array.isArray(payload.advisories) &&
+    payload.advisories.length > 0 &&
+    payload.advisories.every((advisory) =>
+      normalizedMessage.includes(clean(advisory, 400).trim().toLowerCase()),
+    );
   const text = [
     "RWAS CORRESPONDENCE DESK — " + requestId,
     "Request/build ID: " + requestId,
@@ -308,11 +327,11 @@ if (rwasUrl.pathname === "/api/contact") {
     ...attributionLines,
     "",
     "Message:",
-    clean(payload.message, 4000),
-    componentLines.length
+    messageText,
+    componentLines.length && !messageHasAllComponents
       ? "\\nSelected equipment:\\n" + componentLines.join("\\n")
       : "",
-    advisoryLines.length
+    advisoryLines.length && !messageHasAllAdvisories
       ? "\\nPlanner advisories:\\n" + advisoryLines.join("\\n")
       : "",
   ]

@@ -196,6 +196,30 @@ try {
     assert.match(resendRequests[0].body, new RegExp(expected));
   }
 
+  const embeddedInventoryResponse = await invokeRuntime({
+    ...registeredBuild,
+    requestId: 'rwas_axis_embedded_inventory_003',
+    message:
+      'AXIS Certified preliminary build handoff\n\n1 × AXIS Display (TEST-001) — $1,000\n\nPlanner advisories:\n- Confirm the installation kit.',
+  });
+  assert.equal(embeddedInventoryResponse.status, 200);
+  const embeddedInventoryEmail = JSON.parse(resendRequests.at(-1).body);
+  for (const representation of [
+    embeddedInventoryEmail.text,
+    embeddedInventoryEmail.html,
+  ]) {
+    assert.equal(
+      (representation.match(/TEST-001/g) || []).length,
+      1,
+      'AXIS component inventory must appear once per email representation when already embedded in the planner message.',
+    );
+    assert.equal(
+      (representation.match(/Confirm the installation kit\./g) || []).length,
+      1,
+      'AXIS advisories must appear once per email representation when already embedded in the planner message.',
+    );
+  }
+
   const experimentalResponse = await invokeRuntime({
     ...registeredBuild,
     requestId: 'rwas_axis_experimental_002',
