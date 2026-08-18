@@ -6,6 +6,8 @@ const read = (path) =>
 const contact = read('functions/api/contact.ts');
 const form = read('components/shared/ContactForm.tsx');
 const planner = read('components/shopify/AxisBuildPlanner.tsx');
+const certifiedCatalog = read('lib/gfc500-certified-catalog.ts');
+const plannerData = read('lib/axis-planner-data.ts');
 const landing = read('app/axis-system-planner/page.tsx');
 const landingLink = read('components/shopify/AxisPlannerAttributedLink.tsx');
 const edgeInjector = read('scripts/inject-cloudflare-collection-redirects.mjs');
@@ -28,6 +30,12 @@ assert.match(form, /ATTRIBUTION_KEYS\.map/);
 assert.match(planner, /extendedPrice/);
 assert.match(planner, /Garmin July 2026 Build-A-System Guide/);
 assert.match(planner, /Submit Preliminary Build with Advisories/);
+assert.match(planner, /Aircraft eligibility group/);
+assert.match(planner, /GFC500_CERTIFIED_AIRCRAFT\.map/);
+assert.match(planner, /gfcAircraft\.configurations\.map/);
+assert.match(certifiedCatalog, /export const GFC500_CERTIFIED_AIRCRAFT/);
+assert.match(certifiedCatalog, /label: 'Cessna 182'/);
+assert.match(plannerData, /GFC 500X Autopilot/);
 assert.match(
   planner,
   /const requestId = `rwas_axis_\$\{Date\.now\(\)\.toString\(36\)\}/,
