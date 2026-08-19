@@ -15,9 +15,9 @@ import { Suspense } from 'react';
 const pageUrl = 'https://www.rogerwilcoaviation.com/axis-system-planner';
 
 export const metadata = genPageMetadata({
-  title: 'AXIS System Builder | RWAS',
+  title: 'Garmin AXIS System Planner — Certified & Experimental | RWAS',
   description:
-    'Choose the Garmin AXIS certified or experimental system builder, or open the separate visual Panel Layout Planner.',
+    'Plan Garmin AXIS hardware for certified or experimental aircraft, compare manufacturer list pricing, and request an RWAS installation quote.',
   canonical: pageUrl,
 });
 

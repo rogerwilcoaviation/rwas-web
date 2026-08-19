@@ -22,15 +22,15 @@ export default function AxisPlannerPage({ kind }: { kind: AxisPlannerKind }) {
       <BulletinBar />
       <main className="bs-stage">
         <section className="hero-headline-group">
-          <p className="bs-kicker">AXIS Build-A-System Planner</p>
+          <p className="bs-kicker">Garmin AXIS System Planner</p>
           <h1 className="bs-headline bs-headline--hero">
             AXIS System for {certified ? 'Certified' : 'Experimental'} Aircraft
           </h1>
           <p className="bs-subhead">
             Build a preliminary Garmin AXIS hardware package in the same logical
-            order as the official Build-A-System Guide, see the running retail
-            total, then send it to RWAS for compatibility review and special
-            pricing.
+            order as the official Build-A-System Guide, see the estimated
+            hardware list-price total, then send it to RWAS for compatibility
+            review and an equipment and installation quote.
           </p>
           <p className="bs-byline">
             RWAS Avionics Desk · Garmin Authorized Dealer · FAA Repair Station
@@ -57,6 +57,28 @@ export default function AxisPlannerPage({ kind }: { kind: AxisPlannerKind }) {
           full compatibility validation.
         </p>
         <AxisBuildPlanner kind={kind} />
+        <section
+          className="mt-8 grid gap-6 md:grid-cols-2"
+          aria-label="Garmin AXIS accessory planning"
+        >
+          <article className="border-2 border-black bg-white p-5">
+            <h2 className="bs-section-head">Garmin GI 260 AOA planning</h2>
+            <p className="bs-body mt-3">
+              Complete GI 260 AOA packages include an indicator, GAP 26 probe
+              and required air-data hardware. Because AXIS can display AOA with
+              compatible sensors, RWAS reviews duplicate components, aircraft
+              eligibility, approved data, voltage and probe heating.
+            </p>
+          </article>
+          <article className="border-2 border-black bg-white p-5">
+            <h2 className="bs-section-head">Garmin GSB 15 USB charging</h2>
+            <p className="bs-body mt-3">
+              The GSB 15 USB-A/USB-C rear-input charging port is optional panel
+              equipment. RWAS confirms aircraft voltage, circuit protection,
+              connectors, available panel space and installation details.
+            </p>
+          </article>
+        </section>
       </main>
       <BroadsheetFooter />
     </BroadsheetLayout>

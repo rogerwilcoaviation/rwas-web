@@ -77,14 +77,14 @@ const CERTIFIED = `
 8B|011-06677-00|325|GHA 15 Levelling Install Kit
 8B|010-02975-01|549|GCO 14 Carbon Monoxide Detector
 8B|010-01074-71|1400|GAP 26 PMA Self-Regulating Pitot Tube
-8B|K10-00202-00|2200|GI-260 AOA System Kit, 14/28V Unheated
-8B|K10-00202-10|2400|GI-260 AOA System Kit, 14V Heated
-8B|K10-00202-20|2400|GI-260 AOA System Kit, 28V Heated
+8B|K10-00202-00|2200|Garmin GI 260 AOA System Kit — 14/28 V, Unheated
+8B|K10-00202-10|2400|Garmin GI 260 AOA System Kit — 14 V, Heated
+8B|K10-00202-20|2400|Garmin GI 260 AOA System Kit — 28 V, Heated
 8C|010-01172-21|875|GAD 29D PMA ARINC 429 Interface Adapter
 8C|011-03271-00|100|GAD 29 Connector Kit
 8C|010-01525-11|825|GAD 27 PMA Electrical Interface Adapter
 8C|011-03877-01|160|GAD 27 Connector Kit
-8D|010-02544-21|450|GSB 15 USB Type-A and Type-C, Rear Power Input
+8D|010-02544-21|450|Garmin GSB 15 Dual USB Charging Port — USB-A/USB-C, Rear Power Input
 8D|6420093-5|969|Mid-Continent CHRONOS CH93MAX Digital Clock / MAX Power USB Charger`;
 
 const EXPERIMENTAL = `
@@ -173,14 +173,14 @@ const EXPERIMENTAL = `
 8B|010-01074-10|465|GAP 26 Heated/Unregulated Pitot Tube
 8B|010-01074-20|700|GAP 26 Heated/Regulated Pitot Tube
 8B|010-01287-00|380|GI 260 Angle of Attack Indicator
-8B|K10-00202-00|2200|GI-260 AOA System Kit, 14/28V Unheated
-8B|K10-00202-10|2400|GI-260 AOA System Kit, 14V Heated
-8B|K10-00202-20|2400|GI-260 AOA System Kit, 28V Heated
+8B|K10-00202-00|2200|Garmin GI 260 AOA System Kit — 14/28 V, Unheated
+8B|K10-00202-10|2400|Garmin GI 260 AOA System Kit — 14 V, Heated
+8B|K10-00202-20|2400|Garmin GI 260 AOA System Kit — 28 V, Heated
 8C|010-01172-20|565|GAD 29C ARINC 429 Interface Adapter
 8C|011-03271-00|90|GAD 29 Connector Kit
 8C|010-01525-10|825|GAD 27 Electrical Interface Adapter
 8C|011-03877-00|165|GAD 27 Connector Kit
-8D|010-02544-21|450|GSB 15 USB Type-A and Type-C, Rear Power Input
+8D|010-02544-21|450|Garmin GSB 15 Dual USB Charging Port — USB-A/USB-C, Rear Power Input
 8D|6420093-5|969|Mid-Continent CHRONOS CH93MAX Digital Clock / MAX Power USB Charger`;
 
 const describeItem = ({
@@ -317,16 +317,16 @@ const describeItem = ({
     return 'TSO-certified eight-mode digital clock with local and UTC/Zulu time, flight/countdown timers, stopwatch, volts and temperature modes plus simultaneous USB-A and 60-watt USB-C PD charging. Requires 22–32 VDC aircraft power; connector kit is separate.';
   }
   if (/GSB 15/.test(title)) {
-    return 'Panel-mounted charging accessory with one USB Type-A port and one USB Type-C port; this version uses a rear power-input connector.';
+    return 'Optional panel-mounted charging port with one USB-A and one USB-C output and a rear power-input connector. RWAS will verify input voltage, circuit protection, connector requirements, location and panel clearance.';
   }
   if (/GAP 26/.test(title)) {
     return 'Pitot/AOA probe that supplies angle-of-attack data through a compatible GSU 25; heat capability varies by model.';
   }
-  if (/GI 260/.test(title)) {
-    return 'Dedicated external angle-of-attack indicator; optional when AOA is already displayed on AXIS.';
+  if (/GI 260 AOA System Kit/.test(title)) {
+    return 'Standalone Garmin AOA package with GI 260 indicator, GAP 26 probe and required air-data hardware. Components may duplicate AXIS equipment; RWAS will verify eligibility, approved installation data, probe heat, system voltage and whether a separate indicator is necessary.';
   }
-  if (/GI-260 AOA System Kit/.test(title)) {
-    return 'Complete Garmin angle-of-attack system kit with GI-260 indicator; select the unheated or voltage-specific heated version that matches the aircraft electrical system.';
+  if (/GI 260/.test(title)) {
+    return 'Dedicated external angle-of-attack indicator only; optional when AOA is already displayed on AXIS and not a complete standalone AOA system.';
   }
   if (/GAD 29/.test(title) && !/Connector/.test(title)) {
     return 'ARINC 429 interface adapter used with certain external navigators or to provide navigation data to a G5 standby.';
@@ -438,7 +438,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '8B',
       title: 'Safety Sensors and Awareness',
       guidance:
-        'Select radio-height advisory, carbon-monoxide detection and angle-of-attack hardware as applicable. Each sensor requires the installation hardware shown for that option.',
+        'Select awareness hardware as applicable. A complete GI 260 AOA kit may duplicate the AXIS sensor package or a separately selected GAP 26; certified-aircraft installation requires current model eligibility and approved Garmin/FAA data.',
     },
     {
       id: '8C',
@@ -536,7 +536,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '8B',
       title: 'Safety Sensors and Awareness',
       guidance:
-        'Select height advisory, carbon-monoxide detection and angle-of-attack hardware as applicable. Choose the GAP 26 model that matches the aircraft electrical and pitot-heat design.',
+        'Select awareness hardware as applicable. A complete GI 260 AOA kit includes its own indicator, probe and air-data hardware; do not combine it with duplicate standalone components unless RWAS confirms the architecture.',
     },
     {
       id: '8C',
