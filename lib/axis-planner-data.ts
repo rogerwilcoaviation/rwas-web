@@ -77,6 +77,9 @@ const CERTIFIED = `
 8B|011-06677-00|325|GHA 15 Levelling Install Kit
 8B|010-02975-01|549|GCO 14 Carbon Monoxide Detector
 8B|010-01074-71|1400|GAP 26 PMA Self-Regulating Pitot Tube
+8B|K10-00202-00|2200|GI-260 AOA System Kit, 14/28V Unheated
+8B|K10-00202-10|2400|GI-260 AOA System Kit, 14V Heated
+8B|K10-00202-20|2400|GI-260 AOA System Kit, 28V Heated
 8C|010-01172-21|875|GAD 29D PMA ARINC 429 Interface Adapter
 8C|011-03271-00|100|GAD 29 Connector Kit
 8C|010-01525-11|825|GAD 27 PMA Electrical Interface Adapter
@@ -169,6 +172,9 @@ const EXPERIMENTAL = `
 8B|010-01074-10|465|GAP 26 Heated/Unregulated Pitot Tube
 8B|010-01074-20|700|GAP 26 Heated/Regulated Pitot Tube
 8B|010-01287-00|380|GI 260 Angle of Attack Indicator
+8B|K10-00202-00|2200|GI-260 AOA System Kit, 14/28V Unheated
+8B|K10-00202-10|2400|GI-260 AOA System Kit, 14V Heated
+8B|K10-00202-20|2400|GI-260 AOA System Kit, 28V Heated
 8C|010-01172-20|565|GAD 29C ARINC 429 Interface Adapter
 8C|011-03271-00|90|GAD 29 Connector Kit
 8C|010-01525-10|825|GAD 27 Electrical Interface Adapter
@@ -313,6 +319,9 @@ const describeItem = ({
   }
   if (/GI 260/.test(title)) {
     return 'Dedicated external angle-of-attack indicator; optional when AOA is already displayed on AXIS.';
+  }
+  if (/GI-260 AOA System Kit/.test(title)) {
+    return 'Complete Garmin angle-of-attack system kit with GI-260 indicator; select the unheated or voltage-specific heated version that matches the aircraft electrical system.';
   }
   if (/GAD 29/.test(title) && !/Connector/.test(title)) {
     return 'ARINC 429 interface adapter used with certain external navigators or to provide navigation data to a G5 standby.';
