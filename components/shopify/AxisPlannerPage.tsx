@@ -13,8 +13,53 @@ import Link from 'next/link';
 
 export default function AxisPlannerPage({ kind }: { kind: AxisPlannerKind }) {
   const certified = kind === 'certified';
+  const pageUrl = `https://www.rogerwilcoaviation.com/axis-system-planner/${kind}`;
+  const pageName = `Garmin AXIS ${certified ? 'Certified' : 'Experimental'} Aircraft System Planner`;
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': ['WebPage', 'WebApplication'],
+        '@id': `${pageUrl}#planner`,
+        url: pageUrl,
+        name: pageName,
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Web',
+        isPartOf: { '@id': 'https://www.rogerwilcoaviation.com#website' },
+        provider: { '@id': 'https://www.rogerwilcoaviation.com#organization' },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${pageUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: 'https://www.rogerwilcoaviation.com/',
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Garmin AXIS System Planner',
+            item: 'https://www.rogerwilcoaviation.com/axis-system-planner',
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: certified ? 'Certified Aircraft' : 'Experimental Aircraft',
+            item: pageUrl,
+          },
+        ],
+      },
+    ],
+  };
   return (
     <BroadsheetLayout>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <Dateline />
       <Masthead />
       <BroadsheetNav activeHref="/collections" />
