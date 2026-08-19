@@ -102,6 +102,7 @@ const contactSchema = z
       .or(z.literal('')),
     createdAt: z.string().max(80).optional().or(z.literal('')),
     pricingReference: z.string().max(160).optional().or(z.literal('')),
+    priceBasis: z.literal('manufacturer-list-price').optional().or(z.literal('')),
     advisories: z.array(z.string().max(400)).max(30).optional(),
     components: z
       .array(
@@ -179,6 +180,7 @@ type AxisContactDraft = {
   createdAt: string;
   source: string;
   pricingReference: string;
+  priceBasis?: 'manufacturer-list-price';
   message: string;
   components?: ContactFormValues['components'];
   advisories?: string[];
@@ -252,7 +254,7 @@ export default function ContactForm() {
     const draftValue = window.sessionStorage.getItem('rwas-contact-draft');
     if (
       draftValue &&
-      (params.get('draft') === 'axis' || draftValue.trim().startsWith('{'))
+      params.get('draft') === 'axis'
     ) {
       try {
         const draft = JSON.parse(draftValue) as AxisContactDraft;
@@ -263,6 +265,7 @@ export default function ContactForm() {
         if (draft.createdAt) setValue('createdAt', draft.createdAt);
         if (draft.pricingReference)
           setValue('pricingReference', draft.pricingReference);
+        if (draft.priceBasis) setValue('priceBasis', draft.priceBasis);
         if (draft.components) setValue('components', draft.components);
         if (draft.advisories) setValue('advisories', draft.advisories);
         if (draft.attribution) {
@@ -648,6 +651,7 @@ export default function ContactForm() {
         <input type="hidden" {...register('plannerKind')} />
         <input type="hidden" {...register('createdAt')} />
         <input type="hidden" {...register('pricingReference')} />
+        <input type="hidden" {...register('priceBasis')} />
 
         <div className="rwas-field rwas-field--full">
           <label htmlFor="message">Message *</label>

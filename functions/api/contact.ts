@@ -68,6 +68,7 @@ type ContactPayload = {
   plannerKind?: 'certified' | 'experimental';
   createdAt?: string;
   pricingReference?: string;
+  priceBasis?: 'manufacturer-list-price';
   advisories?: string[];
   components?: Array<{
     title?: string;
@@ -241,6 +242,7 @@ function buildPlainTextBody(
   if (p.utm_term) lines.push(`UTM term:     ${p.utm_term}`);
   if (p.plannerKind) lines.push(`Planner:   AXIS ${p.plannerKind}`);
   if (p.pricingReference) lines.push(`Pricing:   ${p.pricingReference}`);
+  if (p.priceBasis) lines.push('Price basis: Manufacturer list price');
   if (p.aircraftStatus) lines.push(`Status:    ${p.aircraftStatus}`);
   lines.push('');
   lines.push('--- Contact ---');

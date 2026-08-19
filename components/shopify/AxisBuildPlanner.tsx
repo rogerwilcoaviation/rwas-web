@@ -100,6 +100,27 @@ function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
       );
     }
   }
+  const aoaKitSkus = ['K10-00202-00', 'K10-00202-10', 'K10-00202-20'];
+  const selectedAoaKits = aoaKitSkus.reduce(
+    (sum, sku) => sum + (selection[sku] || 0),
+    0,
+  );
+  const hasStandaloneAoaHardware =
+    has('010-01287-00') ||
+    has('010-01074-00') ||
+    has('010-01074-10') ||
+    has('010-01074-20') ||
+    has('010-01074-71');
+  if (selectedAoaKits > 1) {
+    notices.push(
+      'Select only one complete GI 260 AOA system kit; voltage and probe-heat options are alternatives.',
+    );
+  }
+  if (selectedAoaKits && hasStandaloneAoaHardware) {
+    notices.push(
+      'The complete GI 260 AOA system kit may duplicate the selected GI 260 indicator or GAP 26 probe. RWAS must confirm the intended AOA architecture before quoting.',
+    );
+  }
   return notices;
 }
 
@@ -191,7 +212,7 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
       ...lines,
       '',
       `Garmin July 2026 guide-pricing reference: hardware list pricing shown in planner`,
-      `Hardware retail total: ${money.format(total)}`,
+      `Estimated hardware list-price total: ${money.format(total)}`,
       `Planner kind: AXIS ${kind}`,
       `Request/build ID: ${requestId}`,
       `Source: ${source}`,
@@ -200,7 +221,7 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
         ? `Planner advisories:\n- ${advisories.join('\n- ')}`
         : 'Planner advisories: None shown.',
       '',
-      'This is preliminary hardware planning—not an approved configuration or installed quote. Please review aircraft eligibility, compatibility, required installation hardware, labor and special package pricing.',
+      'This is preliminary hardware planning—not an approved configuration or installed quote. Please review aircraft eligibility, compatibility, required installation hardware, labor and any available discounted equipment pricing.',
     ].join('\n');
     window.sessionStorage.setItem(
       'rwas-contact-draft',
@@ -210,6 +231,7 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
         createdAt: new Date().toISOString(),
         source,
         pricingReference: 'Garmin July 2026 Build-A-System Guide',
+        priceBasis: 'manufacturer-list-price',
         message,
         components,
         gfc500Aircraft: gfcAircraft || null,
@@ -240,9 +262,11 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
           compatibility, required hardware and labor.
         </p>
         <p className="bs-body mt-2">
-          All prices shown are list prices. Discount pricing may be available
-          on certain orders by submitting a preliminary build to RWAS using the
-          button at the bottom of this screen.
+          All prices shown are manufacturer list prices. Discounted equipment
+          pricing may be available after RWAS reviews a submitted preliminary
+          build. Prices are subject to change and exclude tax, freight,
+          installation labor, fabrication, wiring, configuration,
+          certification and additional required hardware.
         </p>
       </div>
 
@@ -443,7 +467,7 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
       >
         <p className="bs-kicker">Preliminary build summary</p>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-3 border-b-2 border-black pb-4">
-          <h2 className="bs-section-head">Hardware retail total</h2>
+          <h2 className="bs-section-head">Estimated hardware list-price total</h2>
           <p className="text-3xl font-black tabular-nums md:text-4xl">
             {money.format(total)}
           </p>
@@ -451,7 +475,7 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
         <p className="bs-body mt-4">
           {selectedItems.length + (gfcConfiguration ? 1 : 0)} selected component
           {selectedItems.length + (gfcConfiguration ? 1 : 0) === 1 ? '' : 's'} ·
-          Prices are reference list prices and subject to change.
+          Manufacturer list prices are reference values and subject to change.
         </p>
         {advisories.length ? (
           <div className="mt-5 border-l-4 border-amber-500 bg-amber-50 p-4">
