@@ -239,6 +239,11 @@ export default function AxisBuildPlanner({ kind }: { kind: AxisPlannerKind }) {
           installation quote. RWAS will confirm aircraft eligibility,
           compatibility, required hardware and labor.
         </p>
+        <p className="bs-body mt-2">
+          All prices shown are list prices. Discount pricing may be available
+          on certain orders by submitting a preliminary build to RWAS using the
+          button at the bottom of this screen.
+        </p>
       </div>
 
       {steps.map((step) => {
