@@ -84,6 +84,7 @@ const CERTIFIED = `
 8C|011-03271-00|100|GAD 29 Connector Kit
 8C|010-01525-11|825|GAD 27 PMA Electrical Interface Adapter
 8C|011-03877-01|160|GAD 27 Connector Kit
+8D|010-02544-21|450|GSB 15 USB Type-A and Type-C, Rear Power Input
 8D|6420093-5|969|Mid-Continent CHRONOS CH93MAX Digital Clock / MAX Power USB Charger`;
 
 const EXPERIMENTAL = `
@@ -179,6 +180,7 @@ const EXPERIMENTAL = `
 8C|011-03271-00|90|GAD 29 Connector Kit
 8C|010-01525-10|825|GAD 27 Electrical Interface Adapter
 8C|011-03877-00|165|GAD 27 Connector Kit
+8D|010-02544-21|450|GSB 15 USB Type-A and Type-C, Rear Power Input
 8D|6420093-5|969|Mid-Continent CHRONOS CH93MAX Digital Clock / MAX Power USB Charger`;
 
 const describeItem = ({
@@ -314,6 +316,9 @@ const describeItem = ({
   if (/CHRONOS CH93MAX/.test(title)) {
     return 'TSO-certified eight-mode digital clock with local and UTC/Zulu time, flight/countdown timers, stopwatch, volts and temperature modes plus simultaneous USB-A and 60-watt USB-C PD charging. Requires 22–32 VDC aircraft power; connector kit is separate.';
   }
+  if (/GSB 15/.test(title)) {
+    return 'Panel-mounted charging accessory with one USB Type-A port and one USB Type-C port; this version uses a rear power-input connector.';
+  }
   if (/GAP 26/.test(title)) {
     return 'Pitot/AOA probe that supplies angle-of-attack data through a compatible GSU 25; heat capability varies by model.';
   }
@@ -445,7 +450,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '8D',
       title: 'Panel Accessories',
       guidance:
-        'Add optional panel-mounted accessories. CHRONOS CH93MAX combines an eight-mode clock with USB-A and USB-C PD charging and requires a 22–32 VDC electrical system; RWAS will confirm the separate connector kit and installation details.',
+        'Add optional panel-mounted charging and clock accessories. RWAS will confirm aircraft voltage, electrical load, connector kits, location and installation details.',
     },
   ],
   experimental: [
@@ -543,7 +548,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '8D',
       title: 'Panel Accessories',
       guidance:
-        'Add optional panel-mounted accessories. CHRONOS CH93MAX combines an eight-mode clock with USB-A and USB-C PD charging and requires a 22–32 VDC electrical system; RWAS will confirm the separate connector kit and installation details.',
+        'Add optional panel-mounted charging and clock accessories. RWAS will confirm aircraft voltage, electrical load, connector kits, location and installation details.',
     },
   ],
 };
