@@ -388,6 +388,29 @@ export default async function BlogArticlePage({
                     style={{ width: '100%', display: 'block' }}
                   />
                 </Specimen>
+                {(article as { image_credit?: string }).image_credit ? (
+                  <figcaption className="np-kicker" style={{ marginTop: '6px' }}>
+                    <a
+                      href={(article as { image_credit_url?: string }).image_credit_url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {(article as { image_credit?: string }).image_credit}
+                    </a>
+                    {(article as { image_license?: string }).image_license ? (
+                      <>
+                        {' · '}
+                        <a
+                          href={(article as { image_license_url?: string }).image_license_url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {(article as { image_license?: string }).image_license}
+                        </a>
+                      </>
+                    ) : null}
+                  </figcaption>
+                ) : null}
               </figure>
             ) : null}
 
