@@ -183,6 +183,23 @@ const urls = Array.from(sitemapRes.text.matchAll(/<loc>(.*?)<\/loc>/g), (m) => {
 if (!urls.length) fail('Sitemap has no URLs');
 if (!urls.includes(`${base}/contact`)) fail('Sitemap is missing /contact');
 
+const lastmodCount = Array.from(
+  sitemapRes.text.matchAll(/<lastmod>[^<]+<\/lastmod>/g),
+).length;
+const imageCount = Array.from(
+  sitemapRes.text.matchAll(/<image:image>/g),
+).length;
+if (lastmodCount < Math.floor(urls.length * 0.9)) {
+  fail(
+    `Sitemap lastmod coverage is ${lastmodCount}/${urls.length}; expected at least 90%`,
+  );
+}
+if (imageCount < Math.floor(urls.length * 0.8)) {
+  fail(
+    `Sitemap image coverage is ${imageCount}/${urls.length}; expected at least 80%`,
+  );
+}
+
 const today = new Date().toISOString().slice(0, 10);
 const currentDateLastmods = Array.from(
   sitemapRes.text.matchAll(

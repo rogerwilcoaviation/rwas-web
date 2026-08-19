@@ -44,6 +44,13 @@ export type ShopifyCollectionSummary = {
   handle: string;
   description: string;
   image?: ShopifyImage | null;
+  updatedAt?: string;
+};
+
+export type ShopifySeoProduct = {
+  handle: string;
+  updatedAt: string;
+  featuredImage?: ShopifyImage | null;
 };
 
 export type ShopifyCollectionProduct = ShopifyFeaturedProduct & {
@@ -413,6 +420,7 @@ export async function getFeaturedCollections(): Promise<
                 url
                 altText
               }
+              updatedAt
             }
           }
         }
@@ -629,6 +637,51 @@ export async function getSeoProductHandles(): Promise<string[]> {
     new Set([...PRIORITY_PRODUCT_HANDLES, ...handles]),
   );
   return uniqueHandles.filter(isSeoSafeProductHandle);
+}
+
+export async function getSeoProducts(
+  limit = 3000,
+): Promise<ShopifySeoProduct[]> {
+  const products: ShopifySeoProduct[] = [];
+  let cursor: string | null = null;
+
+  do {
+    const data = await shopifyFetch<{
+      products: {
+        pageInfo: { hasNextPage: boolean; endCursor: string | null };
+        edges: Array<{ node: ShopifySeoProduct }>;
+      };
+    }>(
+      `#graphql
+        query SeoProducts($first: Int!, $after: String) {
+          products(first: $first, after: $after, sortKey: UPDATED_AT, reverse: true) {
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+            edges {
+              node {
+                handle
+                updatedAt
+                featuredImage {
+                  url
+                  altText
+                }
+              }
+            }
+          }
+        }
+      `,
+      { first: Math.min(250, limit - products.length), after: cursor },
+    );
+
+    products.push(...data.products.edges.map((edge) => edge.node));
+    cursor = data.products.pageInfo.hasNextPage
+      ? data.products.pageInfo.endCursor
+      : null;
+  } while (cursor && products.length < limit);
+
+  return products.filter((product) => isSeoSafeProductHandle(product.handle));
 }
 
 export async function getPartFinderProducts(
@@ -1309,8 +1362,7 @@ export function imageForCollection(
     },
     'pilot-gear': {
       url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/GDL52Front.png?v=1786107930',
-      altText:
-        'Garmin GDL 52 portable ADS-B and SiriusXM receiver for pilots',
+      altText: 'Garmin GDL 52 portable ADS-B and SiriusXM receiver for pilots',
     },
     'watches-accessories': {
       url: 'https://cdn.shopify.com/s/files/1/0763/1306/7739/collections/Redefining_Smooth.png?v=1754905659',
