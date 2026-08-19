@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { siteConfig } from '@/data/config/site.settings';
 import blogData from '../public/blog-articles.json';
-import { getFeaturedCollections, getSeoProductHandles } from '@/lib/shopify';
+import { getFeaturedCollections, getSeoProducts } from '@/lib/shopify';
 
 export const dynamic = 'force-static';
 
@@ -95,6 +95,8 @@ async function getShopEntries(siteUrl: string): Promise<MetadataRoute.Sitemap> {
       },
       ...collections.map((collection) => ({
         url: `${siteUrl}/collections/${collection.handle}`,
+        ...(collection.updatedAt ? { lastModified: collection.updatedAt } : {}),
+        ...(collection.image?.url ? { images: [collection.image.url] } : {}),
       })),
     );
   } catch {
@@ -104,10 +106,14 @@ async function getShopEntries(siteUrl: string): Promise<MetadataRoute.Sitemap> {
   }
 
   try {
-    const productHandles = await getSeoProductHandles();
+    const products = await getSeoProducts();
     entries.push(
-      ...productHandles.map((handle) => ({
-        url: `${siteUrl}/products/${handle}`,
+      ...products.map((product) => ({
+        url: `${siteUrl}/products/${product.handle}`,
+        lastModified: product.updatedAt,
+        ...(product.featuredImage?.url
+          ? { images: [product.featuredImage.url] }
+          : {}),
       })),
     );
   } catch {

@@ -4,11 +4,13 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 
-const siteUrl = process.env.GSC_SITE_URL || 'https://www.rogerwilcoaviation.com/';
+const siteUrl =
+  process.env.GSC_SITE_URL || 'https://www.rogerwilcoaviation.com/';
 const accessToken = process.env.GSC_ACCESS_TOKEN;
 const serviceAccountKey = process.env.GSC_SERVICE_ACCOUNT_KEY;
 const days = Number(process.env.GSC_DAYS || process.argv[2] || 28);
-const outputDir = process.env.GSC_OUTPUT_DIR || path.join('logs', 'gsc-baseline');
+const outputDir =
+  process.env.GSC_OUTPUT_DIR || path.join('logs', 'gsc-baseline');
 
 function base64url(value) {
   return Buffer.from(value)
@@ -48,7 +50,9 @@ async function tokenFromServiceAccount(keyPath) {
   });
   const json = await response.json();
   if (!response.ok) {
-    throw new Error(`Service account token request failed: ${JSON.stringify(json)}`);
+    throw new Error(
+      `Service account token request failed: ${JSON.stringify(json)}`,
+    );
   }
   return json.access_token;
 }
@@ -59,7 +63,9 @@ async function getAccessToken() {
   console.error('Missing GSC_ACCESS_TOKEN or GSC_SERVICE_ACCOUNT_KEY.');
   console.error('Use one of:');
   console.error('  GSC_ACCESS_TOKEN=... GSC_DAYS=28 npm run seo:gsc-baseline');
-  console.error('  GSC_SERVICE_ACCOUNT_KEY=.secrets/gsc-baseline-rwas-seo.json GSC_DAYS=28 npm run seo:gsc-baseline');
+  console.error(
+    '  GSC_SERVICE_ACCOUNT_KEY=.secrets/gsc-baseline-rwas-seo.json GSC_DAYS=28 npm run seo:gsc-baseline',
+  );
   process.exit(2);
 }
 
@@ -83,6 +89,50 @@ function toCsv(rows, columns) {
     columns.join(','),
     ...rows.map((row) => columns.map((col) => csvEscape(row[col])).join(',')),
   ].join('\n');
+}
+
+function pageGroup(page) {
+  const pathname = new URL(page).pathname;
+  const groups = [
+    ['/products/', 'products'],
+    ['/collections/', 'collections'],
+    ['/services/', 'services'],
+    ['/blog/', 'blog'],
+    ['/aircraft-for-sale/', 'aircraft-for-sale'],
+    ['/locations/', 'locations'],
+  ];
+  return groups.find(([prefix]) => pathname.startsWith(prefix))?.[1] || 'other';
+}
+
+function summarizePageGroups(rows) {
+  const groups = new Map();
+  for (const row of rows) {
+    const group = pageGroup(row.page);
+    const current = groups.get(group) || {
+      pageGroup: group,
+      clicks: 0,
+      impressions: 0,
+      weightedPosition: 0,
+      pages: 0,
+    };
+    current.clicks += row.clicks;
+    current.impressions += row.impressions;
+    current.weightedPosition += row.position * row.impressions;
+    current.pages += 1;
+    groups.set(group, current);
+  }
+  return Array.from(groups.values())
+    .map((group) => ({
+      pageGroup: group.pageGroup,
+      pages: group.pages,
+      clicks: group.clicks,
+      impressions: group.impressions,
+      ctr: group.impressions ? group.clicks / group.impressions : 0,
+      position: group.impressions
+        ? group.weightedPosition / group.impressions
+        : 0,
+    }))
+    .sort((a, b) => b.impressions - a.impressions);
 }
 
 async function querySearchAnalytics(dimensions, rowLimit = 25000) {
@@ -130,11 +180,31 @@ const runDir = path.join(outputDir, runId);
 await fs.mkdir(runDir, { recursive: true });
 
 const exports = [
-  { name: 'queries', dimensions: ['query'], columns: ['query', 'clicks', 'impressions', 'ctr', 'position'] },
-  { name: 'pages', dimensions: ['page'], columns: ['page', 'clicks', 'impressions', 'ctr', 'position'] },
-  { name: 'query-pages', dimensions: ['query', 'page'], columns: ['query', 'page', 'clicks', 'impressions', 'ctr', 'position'] },
-  { name: 'countries', dimensions: ['country'], columns: ['country', 'clicks', 'impressions', 'ctr', 'position'] },
-  { name: 'devices', dimensions: ['device'], columns: ['device', 'clicks', 'impressions', 'ctr', 'position'] },
+  {
+    name: 'queries',
+    dimensions: ['query'],
+    columns: ['query', 'clicks', 'impressions', 'ctr', 'position'],
+  },
+  {
+    name: 'pages',
+    dimensions: ['page'],
+    columns: ['page', 'clicks', 'impressions', 'ctr', 'position'],
+  },
+  {
+    name: 'query-pages',
+    dimensions: ['query', 'page'],
+    columns: ['query', 'page', 'clicks', 'impressions', 'ctr', 'position'],
+  },
+  {
+    name: 'countries',
+    dimensions: ['country'],
+    columns: ['country', 'clicks', 'impressions', 'ctr', 'position'],
+  },
+  {
+    name: 'devices',
+    dimensions: ['device'],
+    columns: ['device', 'clicks', 'impressions', 'ctr', 'position'],
+  },
 ];
 
 const manifest = {
@@ -147,14 +217,58 @@ const manifest = {
 };
 
 for (const item of exports) {
-  const rows = await querySearchAnalytics(item.dimensions);
+  let rows = await querySearchAnalytics(item.dimensions);
+  if (item.dimensions.includes('page')) {
+    rows = rows.map((row) => ({ ...row, pageGroup: pageGroup(row.page) }));
+  }
+  const columns = item.dimensions.includes('page')
+    ? [
+        ...item.columns.slice(0, item.columns.indexOf('page') + 1),
+        'pageGroup',
+        ...item.columns.slice(item.columns.indexOf('page') + 1),
+      ]
+    : item.columns;
   const jsonPath = path.join(runDir, `${item.name}.json`);
   const csvPath = path.join(runDir, `${item.name}.csv`);
   await fs.writeFile(jsonPath, JSON.stringify(rows, null, 2) + '\n');
-  await fs.writeFile(csvPath, toCsv(rows, item.columns) + '\n');
-  manifest.files.push({ name: item.name, json: jsonPath, csv: csvPath, rows: rows.length });
+  await fs.writeFile(csvPath, toCsv(rows, columns) + '\n');
+  manifest.files.push({
+    name: item.name,
+    json: jsonPath,
+    csv: csvPath,
+    rows: rows.length,
+  });
   console.log(`${item.name}: ${rows.length} rows`);
+
+  if (item.name === 'pages') {
+    const summary = summarizePageGroups(rows);
+    const summaryJsonPath = path.join(runDir, 'page-groups.json');
+    const summaryCsvPath = path.join(runDir, 'page-groups.csv');
+    const summaryColumns = [
+      'pageGroup',
+      'pages',
+      'clicks',
+      'impressions',
+      'ctr',
+      'position',
+    ];
+    await fs.writeFile(
+      summaryJsonPath,
+      JSON.stringify(summary, null, 2) + '\n',
+    );
+    await fs.writeFile(summaryCsvPath, toCsv(summary, summaryColumns) + '\n');
+    manifest.files.push({
+      name: 'page-groups',
+      json: summaryJsonPath,
+      csv: summaryCsvPath,
+      rows: summary.length,
+    });
+    console.log(`page-groups: ${summary.length} rows`);
+  }
 }
 
-await fs.writeFile(path.join(runDir, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
+await fs.writeFile(
+  path.join(runDir, 'manifest.json'),
+  JSON.stringify(manifest, null, 2) + '\n',
+);
 console.log(`GSC baseline written to ${runDir}`);
