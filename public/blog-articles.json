@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-08-19T00:56:10.383543+00:00",
+    "last_updated": "2026-08-19T00:57:01.508320+00:00",
     "total_articles": 30,
     "categories": [
       "regulatory",
@@ -45,11 +45,17 @@
       "social": {
         "facebook": {
           "text": "Garmin has received FAA STC approval for GFC 600 autopilot installations in additional Cessna 310-series twins, including the 310P/T310P, 310Q/T310Q, and 310R/T310R serial numbers 310R0002 through 310R0500.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #GFC600 #Cessna310 #Autopilot #SmartRudderBias #GarminAvionics #RogerWilcoAviation #YanktonSD #KYKN #FlyGA",
-          "status": "pending"
+          "status": "published",
+          "approved_at": "2026-08-19T00:56:38.823796+00:00",
+          "published_at": "2026-08-19T00:56:46.721964+00:00",
+          "post_id": "106057782039473_1052073300913208"
         },
         "instagram": {
           "text": "Garmin has expanded FAA-approved GFC 600 coverage to additional Cessna 310-series twins\u2014and Smart Rudder Bias is supported when the required G600 TXi flight display and TXi EIS are installed.\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #GFC600 #Cessna310 #Autopilot #SmartRudderBias #GarminAvionics #RogerWilcoAviation #YanktonSD #KYKN #GeneralAviation",
-          "status": "pending"
+          "status": "published",
+          "approved_at": "2026-08-19T00:56:38.884627+00:00",
+          "published_at": "2026-08-19T00:57:01.508308+00:00",
+          "media_id": "17870034555593527"
         }
       },
       "approved_at": "2026-08-19T00:56:10.357534+00:00",
