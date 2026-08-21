@@ -20,6 +20,13 @@ const axisArticle = blog.articles.find(
 assert.match(contact, /'Idempotency-Key': requestId/);
 assert.match(contact, /const ticketId = requestId/);
 assert.match(contact, /const emailSend = await sendViaResend/);
+assert.match(contact, /sendAxisCustomerReceipt/);
+assert.match(contact, /requestId}_customer/);
+assert.match(contact, /Price basis: Manufacturer list price/);
+assert.match(
+  contact,
+  /const customerReceipt = await sendAxisCustomerReceipt[\s\S]*const teamsSend = await sendToTeams/,
+);
 assert.match(contact, /sendToTeams\(env, payload, ticketId, requestId\)/);
 assert.match(contact, /contact-form Teams send failed after email success/);
 assert.match(contact, /aircraftStatus/);
@@ -62,6 +69,7 @@ for (const runtimeField of [
   'Aircraft status:',
   'Serial Number:',
   'UTM campaign:',
+  'Price basis: Manufacturer list price',
   'componentLines',
   'idempotencyKey: requestId',
 ]) {
@@ -94,6 +102,7 @@ if (fs.existsSync(generatedWorkerUrl)) {
   assert.match(generatedWorker, /Aircraft status:/);
   assert.match(generatedWorker, /Selected equipment:/);
   assert.match(generatedWorker, /UTM campaign:/);
+  assert.match(generatedWorker, /Price basis: Manufacturer list price/);
 }
 
 const runtimeMatch = edgeInjector.match(
@@ -138,7 +147,7 @@ globalThis.fetch = async (url, init) => {
 };
 console.error = (...args) => runtimeErrors.push(args);
 
-const invokeRuntime = async (payload) => {
+const invokeRuntime = async (payload, envOverrides = {}) => {
   const request = new Request(
     'https://www.rogerwilcoaviation.com/api/contact',
     {
@@ -149,7 +158,11 @@ const invokeRuntime = async (payload) => {
   );
   return runContactRuntime(
     request,
-    { RESEND_API_KEY: 'test-resend', TEAMS_RELAY_TOKEN: 'test-teams' },
+    {
+      RESEND_API_KEY: 'test-resend',
+      TEAMS_RELAY_TOKEN: 'test-teams',
+      ...envOverrides,
+    },
     new URL(request.url),
   );
 };
@@ -169,6 +182,8 @@ try {
     nNumber: 'N12345',
     aircraftStatus: 'registered',
     plannerKind: 'certified',
+    pricingReference: 'Garmin July 2026 Build-A-System Guide',
+    priceBasis: 'manufacturer-list-price',
     source: 'facebook',
     utm_campaign: 'axis-launch',
     message: 'Please review this preliminary certified AXIS build.',
@@ -201,12 +216,14 @@ try {
   assert.deepEqual(customerReceipt.to, [registeredBuild.email]);
   assert.match(customerReceipt.subject, /Your RWAS AXIS preliminary build/);
   assert.match(customerReceipt.text, /Selected equipment/);
+  assert.match(customerReceipt.text, /Price basis: Manufacturer list price/);
   for (const expected of [
     'Phone: 605-555-0100',
     'Aircraft: 1980 Cessna R182',
     'Serial Number: R182-001',
     'Aircraft status: registered',
     'UTM campaign: axis-launch',
+    'Price basis: Manufacturer list price',
     'Selected equipment:',
     'Confirm the installation kit.',
   ]) {
@@ -256,13 +273,22 @@ try {
     ...registeredBuild,
     requestId: 'rwas_axis_teams_failure_003',
   });
-  assert.equal(teamsFailureResponse.status, 502);
+  assert.equal(teamsFailureResponse.status, 200);
 
   teamsStatus = 200;
+  const teamsMissingResponse = await invokeRuntime(
+    {
+      ...registeredBuild,
+      requestId: 'rwas_axis_teams_missing_004',
+    },
+    { TEAMS_RELAY_TOKEN: undefined },
+  );
+  assert.equal(teamsMissingResponse.status, 200);
+
   customerResendStatus = 500;
   const customerFailureResponse = await invokeRuntime({
     ...registeredBuild,
-    requestId: 'rwas_axis_customer_failure_004',
+    requestId: 'rwas_axis_customer_failure_005',
   });
   assert.equal(customerFailureResponse.status, 502);
 
@@ -270,7 +296,7 @@ try {
   resendStatus = 500;
   const resendFailureResponse = await invokeRuntime({
     ...registeredBuild,
-    requestId: 'rwas_axis_resend_failure_005',
+    requestId: 'rwas_axis_resend_failure_006',
   });
   assert.equal(resendFailureResponse.status, 502);
   assert.ok(teamsRequests.length >= 3);

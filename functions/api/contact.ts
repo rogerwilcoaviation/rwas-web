@@ -242,7 +242,9 @@ function buildPlainTextBody(
   if (p.utm_term) lines.push(`UTM term:     ${p.utm_term}`);
   if (p.plannerKind) lines.push(`Planner:   AXIS ${p.plannerKind}`);
   if (p.pricingReference) lines.push(`Pricing:   ${p.pricingReference}`);
-  if (p.priceBasis) lines.push('Price basis: Manufacturer list price');
+  if (p.priceBasis === 'manufacturer-list-price') {
+    lines.push('Price basis: Manufacturer list price');
+  }
   if (p.aircraftStatus) lines.push(`Status:    ${p.aircraftStatus}`);
   lines.push('');
   lines.push('--- Contact ---');
@@ -352,6 +354,12 @@ function buildHtmlBody(
             ${row('Aircraft status', p.aircraftStatus)}
             ${row('Planner', p.plannerKind ? `AXIS ${p.plannerKind}` : undefined)}
             ${row('Pricing reference', p.pricingReference)}
+            ${row(
+              'Price basis',
+              p.priceBasis === 'manufacturer-list-price'
+                ? 'Manufacturer list price'
+                : undefined,
+            )}
           </table>
         </td></tr>
         <tr><td style="padding:16px 32px 8px 32px">
@@ -430,6 +438,82 @@ async function sendViaResend(
   }
 }
 
+async function sendAxisCustomerReceipt(
+  env: Env,
+  p: ContactPayload,
+  requestId: string,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!p.plannerKind || !p.components?.length) return { ok: true };
+
+  const apiKey = env.RESEND_API_KEY;
+  if (!apiKey) return { ok: false, error: 'mail provider not configured' };
+  const serviceDesk = env.CONTACT_TO_EMAIL || 'service@rwas.team';
+  const from =
+    env.CONTACT_FROM_EMAIL || 'RWAS Correspondence <noreply@rwas.team>';
+  const aircraft = [p.aircraftYear, p.aircraftMake, p.aircraftModel]
+    .filter(Boolean)
+    .join(' ');
+  const componentLines = p.components.map(
+    (item) =>
+      `- ${item.title || item.sku || 'Component'} (${item.sku || 'no SKU'}) x ${item.quantity || 0} | unit ${item.unitPrice ?? 0} | extended ${item.extendedPrice ?? 0}`,
+  );
+  const customerText = [
+    'Your RWAS AXIS preliminary build',
+    `Reference: ${requestId}`,
+    `Aircraft: ${aircraft || 'Not specified'}`,
+    p.pricingReference ? `Pricing: ${p.pricingReference}` : '',
+    p.priceBasis === 'manufacturer-list-price'
+      ? 'Price basis: Manufacturer list price'
+      : '',
+    '',
+    'Selected equipment:',
+    ...componentLines,
+    p.advisories?.length
+      ? `\nPlanner advisories:\n- ${p.advisories.join('\n- ')}`
+      : '',
+    '',
+    'This is preliminary hardware planning, not an approved configuration or installed quote. RWAS will verify aircraft eligibility, compatibility, installation hardware, labor, and final pricing.',
+  ]
+    .filter((line) => line !== '')
+    .join('\n');
+
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'Idempotency-Key': `${requestId}_customer`,
+      },
+      body: JSON.stringify({
+        from,
+        to: [p.email],
+        reply_to: serviceDesk,
+        subject: `Your RWAS AXIS preliminary build — ${requestId}`,
+        text: customerText,
+        html: `<h2>Your RWAS AXIS preliminary build</h2><pre style="font:14px/1.5 Arial,sans-serif;white-space:pre-wrap">${escapeHtml(customerText)}</pre>`,
+        tags: [
+          { name: 'source', value: 'rwas-axis-planner' },
+          { name: 'reason', value: 'customer-copy' },
+        ],
+      }),
+    });
+    if (!res.ok) {
+      const detail = await res.text();
+      return {
+        ok: false,
+        error: `Resend customer receipt ${res.status}: ${detail.slice(0, 200)}`,
+      };
+    }
+    return { ok: true };
+  } catch (err) {
+    return {
+      ok: false,
+      error: err instanceof Error ? err.message : 'customer receipt failed',
+    };
+  }
+}
+
 function buildTeamsBody(
   p: ContactPayload,
   ticketId: string,
@@ -458,6 +542,10 @@ function buildTeamsBody(
     p.utm_term ? `UTM term: ${p.utm_term}` : '',
     p.aircraftStatus ? `Aircraft status: ${p.aircraftStatus}` : '',
     p.plannerKind ? `Planner: AXIS ${p.plannerKind}` : '',
+    p.pricingReference ? `Pricing: ${p.pricingReference}` : '',
+    p.priceBasis === 'manufacturer-list-price'
+      ? 'Price basis: Manufacturer list price'
+      : '',
     '',
     'Message:',
     p.message || '',
@@ -494,6 +582,8 @@ async function sendToTeams(
       body: JSON.stringify({
         channel: target,
         text: buildTeamsBody(p, ticketId, requestId),
+        requestId,
+        idempotencyKey: requestId,
       }),
     });
     if (!res.ok) {
@@ -553,10 +643,10 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
     }
   }
 
-  // 3. Internal email is the customer-facing delivery gate. Teams is a
-  // best-effort notification sent only after Resend accepts the email.
-  // Keep the Resend payload deterministic for this idempotency key so retries
-  // return the original provider result instead of conflicting.
+  // 3. The service-desk email and AXIS customer receipt gate success. Teams is
+  // a best-effort notification sent only after required email delivery.
+  // Keep Resend payloads deterministic for their idempotency keys so retries
+  // return the original provider results instead of conflicting.
   const ticketId = requestId;
   const emailSend = await sendViaResend(env, payload, ticketId, requestId);
   if (!emailSend.ok) {
@@ -568,6 +658,25 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
       {
         error:
           'We could not deliver your message right now. Please email service@rwas.team directly.',
+      },
+      502,
+    );
+  }
+
+  const customerReceipt = await sendAxisCustomerReceipt(
+    env,
+    payload,
+    requestId,
+  );
+  if (!customerReceipt.ok) {
+    console.error('AXIS customer copy send failed', {
+      requestId,
+      error: customerReceipt.error,
+    });
+    return jsonResponse(
+      {
+        error:
+          'We could not deliver all submission confirmations right now. Please try again or email service@rwas.team directly.',
       },
       502,
     );
