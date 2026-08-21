@@ -61,8 +61,9 @@ const rwasContactWithRequiredNNumber = rwasContact
   );
 
 // The generated worker must preserve the same delivery contract as the
-// standalone Pages Function: Resend gates success, Teams is best-effort, and
-// the planner request ID is reused as Resend's idempotency key.
+// standalone Pages Function: the service-desk email and AXIS customer receipt
+// gate success, Teams is best-effort, and the planner request ID is reused for
+// deterministic Resend idempotency keys.
 const rwasContactAligned = `
 if (rwasUrl.pathname === "/api/contact") {
   const json = (body, status = 200) =>
@@ -324,6 +325,9 @@ if (rwasUrl.pathname === "/api/contact") {
     payload.pricingReference
       ? "Pricing: " + clean(payload.pricingReference, 160)
       : "",
+    payload.priceBasis === "manufacturer-list-price"
+      ? "Price basis: Manufacturer list price"
+      : "",
     ...attributionLines,
     "",
     "Message:",
@@ -392,6 +396,12 @@ if (rwasUrl.pathname === "/api/contact") {
       "Your RWAS AXIS preliminary build",
       "Reference: " + requestId,
       "Aircraft: " + (aircraft || "Not specified"),
+      payload.pricingReference
+        ? "Pricing: " + clean(payload.pricingReference, 160)
+        : "",
+      payload.priceBasis === "manufacturer-list-price"
+        ? "Price basis: Manufacturer list price"
+        : "",
       "",
       "Selected equipment:",
       ...componentLines,
@@ -458,7 +468,6 @@ if (rwasUrl.pathname === "/api/contact") {
           requestId,
           teams.status,
         );
-        return json({error:"We could not deliver all submission confirmations right now. Please try again or email service@rwas.team directly."},502);
       }
     } catch (error) {
       console.error(
@@ -466,11 +475,9 @@ if (rwasUrl.pathname === "/api/contact") {
         requestId,
         error,
       );
-      return json({error:"We could not deliver all submission confirmations right now. Please try again or email service@rwas.team directly."},502);
     }
   } else if (payload.plannerKind && componentLines.length) {
     console.error("contact-form Teams send failed after email success", requestId, "Teams relay not configured");
-    return json({error:"We could not deliver all submission confirmations right now. Please try again or email service@rwas.team directly."},502);
   }
 
   return json({ ticketId: requestId, requestId, to });
