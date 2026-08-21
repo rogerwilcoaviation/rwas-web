@@ -123,9 +123,25 @@ jobs:
           echo "=== /aircraft-for-sale/mnvmpdlz-ng1n0 (detail page) ==="
           curl -sS -o /dev/null -w "HTTP %{http_code}\n" https://rogerwilcoaviation.com/aircraft-for-sale/mnvmpdlz-ng1n0
           echo "=== /api/chat POST (served by intake-bridge Worker) ==="
-          curl -sS -X POST https://rogerwilcoaviation.com/api/chat \
-            -H 'Content-Type: application/json' \
-            -H 'Origin: https://rogerwilcoaviation.com' \
-            -d '{"messages":[{"role":"user","content":"I want to list my aircraft"}],"listingUi":true}' \
-            --max-time 30 | grep -q 'intercept/intake' || { echo "Listing-intake intercept failed"; exit 1; }
+          for attempt in {1..12}; do
+            chat_response=$(curl -fsS -X POST https://rogerwilcoaviation.com/api/chat \
+              -H 'Content-Type: application/json' \
+              -H 'Origin: https://rogerwilcoaviation.com' \
+              -d '{"messages":[{"role":"user","content":"I want to list my aircraft"}],"listingUi":true}' \
+              --max-time 30 || true)
+            if CHAT_RESPONSE="$chat_response" node -e 'try {
+              const response = JSON.parse(process.env.CHAT_RESPONSE || "{}");
+              process.exit(response.ok === true && response.listingStart === true ? 0 : 1);
+            } catch {
+              process.exit(1);
+            }'; then
+              break
+            fi
+            if [ "$attempt" -eq 12 ]; then
+              echo "Listing-intake smoke failed after edge propagation retries."
+              exit 1
+            fi
+            echo "Listing-intake response is still propagating; retrying in 10s... ($attempt/12)"
+            sleep 10
+          done
           echo "All smoke tests passed."
