@@ -94,6 +94,13 @@ export type ShopifyPartFinderProduct = {
   variants: Array<{ sku?: string | null }>;
 };
 
+export type ShopifySkuMedia = {
+  imageUrl: string;
+  imageAlt: string;
+  productUrl: string;
+  catalogDescription: string;
+};
+
 export type ShopifyCartLine = {
   id: string;
   quantity: number;
@@ -747,6 +754,68 @@ export async function getPartFinderProducts(
   } while (cursor && all.length < limit);
 
   return filterPublicCatalogProducts(all);
+}
+
+export async function getSkuMedia(
+  skus: string[],
+  plannerKind?: 'certified' | 'experimental',
+): Promise<Record<string, ShopifySkuMedia>> {
+  if (!STOREFRONT_TOKEN || !skus.length) return {};
+
+  const wanted = new Set(skus.map((sku) => sku.toUpperCase()));
+  const media: Record<string, ShopifySkuMedia> = {};
+  const scores: Record<string, number> = {};
+  const productTypes =
+    plannerKind === 'certified'
+      ? ['Avionics — Certified', 'Garmin Dealer Install']
+      : plannerKind === 'experimental'
+        ? ['Avionics — Experimental', 'Garmin Dealer Install']
+        : [
+            'Avionics — Certified',
+            'Avionics — Experimental',
+            'Garmin Dealer Install',
+          ];
+
+  try {
+    const groups = await Promise.all(
+      productTypes.map((productType) => getProductsByProductType(productType)),
+    );
+    for (const product of groups.flat()) {
+      for (const variant of product.variants || []) {
+        const sku = variant.sku?.toUpperCase();
+        if (!sku || !wanted.has(sku)) continue;
+        const image =
+          variant.image || product.featuredImage || product.images?.[0];
+        if (!image?.url || isFallbackProductImage(image)) continue;
+        // AXIS planner products were initially seeded with a common campaign
+        // banner. Prefer an exact product/LRU record whenever one exists so a
+        // GDU, connector kit, sensor, etc. never inherits that family artwork.
+        const genericAxisCampaign =
+          /80686-|axis-flight-displays-build-system|axis-build-planner/i.test(
+            image.url,
+          );
+        const seededPlannerRecord =
+          /^garmin-axis-(certified|experimental)-/i.test(product.handle);
+        const candidateScore =
+          (variant.image ? 40 : 0) +
+          (!genericAxisCampaign ? 30 : 0) +
+          (!seededPlannerRecord ? 20 : 0) +
+          (product.title.toUpperCase().includes(sku) ? 5 : 0);
+        if ((scores[sku] ?? -1) >= candidateScore) continue;
+        scores[sku] = candidateScore;
+        media[sku] = {
+          imageUrl: image.url,
+          imageAlt: image.altText || `${product.title} product image`,
+          productUrl: `/products/${product.handle}`,
+          catalogDescription: product.description || '',
+        };
+      }
+    }
+  } catch (error) {
+    console.warn('Unable to load AXIS planner product media:', error);
+  }
+
+  return media;
 }
 
 export async function getProductsByTag(
