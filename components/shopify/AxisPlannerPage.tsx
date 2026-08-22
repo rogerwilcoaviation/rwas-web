@@ -9,10 +9,16 @@ import {
   Masthead,
 } from '@/components/shared/broadsheet';
 import type { AxisPlannerKind } from '@/lib/axis-planner-data';
+import { AXIS_ITEMS } from '@/lib/axis-planner-data';
+import { getSkuMedia } from '@/lib/shopify';
 import Link from 'next/link';
 
-export default function AxisPlannerPage({ kind }: { kind: AxisPlannerKind }) {
+export default async function AxisPlannerPage({ kind }: { kind: AxisPlannerKind }) {
   const certified = kind === 'certified';
+  const productMedia = await getSkuMedia(
+    AXIS_ITEMS[kind].map((item) => item.sku),
+    kind,
+  );
   return (
     <BroadsheetLayout>
       <Dateline />
@@ -56,7 +62,7 @@ export default function AxisPlannerPage({ kind }: { kind: AxisPlannerKind }) {
           installed quote. The planner surfaces advisories but does not perform
           full compatibility validation.
         </p>
-        <AxisBuildPlanner kind={kind} />
+        <AxisBuildPlanner kind={kind} productMedia={productMedia} />
       </main>
       <BroadsheetFooter />
     </BroadsheetLayout>

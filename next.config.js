@@ -45,6 +45,12 @@ module.exports = () => {
           port: '',
           pathname: '**/*',
         },
+        {
+          protocol: 'https',
+          hostname: 'res.garmin.com',
+          port: '',
+          pathname: '**/*',
+        },
       ],
     },
     webpack: (config, options) => {
