@@ -18,6 +18,8 @@ export const metadata = genPageMetadata({
   title: 'Garmin AXIS System Planner — Certified & Experimental | RWAS',
   description:
     'Plan Garmin AXIS hardware for certified or experimental aircraft, compare manufacturer list pricing, and request an RWAS installation quote.',
+  image:
+    'https://www.rogerwilcoaviation.com/images/blog/axis-build-planner-display-family-20260807.jpg',
   canonical: pageUrl,
 });
 

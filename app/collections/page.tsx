@@ -108,8 +108,9 @@ export default async function CollectionsPage() {
             </h2>
             <p className="bs-body" style={{ marginTop: 8, maxWidth: 820 }}>
               Follow Garmin&rsquo;s certified or experimental build sequence,
-              choose hardware, see the running retail total, and submit the
-              system to RWAS for compatibility review and special pricing.
+              choose hardware, see the manufacturer list-price total, and
+              submit the system to RWAS for compatibility review and an
+              aircraft-specific equipment and installation quote.
             </p>
             <div
               style={{

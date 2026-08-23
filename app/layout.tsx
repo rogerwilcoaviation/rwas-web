@@ -165,6 +165,7 @@ export default function RootLayout({
                   '@type': ['Organization', 'ProfessionalService'],
                   '@id': `${siteConfig.siteUrl}#organization`,
                   name: 'Roger Wilco Aviation Services',
+                  legalName: 'Roger Wilco Aviation Services LLC',
                   alternateName: 'RWAS',
                   url: siteConfig.siteUrl,
                   logo: `${siteConfig.siteUrl}/newspaper/images/logo.png`,

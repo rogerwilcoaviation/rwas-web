@@ -178,14 +178,16 @@ export default function Home() {
                   formal quote. Choose the certified or experimental path, work
                   through Garmin&rsquo;s recommended build sequence, compare
                   compatible displays and supporting hardware, and watch the
-                  retail total update as the system takes shape.
+                  manufacturer list-price total update as the system takes
+                  shape.
                 </p>
                 <p>
                   Each preliminary build can be submitted directly to Roger
-                  Wilco Aviation Services for compatibility review and special
-                  pricing. RWAS will review the aircraft, mission, certification
-                  path, installation requirements, and selected equipment before
-                  preparing the next step.
+                  Wilco Aviation Services for compatibility review and an
+                  aircraft-specific equipment and installation quote. RWAS will
+                  review the aircraft, mission, certification path, installation
+                  requirements, and selected equipment before preparing the next
+                  step.
                 </p>
                 <div
                   style={{

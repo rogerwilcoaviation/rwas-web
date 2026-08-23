@@ -144,6 +144,7 @@ type ShopifyCollectionProductQueryNode = Omit<
 
 const SHOP_DOMAIN =
   process.env.SHOPIFY_STORE_DOMAIN || 'm06wpv-na.myshopify.com';
+const SITE_URL = 'https://www.rogerwilcoaviation.com';
 const STOREFRONT_TOKEN =
   process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN ||
   process.env.SHOPIFY_STOREFRONT_TOKEN;
@@ -180,7 +181,7 @@ const PAPA_ALPHA_SYNTHETIC: ShopifyCollectionSummary = {
   description:
     'RWAS-built rigging tools for Piper Papa-Alpha airframes. Priced OTC — ships same day.',
   image: {
-    url: '/newspaper/images/papa_alpha_kit_collection.jpg',
+    url: `${SITE_URL}/newspaper/images/papa_alpha_kit_collection.jpg`,
     altText: 'Papa-Alpha precision rigging tool kit for Piper airframes',
   },
 };
@@ -1323,7 +1324,7 @@ export function displayTitleForCollection(
 
 const COLLECTION_DESCRIPTION_OVERRIDES: Record<string, string> = {
   'avionics-certified':
-    'Certified retail avionics, experimental and LSA avionics, and compatible accessories in one collection. Use the product-type selector to browse each group. Current retail prices are shown; contact RWAS for package and special pricing.',
+    'Certified retail avionics, experimental and LSA avionics, and compatible accessories in one collection. Use the product-type selector to browse each group. Current listed prices are shown; contact RWAS for an aircraft-specific equipment and installation quote.',
   'avionics-experimental':
     'Garmin avionics and related components for experimental, LSA, and builder-supported installations, including G3X Touch and compatible accessories.',
   'pilot-gear':
@@ -1374,7 +1375,7 @@ export function imageForCollection(
         'Garmin dealer install hardware, service parts, and cable assemblies',
     },
     'papa-alpha-tools': {
-      url: '/newspaper/images/papa_alpha_kit_collection.jpg',
+      url: `${SITE_URL}/newspaper/images/papa_alpha_kit_collection.jpg`,
       altText: 'Papa-Alpha precision rigging tool kit for Piper airframes',
     },
     'on-sale': {

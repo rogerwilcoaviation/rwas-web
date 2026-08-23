@@ -407,7 +407,7 @@ export default async function CollectionDetailPage({
               {quoteOnly
                 ? 'These are install-only or quote-driven items. Use the request-quote CTA to start the conversation.'
                 : collection.handle === 'avionics-certified'
-                  ? 'Choose Experimental Products, Certified Retail, or Accessories below. Current retail prices are shown; contact RWAS for package and special pricing.'
+                  ? 'Choose Experimental Products, Certified Retail, or Accessories below. Current listed prices are shown; contact RWAS for an aircraft-specific equipment and installation quote.'
                   : 'Browse current products, availability, and purchase options below.'}
             </p>
           </div>
