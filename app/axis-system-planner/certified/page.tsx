@@ -5,6 +5,8 @@ export const metadata = genPageMetadata({
   title: 'Garmin AXIS Certified Aircraft System Planner | RWAS',
   description:
     'Plan a Garmin AXIS system for a certified aircraft, estimate hardware list pricing, and request an RWAS equipment and installation quote.',
+  image:
+    'https://www.rogerwilcoaviation.com/images/blog/axis-build-planner-cockpit-20260807.jpg',
   canonical: 'https://www.rogerwilcoaviation.com/axis-system-planner/certified',
 });
 

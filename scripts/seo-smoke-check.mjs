@@ -145,6 +145,7 @@ for (const [label, value] of [
   ['structured postal code', '"postalCode":"57078"'],
   ['structured opening time', '"opens":"07:00"'],
   ['structured closing time', '"closes":"17:00"'],
+  ['structured legal name', '"legalName":"Roger Wilco Aviation Services LLC"'],
 ]) {
   if (!home.text.includes(value)) fail(`Home is missing ${label}`);
 }
@@ -296,6 +297,36 @@ if (!isLocalBase) {
 
 const failures = [];
 const titles = new Map();
+const EXACT_PAGE_METADATA = new Map([
+  [
+    `${base}/axis-system-planner`,
+    {
+      title: 'Garmin AXIS System Planner — Certified & Experimental | RWAS',
+      image: '/images/blog/axis-build-planner-display-family-20260807.jpg',
+    },
+  ],
+  [
+    `${base}/axis-system-planner/certified`,
+    {
+      title: 'Garmin AXIS Certified Aircraft System Planner | RWAS',
+      image: '/images/blog/axis-build-planner-cockpit-20260807.jpg',
+    },
+  ],
+  [
+    `${base}/axis-system-planner/experimental`,
+    {
+      title: 'Garmin AXIS Experimental Aircraft System Planner | RWAS',
+      image: '/images/blog/axis-build-planner-operating-display-20260807.jpg',
+    },
+  ],
+  [
+    `${base}/panel-planner`,
+    {
+      title: 'Build My Panel — RWAS Garmin Panel Planner',
+      image: '/images/blog/panel-planner-r182-concept-tool.jpg',
+    },
+  ],
+]);
 
 async function checkUrl(url) {
   const { res, text } = await fetchNoRedirect(url);
@@ -328,6 +359,15 @@ async function checkUrl(url) {
   if (!ogImage) urlFailures.push(`${url} missing og:image`);
   if (ogImage && !/^https?:\/\//i.test(ogImage)) {
     urlFailures.push(`${url} has a relative og:image: ${ogImage}`);
+  }
+  const exactMetadata = EXACT_PAGE_METADATA.get(url);
+  if (exactMetadata && decodedTitle !== exactMetadata.title) {
+    urlFailures.push(
+      `${url} has stale title metadata: ${decodedTitle || '(missing)'}`,
+    );
+  }
+  if (exactMetadata && !ogImage.includes(exactMetadata.image)) {
+    urlFailures.push(`${url} has a stale or generic og:image: ${ogImage}`);
   }
   for (const error of jsonLdErrors(text)) {
     urlFailures.push(`${url} has invalid ${error}`);

@@ -17,6 +17,8 @@ export const metadata = genPageMetadata({
   title: 'Build My Panel — RWAS Garmin Panel Planner',
   description:
     'Sketch a Garmin avionics panel concept with the RWAS Panel Planner at KYKN in Yankton. Submit your design for review before fabrication.',
+  image:
+    'https://www.rogerwilcoaviation.com/images/blog/panel-planner-r182-concept-tool.jpg',
   canonical: 'https://www.rogerwilcoaviation.com/panel-planner',
 });
 
