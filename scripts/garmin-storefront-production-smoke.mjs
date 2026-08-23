@@ -310,8 +310,8 @@ for (const requiredLabel of [
     throw new Error(`Retail collection is missing label: ${requiredLabel}`);
   }
 }
-if (!retail.text.includes('contact RWAS for package and special pricing')) {
-  throw new Error('Retail collection is missing the package-pricing message');
+if (!retail.text.includes('contact RWAS for an aircraft-specific equipment and installation quote')) {
+  throw new Error('Retail collection is missing the aircraft-specific quote message');
 }
 
 const k10 = await renderedPage(
