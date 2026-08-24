@@ -752,6 +752,20 @@ export default function AxisBuildPlanner({
               <ul className="divide-y divide-neutral-300">
                 {stepItems.map((item) => {
                   const quantity = selection[item.sku] || 0;
+                  const catalogMedia = productMedia[item.sku.toUpperCase()];
+                  const exactProductImage = EXACT_PRODUCT_IMAGES[item.sku];
+                  const isCertifiedGdu80PThumbnail =
+                    kind === 'certified' && item.sku === '010-04143-00';
+                  const thumbnailUrl = isCertifiedGdu80PThumbnail
+                    ? '/images/blog/axis-build-planner-display-family-20260807.jpg'
+                    : exactProductImage?.imageUrl ||
+                      catalogMedia?.imageUrl ||
+                      FALLBACK_PRODUCT_IMAGE;
+                  const thumbnailAlt = isCertifiedGdu80PThumbnail
+                    ? 'Garmin GDU 80P certified AXIS 8-inch portrait display'
+                    : exactProductImage?.imageAlt ||
+                      catalogMedia?.imageAlt ||
+                      `Garmin AXIS family image for ${item.title}; exact product photo pending`;
                   return (
                     <li
                       key={item.sku}
@@ -766,6 +780,24 @@ export default function AxisBuildPlanner({
                             setQuantity(item.sku, event.target.checked ? 1 : 0)
                           }
                         />
+                        <button
+                          type="button"
+                          onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            setDetailSku(item.sku);
+                          }}
+                          className="relative h-16 w-20 shrink-0 overflow-hidden border border-neutral-400 bg-white hover:border-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 sm:h-20 sm:w-24"
+                          aria-label={`View photo, details and compatibility for ${item.title}`}
+                        >
+                          <Image
+                            src={thumbnailUrl}
+                            alt={thumbnailAlt}
+                            fill
+                            sizes="96px"
+                            className="object-contain p-1.5"
+                          />
+                        </button>
                         <span>
                           <button
                             type="button"
