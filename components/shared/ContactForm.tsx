@@ -208,6 +208,7 @@ export default function ContactForm() {
   const {
     register,
     handleSubmit,
+    getValues,
     setValue,
     watch,
     formState: { errors },
@@ -332,9 +333,44 @@ export default function ContactForm() {
     }
   };
 
+  const sendAxisBuildToPanelPlanner = () => {
+    const values = getValues();
+    const components = values.components || [];
+    const panelComponents = components.filter((item) =>
+      /display|gdu|gtn|gnc|gps 175|gnx 375|gtr|gma|audio panel|gmc 507|gi 275|\bg5\b|transponder|control head/i.test(
+        item.title,
+      ),
+    );
+    const handoff = {
+      version: 2,
+      requestId: values.requestId || `rwas_axis_${Date.now().toString(36)}`,
+      kind: values.plannerKind,
+      aircraft: {
+        year: values.aircraftYear || '',
+        make: values.aircraftMake || '',
+        model: values.aircraftModel || '',
+        serialNumber: values.aircraftSerialNumber || '',
+        nNumber: values.nNumber || '',
+        owner: values.name || '',
+      },
+      components,
+      panelComponents,
+      advisories: values.advisories || [],
+      returnUrl: window.location.href,
+    };
+    const encoded = btoa(
+      String.fromCharCode(...new TextEncoder().encode(JSON.stringify(handoff))),
+    )
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+    window.location.href = `https://panelplanner.rwas.team/customer?axisBuild=${encoded}`;
+  };
+
   const selectedReason = watch('reason');
   const selectedAircraftStatus = watch('aircraftStatus');
   const productContext = watch('product');
+  const plannerKind = watch('plannerKind');
 
   // --- Success state: ticket-stub confirmation ---------------------------
   if (submitState.status === 'success') {
@@ -676,13 +712,24 @@ export default function ContactForm() {
         ) : null}
 
         <div className="rwas-contact-form__actions">
-          <button
-            type="submit"
-            className="bs-cta-primary"
-            disabled={submitState.status === 'submitting'}
-          >
-            {submitState.status === 'submitting' ? 'Sending…' : 'Send to RWAS'}
-          </button>
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="submit"
+              className="bs-cta-primary"
+              disabled={submitState.status === 'submitting'}
+            >
+              {submitState.status === 'submitting' ? 'Sending…' : 'Send to RWAS'}
+            </button>
+            {plannerKind ? (
+              <button
+                type="button"
+                className="bs-cta-secondary"
+                onClick={sendAxisBuildToPanelPlanner}
+              >
+                Send to Panel Planner
+              </button>
+            ) : null}
+          </div>
           <p className="rwas-contact-form__fineprint">
             Routed to <strong>service@rwas.team</strong>. Direct avionics
             questions may also use <strong>avionics@rwas.team</strong>. RWAS
