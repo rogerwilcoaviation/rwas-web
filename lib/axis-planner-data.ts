@@ -27,6 +27,8 @@ const CERTIFIED = `
 1A|010-14469-12|200|Install Kit, GDU 116C/116NC, G3X Touch Upgrade
 1A|010-02639-00|400|GA 35S GPS/WAAS Antenna
 1A|K00-01479-00|200|Printed Material Kit, GDU 80/116 Series
+1A|010-01172-21|875|GAD 29D PMA ARINC 429 Interface Adapter
+1A|011-03271-00|100|GAD 29 Connector Kit
 2|010-04557-00|4000|AXIS Certified LRU Kit with GSU 25D, GMU 11 and GTP 59
 2|K11-00066-00|200|Install Kit, AXIS Certified
 2|010-02003-05|10500|LRU Kit with GMU 44B, GSU 75 and GTP 59
@@ -77,8 +79,6 @@ const CERTIFIED = `
 8B|011-06677-00|325|GHA 15 Levelling Install Kit
 8B|010-02975-01|549|GCO 14 Carbon Monoxide Detector
 8B|010-01074-71|1400|GAP 26 PMA Self-Regulating Pitot Tube
-8C|010-01172-21|875|GAD 29D PMA ARINC 429 Interface Adapter
-8C|011-03271-00|100|GAD 29 Connector Kit
 8C|010-01525-11|825|GAD 27 PMA Electrical Interface Adapter
 8C|011-03877-01|160|GAD 27 Connector Kit`;
 
@@ -357,9 +357,9 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
     },
     {
       id: '1A',
-      title: 'Display Install Kits',
+      title: 'Display Install Kits and GAD 29D',
       guidance:
-        'Each display requires the correct new-install or G3X Touch upgrade kit. IFR GPS displays require a GA 35S antenna. Select one printed-material kit per aircraft.',
+        'Each display requires the correct new-install or G3X Touch upgrade kit. IFR GPS displays require a GA 35S antenna. Select one printed-material kit per aircraft. In a certified AXIS installation, add GAD 29D when a GDU 116B must interface with a supported external serial/ARINC 429 IFR GPS/NAV navigator, such as a GTN 6XX/7XX, GNS 4XXW/5XXW or GNS 480. It is generally not required with GDU 116C or GDU 116NC, or when a supported direct-HSDB interface is used. A GAD 29 path for a G5 standby is optional/recommended for independent navigation data, not universally required. Do not add GAD 29D solely because an external navigator or standby instrument exists. Source: Garmin AXIS Part 23 AML STC Installation Manual 190-03123-10 Rev. 3, §§1.4.9, 3.2.3.1, 3.3.1 and Figure B-12 note 7.',
     },
     {
       id: '2',

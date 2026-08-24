@@ -6,6 +6,7 @@ const read = (path) =>
 const contact = read('functions/api/contact.ts');
 const form = read('components/shared/ContactForm.tsx');
 const planner = read('components/shopify/AxisBuildPlanner.tsx');
+const plannerData = read('lib/axis-planner-data.ts');
 const landing = read('app/axis-system-planner/page.tsx');
 const landingLink = read('components/shopify/AxisPlannerAttributedLink.tsx');
 const edgeInjector = read('scripts/inject-cloudflare-collection-redirects.mjs');
@@ -38,6 +39,12 @@ assert.match(planner, /extendedPrice/);
 assert.match(planner, /Garmin July 2026 Build-A-System Guide/);
 assert.match(planner, /Arrange Panel & Continue with Advisories/);
 assert.match(planner, /panelplanner\.rwas\.team\/customer\?axisBuild=/);
+assert.match(planner, /View photo, details and compatibility for/);
+assert.match(planner, /Product details/);
+assert.match(planner, /setDetailSku\(item\.sku\)/);
+assert.match(plannerData, /1A\|010-01172-21\|875\|GAD 29D/);
+assert.doesNotMatch(plannerData, /8C\|010-01172-21\|875\|GAD 29D/);
+assert.match(plannerData, /Display Install Kits and GAD 29D/);
 assert.match(
   planner,
   /const requestId = `rwas_axis_\$\{Date\.now\(\)\.toString\(36\)\}/,
