@@ -513,8 +513,6 @@ export default function AxisBuildPlanner({
   const detailCompatibility = detailItem
     ? compatibilityFor(kind, detailItem)
     : null;
-  const isCertifiedGdu80P =
-    kind === 'certified' && detailItem?.sku === '010-04143-00';
   const isGdu116 = GDU_116_MODELS.some(
     (model) => model.sku === detailItem?.sku,
   );
@@ -774,18 +772,14 @@ export default function AxisBuildPlanner({
                   const quantity = selection[item.sku] || 0;
                   const catalogMedia = productMedia[item.sku.toUpperCase()];
                   const exactProductImage = EXACT_PRODUCT_IMAGES[item.sku];
-                  const isCertifiedGdu80PThumbnail =
-                    kind === 'certified' && item.sku === '010-04143-00';
-                  const thumbnailUrl = isCertifiedGdu80PThumbnail
-                    ? '/images/blog/axis-build-planner-display-family-20260807.jpg'
-                    : exactProductImage?.imageUrl ||
-                      catalogMedia?.imageUrl ||
-                      FALLBACK_PRODUCT_IMAGE;
-                  const thumbnailAlt = isCertifiedGdu80PThumbnail
-                    ? 'Garmin GDU 80P certified AXIS 8-inch portrait display'
-                    : exactProductImage?.imageAlt ||
-                      catalogMedia?.imageAlt ||
-                      `Garmin AXIS family image for ${item.title}; exact product photo pending`;
+                  const thumbnailUrl =
+                    exactProductImage?.imageUrl ||
+                    catalogMedia?.imageUrl ||
+                    FALLBACK_PRODUCT_IMAGE;
+                  const thumbnailAlt =
+                    exactProductImage?.imageAlt ||
+                    catalogMedia?.imageAlt ||
+                    `Garmin AXIS family image for ${item.title}; exact product photo pending`;
                   return (
                     <li
                       key={item.sku}
@@ -886,30 +880,22 @@ export default function AxisBuildPlanner({
           <DialogContent className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-4xl overflow-y-auto rounded-none border-2 border-black bg-[#fffdf7] p-0 shadow-2xl">
             <div>
               <div
-                className={`relative w-full border-b-2 border-black bg-white ${isCertifiedGdu80P ? 'h-[24rem] md:h-[34rem]' : 'h-72 md:h-[32rem]'}`}
+                className="relative h-72 w-full border-b-2 border-black bg-white md:h-[32rem]"
               >
                 <Image
                   src={
-                    isCertifiedGdu80P
-                      ? '/images/blog/axis-build-planner-display-family-20260807.jpg'
-                      : exactProductImage?.imageUrl ||
-                        detailMedia?.imageUrl ||
-                        FALLBACK_PRODUCT_IMAGE
+                    exactProductImage?.imageUrl ||
+                    detailMedia?.imageUrl ||
+                    FALLBACK_PRODUCT_IMAGE
                   }
                   alt={
-                    isCertifiedGdu80P
-                      ? 'Garmin GDU 80P certified AXIS 8-inch portrait display, front and side view'
-                      : exactProductImage?.imageAlt ||
-                        detailMedia?.imageAlt ||
-                        `${detailItem.title} system illustration`
+                    exactProductImage?.imageAlt ||
+                    detailMedia?.imageAlt ||
+                    `${detailItem.title} system illustration`
                   }
                   fill
                   sizes="(max-width: 768px) 100vw, 896px"
-                  className={
-                    isCertifiedGdu80P
-                      ? 'object-contain p-4 md:p-6'
-                      : 'object-contain p-4 md:p-7'
-                  }
+                  className="object-contain p-4 md:p-7"
                 />
               </div>
               <div className="p-5 pt-8 md:p-8 md:pt-10">
