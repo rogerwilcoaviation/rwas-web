@@ -27,6 +27,8 @@ const CERTIFIED = `
 1A|010-14469-12|200|Install Kit, GDU 116C/116NC, G3X Touch Upgrade
 1A|010-02639-00|400|GA 35S GPS/WAAS Antenna
 1A|K00-01479-00|200|Printed Material Kit, GDU 80/116 Series
+1A|010-01172-21|875|GAD 29D PMA ARINC 429 Interface Adapter
+1A|011-03271-00|100|GAD 29 Connector Kit
 2|010-04557-00|4000|AXIS Certified LRU Kit with GSU 25D, GMU 11 and GTP 59
 2|K11-00066-00|200|Install Kit, AXIS Certified
 2|010-02003-05|10500|LRU Kit with GMU 44B, GSU 75 and GTP 59
@@ -80,8 +82,6 @@ const CERTIFIED = `
 8B|K10-00202-00|2200|Garmin GI 260 AOA System Kit — 14/28 V, Unheated
 8B|K10-00202-10|2400|Garmin GI 260 AOA System Kit — 14 V, Heated
 8B|K10-00202-20|2400|Garmin GI 260 AOA System Kit — 28 V, Heated
-8C|010-01172-21|875|GAD 29D PMA ARINC 429 Interface Adapter
-8C|011-03271-00|100|GAD 29 Connector Kit
 8C|010-01525-11|825|GAD 27 PMA Electrical Interface Adapter
 8C|011-03877-01|160|GAD 27 Connector Kit
 8D|010-02544-21|450|Garmin GSB 15 Dual USB Charging Port — USB-A/USB-C, Rear Power Input
@@ -376,9 +376,9 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
     },
     {
       id: '1A',
-      title: 'Display Install Kits',
+      title: 'Display Install Kits and GAD 29D',
       guidance:
-        'Each display requires the correct new-install or G3X Touch upgrade kit. IFR GPS displays require a GA 35S antenna. Select one printed-material kit per aircraft.',
+        'Each display requires the correct new-install or G3X Touch upgrade kit. IFR GPS displays require a GA 35S antenna. Select one printed-material kit per aircraft. A GAD 29D is required when a GDU 116B interfaces with a supported external GPS/NAV navigator through serial/ARINC 429, such as a GTN 6XX/7XX, GNS 4XXW/5XXW or GNS 480. It is generally not required with a GDU 116C or GDU 116NC, or when a supported navigator uses a direct HSDB interface and no ARINC conversion is needed. With a G5 standby, the GAD 29D backup navigation path is optional/recommended rather than universally required. A GI 275 can receive independent navigator data directly by HSDB, RS-232 or ARINC 429, depending on the navigator. Do not add a GAD 29D merely because an external navigator or standby instrument is installed. Source: Garmin AXIS Part 23 AML STC Installation Manual 190-03123-10 Rev. 3, §§1.4.9, 3.2.3.1, 3.3.1 and Figure B-12 note 7.',
     },
     {
       id: '2',
@@ -444,7 +444,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '8C',
       title: 'Navigation and Electrical Interfaces',
       guidance:
-        'GAD 29 may be needed for an older navigator or G5 navigation display. GAD 27 provides keep-alive power and optional landing/taxi-light wig-wag functions.',
+        'GAD 27 provides keep-alive power and optional landing/taxi-light wig-wag functions. Certified GAD 29D selection and applicability guidance is provided in Step 1A.',
     },
     {
       id: '8D',

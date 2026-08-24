@@ -30,6 +30,8 @@ const CERTIFIED = `
 1A|010-14469-12|200|Install Kit, GDU 116C/116NC, G3X Touch Upgrade
 1A|010-02639-00|400|GA 35S GPS/WAAS Antenna
 1A|K00-01479-00|200|Printed Material Kit, GDU 80/116 Series
+1A|010-01172-21|875|GAD 29D PMA ARINC 429 Interface Adapter
+1A|011-03271-00|100|GAD 29 Connector Kit
 2|010-04557-00|4000|AXIS Certified LRU Kit with GSU 25D, GMU 11 and GTP 59
 2|K11-00066-00|200|Install Kit, AXIS Certified
 2|010-02003-05|10500|LRU Kit with GMU 44B, GSU 75 and GTP 59
@@ -72,8 +74,6 @@ const CERTIFIED = `
 8|011-06097-00|25|GHA 15 Install Kit
 8|011-06677-00|325|GHA 15 Levelling Install Kit
 8|010-02975-01|549|GCO 14 Carbon Monoxide Detector
-8|010-01172-21|875|GAD 29D PMA ARINC 429 Interface Adapter
-8|011-03271-00|100|GAD 29 Connector Kit
 8|010-01525-11|825|GAD 27 PMA Electrical Interface Adapter
 8|011-03877-01|160|GAD 27 Connector Kit
 8|010-01074-71|1400|GAP 26 PMA Self-Regulating Pitot Tube

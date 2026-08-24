@@ -81,6 +81,13 @@ function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
   if (kind === 'certified' && has('010-01076-31') && !has('011-03241-01')) {
     notices.push('The GTR 20 requires its PMA connector kit.');
   }
+  if (
+    kind === 'certified' &&
+    has('010-01172-21') &&
+    !has('011-03271-00')
+  ) {
+    notices.push('The selected GAD 29D requires its connector kit.');
+  }
   if (has('010-00562-00')) {
     const hasSupportedTrafficPath =
       has('010-01216-06') ||
