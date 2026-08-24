@@ -390,7 +390,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '3',
       title: 'Standby Flight Instrument',
       guidance:
-        'A standby flight instrument is required. Choose G5 or GI 275; use the GI 275 +AP model when retaining a compatible non-Garmin autopilot.',
+        'A standby flight instrument is required. Choose G5 or GI 275; use the GI 275 +AP model when retaining a compatible non-Garmin autopilot. A GI 275 standby installation also requires a GPS source. This may be provided by a direct approved interface to a Garmin GPS 175, GNX 375, GNC 355(A), GTN 6XX/7XX/Xi, GNS 4XXW/5XXW or GNS 480. If none of those navigators is directly interfaced to the GI 275, include a Garmin glareshield-mounted VFR GPS antenna (P/N 011-04036-10, or P/N 011-04036-00 with TNC/BNC adapter 330-01754-00). The AXIS-to-GI 275 HSDB standby connection alone does not satisfy this GPS-source requirement.',
     },
     {
       id: '4',
