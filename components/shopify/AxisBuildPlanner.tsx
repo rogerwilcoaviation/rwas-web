@@ -33,20 +33,17 @@ const EXACT_PRODUCT_IMAGES: Record<
       'Garmin AXIS certified LRU kit with GSU 25D, GMU 11 and GTP 59 temperature probe',
   },
   '010-03000-00': {
-    imageUrl:
-      'https://res.garmin.com/www/aviation/80686/80686-11-6-display-tab-primary-flight-display-video.jpg',
+    imageUrl: '/images/axis/products/gdu-116-series-11-6-inch-display.jpg',
     imageAlt:
       'Garmin AXIS GDU 116B 11.6-inch flight display shown from the front',
   },
   '010-03001-00': {
-    imageUrl:
-      'https://res.garmin.com/www/aviation/80686/80686-11-6-display-tab-primary-flight-display-video.jpg',
+    imageUrl: '/images/axis/products/gdu-116-series-11-6-inch-display.jpg',
     imageAlt:
       'Garmin AXIS GDU 116C 11.6-inch flight display shown from the front with integrated COM and audio controls',
   },
   '010-03002-00': {
-    imageUrl:
-      'https://res.garmin.com/www/aviation/80686/80686-11-6-display-tab-primary-flight-display-video.jpg',
+    imageUrl: '/images/axis/products/gdu-116-series-11-6-inch-display.jpg',
     imageAlt:
       'Garmin AXIS GDU 116NC 11.6-inch flight display shown from the front with integrated NAV, COM and audio controls',
   },
