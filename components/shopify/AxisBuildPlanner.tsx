@@ -27,6 +27,11 @@ const EXACT_PRODUCT_IMAGES: Record<
   string,
   { imageUrl: string; imageAlt: string }
 > = {
+  '010-04143-00': {
+    imageUrl: '/images/axis/products/010-04143-00-gdu-80p-portrait-display.jpg',
+    imageAlt:
+      'Garmin AXIS GDU 80P portrait flight display shown from the front',
+  },
   '010-04145-00': {
     imageUrl: '/images/axis/products/010-04145-00-gdu-80l-landscape-display.jpg',
     imageAlt:
