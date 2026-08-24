@@ -37,6 +37,11 @@ const EXACT_PRODUCT_IMAGES: Record<
     imageAlt:
       'Garmin AXIS GDU 80L landscape flight display shown from the front',
   },
+  '010-12498-50': {
+    imageUrl: '/images/axis/products/010-12498-50-ga-24-tnc-siriusxm-antenna.jpg',
+    imageAlt:
+      'Garmin GA 24 TNC SiriusXM antenna with attached cable and TNC connector',
+  },
   '010-04557-00': {
     imageUrl: '/images/axis/products/010-04557-00-certified-lru-kit.jpg',
     imageAlt:
