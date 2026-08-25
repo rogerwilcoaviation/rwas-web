@@ -118,13 +118,23 @@ export default function RefundPolicyPage() {
         </div>
 
         <div className="policy-card mx-auto mb-8 max-w-screen-md rounded p-6 shadow-md">
+          <h2 className="mb-4 text-lg font-semibold">EXCHANGES</h2>
+          <p>
+            We accept exchanges of eligible new items. Contact us within 10 days
+            after receiving the item to request an exchange. The same
+            eligibility conditions, customer-paid return shipping, and 20%
+            restocking fee apply.
+          </p>
+        </div>
+
+        <div className="policy-card mx-auto mb-8 max-w-screen-md rounded p-6 shadow-md">
           <h2 className="mb-4 text-lg font-semibold">REFUNDS</h2>
           <p>
             We will notify you after we receive and inspect the return. If the
             return is approved, the refund—less the 20% restocking fee and any
             nonrefundable original shipping charges—will be issued to the
-            original payment method within 10 business days. Your bank or card
-            issuer may require additional processing time.
+            original payment method within 30 days. Your bank or card issuer may
+            require additional processing time.
           </p>
         </div>
       </main>
