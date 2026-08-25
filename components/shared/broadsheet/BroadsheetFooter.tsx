@@ -11,6 +11,7 @@ type PolicyLink = { href: string; label: string };
 const DEFAULT_POLICIES: PolicyLink[] = [
   { href: '/locations/yankton', label: 'Yankton Location' },
   { href: '/terms', label: 'Terms' },
+  { href: '/policies/refund-policy', label: 'Returns' },
   { href: '/privacy', label: 'Privacy' },
   { href: '/cookies', label: 'Cookies' },
   { href: '/security', label: 'Security' },
@@ -19,7 +20,7 @@ const DEFAULT_POLICIES: PolicyLink[] = [
 
 /**
  * BroadsheetFooter — ink-900 footer with gold double top rule.
- * Top row: policy links (Terms · Privacy · Cookies · Security · Status).
+ * Top row: location and policy links.
  * Bottom row: brand + copyright.
  */
 export default function BroadsheetFooter({

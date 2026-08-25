@@ -36,6 +36,7 @@ const STATIC_ROUTES = [
   'contact',
   'privacy',
   'terms',
+  'policies/refund-policy',
   'cookies',
 ];
 
