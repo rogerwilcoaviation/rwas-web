@@ -58,6 +58,9 @@ assert.match(
 assert.match(plannerData, /GDU 116B interfaces with a supported external GPS\/NAV navigator/);
 assert.match(plannerData, /Do not add a GAD 29D merely because/);
 assert.match(planner, /The selected GAD 29D requires its connector kit/);
+assert.match(planner, /View photo, details and compatibility for/);
+assert.match(planner, /Product details/);
+assert.match(planner, /setDetailSku\(item\.sku\)/);
 assert.equal((plannerData.match(/8D\|6420093-5\|969\|/g) || []).length, 2);
 assert.equal((plannerData.match(/title: 'Panel Accessories'/g) || []).length, 2);
 assert.match(plannerData, /CHRONOS CH93MAX/);
