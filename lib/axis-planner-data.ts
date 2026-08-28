@@ -372,7 +372,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '1',
       title: 'Select Displays',
       guidance:
-        'Choose up to four AXIS displays. Mix formats as panel space and the approved configuration allow.',
+        'Choose up to four AXIS displays. Mix formats as panel space and the approved configuration allow. No AXIS display contains the autopilot itself. When connected to a GFC 500, the selected AXIS GDU displays flight-director cues, autopilot modes and status; the separate GMC 507 remains the dedicated autopilot mode controller and is included with the aircraft-specific GFC 500 package selected in Step 5.',
     },
     {
       id: '1A',
@@ -458,7 +458,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '1',
       title: 'Select Displays',
       guidance:
-        'Choose up to six displays. AXIS X models are non-TSO; certified displays with integrated IFR GPS/radios may be mixed into an experimental system.',
+        'Choose up to six displays. AXIS X models are non-TSO; certified displays with integrated IFR GPS/radios may be mixed into an experimental system. No AXIS display contains the autopilot itself. When connected to a GFC 500, the selected AXIS GDU displays flight-director cues, autopilot modes and status; the separate GMC 507 remains the dedicated autopilot mode controller and is included with the aircraft-specific GFC 500 package selected in Step 5.',
     },
     {
       id: '1A',
