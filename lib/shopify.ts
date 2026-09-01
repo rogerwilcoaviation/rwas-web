@@ -206,7 +206,7 @@ const PRODUCT_TYPE_COLLECTIONS: Record<
     productType: 'Avionics — Experimental',
   },
   'pilot-gear': {
-    title: 'Pilot Gear',
+    title: 'Pilot Gear: Headsets, Handheld GPS & Accessories',
     productType: 'Pilot Gear',
   },
   'watches-accessories': {

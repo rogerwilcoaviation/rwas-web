@@ -15,7 +15,7 @@ import { Suspense } from 'react';
 const pageUrl = 'https://www.rogerwilcoaviation.com/axis-system-planner';
 
 export const metadata = genPageMetadata({
-  title: 'Garmin AXIS System Planner — Certified & Experimental | RWAS',
+  title: 'Garmin AXIS Planner — Certified & Experimental | RWAS',
   description:
     'Plan Garmin AXIS hardware for certified or experimental aircraft, compare manufacturer list pricing, and request an RWAS installation quote.',
   image:
