@@ -56,7 +56,8 @@ def load_data():
 def save_data(data):
     data["meta"]["last_updated"] = datetime.now(timezone.utc).isoformat()
     with open(JSON_PATH, 'w') as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, indent=2, ensure_ascii=False)
+        f.write("\n")
 
 def list_pending():
     data = load_data()

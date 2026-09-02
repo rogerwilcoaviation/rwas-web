@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-09-02T11:55:00+00:00",
+    "last_updated": "2026-09-02T12:37:17.618277+00:00",
     "total_articles": 31,
     "categories": [
       "regulatory",
@@ -40,11 +40,13 @@
       "social": {
         "facebook": {
           "text": "You’re invited to Garmin Aviation’s Salem Fly-In and Open House on Thursday, September 17. Registered guests can tour the facility, see avionics demonstrations, attend seminars, enter Garmin product prize drawings, and enjoy dinner. RSVP by September 7; space is first come, first served.\n\nRead more: https://www.rogerwilcoaviation.com/blog/garmin-salem-aviation-open-house-2026\n\n#GarminAviation #Avionics #GeneralAviation #AircraftOwners #FlyIn #SalemOregon #RogerWilcoAviation",
-          "status": "pending"
+          "status": "approved",
+          "approved_at": "2026-09-02T12:37:17.569449+00:00"
         },
         "instagram": {
           "text": "Want a behind-the-scenes look at Garmin Aviation? ✈️\n\nGarmin’s Salem Fly-In and Open House is Thursday, September 17, from 3–7 p.m. Tour the facility, see avionics demonstrations, attend seminars, enter prize drawings, and enjoy dinner. RSVP by September 7; space is first come, first served.\n\nGarmin.com/salemflyin\n\n#GarminAviation #Avionics #GeneralAviation #FlyIn #AircraftOwners #PilotLife #SalemOregon #RWAS",
-          "status": "pending"
+          "status": "approved",
+          "approved_at": "2026-09-02T12:37:17.618122+00:00"
         }
       },
       "approved_at": "2026-09-02T11:55:00+00:00",
