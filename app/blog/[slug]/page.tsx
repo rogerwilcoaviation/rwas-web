@@ -254,6 +254,10 @@ export default async function BlogArticlePage({
   const videoEmbedUrl = youtubeEmbedUrl(
     (article as { video_url?: string }).video_url,
   );
+  const ctaLabel = (article as { cta_label?: string }).cta_label;
+  const ctaUrl = (article as { cta_url?: string }).cta_url;
+  const articleImageAlt =
+    (article as { image_alt?: string }).image_alt || article.title;
   const relatedServiceLinks = serviceLinksForBlogArticle(article);
 
   const siteUrl = 'https://www.rogerwilcoaviation.com';
@@ -382,12 +386,45 @@ export default async function BlogArticlePage({
             {article.image ? (
               <figure style={{ margin: '0 0 18px' }}>
                 <Specimen variant="hero">
-                  <img
-                    src={article.image}
-                    alt={article.image_alt || article.title}
-                    style={{ width: '100%', display: 'block' }}
-                  />
+                  <a
+                    href="#article-image-zoom"
+                    className="bs-product-image-link"
+                    aria-label={`Expand ${articleImageAlt}`}
+                  >
+                    <img
+                      src={article.image}
+                      alt={articleImageAlt}
+                      style={{ width: '100%', display: 'block' }}
+                    />
+                    <span>Click image to enlarge</span>
+                  </a>
                 </Specimen>
+                <div
+                  id="article-image-zoom"
+                  className="bs-product-image-lightbox"
+                  aria-label={`Expanded ${articleImageAlt}`}
+                >
+                  <a
+                    className="bs-product-image-lightbox__backdrop"
+                    href="#"
+                    aria-label="Close expanded image"
+                  />
+                  <div className="bs-product-image-lightbox__panel">
+                    <a
+                      className="bs-product-image-lightbox__close"
+                      href="#"
+                      aria-label="Close expanded image"
+                    >
+                      ×
+                    </a>
+                    <img
+                      src={article.image}
+                      alt={articleImageAlt}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </div>
                 {(article as { image_credit?: string }).image_credit ? (
                   <figcaption className="np-kicker" style={{ marginTop: '6px' }}>
                     <a
@@ -415,6 +452,18 @@ export default async function BlogArticlePage({
             ) : null}
 
             <p className="np-body-text np-drop">{article.lead}</p>
+            {ctaLabel && ctaUrl ? (
+              <p style={{ margin: '18px 0 22px' }}>
+                <a
+                  className="bs-cta-primary"
+                  href={ctaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {ctaLabel}
+                </a>
+              </p>
+            ) : null}
             {videoEmbedUrl ? (
               <figure style={{ margin: '18px 0' }}>
                 <div
