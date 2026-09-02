@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-08-19T00:57:01.508320+00:00",
-    "total_articles": 30,
+    "last_updated": "2026-09-02T11:55:00+00:00",
+    "total_articles": 31,
     "categories": [
       "regulatory",
       "product-update",
@@ -12,6 +12,42 @@
     ]
   },
   "articles": [
+    {
+      "id": "garmin-salem-aviation-open-house-2026",
+      "status": "published",
+      "category": "press-release",
+      "title": "Tour Garmin Aviation’s Salem Facility on September 17",
+      "subtitle": "Garmin’s 2026 Aviation Fly-In and Open House includes facility tours, avionics demonstrations, seminars, prize drawings, and dinner",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Desk",
+      "date": "2026-09-02",
+      "source": "Garmin Aviation Fly-In and Open House Invitation",
+      "source_url": "https://www.garmin.com/salemflyin",
+      "image": "/images/blog/garmin-salem-open-house-20260917.jpg",
+      "image_alt": "Garmin Aviation Fly-In and Open House invitation for September 17, 2026, at Garmin’s Salem Airport facility.",
+      "lead": "Garmin is inviting pilots, aircraft owners, and aviation enthusiasts to its 2026 Aviation Fly-In and Open House in Salem, Oregon, on Thursday, September 17, from 3–7 p.m. Registered guests can tour the facility, see avionics demonstrations, attend seminars, enter prize drawings, and enjoy dinner.",
+      "body": [],
+      "body_markdown": "## A Rare Look Inside Garmin Aviation\n\nHave you ever wondered what it takes to design, test, and bring modern avionics to the flight deck? Garmin’s Salem open house offers a rare behind-the-scenes look at the people, technology, and work behind the aviation products that ultimately reach the aircraft panel.\n\nFor pilots and aircraft owners following the latest developments in retrofit avionics, including Garmin’s new AXIS flight display system, this is an opportunity to see the scale of engineering and development behind the equipment.\n\n## Event Details\n\n- **Date:** Thursday, September 17, 2026\n- **Time:** 3–7 p.m.\n- **Location:** Garmin facility at Salem Airport (KSLE), 2345 Turner Road SE, Salem, Oregon\n- **RSVP deadline:** Monday, September 7\n- **Registration:** Required and available on a first-come, first-served basis\n\n## What to Expect\n\nRegistered guests can look forward to:\n\n- Behind-the-scenes facility tours\n- Garmin aviation product demonstrations\n- Informational seminars\n- Garmin product prize drawings\n- Dinner\n\n## Flying In or Driving?\n\nPilots flying to **Salem Airport (KSLE)** should plan for Garmin’s facility on the east side of the airport. Garmin associates will direct arriving guests to ramp parking.\n\nGuests driving to the event can park at the Garmin facility at **2345 Turner Road SE, Salem, Oregon**.\n\nPlease note that Garmin does not permit photography or video during the event or facility tours.\n\n## Reserve Your Spot\n\nSpace is limited, registration is first come, first served, and an RSVP is required by **Monday, September 7**.\n\n[RSVP directly with Garmin](https://www.garmin.com/salemflyin)\n\nQuestions about the event may be sent to salemflyin@garmin.com.\n\nRoger Wilco Aviation Services LLC is pleased to share this invitation with our customers and fellow aviation enthusiasts. If you attend, we hope you enjoy the opportunity to see Garmin Aviation from the inside.",
+      "tags": [
+        "garmin",
+        "salem-open-house",
+        "aviation-fly-in",
+        "avionics",
+        "axis"
+      ],
+      "social": {
+        "facebook": {
+          "text": "You’re invited to Garmin Aviation’s Salem Fly-In and Open House on Thursday, September 17. Registered guests can tour the facility, see avionics demonstrations, attend seminars, enter Garmin product prize drawings, and enjoy dinner. RSVP by September 7; space is first come, first served.\n\nRead more: https://www.rogerwilcoaviation.com/blog/garmin-salem-aviation-open-house-2026\n\n#GarminAviation #Avionics #GeneralAviation #AircraftOwners #FlyIn #SalemOregon #RogerWilcoAviation",
+          "status": "pending"
+        },
+        "instagram": {
+          "text": "Want a behind-the-scenes look at Garmin Aviation? ✈️\n\nGarmin’s Salem Fly-In and Open House is Thursday, September 17, from 3–7 p.m. Tour the facility, see avionics demonstrations, attend seminars, enter prize drawings, and enjoy dinner. RSVP by September 7; space is first come, first served.\n\nGarmin.com/salemflyin\n\n#GarminAviation #Avionics #GeneralAviation #FlyIn #AircraftOwners #PilotLife #SalemOregon #RWAS",
+          "status": "pending"
+        }
+      },
+      "approved_at": "2026-09-02T11:55:00+00:00",
+      "published_at": "2026-09-02T11:55:00+00:00"
+    },
     {
       "id": "garmin-expands-gfc-600-approval-for-cessna-310-models-20260818",
       "status": "published",
