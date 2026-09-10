@@ -1,3 +1,5 @@
+import { isCartPurchaseException } from '../../lib/cart-purchase-exceptions';
+
 /*
  * Cloudflare Pages Function — /api/cart
  *
@@ -108,7 +110,7 @@ const CART_FIELDS = `
 const CART_QUERY = `query Cart($cartId: ID!) { cart(id: $cartId) { ${CART_FIELDS} } }`;
 
 const MERCHANDISE_PRODUCT_QUERY = `query MerchandiseProduct($id: ID!) {
-  node(id: $id) { ... on ProductVariant { product { productType title handle tags } } }
+  node(id: $id) { ... on ProductVariant { id sku product { id productType title handle tags } } }
 }`;
 
 const CART_CREATE = `
@@ -181,7 +183,11 @@ async function assertCartEligible(env: Env, merchandiseId: string) {
     })) as
       | {
           node?: {
+            id?: string;
+            sku?: string | null;
             product?: {
+              id?: string;
+              handle?: string;
               productType?: string | null;
               title?: string | null;
               tags?: string[] | null;
@@ -190,6 +196,9 @@ async function assertCartEligible(env: Env, merchandiseId: string) {
         }
       | undefined;
     const product = data?.node?.product;
+    if (isCartPurchaseException({ product, variant: data?.node })) {
+      return;
+    }
     const productType = product?.productType;
     const tags = new Set(
       (product?.tags || []).map((tag) => tag.trim().toLowerCase()),

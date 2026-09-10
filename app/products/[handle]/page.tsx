@@ -22,6 +22,7 @@
 import type { Metadata } from 'next';
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
+import { isCartPurchaseExceptionProduct } from '@/lib/cart-purchase-exceptions';
 import PdpPriceCard, {
   type PdpVariant,
 } from '@/components/shopify/PdpPriceCard';
@@ -1107,6 +1108,10 @@ export default async function ProductDetailPage({
     product.productType,
     product.collections || [],
   );
+  const cartPurchaseException = isCartPurchaseExceptionProduct(product);
+  if (cartPurchaseException) {
+    gating.otc = 'eligible';
+  }
   const imageCandidates = productImageCandidates(product);
   const heroImg =
     imageCandidates.find(
@@ -1439,6 +1444,7 @@ export default async function ProductDetailPage({
               mapLocked={gating.mapLocked}
               showQuoteRetailPrice={showDualG5KitDetails}
               isDealerInstall={gating.isDealerInstall}
+              cartPurchaseException={cartPurchaseException}
             />
           </div>
         </section>

@@ -1,3 +1,4 @@
+import { isCartPurchaseExceptionProduct } from '@/lib/cart-purchase-exceptions';
 import { Button } from '@/components/shared/ui/button';
 import {
   ShopifyCollectionProduct,
@@ -31,7 +32,9 @@ export default function ProductCard({
   product: ShopifyCollectionProduct;
   collectionHandle: string;
 }) {
-  const quoteOnly = isQuoteCollection(collectionHandle);
+  const cartPurchaseException = isCartPurchaseExceptionProduct(product);
+  const quoteOnly =
+    isQuoteCollection(collectionHandle) && !cartPurchaseException;
   // Collection grids NEVER show Add-to-cart per product direction
   // (2026-04-21 PM). The buy button lives only on the PDP, where the gate
   // in app/products/[handle]/page.tsx still consults isOtcCollection /
@@ -42,7 +45,10 @@ export default function ProductCard({
   const otcEligible = false;
   const dealerOnly =
     quoteOnly ||
-    product.tags?.some((tag) => tag.toLowerCase() === 'garmin-dealer-only') ||
+    (!cartPurchaseException &&
+      product.tags?.some(
+        (tag) => tag.toLowerCase() === 'garmin-dealer-only',
+      )) ||
     Number(product.priceRange.minVariantPrice.amount) === 0;
   const price = dealerOnly
     ? null
@@ -72,11 +78,13 @@ export default function ProductCard({
     secondaryCta = { label: 'Add to cart', href: addToCartHref };
   }
 
-  const badgeLabel = quoteOnly
-    ? 'Quote-request item'
-    : otcEligible
-      ? 'In stock \u00b7 OTC'
-      : null;
+  const badgeLabel = cartPurchaseException
+    ? 'Dealer install · Available to order'
+    : quoteOnly
+      ? 'Quote-request item'
+      : otcEligible
+        ? 'In stock \u00b7 OTC'
+        : null;
   const displayImage =
     product.images?.find(
       (image) => !isShopifyPlaceholderImage(image.url, image.altText),

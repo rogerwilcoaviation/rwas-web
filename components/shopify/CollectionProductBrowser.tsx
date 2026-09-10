@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { isCartPurchaseExceptionProduct } from '@/lib/cart-purchase-exceptions';
 import { useMemo, useState } from 'react';
 import {
   isShopifyPlaceholderImage,
@@ -122,6 +123,7 @@ function productFamily(product: CollectionBrowserProduct) {
 function purchaseMode(product: CollectionBrowserProduct, quoteOnly: boolean) {
   const tags = product.tags?.map((tag) => tag.toLowerCase()) || [];
   const price = Number(product.priceRange.minVariantPrice.amount || '0');
+  if (price > 0 && isCartPurchaseExceptionProduct(product)) return 'otc-ready';
   if (quoteOnly || tags.includes('garmin-dealer-only') || price <= 0)
     return 'quote-request';
   if (tags.includes('otc-eligible')) return 'otc-ready';
@@ -225,8 +227,9 @@ function ProductTile({
   const contactHref = firstVariant?.sku
     ? `/contact?sku=${encodeURIComponent(firstVariant.sku)}&product=${encodeURIComponent(product.title)}`
     : `/contact?product=${encodeURIComponent(product.title)}`;
-  const badge =
-    mode === 'quote-request'
+  const badge = isCartPurchaseExceptionProduct(product)
+    ? 'Dealer install · Available to order'
+    : mode === 'quote-request'
       ? 'Quote-request item'
       : mode === 'otc-ready'
         ? 'Retail · OTC eligible'

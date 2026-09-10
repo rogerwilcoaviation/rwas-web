@@ -41,6 +41,7 @@ export type PdpPriceCardProps = {
   mapLocked: boolean;
   showQuoteRetailPrice?: boolean;
   isDealerInstall?: boolean;
+  cartPurchaseException?: boolean;
 };
 
 function formatPrice(amount: string, currencyCode: string) {
@@ -104,6 +105,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
     mapLocked,
     showQuoteRetailPrice = false,
     isDealerInstall = false,
+    cartPurchaseException = false,
   } = props;
 
   const [selectedId, setSelectedId] = useState<string>(variants[0]?.id || '');
@@ -261,7 +263,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
           <Link className="bs-cta-primary" href={contactHref}>
             Contact us for package pricing
           </Link>
-        ) : isDealerInstall ? (
+        ) : isDealerInstall && !cartPurchaseException ? (
           <Link className="bs-cta-primary" href={contactHref}>
             Contact us for package pricing
           </Link>

@@ -1,6 +1,13 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
+const cartPurchaseExceptions = JSON.parse(
+  readFileSync(
+    new URL('../data/cart-purchase-exceptions.json', import.meta.url),
+    'utf8',
+  ),
+);
+
 const workerPath = resolve('.vercel/output/static/_worker.js/index.js');
 
 const redirects = {
@@ -489,11 +496,11 @@ if (rwasUrl.pathname === "/api/contact") {
 const rwasCartFixed = rwasCart
   .replace(
     'const q={cart:',
-    'const q={product:"query MerchandiseProduct($id: ID!) { node(id: $id) { ... on ProductVariant { product { productType title handle tags } } } }",cart:',
+    'const q={product:"query MerchandiseProduct($id: ID!) { node(id: $id) { ... on ProductVariant { id sku product { id productType title handle tags } } } }",cart:',
   )
   .replace(
     'if(!merchandiseId)return j({error:"merchandiseId is required"},400);',
-    'if(!merchandiseId)return j({error:"merchandiseId is required"},400);if(typeof quantity!=="number"||!Number.isInteger(quantity)||quantity<1||quantity>100)return j({error:"quantity must be an integer from 1 to 100"},400);let pt="",tags=[];try{const md=await shop(q.product,{id:merchandiseId});pt=md?.node?.product?.productType||"";tags=(md?.node?.product?.tags||[]).map(x=>String(x).trim().toLowerCase())}catch{}const restricted=tags.some(x=>["garmin-dealer-only","otc-disabled","stock-check-required"].includes(x)),unapproved=pt==="Avionics — Certified"&&!tags.includes("otc-eligible");if(pt==="Garmin Dealer Install"||restricted||unapproved)return j({error:"Cart unavailable for non-OTC Garmin avionics"+(pt?" ("+pt+")":"")+". Contact us for package pricing."},400);',
+    'if(!merchandiseId)return j({error:"merchandiseId is required"},400);if(typeof quantity!=="number"||!Number.isInteger(quantity)||quantity<1||quantity>100)return j({error:"quantity must be an integer from 1 to 100"},400);let pt="",tags=[],exception=false;try{const md=await shop(q.product,{id:merchandiseId});exception=CART_PURCHASE_EXCEPTIONS.some(x=>md?.node?.id===x.variantId&&md?.node?.sku===x.sku&&md?.node?.product?.id===x.productId&&md?.node?.product?.handle===x.handle);pt=md?.node?.product?.productType||"";tags=(md?.node?.product?.tags||[]).map(x=>String(x).trim().toLowerCase())}catch{}const restricted=tags.some(x=>["garmin-dealer-only","otc-disabled","stock-check-required"].includes(x)),unapproved=pt==="Avionics — Certified"&&!tags.includes("otc-eligible");if(!exception&&(pt==="Garmin Dealer Install"||restricted||unapproved))return j({error:"Cart unavailable for non-OTC Garmin avionics"+(pt?" ("+pt+")":"")+". Contact us for package pricing."},400);',
   )
   .replace(
     'if(d?.cartLinesAdd?.userErrors?.length){const f=await shop(q.create,{merchandiseId,quantity});cart=f?.cartCreate?.cart}',
@@ -504,7 +511,12 @@ const rwasCartFixed = rwasCart
     'else{const d=await shop(q.create,{merchandiseId,quantity});if(d?.cartCreate?.userErrors?.length)return j({error:d.cartCreate.userErrors.map(x=>x.message).join("; ")},400);cart=d?.cartCreate?.cart}',
   );
 
-const injected = `${marker}${rwasOpsProxy}${rwasAnalytics}${rwasContactAligned}${rwasCartFixed}const rwasPath=rwasUrl.pathname.replace(/\\/$/,"");if(${JSON.stringify(
+const rwasCartWithExceptions = rwasCartFixed.replace(
+  'CART_PURCHASE_EXCEPTIONS',
+  JSON.stringify(cartPurchaseExceptions),
+);
+
+const injected = `${marker}${rwasOpsProxy}${rwasAnalytics}${rwasContactAligned}${rwasCartWithExceptions}const rwasPath=rwasUrl.pathname.replace(/\\/$/,"");if(${JSON.stringify(
   gonePaths,
 )}.includes(rwasPath))return new Response("Gone",{status:410,headers:{"Cache-Control":"public, max-age=3600","X-Robots-Tag":"noindex, noarchive"}});const rwasTarget=${JSON.stringify(
   redirects,
