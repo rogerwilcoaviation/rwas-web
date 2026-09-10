@@ -43,12 +43,6 @@ export default function Home() {
             <Specimen variant="flat" as="aside" className="bs-toc">
               <div className="bs-toc__title">Today&rsquo;s Edition</div>
               <div className="bs-toc__row">
-                <a href="/blog/garmin-salem-aviation-open-house-2026">
-                  <span>Garmin Salem Open House</span>
-                  <span className="bs-toc__pg">A1 &rarr;</span>
-                </a>
-              </div>
-              <div className="bs-toc__row">
                 <a href="/garmin">
                   <span>Latest From Garmin</span>
                   <span className="bs-toc__pg">A2 &rarr;</span>
@@ -150,77 +144,10 @@ export default function Home() {
           {/* CENTER HERO ----------------------------------------------- */}
           <div>
             <Specimen variant="hero" as="section">
-              <span className="bs-kicker">Featured Event</span>
-              <h1 className="bs-headline bs-headline--section">
-                Tour Garmin Aviation&rsquo;s Salem Facility on September 17
-              </h1>
-              <hr className="section-rule" />
-
-              <Specimen
-                variant="flat"
-                as="figure"
-                className="bs-specimen-figure"
-              >
-                <a href="/blog/garmin-salem-aviation-open-house-2026">
-                  <Specimen.Image
-                    src="/images/blog/garmin-salem-open-house-20260917.jpg"
-                    alt="Garmin Aviation Fly-In and Open House invitation for September 17, 2026"
-                    width={1115}
-                    height={1600}
-                    fetchPriority="high"
-                    decoding="async"
-                  />
-                </a>
-                <Specimen.CaptionRule />
-                <Specimen.Caption numeral="EVENT">
-                  Thursday, September 17 &middot; 3&ndash;7 p.m. &middot; Salem
-                  Airport (KSLE)
-                </Specimen.Caption>
-              </Specimen>
-
-              <div className="bs-body">
-                <p className="bs-drop">
-                  Garmin is inviting pilots, aircraft owners, and aviation
-                  enthusiasts behind the scenes at its Salem, Oregon, facility.
-                  Registered guests can tour the facility, see avionics
-                  demonstrations, attend seminars, enter prize drawings, and
-                  enjoy dinner.
-                </p>
-                <p>
-                  Registration is required, space is first come, first served,
-                  and the RSVP deadline is Monday, September 7.
-                </p>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: 10,
-                    marginTop: 16,
-                  }}
-                >
-                  <a
-                    href="https://www.garmin.com/salemflyin"
-                    className="bs-cta-primary"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    RSVP with Garmin
-                  </a>
-                  <a
-                    href="/blog/garmin-salem-aviation-open-house-2026"
-                    className="bs-cta-secondary"
-                  >
-                    Read Event Details
-                  </a>
-                </div>
-              </div>
-            </Specimen>
-
-            <Specimen variant="hero" as="section">
               <span className="bs-kicker">Featured Tool</span>
-              <h2 className="bs-headline bs-headline--section">
+              <h1 className="bs-headline bs-headline--section">
                 Introducing the AXIS Build-A-System Planner
-              </h2>
+              </h1>
               <hr className="section-rule" />
 
               {/* Hero photo — Garmin AXIS flight display family */}

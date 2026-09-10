@@ -19,7 +19,12 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export default function BlogArticlesFeed() {
   const articles = ((articleData as { articles?: Article[] }).articles || [])
-    .filter((article) => article.status === 'published')
+    // Homepage-only exclusion: the event remains published in the blog.
+    .filter(
+      (article) =>
+        article.status === 'published' &&
+        article.id !== 'garmin-salem-aviation-open-house-2026',
+    )
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 3);
 
