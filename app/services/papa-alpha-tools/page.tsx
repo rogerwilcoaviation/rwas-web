@@ -179,7 +179,7 @@ export default function PapaAlphaToolsPage() {
             </Specimen>
 
             <Specimen variant="hero" as="section">
-              <span className="bs-kicker">Launch Animation</span>
+              <span className="bs-kicker">Launch Video</span>
               <h2 className="bs-headline bs-headline--section">
                 Complete Piper rigging kits, in motion.
               </h2>
@@ -187,9 +187,8 @@ export default function PapaAlphaToolsPage() {
               <PapaAlphaLaunchFrame />
               <div className="bs-body">
                 <p>
-                  A launch piece for the Papa-Alpha complete Piper rigging kit
-                  line, packaged as a self-hosted animation for review and
-                  presentation use.
+                  A narrated launch video for the Papa-Alpha complete Piper
+                  rigging kit line, with sound on playback.
                 </p>
               </div>
               <p>
