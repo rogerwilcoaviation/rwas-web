@@ -1,3 +1,5 @@
+import publicPricePolicy from '../../data/garmin-public-price-policy.json';
+import { stalePublicPriceLines } from '../../lib/cart-native-refresh.mjs';
 import { isCartPurchaseException } from '../../lib/cart-purchase-exceptions';
 
 /*
@@ -36,7 +38,13 @@ type StorefrontMoney = {
 type StorefrontCartLine = {
   id: string;
   quantity: number;
+  cost?: {
+    amountPerQuantity: StorefrontMoney;
+    subtotalAmount: StorefrontMoney;
+    totalAmount: StorefrontMoney;
+  };
   merchandise: {
+    sku?: string;
     id: string;
     title: string;
     price: StorefrontMoney;
@@ -89,9 +97,11 @@ const CART_FIELDS = `
       node {
         id
         quantity
+        cost { amountPerQuantity { amount currencyCode } subtotalAmount { amount currencyCode } totalAmount { amount currencyCode } }
         merchandise {
           ... on ProductVariant {
             id
+            sku
             title
             price { amount currencyCode }
             product {
@@ -139,6 +149,8 @@ const CART_LINES_UPDATE = `
     }
   }
 `;
+
+const CART_REPRICE = `mutation CartReprice($cartId: ID!, $lines: [CartLineUpdateInput!]!) { cartLinesUpdate(cartId: $cartId, lines: $lines) { cart { ${CART_FIELDS} } userErrors { message } } }`;
 
 const CART_LINES_REMOVE = `
   mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
@@ -249,7 +261,10 @@ function flattenCart(c: StorefrontCart | null | undefined) {
 function jsonResponse(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-store',
+    },
   });
 }
 
@@ -263,7 +278,27 @@ export const onRequestGet = async ({ request, env }: Ctx) => {
     const data = (await shopify(env, CART_QUERY, { cartId })) as
       | { cart: StorefrontCart | null }
       | undefined;
-    return jsonResponse({ cart: flattenCart(data?.cart ?? null) });
+    let cart = data?.cart ?? null;
+    const lines = stalePublicPriceLines(cart, publicPricePolicy.products);
+    if (cart && lines.length) {
+      const refreshed = (await shopify(env, CART_REPRICE, {
+        cartId,
+        lines,
+      })) as { cartLinesUpdate?: CartOperation };
+      const result = refreshed?.cartLinesUpdate;
+      if (result?.userErrors?.length)
+        throw new Error(result.userErrors.map((e) => e.message).join('; '));
+      if (
+        !result?.cart ||
+        result.cart.id !== cart.id ||
+        stalePublicPriceLines(result.cart, publicPricePolicy.products).length
+      )
+        throw new Error(
+          'Shopify could not refresh this cart price; please retry.',
+        );
+      cart = result.cart;
+    }
+    return jsonResponse({ cart: flattenCart(cart) });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     return jsonResponse({ error: msg }, 502);

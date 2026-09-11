@@ -13,6 +13,11 @@ type MoneyV2 = { amount: string; currencyCode: string };
 type CartLine = {
   id: string;
   quantity: number;
+  cost?: {
+    amountPerQuantity: MoneyV2;
+    subtotalAmount: MoneyV2;
+    totalAmount: MoneyV2;
+  };
   merchandise: {
     id?: string;
     title: string;
@@ -38,7 +43,8 @@ function formatPrice(amount: string | number, currencyCode: string) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currencyCode,
-    maximumFractionDigits: 0,
+    minimumFractionDigits: Number.isInteger(Number(amount)) ? 0 : 2,
+    maximumFractionDigits: 2,
   }).format(Number(amount));
 }
 
@@ -215,8 +221,18 @@ export default function CartClient() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         {cart.lines.map((line) => {
           const isBusy = busy.has(line.id);
-          const lineTotal =
-            Number(line.merchandise.price.amount) * line.quantity;
+          const unitPrice =
+            line.cost?.amountPerQuantity ?? line.merchandise.price;
+          const lineTotal = line.cost?.totalAmount
+            ? Number(line.cost.totalAmount.amount)
+            : Number(unitPrice.amount) * line.quantity;
+          const lineDiscount = line.cost
+            ? Math.max(
+                0,
+                Number(line.cost.subtotalAmount.amount) -
+                  Number(line.cost.totalAmount.amount),
+              )
+            : 0;
           const variantLabel =
             line.merchandise.title && line.merchandise.title !== 'Default Title'
               ? line.merchandise.title
@@ -293,12 +309,14 @@ export default function CartClient() {
                   ) : null}
 
                   <p className="bs-detail" style={{ margin: 0 }}>
-                    {formatPrice(
-                      line.merchandise.price.amount,
-                      line.merchandise.price.currencyCode,
-                    )}{' '}
-                    each
+                    {formatPrice(unitPrice.amount, unitPrice.currencyCode)} each
                   </p>
+                  {lineDiscount > 0 ? (
+                    <p className="bs-detail" style={{ margin: 0 }}>
+                      Shopify line discount:{' '}
+                      {formatPrice(lineDiscount, unitPrice.currencyCode)}
+                    </p>
+                  ) : null}
 
                   <div
                     style={{

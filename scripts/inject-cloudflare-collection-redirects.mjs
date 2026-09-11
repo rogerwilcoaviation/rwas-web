@@ -1,3 +1,4 @@
+import { stalePublicPriceLines } from '../lib/cart-native-refresh.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -493,10 +494,32 @@ if (rwasUrl.pathname === "/api/contact") {
 
 // Keep the hand-injected Pages fallback aligned with functions/api/cart.ts. The
 // Next-on-Pages worker does not execute the TypeScript function directly.
+const reviewedPriceVariants = JSON.parse(
+  readFileSync(
+    new URL('../data/garmin-public-price-policy.json', import.meta.url),
+    'utf8',
+  ),
+).products.map(({ sku, variantId }) => ({ sku, variantId }));
 const rwasCartFixed = rwasCart
   .replace(
+    'node { id quantity merchandise',
+    'node { id quantity cost { amountPerQuantity { amount currencyCode } subtotalAmount { amount currencyCode } totalAmount { amount currencyCode } } merchandise',
+  )
+  .replace(
+    '... on ProductVariant { id title price',
+    '... on ProductVariant { id sku title price',
+  )
+  .replace(
     'const q={cart:',
-    'const q={product:"query MerchandiseProduct($id: ID!) { node(id: $id) { ... on ProductVariant { id sku product { id productType title handle tags } } } }",cart:',
+    'const q={reprice:"mutation CartReprice($cartId: ID!, $lines: [CartLineUpdateInput!]!) { cartLinesUpdate(cartId: $cartId, lines: $lines) { cart { "+cf+" } userErrors { message } } }",cart:',
+  )
+  .replace(
+    'const d=await shop(q.cart,{cartId});return j({cart:flat(d?.cart??null)})',
+    'const d=await shop(q.cart,{cartId});let cart=d?.cart??null;const lines=stalePublicPriceLines(cart,REVIEWED_PRICE_VARIANTS);if(cart&&lines.length){const fresh=await shop(q.reprice,{cartId,lines}),result=fresh?.cartLinesUpdate;if(result?.userErrors?.length)throw new Error(result.userErrors.map(x=>x.message).join("; "));if(!result?.cart||result.cart.id!==cart.id||stalePublicPriceLines(result.cart,REVIEWED_PRICE_VARIANTS).length)throw new Error("Shopify could not refresh this cart price; please retry.");cart=result.cart}return j({cart:flat(cart)})',
+  )
+  .replace(
+    'const q={reprice:',
+    'const q={product:"query MerchandiseProduct($id: ID!) { node(id: $id) { ... on ProductVariant { id sku product { id productType title handle tags } } } }",reprice:',
   )
   .replace(
     'if(!merchandiseId)return j({error:"merchandiseId is required"},400);',
@@ -511,10 +534,13 @@ const rwasCartFixed = rwasCart
     'else{const d=await shop(q.create,{merchandiseId,quantity});if(d?.cartCreate?.userErrors?.length)return j({error:d.cartCreate.userErrors.map(x=>x.message).join("; ")},400);cart=d?.cartCreate?.cart}',
   );
 
-const rwasCartWithExceptions = rwasCartFixed.replace(
-  'CART_PURCHASE_EXCEPTIONS',
-  JSON.stringify(cartPurchaseExceptions),
-);
+const rwasCartWithExceptions = rwasCartFixed
+  .replace('CART_PURCHASE_EXCEPTIONS', JSON.stringify(cartPurchaseExceptions))
+  .replaceAll('REVIEWED_PRICE_VARIANTS', JSON.stringify(reviewedPriceVariants))
+  .replace(
+    'const cf=',
+    `const stalePublicPriceLines=${stalePublicPriceLines.toString()};const cf=`,
+  );
 
 const injected = `${marker}${rwasOpsProxy}${rwasAnalytics}${rwasContactAligned}${rwasCartWithExceptions}const rwasPath=rwasUrl.pathname.replace(/\\/$/,"");if(${JSON.stringify(
   gonePaths,
