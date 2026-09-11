@@ -26,6 +26,7 @@ import { isCartPurchaseExceptionProduct } from '@/lib/cart-purchase-exceptions';
 import PdpPriceCard, {
   type PdpVariant,
 } from '@/components/shopify/PdpPriceCard';
+import { PdpImageGallery } from '@/components/shopify/PdpImageGallery';
 import {
   PAPA_ALPHA_RIGGING_CHART_ROWS,
   PAPA_ALPHA_RIGGING_KIT_CONTENTS,
@@ -1117,6 +1118,23 @@ export default async function ProductDetailPage({
     imageCandidates.find(
       (image) => !isShopifyPlaceholderImage(image.url, image.altText),
     ) ?? imageCandidates[0];
+  // Scoped visible gallery: Papa-Alpha products with 2+ real photos get
+  // thumbnail browsing. All other products keep the existing hero markup.
+  const galleryImages = (() => {
+    const seen = new Set<string>();
+    const list: Array<{ url: string; altText: string | null }> = [];
+    for (const image of imageCandidates) {
+      if (!image?.url || seen.has(image.url)) continue;
+      if (isShopifyPlaceholderImage(image.url, image.altText)) continue;
+      seen.add(image.url);
+      list.push({ url: image.url, altText: image.altText ?? null });
+    }
+    return list;
+  })();
+  const showPapaAlphaGallery =
+    galleryImages.length > 1 &&
+    ((product.tags || []).some((tag) => /papa-alpha/i.test(tag)) ||
+      /papa-alpha|rigging-tool/i.test(product.handle));
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
   const primaryPrice = product.variants[0]?.price;
@@ -1306,7 +1324,13 @@ export default async function ProductDetailPage({
         {/* Hero — photo + summary */}
         <section className="bs-hero">
           <figure className="bs-photo-box">
-            {heroImg ? (
+            {showPapaAlphaGallery ? (
+              <PdpImageGallery
+                images={galleryImages}
+                title={product.title}
+                handle={handle}
+              />
+            ) : heroImg ? (
               <>
                 <a
                   className="bs-product-image-link"
