@@ -23,6 +23,11 @@ const POLICY_SOURCE = {
 };
 
 const OTC_RETAIL_PRODUCTS = [
+  // Exact green OTC rows in retained August 2026 Rev 5 catalog p22.
+  // Duplicate identities still require the canonical-ID public-price reconciler.
+  { sku: '010-12493-11', family: 'G5 Lightning Protection Installation Kit' },
+  { sku: '011-04349-90', family: 'GMU 11 Installation Kit' },
+  { sku: '010-01071-55', family: 'GSU 25C AOA Component' },
   { sku: '010-02232-60', family: 'GNC 355A' },
   { sku: '010-02232-61', family: 'GNC 355A' },
   { sku: '010-01822-60', family: 'GPS 175 International' },

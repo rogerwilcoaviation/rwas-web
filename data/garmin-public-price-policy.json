@@ -184,6 +184,78 @@
       "publicPrice": "170.00",
       "previousRetail": "180.00",
       "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-12493-11",
+      "productId": "gid://shopify/Product/8961791131867",
+      "variantId": "gid://shopify/ProductVariant/47408724017371",
+      "handle": "lightning-protection-module-with-g5-installation-kit-faa-pma",
+      "publicPrice": "120.00",
+      "previousRetail": "135.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "011-04349-90",
+      "productId": "gid://shopify/Product/8961764458715",
+      "variantId": "gid://shopify/ProductVariant/47408699080923",
+      "handle": "gmu-11-installation-kit",
+      "publicPrice": "70.00",
+      "previousRetail": "70.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-01287-00",
+      "productId": "gid://shopify/Product/8961762459867",
+      "variantId": "gid://shopify/ProductVariant/47408697344219",
+      "handle": "gi-260-aoa",
+      "publicPrice": "335.00",
+      "previousRetail": "420.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-01071-55",
+      "productId": "gid://shopify/Product/9342818320603",
+      "variantId": "gid://shopify/ProductVariant/48758719709403",
+      "handle": "garmin-gsu-25c-unit-only-010-01071-55",
+      "publicPrice": "910.00",
+      "previousRetail": "1100.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-01074-00",
+      "productId": "gid://shopify/Product/8961756430555",
+      "variantId": "gid://shopify/ProductVariant/47408692297947",
+      "handle": "gap26-unit-only",
+      "publicPrice": "315.00",
+      "previousRetail": "380.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-02480-01",
+      "productId": "gid://shopify/Product/8961769504987",
+      "variantId": "gid://shopify/ProductVariant/47408703504603",
+      "handle": "gtr-205-standard-kit",
+      "publicPrice": "2595.00",
+      "previousRetail": "2895.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-02481-01",
+      "productId": "gid://shopify/Product/8961764917467",
+      "variantId": "gid://shopify/ProductVariant/47408699572443",
+      "handle": "gnc-215-standard-kit",
+      "publicPrice": "4975.00",
+      "previousRetail": "5595.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-01074-20",
+      "productId": "gid://shopify/Product/8961827766491",
+      "variantId": "gid://shopify/ProductVariant/47408761110747",
+      "handle": "top-assy-gap26-unit-only-htr-control",
+      "publicPrice": "670.00",
+      "previousRetail": "820.00",
+      "canonicalIdentityReviewed": true
     }
   ]
 }
