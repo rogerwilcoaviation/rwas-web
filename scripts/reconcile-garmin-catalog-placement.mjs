@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import { assertReviewedCommercialWrites } from './garmin-commercial-review.mjs';
 
 const SHOPIFY_ENV_PATH =
   process.env.RWAS_SHOPIFY_ENV_PATH ||
@@ -47,6 +48,9 @@ const REQUIRED_STOREFRONT_PUBLICATIONS = [
 // The exact SKU set below is the intersection of those approved families,
 // active Shopify products, and the current Garmin list-price authority.
 const APPROVED_CERTIFIED_OTC = new Set([
+  '010-02232-60',
+  '010-02232-61',
+  '010-01822-60',
   '010-02232-00',
   '010-02232-50',
   '010-02232-51',
@@ -1198,7 +1202,10 @@ async function main() {
         .join(', ')}`,
     );
   }
-  if (apply) await applyPlan(plan, collections);
+  if (apply) {
+    assertReviewedCommercialWrites(plan.changes.map((record) => record.sku));
+    await applyPlan(plan, collections);
+  }
 
   let afterProducts = products;
   let afterCollections = collections;

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import { assertReviewedCommercialWrites } from './garmin-commercial-review.mjs';
 
 const SHOPIFY_ENV_PATH =
   process.env.RWAS_SHOPIFY_ENV_PATH ||
@@ -576,6 +577,7 @@ function delay(milliseconds) {
 
 async function main() {
   const apply = process.argv.includes('--apply');
+  if (apply) assertReviewedCommercialWrites([...MANAGED_SKUS]);
   loadEnv(SHOPIFY_ENV_PATH);
   const priceAuthority = JSON.parse(
     fs.readFileSync(PRICE_AUTHORITY_PATH, 'utf8'),
