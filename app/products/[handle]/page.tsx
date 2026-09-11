@@ -1134,7 +1134,7 @@ export default async function ProductDetailPage({
   const showPapaAlphaGallery =
     galleryImages.length > 1 &&
     ((product.tags || []).some((tag) => /papa-alpha/i.test(tag)) ||
-      /papa-alpha|rigging-tool/i.test(product.handle));
+      (/papa-alpha/i.test(product.handle) || product.handle === 'pa-36-flap-rigging-tool-1'));
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
   const primaryPrice = product.variants[0]?.price;

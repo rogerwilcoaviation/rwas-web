@@ -11,7 +11,7 @@
 // active thumbnail, aria-live position counter. Keyboard free via buttons.
 // ============================================================================
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { productImageAlt, productImageUrl } from '@/lib/product-image';
 
 export interface PdpGalleryImage {
@@ -27,6 +27,7 @@ interface Props {
 
 export function PdpImageGallery({ images, title, handle }: Props) {
   const [index, setIndex] = useState(0);
+  const dialog = useRef<HTMLDialogElement>(null);
   const total = images.length;
   const current = images[Math.min(index, total - 1)];
   if (!current) return null;
@@ -35,6 +36,12 @@ export function PdpImageGallery({ images, title, handle }: Props) {
   return (
     <>
       <style>{`
+        .pa-gallery-open { width: 100%; border: 0; padding: 0; text-align: left; }
+        .pa-gallery-dialog { border: 0; background: transparent; padding: 24px; max-width: 100vw; max-height: 100dvh; overflow: auto; }
+        .pa-gallery-dialog::backdrop { background: rgba(8,13,23,.84); }
+        .pa-gallery-dialog .bs-product-image-lightbox__panel { max-width: calc(100vw - 48px); }
+        .pa-gallery-dialog .bs-product-image-lightbox__panel img { max-width: 100%; max-height: calc(100dvh - 110px); }
+        .pa-thumb:focus-visible, .pa-gallery-open:focus-visible { outline: 3px solid #235a91; outline-offset: 3px; }
         .pa-thumbs {
           display: flex; gap: 8px;
           margin-top: 10px;
@@ -64,9 +71,10 @@ export function PdpImageGallery({ images, title, handle }: Props) {
           white-space: nowrap;
         }
       `}</style>
-      <a
-        className="bs-product-image-link"
-        href="#product-image-zoom"
+      <button
+        type="button"
+        className="bs-product-image-link pa-gallery-open"
+        onClick={() => dialog.current?.showModal()}
         aria-label={`Open larger image for ${title}`}
       >
         <img
@@ -85,25 +93,28 @@ export function PdpImageGallery({ images, title, handle }: Props) {
           loading="eager"
         />
         <span>Click image to enlarge</span>
-      </a>
-      <div
-        id="product-image-zoom"
-        className="bs-product-image-lightbox"
+      </button>
+      <dialog
+        ref={dialog}
+        className="pa-gallery-dialog"
         aria-label={`Expanded image for ${title}`}
+        onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}
+        onKeyDown={(event) => {
+          if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+            event.preventDefault();
+            setIndex((value) => (value + (event.key === 'ArrowRight' ? 1 : total - 1)) % total);
+          }
+        }}
       >
-        <a
-          className="bs-product-image-lightbox__backdrop"
-          href="#"
-          aria-label="Close expanded image"
-        />
         <div className="bs-product-image-lightbox__panel">
-          <a
+          <button
+            type="button"
             className="bs-product-image-lightbox__close"
-            href="#"
+            onClick={() => dialog.current?.close()}
             aria-label="Close expanded image"
           >
             ×
-          </a>
+          </button>
           <img
             src={productImageUrl(current.url, 1600, current.altText, handle)}
             alt={currentAlt}
@@ -116,7 +127,7 @@ export function PdpImageGallery({ images, title, handle }: Props) {
             decoding="async"
           />
         </div>
-      </div>
+      </dialog>
       <div className="pa-thumbs" aria-label="Product photo thumbnails">
         {images.map((img, i) => (
           <button
