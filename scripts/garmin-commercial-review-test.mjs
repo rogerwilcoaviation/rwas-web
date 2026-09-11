@@ -14,8 +14,8 @@ const p = JSON.parse(
   ),
 );
 assert.equal(p.cartSaleEnabled, false);
-assert.equal(p.products.length, 22);
-assert.equal(new Set(p.products.map((p) => p.sku)).size, 22);
+assert.equal(p.products.length, 30);
+assert.equal(new Set(p.products.map((p) => p.sku)).size, 30);
 let passed = 3;
 for (const e of p.products) {
   assert.ok(Number(e.publicPrice) > 0);
