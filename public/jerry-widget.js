@@ -102,6 +102,7 @@
     '.jerry-widget-msg{display:inline-block;max-width:92%;padding:10px 12px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;line-height:1.35;text-align:left;box-shadow:0 1px 3px rgba(0,0,0,.08);white-space:pre-wrap}' +
     '.jerry-widget-row.user .jerry-widget-msg{background:#1a1a1a;border:1px solid #1a1a1a;color:#f7f4ef}' +
     '.jerry-widget-row.assistant .jerry-widget-msg{background:#fffdf9;border:1px solid #1a1a1a;color:#1a1a1a}' +
+    '.jerry-message-link{display:inline-block;box-sizing:border-box;min-height:44px;max-width:100%;padding:8px 2px;overflow-wrap:anywhere;word-break:break-word;vertical-align:middle;line-height:1.4;color:inherit;text-decoration:underline;text-underline-offset:2px}.jerry-message-link:focus-visible{outline:2px solid currentColor;outline-offset:2px}' +
     '.jerry-widget-error{margin:0 12px 10px;padding:10px 12px;border:1px solid #a33;background:#f7eaea;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;color:#7a1f1f;display:none}' +
     '.jerry-widget-input{display:flex;gap:8px;padding:10px 12px 12px;border-top:1px solid #c8c1b8;background:#ede9e2}' +
     '.jerry-widget-input input{flex:1;min-width:0;border:1px solid #1a1a1a;background:#fffdf9;padding:10px 12px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;color:#1a1a1a;outline:none}' +
@@ -160,21 +161,66 @@
   var send = panel.querySelector('.jerry-widget-send');
   var closeBtn = panel.querySelector('.jerry-widget-close');
 
-  function formatMessage(text) {
-    // Strip INTAKE_COMPLETE, LISTING_DRAFT, LISTING_SAVE JSON blocks
-    text = text.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '');
-    text = text.replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '');
-    text = text.replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '');
-    text = text.replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}\s*$/m, '');
-    text = text.trim();
-    // Basic markdown: **bold**, __bold__, _italic_
-    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-    text = text.replace(/__([^_\n]+)__/g, '<strong>$1</strong>');
-    text = text.replace(/(^|[^_\w*])_([^_\n*]+)_(?=[^_\w*]|$)/g, '$1<em>$2</em>');
-    // Line breaks
-    text = text.replace(/\n/g, '<br>');
-    text = text.split('\n').join('<br>');
-    return text;
+  // Shared safe renderer: keep identical in widget and static newspaper chat.
+  function renderMessage(target, text) {
+    text = String(text || '')
+      .replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '')
+      .replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '')
+      .replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '')
+      .replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}\s*$/m, '')
+      .trim();
+    var fragment = document.createDocumentFragment();
+    // Parse only our small formatting vocabulary. Never parse response HTML.
+    var tokens = /https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_/gi;
+    var cursor = 0;
+    var match;
+    while ((match = tokens.exec(text))) {
+      fragment.appendChild(document.createTextNode(text.slice(cursor, match.index)));
+      var raw = match[0];
+      if (/^https?:\/\//i.test(raw)) {
+        var urlText = raw.replace(/[.,!?:;]+$/, '');
+        // Remove only unmatched closing punctuation, preserving balanced URL paths.
+        var pairs = { ')': '(', ']': '[', '}': '{' };
+        while (pairs[urlText.slice(-1)]) {
+          var close = urlText.slice(-1);
+          var open = pairs[close];
+          if (urlText.split(close).length <= urlText.split(open).length) break;
+          urlText = urlText.slice(0, -1).replace(/[.,!?:;]+$/, '');
+        }
+        var safe = false;
+        try {
+          var url = new URL(urlText);
+          safe = (url.protocol === 'https:' || url.protocol === 'http:') &&
+            !!url.hostname && !url.username && !url.password &&
+            !/[\\\u0000-\u001f\u007f]/.test(urlText) &&
+            !/[\w:@/\\=]/.test(text.charAt(match.index - 1));
+        } catch (e) { /* Invalid URLs remain plain text. */ }
+        if (safe) {
+          var anchor = document.createElement('a');
+          anchor.className = 'jerry-message-link';
+          anchor.setAttribute('href', urlText);
+          anchor.setAttribute('target', '_blank');
+          anchor.setAttribute('rel', 'noopener noreferrer');
+          anchor.textContent = urlText;
+          fragment.appendChild(anchor);
+          fragment.appendChild(document.createTextNode(raw.slice(urlText.length)));
+        } else {
+          fragment.appendChild(document.createTextNode(raw));
+        }
+      } else {
+        var italic = match[3] !== undefined;
+        if (italic && (/[\w*]/.test(text.charAt(match.index - 1)) || /[\w*]/.test(text.charAt(tokens.lastIndex)))) {
+          fragment.appendChild(document.createTextNode(raw));
+        } else {
+          var emphasis = document.createElement(italic ? 'em' : 'strong');
+          renderMessage(emphasis, match[1] || match[2] || match[3]);
+          fragment.appendChild(emphasis);
+        }
+      }
+      cursor = tokens.lastIndex;
+    }
+    fragment.appendChild(document.createTextNode(text.slice(cursor)));
+    target.replaceChildren(fragment);
   }
 
   function render() {
@@ -185,7 +231,7 @@
       var msg = document.createElement('div');
       msg.className = 'jerry-widget-msg';
       if (message.role === 'assistant') {
-        msg.innerHTML = formatMessage(message.content);
+        renderMessage(msg, message.content);
       } else {
         msg.textContent = message.content;
       }
@@ -742,7 +788,7 @@
                 var sEvt = JSON.parse(sLines[si].slice(6));
                 if (sEvt.token) {
                   reply += sEvt.token;
-                  streamMsg.innerHTML = formatMessage(reply);
+                  renderMessage(streamMsg, reply);
                   chat.scrollTop = chat.scrollHeight;
                 }
                 // v3 protocol: final frame carries structured state/action.

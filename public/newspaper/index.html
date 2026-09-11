@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Roger Wilco Aviation Services</title>
 <style>
+.jerry-message-link{display:inline-block;box-sizing:border-box;min-height:44px;max-width:100%;padding:8px 2px;overflow-wrap:anywhere;word-break:break-word;vertical-align:middle;line-height:1.4;color:inherit;text-decoration:underline;text-underline-offset:2px}.jerry-message-link:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body, body * { font-family: Arial, Helvetica, sans-serif !important; font-weight: 700 !important; font-style: normal !important; }
 pre, pre *, code, code * { font-family: monospace !important; font-weight: 400 !important; }
@@ -223,6 +224,68 @@ body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
           var history = [{role:'assistant',content:'Captain Jerry here. Avionics question, service inquiry, or just looking around \u2014 what can I do for you? \u2014 Capt. Jerry, RWAS'}];
           var submitted = false;
 
+  // Shared safe renderer: keep identical in widget and static newspaper chat.
+  function renderMessage(target, text) {
+    text = String(text || '')
+      .replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '')
+      .replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '')
+      .replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '')
+      .replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}\s*$/m, '')
+      .trim();
+    var fragment = document.createDocumentFragment();
+    // Parse only our small formatting vocabulary. Never parse response HTML.
+    var tokens = /https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_/gi;
+    var cursor = 0;
+    var match;
+    while ((match = tokens.exec(text))) {
+      fragment.appendChild(document.createTextNode(text.slice(cursor, match.index)));
+      var raw = match[0];
+      if (/^https?:\/\//i.test(raw)) {
+        var urlText = raw.replace(/[.,!?:;]+$/, '');
+        // Remove only unmatched closing punctuation, preserving balanced URL paths.
+        var pairs = { ')': '(', ']': '[', '}': '{' };
+        while (pairs[urlText.slice(-1)]) {
+          var close = urlText.slice(-1);
+          var open = pairs[close];
+          if (urlText.split(close).length <= urlText.split(open).length) break;
+          urlText = urlText.slice(0, -1).replace(/[.,!?:;]+$/, '');
+        }
+        var safe = false;
+        try {
+          var url = new URL(urlText);
+          safe = (url.protocol === 'https:' || url.protocol === 'http:') &&
+            !!url.hostname && !url.username && !url.password &&
+            !/[\\\u0000-\u001f\u007f]/.test(urlText) &&
+            !/[\w:@/\\=]/.test(text.charAt(match.index - 1));
+        } catch (e) { /* Invalid URLs remain plain text. */ }
+        if (safe) {
+          var anchor = document.createElement('a');
+          anchor.className = 'jerry-message-link';
+          anchor.setAttribute('href', urlText);
+          anchor.setAttribute('target', '_blank');
+          anchor.setAttribute('rel', 'noopener noreferrer');
+          anchor.textContent = urlText;
+          fragment.appendChild(anchor);
+          fragment.appendChild(document.createTextNode(raw.slice(urlText.length)));
+        } else {
+          fragment.appendChild(document.createTextNode(raw));
+        }
+      } else {
+        var italic = match[3] !== undefined;
+        if (italic && (/[\w*]/.test(text.charAt(match.index - 1)) || /[\w*]/.test(text.charAt(tokens.lastIndex)))) {
+          fragment.appendChild(document.createTextNode(raw));
+        } else {
+          var emphasis = document.createElement(italic ? 'em' : 'strong');
+          renderMessage(emphasis, match[1] || match[2] || match[3]);
+          fragment.appendChild(emphasis);
+        }
+      }
+      cursor = tokens.lastIndex;
+    }
+    fragment.appendChild(document.createTextNode(text.slice(cursor)));
+    target.replaceChildren(fragment);
+  }
+
           function renderHistory() {
             var chat = document.getElementById('jerry-chat');
             chat.innerHTML = '';
@@ -230,11 +293,12 @@ body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
               var row = document.createElement('div');
               row.style.cssText = 'display:flex;' + (m.role==='user' ? 'justify-content:flex-end;' : 'justify-content:flex-start;');
               var bubble = document.createElement('div');
-              bubble.style.cssText = 'max-width:88%;padding:7px 10px;font-family:Georgia,serif;font-size:11px;line-height:1.55;' +
+              bubble.style.cssText = 'white-space:pre-wrap;max-width:88%;padding:7px 10px;font-family:Georgia,serif;font-size:11px;line-height:1.55;' +
                 (m.role==='user'
                   ? 'background:rgba(196,154,42,0.2);color:rgba(196,154,42,0.95);border-radius:12px 12px 2px 12px;'
                   : 'background:rgba(255,255,255,0.07);color:rgba(247,244,239,0.88);border-radius:12px 12px 12px 2px;');
-              bubble.textContent = m.content;
+              if (m.role === 'assistant') renderMessage(bubble, m.content);
+              else bubble.textContent = m.content;
               row.appendChild(bubble);
               chat.appendChild(row);
             });
