@@ -45,7 +45,8 @@ export function expectedProduct(product, entry) {
   );
   descriptionHtml = descriptionHtml.replace(
     /(<strong>)Garmin list price:(<\/strong>\s*)\$[\d,.]+/gi,
-    `$1Equipment price:$2$${Number(entry.publicPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+    (_match, open, close) =>
+      `${open}Equipment price:${close}$${Number(entry.publicPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
   );
   return {
     ...product,
@@ -142,9 +143,16 @@ async function main() {
     const all = d.products.nodes.filter((p) =>
       p.variants.nodes.some((v) => v.sku === entry.sku),
     );
-    if (d.products.pageInfo.hasNextPage || all.length !== 1)
+    if (d.products.pageInfo.hasNextPage)
+      throw new Error(`Incomplete SKU inventory ${entry.sku}`);
+    const selected = all.filter((p) => p.id === entry.productId);
+    if (
+      selected.length !== 1 ||
+      (all.length !== 1 && !entry.canonicalIdentityReviewed)
+    )
       throw new Error(`Ambiguous or absent SKU ${entry.sku}`);
-    return comparable(all[0]);
+    expectedProduct(selected[0], entry);
+    return comparable(selected[0]);
   }
   const before = [];
   for (const entry of policy.products)

@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-10",
+  "asOf": "2026-09-11",
   "mode": "public-price-only",
   "cartSaleEnabled": false,
   "products": [
@@ -130,6 +130,60 @@
       "handle": "gnc-215-standard-kit-helo",
       "publicPrice": "5275.00",
       "previousRetail": "5895.00"
+    },
+    {
+      "sku": "010-01823-50",
+      "productId": "gid://shopify/Product/8962777350363",
+      "variantId": "gid://shopify/ProductVariant/47411663700187",
+      "handle": "garmin-gnx-375-gps-navigator-transponder-kit-with-ga-35s-for-certified-aircraft-americas",
+      "publicPrice": "8250.00",
+      "previousRetail": "9395.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-02232-51",
+      "productId": "gid://shopify/Product/8961764851931",
+      "variantId": "gid://shopify/ProductVariant/47408699506907",
+      "handle": "gnc-355-unit-only",
+      "publicPrice": "7750.00",
+      "previousRetail": "8495.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-01822-50",
+      "productId": "gid://shopify/Product/8961868398811",
+      "variantId": "gid://shopify/ProductVariant/47408829432027",
+      "handle": "gps-175",
+      "publicPrice": "5525.00",
+      "previousRetail": "6250.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "K10-00280-01",
+      "productId": "gid://shopify/Product/9066051567835",
+      "variantId": "gid://shopify/ProductVariant/48036267753691",
+      "handle": "garmin-g5-primary-electronic-attitude-display-stcd-for-certified-aircraft-with-lpm",
+      "publicPrice": "2895.00",
+      "previousRetail": "3095.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-02203-K0",
+      "productId": "gid://shopify/Product/8961870659803",
+      "variantId": "gid://shopify/ProductVariant/47408832577755",
+      "handle": "kit-gad-13-gtp-59-conn-kit",
+      "publicPrice": "560.00",
+      "previousRetail": "590.00",
+      "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-02203-00",
+      "productId": "gid://shopify/Product/8961755873499",
+      "variantId": "gid://shopify/ProductVariant/47408691806427",
+      "handle": "gad-13-faa-pma-unit-only",
+      "publicPrice": "170.00",
+      "previousRetail": "180.00",
+      "canonicalIdentityReviewed": true
     }
   ]
 }

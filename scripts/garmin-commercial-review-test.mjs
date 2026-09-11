@@ -14,13 +14,15 @@ const p = JSON.parse(
   ),
 );
 assert.equal(p.cartSaleEnabled, false);
-assert.equal(p.products.length, 16);
-assert.equal(new Set(p.products.map((p) => p.sku)).size, 16);
+assert.equal(p.products.length, 22);
+assert.equal(new Set(p.products.map((p) => p.sku)).size, 22);
 let passed = 3;
 for (const e of p.products) {
   assert.ok(Number(e.publicPrice) > 0);
   assert.ok(Number(e.publicPrice) <= Number(e.previousRetail));
-  assertReviewedCommercialWrites([e.sku]);
+  if (e.canonicalIdentityReviewed)
+    assert.throws(() => assertReviewedCommercialWrites([e.sku]));
+  else assertReviewedCommercialWrites([e.sku]);
   assert.equal(approvedPublicPrice(e.sku).list_price, Number(e.publicPrice));
   const product = {
     id: e.productId,
@@ -50,6 +52,11 @@ for (const e of p.products) {
   assert.ok(!next.tags.includes('otc-disabled'));
   assert.ok(!next.descriptionHtml.includes('dealer-only'));
   assert.ok(!next.descriptionHtml.includes('list price'));
+  assert.ok(
+    next.descriptionHtml.includes(
+      `Equipment price:</strong> $${Number(e.publicPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+    ),
+  );
   assert.equal(next.variants.nodes[0].inventoryPolicy, 'CONTINUE');
   assert.equal(next.variants.nodes[0].taxable, true);
   assert.equal(next.variants.nodes[0].price, e.publicPrice);
@@ -62,7 +69,6 @@ for (const e of p.products) {
   passed += 15;
 }
 for (const sku of [
-  '010-01822-50',
   '010-01561-30',
   '010-02602-00',
   '010-04142-00',
