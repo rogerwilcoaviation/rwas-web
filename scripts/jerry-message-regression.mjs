@@ -51,6 +51,7 @@ const cases = [
   ['HTML unsafe link', '<a href="javascript:alert(1)">click</a>', []],
   ['formatting', '**Bold** and __also bold__ and _italic_', []],
   ['underscore word', 'part_number_suffix', []],
+  ['multiple markers', 'Hello\nLISTING_DRAFT:{}\nLISTING_SAVE:{}', []],
   ['marker stripping', 'Hello\nINTAKE_COMPLETE:{"first_name":"test"}', []],
 ];
 for (const [name, text, expected] of cases) {
@@ -65,7 +66,7 @@ for (const [name, text, expected] of cases) {
     assert.deepEqual(Object.keys(link.attrs).sort(), ['href', 'rel', 'target']);
   }
   if (name === 'multiline') assert.equal(root.textContent, text);
-  if (name === 'marker stripping') assert.equal(root.textContent, 'Hello');
+  if (name === 'marker stripping' || name === 'multiple markers') assert.equal(root.textContent, 'Hello');
   if (name === 'formatting') assert.equal(root.textContent, 'Bold and also bold and italic');
   if (name === 'underscore word') assert.equal(root.textContent, text);
 }

@@ -227,7 +227,10 @@ body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
   // Shared safe renderer: keep identical in widget and static newspaper chat.
   function renderMessage(target, text) {
     text = String(text || '')
-      .replace(/(?:INTAKE_COMPLETE|LISTING_DRAFT|LISTING_SAVE|LISTING_INTAKE_STATE):\{[\s\S]*?\}\s*$/m, '')
+      .replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '')
+      .replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '')
+      .replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '')
+      .replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}\s*$/m, '')
       .trim();
     var fragment = document.createDocumentFragment();
     // Parse only our small formatting vocabulary. Never parse response HTML.
