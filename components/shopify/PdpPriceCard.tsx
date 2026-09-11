@@ -17,7 +17,8 @@
 
 import Link from 'next/link';
 import publicPricePolicy from '@/data/garmin-public-price-policy.json';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { papaAlphaVariantFromSearch } from '@/lib/papa-alpha-variant-selection.mjs';
 
 const CART_STORAGE_KEY = 'rwas-shopify-cart-id';
 
@@ -110,6 +111,19 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
   } = props;
 
   const [selectedId, setSelectedId] = useState<string>(variants[0]?.id || '');
+  useEffect(() => {
+    const syncLinkedVariant = () => {
+      const linkedId = papaAlphaVariantFromSearch(
+        productTitle,
+        variants,
+        window.location.search,
+      );
+      if (linkedId) setSelectedId(linkedId);
+    };
+    syncLinkedVariant();
+    window.addEventListener('popstate', syncLinkedVariant);
+    return () => window.removeEventListener('popstate', syncLinkedVariant);
+  }, [productTitle, variants]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
