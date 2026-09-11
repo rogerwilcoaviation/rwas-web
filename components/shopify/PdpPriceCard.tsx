@@ -16,6 +16,7 @@
  */
 
 import Link from 'next/link';
+import publicPricePolicy from '@/data/garmin-public-price-policy.json';
 import { useMemo, useState } from 'react';
 
 const CART_STORAGE_KEY = 'rwas-shopify-cart-id';
@@ -289,7 +290,11 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
         ) : null}
       </div>
 
-      {showGarminRetailPrice ? (
+      {showGarminRetailPrice &&
+      !publicPricePolicy.products.some(
+        (entry) =>
+          entry.variantId === selected?.id && entry.sku === selected?.sku,
+      ) ? (
         <Link className="bs-cta-secondary" href={contactHref}>
           For package and special pricing please contact us
         </Link>

@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import {
+  approvedPublicPrice,
+  assertReviewedCommercialWrites,
+} from './garmin-commercial-review.mjs';
 
 const SHOPIFY_ENV_PATH =
   process.env.RWAS_SHOPIFY_ENV_PATH ||
@@ -19,6 +23,9 @@ const POLICY_SOURCE = {
 };
 
 const OTC_RETAIL_PRODUCTS = [
+  { sku: '010-02232-60', family: 'GNC 355A' },
+  { sku: '010-02232-61', family: 'GNC 355A' },
+  { sku: '010-01822-60', family: 'GPS 175 International' },
   { sku: '010-02232-00', family: 'GNC 355' },
   { sku: '010-02232-50', family: 'GNC 355' },
   { sku: '010-02232-51', family: 'GNC 355' },
@@ -64,7 +71,10 @@ const OTC_RETAIL_PRODUCTS = [
   { sku: '010-02544-21', family: 'GSB 15' },
   { sku: '010-02544-31', family: 'GSB 15' },
   { sku: 'K11-00024-25', family: 'GFC 500 Mooney M20 Two-Axis Install Kit' },
-  { sku: 'K11-00024-26', family: 'GFC 500 Mooney M20J/M20K Pitch Trim Install Kit' },
+  {
+    sku: 'K11-00024-26',
+    family: 'GFC 500 Mooney M20J/M20K Pitch Trim Install Kit',
+  },
   { sku: 'K11-00024-27', family: 'GFC 500 Mooney M20 Yaw Damper Install Kit' },
 ];
 
@@ -288,11 +298,17 @@ async function findSku(sku) {
   return matches;
 }
 
-async function buildAudit(priceAuthority, collection, policies = OTC_RETAIL_PRODUCTS) {
+async function buildAudit(
+  priceAuthority,
+  collection,
+  policies = OTC_RETAIL_PRODUCTS,
+) {
   const records = [];
   for (const policy of policies) {
     const authority =
-      PUBLIC_PRICE_AUTHORITIES[policy.sku] || priceAuthority.rows[policy.sku];
+      approvedPublicPrice(policy.sku) ||
+      PUBLIC_PRICE_AUTHORITIES[policy.sku] ||
+      priceAuthority.rows[policy.sku];
     if (!authority || !Number.isFinite(Number(authority.list_price))) {
       records.push({
         ...policy,
@@ -460,8 +476,11 @@ async function main() {
     (sku) => !OTC_RETAIL_PRODUCTS.some((policy) => policy.sku === sku),
   );
   if (unknownSkus.length) {
-    throw new Error(`Requested SKU is not in OTC policy: ${unknownSkus.join(', ')}`);
+    throw new Error(
+      `Requested SKU is not in OTC policy: ${unknownSkus.join(', ')}`,
+    );
   }
+  if (apply) assertReviewedCommercialWrites(policies.map((p) => p.sku));
   loadEnv(SHOPIFY_ENV_PATH);
 
   const priceAuthority = JSON.parse(

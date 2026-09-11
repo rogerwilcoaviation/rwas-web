@@ -1,0 +1,135 @@
+{
+  "asOf": "2026-09-10",
+  "mode": "public-price-only",
+  "cartSaleEnabled": false,
+  "products": [
+    {
+      "sku": "010-01823-51",
+      "productId": "gid://shopify/Product/9342821335259",
+      "variantId": "gid://shopify/ProductVariant/48758722756827",
+      "handle": "garmin-kit-gnx-375-ga-35s-international-010-01823-51",
+      "publicPrice": "8250.00",
+      "previousRetail": "9395.00"
+    },
+    {
+      "sku": "010-02232-50",
+      "productId": "gid://shopify/Product/9342822645979",
+      "variantId": "gid://shopify/ProductVariant/48758724100315",
+      "handle": "garmin-kit-gnc-355-w-ga-35s-international-010-02232-50",
+      "publicPrice": "7750.00",
+      "previousRetail": "8495.00"
+    },
+    {
+      "sku": "010-02232-60",
+      "productId": "gid://shopify/Product/9342822711515",
+      "variantId": "gid://shopify/ProductVariant/48758724165851",
+      "handle": "garmin-kit-gnc-355a-w-ga-35s-international-010-02232-60",
+      "publicPrice": "8450.00",
+      "previousRetail": "9195.00"
+    },
+    {
+      "sku": "010-02232-61",
+      "productId": "gid://shopify/Product/9342822809819",
+      "variantId": "gid://shopify/ProductVariant/48758724329691",
+      "handle": "garmin-kit-gnc-355a-w-ga-35s-americas-010-02232-61",
+      "publicPrice": "8450.00",
+      "previousRetail": "9195.00"
+    },
+    {
+      "sku": "010-01822-60",
+      "productId": "gid://shopify/Product/9342821204187",
+      "variantId": "gid://shopify/ProductVariant/48758722625755",
+      "handle": "garmin-kit-gps-175-ga-35-stc-product-registration-international-010-01822-60",
+      "publicPrice": "5525.00",
+      "previousRetail": "6250.00"
+    },
+    {
+      "sku": "010-02325-00",
+      "productId": "gid://shopify/Product/8961786773723",
+      "variantId": "gid://shopify/ProductVariant/47408721428699",
+      "handle": "kit-gi-275-base",
+      "publicPrice": "3695.00",
+      "previousRetail": "3895.00"
+    },
+    {
+      "sku": "010-02325-10",
+      "productId": "gid://shopify/Product/8961871511771",
+      "variantId": "gid://shopify/ProductVariant/47408834183387",
+      "handle": "kit-gi-275-base-eis-w-gea-24",
+      "publicPrice": "4295.00",
+      "previousRetail": "4595.00"
+    },
+    {
+      "sku": "K10-00280-21",
+      "productId": "gid://shopify/Product/9342830575835",
+      "variantId": "gid://shopify/ProductVariant/48758732357851",
+      "handle": "garmin-g5-for-certificated-aircraft-dg-hsi-kit-k10-00280-21",
+      "publicPrice": "3295.00",
+      "previousRetail": "3495.00"
+    },
+    {
+      "sku": "K10-00280-31",
+      "productId": "gid://shopify/Product/9066074767579",
+      "variantId": "gid://shopify/ProductVariant/48036293607643",
+      "handle": "garmin-g5-dg-hsi-stcd-for-certified-aircraft-with-lpm",
+      "publicPrice": "3895.00",
+      "previousRetail": "4095.00"
+    },
+    {
+      "sku": "K10-00202-00",
+      "productId": "gid://shopify/Product/8961867841755",
+      "variantId": "gid://shopify/ProductVariant/47408829104347",
+      "handle": "gi-260-aoa-14-28-volt-unheated",
+      "publicPrice": "1895.00",
+      "previousRetail": "2200.00"
+    },
+    {
+      "sku": "K10-00202-10",
+      "productId": "gid://shopify/Product/8961867808987",
+      "variantId": "gid://shopify/ProductVariant/47408829071579",
+      "handle": "gi-260-aoa-14-volt-heated",
+      "publicPrice": "2045.00",
+      "previousRetail": "2400.00"
+    },
+    {
+      "sku": "K10-00202-20",
+      "productId": "gid://shopify/Product/8961867907291",
+      "variantId": "gid://shopify/ProductVariant/47408829235419",
+      "handle": "gi-260-aoa-28-volt-heated",
+      "publicPrice": "2045.00",
+      "previousRetail": "2400.00"
+    },
+    {
+      "sku": "010-01074-60",
+      "productId": "gid://shopify/Product/8961756496091",
+      "variantId": "gid://shopify/ProductVariant/47408692363483",
+      "handle": "gap26-unit-only-28v",
+      "publicPrice": "550.00",
+      "previousRetail": "700.00"
+    },
+    {
+      "sku": "010-01083-01",
+      "productId": "gid://shopify/Product/8961770094811",
+      "variantId": "gid://shopify/ProductVariant/47408703897819",
+      "handle": "gtx-325",
+      "publicPrice": "2445.00",
+      "previousRetail": "2795.00"
+    },
+    {
+      "sku": "010-02480-02",
+      "productId": "gid://shopify/Product/8961769537755",
+      "variantId": "gid://shopify/ProductVariant/47408703537371",
+      "handle": "gtr-205-standard-kit-helo",
+      "publicPrice": "2845.00",
+      "previousRetail": "3195.00"
+    },
+    {
+      "sku": "010-02481-02",
+      "productId": "gid://shopify/Product/8961764950235",
+      "variantId": "gid://shopify/ProductVariant/47408699605211",
+      "handle": "gnc-215-standard-kit-helo",
+      "publicPrice": "5275.00",
+      "previousRetail": "5895.00"
+    }
+  ]
+}
