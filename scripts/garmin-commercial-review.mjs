@@ -23,7 +23,12 @@ export function approvedPublicPrice(sku) {
 }
 export function assertReviewedCommercialWrites(skus) {
   const held = [...new Set(skus)].filter(
-    (sku) => scope.has(sku) && !approvedPublicPrice(sku),
+    (sku) =>
+      scope.has(sku) &&
+      (!approvedPublicPrice(sku) ||
+        policy.products.some(
+          (p) => p.sku === sku && p.canonicalIdentityReviewed,
+        )),
   );
   if (held.length)
     throw new Error(
