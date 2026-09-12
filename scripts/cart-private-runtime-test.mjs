@@ -99,6 +99,10 @@ try {
       for (const bad of [false, true]) {
         let applied = 0;
         globalThis.fetch = async (url, opt) => {
+          assert.equal(
+            opt.headers['Shopify-Storefront-Buyer-IP'],
+            '192.0.2.20',
+          );
           const { query, variables } = JSON.parse(opt.body);
           if (query.includes('MerchandiseProduct'))
             return Response.json({
@@ -143,10 +147,14 @@ try {
           'https://example.com/api/cart?cartId=cart',
           {
             method,
+            headers: { 'CF-Connecting-IP': '192.0.2.20' },
             ...(method === 'GET'
               ? {}
               : {
-                  headers: { 'Content-Type': 'application/json' },
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'CF-Connecting-IP': '192.0.2.20',
+                  },
                   body: JSON.stringify({
                     cartId: 'cart',
                     merchandiseId: 'v1',
