@@ -503,6 +503,10 @@ const reviewedPriceVariants = JSON.parse(
 ).products.map(({ sku, variantId }) => ({ sku, variantId }));
 const rwasCartFixed = rwasCart
   .replace(
+    '"X-Shopify-Storefront-Access-Token":token',
+    '"X-Shopify-Storefront-Access-Token":token,...(t.headers.get("CF-Connecting-IP")?{"Shopify-Storefront-Buyer-IP":t.headers.get("CF-Connecting-IP")}: {})',
+  )
+  .replace(
     '"Cache-Control":"no-store"',
     '"Cache-Control":"no-store","X-Robots-Tag":"noindex, nofollow, noarchive"',
   )

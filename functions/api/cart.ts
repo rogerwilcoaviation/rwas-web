@@ -26,6 +26,7 @@ import { isCartPurchaseException } from '../../lib/cart-purchase-exceptions';
  */
 
 type Env = {
+  buyerIp?: string;
   SHOPIFY_CART_PRICING_POLICY?: string;
   SHOPIFY_STORE_DOMAIN?: string;
   SHOPIFY_STOREFRONT_ACCESS_TOKEN?: string;
@@ -183,6 +184,7 @@ async function shopify(
     headers: {
       'Content-Type': 'application/json',
       'X-Shopify-Storefront-Access-Token': token,
+      ...(env.buyerIp ? { 'Shopify-Storefront-Buyer-IP': env.buyerIp } : {}),
     },
     body: JSON.stringify({ query, variables }),
   });
@@ -289,6 +291,11 @@ function jsonResponse(body: unknown, status = 200) {
 type Ctx = { request: Request; env: Env };
 
 export const onRequestGet = async ({ request, env }: Ctx) => {
+  // Cloudflare supplies this edge header; never persist or log buyer IPs.
+  env = {
+    ...env,
+    buyerIp: request.headers.get('CF-Connecting-IP') || undefined,
+  };
   const url = new URL(request.url);
   const cartId = url.searchParams.get('cartId');
   if (!cartId) return jsonResponse({ error: 'cartId required' }, 400);
@@ -328,6 +335,11 @@ export const onRequestGet = async ({ request, env }: Ctx) => {
 };
 
 export const onRequestPost = async ({ request, env }: Ctx) => {
+  // Cloudflare supplies this edge header; never persist or log buyer IPs.
+  env = {
+    ...env,
+    buyerIp: request.headers.get('CF-Connecting-IP') || undefined,
+  };
   try {
     const body = (await request.json()) as {
       cartId?: string | null;
@@ -408,6 +420,11 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
 };
 
 export const onRequestPatch = async ({ request, env }: Ctx) => {
+  // Cloudflare supplies this edge header; never persist or log buyer IPs.
+  env = {
+    ...env,
+    buyerIp: request.headers.get('CF-Connecting-IP') || undefined,
+  };
   try {
     const body = (await request.json()) as {
       cartId?: string;
@@ -451,6 +468,11 @@ export const onRequestPatch = async ({ request, env }: Ctx) => {
 };
 
 export const onRequestDelete = async ({ request, env }: Ctx) => {
+  // Cloudflare supplies this edge header; never persist or log buyer IPs.
+  env = {
+    ...env,
+    buyerIp: request.headers.get('CF-Connecting-IP') || undefined,
+  };
   try {
     const body = (await request.json()) as {
       cartId?: string;
