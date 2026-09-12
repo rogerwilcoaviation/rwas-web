@@ -1,0 +1,348 @@
+{
+  "asOf": "2026-09-12",
+  "sourceCollection": "gid://shopify/Collection/533885911259",
+  "variants": [
+    {
+      "productId": "gid://shopify/Product/8950072541403",
+      "variantId": "gid://shopify/ProductVariant/47328307282139",
+      "sku": "R-01",
+      "handle": "rudder-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072541403",
+      "variantId": "gid://shopify/ProductVariant/47328307314907",
+      "sku": "R-02",
+      "handle": "rudder-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072541403",
+      "variantId": "gid://shopify/ProductVariant/47328307347675",
+      "sku": "R-03",
+      "handle": "rudder-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072541403",
+      "variantId": "gid://shopify/ProductVariant/47328307380443",
+      "sku": "R-04",
+      "handle": "rudder-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072541403",
+      "variantId": "gid://shopify/ProductVariant/47328307413211",
+      "sku": "R-05",
+      "handle": "rudder-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072541403",
+      "variantId": "gid://shopify/ProductVariant/47328307445979",
+      "sku": "R-06",
+      "handle": "rudder-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072541403",
+      "variantId": "gid://shopify/ProductVariant/47328307478747",
+      "sku": "R-07",
+      "handle": "rudder-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072541403",
+      "variantId": "gid://shopify/ProductVariant/47328307511515",
+      "sku": "R-08",
+      "handle": "rudder-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072541403",
+      "variantId": "gid://shopify/ProductVariant/47328307544283",
+      "sku": "R-09",
+      "handle": "rudder-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072541403",
+      "variantId": "gid://shopify/ProductVariant/47328307577051",
+      "sku": "R-10",
+      "handle": "rudder-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072574171",
+      "variantId": "gid://shopify/ProductVariant/47328307609819",
+      "sku": "BC-01",
+      "handle": "bell-crank-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072574171",
+      "variantId": "gid://shopify/ProductVariant/47328307642587",
+      "sku": "BC-02",
+      "handle": "bell-crank-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072574171",
+      "variantId": "gid://shopify/ProductVariant/47328307675355",
+      "sku": "BC-03",
+      "handle": "bell-crank-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072574171",
+      "variantId": "gid://shopify/ProductVariant/47328307708123",
+      "sku": "BC-04",
+      "handle": "bell-crank-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072574171",
+      "variantId": "gid://shopify/ProductVariant/47328307740891",
+      "sku": "BC-05",
+      "handle": "bell-crank-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072574171",
+      "variantId": "gid://shopify/ProductVariant/47328307773659",
+      "sku": "BC-06",
+      "handle": "bell-crank-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072574171",
+      "variantId": "gid://shopify/ProductVariant/47328307806427",
+      "sku": "BC-07",
+      "handle": "bell-crank-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072574171",
+      "variantId": "gid://shopify/ProductVariant/47328307839195",
+      "sku": "BC-08",
+      "handle": "bell-crank-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072574171",
+      "variantId": "gid://shopify/ProductVariant/47328307871963",
+      "sku": "BC-09",
+      "handle": "bell-crank-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072574171",
+      "variantId": "gid://shopify/ProductVariant/47328307904731",
+      "sku": "BC-10",
+      "handle": "bell-crank-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072606939",
+      "variantId": "gid://shopify/ProductVariant/47328307937499",
+      "sku": "S-01",
+      "handle": "stabilator-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072606939",
+      "variantId": "gid://shopify/ProductVariant/47328307970267",
+      "sku": "S-02",
+      "handle": "stabilator-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072606939",
+      "variantId": "gid://shopify/ProductVariant/47328308003035",
+      "sku": "S-03",
+      "handle": "stabilator-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072606939",
+      "variantId": "gid://shopify/ProductVariant/47328308035803",
+      "sku": "S-04",
+      "handle": "stabilator-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072606939",
+      "variantId": "gid://shopify/ProductVariant/47328308068571",
+      "sku": "S-05",
+      "handle": "stabilator-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072606939",
+      "variantId": "gid://shopify/ProductVariant/47328308101339",
+      "sku": "S-06",
+      "handle": "stabilator-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072606939",
+      "variantId": "gid://shopify/ProductVariant/47328308134107",
+      "sku": "S-07",
+      "handle": "stabilator-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072639707",
+      "variantId": "gid://shopify/ProductVariant/47348502790363",
+      "sku": "13-26179",
+      "handle": "pa-28-32-34-44-aileron-and-flap-rigging-tool-1"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072639707",
+      "variantId": "gid://shopify/ProductVariant/47348502823131",
+      "sku": "13-26180",
+      "handle": "pa-28-32-34-44-aileron-and-flap-rigging-tool-1"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072705243",
+      "variantId": "gid://shopify/ProductVariant/47328308232411",
+      "sku": "AE-01",
+      "handle": "pa-31-aileron-and-elevator-rigging-tool-1"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072738011",
+      "variantId": "gid://shopify/ProductVariant/47328308265179",
+      "sku": "A-01",
+      "handle": "pa-30-39-aileron-rigging-tool-1"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072770779",
+      "variantId": "gid://shopify/ProductVariant/47328308297947",
+      "sku": "F-01",
+      "handle": "pa-36-flap-rigging-tool-1"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072803547",
+      "variantId": "gid://shopify/ProductVariant/47328308330715",
+      "sku": "RT-01",
+      "handle": "pa-31-rudder-trim-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072803547",
+      "variantId": "gid://shopify/ProductVariant/47328308363483",
+      "sku": "RT-02",
+      "handle": "pa-31-rudder-trim-rigging-tool"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308396251",
+      "sku": "KT-01",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308429019",
+      "sku": "KT-02",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308461787",
+      "sku": "KT-03",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308494555",
+      "sku": "KT-04",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308527323",
+      "sku": "KT-05",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308560091",
+      "sku": "KT-06",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308592859",
+      "sku": "KT-07",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308625627",
+      "sku": "KT-08",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308658395",
+      "sku": "KT-09",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308691163",
+      "sku": "KT-10",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308723931",
+      "sku": "KT-11",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308756699",
+      "sku": "KT-12",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308789467",
+      "sku": "KT-13",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308822235",
+      "sku": "KT-14",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308855003",
+      "sku": "KT-15",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308887771",
+      "sku": "KT-16",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308920539",
+      "sku": "KT-17",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308953307",
+      "sku": "KT-18",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328308986075",
+      "sku": "KT-19",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328309018843",
+      "sku": "KT-20",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328309051611",
+      "sku": "KT-21",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328309084379",
+      "sku": "KT-22",
+      "handle": "rigging-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8950072836315",
+      "variantId": "gid://shopify/ProductVariant/47328309117147",
+      "sku": "KT-23",
+      "handle": "rigging-kit"
+    }
+  ]
+}

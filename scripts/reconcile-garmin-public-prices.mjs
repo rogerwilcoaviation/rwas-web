@@ -265,7 +265,7 @@ async function main() {
       mode: rollback ? 'rollback' : apply ? 'apply' : 'dry-run',
       products: plan.length,
       changes: plan.filter((p) => sha(p.before) !== sha(p.after)).length,
-      cartSaleEnabled: false,
+      containsPrivatePrices: false,
     }),
   );
 }

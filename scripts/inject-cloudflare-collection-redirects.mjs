@@ -1,3 +1,4 @@
+import { applyPrivateCartPricing } from '../lib/cart-private-pricing.mjs';
 import { stalePublicPriceLines } from '../lib/cart-native-refresh.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -502,6 +503,22 @@ const reviewedPriceVariants = JSON.parse(
 ).products.map(({ sku, variantId }) => ({ sku, variantId }));
 const rwasCartFixed = rwasCart
   .replace(
+    '"Cache-Control":"no-store"',
+    '"Cache-Control":"no-store","X-Robots-Tag":"noindex, nofollow, noarchive"',
+  )
+  .replace(
+    'id checkoutUrl totalQuantity cost',
+    'id checkoutUrl totalQuantity discountCodes { code applicable } cost',
+  )
+  .replace(
+    'lines(first: 100) { edges',
+    'lines(first: 100) { pageInfo { hasNextPage } edges',
+  )
+  .replace(
+    'product { title handle featuredImage',
+    'product { id productType tags title handle featuredImage',
+  )
+  .replace(
     'node { id quantity merchandise',
     'node { id quantity cost { amountPerQuantity { amount currencyCode } subtotalAmount { amount currencyCode } totalAmount { amount currencyCode } } merchandise',
   )
@@ -515,7 +532,7 @@ const rwasCartFixed = rwasCart
   )
   .replace(
     'const d=await shop(q.cart,{cartId});return j({cart:flat(d?.cart??null)})',
-    'const d=await shop(q.cart,{cartId});let cart=d?.cart??null;const lines=stalePublicPriceLines(cart,REVIEWED_PRICE_VARIANTS);if(cart&&lines.length){const fresh=await shop(q.reprice,{cartId,lines}),result=fresh?.cartLinesUpdate;if(result?.userErrors?.length)throw new Error(result.userErrors.map(x=>x.message).join("; "));if(!result?.cart||result.cart.id!==cart.id||stalePublicPriceLines(result.cart,REVIEWED_PRICE_VARIANTS).length)throw new Error("Shopify could not refresh this cart price; please retry.");cart=result.cart}return j({cart:flat(cart)})',
+    'const d=await shop(q.cart,{cartId});let cart=d?.cart??null;const lines=cart?.discountCodes?.length?cart.lines.edges.map(x=>({id:x.node.id,quantity:x.node.quantity})):stalePublicPriceLines(cart,REVIEWED_PRICE_VARIANTS);if(cart&&lines.length){const fresh=await shop(q.reprice,{cartId,lines}),result=fresh?.cartLinesUpdate;if(result?.userErrors?.length)throw new Error(result.userErrors.map(x=>x.message).join("; "));if(!result?.cart||result.cart.id!==cart.id||stalePublicPriceLines(result.cart,REVIEWED_PRICE_VARIANTS).length)throw new Error("Shopify could not refresh this cart price; please retry.");cart=result.cart}return j({cart:flat(cart)})',
   )
   .replace(
     'const q={reprice:',
@@ -535,11 +552,23 @@ const rwasCartFixed = rwasCart
   );
 
 const rwasCartWithExceptions = rwasCartFixed
+  .replaceAll(
+    'flat(cart)',
+    'flat(await applyPrivateCartPricing(cart,e.SHOPIFY_CART_PRICING_POLICY,shop,cf))',
+  )
+  .replaceAll(
+    'flat(d?.cartLinesUpdate?.cart??null)',
+    'flat(await applyPrivateCartPricing(d?.cartLinesUpdate?.cart??null,e.SHOPIFY_CART_PRICING_POLICY,shop,cf))',
+  )
+  .replaceAll(
+    'flat(d?.cartLinesRemove?.cart??null)',
+    'flat(await applyPrivateCartPricing(d?.cartLinesRemove?.cart??null,e.SHOPIFY_CART_PRICING_POLICY,shop,cf))',
+  )
   .replace('CART_PURCHASE_EXCEPTIONS', JSON.stringify(cartPurchaseExceptions))
   .replaceAll('REVIEWED_PRICE_VARIANTS', JSON.stringify(reviewedPriceVariants))
   .replace(
     'const cf=',
-    `const stalePublicPriceLines=${stalePublicPriceLines.toString()};const cf=`,
+    `const applyPrivateCartPricing=${applyPrivateCartPricing.toString()};const stalePublicPriceLines=${stalePublicPriceLines.toString()};const cf=`,
   );
 
 const injected = `${marker}${rwasOpsProxy}${rwasAnalytics}${rwasContactAligned}${rwasCartWithExceptions}const rwasPath=rwasUrl.pathname.replace(/\\/$/,"");if(${JSON.stringify(
