@@ -1,7 +1,7 @@
 {
   "asOf": "2026-09-11",
   "mode": "public-price-only",
-  "cartSaleEnabled": false,
+  "containsPrivatePrices": false,
   "products": [
     {
       "sku": "010-01823-51",

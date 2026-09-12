@@ -13,7 +13,7 @@ const p = JSON.parse(
     new URL('../data/garmin-public-price-policy.json', import.meta.url),
   ),
 );
-assert.equal(p.cartSaleEnabled, false);
+assert.equal(p.containsPrivatePrices, false);
 assert.equal(p.products.length, 30);
 assert.equal(new Set(p.products.map((p) => p.sku)).size, 30);
 let passed = 3;
@@ -82,4 +82,4 @@ for (const sku of [
 }
 assertReviewedCommercialWrites(['not-in-scope']);
 passed++;
-console.log(JSON.stringify({ passed, cartSaleEnabled: false }));
+console.log(JSON.stringify({ passed, containsPrivatePrices: false }));

@@ -1,3 +1,4 @@
+import { applyPrivateCartPricing } from '../../lib/cart-private-pricing.mjs';
 import publicPricePolicy from '../../data/garmin-public-price-policy.json';
 import { stalePublicPriceLines } from '../../lib/cart-native-refresh.mjs';
 import { isCartPurchaseException } from '../../lib/cart-purchase-exceptions';
@@ -25,6 +26,7 @@ import { isCartPurchaseException } from '../../lib/cart-purchase-exceptions';
  */
 
 type Env = {
+  SHOPIFY_CART_PRICING_POLICY?: string;
   SHOPIFY_STORE_DOMAIN?: string;
   SHOPIFY_STOREFRONT_ACCESS_TOKEN?: string;
   SHOPIFY_STOREFRONT_API_VERSION?: string;
@@ -61,6 +63,7 @@ type StorefrontCart = {
   id: string;
   checkoutUrl: string;
   totalQuantity: number;
+  discountCodes?: Array<{ code: string; applicable: boolean }>;
   cost: {
     subtotalAmount: StorefrontMoney;
     totalAmount: StorefrontMoney;
@@ -88,11 +91,13 @@ const CART_FIELDS = `
   id
   checkoutUrl
   totalQuantity
+  discountCodes { code applicable }
   cost {
     subtotalAmount { amount currencyCode }
     totalAmount { amount currencyCode }
   }
   lines(first: 100) {
+    pageInfo { hasNextPage }
     edges {
       node {
         id
@@ -105,6 +110,9 @@ const CART_FIELDS = `
             title
             price { amount currencyCode }
             product {
+              id
+              productType
+              tags
               title
               handle
               featuredImage { url altText }
@@ -241,6 +249,15 @@ async function assertCartEligible(env: Env, merchandiseId: string) {
   }
 }
 
+async function priceCart(c: StorefrontCart | null | undefined, env: Env) {
+  return applyPrivateCartPricing(
+    c,
+    env.SHOPIFY_CART_PRICING_POLICY,
+    (q: string, v: Record<string, unknown>) => shopify(env, q, v),
+    CART_FIELDS,
+  );
+}
+
 function flattenCart(c: StorefrontCart | null | undefined) {
   if (!c) {
     return null;
@@ -264,6 +281,7 @@ function jsonResponse(body: unknown, status = 200) {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': 'no-store',
+      'X-Robots-Tag': 'noindex, nofollow, noarchive',
     },
   });
 }
@@ -279,7 +297,11 @@ export const onRequestGet = async ({ request, env }: Ctx) => {
       | { cart: StorefrontCart | null }
       | undefined;
     let cart = data?.cart ?? null;
-    const lines = stalePublicPriceLines(cart, publicPricePolicy.products);
+    const lines = cart?.discountCodes?.length
+      ? cart.lines.edges
+          .map(({ node }) => node && { id: node.id, quantity: node.quantity })
+          .filter(Boolean)
+      : stalePublicPriceLines(cart, publicPricePolicy.products);
     if (cart && lines.length) {
       const refreshed = (await shopify(env, CART_REPRICE, {
         cartId,
@@ -298,7 +320,7 @@ export const onRequestGet = async ({ request, env }: Ctx) => {
         );
       cart = result.cart;
     }
-    return jsonResponse({ cart: flattenCart(cart) });
+    return jsonResponse({ cart: flattenCart(await priceCart(cart, env)) });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     return jsonResponse({ error: msg }, 502);
@@ -373,7 +395,7 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
     }
 
     if (!cart) return jsonResponse({ error: 'Cart operation failed' }, 502);
-    return jsonResponse({ cart: flattenCart(cart) });
+    return jsonResponse({ cart: flattenCart(await priceCart(cart, env)) });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Cart request failed';
     // Shopify reports malformed merchandise IDs and rejected quantities as
@@ -418,7 +440,9 @@ export const onRequestPatch = async ({ request, env }: Ctx) => {
       );
     }
     return jsonResponse({
-      cart: flattenCart(data?.cartLinesUpdate?.cart ?? null),
+      cart: flattenCart(
+        await priceCart(data?.cartLinesUpdate?.cart ?? null, env),
+      ),
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
@@ -454,7 +478,9 @@ export const onRequestDelete = async ({ request, env }: Ctx) => {
       );
     }
     return jsonResponse({
-      cart: flattenCart(data?.cartLinesRemove?.cart ?? null),
+      cart: flattenCart(
+        await priceCart(data?.cartLinesRemove?.cart ?? null, env),
+      ),
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
