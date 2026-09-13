@@ -1,0 +1,4122 @@
+{
+  "reviewedAt": "2026-09-13",
+  "sourceLastAuthenticatedCheck": "2026-09-12",
+  "source": "Garmin Aviation Aftermarket Price Catalog August 2026 Rev5, published August 17; no fixed printed expiration",
+  "sourceSha256": "9dd27419642cfd30a644a2ef97d0cd7c6948dbfb06ea11f2e35fe13ff2b3d519",
+  "products": [
+    {
+      "productId": "gid://shopify/Product/8961740701915",
+      "handle": "antenna-array-gwx-gsx-10",
+      "variantId": "gid://shopify/ProductVariant/47408681386203",
+      "sku": "117-00254-00",
+      "amount": "4500.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961740734683",
+      "handle": "antenna-array-gwx-gsx-12",
+      "variantId": "gid://shopify/ProductVariant/47408681418971",
+      "sku": "117-00254-01",
+      "amount": "5400.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961740832987",
+      "handle": "antenna-doubler-arinc-743-style-ga-36-37",
+      "variantId": "gid://shopify/ProductVariant/47408681517275",
+      "sku": "115-00846-00",
+      "amount": "85.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15,
+        16,
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961740865755",
+      "handle": "antenna-doubler-ga-36-37",
+      "variantId": "gid://shopify/ProductVariant/47408681550043",
+      "sku": "115-00873-00",
+      "amount": "625.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15,
+        16,
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961744863451",
+      "handle": "conn-kit-gma35",
+      "variantId": "gid://shopify/ProductVariant/47408684826843",
+      "sku": "011-02302-00",
+      "amount": "350.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961747157211",
+      "handle": "data-card-gtn-xi-database-americas",
+      "variantId": "gid://shopify/ProductVariant/47408686727387",
+      "sku": "010-02044-10",
+      "amount": "555.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15,
+        16
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961747189979",
+      "handle": "data-card-gtn-xi-database-international",
+      "variantId": "gid://shopify/ProductVariant/47408686760155",
+      "sku": "010-02044-20",
+      "amount": "555.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15,
+        16
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961747222747",
+      "handle": "data-card-gtn-xi-database-worldwide",
+      "variantId": "gid://shopify/ProductVariant/47408686792923",
+      "sku": "010-02044-30",
+      "amount": "655.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15,
+        16
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961747288283",
+      "handle": "data-card-txi-database",
+      "variantId": "gid://shopify/ProductVariant/47408686858459",
+      "sku": "010-03716-10",
+      "amount": "75.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        7,
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961747321051",
+      "handle": "data-card-txi-heli-database",
+      "variantId": "gid://shopify/ProductVariant/47408686891227",
+      "sku": "010-03716-20",
+      "amount": "75.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961865449691",
+      "handle": "g500-txi-alt-preselect-for-s-tec-55x-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408825991387",
+      "sku": "006-D7009-60",
+      "amount": "3145.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        8
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961865547995",
+      "handle": "g500-txi-g600-txi-nv-3-display-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826122459",
+      "sku": "006-D7010-F3",
+      "amount": "7870.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961865580763",
+      "handle": "g500-txi-g600-txi-nv-4-display-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826155227",
+      "sku": "006-D7010-F4",
+      "amount": "9970.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961865613531",
+      "handle": "g500-txi-g600-txi-s-tec-dcfs-2100-1500-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826187995",
+      "sku": "006-D7010-G0",
+      "amount": "7995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961865679067",
+      "handle": "g500-txi-g600-txi-taws-b-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826286299",
+      "sku": "006-D7010-30",
+      "amount": "8395.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866039515",
+      "handle": "g500h-g600-txi-gtn-xi-gwx-8000-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826777819",
+      "sku": "006-D7010-Q0",
+      "amount": "14995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8,
+        15,
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866072283",
+      "handle": "g500h-g600-txi-gtn-xi-radar-agcs-and-td-enablement",
+      "variantId": "gid://shopify/ProductVariant/47408826810587",
+      "sku": "010-D1696-30",
+      "amount": "9995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8,
+        9,
+        15
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961865744603",
+      "handle": "g500h-txi-g600-txi-chartview-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826351835",
+      "sku": "006-D7010-10",
+      "amount": "2095.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8,
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961865810139",
+      "handle": "g500h-txi-g600-txi-nv-1-display-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826482907",
+      "sku": "006-D7010-F1",
+      "amount": "3670.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8,
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961865842907",
+      "handle": "g500h-txi-g600-txi-nv-2-display-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826515675",
+      "sku": "006-D7010-F2",
+      "amount": "5770.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8,
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961865875675",
+      "handle": "g500h-txi-g600-txi-radar-altimeter-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826548443",
+      "sku": "006-D7010-A0",
+      "amount": "2620.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8,
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961865908443",
+      "handle": "g500h-txi-g600-txi-third-party-radar-a708-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826581211",
+      "sku": "006-D7010-E0",
+      "amount": "4510.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8,
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866137819",
+      "handle": "g500h-txi-helicopter-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826876123",
+      "sku": "006-D7006-00",
+      "amount": "1770.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961754366171",
+      "handle": "g500h-txi-hsvt-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408691347675",
+      "sku": "006-D7006-80",
+      "amount": "8395.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961865711835",
+      "handle": "g500h-txi-metric-pfd-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826319067",
+      "sku": "006-D7009-M0",
+      "amount": "2095.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        8,
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866170587",
+      "handle": "g600-txi-pc12-fast-slow-a429-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826908891",
+      "sku": "006-D7010-B0",
+      "amount": "10995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866236123",
+      "handle": "g600-txi-socata-tbm700-850-rvsm-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408826974427",
+      "sku": "006-D7010-J0",
+      "amount": "19999.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866301659",
+      "handle": "g700-txi-a708-radar-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408827039963",
+      "sku": "006-D7011-E0",
+      "amount": "4510.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866334427",
+      "handle": "g700-txi-chartview-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408827072731",
+      "sku": "006-D7011-10",
+      "amount": "2095.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866858715",
+      "handle": "g700-txi-gtn-xi-gwx-8000-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408827760859",
+      "sku": "006-D7011-Q0",
+      "amount": "34995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10,
+        15,
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866531035",
+      "handle": "g700-txi-nv-1-display-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408827334875",
+      "sku": "006-D7011-F1",
+      "amount": "3670.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866563803",
+      "handle": "g700-txi-nv-2-displays-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408827367643",
+      "sku": "006-D7011-F2",
+      "amount": "5770.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866596571",
+      "handle": "g700-txi-nv-3-displays-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408827400411",
+      "sku": "006-D7011-F3",
+      "amount": "7870.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866662107",
+      "handle": "g700-txi-nv-4-displays-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408827498715",
+      "sku": "006-D7011-F4",
+      "amount": "9970.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866694875",
+      "handle": "g700-txi-radar-agcs-and-td-enablement",
+      "variantId": "gid://shopify/ProductVariant/47408827531483",
+      "sku": "010-D1697-30",
+      "amount": "9995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866727643",
+      "handle": "g700-txi-radar-alt-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408827564251",
+      "sku": "006-D7011-A0",
+      "amount": "2620.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866793179",
+      "handle": "g700-txi-taws-b-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408827695323",
+      "sku": "006-D7011-30",
+      "amount": "8395.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961866825947",
+      "handle": "g700-txi-video-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408827728091",
+      "sku": "006-D7011-H0",
+      "amount": "1570.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961755644123",
+      "handle": "ga-55a",
+      "variantId": "gid://shopify/ProductVariant/47408691577051",
+      "sku": "010-10598-00",
+      "amount": "505.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        31
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961755676891",
+      "handle": "ga-56-low-profile-antenna",
+      "variantId": "gid://shopify/ProductVariant/47408691609819",
+      "sku": "010-10040-01",
+      "amount": "520.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        4,
+        11,
+        40
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961755742427",
+      "handle": "ga-57x",
+      "variantId": "gid://shopify/ProductVariant/47408691675355",
+      "sku": "010-11370-10",
+      "amount": "370.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        40
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961755775195",
+      "handle": "ga-58-tnc-unit-only",
+      "variantId": "gid://shopify/ProductVariant/47408691708123",
+      "sku": "010-10720-02",
+      "amount": "1120.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        25,
+        26,
+        27
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961755807963",
+      "handle": "ga-61a-unit-only",
+      "variantId": "gid://shopify/ProductVariant/47408691740891",
+      "sku": "010-02916-00",
+      "amount": "2260.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        17
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961755840731",
+      "handle": "ga58-unit-only",
+      "variantId": "gid://shopify/ProductVariant/47408691773659",
+      "sku": "010-10720-00",
+      "amount": "1120.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        25,
+        26,
+        27
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961756102875",
+      "handle": "gad-43e-no-enablement-card-for-use-with-g600",
+      "variantId": "gid://shopify/ProductVariant/47408692035803",
+      "sku": "010-00852-01",
+      "amount": "6235.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8,
+        10,
+        32
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961756135643",
+      "handle": "gad-43e-with-g500-enablement-standard",
+      "variantId": "gid://shopify/ProductVariant/47408692068571",
+      "sku": "010-00852-02",
+      "amount": "6235.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        32
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961756168411",
+      "handle": "gad42-standard",
+      "variantId": "gid://shopify/ProductVariant/47408692101339",
+      "sku": "010-00154-11",
+      "amount": "4275.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        32
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961756201179",
+      "handle": "gad43-adapter-g500-standard-century",
+      "variantId": "gid://shopify/ProductVariant/47408692134107",
+      "sku": "010-00724-05",
+      "amount": "3805.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        32
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961756233947",
+      "handle": "gad43-upgraded-standard",
+      "variantId": "gid://shopify/ProductVariant/47408692166875",
+      "sku": "010-00724-04",
+      "amount": "3805.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8,
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342820876507",
+      "handle": "garmin-gdl-50r-010-01561-11",
+      "variantId": "gid://shopify/ProductVariant/48758722298075",
+      "sku": "010-01561-11",
+      "amount": "1000.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        34
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342819107035",
+      "handle": "garmin-gdu-700l-g600-txi-gray-ahrs-standard-010-01219-a3",
+      "variantId": "gid://shopify/ProductVariant/48758720528603",
+      "sku": "010-01219-A3",
+      "amount": "14450.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342819533019",
+      "handle": "garmin-gma-345-010-01319-23",
+      "variantId": "gid://shopify/ProductVariant/48758720954587",
+      "sku": "010-01319-23",
+      "amount": "2695.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342826479835",
+      "handle": "garmin-gns-waas-navdata-card-international-010-10546-02",
+      "variantId": "gid://shopify/ProductVariant/48758728327387",
+      "sku": "010-10546-02",
+      "amount": "480.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        19
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342818746587",
+      "handle": "garmin-gtx-335r-010-01215-41",
+      "variantId": "gid://shopify/ProductVariant/48758720168155",
+      "sku": "010-01215-41",
+      "amount": "4395.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342819074267",
+      "handle": "garmin-gtx-345r-010-01217-46",
+      "variantId": "gid://shopify/ProductVariant/48758720495835",
+      "sku": "010-01217-46",
+      "amount": "7095.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342829887707",
+      "handle": "garmin-kit-faa-datacom-gtn-xi-k00-01497-00",
+      "variantId": "gid://shopify/ProductVariant/48758731669723",
+      "sku": "K00-01497-00",
+      "amount": "15495.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342822908123",
+      "handle": "garmin-kit-gi-275-nvis-w-out-battery-010-02326-61",
+      "variantId": "gid://shopify/ProductVariant/48758724493531",
+      "sku": "010-02326-61",
+      "amount": "4995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        21
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342829789403",
+      "handle": "garmin-kit-stc-documentation-cirrus-sr2x-g1000-nxi-upgrade-k00-01491-00",
+      "variantId": "gid://shopify/ProductVariant/48758731571419",
+      "sku": "K00-01491-00",
+      "amount": "500.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        14
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342822252763",
+      "handle": "garmin-lru-kit-g600-txi-gmu44b-integrated-ahrs-010-02004-16",
+      "variantId": "gid://shopify/ProductVariant/48758723674331",
+      "sku": "010-02004-16",
+      "amount": "9225.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342822416603",
+      "handle": "garmin-lru-kit-txi-grs-79-gdc-7400-gmu-44b-010-02115-05",
+      "variantId": "gid://shopify/ProductVariant/48758723870939",
+      "sku": "010-02115-05",
+      "amount": "23825.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342822285531",
+      "handle": "garmin-lru-kit-txi-rvsm-gmu44b-grs-7800-gdc-7400-010-02004-25",
+      "variantId": "gid://shopify/ProductVariant/48758723707099",
+      "sku": "010-02004-25",
+      "amount": "40850.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342820483291",
+      "handle": "garmin-sd-card-g500-h-g600-g700-txi-turbine-eis-enablement-010-01478-4c",
+      "variantId": "gid://shopify/ProductVariant/48758721904859",
+      "sku": "010-01478-4C",
+      "amount": "2500.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        23
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342822514907",
+      "handle": "garmin-sd-card-g500-h-g600-txi-gtn-xi-radar-agcs-and-td-enablement-010-02192-30",
+      "variantId": "gid://shopify/ProductVariant/48758723969243",
+      "sku": "010-02192-30",
+      "amount": "9995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342820090075",
+      "handle": "garmin-sd-card-g500-h-g600-txi-video-enablement-010-01477-4g",
+      "variantId": "gid://shopify/ProductVariant/48758721511643",
+      "sku": "010-01477-4G",
+      "amount": "1570.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        8
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342826152155",
+      "handle": "garmin-sd-card-g500h-txi-helicopter-enablement-010-03716-33",
+      "variantId": "gid://shopify/ProductVariant/48758727999707",
+      "sku": "010-03716-33",
+      "amount": "1995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342822547675",
+      "handle": "garmin-sd-card-g700-txi-gtn-xi-radar-agcs-and-td-enablement-010-02193-30",
+      "variantId": "gid://shopify/ProductVariant/48758724002011",
+      "sku": "010-02193-30",
+      "amount": "9995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342817206491",
+      "handle": "garmin-sd-card-gdu10xx-chart-unlock-010-00330-50",
+      "variantId": "gid://shopify/ProductVariant/48758718595291",
+      "sku": "010-00330-50",
+      "amount": "3000.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        12
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/9342826348763",
+      "handle": "garmin-sd-card-gx000-taws-unlock-enablement-sysrel-7-51-or-later-010-03905-04",
+      "variantId": "gid://shopify/ProductVariant/48758728196315",
+      "sku": "010-03905-04",
+      "amount": "8395.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        14
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961757020379",
+      "handle": "gcu-485-gray-1-button-unit-only",
+      "variantId": "gid://shopify/ProductVariant/47408692887771",
+      "sku": "010-01350-14",
+      "amount": "3000.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        8
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961757282523",
+      "handle": "gdl-50-52-replacement-ads-b-antenna",
+      "variantId": "gid://shopify/ProductVariant/47408693149915",
+      "sku": "010-12498-70",
+      "amount": "70.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        34
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961758331099",
+      "handle": "gdu-1060-g500-txi-black-ahrs-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694067419",
+      "sku": "010-01220-33",
+      "amount": "14300.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        7
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961758363867",
+      "handle": "gdu-1060-g500-txi-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694100187",
+      "sku": "010-01220-23",
+      "amount": "13300.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        7,
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961758298331",
+      "handle": "gdu-1060-g600-txi-black-ahrs-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694034651",
+      "sku": "010-01220-73",
+      "amount": "20500.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961758396635",
+      "handle": "gdu-1060-g600-txi-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694132955",
+      "sku": "010-01220-63",
+      "amount": "19300.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961758429403",
+      "handle": "gdu-1060-g600-txi-gray-ahrs-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694165723",
+      "sku": "010-01220-A3",
+      "amount": "21500.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961758462171",
+      "handle": "gdu-1060-g600-txi-gray-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694198491",
+      "sku": "010-01220-83",
+      "amount": "20300.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961758494939",
+      "handle": "gdu-1060-g700-txi-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694231259",
+      "sku": "010-01220-B3",
+      "amount": "28800.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961758527707",
+      "handle": "gdu-1060-g700-txi-gray-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694264027",
+      "sku": "010-01220-C3",
+      "amount": "29800.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961867186395",
+      "handle": "gdu-1210-g500-txi-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408828088539",
+      "sku": "010-02837-21",
+      "amount": "15300.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        7
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961867219163",
+      "handle": "gdu-1210-g600-txi-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408828121307",
+      "sku": "010-02837-61",
+      "amount": "21300.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961867251931",
+      "handle": "gdu-1210-g600-txi-gray-standard",
+      "variantId": "gid://shopify/ProductVariant/47408828154075",
+      "sku": "010-02837-81",
+      "amount": "22300.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961867317467",
+      "handle": "gdu-460-gps-display-am-pma-standard",
+      "variantId": "gid://shopify/ProductVariant/47408828219611",
+      "sku": "010-02319-00",
+      "amount": "8995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        11
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961867350235",
+      "handle": "gdu-470-gps-display-am-pma-standard",
+      "variantId": "gid://shopify/ProductVariant/47408828252379",
+      "sku": "010-02318-00",
+      "amount": "6795.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        11,
+        23
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961759117531",
+      "handle": "gdu-700l-g500-txi-black-ahrs-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694526171",
+      "sku": "010-01219-33",
+      "amount": "9600.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        7
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961759150299",
+      "handle": "gdu-700l-g500-txi-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694558939",
+      "sku": "010-01219-23",
+      "amount": "8600.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        7,
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961759314139",
+      "handle": "gdu-700l-g600-txi-black-ahrs-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694657243",
+      "sku": "010-01219-73",
+      "amount": "13450.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961759346907",
+      "handle": "gdu-700l-g600-txi-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694690011",
+      "sku": "010-01219-63",
+      "amount": "12250.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961867481307",
+      "handle": "gdu-700l-g600-txi-gray-standard",
+      "variantId": "gid://shopify/ProductVariant/47408828416219",
+      "sku": "010-01219-83",
+      "amount": "13250.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961867514075",
+      "handle": "gdu-700l-g700-txi-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408828448987",
+      "sku": "010-01219-B3",
+      "amount": "22000.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961867546843",
+      "handle": "gdu-700l-g700-txi-gray-standard",
+      "variantId": "gid://shopify/ProductVariant/47408828547291",
+      "sku": "010-01219-C3",
+      "amount": "23000.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961759772891",
+      "handle": "gdu-700p-g500-txi-black-ahrs-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694853851",
+      "sku": "010-01218-33",
+      "amount": "9600.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        7
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961759641819",
+      "handle": "gdu-700p-g500-txi-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694722779",
+      "sku": "010-01218-23",
+      "amount": "8600.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        7,
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961759674587",
+      "handle": "gdu-700p-g600-txi-black-ahrs-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694755547",
+      "sku": "010-01218-73",
+      "amount": "13450.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961759805659",
+      "handle": "gdu-700p-g600-txi-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694886619",
+      "sku": "010-01218-63",
+      "amount": "12250.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5,
+        23
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961867579611",
+      "handle": "gdu-700p-g600-txi-gray-ahrs-standard",
+      "variantId": "gid://shopify/ProductVariant/47408828580059",
+      "sku": "010-01218-A3",
+      "amount": "14450.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961759903963",
+      "handle": "gdu-700p-g600-txi-gray-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694919387",
+      "sku": "010-01218-83",
+      "amount": "13250.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961759936731",
+      "handle": "gdu-700p-g700-txi-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694952155",
+      "sku": "010-01218-B3",
+      "amount": "22000.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961759969499",
+      "handle": "gdu-700p-g700-txi-gray-standard",
+      "variantId": "gid://shopify/ProductVariant/47408694984923",
+      "sku": "010-01218-C3",
+      "amount": "23000.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961762722011",
+      "handle": "gi275-pilots-guide",
+      "variantId": "gid://shopify/ProductVariant/47408697409755",
+      "sku": "190-02246-01",
+      "amount": "155.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        21
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961763180763",
+      "handle": "gma-350h-pilots-guide",
+      "variantId": "gid://shopify/ProductVariant/47408697934043",
+      "sku": "190-01134-14",
+      "amount": "30.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961763279067",
+      "handle": "gma245r-mkr-standard",
+      "variantId": "gid://shopify/ProductVariant/47408698032347",
+      "sku": "010-01471-13",
+      "amount": "2550.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        4,
+        11
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961763344603",
+      "handle": "gma342-pilots-guide",
+      "variantId": "gid://shopify/ProductVariant/47408698097883",
+      "sku": "190-01878-00",
+      "amount": "30.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961763410139",
+      "handle": "gma345-pilots-guide",
+      "variantId": "gid://shopify/ProductVariant/47408698163419",
+      "sku": "190-01878-01",
+      "amount": "30.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961763508443",
+      "handle": "gma350-pilots-guide",
+      "variantId": "gid://shopify/ProductVariant/47408698196187",
+      "sku": "190-01134-12",
+      "amount": "30.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961764589787",
+      "handle": "gmu-22-magnetometer",
+      "variantId": "gid://shopify/ProductVariant/47408699244763",
+      "sku": "010-01196-00",
+      "amount": "960.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        39
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961764688091",
+      "handle": "gmx-200-chartview-kit-single-install",
+      "variantId": "gid://shopify/ProductVariant/47408699343067",
+      "sku": "010-00489-50",
+      "amount": "2495.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        19
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961764753627",
+      "handle": "gmx-200-safe-taxi-flitechart-data-card-kit-dual",
+      "variantId": "gid://shopify/ProductVariant/47408699408603",
+      "sku": "010-00489-55",
+      "amount": "975.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        19
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961764786395",
+      "handle": "gmx-200-safetaxi-flitechart-data-card-kit",
+      "variantId": "gid://shopify/ProductVariant/47408699441371",
+      "sku": "010-00489-52",
+      "amount": "830.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        19
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961765114075",
+      "handle": "gns-waas-data-card",
+      "variantId": "gid://shopify/ProductVariant/47408699637979",
+      "sku": "010-10546-20",
+      "amount": "250.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        19
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961765146843",
+      "handle": "gns-waas-navdata-card-americas",
+      "variantId": "gid://shopify/ProductVariant/47408699670747",
+      "sku": "010-10546-01",
+      "amount": "480.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        19
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961765998811",
+      "handle": "gra-5500-55-external-5g-filter-1-7x1-2",
+      "variantId": "gid://shopify/ProductVariant/47408700260571",
+      "sku": "010-02886-00",
+      "amount": "2800.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        32
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961766818011",
+      "handle": "gsr-56",
+      "variantId": "gid://shopify/ProductVariant/47408701079771",
+      "sku": "010-00815-00",
+      "amount": "11750.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        31
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961766981851",
+      "handle": "gsr56-9522b-standard",
+      "variantId": "gid://shopify/ProductVariant/47408701243611",
+      "sku": "010-00815-05",
+      "amount": "12250.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        31
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961868693723",
+      "handle": "gtn-16-watt-comm-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408829759707",
+      "sku": "006-D2990-04",
+      "amount": "5345.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15,
+        16
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961767538907",
+      "handle": "gtn-625xi-black-unit-only-w-info-kit",
+      "variantId": "gid://shopify/ProductVariant/47408701800667",
+      "sku": "010-01997-03",
+      "amount": "10995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        16
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961767932123",
+      "handle": "gtn-725xi-black-unit-only-w-info-kit",
+      "variantId": "gid://shopify/ProductVariant/47408702324955",
+      "sku": "010-02000-03",
+      "amount": "16700.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961868759259",
+      "handle": "gtn-7xx-chartview-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408829825243",
+      "sku": "006-D2990-40",
+      "amount": "2195.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961868792027",
+      "handle": "gtn-7xx-third-party-radar-a708-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408829858011",
+      "sku": "006-D2990-42",
+      "amount": "4295.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961868824795",
+      "handle": "gtn-7xx-xi-faa-data-comm-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408829890779",
+      "sku": "006-D2990-48",
+      "amount": "4500.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961868857563",
+      "handle": "gtn-htaws-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408829923547",
+      "sku": "006-D2990-02",
+      "amount": "8495.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        17
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961868890331",
+      "handle": "gtn-search-rescue-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408829956315",
+      "sku": "006-D2990-03",
+      "amount": "2195.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15,
+        16
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961868923099",
+      "handle": "gtn-taws-a-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408829989083",
+      "sku": "006-D2990-05",
+      "amount": "18995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15,
+        16
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961868955867",
+      "handle": "gtn-taws-b-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408830021851",
+      "sku": "006-D2990-01",
+      "amount": "8495.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15,
+        16
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961768620251",
+      "handle": "gtn-xi-series-pilots-guide",
+      "variantId": "gid://shopify/ProductVariant/47408702554331",
+      "sku": "190-02327-03",
+      "amount": "245.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15,
+        16,
+        17
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961768653019",
+      "handle": "gtn635xi-black-unit-only-w-info-kit",
+      "variantId": "gid://shopify/ProductVariant/47408702587099",
+      "sku": "010-01998-07",
+      "amount": "11995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        16
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961768718555",
+      "handle": "gtn650xi-black-unit-only-w-info-kit",
+      "variantId": "gid://shopify/ProductVariant/47408702652635",
+      "sku": "010-01999-07",
+      "amount": "12995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        16
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961768784091",
+      "handle": "gtn650xi-gray-unit-only-w-info-kit",
+      "variantId": "gid://shopify/ProductVariant/47408702718171",
+      "sku": "010-01999-37",
+      "amount": "13995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        16
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961768816859",
+      "handle": "gtn650xi-helicopter-black-standard",
+      "variantId": "gid://shopify/ProductVariant/47408702750939",
+      "sku": "010-01999-06",
+      "amount": "14600.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        17
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961768849627",
+      "handle": "gtn650xi-nv-black-unit-only-w-info-kit",
+      "variantId": "gid://shopify/ProductVariant/47408702783707",
+      "sku": "010-01999-67",
+      "amount": "16495.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        17
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961768915163",
+      "handle": "gtn750xi-black-unit-only-w-info-kit",
+      "variantId": "gid://shopify/ProductVariant/47408702849243",
+      "sku": "010-02002-07",
+      "amount": "18800.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961768980699",
+      "handle": "gtn750xi-gray-unit-only-w-info-kit",
+      "variantId": "gid://shopify/ProductVariant/47408702914779",
+      "sku": "010-02002-37",
+      "amount": "20200.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        15
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961769046235",
+      "handle": "gtn750xi-nv-black-unit-only-w-info-kit",
+      "variantId": "gid://shopify/ProductVariant/47408702980315",
+      "sku": "010-02002-67",
+      "amount": "22395.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        17
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961769308379",
+      "handle": "gtp-59",
+      "variantId": "gid://shopify/ProductVariant/47408703242459",
+      "sku": "011-00978-00",
+      "amount": "630.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        21
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961769341147",
+      "handle": "gtr-20-standard-pma",
+      "variantId": "gid://shopify/ProductVariant/47408703275227",
+      "sku": "010-01076-31",
+      "amount": "2400.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        4,
+        11
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961869054171",
+      "handle": "gtr-205-audio-panel-enablement",
+      "variantId": "gid://shopify/ProductVariant/47408830152923",
+      "sku": "006-DA566-02",
+      "amount": "1495.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        31
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961869152475",
+      "handle": "gtr205-gnc215-16w-comm-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408830185691",
+      "sku": "006-DA566-00",
+      "amount": "1495.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        31
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961869218011",
+      "handle": "gtr205-gnc215-nvis-enablement-download",
+      "variantId": "gid://shopify/ProductVariant/47408830283995",
+      "sku": "006-DA566-01",
+      "amount": "995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        31
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961769865435",
+      "handle": "gts-processor",
+      "variantId": "gid://shopify/ProductVariant/47408703668443",
+      "sku": "010-00962-00",
+      "amount": "21250.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        26
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961769898203",
+      "handle": "gts-processor-w-tcas-i-enablement-coupon",
+      "variantId": "gid://shopify/ProductVariant/47408703701211",
+      "sku": "010-00962-10",
+      "amount": "27250.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        25
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961769996507",
+      "handle": "gtx-3000",
+      "variantId": "gid://shopify/ProductVariant/47408703799515",
+      "sku": "010-00736-00",
+      "amount": "29895.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        29
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961770258651",
+      "handle": "gtx-335-nvg-compatible",
+      "variantId": "gid://shopify/ProductVariant/47408704061659",
+      "sku": "010-01214-21",
+      "amount": "4695.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961770324187",
+      "handle": "gtx-335d",
+      "variantId": "gid://shopify/ProductVariant/47408704127195",
+      "sku": "010-01773-01",
+      "amount": "7595.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961770389723",
+      "handle": "gtx-335dr",
+      "variantId": "gid://shopify/ProductVariant/47408704323803",
+      "sku": "010-01774-01",
+      "amount": "7595.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961770520795",
+      "handle": "gtx-335r-gps-standard-kit-g1000",
+      "variantId": "gid://shopify/ProductVariant/47408704389339",
+      "sku": "010-01215-43",
+      "amount": "4395.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961770586331",
+      "handle": "gtx-335r-standard-kit-g1000",
+      "variantId": "gid://shopify/ProductVariant/47408704454875",
+      "sku": "010-01215-03",
+      "amount": "3895.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961770782939",
+      "handle": "gtx-345-w-waas",
+      "variantId": "gid://shopify/ProductVariant/47408704651483",
+      "sku": "010-01216-46",
+      "amount": "7095.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961770815707",
+      "handle": "gtx-345d",
+      "variantId": "gid://shopify/ProductVariant/47408704684251",
+      "sku": "010-01775-01",
+      "amount": "9595.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961770848475",
+      "handle": "gtx-345dr",
+      "variantId": "gid://shopify/ProductVariant/47408704717019",
+      "sku": "010-01776-01",
+      "amount": "9595.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        12,
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961771045083",
+      "handle": "gtx325-pilots-guide",
+      "variantId": "gid://shopify/ProductVariant/47408704848091",
+      "sku": "190-01499-00",
+      "amount": "55.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961771077851",
+      "handle": "gtx345-nv-gps-standard-kit-nab",
+      "variantId": "gid://shopify/ProductVariant/47408704880859",
+      "sku": "010-01216-66",
+      "amount": "8395.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961771110619",
+      "handle": "gtx345-nv-standard-kit-nab",
+      "variantId": "gid://shopify/ProductVariant/47408704913627",
+      "sku": "010-01216-26",
+      "amount": "7695.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961771241691",
+      "handle": "gtx345r-gps-standard-kit-g1000-nab",
+      "variantId": "gid://shopify/ProductVariant/47408705044699",
+      "sku": "010-01217-48",
+      "amount": "7095.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961771372763",
+      "handle": "gtx345r-unit-only-nab",
+      "variantId": "gid://shopify/ProductVariant/47408705175771",
+      "sku": "010-01217-05",
+      "amount": "6495.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961771765979",
+      "handle": "gwx70-counterweight",
+      "variantId": "gid://shopify/ProductVariant/47408705503451",
+      "sku": "011-02546-00",
+      "amount": "275.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        30
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961772814555",
+      "handle": "heat-shrink-kit-color-coded-gts-processor",
+      "variantId": "gid://shopify/ProductVariant/47408705863899",
+      "sku": "011-02817-00",
+      "amount": "15.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        25,
+        26
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961870495963",
+      "handle": "kit-ads-b-hawker-800a-xp",
+      "variantId": "gid://shopify/ProductVariant/47408832282843",
+      "sku": "K10-00265-00",
+      "amount": "63695.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        29
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961786249435",
+      "handle": "kit-gi-275-adahrs-ap-class-iii-part-25",
+      "variantId": "gid://shopify/ProductVariant/47408720969947",
+      "sku": "010-02326-40",
+      "amount": "9795.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        20
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961871151323",
+      "handle": "kit-gi-275-adahrs-ap-w-gmu-11-class-i-ii",
+      "variantId": "gid://shopify/ProductVariant/47408833724635",
+      "sku": "010-02327-20",
+      "amount": "6195.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        20
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961871184091",
+      "handle": "kit-gi-275-adahrs-ap-w-gmu-44b-class-iii-part-25",
+      "variantId": "gid://shopify/ProductVariant/47408833757403",
+      "sku": "010-02327-40",
+      "amount": "11995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        20
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961786642651",
+      "handle": "kit-gi-275-adahrs-class-iii-helo-part-25",
+      "variantId": "gid://shopify/ProductVariant/47408721363163",
+      "sku": "010-02326-30",
+      "amount": "8695.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        20,
+        21
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961871380699",
+      "handle": "kit-gi-275-adahrs-class-iii-part-25-w-out-battery",
+      "variantId": "gid://shopify/ProductVariant/47408833954011",
+      "sku": "010-02326-31",
+      "amount": "8295.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        21
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961786314971",
+      "handle": "kit-gi-275-adahrs-green-halo",
+      "variantId": "gid://shopify/ProductVariant/47408721068251",
+      "sku": "010-02326-70",
+      "amount": "9795.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        21
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961871216859",
+      "handle": "kit-gi-275-adahrs-green-halo-w-out-battery",
+      "variantId": "gid://shopify/ProductVariant/47408833790171",
+      "sku": "010-02326-71",
+      "amount": "9395.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        21
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961871282395",
+      "handle": "kit-gi-275-adahrs-w-gmu-11-class-i-ii",
+      "variantId": "gid://shopify/ProductVariant/47408833855707",
+      "sku": "010-02327-10",
+      "amount": "5095.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        20
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961871347931",
+      "handle": "kit-gi-275-adahrs-w-gmu-44b-class-iii-part-25",
+      "variantId": "gid://shopify/ProductVariant/47408833888475",
+      "sku": "010-02327-30",
+      "amount": "10895.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        20,
+        21
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961789067483",
+      "handle": "kit-product-info-gi-275",
+      "variantId": "gid://shopify/ProductVariant/47408722247899",
+      "sku": "K00-01190-00",
+      "amount": "105.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        21
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961789133019",
+      "handle": "kit-product-info-txi",
+      "variantId": "gid://shopify/ProductVariant/47408722313435",
+      "sku": "K00-00717-00",
+      "amount": "260.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6,
+        7,
+        9,
+        10
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961872494811",
+      "handle": "kit-tcas-ii-system-gts-8000-w-dual-gtx-3000",
+      "variantId": "gid://shopify/ProductVariant/47408835526875",
+      "sku": "K10-00187-00",
+      "amount": "99995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        25
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961872625883",
+      "handle": "lru-kit-g500-g600-txi-gmu44b-grs-79-gdc-72",
+      "variantId": "gid://shopify/ProductVariant/47408835756251",
+      "sku": "010-02003-25",
+      "amount": "11750.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5,
+        7
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961872593115",
+      "handle": "lru-kit-g500-txi-gmu44b-integrated-ahrs",
+      "variantId": "gid://shopify/ProductVariant/47408835723483",
+      "sku": "010-02003-16",
+      "amount": "4300.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        7
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961872756955",
+      "handle": "lru-kit-g500h-txi-gsu-75h-gmu-44b",
+      "variantId": "gid://shopify/ProductVariant/47408835920091",
+      "sku": "010-02105-05",
+      "amount": "16200.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        9
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961872888027",
+      "handle": "lru-kit-g600-txi-gmu44b-gsu-75b",
+      "variantId": "gid://shopify/ProductVariant/47408836083931",
+      "sku": "010-02004-05",
+      "amount": "17725.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        5
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961872822491",
+      "handle": "lru-kit-g600-txi-rvsm-gmu44b-grs-79-gdc-72b",
+      "variantId": "gid://shopify/ProductVariant/47408836018395",
+      "sku": "010-02004-35",
+      "amount": "18850.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        6
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961801421019",
+      "handle": "optional-antenna-kit-gtx-320-320a-327-330",
+      "variantId": "gid://shopify/ProductVariant/47408733946075",
+      "sku": "010-10160-00",
+      "amount": "370.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        25,
+        26,
+        27,
+        40
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961803190491",
+      "handle": "product-registration-gtx335-gps",
+      "variantId": "gid://shopify/ProductVariant/47408735781083",
+      "sku": "010-12661-00",
+      "amount": "60.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        28
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961816494299",
+      "handle": "sd-card-gdu10xx-taws-unlock",
+      "variantId": "gid://shopify/ProductVariant/47408749215963",
+      "sku": "010-00330-51",
+      "amount": "8000.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        12
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961816395995",
+      "handle": "sd-card-gdu1xxx-svs-unlock",
+      "variantId": "gid://shopify/ProductVariant/47408749117659",
+      "sku": "010-00330-55",
+      "amount": "24995.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        12
+      ]
+    },
+    {
+      "productId": "gid://shopify/Product/8961818788059",
+      "handle": "sub-assy-conn-kit-90-deg-gtx-3000",
+      "variantId": "gid://shopify/ProductVariant/47408751444187",
+      "sku": "011-02019-01",
+      "amount": "830.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        25,
+        29
+      ]
+    }
+  ],
+  "quoteOnlyAuditProducts": [
+    {
+      "productId": "gid://shopify/Product/8961739522267",
+      "handle": "a-33-gps-antenna"
+    },
+    {
+      "productId": "gid://shopify/Product/8961740046555",
+      "handle": "ads-b-antenna"
+    },
+    {
+      "productId": "gid://shopify/Product/8961740701915",
+      "handle": "antenna-array-gwx-gsx-10"
+    },
+    {
+      "productId": "gid://shopify/Product/8961740734683",
+      "handle": "antenna-array-gwx-gsx-12"
+    },
+    {
+      "productId": "gid://shopify/Product/8961740767451",
+      "handle": "antenna-array-gwx-gsx-14"
+    },
+    {
+      "productId": "gid://shopify/Product/8961740800219",
+      "handle": "antenna-array-gwx-gsx-18"
+    },
+    {
+      "productId": "gid://shopify/Product/8961740832987",
+      "handle": "antenna-doubler-arinc-743-style-ga-36-37"
+    },
+    {
+      "productId": "gid://shopify/Product/8961740865755",
+      "handle": "antenna-doubler-ga-36-37"
+    },
+    {
+      "productId": "gid://shopify/Product/8961741947099",
+      "handle": "battery-holder-gns-480"
+    },
+    {
+      "productId": "gid://shopify/Product/8961742930139",
+      "handle": "cabale-assy-gfc-700-c90-yaw-w-label"
+    },
+    {
+      "productId": "gid://shopify/Product/8961744044251",
+      "handle": "cable-guard-gsm9100"
+    },
+    {
+      "productId": "gid://shopify/Product/8961744601307",
+      "handle": "cirrus-perspective-pc-trainer-for-cirrus-sr2x-v20-81"
+    },
+    {
+      "productId": "gid://shopify/Product/8961744863451",
+      "handle": "conn-kit-gma35"
+    },
+    {
+      "productId": "gid://shopify/Product/8961746731227",
+      "handle": "data-card-gns-400w-500w-app-update-v3-30"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747386587",
+      "handle": "data-card-gns-400w-500w-app-update-v5-40"
+    },
+    {
+      "productId": "gid://shopify/Product/8961746763995",
+      "handle": "data-card-gps-175-gnx-375-database-worldwide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961746796763",
+      "handle": "data-card-gtn-6xx-7xx-bravo-database-helo-americas-north"
+    },
+    {
+      "productId": "gid://shopify/Product/8961746829531",
+      "handle": "data-card-gtn-6xx-7xx-bravo-database-helo-americas-south"
+    },
+    {
+      "productId": "gid://shopify/Product/8961746862299",
+      "handle": "data-card-gtn-database-americas"
+    },
+    {
+      "productId": "gid://shopify/Product/8961746895067",
+      "handle": "data-card-gtn-database-heli-americas-north"
+    },
+    {
+      "productId": "gid://shopify/Product/8961746927835",
+      "handle": "data-card-gtn-database-heli-americas-south"
+    },
+    {
+      "productId": "gid://shopify/Product/8961746960603",
+      "handle": "data-card-gtn-database-heli-atlantic-north"
+    },
+    {
+      "productId": "gid://shopify/Product/8961746993371",
+      "handle": "data-card-gtn-database-heli-atlantic-south"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747026139",
+      "handle": "data-card-gtn-database-heli-pacific-north"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747058907",
+      "handle": "data-card-gtn-database-heli-pacific-south"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747091675",
+      "handle": "data-card-gtn-database-international"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747124443",
+      "handle": "data-card-gtn-database-worldwide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747157211",
+      "handle": "data-card-gtn-xi-database-americas"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747189979",
+      "handle": "data-card-gtn-xi-database-international"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747222747",
+      "handle": "data-card-gtn-xi-database-worldwide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747255515",
+      "handle": "data-card-terrain-obstacle-helo-americas-north"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747288283",
+      "handle": "data-card-txi-database"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747321051",
+      "handle": "data-card-txi-heli-database"
+    },
+    {
+      "productId": "gid://shopify/Product/8961863712987",
+      "handle": "db-gi-275-advisory-airspeed-unlock"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747615963",
+      "handle": "dcp-chassis-gma350"
+    },
+    {
+      "productId": "gid://shopify/Product/8961747648731",
+      "handle": "dcp-rear-conn-plate-gma36"
+    },
+    {
+      "productId": "gid://shopify/Product/8961752989915",
+      "handle": "g5-battery-pack"
+    },
+    {
+      "productId": "gid://shopify/Product/8961753186523",
+      "handle": "g5-stc-permission-letter-redemption-code"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866105051",
+      "handle": "g500-g600-txi-turbine-eis-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865449691",
+      "handle": "g500-txi-alt-preselect-for-s-tec-55x-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865515227",
+      "handle": "g500-txi-g600-txi-dfc90-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865547995",
+      "handle": "g500-txi-g600-txi-nv-3-display-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865580763",
+      "handle": "g500-txi-g600-txi-nv-4-display-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865613531",
+      "handle": "g500-txi-g600-txi-s-tec-dcfs-2100-1500-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865679067",
+      "handle": "g500-txi-g600-txi-taws-b-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866039515",
+      "handle": "g500h-g600-txi-gtn-xi-gwx-8000-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866072283",
+      "handle": "g500h-g600-txi-gtn-xi-radar-agcs-and-td-enablement"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865744603",
+      "handle": "g500h-txi-g600-txi-chartview-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865810139",
+      "handle": "g500h-txi-g600-txi-nv-1-display-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865842907",
+      "handle": "g500h-txi-g600-txi-nv-2-display-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865875675",
+      "handle": "g500h-txi-g600-txi-radar-altimeter-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865908443",
+      "handle": "g500h-txi-g600-txi-third-party-radar-a708-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865941211",
+      "handle": "g500h-txi-g600-txi-video-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866137819",
+      "handle": "g500h-txi-helicopter-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961754366171",
+      "handle": "g500h-txi-hsvt-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961865711835",
+      "handle": "g500h-txi-metric-pfd-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961754398939",
+      "handle": "g600-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866268891",
+      "handle": "g600-txi-g700-txi-tcas-ii-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866170587",
+      "handle": "g600-txi-pc12-fast-slow-a429-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866236123",
+      "handle": "g600-txi-socata-tbm700-850-rvsm-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866301659",
+      "handle": "g700-txi-a708-radar-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866334427",
+      "handle": "g700-txi-chartview-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866858715",
+      "handle": "g700-txi-gtn-xi-gwx-8000-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866399963",
+      "handle": "g700-txi-gwx-agcs-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866432731",
+      "handle": "g700-txi-gwx-turb-detect-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866531035",
+      "handle": "g700-txi-nv-1-display-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866563803",
+      "handle": "g700-txi-nv-2-displays-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866596571",
+      "handle": "g700-txi-nv-3-displays-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866662107",
+      "handle": "g700-txi-nv-4-displays-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866694875",
+      "handle": "g700-txi-radar-agcs-and-td-enablement"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866727643",
+      "handle": "g700-txi-radar-alt-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866793179",
+      "handle": "g700-txi-taws-b-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961866825947",
+      "handle": "g700-txi-video-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961755644123",
+      "handle": "ga-55a"
+    },
+    {
+      "productId": "gid://shopify/Product/8961755676891",
+      "handle": "ga-56-low-profile-antenna"
+    },
+    {
+      "productId": "gid://shopify/Product/8961755742427",
+      "handle": "ga-57x"
+    },
+    {
+      "productId": "gid://shopify/Product/8961755775195",
+      "handle": "ga-58-tnc-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961755807963",
+      "handle": "ga-61a-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961755840731",
+      "handle": "ga58-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961755906267",
+      "handle": "gad-27-electronic-adapter-unit-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961755939035",
+      "handle": "gad-27-unit-only-faa-pma"
+    },
+    {
+      "productId": "gid://shopify/Product/8961755971803",
+      "handle": "gad-29c-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961756070107",
+      "handle": "gad-43e"
+    },
+    {
+      "productId": "gid://shopify/Product/8961756102875",
+      "handle": "gad-43e-no-enablement-card-for-use-with-g600"
+    },
+    {
+      "productId": "gid://shopify/Product/8961756135643",
+      "handle": "gad-43e-with-g500-enablement-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961756168411",
+      "handle": "gad42-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961756201179",
+      "handle": "gad43-adapter-g500-standard-century"
+    },
+    {
+      "productId": "gid://shopify/Product/8961756233947",
+      "handle": "gad43-upgraded-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822351067",
+      "handle": "garmin-data-card-gtn-xi-series-database-helo-atlantic-south-010-02045-44"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817927387",
+      "handle": "garmin-gad43-gyro-adapter-upgraded-010-00724-03"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819696859",
+      "handle": "garmin-gdc72-unit-only-010-01424-01"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819762395",
+      "handle": "garmin-gdc72b-unit-only-010-01424-41"
+    },
+    {
+      "productId": "gid://shopify/Product/9342826971355",
+      "handle": "garmin-gdl-39-battery-010-11688-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820810971",
+      "handle": "garmin-gdl-50-010-01561-01"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820843739",
+      "handle": "garmin-gdl-50r-010-01561-10"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820876507",
+      "handle": "garmin-gdl-50r-010-01561-11"
+    },
+    {
+      "productId": "gid://shopify/Product/9342823006427",
+      "handle": "garmin-gdm-4500-unit-only-010-02621-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819107035",
+      "handle": "garmin-gdu-700l-g600-txi-gray-ahrs-standard-010-01219-a3"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819369179",
+      "handle": "garmin-gfs-83-clutchless-high-torque-unit-only-010-01243-14"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819303643",
+      "handle": "garmin-gfs-83-clutchless-unit-only-010-01243-11"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819336411",
+      "handle": "garmin-gfs-83-clutchless-unit-only-010-01243-12"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821368027",
+      "handle": "garmin-gi275-class-iii-adahrs-ap-unit-only-010-01912-50"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819139803",
+      "handle": "garmin-gla-85-unit-only-010-01242-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819205339",
+      "handle": "garmin-gla-85-unit-only-10-mm-010-01242-01"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819238107",
+      "handle": "garmin-gla-85-unit-only-12-mm-010-01242-02"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819270875",
+      "handle": "garmin-gla-85-unit-only-20-mm-010-01242-03"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819434715",
+      "handle": "garmin-gma-345-010-01319-03"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819533019",
+      "handle": "garmin-gma-345-010-01319-23"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821171419",
+      "handle": "garmin-gmc-307-no-yd-unit-only-010-01595-20"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821138651",
+      "handle": "garmin-gmc-307-unit-only-010-01595-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818517211",
+      "handle": "garmin-gmc605-color-black-flc-standard-010-01075-17"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818484443",
+      "handle": "garmin-gmc605-color-black-flc-unit-only-010-01075-16"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818451675",
+      "handle": "garmin-gmc605-color-gray-standard-010-01075-15"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818418907",
+      "handle": "garmin-gmc605-color-gray-unit-only-010-01075-14"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818386139",
+      "handle": "garmin-gmc605-color-ias-standard-010-01075-13"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818353371",
+      "handle": "garmin-gmc605-color-ias-unit-only-010-01075-12"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818549979",
+      "handle": "garmin-gmc605h-w-o-fd-nv-unit-only-010-01075-22"
+    },
+    {
+      "productId": "gid://shopify/Product/9342826479835",
+      "handle": "garmin-gns-waas-navdata-card-international-010-10546-02"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821269723",
+      "handle": "garmin-gnx375-standard-kit-americas-010-01823-01"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821236955",
+      "handle": "garmin-gnx375-unit-only-010-01823-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342829363419",
+      "handle": "garmin-gpsmap-696-quick-reference-guide-190-00959-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817960155",
+      "handle": "garmin-grs7800-unit-only-010-00816-01"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819795163",
+      "handle": "garmin-gsa-87-unit-only-010-01469-02"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817108187",
+      "handle": "garmin-gsa80-unit-only-010-00302-20"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817140955",
+      "handle": "garmin-gsa80-unit-only-010-00302-21"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817173723",
+      "handle": "garmin-gsa81-unit-only-010-00303-20"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817566939",
+      "handle": "garmin-gsm-86-103-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-19"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817894619",
+      "handle": "garmin-gsm-86-135-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-33"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817796315",
+      "handle": "garmin-gsm-86-32-in-lb-1-16-spiral-clutch-capstan-unit-only-010-00714-26"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817763547",
+      "handle": "garmin-gsm-86-32-in-lb-clutch-1-16-straight-grooves-unit-only-010-00714-25"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817829083",
+      "handle": "garmin-gsm-86-52-in-lb-1-16-spiral-clutch-capstan-unit-only-010-00714-27"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817665243",
+      "handle": "garmin-gsm-86-52-in-lb-clutch-1-16-straight-grooves-unit-only-010-00714-22"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817632475",
+      "handle": "garmin-gsm-86-52-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-21"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817501403",
+      "handle": "garmin-gsm-86-72-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-05"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817599707",
+      "handle": "garmin-gsm-86-72-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-20"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817730779",
+      "handle": "garmin-gsm-86-81-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-24"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817698011",
+      "handle": "garmin-gsm-86-90-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-23"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817435867",
+      "handle": "garmin-gsm85a-3-32-spiral-mt-preset-010-00556-a2"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817337563",
+      "handle": "garmin-gsm85a-high-torque-universal-010-00556-04"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817403099",
+      "handle": "garmin-gsm85a-low-torque-universal-010-00556-06"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817304795",
+      "handle": "garmin-gsm85a-med-torque-spir-1-16-010-00556-02"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817370331",
+      "handle": "garmin-gsm85a-med-torque-universal-010-00556-05"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817272027",
+      "handle": "garmin-gsm85a-spiral-med-torque-010-00556-01"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818255067",
+      "handle": "garmin-gsu-25c-unit-only-010-01071-50"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818287835",
+      "handle": "garmin-gsu-25d-unit-only-faa-pma-010-01071-51"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830379227",
+      "handle": "garmin-gtn-625-simulator-complete-system-k10-00245-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830411995",
+      "handle": "garmin-gtn-625xi-simulator-complete-system-k10-00245-50"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830280923",
+      "handle": "garmin-gtn-635-simulator-complete-system-k10-00244-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830346459",
+      "handle": "garmin-gtn-635xi-simulator-complete-system-k10-00244-50"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830182619",
+      "handle": "garmin-gtn-650-simulator-complete-system-k10-00243-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830248155",
+      "handle": "garmin-gtn-650xi-simulator-complete-system-k10-00243-50"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830117083",
+      "handle": "garmin-gtn-725-simulator-complete-system-k10-00242-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830149851",
+      "handle": "garmin-gtn-725xi-simulator-complete-system-k10-00242-50"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830051547",
+      "handle": "garmin-gtn-750-simulator-complete-system-k10-00241-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830084315",
+      "handle": "garmin-gtn-750xi-simulator-complete-system-k10-00241-50"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830510299",
+      "handle": "garmin-gtn-nvg-650h-simulator-complete-system-k10-00254-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830543067",
+      "handle": "garmin-gtn-nvg-650h-xi-simulator-complete-system-k10-00254-50"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830444763",
+      "handle": "garmin-gtn-nvg-750h-simulator-complete-system-k10-00253-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830477531",
+      "handle": "garmin-gtn-nvg-750h-xi-simulator-complete-system-k10-00253-50"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821826779",
+      "handle": "garmin-gtn635xi-black-standard-010-01998-01"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821794011",
+      "handle": "garmin-gtn635xi-black-unit-only-010-01998-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821859547",
+      "handle": "garmin-gtn635xi-black-unit-only-010-01998-04"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821925083",
+      "handle": "garmin-gtn650xi-black-standard-010-01999-01"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821892315",
+      "handle": "garmin-gtn650xi-black-unit-only-010-01999-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822023387",
+      "handle": "garmin-gtn650xi-black-unit-only-010-01999-04"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821990619",
+      "handle": "garmin-gtn650xi-black-unit-only-w-info-kit-010-01999-03"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822056155",
+      "handle": "garmin-gtn650xi-gray-standard-010-01999-31"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822121691",
+      "handle": "garmin-gtn650xi-gray-unit-only-010-01999-34"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822088923",
+      "handle": "garmin-gtn650xi-gray-unit-only-w-info-kit-010-01999-33"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821957851",
+      "handle": "garmin-gtn650xi-helicopter-black-standard-010-01999-02"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822154459",
+      "handle": "garmin-gtn650xi-nv-black-unit-only-010-01999-60"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822219995",
+      "handle": "garmin-gtn650xi-nv-black-unit-only-010-01999-64"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822187227",
+      "handle": "garmin-gtn650xi-nv-helicopter-black-standard-010-01999-62"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818189531",
+      "handle": "garmin-gtr-225b-nv-standard-010-01027-70"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822940891",
+      "handle": "garmin-gtr-225b-nv-standard-010-02485-70"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818746587",
+      "handle": "garmin-gtx-335r-010-01215-41"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818681051",
+      "handle": "garmin-gtx-335r-standard-kit-010-01215-01"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818943195",
+      "handle": "garmin-gtx-345r-010-01217-06"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819074267",
+      "handle": "garmin-gtx-345r-010-01217-46"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818975963",
+      "handle": "garmin-gtx-345r-unit-only-nf-010-01217-0a"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818615515",
+      "handle": "garmin-gtx335-gps-unit-only-010-01214-40"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818582747",
+      "handle": "garmin-gtx335-nv-unit-only-010-01214-20"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818713819",
+      "handle": "garmin-gtx335r-gps-unit-only-010-01215-40"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818877659",
+      "handle": "garmin-gtx345-gps-unit-only-010-01216-40"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818910427",
+      "handle": "garmin-gtx345-gps-unit-only-nab-010-01216-45"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818812123",
+      "handle": "garmin-gtx345-nv-unit-only-nab-010-01216-25"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818779355",
+      "handle": "garmin-gtx345-standard-kit-010-01216-01"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819008731",
+      "handle": "garmin-gtx345r-gps-unit-only-010-01217-40"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819041499",
+      "handle": "garmin-gtx345r-gps-unit-only-nab-010-01217-45"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821073115",
+      "handle": "garmin-gwx-processor-h-unit-only-010-01590-10"
+    },
+    {
+      "productId": "gid://shopify/Product/9342829887707",
+      "handle": "garmin-kit-faa-datacom-gtn-xi-k00-01497-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821400795",
+      "handle": "garmin-kit-gfc600-2-axis-w-p-t-pa-46-piston-010-01993-13"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821728475",
+      "handle": "garmin-kit-gfc600-4-servo-pa-31t-gmc605c-010-01993-52"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821761243",
+      "handle": "garmin-kit-gfc600-5-servo-pa-31t-gmc605c-010-01993-53"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822908123",
+      "handle": "garmin-kit-gi-275-nvis-w-out-battery-010-02326-61"
+    },
+    {
+      "productId": "gid://shopify/Product/9342829986011",
+      "handle": "garmin-kit-gifd-tcas-ii-system-gts-8000-w-dual-gtx-3000-k10-00187-10"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821499099",
+      "handle": "garmin-kit-lru-gfc600-2-axis-gmc605c-010-01993-22"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821662939",
+      "handle": "garmin-kit-lru-gfc600-3-servo-with-2-gta-gmc605c-010-01993-28"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821695707",
+      "handle": "garmin-kit-lru-gfc600-4-axis-with-1-continuous-travel-gmc605c-010-01993-51"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821531867",
+      "handle": "garmin-kit-lru-gfc600-4-axis-with-gta-82-gmc605c-010-01993-24"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821564635",
+      "handle": "garmin-kit-lru-gfc600-4-servo-gsa-gsm-gmc605c-010-01993-26"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821630171",
+      "handle": "garmin-kit-lru-gfc600-5-servos-with-2-continuous-travel-gmc605c-010-01993-27"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822842587",
+      "handle": "garmin-kit-lru-gfc600h-3-axis-w-o-fd-010-02323-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342829789403",
+      "handle": "garmin-kit-stc-documentation-cirrus-sr2x-g1000-nxi-upgrade-k00-01491-00"
+    },
+    {
+      "productId": "gid://shopify/Product/9342830018779",
+      "handle": "garmin-kit-tcas-lru-xls-g5000-stc-k10-00207-08"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822252763",
+      "handle": "garmin-lru-kit-g600-txi-gmu44b-integrated-ahrs-010-02004-16"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822416603",
+      "handle": "garmin-lru-kit-txi-grs-79-gdc-7400-gmu-44b-010-02115-05"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822285531",
+      "handle": "garmin-lru-kit-txi-rvsm-gmu44b-grs-7800-gdc-7400-010-02004-25"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819959003",
+      "handle": "garmin-sd-card-g500-600-txi-radar-altimeter-enablement-010-01477-4a"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820057307",
+      "handle": "garmin-sd-card-g500-600-txi-s-tec-dfcs-2100-1500-enablement-010-01477-4f"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819860699",
+      "handle": "garmin-sd-card-g500-600-txi-taws-b-enablement-010-01477-42"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820024539",
+      "handle": "garmin-sd-card-g500-600-txi-third-party-radar-a708-enablement-010-01477-4d"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819893467",
+      "handle": "garmin-sd-card-g500-g600-txi-dfc90-enablement-010-01477-49"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820483291",
+      "handle": "garmin-sd-card-g500-h-g600-g700-txi-turbine-eis-enablement-010-01478-4c"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820286683",
+      "handle": "garmin-sd-card-g500-h-g600-txi-gtn-xi-gwx-8000-enablement-part-23-class-i-ii-iii-010-01477-4s"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822514907",
+      "handle": "garmin-sd-card-g500-h-g600-txi-gtn-xi-radar-agcs-and-td-enablement-010-02192-30"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820122843",
+      "handle": "garmin-sd-card-g500-h-g600-txi-nv-enablement-1-display-010-01477-4l"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820188379",
+      "handle": "garmin-sd-card-g500-h-g600-txi-nv-enablement-2-display-010-01477-4m"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820221147",
+      "handle": "garmin-sd-card-g500-h-g600-txi-nv-enablement-3-display-010-01477-4n"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820253915",
+      "handle": "garmin-sd-card-g500-h-g600-txi-nv-enablement-4-display-010-01477-4p"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820090075",
+      "handle": "garmin-sd-card-g500-h-g600-txi-video-enablement-010-01477-4g"
+    },
+    {
+      "productId": "gid://shopify/Product/9342826217691",
+      "handle": "garmin-sd-card-g500-txi-alt-preselect-enablement-010-03716-45"
+    },
+    {
+      "productId": "gid://shopify/Product/9342826250459",
+      "handle": "garmin-sd-card-g500-txi-metric-pfd-enablement-010-03716-4j"
+    },
+    {
+      "productId": "gid://shopify/Product/9342826152155",
+      "handle": "garmin-sd-card-g500h-txi-helicopter-enablement-010-03716-33"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819827931",
+      "handle": "garmin-sd-card-g500h-txi-hsvt-enablement-010-01476-47"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819991771",
+      "handle": "garmin-sd-card-g600-txi-pc12-fast-slow-a429-enablement-010-01477-4b"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820319451",
+      "handle": "garmin-sd-card-g600-txi-rvsm-enablement-socata-tbm700-850-010-01477-60"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820516059",
+      "handle": "garmin-sd-card-g700-txi-a708-radar-enablement-010-01478-4d"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820352219",
+      "handle": "garmin-sd-card-g700-txi-chartview-enablement-010-01478-40"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820778203",
+      "handle": "garmin-sd-card-g700-txi-gtn-xi-gwx-8000-enablement-part-25-and-part-23-class-iv-010-01478-4s"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822547675",
+      "handle": "garmin-sd-card-g700-txi-gtn-xi-radar-agcs-and-td-enablement-010-02193-30"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820581595",
+      "handle": "garmin-sd-card-g700-txi-nv-enablement-1-display-010-01478-4l"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820647131",
+      "handle": "garmin-sd-card-g700-txi-nv-enablement-2-display-010-01478-4m"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820712667",
+      "handle": "garmin-sd-card-g700-txi-nv-enablement-3-display-010-01478-4n"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820745435",
+      "handle": "garmin-sd-card-g700-txi-nv-enablement-4-display-010-01478-4p"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820450523",
+      "handle": "garmin-sd-card-g700-txi-radar-alt-enablement-010-01478-4a"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820417755",
+      "handle": "garmin-sd-card-g700-txi-taws-b-enablement-010-01478-42"
+    },
+    {
+      "productId": "gid://shopify/Product/9342820548827",
+      "handle": "garmin-sd-card-g700-txi-video-enablement-010-01478-4g"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817206491",
+      "handle": "garmin-sd-card-gdu10xx-chart-unlock-010-00330-50"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818058459",
+      "handle": "garmin-sd-card-gtn-16-watt-comm-enablement-010-00878-04"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818091227",
+      "handle": "garmin-sd-card-gtn-7xx-chartview-enablement-010-00878-40"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818156763",
+      "handle": "garmin-sd-card-gtn-7xx-faa-data-comm-enablement-010-00878-48"
+    },
+    {
+      "productId": "gid://shopify/Product/9342817992923",
+      "handle": "garmin-sd-card-gtn-taws-b-enablement-010-00878-01"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818123995",
+      "handle": "garmin-sd-card-gtn-third-party-radar-arinc-708-enablement-010-00878-42"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818025691",
+      "handle": "garmin-sd-card-gtn6xx-7xx-search-rescue-enablement-010-00878-03"
+    },
+    {
+      "productId": "gid://shopify/Product/9342826348763",
+      "handle": "garmin-sd-card-gx000-taws-unlock-enablement-sysrel-7-51-or-later-010-03905-04"
+    },
+    {
+      "productId": "gid://shopify/Product/9342818222299",
+      "handle": "garmin-top-assy-gsa-28-unit-only-010-01068-20"
+    },
+    {
+      "productId": "gid://shopify/Product/8961756954843",
+      "handle": "gco-14"
+    },
+    {
+      "productId": "gid://shopify/Product/8961757020379",
+      "handle": "gcu-485-gray-1-button-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961757249755",
+      "handle": "gdl-39r"
+    },
+    {
+      "productId": "gid://shopify/Product/8961757282523",
+      "handle": "gdl-50-52-replacement-ads-b-antenna"
+    },
+    {
+      "productId": "gid://shopify/Product/8961757315291",
+      "handle": "gdl-50r-faa-pma"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758265563",
+      "handle": "gdu-1050"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758331099",
+      "handle": "gdu-1060-g500-txi-black-ahrs-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758363867",
+      "handle": "gdu-1060-g500-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758298331",
+      "handle": "gdu-1060-g600-txi-black-ahrs-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758396635",
+      "handle": "gdu-1060-g600-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758429403",
+      "handle": "gdu-1060-g600-txi-gray-ahrs-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758462171",
+      "handle": "gdu-1060-g600-txi-gray-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758494939",
+      "handle": "gdu-1060-g700-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758527707",
+      "handle": "gdu-1060-g700-txi-gray-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961867186395",
+      "handle": "gdu-1210-g500-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961867219163",
+      "handle": "gdu-1210-g600-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961867251931",
+      "handle": "gdu-1210-g600-txi-gray-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758757083",
+      "handle": "gdu-1250a-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758789851",
+      "handle": "gdu-1250w-harsh-env-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758822619",
+      "handle": "gdu-1250w-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758855387",
+      "handle": "gdu-1450w"
+    },
+    {
+      "productId": "gid://shopify/Product/8961758888155",
+      "handle": "gdu-1550"
+    },
+    {
+      "productId": "gid://shopify/Product/8961867317467",
+      "handle": "gdu-460-gps-display-am-pma-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961867350235",
+      "handle": "gdu-470-gps-display-am-pma-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759084763",
+      "handle": "gdu-700-1060-adc-g500-txi-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759248603",
+      "handle": "gdu-700l-eis-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759117531",
+      "handle": "gdu-700l-g500-txi-black-ahrs-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759150299",
+      "handle": "gdu-700l-g500-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759314139",
+      "handle": "gdu-700l-g600-txi-black-ahrs-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759346907",
+      "handle": "gdu-700l-g600-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961867481307",
+      "handle": "gdu-700l-g600-txi-gray-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961867514075",
+      "handle": "gdu-700l-g700-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961867546843",
+      "handle": "gdu-700l-g700-txi-gray-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759707355",
+      "handle": "gdu-700p-eis-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759772891",
+      "handle": "gdu-700p-g500-txi-black-ahrs-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759641819",
+      "handle": "gdu-700p-g500-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759674587",
+      "handle": "gdu-700p-g600-txi-black-ahrs-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759805659",
+      "handle": "gdu-700p-g600-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961867579611",
+      "handle": "gdu-700p-g600-txi-gray-ahrs-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759903963",
+      "handle": "gdu-700p-g600-txi-gray-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759936731",
+      "handle": "gdu-700p-g700-txi-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961759969499",
+      "handle": "gdu-700p-g700-txi-gray-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961760067803",
+      "handle": "gea-24-unit-only-faa-pma"
+    },
+    {
+      "productId": "gid://shopify/Product/8961760133339",
+      "handle": "gea-24b-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961760166107",
+      "handle": "gea-7100"
+    },
+    {
+      "productId": "gid://shopify/Product/8961760198875",
+      "handle": "gea-71b-enhanced-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961761509595",
+      "handle": "gfc-500-product-info-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961762263259",
+      "handle": "gi-285-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961762296027",
+      "handle": "gi-285-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961762689243",
+      "handle": "gi106b-crs-datum-w-inst-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961762722011",
+      "handle": "gi275-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961762787547",
+      "handle": "gia-6300-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961762853083",
+      "handle": "gia-64"
+    },
+    {
+      "productId": "gid://shopify/Product/8961762984155",
+      "handle": "gma-1360d-audio-panel-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763016923",
+      "handle": "gma-245-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763147995",
+      "handle": "gma-347-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763180763",
+      "handle": "gma-350h-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763213531",
+      "handle": "gma-36b-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763246299",
+      "handle": "gma1347c-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763279067",
+      "handle": "gma245r-mkr-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763311835",
+      "handle": "gma245r-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763344603",
+      "handle": "gma342-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763410139",
+      "handle": "gma345-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763508443",
+      "handle": "gma350-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763541211",
+      "handle": "gma350hc-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961763999963",
+      "handle": "gmc-305-control-panel"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764032731",
+      "handle": "gmc-507-no-pma"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764065499",
+      "handle": "gmc-507-pma-certificated-aircraft"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764098267",
+      "handle": "gmc-605-product-info-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764131035",
+      "handle": "gmc-605-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764163803",
+      "handle": "gmc-707-no-bc-yd-buttons-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764196571",
+      "handle": "gmc-708-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764229339",
+      "handle": "gmc-711-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764262107",
+      "handle": "gmc-7200"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764294875",
+      "handle": "gmc-725"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764327643",
+      "handle": "gmc-7250"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764360411",
+      "handle": "gmc-7300-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764393179",
+      "handle": "gmc305-w-yd"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764589787",
+      "handle": "gmu-22-magnetometer"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764655323",
+      "handle": "gmu-44b-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764688091",
+      "handle": "gmx-200-chartview-kit-single-install"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764720859",
+      "handle": "gmx-200-pilots-guide-and-reference"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764753627",
+      "handle": "gmx-200-safe-taxi-flitechart-data-card-kit-dual"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764786395",
+      "handle": "gmx-200-safetaxi-flitechart-data-card-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764819163",
+      "handle": "gnc-255b-nvg-compatible"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764884699",
+      "handle": "gnc255b-nv-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961765114075",
+      "handle": "gns-waas-data-card"
+    },
+    {
+      "productId": "gid://shopify/Product/8961765146843",
+      "handle": "gns-waas-navdata-card-americas"
+    },
+    {
+      "productId": "gid://shopify/Product/8961765998811",
+      "handle": "gra-5500-55-external-5g-filter-1-7x1-2"
+    },
+    {
+      "productId": "gid://shopify/Product/8961766097115",
+      "handle": "grs-7800"
+    },
+    {
+      "productId": "gid://shopify/Product/8961766129883",
+      "handle": "grs-79-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961766162651",
+      "handle": "gsa-87-servo-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961766228187",
+      "handle": "gsa-9000"
+    },
+    {
+      "productId": "gid://shopify/Product/8961766785243",
+      "handle": "gsm-86-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961766818011",
+      "handle": "gsr-56"
+    },
+    {
+      "productId": "gid://shopify/Product/8961766883547",
+      "handle": "gsr-56-harsh-env"
+    },
+    {
+      "productId": "gid://shopify/Product/8961766981851",
+      "handle": "gsr56-9522b-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961868693723",
+      "handle": "gtn-16-watt-comm-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961767473371",
+      "handle": "gtn-625-635-650-cockpit-reference-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961767506139",
+      "handle": "gtn-625-635-650-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961767538907",
+      "handle": "gtn-625xi-black-unit-only-w-info-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961767866587",
+      "handle": "gtn-725-750-cockpit-reference-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961767899355",
+      "handle": "gtn-725-750-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961767932123",
+      "handle": "gtn-725xi-black-unit-only-w-info-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961868759259",
+      "handle": "gtn-7xx-chartview-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961868792027",
+      "handle": "gtn-7xx-third-party-radar-a708-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961868824795",
+      "handle": "gtn-7xx-xi-faa-data-comm-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768325339",
+      "handle": "gtn-fan-assembly-replacement-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961868857563",
+      "handle": "gtn-htaws-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961868890331",
+      "handle": "gtn-search-rescue-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961868923099",
+      "handle": "gtn-taws-a-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961868955867",
+      "handle": "gtn-taws-b-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768620251",
+      "handle": "gtn-xi-series-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768653019",
+      "handle": "gtn635xi-black-unit-only-w-info-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768685787",
+      "handle": "gtn635xi-helicopter-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768718555",
+      "handle": "gtn650xi-black-unit-only-w-info-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768751323",
+      "handle": "gtn650xi-gray-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768784091",
+      "handle": "gtn650xi-gray-unit-only-w-info-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768816859",
+      "handle": "gtn650xi-helicopter-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768849627",
+      "handle": "gtn650xi-nv-black-unit-only-w-info-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768882395",
+      "handle": "gtn650xi-nv-helicopter-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768915163",
+      "handle": "gtn750xi-black-unit-only-w-info-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768947931",
+      "handle": "gtn750xi-gray-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961768980699",
+      "handle": "gtn750xi-gray-unit-only-w-info-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961769013467",
+      "handle": "gtn750xi-helicopter-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961769046235",
+      "handle": "gtn750xi-nv-black-unit-only-w-info-kit"
+    },
+    {
+      "productId": "gid://shopify/Product/8961769079003",
+      "handle": "gtn750xi-nv-helicopter-black-standard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961769308379",
+      "handle": "gtp-59"
+    },
+    {
+      "productId": "gid://shopify/Product/8961769341147",
+      "handle": "gtr-20-standard-pma"
+    },
+    {
+      "productId": "gid://shopify/Product/8961869054171",
+      "handle": "gtr-205-audio-panel-enablement"
+    },
+    {
+      "productId": "gid://shopify/Product/8961869152475",
+      "handle": "gtr205-gnc215-16w-comm-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961869218011",
+      "handle": "gtr205-gnc215-nvis-enablement-download"
+    },
+    {
+      "productId": "gid://shopify/Product/8961769832667",
+      "handle": "gts-820"
+    },
+    {
+      "productId": "gid://shopify/Product/8961769865435",
+      "handle": "gts-processor"
+    },
+    {
+      "productId": "gid://shopify/Product/8961769898203",
+      "handle": "gts-processor-w-tcas-i-enablement-coupon"
+    },
+    {
+      "productId": "gid://shopify/Product/8961769996507",
+      "handle": "gtx-3000"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770029275",
+      "handle": "gtx-320-320a-adapter-kit-king-kt-76a-kt-78a"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770127579",
+      "handle": "gtx-327-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770160347",
+      "handle": "gtx-330-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770193115",
+      "handle": "gtx-330d-transponder"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770258651",
+      "handle": "gtx-335-nvg-compatible"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770291419",
+      "handle": "gtx-335-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770324187",
+      "handle": "gtx-335d"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770389723",
+      "handle": "gtx-335dr"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770520795",
+      "handle": "gtx-335r-gps-standard-kit-g1000"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770586331",
+      "handle": "gtx-335r-standard-kit-g1000"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770651867",
+      "handle": "gtx-335r-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770717403",
+      "handle": "gtx-33d-remote-transponder"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770750171",
+      "handle": "gtx-345"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770782939",
+      "handle": "gtx-345-w-waas"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770815707",
+      "handle": "gtx-345d"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770848475",
+      "handle": "gtx-345dr"
+    },
+    {
+      "productId": "gid://shopify/Product/8961770979547",
+      "handle": "gtx-345r-standard-kit-g1000"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771012315",
+      "handle": "gtx-345r-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771045083",
+      "handle": "gtx325-pilots-guide"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771077851",
+      "handle": "gtx345-nv-gps-standard-kit-nab"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771110619",
+      "handle": "gtx345-nv-standard-kit-nab"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771143387",
+      "handle": "gtx345-unit-only-nab"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771208923",
+      "handle": "gtx345dr-unit-only"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771241691",
+      "handle": "gtx345r-gps-standard-kit-g1000-nab"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771307227",
+      "handle": "gtx345r-standard-kit-g1000-nab"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771372763",
+      "handle": "gtx345r-unit-only-nab"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771405531",
+      "handle": "gtx45r-gps-standard-kit-nab"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771438299",
+      "handle": "gtx45r-standard-kit-nab"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771471067",
+      "handle": "gtx45r-unit-only-nab"
+    },
+    {
+      "productId": "gid://shopify/Product/8961771765979",
+      "handle": "gwx70-counterweight"
+    },
+    {
+      "productId": "gid://shopify/Product/8961869775067",
+      "handle": "gx-2101-east-n-america-datacard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961869873371",
+      "handle": "gx-2101-series-blank-datacard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961869906139",
+      "handle": "gx-2101-usa-lam-datacard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961869938907",
+      "handle": "gx-2101-west-n-america-datacard"
+    },
+    {
+      "productId": "gid://shopify/Product/8961772814555",
+      "handle": "heat-shrink-kit-color-coded-gts-processor"
+    },
+    {
+      "productId": "gid://shopify/Product/8961773863131",
+      "handle": "install-tray-gea-110"
+    },
+    {
+      "productId": "gid://shopify/Product/8961870495963",
+      "handle": "kit-ads-b-hawker-800a-xp"
+    },
+    {
+      "productId": "gid://shopify/Product/8961870528731",
+      "handle": "kit-dual-gi-275-w-gmu-11-adahrs"
+    },
+    {
+      "productId": "gid://shopify/Product/8961870561499",
+      "handle": "kit-dual-gi-275-w-gmu-11-adahrs-adahrs-ap"
+    },
+    {
+      "productId": "gid://shopify/Product/8961780842715",
+      "handle": "kit-engine-sensor-4-cylinder-txi-gpt-oil-t"
+    },
+    {
+      "productId": "gid://shopify/Product/8961780973787",
+      "handle": "kit-engine-sensor-6-cylinder-txi-gpt-oil-t"
+    },
+    {
+      "productId": "gid://shopify/Product/8961781301467",
+      "handle": "kit-gdu-1040a-replacement-knob-set"
+    },
+    {
+      "productId": "gid://shopify/Product/8961781367003",
+      "handle": "kit-gdu-620-fan-assembly"
+    },
+    {
+      "productId": "gid://shopify/Product/8961781432539",
+      "handle": "kit-gdu-620-replacement-knob-set"
+    },
+    {
+      "productId": "gid://shopify/Product/8961789591771",
+      "handle": "kit-gdu10xx-replacement-knob-set"
+    },
+    {
+      "productId": "gid://shopify/Product/8961870856411",
+      "handle": "kit-gfc600-2-axis-w-p-t-pa-46-piston-gmc605c"
+    },
+    {
+      "productId": "gid://shopify/Product/8961870889179",
+      "handle": "kit-gfc600-3-axis-w-p-t-pa-46-piston-gmc605c"
+    },
+    {
+      "productId": "gid://shopify/Product/8961870921947",
+      "handle": "kit-gfc600-3-servo-pa-46-meridian"
+    },
+    {
+      "productId": "gid://shopify/Product/8961870954715",
+      "handle": "kit-gfc600-3-servo-pa-46-meridian-gmc605c"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871020251",
+      "handle": "kit-gfc600-4-servo-pa-46-meridian"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871085787",
+      "handle": "kit-gfc600-4-servo-pa-46-meridian-gmc605c"
+    },
+    {
+      "productId": "gid://shopify/Product/8961785102555",
+      "handle": "kit-gfc600-textron-4xx-ifcs-de-mod"
+    },
+    {
+      "productId": "gid://shopify/Product/8961786151131",
+      "handle": "kit-gi-275-adahrs-ap-class-i-ii"
+    },
+    {
+      "productId": "gid://shopify/Product/8961786249435",
+      "handle": "kit-gi-275-adahrs-ap-class-iii-part-25"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871151323",
+      "handle": "kit-gi-275-adahrs-ap-w-gmu-11-class-i-ii"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871184091",
+      "handle": "kit-gi-275-adahrs-ap-w-gmu-44b-class-iii-part-25"
+    },
+    {
+      "productId": "gid://shopify/Product/8961786609883",
+      "handle": "kit-gi-275-adahrs-class-i-ii"
+    },
+    {
+      "productId": "gid://shopify/Product/8961786642651",
+      "handle": "kit-gi-275-adahrs-class-iii-helo-part-25"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871380699",
+      "handle": "kit-gi-275-adahrs-class-iii-part-25-w-out-battery"
+    },
+    {
+      "productId": "gid://shopify/Product/8961786314971",
+      "handle": "kit-gi-275-adahrs-green-halo"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871216859",
+      "handle": "kit-gi-275-adahrs-green-halo-w-out-battery"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871282395",
+      "handle": "kit-gi-275-adahrs-w-gmu-11-class-i-ii"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871347931",
+      "handle": "kit-gi-275-adahrs-w-gmu-44b-class-iii-part-25"
+    },
+    {
+      "productId": "gid://shopify/Product/8961789919451",
+      "handle": "kit-gma346-product-info"
+    },
+    {
+      "productId": "gid://shopify/Product/8961787003099",
+      "handle": "kit-gmc605-color-product-info"
+    },
+    {
+      "productId": "gid://shopify/Product/8961787199707",
+      "handle": "kit-gtn-battery-replacement"
+    },
+    {
+      "productId": "gid://shopify/Product/8961787330779",
+      "handle": "kit-gtn-internal-datacard-replacement-8gb"
+    },
+    {
+      "productId": "gid://shopify/Product/8961787396315",
+      "handle": "kit-gtn-replacement-knob-set"
+    },
+    {
+      "productId": "gid://shopify/Product/8961787461851",
+      "handle": "kit-gtn-xi-battery-replacement"
+    },
+    {
+      "productId": "gid://shopify/Product/8961787527387",
+      "handle": "kit-gtr225-gnc255-fan-assembly-replacement"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871773915",
+      "handle": "kit-lru-gfc600-2-axis"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871904987",
+      "handle": "kit-lru-gfc600-3-axis-gmc605c"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871806683",
+      "handle": "kit-lru-gfc600-3-axis-spiral"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871839451",
+      "handle": "kit-lru-gfc600-3-axis-with-1-continuous-travel"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871872219",
+      "handle": "kit-lru-gfc600-3-axis-with-1-continuous-travel-gmc605c"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871970523",
+      "handle": "kit-lru-gfc600-3-servo-with-2-gta"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872101595",
+      "handle": "kit-lru-gfc600-4-axis-gmc605c"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872003291",
+      "handle": "kit-lru-gfc600-4-axis-spiral"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872036059",
+      "handle": "kit-lru-gfc600-4-axis-with-1-continuous-travel"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872068827",
+      "handle": "kit-lru-gfc600-4-axis-with-1-continuous-travel-gmc605c"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872134363",
+      "handle": "kit-lru-gfc600-4-servo-gsa-gsm"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872167131",
+      "handle": "kit-lru-gfc600-4-servo-gsa80-gsm"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872199899",
+      "handle": "kit-lru-gfc600-4-servo-gsa80-gsm-gmc605c"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872265435",
+      "handle": "kit-lru-gfc600-5-servos-with-2-continuous-travel"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872298203",
+      "handle": "kit-lru-gfc600h-bell-505-2-axis"
+    },
+    {
+      "productId": "gid://shopify/Product/8961789984987",
+      "handle": "kit-prod-info-gnc255"
+    },
+    {
+      "productId": "gid://shopify/Product/8961789067483",
+      "handle": "kit-product-info-gi-275"
+    },
+    {
+      "productId": "gid://shopify/Product/8961789133019",
+      "handle": "kit-product-info-txi"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872494811",
+      "handle": "kit-tcas-ii-system-gts-8000-w-dual-gtx-3000"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872330971",
+      "handle": "kit-txi-eis-7-landscape-single-piston-engine"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872363739",
+      "handle": "kit-txi-eis-7-landscape-twin-piston-engine"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872396507",
+      "handle": "kit-txi-eis-7-portrait-single-piston-engine"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872462043",
+      "handle": "kit-txi-eis-7-portrait-twin-piston-engine"
+    },
+    {
+      "productId": "gid://shopify/Product/8961790181595",
+      "handle": "knob-assy-crs-v2-gdu10xx"
+    },
+    {
+      "productId": "gid://shopify/Product/8961790869723",
+      "handle": "knob-assy-dual-inner-gtn6xx-7xx"
+    },
+    {
+      "productId": "gid://shopify/Product/8961790345435",
+      "handle": "knob-assy-dual-outer-gtn6xx-7xx"
+    },
+    {
+      "productId": "gid://shopify/Product/8961790410971",
+      "handle": "knob-assy-hdg-v2-gdu10xx"
+    },
+    {
+      "productId": "gid://shopify/Product/8961790476507",
+      "handle": "knob-assy-inner-v2-gdu10xx"
+    },
+    {
+      "productId": "gid://shopify/Product/8961790542043",
+      "handle": "knob-assy-joystick-v2-gdu10xx"
+    },
+    {
+      "productId": "gid://shopify/Product/8961790705883",
+      "handle": "knob-assy-outer-v2-gdu10xx"
+    },
+    {
+      "productId": "gid://shopify/Product/8961790771419",
+      "handle": "knob-assy-sqlh-knob-gma340-347"
+    },
+    {
+      "productId": "gid://shopify/Product/8961790804187",
+      "handle": "knob-assy-volume-v2-gdu10xx"
+    },
+    {
+      "productId": "gid://shopify/Product/8961791000795",
+      "handle": "knob-code-select-gtx320"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872625883",
+      "handle": "lru-kit-g500-g600-txi-gmu44b-grs-79-gdc-72"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872691419",
+      "handle": "lru-kit-g500-g600-txi-gmu44b-gsu-75"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872593115",
+      "handle": "lru-kit-g500-txi-gmu44b-integrated-ahrs"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872756955",
+      "handle": "lru-kit-g500h-txi-gsu-75h-gmu-44b"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872888027",
+      "handle": "lru-kit-g600-txi-gmu44b-gsu-75b"
+    },
+    {
+      "productId": "gid://shopify/Product/8961873019099",
+      "handle": "lru-kit-g600-txi-gsu-75b"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872822491",
+      "handle": "lru-kit-g600-txi-rvsm-gmu44b-grs-79-gdc-72b"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872855259",
+      "handle": "lru-kit-g600-txi-rvsm-grs-7800-gdc-7400"
+    },
+    {
+      "productId": "gid://shopify/Product/8961873084635",
+      "handle": "lru-kit-txi-grs-79-gdc-7400"
+    },
+    {
+      "productId": "gid://shopify/Product/8961801421019",
+      "handle": "optional-antenna-kit-gtx-320-320a-327-330"
+    },
+    {
+      "productId": "gid://shopify/Product/8961802305755",
+      "handle": "pmp-inlay-assy-gtx330-blk"
+    },
+    {
+      "productId": "gid://shopify/Product/8961803190491",
+      "handle": "product-registration-gtx335-gps"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816232155",
+      "handle": "sd-card-g500-txi-svt-enablement"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816264923",
+      "handle": "sd-card-g500h-600-txi-chartview-enablement"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816297691",
+      "handle": "sd-card-g950-nxi-super-mushshak-loader-card"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816363227",
+      "handle": "sd-card-gdu10xx-chart-unlock"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816494299",
+      "handle": "sd-card-gdu10xx-taws-unlock"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816527067",
+      "handle": "sd-card-gdu10xx-trn-obs-apt-db-supp"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816559835",
+      "handle": "sd-card-gdu10xx-trn-obs-apt-db-supp-safe-taxi"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816395995",
+      "handle": "sd-card-gdu1xxx-svs-unlock"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816428763",
+      "handle": "sd-card-gdu6xx-gad43-enablement"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816592603",
+      "handle": "sd-card-spare-database-adapter"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816625371",
+      "handle": "sd-micro-sd-card-reader"
+    },
+    {
+      "productId": "gid://shopify/Product/8961816920283",
+      "handle": "smp-gsa28-plate"
+    },
+    {
+      "productId": "gid://shopify/Product/8961817411803",
+      "handle": "snapdome-array-gnc4xx"
+    },
+    {
+      "productId": "gid://shopify/Product/8961817444571",
+      "handle": "snapdome-array-gnc5xx"
+    },
+    {
+      "productId": "gid://shopify/Product/8961818788059",
+      "handle": "sub-assy-conn-kit-90-deg-gtx-3000"
+    },
+    {
+      "productId": "gid://shopify/Product/8961822589147",
+      "handle": "sub-assy-conn-kit-gdu-700"
+    },
+    {
+      "productId": "gid://shopify/Product/8961823113435",
+      "handle": "sub-assy-conn-kit-gnc255"
+    },
+    {
+      "productId": "gid://shopify/Product/8961823342811",
+      "handle": "sub-assy-conn-kit-gtx35"
+    },
+    {
+      "productId": "gid://shopify/Product/8961823572187",
+      "handle": "sub-assy-conn-kit-sb-gtx32"
+    },
+    {
+      "productId": "gid://shopify/Product/8961823637723",
+      "handle": "sub-assy-conn-kit-sb-gtx33"
+    },
+    {
+      "productId": "gid://shopify/Product/8961826324699",
+      "handle": "supplemental-database-card-gifd-ifr-vfr-charts"
+    },
+    {
+      "productId": "gid://shopify/Product/8961827864795",
+      "handle": "top-assy-gdl-69e"
+    },
+    {
+      "productId": "gid://shopify/Product/8961827963099",
+      "handle": "top-assy-gsa-28-w-ball-bearings-pma"
+    }
+  ]
+}

@@ -42,6 +42,7 @@ export type PdpPriceCardProps = {
   isGarmin: boolean;
   mapLocked: boolean;
   showQuoteRetailPrice?: boolean;
+  verifiedQuoteRetailDisplay?: boolean;
   isDealerInstall?: boolean;
   cartPurchaseException?: boolean;
 };
@@ -106,6 +107,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
     isGarmin,
     mapLocked,
     showQuoteRetailPrice = false,
+    verifiedQuoteRetailDisplay = false,
     isDealerInstall = false,
     cartPurchaseException = false,
   } = props;
@@ -297,12 +299,22 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
           </button>
         ) : isNonOtcGarmin ? (
           <Link className="bs-cta-primary" href={contactHref}>
-            {showQuoteRetailPrice
-              ? 'Call for Package and Sale Pricing'
-              : 'Call RWAS for Pricing and Installation'}
+            {verifiedQuoteRetailDisplay
+              ? 'Contact RWAS for Installation and Availability'
+              : showQuoteRetailPrice
+                ? 'Call for Package and Sale Pricing'
+                : 'Call RWAS for Pricing and Installation'}
           </Link>
         ) : null}
       </div>
+
+      {verifiedQuoteRetailDisplay ? (
+        <p className="bs-quote-retail-note">
+          Equipment retail price only. Installation, additional parts, and
+          aircraft applicability require a separate quote. This listing is not
+          available for online purchase.
+        </p>
+      ) : null}
 
       {showGarminRetailPrice &&
       !publicPricePolicy.products.some(

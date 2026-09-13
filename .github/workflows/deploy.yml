@@ -39,6 +39,16 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Scoped SEO and mocked commerce regressions
+        run: |
+          node scripts/seo-remediation-test.mjs
+          node scripts/garmin-commercial-review-test.mjs
+          node scripts/cart-private-pricing-test.mjs
+          node scripts/cart-private-runtime-test.mjs
+          node scripts/cart-native-refresh-test.mjs
+          node scripts/cart-purchase-exceptions-test.mjs
+          node scripts/papa-alpha-variant-selection-test.mjs
+
       - name: Build (next-on-pages)
         run: npm run pages:build
         env:
@@ -76,6 +86,10 @@ jobs:
 
       - name: Smoke-test production (main only)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          # This release explicitly forbids creating even disposable carts.
+          # Ordinary future releases retain native cart verification.
+          RWAS_CATALOG_READ_ONLY: ${{ contains(github.event.head_commit.message, '[read-only-catalog]') && '1' || '0' }}
         run: |
           set -e
           echo "=== SEO smoke ==="

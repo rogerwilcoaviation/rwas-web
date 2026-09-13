@@ -359,16 +359,15 @@ export default async function BlogArticlePage({
         </header>
 
         <div
+          className="rwas-article-grid"
           style={{
-            display: 'grid',
-            gridTemplateColumns: '1.6fr 1px 0.9fr',
             gap: 0,
             padding: '22px 0',
             alignItems: 'start',
           }}
         >
           {/* Body column */}
-          <div style={{ padding: '0 22px 0 0' }}>
+          <div className="rwas-article-body">
             {article.subtitle ? (
               <p
                 className="np-body-text"
@@ -519,12 +518,12 @@ export default async function BlogArticlePage({
             </div>
           </div>
 
-          <div className="np-col-divider" />
+          <div className="np-col-divider rwas-article-divider" />
 
           {/* Sidebar column — flat specimens filed inside the stage */}
           <div
+            className="rwas-article-sidebar"
             style={{
-              padding: '0 0 0 22px',
               display: 'flex',
               flexDirection: 'column',
               gap: '14px',
