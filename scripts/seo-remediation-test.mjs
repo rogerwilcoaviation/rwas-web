@@ -5,9 +5,9 @@ const policy = JSON.parse(fs.readFileSync(new URL('../data/garmin-quote-retail-d
 const existing = JSON.parse(fs.readFileSync(new URL('../data/garmin-public-price-policy.json', import.meta.url)));
 let passed = 0;
 function test(value) { assert.ok(value); passed++; }
-test(policy.products.length === 178);
+test(policy.products.length === 195);
 test(policy.quoteOnlyAuditProducts.length === 521);
-test(new Set(policy.products.map(p => p.sku)).size === 178);
+test(new Set(policy.products.map(p => p.sku)).size === 195);
 for (const e of policy.products) {
   const p = { id: e.productId, handle: e.handle, vendor: 'Garmin', variants: [{ id: e.variantId, sku: e.sku, price: {amount:e.amount, currencyCode:e.currencyCode} }] };
   test(verifiedQuoteRetailPrice(p, policy)?.amount === e.amount);
@@ -30,4 +30,4 @@ test(card.includes("? 'Contact RWAS for Installation and Availability'"));
 const page = fs.readFileSync(new URL('../app/products/[handle]/page.tsx',import.meta.url),'utf8');
 test(page.includes('quoteRetailPolicy.quoteOnlyAuditProducts.some'));
 test(page.includes("gating.otc !== 'eligible'"));
-console.log(JSON.stringify({passed,approvedDisplay:178,auditScope:521,networkWrites:0}));
+console.log(JSON.stringify({passed,approvedDisplay:195,auditScope:521,networkWrites:0}));

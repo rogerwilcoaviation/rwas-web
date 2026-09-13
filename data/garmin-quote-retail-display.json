@@ -1,7 +1,7 @@
 {
   "reviewedAt": "2026-09-13",
   "sourceLastAuthenticatedCheck": "2026-09-12",
-  "source": "Garmin Aviation Aftermarket Price Catalog August 2026 Rev5, published August 17; no fixed printed expiration",
+  "source": "Valid retained current Garmin aftermarket and autopilot catalogs; no fixed printed expiration. Explicit source provenance per row.",
   "sourceSha256": "9dd27419642cfd30a644a2ef97d0cd7c6948dbfb06ea11f2e35fe13ff2b3d519",
   "products": [
     {
@@ -13,7 +13,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961740734683",
@@ -24,7 +25,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961740832987",
@@ -37,7 +39,8 @@
         15,
         16,
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961740865755",
@@ -50,7 +53,8 @@
         15,
         16,
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961744863451",
@@ -61,7 +65,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961747157211",
@@ -73,7 +78,8 @@
       "sourcePages": [
         15,
         16
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961747189979",
@@ -85,7 +91,8 @@
       "sourcePages": [
         15,
         16
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961747222747",
@@ -97,7 +104,8 @@
       "sourcePages": [
         15,
         16
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961747288283",
@@ -110,7 +118,8 @@
         6,
         7,
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961747321051",
@@ -121,7 +130,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961865449691",
@@ -132,7 +142,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         8
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961865547995",
@@ -144,7 +155,8 @@
       "sourcePages": [
         6,
         8
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961865580763",
@@ -156,7 +168,8 @@
       "sourcePages": [
         6,
         8
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961865613531",
@@ -168,7 +181,8 @@
       "sourcePages": [
         6,
         8
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961865679067",
@@ -179,7 +193,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         6
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866039515",
@@ -193,7 +208,8 @@
         8,
         15,
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866072283",
@@ -207,7 +223,8 @@
         8,
         9,
         15
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961865744603",
@@ -220,7 +237,8 @@
         6,
         8,
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961865810139",
@@ -233,7 +251,8 @@
         6,
         8,
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961865842907",
@@ -246,7 +265,8 @@
         6,
         8,
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961865875675",
@@ -259,7 +279,8 @@
         6,
         8,
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961865908443",
@@ -272,7 +293,8 @@
         6,
         8,
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866137819",
@@ -283,7 +305,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961754366171",
@@ -294,7 +317,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961865711835",
@@ -306,7 +330,8 @@
       "sourcePages": [
         8,
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866170587",
@@ -317,7 +342,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         6
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866236123",
@@ -328,7 +354,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         6
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866301659",
@@ -339,7 +366,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866334427",
@@ -350,7 +378,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866858715",
@@ -363,7 +392,8 @@
         10,
         15,
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866531035",
@@ -374,7 +404,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866563803",
@@ -385,7 +416,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866596571",
@@ -396,7 +428,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866662107",
@@ -407,7 +440,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866694875",
@@ -418,7 +452,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866727643",
@@ -429,7 +464,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866793179",
@@ -440,7 +476,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961866825947",
@@ -451,7 +488,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961755644123",
@@ -462,7 +500,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         31
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961755676891",
@@ -475,7 +514,8 @@
         4,
         11,
         40
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961755742427",
@@ -486,7 +526,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         40
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961755775195",
@@ -499,7 +540,8 @@
         25,
         26,
         27
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961755807963",
@@ -510,7 +552,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         17
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961755840731",
@@ -523,7 +566,8 @@
         25,
         26,
         27
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961756102875",
@@ -537,7 +581,8 @@
         8,
         10,
         32
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961756135643",
@@ -548,7 +593,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         32
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961756168411",
@@ -559,7 +605,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         32
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961756201179",
@@ -570,7 +617,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         32
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961756233947",
@@ -583,7 +631,8 @@
         6,
         8,
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342820876507",
@@ -594,7 +643,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         34
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342819107035",
@@ -605,7 +655,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342819533019",
@@ -616,7 +667,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342826479835",
@@ -627,7 +679,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         19
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342818746587",
@@ -638,7 +691,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342819074267",
@@ -649,7 +703,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342829887707",
@@ -660,7 +715,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         15
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342822908123",
@@ -671,7 +727,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         21
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342829789403",
@@ -682,7 +739,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         14
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342822252763",
@@ -693,7 +751,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342822416603",
@@ -704,7 +763,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342822285531",
@@ -716,7 +776,8 @@
       "sourcePages": [
         6,
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342820483291",
@@ -728,7 +789,8 @@
       "sourcePages": [
         6,
         23
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342822514907",
@@ -739,7 +801,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342820090075",
@@ -750,7 +813,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         8
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342826152155",
@@ -761,7 +825,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342822547675",
@@ -772,7 +837,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342817206491",
@@ -783,7 +849,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         12
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/9342826348763",
@@ -794,7 +861,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         14
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961757020379",
@@ -806,7 +874,8 @@
       "sourcePages": [
         6,
         8
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961757282523",
@@ -817,7 +886,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         34
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961758331099",
@@ -828,7 +898,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         7
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961758363867",
@@ -840,7 +911,8 @@
       "sourcePages": [
         7,
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961758298331",
@@ -851,7 +923,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961758396635",
@@ -862,7 +935,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961758429403",
@@ -873,7 +947,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961758462171",
@@ -884,7 +959,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961758494939",
@@ -895,7 +971,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961758527707",
@@ -906,7 +983,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961867186395",
@@ -917,7 +995,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         7
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961867219163",
@@ -928,7 +1007,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961867251931",
@@ -939,7 +1019,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961867317467",
@@ -950,7 +1031,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         11
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961867350235",
@@ -962,7 +1044,8 @@
       "sourcePages": [
         11,
         23
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961759117531",
@@ -973,7 +1056,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         7
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961759150299",
@@ -985,7 +1069,8 @@
       "sourcePages": [
         7,
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961759314139",
@@ -996,7 +1081,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961759346907",
@@ -1007,7 +1093,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961867481307",
@@ -1018,7 +1105,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961867514075",
@@ -1029,7 +1117,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961867546843",
@@ -1040,7 +1129,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961759772891",
@@ -1051,7 +1141,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         7
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961759641819",
@@ -1063,7 +1154,8 @@
       "sourcePages": [
         7,
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961759674587",
@@ -1074,7 +1166,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961759805659",
@@ -1086,7 +1179,8 @@
       "sourcePages": [
         5,
         23
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961867579611",
@@ -1097,7 +1191,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961759903963",
@@ -1108,7 +1203,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961759936731",
@@ -1119,7 +1215,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961759969499",
@@ -1130,7 +1227,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961762722011",
@@ -1141,7 +1239,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         21
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961763180763",
@@ -1152,7 +1251,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961763279067",
@@ -1164,7 +1264,8 @@
       "sourcePages": [
         4,
         11
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961763344603",
@@ -1175,7 +1276,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961763410139",
@@ -1186,7 +1288,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961763508443",
@@ -1197,7 +1300,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961764589787",
@@ -1208,7 +1312,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         39
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961764688091",
@@ -1219,7 +1324,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         19
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961764753627",
@@ -1230,7 +1336,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         19
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961764786395",
@@ -1241,7 +1348,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         19
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961765114075",
@@ -1252,7 +1360,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         19
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961765146843",
@@ -1263,7 +1372,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         19
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961765998811",
@@ -1274,7 +1384,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         32
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961766818011",
@@ -1285,7 +1396,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         31
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961766981851",
@@ -1296,7 +1408,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         31
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961868693723",
@@ -1308,7 +1421,8 @@
       "sourcePages": [
         15,
         16
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961767538907",
@@ -1319,7 +1433,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         16
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961767932123",
@@ -1330,7 +1445,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         15
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961868759259",
@@ -1341,7 +1457,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         15
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961868792027",
@@ -1352,7 +1469,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         15
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961868824795",
@@ -1363,7 +1481,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         15
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961868857563",
@@ -1374,7 +1493,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         17
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961868890331",
@@ -1386,7 +1506,8 @@
       "sourcePages": [
         15,
         16
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961868923099",
@@ -1398,7 +1519,8 @@
       "sourcePages": [
         15,
         16
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961868955867",
@@ -1410,7 +1532,8 @@
       "sourcePages": [
         15,
         16
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961768620251",
@@ -1423,7 +1546,8 @@
         15,
         16,
         17
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961768653019",
@@ -1434,7 +1558,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         16
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961768718555",
@@ -1445,7 +1570,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         16
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961768784091",
@@ -1456,7 +1582,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         16
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961768816859",
@@ -1467,7 +1594,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         17
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961768849627",
@@ -1478,7 +1606,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         17
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961768915163",
@@ -1489,7 +1618,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         15
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961768980699",
@@ -1500,7 +1630,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         15
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961769046235",
@@ -1511,7 +1642,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         17
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961769308379",
@@ -1522,7 +1654,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         21
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961769341147",
@@ -1534,7 +1667,8 @@
       "sourcePages": [
         4,
         11
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961869054171",
@@ -1545,7 +1679,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         31
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961869152475",
@@ -1556,7 +1691,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         31
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961869218011",
@@ -1567,7 +1703,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         31
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961769865435",
@@ -1578,7 +1715,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         26
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961769898203",
@@ -1589,7 +1727,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         25
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961769996507",
@@ -1600,7 +1739,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         29
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961770258651",
@@ -1611,7 +1751,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961770324187",
@@ -1622,7 +1763,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961770389723",
@@ -1633,7 +1775,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961770520795",
@@ -1644,7 +1787,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961770586331",
@@ -1655,7 +1799,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961770782939",
@@ -1666,7 +1811,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961770815707",
@@ -1677,7 +1823,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961770848475",
@@ -1689,7 +1836,8 @@
       "sourcePages": [
         12,
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961771045083",
@@ -1700,7 +1848,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961771077851",
@@ -1711,7 +1860,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961771110619",
@@ -1722,7 +1872,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961771241691",
@@ -1733,7 +1884,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961771372763",
@@ -1744,7 +1896,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961771765979",
@@ -1755,7 +1908,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         30
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961772814555",
@@ -1767,7 +1921,8 @@
       "sourcePages": [
         25,
         26
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961870495963",
@@ -1778,7 +1933,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         29
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961786249435",
@@ -1789,7 +1945,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         20
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961871151323",
@@ -1800,7 +1957,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         20
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961871184091",
@@ -1811,7 +1969,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         20
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961786642651",
@@ -1823,7 +1982,8 @@
       "sourcePages": [
         20,
         21
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961871380699",
@@ -1834,7 +1994,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         21
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961786314971",
@@ -1845,7 +2006,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         21
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961871216859",
@@ -1856,7 +2018,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         21
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961871282395",
@@ -1867,7 +2030,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         20
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961871347931",
@@ -1879,7 +2043,8 @@
       "sourcePages": [
         20,
         21
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961789067483",
@@ -1890,7 +2055,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         21
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961789133019",
@@ -1904,7 +2070,8 @@
         7,
         9,
         10
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961872494811",
@@ -1915,7 +2082,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         25
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961872625883",
@@ -1927,7 +2095,8 @@
       "sourcePages": [
         5,
         7
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961872593115",
@@ -1938,7 +2107,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         7
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961872756955",
@@ -1949,7 +2119,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         9
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961872888027",
@@ -1960,7 +2131,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         5
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961872822491",
@@ -1971,7 +2143,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         6
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961801421019",
@@ -1985,7 +2158,8 @@
         26,
         27,
         40
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961803190491",
@@ -1996,7 +2170,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         28
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961816494299",
@@ -2007,7 +2182,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         12
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961816395995",
@@ -2018,7 +2194,8 @@
       "currencyCode": "USD",
       "sourcePages": [
         12
-      ]
+      ],
+      "sourceKey": "aftermarket"
     },
     {
       "productId": "gid://shopify/Product/8961818788059",
@@ -2030,7 +2207,429 @@
       "sourcePages": [
         25,
         29
-      ]
+      ],
+      "sourceKey": "aftermarket"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819369179",
+      "handle": "garmin-gfs-83-clutchless-high-torque-unit-only-010-01243-14",
+      "variantId": "gid://shopify/ProductVariant/48758720790747",
+      "sku": "010-01243-14",
+      "amount": "24675.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        96
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/9342819795163",
+      "handle": "garmin-gsa-87-unit-only-010-01469-02",
+      "variantId": "gid://shopify/ProductVariant/48758721216731",
+      "sku": "010-01469-02",
+      "amount": "7630.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        61,
+        62,
+        63,
+        64,
+        65,
+        70,
+        71,
+        75,
+        76,
+        78,
+        85,
+        86,
+        88,
+        89,
+        91
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821728475",
+      "handle": "garmin-kit-gfc600-4-servo-pa-31t-gmc605c-010-01993-52",
+      "variantId": "gid://shopify/ProductVariant/48758723150043",
+      "sku": "010-01993-52",
+      "amount": "45920.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        87
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821761243",
+      "handle": "garmin-kit-gfc600-5-servo-pa-31t-gmc605c-010-01993-53",
+      "variantId": "gid://shopify/ProductVariant/48758723182811",
+      "sku": "010-01993-53",
+      "amount": "51330.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        87
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821695707",
+      "handle": "garmin-kit-lru-gfc600-4-axis-with-1-continuous-travel-gmc605c-010-01993-51",
+      "variantId": "gid://shopify/ProductVariant/48758723117275",
+      "sku": "010-01993-51",
+      "amount": "27850.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        77
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/9342821564635",
+      "handle": "garmin-kit-lru-gfc600-4-servo-gsa-gsm-gmc605c-010-01993-26",
+      "variantId": "gid://shopify/ProductVariant/48758722986203",
+      "sku": "010-01993-26",
+      "amount": "44240.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        66,
+        80,
+        93
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/9342822842587",
+      "handle": "garmin-kit-lru-gfc600h-3-axis-w-o-fd-010-02323-00",
+      "variantId": "gid://shopify/ProductVariant/48758724427995",
+      "sku": "010-02323-00",
+      "amount": "81140.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        94
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/8961761509595",
+      "handle": "gfc-500-product-info-kit",
+      "variantId": "gid://shopify/ProductVariant/47408696525019",
+      "sku": "K00-01087-00",
+      "amount": "60.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/8961762263259",
+      "handle": "gi-285-standard",
+      "variantId": "gid://shopify/ProductVariant/47408697147611",
+      "sku": "010-01598-03",
+      "amount": "2575.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        85,
+        86,
+        88,
+        89,
+        90,
+        91,
+        93
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764065499",
+      "handle": "gmc-507-pma-certificated-aircraft",
+      "variantId": "gid://shopify/ProductVariant/47408698687707",
+      "sku": "010-01946-01",
+      "amount": "3870.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        4,
+        5,
+        6,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/8961764098267",
+      "handle": "gmc-605-product-info-kit",
+      "variantId": "gid://shopify/ProductVariant/47408698720475",
+      "sku": "K00-00662-00",
+      "amount": "70.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        69,
+        73,
+        74,
+        81,
+        84,
+        85,
+        86,
+        92
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/8961785102555",
+      "handle": "kit-gfc600-textron-4xx-ifcs-de-mod",
+      "variantId": "gid://shopify/ProductVariant/47408719495387",
+      "sku": "K11-00045-02",
+      "amount": "1590.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        76,
+        77,
+        78,
+        79,
+        80
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/8961787003099",
+      "handle": "kit-gmc605-color-product-info",
+      "variantId": "gid://shopify/ProductVariant/47408721527003",
+      "sku": "K00-00662-10",
+      "amount": "70.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        70,
+        71,
+        72,
+        73,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        82,
+        83,
+        87,
+        88,
+        89,
+        90,
+        91,
+        93
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/8961871773915",
+      "handle": "kit-lru-gfc600-2-axis",
+      "variantId": "gid://shopify/ProductVariant/47408834543835",
+      "sku": "010-01993-02",
+      "amount": "16575.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        69
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872134363",
+      "handle": "kit-lru-gfc600-4-servo-gsa-gsm",
+      "variantId": "gid://shopify/ProductVariant/47408835035355",
+      "sku": "010-01993-06",
+      "amount": "44240.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        81
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/8961872298203",
+      "handle": "kit-lru-gfc600h-bell-505-2-axis",
+      "variantId": "gid://shopify/ProductVariant/47408835231963",
+      "sku": "010-02323-05",
+      "amount": "57080.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        96
+      ],
+      "sourceKey": "autopilot"
+    },
+    {
+      "productId": "gid://shopify/Product/8961827963099",
+      "handle": "top-assy-gsa-28-w-ball-bearings-pma",
+      "variantId": "gid://shopify/ProductVariant/47408761307355",
+      "sku": "010-01068-21",
+      "amount": "2220.00",
+      "currencyCode": "USD",
+      "sourcePages": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "sourceKey": "autopilot"
     }
   ],
   "quoteOnlyAuditProducts": [
@@ -4118,5 +4717,19 @@
       "productId": "gid://shopify/Product/8961827963099",
       "handle": "top-assy-gsa-28-w-ball-bearings-pma"
     }
-  ]
+  ],
+  "sources": {
+    "aftermarket": {
+      "title": "Garmin Aviation Aftermarket Price Catalog August 2026 Rev5",
+      "publicationDate": "2026-08-17",
+      "lastAuthenticatedCurrentCheck": "2026-09-12",
+      "sha256": "9dd27419642cfd30a644a2ef97d0cd7c6948dbfb06ea11f2e35fe13ff2b3d519"
+    },
+    "autopilot": {
+      "title": "Garmin Aviation Retrofit Autopilot Price Catalog September 2026",
+      "publicationDate": "2026-09-04",
+      "lastAuthenticatedCurrentCheck": "2026-09-10",
+      "sha256": "b5f2a2e617ca1fb8fc09ed9a1139082e94acf3700e4a38252904b349f39d3295"
+    }
+  }
 }
