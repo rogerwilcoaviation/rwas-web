@@ -308,7 +308,7 @@ export default function PapaAlphaToolsPage() {
                   are trying to perform.
                 </p>
               </div>
-              <p>
+              <p className="flex flex-wrap items-center gap-3">
                 <Link
                   className="bs-cta-primary"
                   href="/collections/papa-alpha-tools"
@@ -321,6 +321,13 @@ export default function PapaAlphaToolsPage() {
                 >
                   Ask about applicability
                 </Link>
+                <a
+                  className="bs-cta-secondary"
+                  href="/brochures/papa-alpha-tools/papa-alpha-tools-trifold.pdf"
+                  download="papa-alpha-tools-trifold.pdf"
+                >
+                  Download Brochure
+                </a>
               </p>
             </Specimen>
           </div>
