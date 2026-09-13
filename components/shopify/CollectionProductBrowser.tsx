@@ -302,6 +302,8 @@ function ProductTile({
           {quoteRequest ? (
             <Link
               href={contactHref}
+              rel="nofollow"
+              prefetch={false}
               className="inline-flex items-center justify-center rounded-md border border-[#C49A2A] px-4 py-2 text-sm font-medium text-[#111111] transition hover:bg-[#C49A2A]/10"
             >
               Contact us for package pricing

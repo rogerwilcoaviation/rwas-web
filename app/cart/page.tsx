@@ -9,6 +9,7 @@ import {
 } from '@/components/shared/broadsheet';
 import CartClient from '@/components/shopify/CartClient';
 
+// Crawlable noindex, nofollow; intentionally no canonical to an indexable page.
 export const metadata = {
   title: 'RWAS Cart',
   description: 'Review your RWAS cart and continue to secure checkout.',

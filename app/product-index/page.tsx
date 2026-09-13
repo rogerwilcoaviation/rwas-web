@@ -89,15 +89,12 @@ export default async function ProductIndexPage() {
 
         <Specimen variant="flat">
           {sortedProducts.length ? (
-            <ul className="grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-3 [&_a]:underline [&_a]:decoration-black/30 [&_a]:underline-offset-2 [&_a:hover]:decoration-[#C49A2A]">
               {sortedProducts.map((product) => (
                 <li key={product.id}>
-                  <Link
-                    href={`/products/${encodeURIComponent(product.handle)}`}
-                    className="underline decoration-black/30 underline-offset-2 hover:decoration-[#C49A2A]"
-                  >
+                  <a href={`/products/${encodeURIComponent(product.handle)}`}>
                     {product.title}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>

@@ -433,17 +433,16 @@ export default async function CollectionDetailPage({
                 Browse every item in this collection alphabetically. This index
                 remains usable when filtering scripts are unavailable.
               </p>
-              <ul className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-3 [&_a]:underline [&_a]:decoration-black/30 [&_a]:underline-offset-2 [&_a:hover]:decoration-[#C49A2A]">
                 {[...indexableProducts]
                   .sort((a, b) => a.title.localeCompare(b.title))
                   .map((product) => (
                     <li key={product.id}>
-                      <Link
+                      <a
                         href={`/products/${encodeURIComponent(product.handle)}`}
-                        className="underline decoration-black/30 underline-offset-2 hover:decoration-[#C49A2A]"
                       >
                         {product.title}
-                      </Link>
+                      </a>
                     </li>
                   ))}
               </ul>

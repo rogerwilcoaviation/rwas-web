@@ -1,5 +1,7 @@
 # RWAS allows normal search indexing while reserving AI training rights.
 # robots.txt is advisory only; Cloudflare bot controls should enforce this.
+# /cart intentionally remains crawlable so search engines can read its noindex.
+# It is excluded from sitemap.xml; robots blocking would hide that directive.
 User-agent: *
 Content-signal: search=yes, ai-input=no, ai-train=no, use=reference
 Allow: /
