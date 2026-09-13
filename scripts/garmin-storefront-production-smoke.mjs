@@ -4,6 +4,7 @@ import fs from 'node:fs';
 
 const BASE_URL =
   process.env.RWAS_PRODUCTION_URL || 'https://www.rogerwilcoaviation.com';
+const READ_ONLY = process.env.RWAS_CATALOG_READ_ONLY === '1';
 const ENV_PATH = process.env.RWAS_STOREFRONT_ENV_PATH || '.env.production';
 
 function loadEnv(file) {
@@ -129,6 +130,7 @@ async function renderedPage(pathname) {
 }
 
 async function cartRequest(method, body) {
+  if (READ_ONLY) throw new Error('Cart mutation attempted in explicit read-only verification');
   const response = await fetch(`${BASE_URL}/api/cart`, {
     method,
     headers: { 'Content-Type': 'application/json' },
@@ -368,20 +370,22 @@ for (const internalLabel of [
   }
 }
 
-await dealerInstallCartBlocked();
-await unapprovedCertifiedCartBlocked();
-await cartEligibleProduct(
-  'garmin-dual-g5-ai-hsi-kit-k10-00280-51',
-  'Avionics — Certified',
-);
-await cartEligibleProduct(
-  'g3x-touch-display-gdu-450',
-  'Avionics — Experimental',
-);
-await cartEligibleProduct(
-  'garmin-gdl-82-ads-b-out-datalink',
-  'Avionics — Certified',
-);
+if (!READ_ONLY) {
+  await dealerInstallCartBlocked();
+  await unapprovedCertifiedCartBlocked();
+  await cartEligibleProduct(
+    'garmin-dual-g5-ai-hsi-kit-k10-00280-51',
+    'Avionics — Certified',
+  );
+  await cartEligibleProduct(
+    'g3x-touch-display-gdu-450',
+    'Avionics — Experimental',
+  );
+  await cartEligibleProduct(
+    'garmin-gdl-82-ads-b-out-datalink',
+    'Avionics — Certified',
+  );
+}
 
 process.stdout.write(
   `${JSON.stringify(
@@ -394,8 +398,9 @@ process.stdout.write(
       retailPricingMessageVerified: true,
       k10ProductCopyVerified: true,
       gdl82ProductCopyVerified: true,
-      cartEligibilityVerified: true,
-      restrictedCertifiedCartVerified: true,
+      cartEligibilityVerified: !READ_ONLY,
+      restrictedCertifiedCartVerified: !READ_ONLY,
+      cartVerificationSkipped: READ_ONLY ? 'Explicit read-only release; no carts created or changed' : null,
     },
     null,
     2,

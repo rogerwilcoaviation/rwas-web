@@ -1,3 +1,5 @@
+import quoteRetailPolicy from '@/data/garmin-quote-retail-display.json';
+import { verifiedQuoteRetailPrice } from '@/lib/garmin-quote-retail-display.mjs';
 /* eslint-disable @next/next/no-img-element */
 /*
  * Product detail template — Ship 2 refactor (2026-04-21).
@@ -1138,6 +1140,9 @@ export default async function ProductDetailPage({
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
   const primaryPrice = product.variants[0]?.price;
+  const approvedQuoteRetailPrice = gating.isGarmin && gating.otc !== 'eligible'
+    ? verifiedQuoteRetailPrice(product, quoteRetailPolicy)
+    : null;
   const hasSingleVariant = product.variants.length === 1;
   const normalListPrice = product.variants[0]?.compareAtPrice;
   const hasSalePrice = Boolean(
@@ -1262,9 +1267,13 @@ export default async function ProductDetailPage({
     url: canonicalUrl,
     offers: (() => {
       if (!primaryPrice) return undefined;
-      // Garmin quote-first path: keep the visible PDP gated, but include a
-      // PriceSpecification so Google Merchant listings receive complete Offer
-      // markup instead of flagging "offers" as missing a price.
+      // A quote-only listing is not an online transactional offer, even when
+      // its independently verified retail equipment price is visible.
+      if (gating.isGarmin && gating.otc !== 'eligible' &&
+          quoteRetailPolicy.quoteOnlyAuditProducts.some((row) =>
+            row.productId === product.id && row.handle === product.handle)) return undefined;
+      // Preserve existing quote-offer behavior outside the explicitly audited
+      // 521 products; this remediation does not change other listing policies.
       if (gating.isGarmin && gating.otc !== 'eligible') {
         return {
           '@type': 'Offer',
@@ -1466,7 +1475,8 @@ export default async function ProductDetailPage({
               stockCheckRequired={gating.stockCheckRequired}
               isGarmin={gating.isGarmin}
               mapLocked={gating.mapLocked}
-              showQuoteRetailPrice={showDualG5KitDetails}
+              showQuoteRetailPrice={showDualG5KitDetails || Boolean(approvedQuoteRetailPrice)}
+              verifiedQuoteRetailDisplay={Boolean(approvedQuoteRetailPrice)}
               isDealerInstall={gating.isDealerInstall}
               cartPurchaseException={cartPurchaseException}
             />
