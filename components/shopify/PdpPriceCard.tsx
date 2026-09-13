@@ -277,11 +277,21 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
 
       <div className="bs-cta-row bs-cta-row--single">
         {zeroPrice ? (
-          <Link className="bs-cta-primary" href={contactHref}>
+          <Link
+            className="bs-cta-primary"
+            href={contactHref}
+            rel="nofollow"
+            prefetch={false}
+          >
             Contact us for package pricing
           </Link>
         ) : isDealerInstall && !cartPurchaseException ? (
-          <Link className="bs-cta-primary" href={contactHref}>
+          <Link
+            className="bs-cta-primary"
+            href={contactHref}
+            rel="nofollow"
+            prefetch={false}
+          >
             Contact us for package pricing
           </Link>
         ) : otcEligible ? (
@@ -298,7 +308,12 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
                 : 'Unavailable'}
           </button>
         ) : isNonOtcGarmin ? (
-          <Link className="bs-cta-primary" href={contactHref}>
+          <Link
+            className="bs-cta-primary"
+            href={contactHref}
+            rel="nofollow"
+            prefetch={false}
+          >
             {verifiedQuoteRetailDisplay
               ? 'Contact RWAS for Installation and Availability'
               : showQuoteRetailPrice
@@ -321,7 +336,12 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
         (entry) =>
           entry.variantId === selected?.id && entry.sku === selected?.sku,
       ) ? (
-        <Link className="bs-cta-secondary" href={contactHref}>
+        <Link
+          className="bs-cta-secondary"
+          href={contactHref}
+          rel="nofollow"
+          prefetch={false}
+        >
           For package and special pricing please contact us
         </Link>
       ) : null}
