@@ -42,6 +42,7 @@ jobs:
       - name: Scoped SEO and mocked commerce regressions
         run: |
           node scripts/seo-remediation-test.mjs
+          node scripts/seo-technical-test.mjs
           node scripts/garmin-commercial-review-test.mjs
           node scripts/cart-private-pricing-test.mjs
           node scripts/cart-private-runtime-test.mjs

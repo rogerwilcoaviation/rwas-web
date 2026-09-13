@@ -1,17 +1,15 @@
+# Retired without equivalent: /careers, /faq, /pricing, /collections/aircraft-management.
+# Intentionally retain real 404/noindex; no unrelated homepage redirects.
 
 # --- P1.1: deleted Shipixen template pages redirect to real content ---
 # P1.1: old Shipixen template page deleted
-/careers /about 301
-/press /blog/ 301
-/faq /about 301
+/press /blog 301
 /features /shop-capabilities 301
-/pricing /financing 301
 /pages/about /about 301
 /pages/contact /contact 301
 /pages/financing /financing 301
 /pages/garmin-avionics-accessories /collections/garmin-dealer-install 301
 /pages/shop-capabilities /shop-capabilities 301
-/collections/aircraft-management /collections 301
 /aircraft4sale /aircraft-for-sale 301
 /aircraft4sale/ /aircraft-for-sale 301
 /Home / 301
@@ -40,17 +38,13 @@
 /collections/on-sale/Garmin-Product-On-Sale /collections/on-sale 301
 
 # P3.2: trailing-slash variants for template deletions + contact consolidation
-/careers/ /about 301
-/press/ /blog/ 301
-/faq/ /about 301
+/press/ /blog 301
 /features/ /shop-capabilities 301
-/pricing/ /financing 301
 /pages/about/ /about 301
 /pages/contact/ /contact 301
 /pages/financing/ /financing 301
 /pages/garmin-avionics-accessories/ /collections/garmin-dealer-install 301
 /pages/shop-capabilities/ /shop-capabilities 301
-/collections/aircraft-management/ /collections 301
 /collections/garmin-avionics/ /collections/avionics-certified 301
 /collections/garmin-avionics-certified-retail/ /collections/avionics-certified 301
 /collections/garmin-avionics-accessories/ /collections/garmin-dealer-install 301
@@ -81,3 +75,5 @@
 /work-order-system/customer/* /work-order-system/ 200
 /work-order-system/employee /work-order-system/ 200
 /work-order-system/portal/* /work-order-system/ 200
+
+/brochures/papa-alpha-tools-trifold.pdf /brochures/papa-alpha-tools/papa-alpha-tools-trifold.pdf 301

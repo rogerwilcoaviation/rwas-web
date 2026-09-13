@@ -12,7 +12,18 @@ const cartPurchaseExceptions = JSON.parse(
 
 const workerPath = resolve('.vercel/output/static/_worker.js/index.js');
 
+// Advanced-mode Pages uses this Worker, not public/_redirects, for these URLs.
+// Retired generic template content must not become an unrelated soft redirect.
 const redirects = {
+  '/press': '/blog',
+  '/features': '/shop-capabilities',
+  '/pages/about': '/about',
+  '/pages/contact': '/contact',
+  '/pages/financing': '/financing',
+  '/pages/garmin-avionics-accessories': '/collections/garmin-dealer-install',
+  '/pages/shop-capabilities': '/shop-capabilities',
+  '/collections/on-sale/Garmin-Product-On-Sale': '/collections/on-sale',
+  '/brochures/papa-alpha-tools-trifold.pdf': '/brochures/papa-alpha-tools/papa-alpha-tools-trifold.pdf',
   '/contact.html': '/contact',
   '/newspaper/index.html': '/',
   '/aircraft4sale': '/aircraft-for-sale',
