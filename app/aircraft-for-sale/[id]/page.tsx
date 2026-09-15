@@ -1,3 +1,4 @@
+import { hasProductSnippetEligibility } from '@/lib/product-snippet-eligibility.mjs';
 /* eslint-disable @next/next/no-html-link-for-pages */
 /*
  * /aircraft-for-sale/[id] — Ship 3 Tranche C migration
@@ -326,7 +327,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([productJsonLd, breadcrumbJsonLd]),
+          __html: JSON.stringify([...(hasProductSnippetEligibility(productJsonLd) ? [productJsonLd] : []), breadcrumbJsonLd]),
         }}
       />
       <style>{`

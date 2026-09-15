@@ -1,3 +1,4 @@
+import { hasProductSnippetEligibility } from '@/lib/product-snippet-eligibility.mjs';
 import quoteRetailPolicy from '@/data/garmin-quote-retail-display.json';
 import { verifiedQuoteRetailPrice } from '@/lib/garmin-quote-retail-display.mjs';
 /* eslint-disable @next/next/no-img-element */
@@ -1315,10 +1316,12 @@ export default async function ProductDetailPage({
 
   return (
     <BroadsheetLayout>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-      />
+      {hasProductSnippetEligibility(productSchema) && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}

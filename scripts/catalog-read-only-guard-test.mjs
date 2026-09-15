@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+const source = fs.readFileSync(new URL('./garmin-storefront-production-smoke.mjs', import.meta.url), 'utf8');
+const workflow = fs.readFileSync(new URL('../.github/workflows/deploy.yml', import.meta.url), 'utf8');
+assert.match(workflow, /RWAS_CATALOG_READ_ONLY:.*contains\(github.event.head_commit.message, '\[read-only-catalog\]'\)/);
+assert.match(source, /const READ_ONLY = process.env.RWAS_CATALOG_READ_ONLY === '1'/);
+let calls = 0;
+const fn = source.slice(source.indexOf('async function cartRequest('), source.indexOf('async function cartEligibleProduct('));
+const context = vm.createContext({ READ_ONLY: true, fetch: () => { calls++; throw new Error('Network forbidden'); } });
+vm.runInContext(fn, context);
+for (const method of ['POST', 'PATCH', 'DELETE']) await assert.rejects(vm.runInContext(`cartRequest('${method}', {})`, context), /Cart mutation attempted/);
+const gate = source.slice(source.lastIndexOf('if (!READ_ONLY) {'), source.indexOf('\nprocess.stdout.write('));
+let attempted = 0;
+await vm.runInNewContext(`(async () => {${gate}})()`, { READ_ONLY: true, dealerInstallCartBlocked: () => attempted++, unapprovedCertifiedCartBlocked: () => attempted++, cartEligibleProduct: () => attempted++ });
+assert.equal(calls, 0); assert.equal(attempted, 0);
+console.log(JSON.stringify({ actualCartFunctionBlocked: 3, actualCallGateSkipped: true, networkCalls: calls, cartAttempts: attempted, workflowMarker: '[read-only-catalog]' }));
