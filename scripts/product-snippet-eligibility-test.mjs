@@ -31,6 +31,8 @@ check({ ...product, aggregateRating: { '@type': 'AggregateRating', ratingValue: 
 check({ ...product, review: { ...review, reviewRating: { ratingValue: 9, bestRating: 10, worstRating: 0 } } }, true);
 check({ ...product, review: { ...review, reviewRating: { ratingValue: 9 } } }, false);
 check({ ...product, name: '', review }, false);
+for (const ratingValue of ['60%', '6 / 10', '0/10']) check({ ...product, review: { ...review, reviewRating: { ratingValue } } }, true);
+for (const ratingValue of ['101%', '11/10', '1/0']) check({ ...product, review: { ...review, reviewRating: { ratingValue } } }, false);
 // The actual aircraft generator's price branch, evaluated with synthetic listings.
 const aircraft = fs.readFileSync(new URL('../app/aircraft-for-sale/[id]/page.tsx', import.meta.url), 'utf8');
 const branch = aircraft.slice(aircraft.indexOf('  if (listing.price &&'), aircraft.indexOf('  const breadcrumbJsonLd'));
