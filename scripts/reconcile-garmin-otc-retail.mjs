@@ -81,9 +81,17 @@ const OTC_RETAIL_PRODUCTS = [
     family: 'GFC 500 Mooney M20J/M20K Pitch Trim Install Kit',
   },
   { sku: 'K11-00024-27', family: 'GFC 500 Mooney M20 Yaw Damper Install Kit' },
+  { sku: '211-00169-01', family: 'Install hardware' },
 ];
 
 const PUBLIC_PRICE_AUTHORITIES = {
+  '211-00169-01': {
+    list_price: 5.0,
+    source: 'Ryan confirmed $5.00 per Garmin website 2026-09-16; corroborated by expired July guide row 1598 and live storefront',
+    url: 'https://www.rogerwilcoaviation.com/products/screw-machine-panel-mounting-0-550-black',
+    priceType: 'List',
+    accessed: '2026-09-16',
+  },
   '010-01560-31': {
     list_price: 2475,
     source: 'Garmin GDL 82 product page',
