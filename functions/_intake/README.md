@@ -21,3 +21,11 @@ From repository root: `node --test tests/intake/backend.test.mjs`. Uses installe
 References checked 2026-09-22:
 - https://developers.cloudflare.com/d1/worker-api/d1-database/ — batch transactions rollback on statement failure.
 - https://resend.com/docs/dashboard/emails/idempotency-keys — POST /emails idempotency retained 24h, identical requests reuse response.
+
+## Isolated staging exception
+
+Staging requires the exact destination origin `https://intake-restoration-20260922.rwas-web.pages.dev` in every intake/config/dispatch/receipt handler and the advanced-mode wrapper. Intake additionally requires its matching Origin header. Production, deployment-hash and other branch aliases cannot use staging bindings.
+
+Staging permits **one reserved provider attempt total**, not one logical idempotent email with retries. Claims require a queued row, attempts=0 and an empty attempt ledger. Any uncertain response (timeout, malformed success, HTTP 408/429/5xx) becomes needs_review; expired sending leases and previously reserved attempts become needs_review without sending again. A crash before network I/O conservatively consumes the authorization. Production retries remain unchanged.
+
+For builds whose CF_PAGES_BRANCH/GITHUB_HEAD_REF unambiguously identify this exact staging branch, the artifact appends a wildcard noindex/nofollow `_headers` rule preserving existing headers; this covers static paths excluded from the Worker. Other/unknown/conflicting branch builds do not modify headers. Cloudflare Pages also documents automatic preview X-Robots-Tag: noindex (https://developers.cloudflare.com/pages/configuration/preview-deployments/#preview-indexing-by-search-engines). Parent must verify actual deployed headers on static assets, exclusions and normal pages; local tests do not prove platform delivery.

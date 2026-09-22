@@ -46,6 +46,11 @@ export const staging = (env: Env) => env.INTAKE_STAGING_MODE === 'true';
 export function originAllowed(env: Env, origin: string) {
   return staging(env) ? origin === STAGING_ORIGIN : ORIGINS.has(origin);
 }
+// Staging bindings must never authorize a production, hash, or other branch alias.
+export function destinationAllowed(env: Env, request: Request): boolean {
+  const origin = new URL(request.url).origin;
+  return staging(env) ? origin === STAGING_ORIGIN : origin !== STAGING_ORIGIN;
+}
 export function stagingFixture(raw: unknown, env: Env): boolean {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return false;
   const p = raw as Record<string, unknown>;

@@ -25,6 +25,31 @@ test('advanced Pages routing reaches actual handlers and preserves existing app'
  const stagePage = await mf.dispatchFetch('https://intake-restoration-20260922.rwas-web.pages.dev/faq');assert.equal(stagePage.headers.get('X-Robots-Tag'),'noindex, nofollow');assert.equal(stagePage.headers.get('Content-Security-Policy-Report-Only'),'existing-policy');
  assert.match(await (await mf.dispatchFetch('https://intake-restoration-20260922.rwas-web.pages.dev/robots.txt')).text(),/Disallow: \//);
  assert.equal((await mf.dispatchFetch('https://intake-restoration-20260922.rwas-web.pages.dev/api/service-intake-config')).status,503);
+ for (const origin of ['https://www.rogerwilcoaviation.com','https://abcdef12.rwas-web.pages.dev','https://other-branch.rwas-web.pages.dev']) {
+   for (const [path, method] of [['service-intake','POST'],['intake-dispatch','POST'],['service-receipt','GET'],['service-intake-config','GET']]) {
+     const rejected=await mf.dispatchFetch(origin+'/api/'+path,{method,headers:{Origin:'https://intake-restoration-20260922.rwas-web.pages.dev'}});
+     assert.equal(rejected.status,503);assert.equal(rejected.headers.get('X-Robots-Tag'),'noindex, nofollow');
+   }
+ }
  const routes=JSON.parse(await readFile(join(root,'_routes.json'),'utf8'));assert.deepEqual(routes.exclude,['/ops/*']);assert.deepEqual(routes.include,['/*']);
  } finally {await mf?.dispose();await rm(root,{recursive:true,force:true});}
+});
+
+test('noindex artifact covers static exclusions only for an unambiguous authorized preview build', async()=>{
+ for (const vars of [{}, {CF_PAGES_BRANCH:'main'}, {GITHUB_HEAD_REF:'other-branch'}, {GITHUB_HEAD_REF:'intake-restoration-20260922'}, {CF_PAGES_BRANCH:'intake-restoration-20260922'}, {CF_PAGES_BRANCH:'main',GITHUB_HEAD_REF:'intake-restoration-20260922'}]) {
+  const root=await mkdtemp(join(tmpdir(),'rwas-intake-headers-'));
+  try {
+   await mkdir(join(root,'_worker.js'));
+   await writeFile(join(root,'_worker.js/index.js'),'export default {fetch(){return new Response("app")}}');
+   await writeFile(join(root,'_routes.json'),JSON.stringify({version:1,include:['/*'],exclude:['/static/*']}));
+   const original='/existing\n  X-Existing: retained\n';
+   await writeFile(join(root,'_headers'),original);
+   const env={...process.env};delete env.CF_PAGES_BRANCH;delete env.GITHUB_HEAD_REF;
+   execFileSync(process.execPath,['scripts/stage-service-intake.mjs',root],{env:{...env,...vars}});
+   const headers=await readFile(join(root,'_headers'),'utf8');
+   const preview=Object.values(vars).length && Object.values(vars).every(v=>v==='intake-restoration-20260922');
+   if(preview){assert.ok(headers.startsWith(original));assert.match(headers,/\/\*\n  X-Robots-Tag: noindex, nofollow/);}
+   else assert.equal(headers,original);
+  }finally{await rm(root,{recursive:true,force:true});}
+ }
 });

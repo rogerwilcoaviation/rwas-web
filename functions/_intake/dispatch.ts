@@ -86,6 +86,17 @@ export async function drain(env: Env): Promise<number> {
   }
   let processed = 0;
   const maintenanceTime = Date.now();
+  if (staging(env)) {
+    // A reserved attempt may already have reached the provider. Never reclaim it,
+    // even after a crash or an operator resetting the attempt counter/status.
+    await db.prepare(`UPDATE intake_outbox SET status='needs_review',
+      last_code='staging_attempt_reserved',lease_token=NULL,lease_until=NULL,updated_at=?
+      WHERE receipt_id=? AND status IN ('queued','retry','sending')
+      AND (lease_until IS NULL OR lease_until<=?)
+      AND (status='sending' OR attempts>0 OR EXISTS
+        (SELECT 1 FROM intake_attempts WHERE receipt_id=intake_outbox.receipt_id))`)
+      .bind(maintenanceTime, stagingId, maintenanceTime).run();
+  }
   // Expired ambiguous attempts are never retried outside the provider's deduplication window.
   // This maintenance is scoped to at most five rows per tick as well.
   await db
@@ -113,7 +124,8 @@ export async function drain(env: Env): Promise<number> {
         AND (SELECT COUNT(*) FROM intake_attempts WHERE started_at>=?)<50
         AND (?=0 OR (receipt_id=? AND email_json=?
           AND (SELECT COUNT(*) FROM intake_receipts)=1
-          AND NOT EXISTS (SELECT 1 FROM intake_attempts WHERE receipt_id<>?)))
+          AND status='queued' AND attempts=0
+          AND NOT EXISTS (SELECT 1 FROM intake_attempts)))
         ORDER BY next_attempt_at,receipt_id LIMIT 1) RETURNING *`,
         )
         .bind(
@@ -128,7 +140,6 @@ export async function drain(env: Env): Promise<number> {
           staging(env) ? 1 : 0,
           stagingId,
           stagingBody,
-          stagingId,
         ),
       db
         .prepare(
@@ -191,6 +202,7 @@ export async function drain(env: Env): Promise<number> {
     } catch {
       /* Outcome unknown; reuse the exact persisted body/key only inside 23h. */
     }
+    if (staging(env) && status === 'retry') status = 'needs_review';
     if (status === 'retry' && job.attempts >= 6) status = 'dead_letter';
     if (status === 'retry' && next >= job.first_attempt_at + WINDOW)
       status = 'needs_review';

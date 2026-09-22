@@ -1,5 +1,5 @@
 import { build } from 'esbuild';
-import { readFileSync, writeFileSync, renameSync } from 'node:fs';
+import { readFileSync, writeFileSync, renameSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 // Pages advanced mode ignores /functions. Bundle the actual handlers explicitly;
 // do not duplicate their implementation inside the existing generated application.
@@ -32,6 +32,7 @@ export default { ...app, async fetch(request, env, ctx) {
 
  const routes = { '/api/service-intake-config': ['GET', config], '/api/service-intake': ['POST', intake], '/api/service-receipt': ['GET', receipt], '/api/intake-dispatch': ['POST', dispatch] };
  if (Object.prototype.hasOwnProperty.call(routes, path)) {
+   if (env.INTAKE_STAGING_MODE === 'true' && url.origin !== STAGING_ORIGIN) return protect(new Response('Staging destination not allowed', {status:503}));
    const [method, handler] = routes[path];
    if (request.method !== method) return protect(new Response(JSON.stringify({error:'Method not allowed.'}), {status:405, headers:{'Content-Type':'application/json','Cache-Control':'no-store'}}));
    return protect(await handler({request, env}));
@@ -49,3 +50,13 @@ for (const path of ['/api/service-intake', '/api/service-receipt', '/api/intake-
 }
 writeFileSync(routesPath, JSON.stringify(routes, null, 2));
 console.log('Staged four explicit intake routes; existing application and CSP preserved.');
+
+// Only the exact authorized preview branch gets this artifact-level rule. Unlike
+// Worker response headers, Pages _headers also covers excluded/static assets.
+const previewBranch = 'intake-restoration-20260922';
+const buildBranches = [process.env.CF_PAGES_BRANCH, process.env.GITHUB_HEAD_REF].filter(Boolean);
+if (buildBranches.length && buildBranches.every(branch => branch === previewBranch)) {
+ const headersPath = resolve(root, '_headers');
+ const existing = existsSync(headersPath) ? readFileSync(headersPath, 'utf8') : '';
+ writeFileSync(headersPath, existing + '\n# Authorized intake preview only: static assets included\n/*\n  X-Robots-Tag: noindex, nofollow\n');
+}

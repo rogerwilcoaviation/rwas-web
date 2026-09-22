@@ -69,11 +69,12 @@ const payload = () => ({
   website: '',
 });
 let ip = 0;
-const submit = (body, customEnv = env, headers = {}) =>
+const destination = (env) => env.INTAKE_STAGING_MODE === 'true' ? api.STAGING_ORIGIN : 'https://www.rogerwilcoaviation.com';
+const submit = (body, customEnv = env, headers = {}, origin = destination(customEnv)) =>
   api.intake({
     env: customEnv,
     request: new Request(
-      'https://www.rogerwilcoaviation.com/api/service-intake',
+      origin + '/api/service-intake',
       {
         method: 'POST',
         headers: {
@@ -86,11 +87,11 @@ const submit = (body, customEnv = env, headers = {}) =>
       },
     ),
   });
-const dispatch = (customEnv = env, secret = env.INTAKE_DISPATCH_SECRET) =>
+const dispatch = (customEnv = env, secret = env.INTAKE_DISPATCH_SECRET, origin = destination(customEnv)) =>
   api.dispatch({
     env: customEnv,
     request: new Request(
-      'https://www.rogerwilcoaviation.com/api/intake-dispatch',
+      origin + '/api/intake-dispatch',
       { method: 'POST', headers: { Authorization: `Bearer ${secret}` } },
     ),
   });
@@ -443,6 +444,13 @@ test('durable intake and outbox integration', async (t) => {
           JSON.stringify(publicConfig).includes('managed-staging-secret'),
           false,
         );
+        for (const origin of ['https://www.rogerwilcoaviation.com', 'https://abcdef12.rwas-web.pages.dev', 'https://other-branch.rwas-web.pages.dev']) {
+          assert.equal((await submit(fixture, stage, { Origin: api.STAGING_ORIGIN }, origin)).status, 503);
+          assert.equal((await dispatch(stage, env.INTAKE_DISPATCH_SECRET, origin)).status, 503);
+          for (const [handler, path] of [[api.config, 'service-intake-config'], [api.receipt, 'service-receipt']]) {
+            assert.equal((await handler({env: stage, request: new Request(origin + '/api/' + path, {headers: {Origin: api.STAGING_ORIGIN, Authorization: 'Bearer ' + 'a'.repeat(64)}})})).status, 503);
+          }
+        }
         const responses = await Promise.all([send(), send(), send()]);
         assert.deepEqual(
           responses.map((r) => r.status),
@@ -464,14 +472,10 @@ test('durable intake and outbox integration', async (t) => {
         await db.prepare('UPDATE intake_outbox SET next_attempt_at=0').run();
         provider = () => Response.json({ id: 'one-logical-email' });
         await dispatch(stage);
-        assert.equal(emails.length, 2);
-        assert.equal(emails[0].body, emails[1].body);
-        assert.equal(
-          emails[0].headers['Idempotency-Key'],
-          emails[1].headers['Idempotency-Key'],
-        );
+        assert.equal(emails.length, 1);
+        assert.equal((await db.prepare('SELECT status FROM intake_outbox').first()).status, 'needs_review');
         await dispatch(stage);
-        assert.equal(emails.length, 2);
+        assert.equal(emails.length, 1);
         await db.prepare('UPDATE intake_receipts SET created_at=0').run();
         const changedId = {
           ...stage,
@@ -498,6 +502,50 @@ test('durable intake and outbox integration', async (t) => {
         assert.equal(emails.length, 0);
       },
     );
+    await t.test('staging failure, crash and ledger fences never permit a second provider call', async () => {
+      const stage = {...env, INTAKE_STAGING_MODE:'true', INTAKE_STAGING_ENABLED:'true', INTAKE_STAGING_REQUEST_ID:crypto.randomUUID(), INTAKE_STAGING_TURNSTILE_SECRET:'managed-staging-secret', INTAKE_STAGING_SITE_KEY:'managed-staging-site-key', CONTACT_TO_EMAIL:'service@rwas.team'};
+      const seed = async () => {
+        await reset();
+        assert.equal((await submit({...api.STAGING_FIXTURE, requestId:stage.INTAKE_STAGING_REQUEST_ID, turnstileToken:'offline', website:''}, stage, {Origin:api.STAGING_ORIGIN})).status, 202);
+      };
+      for (const outcome of [
+        () => {throw new DOMException('mock timeout','TimeoutError');},
+        () => new Response('not json'),
+        () => Response.json({}),
+        ...[408,429,500].map(status => () => new Response('', {status, headers:{'Retry-After':'1'}})),
+        () => Response.json({id:'accepted-once'}),
+      ]) {
+        await seed(); provider = outcome;
+        await Promise.all([dispatch(stage), dispatch(stage), dispatch(stage)]);
+        assert.equal(emails.length, 1);
+        const row = await db.prepare('SELECT status FROM intake_outbox').first();
+        assert.ok(['needs_review','provider_accepted'].includes(row.status));
+        // Even counter/status corruption cannot override the durable attempt ledger.
+        await db.prepare("UPDATE intake_outbox SET attempts=0,status='queued',next_attempt_at=0,lease_until=0").run();
+        await Promise.all([dispatch(stage),dispatch(stage),dispatch(stage)]);
+        await dispatch(stage);
+        assert.equal(emails.length, 1);
+        assert.equal((await db.prepare('SELECT COUNT(*) n FROM intake_attempts').first()).n,1);
+        assert.equal((await db.prepare('SELECT status FROM intake_outbox').first()).status,'needs_review');
+      }
+      for (const attempts of [0,1]) {
+        await seed();
+        await db.prepare("UPDATE intake_outbox SET status='sending',lease_token='crashed',lease_until=0,attempts=?").bind(attempts).run();
+        await Promise.all([dispatch(stage),dispatch(stage)]); await dispatch(stage);
+        assert.equal(emails.length,0);
+        assert.equal((await db.prepare('SELECT status FROM intake_outbox').first()).status,'needs_review');
+      }
+      // Crash after provider I/O but before finish: simulate lease loss inside fetch.
+      await seed();
+      provider = async () => {
+        await db.prepare('UPDATE intake_outbox SET lease_until=0').run();
+        return Response.json({id:'accepted-before-crash'});
+      };
+      await dispatch(stage);
+      await Promise.all([dispatch(stage),dispatch(stage)]); await dispatch(stage);
+      assert.equal(emails.length,1);
+      assert.equal((await db.prepare('SELECT status FROM intake_outbox').first()).status,'needs_review');
+    });
     await t.test('per-IP durable admission cap', async () => {
       await reset();
       const responses = [];

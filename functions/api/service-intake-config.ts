@@ -1,5 +1,6 @@
 import {
   Context,
+  destinationAllowed,
   configured,
   json,
   methodNotAllowed,
@@ -11,6 +12,7 @@ import {
 } from '../_intake/core';
 // Runtime configuration contains only public values; no challenge or dispatch secrets.
 export async function onRequestGet({ request, env }: Context) {
+  if (!destinationAllowed(env, request)) return unavailable();
   const origin = new URL(request.url).origin;
   if (staging(env) || origin === STAGING_ORIGIN) {
     if (!staging(env) || origin !== STAGING_ORIGIN || !configured(env, true))

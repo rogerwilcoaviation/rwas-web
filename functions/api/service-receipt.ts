@@ -1,11 +1,13 @@
 import {
   Context,
+  destinationAllowed,
   hash,
   json,
   methodNotAllowed,
   unavailable,
 } from '../_intake/core';
 export async function onRequestGet({ request, env }: Context) {
+  if (!destinationAllowed(env, request)) return unavailable();
   const token = request.headers
     .get('Authorization')
     ?.match(/^Bearer ([a-f0-9]{64})$/)?.[1];

@@ -1,5 +1,6 @@
 import {
   Context,
+  destinationAllowed,
   InvalidBody,
   originAllowed,
   staging,
@@ -16,6 +17,7 @@ import {
 } from '../_intake/core';
 
 export async function onRequestPost({ request, env }: Context) {
+  if (!destinationAllowed(env, request)) return unavailable();
   if (!originAllowed(env, request.headers.get('Origin') || ''))
     return json({ error: 'Origin not allowed.' }, 403);
   if (!configured(env, true)) return unavailable();

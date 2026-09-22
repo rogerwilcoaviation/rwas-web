@@ -1,5 +1,6 @@
 import {
   Context,
+  destinationAllowed,
   configured,
   json,
   methodNotAllowed,
@@ -8,6 +9,7 @@ import {
 } from '../_intake/core';
 import { drain } from '../_intake/dispatch';
 export async function onRequestPost({ request, env }: Context) {
+  if (!destinationAllowed(env, request)) return unavailable();
   if (!env.INTAKE_DISPATCH_SECRET || env.INTAKE_DISPATCH_SECRET.length < 32)
     return unavailable();
   const supplied =
