@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run appinfo && cross-env PORT=6006 NODE_OPTIONS='--no-warnings' next dev",
-    "build": "npm run appinfo && next build",
+    "build": "npm run appinfo && npm run build:analytics && next build",
     "serve": "next start",
     "analyze": "cross-env ANALYZE=true next build",
     "lint": "eslint app components functions lib scripts --max-warnings=0",
@@ -13,7 +13,7 @@
     "appinfo": "node ./scripts/generateAppInfo.mjs",
     "pages:build": "npm run build:cloudflare",
     "pages:deploy:preview": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview",
-    "build:cloudflare": "npm run appinfo && npx @cloudflare/next-on-pages && node scripts/inject-cloudflare-collection-redirects.mjs && node scripts/inject-wos-routes.mjs",
+    "build:cloudflare": "npm run appinfo && npm run build:analytics && npx @cloudflare/next-on-pages && node scripts/inject-cloudflare-collection-redirects.mjs && node scripts/inject-wos-routes.mjs && node scripts/stage-csp.mjs",
     "deploy:preview": "npm run build:cloudflare && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview",
     "seo:smoke": "node scripts/seo-smoke-check.mjs",
     "seo:artifact": "node scripts/seo-build-artifact-check.mjs",
@@ -25,7 +25,8 @@
     "catalog:production-smoke": "node scripts/garmin-storefront-production-smoke.mjs",
     "catalog:garmin-list-price-audit": "node scripts/audit-garmin-list-prices.mjs",
     "catalog:former-sale-list-prices": "node scripts/reconcile-former-sale-list-prices.mjs",
-    "catalog:experimental-retail": "node scripts/reconcile-experimental-retail.mjs"
+    "catalog:experimental-retail": "node scripts/reconcile-experimental-retail.mjs",
+    "build:analytics": "node scripts/build-analytics.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
@@ -97,6 +98,7 @@
     "tailwindcss-animate": "^1.0.7",
     "unist-util-visit": "^5.0.0",
     "vaul": "^1.1.2",
+    "web-vitals": "6.2.2",
     "zod": "^4.1.8"
   },
   "devDependencies": {

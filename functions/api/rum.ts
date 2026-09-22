@@ -15,6 +15,8 @@ type TrackPayload = {
   referrer?: string;
   device?: string;
   metric?: string;
+  metricId?: string;
+  measurementSource?: string;
   value?: number;
   rating?: string;
   visibilityState?: string;
@@ -60,6 +62,8 @@ function normalize(payload: TrackPayload, request: Request) {
     referrer: cleanString(payload.referrer, 500),
     device: cleanString(payload.device, 30),
     metric: cleanString(payload.metric, 20),
+    metricId: cleanString(payload.metricId, 100),
+    measurementSource: cleanString(payload.measurementSource, 60),
     value: cleanNumber(payload.value),
     rating: cleanString(payload.rating, 30),
     visibilityState: cleanString(payload.visibilityState, 30),

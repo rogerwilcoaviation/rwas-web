@@ -107,7 +107,11 @@ const generatedWorkerUrl = new URL(
   import.meta.url,
 );
 if (fs.existsSync(generatedWorkerUrl)) {
-  const generatedWorker = fs.readFileSync(generatedWorkerUrl, 'utf8');
+  const wrappedWorkerUrl = new URL('../.vercel/output/static/_worker.js/rwas-app.js', import.meta.url);
+  const generatedWorker = fs.readFileSync(
+    fs.existsSync(wrappedWorkerUrl) ? wrappedWorkerUrl : generatedWorkerUrl,
+    'utf8',
+  );
   assert.match(generatedWorker, /Idempotency-Key/);
   assert.match(generatedWorker, /Aircraft status:/);
   assert.match(generatedWorker, /Selected equipment:/);

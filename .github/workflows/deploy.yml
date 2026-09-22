@@ -51,6 +51,8 @@ jobs:
           node scripts/cart-native-refresh-test.mjs
           node scripts/cart-purchase-exceptions-test.mjs
           node scripts/papa-alpha-variant-selection-test.mjs
+          node scripts/telemetry-reference-test.mjs
+          node scripts/csp-stage-test.mjs
 
       - name: Build (next-on-pages)
         run: npm run pages:build
@@ -87,81 +89,11 @@ jobs:
             --project-name=rwas-web
             --branch=${{ github.head_ref || github.ref_name }}
 
-      - name: Smoke-test production (main only)
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        env:
-          # This release explicitly forbids creating even disposable carts.
-          # Ordinary future releases retain native cart verification.
-          RWAS_CATALOG_READ_ONLY: ${{ contains(github.event.head_commit.message, '[read-only-catalog]') && '1' || '0' }}
+      - name: Read-only production smoke (push and manual)
+        if: github.ref == 'refs/heads/main' && steps.cf-deploy-production.outcome == 'success'
         run: |
-          set -e
-          echo "=== SEO smoke ==="
-          for attempt in {1..12}; do
-            if npm run seo:smoke; then
-              break
-            fi
-            if [ "$attempt" -eq 12 ]; then
-              echo "SEO smoke failed after edge propagation retries."
-              exit 1
-            fi
-            echo "SEO smoke failed while the edge is propagating; retrying in 10s... ($attempt/12)"
+          for attempt in {1..6}; do
+            if node scripts/production-readonly-smoke.mjs; then exit 0; fi
+            if [ "$attempt" -eq 6 ]; then exit 1; fi
             sleep 10
           done
-          echo "=== Certified retail and experimental avionics collection ==="
-          for attempt in {1..12}; do
-            retail_html=$(curl -fsSL https://www.rogerwilcoaviation.com/collections/avionics-certified)
-            if grep -q 'Certified Retail and Experimental Avionics' <<< "$retail_html" \
-              && grep -q 'g3x-touch-display-gdu-460' <<< "$retail_html" \
-              && grep -q 'g5-electronic-flight-instrument-for-experimental-lsa-aircraft' <<< "$retail_html" \
-              && grep -q 'Product Type' <<< "$retail_html" \
-              && grep -q 'Experimental Products' <<< "$retail_html" \
-              && grep -q 'Certified Retail' <<< "$retail_html" \
-              && grep -q 'Accessories' <<< "$retail_html"; then
-              break
-            fi
-            if [ "$attempt" -eq 12 ]; then
-              echo "Retail collection smoke failed after edge propagation retries."
-              exit 1
-            fi
-            echo "Retail collection is still propagating; retrying in 10s... ($attempt/12)"
-            sleep 10
-          done
-          echo "=== Garmin storefront catalog ==="
-          for attempt in {1..12}; do
-            if npm run catalog:production-smoke; then
-              break
-            fi
-            if [ "$attempt" -eq 12 ]; then
-              echo "Garmin storefront catalog smoke failed after edge propagation retries."
-              exit 1
-            fi
-            echo "Garmin storefront catalog is still propagating; retrying in 10s... ($attempt/12)"
-            sleep 10
-          done
-          echo "=== /aircraft-for-sale ==="
-          curl -sS -o /dev/null -w "HTTP %{http_code}\n" https://rogerwilcoaviation.com/aircraft-for-sale
-          echo "=== /aircraft-for-sale/mnvmpdlz-ng1n0 (detail page) ==="
-          curl -sS -o /dev/null -w "HTTP %{http_code}\n" https://rogerwilcoaviation.com/aircraft-for-sale/mnvmpdlz-ng1n0
-          echo "=== /api/chat POST (served by intake-bridge Worker) ==="
-          for attempt in {1..12}; do
-            chat_response=$(curl -fsS -X POST https://rogerwilcoaviation.com/api/chat \
-              -H 'Content-Type: application/json' \
-              -H 'Origin: https://rogerwilcoaviation.com' \
-              -d '{"messages":[{"role":"user","content":"I want to list my aircraft"}],"listingUi":true}' \
-              --max-time 30 || true)
-            if CHAT_RESPONSE="$chat_response" node -e 'try {
-              const response = JSON.parse(process.env.CHAT_RESPONSE || "{}");
-              process.exit(response.ok === true && response.listingStart === true ? 0 : 1);
-            } catch {
-              process.exit(1);
-            }'; then
-              break
-            fi
-            if [ "$attempt" -eq 12 ]; then
-              echo "Listing-intake smoke failed after edge propagation retries."
-              exit 1
-            fi
-            echo "Listing-intake response is still propagating; retrying in 10s... ($attempt/12)"
-            sleep 10
-          done
-          echo "All smoke tests passed."

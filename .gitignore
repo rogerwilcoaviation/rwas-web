@@ -74,3 +74,5 @@ ruvector.db
 
 # Content-addressed public catalog projection generated during static export
 /public/catalog-data/
+# Generated pinned reference instrumentation
+/public/rwas-web-vitals.js

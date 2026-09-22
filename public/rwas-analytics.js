@@ -28,8 +28,8 @@
 
   function send(event, feature, path, extra) {
     try {
-      // Interaction events belong in the D1-backed daily report. Web-vital
-      // measurements use the RUM endpoint and must not inflate click counts.
+      // Keep interaction and metric event streams separate. The current Pages
+      // Worker emits both as structured logs; storage retention is configured separately.
       var endpoint = event === 'web_vital' ? '/api/rum' : '/api/track';
       var body = {
         sessionId: getSessionId(),
@@ -81,91 +81,24 @@
   window.rwasTrack = send;
   send('pageview', '', window.location.pathname);
 
-  function rating(name, value) {
-    if (name === 'LCP') return value <= 2500 ? 'good' : value <= 4000 ? 'needs-improvement' : 'poor';
-    if (name === 'CLS') return value <= 0.1 ? 'good' : value <= 0.25 ? 'needs-improvement' : 'poor';
-    if (name === 'FCP') return value <= 1800 ? 'good' : value <= 3000 ? 'needs-improvement' : 'poor';
-    if (name === 'TTFB') return value <= 800 ? 'good' : value <= 1800 ? 'needs-improvement' : 'poor';
-    return '';
-  }
-
-  function sendVital(name, value, extra) {
-    if (typeof value !== 'number' || !isFinite(value)) return;
-    send('web_vital', name, window.location.pathname, Object.assign({
-      metric: name,
-      value: Math.round(value * 1000) / 1000,
-      rating: rating(name, value),
+  // The reference implementation owns CLS windows, interaction selection and
+  // visibility/bfcache lifecycle. Do not send DOM nodes, URLs or entries.
+  function reportVital(metric) {
+    if (!Number.isFinite(metric.value)) return;
+    send('web_vital', metric.name, window.location.pathname, {
+      metric: metric.name,
+      value: metric.value,
+      rating: metric.rating,
+      metricId: metric.id,
+      navigationType: metric.navigationType,
+      measurementSource: 'web-vitals/6.2.2',
       visibilityState: document.visibilityState || ''
-    }, extra || {}));
+    });
   }
-
-  function observeVitals() {
-    if (!('PerformanceObserver' in window)) return;
-
-    try {
-      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-      if (nav && typeof nav.responseStart === 'number') {
-        sendVital('TTFB', nav.responseStart, {
-          navigationType: nav.type || '',
-          transferSize: nav.transferSize || 0
-        });
-      }
-    } catch (_) {}
-
-    try {
-      new PerformanceObserver(function (list) {
-        list.getEntries().forEach(function (entry) {
-          if (entry.name === 'first-contentful-paint') sendVital('FCP', entry.startTime);
-        });
-      }).observe({ type: 'paint', buffered: true });
-    } catch (_) {}
-
-    try {
-      var lcpEntry;
-      var lcpObserver = new PerformanceObserver(function (list) {
-        var entries = list.getEntries();
-        lcpEntry = entries[entries.length - 1] || lcpEntry;
-      });
-      lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
-      var flushLcp = function () {
-        if (!lcpEntry) return;
-        sendVital('LCP', lcpEntry.startTime, {
-          element: lcpEntry.element && lcpEntry.element.tagName ? lcpEntry.element.tagName.toLowerCase() : '',
-          url: lcpEntry.url || '',
-          size: lcpEntry.size || 0
-        });
-        try { lcpObserver.disconnect(); } catch (_) {}
-        lcpEntry = null;
-      };
-      document.addEventListener('visibilitychange', function () {
-        if (document.visibilityState === 'hidden') flushLcp();
-      });
-      window.addEventListener('pagehide', flushLcp);
-    } catch (_) {}
-
-    try {
-      var cls = 0;
-      var clsObserver = new PerformanceObserver(function (list) {
-        list.getEntries().forEach(function (entry) {
-          if (!entry.hadRecentInput) cls += entry.value || 0;
-        });
-      });
-      clsObserver.observe({ type: 'layout-shift', buffered: true });
-      var clsSent = false;
-      var flushCls = function () {
-        if (clsSent) return;
-        clsSent = true;
-        sendVital('CLS', cls);
-        try { clsObserver.disconnect(); } catch (_) {}
-      };
-      document.addEventListener('visibilitychange', function () {
-        if (document.visibilityState === 'hidden') flushCls();
-      });
-      window.addEventListener('pagehide', flushCls);
-    } catch (_) {}
-  }
-
-  observeVitals();
+  import('/rwas-web-vitals.js').then(function (vitals) {
+    [vitals.onCLS, vitals.onINP, vitals.onLCP, vitals.onFCP, vitals.onTTFB]
+      .forEach(function (observe) { observe(reportVital); });
+  }).catch(function () { /* Analytics must never break the customer journey. */ });
 
   document.addEventListener('click', function (evt) {
     var target = evt.target;
@@ -173,7 +106,7 @@
     if (!feature) return;
     var event = 'feature';
     if (feature === 'chat_widget') event = 'chat_open';
-    if (feature === 'cart') event = 'cart_add';
+    if (feature === 'cart') event = 'cart_open';
     if (feature.indexOf('panel_planner') >= 0) event = 'panel_planner';
     if (feature.indexOf('aircraft_sale') >= 0) event = 'aircraft_sale';
     send(event, feature, window.location.pathname);
