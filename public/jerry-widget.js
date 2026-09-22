@@ -144,6 +144,7 @@
     '<div class="jerry-widget-status"><span class="jerry-widget-dot"></span><span>ONLINE — AVIONICS &amp; SERVICE</span></div>' +
     '<div class="jerry-widget-chat"></div>' +
     '<div class="jerry-widget-error"></div>' +
+    '<p class="jerry-widget-privacy" style="margin:0;padding:6px 12px;font:11px/1.4 Arial,sans-serif;color:#333;background:#f7f4ef">Messages are processed by our AI chat service and stored in this tab. Avoid sensitive details. <a href="/privacy" target="_blank" rel="noopener noreferrer" style="color:#17466b;text-decoration:underline">Privacy and retention</a>. Chat alone does not submit a service request.</p>' +
     '<div class="jerry-widget-input">' +
       '<button type="button" class="jerry-widget-attach" title="Attach photos or documents">📎</button>' +
       '<input type="file" class="jerry-file-input" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx" style="display:none" />' +
