@@ -692,11 +692,12 @@ export async function getSeoProducts(
   return products.filter((product) => isSeoSafeProductHandle(product.handle));
 }
 
-export async function getPartFinderProducts(
-  limit = 2000,
-): Promise<ShopifyPartFinderProduct[]> {
+export async function getPartFinderProducts(): Promise<
+  ShopifyPartFinderProduct[]
+> {
   const all: ShopifyPartFinderProduct[] = [];
   let cursor: string | null = null;
+  const visitedCursors = new Set<string>();
 
   do {
     const data = await shopifyFetch<{
@@ -739,7 +740,7 @@ export async function getPartFinderProducts(
           }
         }
       `,
-      { first: Math.min(250, limit - all.length), after: cursor },
+      { first: 250, after: cursor },
     );
 
     all.push(
@@ -748,10 +749,16 @@ export async function getPartFinderProducts(
         variants: edge.node.variants.edges.map(({ node }) => node),
       })),
     );
-    cursor = data.products.pageInfo.hasNextPage
-      ? data.products.pageInfo.endCursor
-      : null;
-  } while (cursor && all.length < limit);
+    const nextCursor = data.products.pageInfo.endCursor;
+    if (
+      data.products.pageInfo.hasNextPage &&
+      (!nextCursor || visitedCursors.has(nextCursor))
+    ) {
+      throw new Error('Part finder pagination did not advance.');
+    }
+    if (nextCursor) visitedCursors.add(nextCursor);
+    cursor = data.products.pageInfo.hasNextPage ? nextCursor : null;
+  } while (cursor);
 
   return filterPublicCatalogProducts(all);
 }

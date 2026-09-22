@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import CollectionProductBrowser from '@/components/shopify/CollectionProductBrowser';
+import CollectionCatalog from '@/components/shopify/CollectionCatalog';
+import { writeCatalogStaticData } from '@/lib/catalog-static-data';
 import PartFinder, {
   type PartFinderProduct,
 } from '@/components/shopify/PartFinder';
@@ -233,6 +235,13 @@ export default async function CollectionDetailPage({
       priceRange: product.priceRange,
     };
   });
+  const catalogDataUrl =
+    indexableProducts.length > 24
+      ? await writeCatalogStaticData({
+          products: browserProducts,
+          finderProducts,
+        })
+      : null;
   const quoteOnly = isQuoteCollection(collection.handle);
   const relatedServiceLinks = serviceLinksForCollection(
     collection.handle,
@@ -333,7 +342,7 @@ export default async function CollectionDetailPage({
           </div>
         </section>
 
-        {finderProducts.length ? (
+        {finderProducts.length && !catalogDataUrl ? (
           <Specimen variant="flat">
             <PartFinder
               products={finderProducts}
@@ -413,12 +422,23 @@ export default async function CollectionDetailPage({
           </div>
 
           {indexableProducts.length ? (
-            <CollectionProductBrowser
-              products={browserProducts}
-              collectionTitle={collection.title}
-              collectionHandle={collection.handle}
-              quoteOnly={quoteOnly}
-            />
+            catalogDataUrl ? (
+              <CollectionCatalog
+                initialProducts={browserProducts.slice(0, 24)}
+                dataUrl={catalogDataUrl}
+                total={browserProducts.length}
+                collectionTitle={collection.title}
+                collectionHandle={collection.handle}
+                quoteOnly={quoteOnly}
+              />
+            ) : (
+              <CollectionProductBrowser
+                products={browserProducts}
+                collectionTitle={collection.title}
+                collectionHandle={collection.handle}
+                quoteOnly={quoteOnly}
+              />
+            )
           ) : (
             <p className="bs-body">No products in this collection yet.</p>
           )}

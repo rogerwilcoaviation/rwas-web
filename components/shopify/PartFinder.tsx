@@ -1,6 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import {
+  matchesPartSearch,
+  normalizePartText as normalize,
+} from '@/lib/part-search';
 import { useMemo, useState } from 'react';
 
 export type PartFinderProduct = {
@@ -11,13 +15,6 @@ export type PartFinderProduct = {
   productType?: string;
   skus: string[];
 };
-
-function normalize(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim();
-}
 
 export default function PartFinder({
   products,
@@ -50,12 +47,13 @@ export default function PartFinder({
 
   const results = useMemo(() => {
     if (cleanQuery.length < 2) return [];
-    const terms = cleanQuery.split(/\s+/).filter(Boolean);
     return indexed
-      .filter(({ haystack }) => terms.every((term) => haystack.includes(term)))
+      .filter(({ haystack, product }) =>
+        matchesPartSearch({ query, haystack, skus: product.skus }),
+      )
       .slice(0, 12)
       .map(({ product }) => product);
-  }, [cleanQuery, indexed]);
+  }, [cleanQuery, query, indexed]);
 
   return (
     <div className="bs-part-finder" aria-label="Find Component or Part">
