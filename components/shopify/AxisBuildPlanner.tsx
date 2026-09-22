@@ -29,9 +29,9 @@ const EXACT_PRODUCT_IMAGES: Record<
 > = {
   '010-02544-21': {
     imageUrl:
-      'https://cdn.shopify.com/s/files/1/0763/1306/7739/files/cf-lg-87b40178-aecb-43d5-ab57-42ba297ea1cc_2a89dd13-0c5b-4997-835c-db35cedfca36.jpg?v=1778366650',
+      '/images/axis/products/010-02544-21-garmin-gsb15-usb-a-c-rear.webp',
     imageAlt:
-      'GSB™ 15, Type-A and Type-C, Rear Power Input, Standard — Garmin.com product image',
+      'Garmin GSB 15 010-02544-21 — USB-A and USB-C, rear power input',
   },
   '6420093-5': {
     imageUrl: '/images/axis/products/6420093-5-mid-continent-chronos-ch93max.jpg',
