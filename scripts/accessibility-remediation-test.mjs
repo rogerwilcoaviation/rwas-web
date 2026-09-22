@@ -4,7 +4,6 @@ import { readFileSync, mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { createRequire } from 'node:module';
-import { execFileSync } from 'node:child_process';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 const require = createRequire(import.meta.url);
@@ -127,12 +126,10 @@ assert.ok(services.includes('mainEntity: serviceFaq'));
 assert.ok(services.includes('serviceFaq.map((question)'));
 assert.ok(services.includes('id="faq"'));
 assert.equal((services.match(/'@type': 'Question'/g) || []).length, 7);
-const old = execFileSync('git', ['show', 'bd94a41:app/services/page.tsx'], {
-  encoding: 'utf8',
-});
+const approvedFaq = JSON.parse(readFileSync('scripts/fixtures/services-faq-approved-baseline.json', 'utf8'));
 assert.deepEqual(
   [...services.matchAll(/text: '([^']+)'/g)].map((m) => m[1]),
-  [...old.matchAll(/text: '([^']+)'/g)].map((m) => m[1]),
+  approvedFaq.answers,
 );
 function lum(hex) {
   return hex
