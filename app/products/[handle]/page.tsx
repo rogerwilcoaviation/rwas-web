@@ -1080,7 +1080,7 @@ export default async function ProductDetailPage({
         <BroadsheetNav activeHref="/collections" />
         <CredentialsBar />
         <BulletinBar />
-        <main className="bs-stage">
+        <main id="main-content" tabIndex={-1} className="bs-stage">
           <section className="bs-hero">
             <div>
               <div className="bs-product-dateline">
@@ -1332,7 +1332,7 @@ export default async function ProductDetailPage({
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         {/* Hero — photo + summary */}
         <section className="bs-hero">
           <figure className="bs-photo-box">

@@ -37,7 +37,7 @@ export default function AboutPage() {
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         {/* ── HERO HEADLINE ─────────────────────────────────────────── */}
         <section className="hero-headline-group" aria-labelledby="about-hero">
           <span className="bs-kicker">About the Shop</span>
@@ -324,7 +324,7 @@ export default function AboutPage() {
               <span className="bs-script-accent">
                 &mdash; on duty 24/7 &mdash;
               </span>
-              <h4>Talk to Captain Jerry</h4>
+              <h2 className="jerry-card-heading">Talk to Captain Jerry</h2>
               <p>Service inquiries &amp; scheduling</p>
               <a className="cta" href="#ask-jerry">
                 Ask Jerry

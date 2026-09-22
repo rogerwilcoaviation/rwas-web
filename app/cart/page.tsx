@@ -24,7 +24,7 @@ export default function CartPage() {
       <BroadsheetNav activeHref="/cart" />
       <CredentialsBar />
       <BulletinBar />
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="hero-headline-group">
           <p className="bs-kicker">The Order Desk</p>
           <p className="bs-script-accent">

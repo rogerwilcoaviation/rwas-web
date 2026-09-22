@@ -544,7 +544,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <a href="/aircraft-for-sale" className="a4s-back">
           &larr; Back to listings
         </a>

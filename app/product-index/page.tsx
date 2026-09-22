@@ -64,7 +64,7 @@ export default async function ProductIndexPage() {
       <BroadsheetNav activeHref="/collections" />
       <CredentialsBar />
       <BulletinBar />
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="hero-headline-group">
           <p className="bs-kicker">Complete catalog</p>
           <h1 className="bs-headline bs-headline--hero">Product Index</h1>

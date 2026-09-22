@@ -247,6 +247,9 @@ export default function RootLayout({
       </head>
 
       <body className="flex flex-col text-black antialiased dark:bg-gray-950 dark:text-white min-h-screen bs-body-cream">
+        <a className="rwas-skip-link" href="#main-content">
+          Skip to main content
+        </a>
         <DeferredJerryWidget />
         <Script
           src="/rwas-analytics.js?v=20260721-track-fix"
@@ -258,9 +261,9 @@ export default function RootLayout({
 
           <div className="w-full flex flex-col justify-between items-center font-sans">
             <ClientVisualEffects />
-            <main className="w-full flex flex-col items-stretch mb-auto">
+            <div className="w-full flex flex-col items-stretch mb-auto">
               {children}
-            </main>
+            </div>
           </div>
         </ThemeProviders>
       </body>

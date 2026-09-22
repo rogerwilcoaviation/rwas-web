@@ -71,7 +71,7 @@ export default async function AxisPlannerPage({ kind }: { kind: AxisPlannerKind 
       <BroadsheetNav activeHref="/collections" />
       <CredentialsBar />
       <BulletinBar />
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="hero-headline-group">
           <p className="bs-kicker">Garmin AXIS System Planner</p>
           <h1 className="bs-headline bs-headline--hero">

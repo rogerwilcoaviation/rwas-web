@@ -278,7 +278,7 @@ export default function ShopCapabilitiesPage() {
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         {/* ── HERO HEADLINE ─────────────────────────────────────────── */}
         <section className="hero-headline-group" aria-labelledby="caps-hero">
           <span className="bs-kicker">

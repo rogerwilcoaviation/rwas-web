@@ -38,12 +38,13 @@
 
 @media (max-width: 640px) {
   .broadsheet .rwas-contact-form__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
 /* --- Field cell --- */
 .broadsheet .rwas-field {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -64,7 +65,11 @@
 .broadsheet .rwas-field input,
 .broadsheet .rwas-field select,
 .broadsheet .rwas-field textarea {
-  font-family: var(--font-body, "Source Serif 4", Georgia, serif);
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-body, 'Source Serif 4', Georgia, serif);
   font-size: 15px;
   color: var(--ink-900);
   background: var(--bone);
@@ -187,7 +192,7 @@
 }
 
 .broadsheet .rwas-contact-confirm__head {
-  font-family: var(--font-display, "Playfair Display", Georgia, serif);
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
   font-size: clamp(26px, 4vw, 40px);
   line-height: 1.1;
   margin: 0;

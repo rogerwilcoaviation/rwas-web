@@ -99,7 +99,7 @@ export default async function CollectionsPage() {
       <BroadsheetNav activeHref="/collections" />
       <CredentialsBar />
       <BulletinBar />
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <Specimen variant="flat">
           <div className="border-l-4 border-black pl-5">
             <p className="bs-kicker">Plan a Garmin AXIS panel</p>

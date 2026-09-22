@@ -34,7 +34,7 @@ export default function Home() {
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         {/* ── ABOVE-FOLD 3-COL GRID (LEFT RAIL | HERO | RIGHT RAIL) ── */}
         <div className="bs-3col">
           {/* LEFT RAIL -------------------------------------------------- */}

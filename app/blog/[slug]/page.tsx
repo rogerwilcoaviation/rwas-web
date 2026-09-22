@@ -345,7 +345,7 @@ export default async function BlogArticlePage({
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         {/* Article header — kicker, title, byline. Flows directly on watermark. */}
         <header
           style={{

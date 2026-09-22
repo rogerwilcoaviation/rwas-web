@@ -42,7 +42,7 @@ export default function BlogPage() {
       <BroadsheetNav activeHref="/blog" />
       <CredentialsBar />
       <BulletinBar />
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="hero-headline-group">
           <p className="bs-kicker">Dispatches &amp; Bulletins</p>
           <p className="bs-script-accent">

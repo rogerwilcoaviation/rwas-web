@@ -146,7 +146,7 @@ export default async function CollectionDetailPage({
         <BroadsheetNav activeHref={`/collections/${handle}`} />
         <CredentialsBar />
         <BulletinBar />
-        <main className="bs-stage">
+        <main id="main-content" tabIndex={-1} className="bs-stage">
           <section className="hero-headline-group">
             <p className="bs-kicker">Collection</p>
             <p className="bs-script-accent">
@@ -295,7 +295,7 @@ export default async function CollectionDetailPage({
       <BroadsheetNav activeHref={`/collections/${collection.handle}`} />
       <CredentialsBar />
       <BulletinBar />
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="hero-headline-group">
           <p className="bs-kicker">
             Collection &middot; {indexableProducts.length} items

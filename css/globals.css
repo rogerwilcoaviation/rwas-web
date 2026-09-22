@@ -424,3 +424,21 @@ input:-webkit-autofill:focus {
   background-color: var(--primary-darker);
   color: white;
 }
+
+/* Keyboard bypass link remains visible above fixed navigation while focused. */
+.rwas-skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 10000;
+  transform: translateY(-200%);
+  padding: 0.75rem 1rem;
+  background: #fff;
+  color: #111;
+  font-weight: 700;
+}
+.rwas-skip-link:focus {
+  transform: translateY(0);
+  outline: 3px solid #111;
+  outline-offset: 3px;
+}

@@ -131,7 +131,7 @@ export default function PreBuyInspectionPage() {
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="hero-headline-group" aria-labelledby="prebuy-hero">
           <span className="bs-kicker">
             FAA Part 145 Repair Station &middot; Buyer-Side Aircraft Review

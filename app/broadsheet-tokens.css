@@ -443,7 +443,7 @@
   --ink-800: #10294a;
   --ink-700: #1f3f66;
   --ink-600: #45688f;
-  --ink-500: #7d93ad;
+  --ink-500: #45688f;
   --gold-900: #641b25;
   --gold-800: #842330;
   --gold-700: #9c2f3e;
@@ -1239,4 +1239,11 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+/* Fourth of July preview: small CTA labels need normal-text contrast. */
+.theme-july-4 .broadsheet .bs-cta-primary,
+.theme-july-4 .broadsheet .bs-cta-primary:hover,
+.theme-july-4 .broadsheet .bs-cta-primary:focus-visible {
+  color: #ffffff;
 }

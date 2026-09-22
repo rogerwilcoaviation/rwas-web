@@ -102,7 +102,10 @@ const contactSchema = z
       .or(z.literal('')),
     createdAt: z.string().max(80).optional().or(z.literal('')),
     pricingReference: z.string().max(160).optional().or(z.literal('')),
-    priceBasis: z.literal('manufacturer-list-price').optional().or(z.literal('')),
+    priceBasis: z
+      .literal('manufacturer-list-price')
+      .optional()
+      .or(z.literal('')),
     advisories: z.array(z.string().max(400)).max(30).optional(),
     components: z
       .array(
@@ -252,10 +255,7 @@ export default function ContactForm() {
       if (value) setValue(key, value);
     }
     const draftValue = window.sessionStorage.getItem('rwas-contact-draft');
-    if (
-      draftValue &&
-      params.get('draft') === 'axis'
-    ) {
+    if (draftValue && params.get('draft') === 'axis') {
       try {
         const draft = JSON.parse(draftValue) as AxisContactDraft;
         if (draft.message) setValue('message', draft.message.slice(0, 4000));
@@ -421,9 +421,12 @@ export default function ContactForm() {
               required
               {...register('name')}
               aria-invalid={Boolean(errors.name)}
+              aria-describedby={errors.name ? 'name-error' : undefined}
             />
             {errors.name ? (
-              <p className="rwas-field__error">{errors.name.message}</p>
+              <p id="name-error" className="rwas-field__error" role="alert">
+                {errors.name.message}
+              </p>
             ) : null}
           </div>
 
@@ -436,9 +439,12 @@ export default function ContactForm() {
               required
               {...register('email')}
               aria-invalid={Boolean(errors.email)}
+              aria-describedby={errors.email ? 'email-error' : undefined}
             />
             {errors.email ? (
-              <p className="rwas-field__error">{errors.email.message}</p>
+              <p id="email-error" className="rwas-field__error" role="alert">
+                {errors.email.message}
+              </p>
             ) : null}
           </div>
 
@@ -483,9 +489,18 @@ export default function ContactForm() {
               }
               {...register('aircraftYear')}
               aria-invalid={Boolean(errors.aircraftYear)}
+              aria-describedby={
+                errors.aircraftYear ? 'aircraftYear-error' : undefined
+              }
             />
             {errors.aircraftYear ? (
-              <p className="rwas-field__error">{errors.aircraftYear.message}</p>
+              <p
+                id="aircraftYear-error"
+                className="rwas-field__error"
+                role="alert"
+              >
+                {errors.aircraftYear.message}
+              </p>
             ) : null}
           </div>
 
@@ -500,9 +515,18 @@ export default function ContactForm() {
               required={selectedReason === 'quote'}
               {...register('aircraftMake')}
               aria-invalid={Boolean(errors.aircraftMake)}
+              aria-describedby={
+                errors.aircraftMake ? 'aircraftMake-error' : undefined
+              }
             />
             {errors.aircraftMake ? (
-              <p className="rwas-field__error">{errors.aircraftMake.message}</p>
+              <p
+                id="aircraftMake-error"
+                className="rwas-field__error"
+                role="alert"
+              >
+                {errors.aircraftMake.message}
+              </p>
             ) : null}
           </div>
 
@@ -517,9 +541,16 @@ export default function ContactForm() {
               required={selectedReason === 'quote'}
               {...register('aircraftModel')}
               aria-invalid={Boolean(errors.aircraftModel)}
+              aria-describedby={
+                errors.aircraftModel ? 'aircraftModel-error' : undefined
+              }
             />
             {errors.aircraftModel ? (
-              <p className="rwas-field__error">
+              <p
+                id="aircraftModel-error"
+                className="rwas-field__error"
+                role="alert"
+              >
                 {errors.aircraftModel.message}
               </p>
             ) : null}
@@ -543,9 +574,18 @@ export default function ContactForm() {
               }
               {...register('aircraftSerialNumber')}
               aria-invalid={Boolean(errors.aircraftSerialNumber)}
+              aria-describedby={
+                errors.aircraftSerialNumber
+                  ? 'aircraftSerialNumber-error'
+                  : undefined
+              }
             />
             {errors.aircraftSerialNumber ? (
-              <p className="rwas-field__error">
+              <p
+                id="aircraftSerialNumber-error"
+                className="rwas-field__error"
+                role="alert"
+              >
                 {errors.aircraftSerialNumber.message}
               </p>
             ) : null}
@@ -569,9 +609,12 @@ export default function ContactForm() {
               }
               {...register('nNumber')}
               aria-invalid={Boolean(errors.nNumber)}
+              aria-describedby={errors.nNumber ? 'nNumber-error' : undefined}
             />
             {errors.nNumber ? (
-              <p className="rwas-field__error">{errors.nNumber.message}</p>
+              <p id="nNumber-error" className="rwas-field__error" role="alert">
+                {errors.nNumber.message}
+              </p>
             ) : null}
           </div>
 
@@ -581,6 +624,7 @@ export default function ContactForm() {
             </label>
             <select
               id="aircraftStatus"
+              required={selectedReason === 'quote'}
               {...register('aircraftStatus')}
               aria-invalid={Boolean(errors.aircraftStatus)}
               aria-describedby={
@@ -662,9 +706,12 @@ export default function ContactForm() {
             required
             {...register('message')}
             aria-invalid={Boolean(errors.message)}
+            aria-describedby={errors.message ? 'message-error' : undefined}
           />
           {errors.message ? (
-            <p className="rwas-field__error">{errors.message.message}</p>
+            <p id="message-error" className="rwas-field__error" role="alert">
+              {errors.message.message}
+            </p>
           ) : null}
         </div>
 

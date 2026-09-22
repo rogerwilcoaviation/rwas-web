@@ -170,7 +170,7 @@ export default function FiberLaserFabricationPage() {
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <figure
           className="fabrication-video fabrication-video--feature"
           aria-labelledby="fabrication-video-title"

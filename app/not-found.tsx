@@ -20,7 +20,7 @@ export const metadata = {
  */
 export default function NotFound() {
   return (
-    <main
+    <main id="main-content" tabIndex={-1}
       style={{
         minHeight: '100vh',
         display: 'flex',

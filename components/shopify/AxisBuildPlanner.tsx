@@ -16,7 +16,7 @@ import {
 } from '@/components/shared/ui/dialog';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useState, type MouseEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 
 type Selection = Record<string, number>;
 
@@ -30,12 +30,13 @@ const EXACT_PRODUCT_IMAGES: Record<
   '010-02544-21': {
     imageUrl:
       '/images/axis/products/010-02544-21-garmin-gsb15-usb-a-c-rear.webp',
-    imageAlt:
-      'Garmin GSB 15 010-02544-21 — USB-A and USB-C, rear power input',
+    imageAlt: 'Garmin GSB 15 010-02544-21 — USB-A and USB-C, rear power input',
   },
   '6420093-5': {
-    imageUrl: '/images/axis/products/6420093-5-mid-continent-chronos-ch93max.jpg',
-    imageAlt: 'Mid-Continent CHRONOS CH93MAX Digital Clock / MAX Power USB Charger',
+    imageUrl:
+      '/images/axis/products/6420093-5-mid-continent-chronos-ch93max.jpg',
+    imageAlt:
+      'Mid-Continent CHRONOS CH93MAX Digital Clock / MAX Power USB Charger',
   },
   '010-04143-00': {
     imageUrl: '/images/axis/products/010-04143-00-gdu-80p-portrait-display.jpg',
@@ -43,12 +44,14 @@ const EXACT_PRODUCT_IMAGES: Record<
       'Garmin AXIS GDU 80P portrait flight display shown from the front',
   },
   '010-04145-00': {
-    imageUrl: '/images/axis/products/010-04145-00-gdu-80l-landscape-display.jpg',
+    imageUrl:
+      '/images/axis/products/010-04145-00-gdu-80l-landscape-display.jpg',
     imageAlt:
       'Garmin AXIS GDU 80L landscape flight display shown from the front',
   },
   '010-12498-50': {
-    imageUrl: '/images/axis/products/010-12498-50-ga-24-tnc-siriusxm-antenna.jpg',
+    imageUrl:
+      '/images/axis/products/010-12498-50-ga-24-tnc-siriusxm-antenna.jpg',
     imageAlt:
       'Garmin GA 24 TNC SiriusXM antenna with attached cable and TNC connector',
   },
@@ -453,11 +456,7 @@ function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
   if (kind === 'certified' && has('010-01076-31') && !has('011-03241-01')) {
     notices.push('The GTR 20 requires its PMA connector kit.');
   }
-  if (
-    kind === 'certified' &&
-    has('010-01172-21') &&
-    !has('011-03271-00')
-  ) {
+  if (kind === 'certified' && has('010-01172-21') && !has('011-03271-00')) {
     notices.push('The selected GAD 29D requires its connector kit.');
   }
   if (has('010-00562-00')) {
@@ -515,6 +514,7 @@ export default function AxisBuildPlanner({
   const [gfcConfigurationName, setGfcConfigurationName] = useState('');
   const [source, setSource] = useState('axis-build-planner');
   const [attribution, setAttribution] = useState<Record<string, string>>({});
+  const detailOpenerRef = useRef<HTMLButtonElement | null>(null);
   const [detailSku, setDetailSku] = useState<string | null>(null);
   const items = AXIS_ITEMS[kind];
   const steps = AXIS_STEPS[kind].filter(
@@ -664,8 +664,8 @@ export default function AxisBuildPlanner({
           All prices shown are manufacturer list prices. Discounted equipment
           pricing may be available after RWAS reviews a submitted preliminary
           build. Prices are subject to change and exclude tax, freight,
-          installation labor, fabrication, wiring, configuration,
-          certification and additional required hardware.
+          installation labor, fabrication, wiring, configuration, certification
+          and additional required hardware.
         </p>
       </div>
 
@@ -812,10 +812,10 @@ export default function AxisBuildPlanner({
                       key={item.sku}
                       className="grid gap-3 px-5 py-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-center"
                     >
-                      <label className="flex cursor-pointer items-start gap-3">
+                      <label className="flex min-w-0 cursor-pointer items-start gap-3">
                         <input
                           type="checkbox"
-                          className="mt-1 h-5 w-5 rounded-none border-2 border-black text-black focus:ring-black"
+                          className="mt-1 h-5 w-5 shrink-0 rounded-none border-2 border-black text-black focus:ring-black"
                           checked={Boolean(quantity)}
                           onChange={(event) =>
                             setQuantity(item.sku, event.target.checked ? 1 : 0)
@@ -826,6 +826,7 @@ export default function AxisBuildPlanner({
                           onClick={(event) => {
                             event.preventDefault();
                             event.stopPropagation();
+                            detailOpenerRef.current = event.currentTarget;
                             setDetailSku(item.sku);
                           }}
                           className="relative h-16 w-20 shrink-0 overflow-hidden border border-neutral-400 bg-white hover:border-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 sm:h-20 sm:w-24"
@@ -839,12 +840,13 @@ export default function AxisBuildPlanner({
                             className="object-contain p-1.5"
                           />
                         </button>
-                        <span>
+                        <span className="min-w-0 [overflow-wrap:anywhere]">
                           <button
                             type="button"
                             onClick={(event) => {
                               event.preventDefault();
                               event.stopPropagation();
+                              detailOpenerRef.current = event.currentTarget;
                               setDetailSku(item.sku);
                             }}
                             className="block text-left font-bold text-black underline decoration-1 underline-offset-4 hover:text-amber-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
@@ -904,11 +906,15 @@ export default function AxisBuildPlanner({
         }}
       >
         {detailItem && detailCompatibility ? (
-          <DialogContent className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-4xl overflow-y-auto rounded-none border-2 border-black bg-[#fffdf7] p-0 shadow-2xl">
+          <DialogContent
+            onCloseAutoFocus={(event) => {
+              event.preventDefault();
+              detailOpenerRef.current?.focus({ preventScroll: true });
+            }}
+            className="max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-4xl overflow-y-auto rounded-none border-2 border-black bg-[#fffdf7] p-0 shadow-2xl"
+          >
             <div>
-              <div
-                className="relative h-72 w-full border-b-2 border-black bg-white md:h-[32rem]"
-              >
+              <div className="relative h-72 w-full border-b-2 border-black bg-white md:h-[32rem]">
                 <Image
                   src={
                     exactProductImage?.imageUrl ||
@@ -1098,7 +1104,9 @@ export default function AxisBuildPlanner({
       >
         <p className="bs-kicker">Preliminary build summary</p>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-3 border-b-2 border-black pb-4">
-          <h2 className="bs-section-head">Estimated hardware list-price total</h2>
+          <h2 className="bs-section-head">
+            Estimated hardware list-price total
+          </h2>
           <p className="text-3xl font-black tabular-nums md:text-4xl">
             {money.format(total)}
           </p>

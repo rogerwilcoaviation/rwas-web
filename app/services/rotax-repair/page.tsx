@@ -124,7 +124,7 @@ export default function RotaxRepairPage() {
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="hero-headline-group" aria-labelledby="rotax-hero">
           <span className="bs-kicker">
             Light Sport &amp; Experimental Aircraft &middot; Northern Plains

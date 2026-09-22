@@ -28,7 +28,7 @@ export default function SecurityPage() {
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         {/* ── HERO HEADLINE ─────────────────────────────────────────── */}
         <section className="hero-headline-group" aria-labelledby="security-hero">
           <span className="bs-kicker">Trust &amp; Safety</span>

@@ -131,7 +131,7 @@ export default function G3xTouchInstallationPage() {
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="hero-headline-group" aria-labelledby="g3x-hero">
           <span className="bs-kicker">
             Certified Garmin Dealer &middot; FAA Part 145 Repair Station

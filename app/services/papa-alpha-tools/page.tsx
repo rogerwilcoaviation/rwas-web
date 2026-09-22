@@ -116,7 +116,7 @@ export default function PapaAlphaToolsPage() {
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="hero-headline-group" aria-labelledby="pa-hero">
           <span className="bs-kicker">
             Papa-Alpha Tools &middot; Piper Rigging References

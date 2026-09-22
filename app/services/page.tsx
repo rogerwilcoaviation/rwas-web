@@ -97,6 +97,65 @@ const serviceGroups = [
   },
 ];
 
+const serviceFaq = [
+  {
+    '@type': 'Question',
+    name: 'What does Roger Wilco Aviation Services do?',
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: 'RWAS is an FAA-certificated repair station specializing in Garmin avionics installation, airframe and powerplant maintenance, non-destructive testing, and sheet metal fabrication. We also manufacture Papa-Alpha rigging reference tools for Piper aircraft.',
+    },
+  },
+  {
+    '@type': 'Question',
+    name: 'Where is Roger Wilco Aviation Services located?',
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: 'RWAS Repair Station Headquarters is at 3309 Douglas Avenue Unit #3, Yankton, SD 57078. The shop serves aircraft owners across the Northern Plains.',
+    },
+  },
+  {
+    '@type': 'Question',
+    name: 'What are your business hours?',
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: 'Monday through Friday, 7:00 AM to 5:00 PM Central Time.',
+    },
+  },
+  {
+    '@type': 'Question',
+    name: 'What Garmin systems do you install?',
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: 'We specialize in Garmin systems including the G3X Touch suite, G500/G600 TXi, GTN Xi navigators, GFC 500 autopilots, GI 275 displays, transponders, audio panels, ADS-B solutions, and full integrated panel installations.',
+    },
+  },
+  {
+    '@type': 'Question',
+    name: 'Can you work on my aircraft if I am not local?',
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: 'Yes. Many customers fly their aircraft in for avionics installation and maintenance. We can coordinate logistics with you, your mechanic, or a ferry pilot, and we ship Papa-Alpha tools nationwide and internationally.',
+    },
+  },
+  {
+    '@type': 'Question',
+    name: 'Do you offer financing for avionics or maintenance work?',
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: 'Yes. RWAS offers financing options for avionics installations and maintenance projects including panel upgrades, autopilot installs, ADS-B upgrades, and major maintenance.',
+    },
+  },
+  {
+    '@type': 'Question',
+    name: 'Are you an FAA repair station?',
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: 'Yes. RWAS is an FAA-certificated repair station, Certificate No. RWSR491E, and a certified Garmin dealer.',
+    },
+  },
+];
+
 const allServices = serviceGroups.flatMap((group) => group.services);
 
 export const metadata = genPageMetadata({
@@ -116,64 +175,7 @@ export default function ServicesPage() {
             '@context': 'https://schema.org',
             '@type': 'FAQPage',
             '@id': `${pageUrl}#faq`,
-            mainEntity: [
-              {
-                '@type': 'Question',
-                name: 'What does Roger Wilco Aviation Services do?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'RWAS is an FAA-certificated repair station specializing in Garmin avionics installation, airframe and powerplant maintenance, non-destructive testing, and sheet metal fabrication. We also manufacture Papa-Alpha rigging reference tools for Piper aircraft.',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: 'Where is Roger Wilco Aviation Services located?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'RWAS Repair Station Headquarters is at 3309 Douglas Avenue Unit #3, Yankton, SD 57078. The shop serves aircraft owners across the Northern Plains.',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: 'What are your business hours?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Monday through Friday, 7:00 AM to 5:00 PM Central Time.',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: 'What Garmin systems do you install?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'We specialize in Garmin systems including the G3X Touch suite, G500/G600 TXi, GTN Xi navigators, GFC 500 autopilots, GI 275 displays, transponders, audio panels, ADS-B solutions, and full integrated panel installations.',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: 'Can you work on my aircraft if I am not local?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Yes. Many customers fly their aircraft in for avionics installation and maintenance. We can coordinate logistics with you, your mechanic, or a ferry pilot, and we ship Papa-Alpha tools nationwide and internationally.',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: 'Do you offer financing for avionics or maintenance work?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Yes. RWAS offers financing options for avionics installations and maintenance projects including panel upgrades, autopilot installs, ADS-B upgrades, and major maintenance.',
-                },
-              },
-              {
-                '@type': 'Question',
-                name: 'Are you an FAA repair station?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Yes. RWAS is an FAA-certificated repair station, Certificate No. RWSR491E, and a certified Garmin dealer.',
-                },
-              },
-            ],
+            mainEntity: serviceFaq,
           }),
         }}
       />
@@ -262,7 +264,7 @@ export default function ServicesPage() {
       <CredentialsBar />
       <BulletinBar />
 
-      <main className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage">
         <section
           className="hero-headline-group"
           aria-labelledby="services-hero"
@@ -337,9 +339,9 @@ export default function ServicesPage() {
               <div className="bs-body">
                 <p>
                   Roger Wilco Aviation Services is a working FAA Part 145 repair
-                  station at KYKN in Yankton, serving aircraft owners across
-                  the Northern Plains. This page is the front desk for the
-                  shop's crawlable service pages: Garmin installation, aircraft
+                  station at KYKN in Yankton, serving aircraft owners across the
+                  Northern Plains. This page is the front desk for the shop's
+                  crawlable service pages: Garmin installation, aircraft
                   maintenance, NDT, fabrication, Rotax support, pre-buy
                   inspections, and RWAS-built Papa-Alpha tools.
                 </p>
@@ -477,6 +479,21 @@ export default function ServicesPage() {
             </Specimen>
           </aside>
         </div>
+        <section
+          id="faq"
+          aria-labelledby="services-faq-heading"
+          className="mt-8 border-t-2 border-black pt-6"
+        >
+          <h2 id="services-faq-heading" className="bs-section-title">
+            Frequently asked questions
+          </h2>
+          {serviceFaq.map((question) => (
+            <div key={question.name} className="mt-5">
+              <h3 className="font-bold">{question.name}</h3>
+              <p className="bs-body mt-2">{question.acceptedAnswer.text}</p>
+            </div>
+          ))}
+        </section>
       </main>
 
       <BroadsheetFooter />
