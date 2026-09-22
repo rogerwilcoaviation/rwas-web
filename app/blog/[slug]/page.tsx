@@ -198,8 +198,14 @@ export async function generateMetadata({
       : `${siteUrl}${article.image}`
     : `${siteUrl}/newspaper/images/logo.png`;
 
-  const seoTitle = truncateMeta(`${article.title} | RWAS`, 60);
-  const seoDescription = truncateMeta(article.lead, 155);
+  const seoTitle = truncateMeta(
+    (article as { seo_title?: string }).seo_title || `${article.title} | RWAS`,
+    60,
+  );
+  const seoDescription = truncateMeta(
+    (article as { meta_description?: string }).meta_description || article.lead,
+    155,
+  );
   const updatedTime = (article as { updated_at?: string }).updated_at;
 
   return {
@@ -267,7 +273,10 @@ export default async function BlogArticlePage({
       ? article.image
       : `${siteUrl}${article.image}`
     : `${siteUrl}/newspaper/images/logo.png`;
-  const seoDescription = truncateMeta(article.lead, 155);
+  const seoDescription = truncateMeta(
+    (article as { meta_description?: string }).meta_description || article.lead,
+    155,
+  );
   const updatedTime = (article as { updated_at?: string }).updated_at;
   const articleSchema = {
     '@context': 'https://schema.org',
