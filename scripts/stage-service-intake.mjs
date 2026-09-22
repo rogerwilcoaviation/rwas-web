@@ -29,7 +29,8 @@ export default { ...app, async fetch(request, env, ctx) {
 const routesPath = resolve(root, '_routes.json');
 const routes = JSON.parse(readFileSync(routesPath, 'utf8'));
 for (const path of ['/api/service-intake', '/api/service-receipt', '/api/intake-dispatch']) {
- routes.include = Array.from(new Set([...(routes.include || []), path]));
+ routes.include = routes.include || [];
+ if (!routes.include.some(p => p === path || (p.endsWith('*') && path.startsWith(p.slice(0, -1))))) routes.include.push(path);
  routes.exclude = (routes.exclude || []).filter(p => p !== path);
  if (routes.exclude.some(p => p.includes('*') && path.startsWith(p.split('*')[0]))) throw new Error('An existing wildcard exclusion would bypass service intake');
 }

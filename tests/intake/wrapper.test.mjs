@@ -18,6 +18,6 @@ test('advanced Pages routing reaches actual handlers and preserves existing app'
  assert.equal((await mf.dispatchFetch('https://www.rogerwilcoaviation.com/api/service-receipt')).status,404);
  assert.equal((await mf.dispatchFetch('https://www.rogerwilcoaviation.com/api/service-intake',{method:'POST',headers:{Origin:'https://evil.test'}})).status,403);
  assert.equal((await mf.dispatchFetch('https://www.rogerwilcoaviation.com/api/intake-dispatch',{method:'POST'})).status,503);
- const routes=JSON.parse(await readFile(join(root,'_routes.json'),'utf8'));assert.deepEqual(routes.exclude,['/ops/*']);assert(routes.include.includes('/api/service-intake'));
+ const routes=JSON.parse(await readFile(join(root,'_routes.json'),'utf8'));assert.deepEqual(routes.exclude,['/ops/*']);assert.deepEqual(routes.include,['/*']);
  } finally {await mf?.dispose();await rm(root,{recursive:true,force:true});}
 });
