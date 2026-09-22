@@ -23,7 +23,7 @@ export const metadata = genPageMetadata({
 });
 
 const policyConfig = {
-  lastUpdated: 'March 1st, 2024',
+  lastUpdated: 'September 22, 2026',
 };
 
 export default function PrivacyPolicyPage() {
@@ -52,6 +52,13 @@ export default function PrivacyPolicyPage() {
           <div className="bs-byline">
             Last updated {policyConfig.lastUpdated}
           </div>
+        </section>
+
+        <section className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8" aria-labelledby="browser-analytics-notice">
+          <h2 id="browser-analytics-notice" className="text-lg font-semibold mb-4">Website analytics and Captain Jerry</h2>
+          <p>Our first-party analytics associates visits and performance measurements with a random browser identifier stored as <code>rwas_anon_session</code> in localStorage. The identifier has no script-set expiry. Analytics includes page paths, referrers, device categories, interactions, and performance measurements. Activity records are stored in Cloudflare D1; performance records are emitted to runtime logs and may include browser information. A fixed server-retention period for these records has not been established.</p>
+          <p>Captain Jerry keeps recent conversation history in your tab’s sessionStorage. Sending a message transmits your conversation to our chat service for a response. Do not enter passwords, payment-card details, or sensitive personal information. Clearing browser data does not delete information already received by our services.</p>
+          <p>Our <a href="/cookies">Cookie Policy and browser-data controls</a> explain these storage keys and how to remove the first-party identifier. For questions about retention or requests to delete information held by us, contact <a href="mailto:avionics@rwas.team">avionics@rwas.team</a>. Deleting a local identifier is not an analytics opt-out or a server-record deletion.</p>
         </section>
 
         <div className="mt-12 max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">

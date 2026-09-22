@@ -9,6 +9,7 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import { genPageMetadata } from '@/app/seo';
+import { BrowserDataControls } from '@/components/shared/BrowserDataControls';
 
 export const metadata = genPageMetadata({
   title: 'Cookie Policy | Roger Wilco Aviation Services',
@@ -17,7 +18,7 @@ export const metadata = genPageMetadata({
   canonical: 'https://www.rogerwilcoaviation.com/cookies',
 });
 
-const LAST_UPDATED = 'April 21, 2026';
+const LAST_UPDATED = 'September 22, 2026';
 
 export default function CookiePolicyPage() {
   return (
@@ -113,6 +114,17 @@ export default function CookiePolicyPage() {
               </a>
               .
             </p>
+          </div>
+        </Specimen>
+
+        <Specimen variant="flat" as="section">
+          <h2 className="bs-headline bs-headline--section">First-party analytics and chat storage</h2>
+          <div className="bs-body">
+            <p>Our first-party analytics uses the localStorage key <code>rwas_anon_session</code>, a randomly generated browser identifier. It is not a login or your name. It helps associate page views, feature interactions, and performance measurements across visits. The script sets no expiry: the identifier remains until you or your browser remove this site’s local data.</p>
+            <p>Analytics requests include this identifier, the page path, referring page, device category, and event or performance measurement. Our activity endpoint stores events in Cloudflare D1, including a referring hostname and country. The performance endpoint writes structured runtime logs, which may also include browser information. We have not established a fixed server-retention period for these records; contact us for retention or deletion questions.</p>
+            <p>Captain Jerry keeps chat history in this tab’s sessionStorage under <code>jerry-chat-history</code>. Browser session storage normally lasts for the tab’s session and may be restored by browser session-recovery features. Messages you send are also processed by our chat service; removing browser storage does not remove server-side records. See our <a href="/privacy">Privacy Policy</a> before entering personal details.</p>
+            <p>The control below removes only the first-party analytics identifier, not your cart, seller login, listing drafts, or chat. It is not an analytics opt-out. You can remove this site’s other localStorage and sessionStorage data through your browser’s site-data controls.</p>
+            <BrowserDataControls />
           </div>
         </Specimen>
 

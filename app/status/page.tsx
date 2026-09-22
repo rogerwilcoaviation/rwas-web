@@ -12,7 +12,7 @@ import {
 export const metadata = {
   title: { absolute: 'System Status | Roger Wilco Aviation Services' },
   description:
-    'Live operational status for the Roger Wilco Aviation Services website, aircraft marketplace, Captain Jerry assistant, and Shopify checkout.',
+    'Dated manual status information for Roger Wilco Aviation Services. This page is not a live health monitor.',
   alternates: { canonical: 'https://www.rogerwilcoaviation.com/status' },
   robots: { index: false, follow: true },
 };
@@ -20,48 +20,42 @@ export const metadata = {
 type SystemRow = {
   name: string;
   detail: string;
-  state: 'operational' | 'degraded' | 'down';
+  state: 'not-verified';
 };
 
 const SYSTEMS: SystemRow[] = [
   {
     name: 'rogerwilcoaviation.com',
     detail: 'Marketing site, blog, and product pages (Cloudflare Pages).',
-    state: 'operational',
+    state: 'not-verified',
   },
   {
     name: 'Aircraft Marketplace',
     detail: 'Listings API and seller portal at sale-api.rogerwilcoaviation.com.',
-    state: 'operational',
+    state: 'not-verified',
   },
   {
     name: 'Captain Jerry',
     detail: 'AI assistant widget and chat endpoint.',
-    state: 'operational',
+    state: 'not-verified',
   },
   {
     name: 'Shopify Checkout',
     detail: 'Cart, payment, and order confirmation.',
-    state: 'operational',
+    state: 'not-verified',
   },
   {
     name: 'Quote Requests',
     detail: 'Autopilot and avionics quote forms + email delivery.',
-    state: 'operational',
+    state: 'not-verified',
   },
 ];
 
-const LAST_CHECK = 'April 21, 2026';
+const LAST_CHECK = 'September 22, 2026';
 
 function Dot({ state }: { state: SystemRow['state'] }) {
-  const color =
-    state === 'operational' ? '#1f6b3f' : state === 'degraded' ? '#b7791f' : '#8a1c1c';
-  const label =
-    state === 'operational'
-      ? 'Operational'
-      : state === 'degraded'
-      ? 'Degraded'
-      : 'Down';
+  const color = '#645746';
+  const label = 'Not independently verified';
   return (
     <span
       style={{
@@ -106,16 +100,17 @@ export default function StatusPage() {
             System Status
           </h1>
           <p className="bs-subhead">
-            Live operational status for every public service we run.
+            A manually maintained service directory, not a live health monitor.
           </p>
-          <div className="bs-byline">Last checked {LAST_CHECK}</div>
+          <div className="bs-byline">Last manually reviewed {LAST_CHECK}</div>
         </section>
 
         {/* ── SYSTEMS ───────────────────────────────────────────────── */}
         <Specimen variant="hero" as="section">
           <span className="bs-kicker">Services</span>
-          <h2 className="bs-headline bs-headline--section">Current status</h2>
+          <h2 className="bs-headline bs-headline--section">Verification status</h2>
           <hr className="section-rule" />
+          <p className="bs-body">The previous April 21 snapshot is not a current health check. Page availability alone does not verify message delivery, listing submission, checkout, payment, or order confirmation. Contact us if you encounter a problem.</p>
           <ul className="bs-svc-list">
             {SYSTEMS.map((s) => (
               <li key={s.name} className="bs-svc">
