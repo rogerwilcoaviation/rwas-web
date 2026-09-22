@@ -79,7 +79,10 @@
       event.preventDefault();
       if (busy || accepted || !form.reportValidity()) return;
       var next = {};
-      definitions.forEach(function (d) { next[d[0]] = fields[d[0]].value.trim(); });
+      definitions.forEach(function (d) { next[d[0]] = fields[d[0]].value.normalize('NFC').replace(/\r\n?/g, '\n').trim(); });
+      next.email = next.email.toLowerCase();
+      var byteLimits = { name: 120, email: 254, phone: 40, aircraft: 160, message: 8000 };
+      if (Object.keys(next).some(function (key) { return new TextEncoder().encode(next[key]).length > byteLimits[key] || /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/.test(next[key]) || (key !== 'message' && /[\n\t]/.test(next[key])); })) { say('One or more fields are too long or contain unsupported control characters. Please shorten or correct them.'); return; }
       if (next.name.length < 2 || next.message.length < 10) { say('Enter a name and a request of at least 10 characters.'); return; }
       var nextFingerprint = JSON.stringify(next);
       if (nextFingerprint !== fingerprint) {
@@ -106,8 +109,9 @@
       var descriptions = {
         notification_pending: 'Staff email notification pending; not a booking/quote.',
         provider_accepted: 'The email provider accepted the staff notification; delivery is not confirmed. Not a booking/quote.',
-        delivered: 'Staff email notification delivered; this does not confirm staff review, a booking or a quote.',
-        notification_failed: 'Staff email notification failed. Please call (605) 299-8178. Not a booking/quote.'
+        retry_pending: 'Staff email notification is waiting for another attempt. Not a booking/quote.',
+        needs_review: 'Staff email notification needs operator review. Please call (605) 299-8178. Not a booking/quote.',
+        failed: 'Staff email notification could not be confirmed. Please call (605) 299-8178. Not a booking/quote.'
       };
       say(prefix + (descriptions[value] || 'Staff email notification status unavailable; not a booking/quote.') + ' Receipt: ' + receiptId);
     }
@@ -133,7 +137,7 @@
         } else if (response.status === 409) {
           say('Request ID conflict. This attempt was not saved. Do not retry with different details to resolve a conflict; call (605) 299-8178.' + (ambiguous ? ' The earlier attempt may have been saved.' : ''));
         } else if (response.status === 503) {
-          say('This attempt was not saved: service intake is unavailable. Retry unchanged details or call (605) 299-8178.' + (ambiguous ? ' The earlier attempt still has an unknown outcome.' : ''));
+          ambiguous = true; say('Service intake is unavailable and we cannot confirm whether your request was saved. Retry unchanged details or call (605) 299-8178.');
         } else if (response.status === 429) {
           say('Request was not accepted. Wait, complete verification again, and retry.' + (ambiguous ? ' The earlier attempt still has an unknown outcome.' : ''));
         } else {

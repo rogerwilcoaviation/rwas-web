@@ -27,19 +27,6 @@ export async function onRequestPost({ request, env }: Context) {
       env.INTAKE_DISPATCH_SECRET!,
       `intake-ip:v1:${ip}`,
     );
-    const bucket = Math.floor(now / 3600000);
-    // Guard even replay attempts before Turnstile/provider work; retain no raw IP.
-    const guard = await db
-      .prepare(
-        `INSERT INTO intake_rate(ip_hash,bucket,hits) VALUES(?,?,1)
-      ON CONFLICT(ip_hash,bucket) DO UPDATE SET hits=hits+1 WHERE hits<20 RETURNING hits`,
-      )
-      .bind(ipHash, bucket)
-      .first();
-    if (!guard)
-      return json({ error: 'Please try again later.' }, 429, {
-        'Retry-After': '3600',
-      });
     const serialized = JSON.stringify(payload);
     const fingerprint = await hash(serialized);
     const receiptToken = await hmac(
@@ -61,7 +48,7 @@ export async function onRequestPost({ request, env }: Context) {
         );
       // Secret rotation cannot silently return an unusable replacement token.
       if (row.token_hash !== (await hash(receiptToken))) return unavailable();
-      return json({ receiptId: row.id, receiptToken, status: 'received' }, 200);
+      return json({ receiptId: row.id, receiptToken, status: 'notification_pending' }, 202);
     };
     if (existing) return replay(existing);
     const verification = await fetch(
@@ -89,6 +76,19 @@ export async function onRequestPost({ request, env }: Context) {
     ) {
       return json({ error: 'Verification failed. Please try again.' }, 403);
     }
+    const bucket = Math.floor(now / 3600000);
+    // Persist a bounded rate record only after successful anti-abuse verification.
+    const guard = await db
+      .prepare(
+        `INSERT INTO intake_rate(ip_hash,bucket,hits) VALUES(?,?,1)
+      ON CONFLICT(ip_hash,bucket) DO UPDATE SET hits=hits+1 WHERE hits<20 RETURNING hits`,
+      )
+      .bind(ipHash, bucket)
+      .first();
+    if (!guard)
+      return json({ error: 'Please try again later.' }, 429, {
+        'Retry-After': '3600',
+      });
     const id = crypto.randomUUID();
     const day = Math.floor(now / 86400000) * 86400000;
     // Both writes commit together. Admission predicates execute under D1's write transaction,
@@ -131,7 +131,7 @@ export async function onRequestPost({ request, env }: Context) {
         'Retry-After': '3600',
       });
     if (committed.id !== id) return replay(committed);
-    return json({ receiptId: id, receiptToken, status: 'received' }, 202);
+    return json({ receiptId: id, receiptToken, status: 'notification_pending' }, 202);
   } catch (error) {
     if (error instanceof InvalidBody)
       return json({ error: 'Invalid submission.' }, 400);

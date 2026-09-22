@@ -138,7 +138,9 @@ test('durable intake and outbox integration', async (t) => {
         assert.equal(response.status, 202);
         const a = await response.json();
         assert.match(a.receiptToken, /^[a-f0-9]{64}$/);
-        const b = await (await submit(p)).json();
+        const replayResponse = await submit(p);
+        assert.equal(replayResponse.status, 202);
+        const b = await replayResponse.json();
         assert.equal(b.receiptToken, a.receiptToken);
         assert.equal(
           (await submit({ ...p, message: 'Different message content.' }))
@@ -160,8 +162,7 @@ test('durable intake and outbox integration', async (t) => {
           }),
         });
         const status = await receipt.json();
-        assert.equal(status.status, 'queued');
-        assert.equal(status.deliveryConfirmed, false);
+        assert.deepEqual(status, {status: 'notification_pending'});
         assert.equal(JSON.stringify(status).includes(p.email), false);
         assert.equal(
           (

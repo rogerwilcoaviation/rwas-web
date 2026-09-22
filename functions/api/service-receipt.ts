@@ -19,12 +19,8 @@ export async function onRequestGet({ request, env }: Context) {
       .bind(await hash(token))
       .first<{ id: string; created_at: number; status: string }>();
     if (!row) return json({ error: 'Receipt not found.' }, 404);
-    return json({
-      receiptId: row.id,
-      receivedAt: new Date(row.created_at).toISOString(),
-      status: row.status,
-      deliveryConfirmed: false,
-    });
+    const states: Record<string, string> = { queued: 'notification_pending', sending: 'notification_pending', retry: 'retry_pending', provider_accepted: 'provider_accepted', dead_letter: 'failed', needs_review: 'needs_review' };
+    return json({ status: states[row.status] || 'needs_review' });
   } catch {
     return unavailable();
   }
