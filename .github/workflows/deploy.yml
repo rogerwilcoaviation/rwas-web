@@ -53,14 +53,18 @@ jobs:
           node scripts/papa-alpha-variant-selection-test.mjs
           node scripts/telemetry-reference-test.mjs
           node scripts/csp-stage-test.mjs
+          node scripts/accessibility-remediation-test.mjs
+          node scripts/commerce-audit-regression-test.mjs
 
       - name: Build (next-on-pages)
         run: npm run pages:build
         env:
           NODE_VERSION: '22'
 
-      - name: Verify SEO build artifact
-        run: npm run seo:artifact
+      - name: Verify SEO build artifact and catalog payload budgets
+        run: |
+          npm run seo:artifact
+          node scripts/catalog-payload-budget-test.mjs .vercel/output/static
 
       - name: AXIS funnel smoke
         run: node scripts/axis-funnel-smoke.mjs
