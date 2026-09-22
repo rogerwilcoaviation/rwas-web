@@ -56,7 +56,7 @@ assert.equal(cls.at(-1).navigationType, 'back-forward-cache');
 assert.equal(inp.at(-1).value, 80);
 const client = readFileSync('public/rwas-analytics.js', 'utf8');
 assert.match(client, /vitals.onCLS, vitals.onINP, vitals.onLCP, vitals.onFCP, vitals.onTTFB/);
-assert.match(client, /feature === 'cart'\) event = 'cart_open'/);
+assert.match(client, /feature === 'cart'\) feature = 'cart_open'/);
 assert.doesNotMatch(client, /event = 'cart_add'/);
 assert.match(client, /metricId: metric.id/);
 console.log(JSON.stringify({ clsWindow: 0.2, lifetimeSumNotUsed: 0.35, inp: 160, bfcacheCLS: 0.05, bfcacheINP: 80, freshMetricId: true, cartOpenNotAdd: true, networkCalls: 0 }));

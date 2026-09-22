@@ -28,8 +28,8 @@
 
   function send(event, feature, path, extra) {
     try {
-      // Keep interaction and metric event streams separate. The current Pages
-      // Worker emits both as structured logs; storage retention is configured separately.
+      // Keep interaction and metric event streams separate. Production /api/track
+      // is routed to the D1-backed analytics Worker; /api/rum uses Pages logs.
       var endpoint = event === 'web_vital' ? '/api/rum' : '/api/track';
       var body = {
         sessionId: getSessionId(),
@@ -106,7 +106,7 @@
     if (!feature) return;
     var event = 'feature';
     if (feature === 'chat_widget') event = 'chat_open';
-    if (feature === 'cart') event = 'cart_open';
+    if (feature === 'cart') feature = 'cart_open'; // Existing /api/track accepts feature events, not cart_open events.
     if (feature.indexOf('panel_planner') >= 0) event = 'panel_planner';
     if (feature.indexOf('aircraft_sale') >= 0) event = 'aircraft_sale';
     send(event, feature, window.location.pathname);
