@@ -9,30 +9,43 @@ await build({ stdin: { contents: `
 import { onRequestPost as intake } from './functions/api/service-intake';
 import { onRequestGet as receipt } from './functions/api/service-receipt';
 import { onRequestPost as dispatch } from './functions/api/intake-dispatch';
-export { intake, receipt, dispatch };`, resolveDir: process.cwd(), sourcefile: 'intake-entry.ts' },
+import { onRequestGet as config } from './functions/api/service-intake-config';
+import { STAGING_ORIGIN } from './functions/_intake/core';
+export { intake, receipt, dispatch, config, STAGING_ORIGIN };`, resolveDir: process.cwd(), sourcefile: 'intake-entry.ts' },
   outfile: resolve(directory, 'rwas-intake.js'), bundle: true, platform: 'browser', format: 'esm', target: 'es2022' });
 const index = resolve(directory, 'index.js');
 renameSync(index, resolve(directory, 'rwas-csp-wrapper.js'));
 writeFileSync(index, `import app from './rwas-csp-wrapper.js';
-import { intake, receipt, dispatch } from './rwas-intake.js';
+import { intake, receipt, dispatch, config, STAGING_ORIGIN } from './rwas-intake.js';
 export default { ...app, async fetch(request, env, ctx) {
- const path = new URL(request.url).pathname;
- const routes = { '/api/service-intake': ['POST', intake], '/api/service-receipt': ['GET', receipt], '/api/intake-dispatch': ['POST', dispatch] };
+ const url = new URL(request.url);
+ const path = url.pathname;
+ const isolated = env.INTAKE_STAGING_MODE === 'true' || url.origin === STAGING_ORIGIN;
+ const protect = (response) => {
+   if (!isolated) return response;
+   const result = new Response(response.body, response);
+   result.headers.set('X-Robots-Tag', 'noindex, nofollow');
+   return result;
+ };
+ if (url.origin === STAGING_ORIGIN && env.INTAKE_STAGING_MODE !== 'true') return protect(new Response('Staging disabled', {status:503}));
+ if (isolated && path === '/robots.txt') return protect(new Response('User-agent: *\\nDisallow: /\\n'));
+
+ const routes = { '/api/service-intake-config': ['GET', config], '/api/service-intake': ['POST', intake], '/api/service-receipt': ['GET', receipt], '/api/intake-dispatch': ['POST', dispatch] };
  if (Object.prototype.hasOwnProperty.call(routes, path)) {
    const [method, handler] = routes[path];
-   if (request.method !== method) return new Response(JSON.stringify({error:'Method not allowed.'}), {status:405, headers:{'Content-Type':'application/json','Cache-Control':'no-store'}});
-   return handler({request, env});
+   if (request.method !== method) return protect(new Response(JSON.stringify({error:'Method not allowed.'}), {status:405, headers:{'Content-Type':'application/json','Cache-Control':'no-store'}}));
+   return protect(await handler({request, env}));
  }
- return app.fetch(request, env, ctx);
+ return protect(await app.fetch(request, env, ctx));
 }};
 `);
 const routesPath = resolve(root, '_routes.json');
 const routes = JSON.parse(readFileSync(routesPath, 'utf8'));
-for (const path of ['/api/service-intake', '/api/service-receipt', '/api/intake-dispatch']) {
+for (const path of ['/api/service-intake', '/api/service-receipt', '/api/intake-dispatch', '/api/service-intake-config']) {
  routes.include = routes.include || [];
  if (!routes.include.some(p => p === path || (p.endsWith('*') && path.startsWith(p.slice(0, -1))))) routes.include.push(path);
  routes.exclude = (routes.exclude || []).filter(p => p !== path);
  if (routes.exclude.some(p => p.includes('*') && path.startsWith(p.split('*')[0]))) throw new Error('An existing wildcard exclusion would bypass service intake');
 }
 writeFileSync(routesPath, JSON.stringify(routes, null, 2));
-console.log('Staged three explicit intake routes; existing application and CSP preserved.');
+console.log('Staged four explicit intake routes; existing application and CSP preserved.');

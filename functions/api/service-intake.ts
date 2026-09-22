@@ -1,7 +1,9 @@
 import {
   Context,
   InvalidBody,
-  ORIGINS,
+  originAllowed,
+  staging,
+  stagingFixture,
   boundedJson,
   configured,
   emailBody,
@@ -14,12 +16,14 @@ import {
 } from '../_intake/core';
 
 export async function onRequestPost({ request, env }: Context) {
-  if (!ORIGINS.has(request.headers.get('Origin') || ''))
+  if (!originAllowed(env, request.headers.get('Origin') || ''))
     return json({ error: 'Origin not allowed.' }, 403);
   if (!configured(env, true)) return unavailable();
   const db = env.INTAKE_RECEIPTS!;
   try {
-    const { payload, requestId, token } = validate(await boundedJson(request));
+    const raw = await boundedJson(request);
+    if (staging(env) && !stagingFixture(raw, env)) throw new InvalidBody();
+    const { payload, requestId, token } = validate(raw);
     const ip = request.headers.get('CF-Connecting-IP');
     if (!ip || ip.length > 64) return unavailable();
     const now = Date.now();
@@ -48,7 +52,10 @@ export async function onRequestPost({ request, env }: Context) {
         );
       // Secret rotation cannot silently return an unusable replacement token.
       if (row.token_hash !== (await hash(receiptToken))) return unavailable();
-      return json({ receiptId: row.id, receiptToken, status: 'notification_pending' }, 202);
+      return json(
+        { receiptId: row.id, receiptToken, status: 'notification_pending' },
+        202,
+      );
     };
     if (existing) return replay(existing);
     const verification = await fetch(
@@ -56,7 +63,9 @@ export async function onRequestPost({ request, env }: Context) {
       {
         method: 'POST',
         body: new URLSearchParams({
-          secret: env.TURNSTILE_SECRET_KEY!,
+          secret: (staging(env)
+            ? env.INTAKE_STAGING_TURNSTILE_SECRET
+            : env.TURNSTILE_SECRET_KEY)!,
           response: token,
           remoteip: ip,
         }),
@@ -99,6 +108,7 @@ export async function onRequestPost({ request, env }: Context) {
           `INSERT INTO intake_receipts(id,request_id,fingerprint,token_hash,payload,ip_hash,created_at)
         SELECT ?,?,?,?,?,?,? WHERE (SELECT COUNT(*) FROM intake_receipts WHERE created_at>=?)<50
         AND (SELECT COUNT(*) FROM intake_receipts WHERE ip_hash=? AND created_at>=?)<5
+        ${staging(env) ? 'AND (SELECT COUNT(*) FROM intake_receipts)<1' : ''}
         ON CONFLICT(request_id) DO NOTHING`,
         )
         .bind(
@@ -131,7 +141,10 @@ export async function onRequestPost({ request, env }: Context) {
         'Retry-After': '3600',
       });
     if (committed.id !== id) return replay(committed);
-    return json({ receiptId: id, receiptToken, status: 'notification_pending' }, 202);
+    return json(
+      { receiptId: id, receiptToken, status: 'notification_pending' },
+      202,
+    );
   } catch (error) {
     if (error instanceof InvalidBody)
       return json({ error: 'Invalid submission.' }, 400);

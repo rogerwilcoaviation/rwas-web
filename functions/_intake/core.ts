@@ -13,6 +13,11 @@ export interface Database {
   batch(statements: Statement[]): Promise<unknown[]>;
 }
 export interface Env {
+  INTAKE_STAGING_MODE?: string;
+  INTAKE_STAGING_ENABLED?: string;
+  INTAKE_STAGING_REQUEST_ID?: string;
+  INTAKE_STAGING_TURNSTILE_SECRET?: string;
+  INTAKE_STAGING_SITE_KEY?: string;
   INTAKE_RECEIPTS?: Database;
   INTAKE_DISPATCH_SECRET?: string;
   RESEND_API_KEY?: string;
@@ -25,6 +30,39 @@ export const ORIGINS = new Set([
   'https://www.rogerwilcoaviation.com',
   'https://rogerwilcoaviation.com',
 ]);
+export const STAGING_ORIGIN =
+  'https://intake-restoration-20260922.rwas-web.pages.dev';
+export const PRODUCTION_SITE_KEY = '0x4AAAAAADBTcvCdprG6EEdl';
+export const STAGING_FIXTURE = Object.freeze({
+  name: 'RWAS Intake Test',
+  email: 'service@rwas.team',
+  phone: '',
+  aircraft: 'SYNTHETIC TEST ONLY',
+  message:
+    'RWAS TEST—NO CUSTOMER REQUEST. Authorized synthetic intake delivery verification only.',
+  consent: true,
+});
+export const staging = (env: Env) => env.INTAKE_STAGING_MODE === 'true';
+export function originAllowed(env: Env, origin: string) {
+  return staging(env) ? origin === STAGING_ORIGIN : ORIGINS.has(origin);
+}
+export function stagingFixture(raw: unknown, env: Env): boolean {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return false;
+  const p = raw as Record<string, unknown>;
+  return (
+    p.requestId === env.INTAKE_STAGING_REQUEST_ID &&
+    Object.entries(STAGING_FIXTURE).every(([key, value]) => p[key] === value) &&
+    Object.keys(p).every((key) =>
+      [
+        ...Object.keys(STAGING_FIXTURE),
+        'requestId',
+        'turnstileToken',
+        'website',
+      ].includes(key),
+    ) &&
+    (p.website === undefined || p.website === '')
+  );
+}
 export const WINDOW = 23 * 60 * 60 * 1000;
 export const DAILY_CAP = 50;
 export function json(body: unknown, status = 200, headers = {}) {
@@ -69,6 +107,28 @@ export async function secretEquals(a: string, b: string) {
   return mismatch === 0;
 }
 export function configured(env: Env, turnstile = false): boolean {
+  // A malformed staging selector must never fall through into production mode.
+  if (
+    env.INTAKE_STAGING_MODE !== undefined &&
+    !['true', 'false'].includes(env.INTAKE_STAGING_MODE)
+  )
+    return false;
+  if (
+    staging(env) &&
+    !(
+      env.INTAKE_STAGING_ENABLED === 'true' &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(
+        env.INTAKE_STAGING_REQUEST_ID || '',
+      ) &&
+      env.INTAKE_STAGING_TURNSTILE_SECRET?.trim() &&
+      env.INTAKE_STAGING_SITE_KEY?.trim() &&
+      // Cloudflare's documented testing credentials are not a Managed challenge.
+      !/^[123]x0{10,}/.test(env.INTAKE_STAGING_SITE_KEY) &&
+      !/^[123]x0{10,}/.test(env.INTAKE_STAGING_TURNSTILE_SECRET) &&
+      env.CONTACT_TO_EMAIL === 'service@rwas.team'
+    )
+  )
+    return false;
   const email = /^[^\s<>@,;]+@[^\s<>@,;]+\.[^\s<>@,;]+$/;
   const from = env.CONTACT_FROM_EMAIL?.trim() || '';
   const address = from.match(/^[^<>\r\n]+<([^<>]+)>$/)?.[1] || from;
@@ -80,7 +140,11 @@ export function configured(env: Env, turnstile = false): boolean {
       email.test(env.CONTACT_TO_EMAIL || '') &&
       email.test(address) &&
       !/[\r\n]/.test(from) &&
-      (!turnstile || env.TURNSTILE_SECRET_KEY?.trim()),
+      (!turnstile ||
+        (staging(env)
+          ? env.INTAKE_STAGING_TURNSTILE_SECRET
+          : env.TURNSTILE_SECRET_KEY
+        )?.trim()),
   );
 }
 export class InvalidBody extends Error {}
@@ -176,7 +240,9 @@ export function emailBody(env: Env, p: Payload, id: string) {
   return JSON.stringify({
     from: env.CONTACT_FROM_EMAIL!.trim(),
     to: [env.CONTACT_TO_EMAIL],
-    subject: `RWAS service inquiry ${id}`,
+    subject: staging(env)
+      ? '[RWAS TEST—NO CUSTOMER REQUEST]'
+      : `RWAS service inquiry ${id}`,
     text: [
       `Service inquiry: ${id}`,
       `Name: ${p.name}`,

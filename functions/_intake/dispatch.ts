@@ -1,4 +1,12 @@
-import { Database, Env, WINDOW } from './core';
+import {
+  Database,
+  Env,
+  WINDOW,
+  configured,
+  staging,
+  stagingFixture,
+  emailBody,
+} from './core';
 type Job = {
   receipt_id: string;
   email_json: string;
@@ -47,7 +55,35 @@ async function finish(
     .run();
 }
 export async function drain(env: Env): Promise<number> {
+  if (!configured(env)) return 0;
   const db = env.INTAKE_RECEIPTS!;
+  // In staging, even a pre-existing/misbound database must not dispatch customer rows.
+  // Exact stored body comparison preserves ordinary immutable provider idempotency.
+  let stagingId = '';
+  let stagingBody = '';
+  if (staging(env)) {
+    const rows = await db
+      .prepare('SELECT id,request_id,payload FROM intake_receipts')
+      .all<{ id: string; request_id: string; payload: string }>();
+    if (rows.results.length !== 1) return 0;
+    const row = rows.results[0];
+    let payload;
+    try {
+      payload = JSON.parse(row.payload);
+    } catch {
+      return 0;
+    }
+    if (!stagingFixture({ ...payload, requestId: row.request_id }, env))
+      return 0;
+    const outbox = await db
+      .prepare('SELECT email_json FROM intake_outbox WHERE receipt_id=?')
+      .bind(row.id)
+      .first<{ email_json: string }>();
+    if (!outbox || outbox.email_json !== emailBody(env, payload, row.id))
+      return 0;
+    stagingId = row.id;
+    stagingBody = outbox.email_json;
+  }
   let processed = 0;
   const maintenanceTime = Date.now();
   // Expired ambiguous attempts are never retried outside the provider's deduplication window.
@@ -75,9 +111,25 @@ export async function drain(env: Env): Promise<number> {
         SELECT receipt_id FROM intake_outbox WHERE status IN ('queued','retry','sending') AND next_attempt_at<=?
         AND (lease_until IS NULL OR lease_until<=?) AND attempts<6 AND (first_attempt_at IS NULL OR first_attempt_at>?)
         AND (SELECT COUNT(*) FROM intake_attempts WHERE started_at>=?)<50
+        AND (?=0 OR (receipt_id=? AND email_json=?
+          AND (SELECT COUNT(*) FROM intake_receipts)=1
+          AND NOT EXISTS (SELECT 1 FROM intake_attempts WHERE receipt_id<>?)))
         ORDER BY next_attempt_at,receipt_id LIMIT 1) RETURNING *`,
         )
-        .bind(lease, now + 120000, now, now, now, now, now - WINDOW, day),
+        .bind(
+          lease,
+          now + 120000,
+          now,
+          now,
+          now,
+          now,
+          now - WINDOW,
+          day,
+          staging(env) ? 1 : 0,
+          stagingId,
+          stagingBody,
+          stagingId,
+        ),
       db
         .prepare(
           `INSERT INTO intake_attempts(receipt_id,attempt,started_at)

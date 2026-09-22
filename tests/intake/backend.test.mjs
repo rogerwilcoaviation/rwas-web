@@ -6,6 +6,8 @@ import { Miniflare } from 'miniflare';
 
 const source = `export {onRequestPost as intake} from './functions/api/service-intake.ts';
 export {onRequestPost as dispatch} from './functions/api/intake-dispatch.ts';
+export {onRequestGet as config} from './functions/api/service-intake-config.ts';
+export {STAGING_FIXTURE,STAGING_ORIGIN} from './functions/_intake/core.ts';
 export {onRequestGet as receipt} from './functions/api/service-receipt.ts';`;
 const compiled = await build({
   stdin: { contents: source, resolveDir: process.cwd(), loader: 'ts' },
@@ -47,7 +49,10 @@ globalThis.fetch = async (url, options) => {
   if (url === 'https://challenges.cloudflare.com/turnstile/v0/siteverify')
     return Response.json({
       success: true,
-      hostname: 'www.rogerwilcoaviation.com',
+      hostname:
+        options.body.get('secret') === 'managed-staging-secret'
+          ? 'intake-restoration-20260922.rwas-web.pages.dev'
+          : 'www.rogerwilcoaviation.com',
       action: 'service_intake',
     });
   assert.equal(url, 'https://api.resend.com/emails');
@@ -162,7 +167,7 @@ test('durable intake and outbox integration', async (t) => {
           }),
         });
         const status = await receipt.json();
-        assert.deepEqual(status, {status: 'notification_pending'});
+        assert.deepEqual(status, { status: 'notification_pending' });
         assert.equal(JSON.stringify(status).includes(p.email), false);
         assert.equal(
           (
@@ -345,6 +350,152 @@ test('durable intake and outbox integration', async (t) => {
           .run();
         await dispatch();
         assert.equal(emails.length, 50);
+      },
+    );
+    await t.test(
+      'isolated staging is exact, fail closed, total-cap-one and provider-idempotent',
+      async () => {
+        await reset();
+        const stage = {
+          ...env,
+          INTAKE_STAGING_MODE: 'true',
+          INTAKE_STAGING_ENABLED: 'true',
+          INTAKE_STAGING_REQUEST_ID: crypto.randomUUID(),
+          INTAKE_STAGING_TURNSTILE_SECRET: 'managed-staging-secret',
+          INTAKE_STAGING_SITE_KEY: 'managed-staging-site-key',
+          CONTACT_TO_EMAIL: 'service@rwas.team',
+        };
+        const fixture = {
+          ...api.STAGING_FIXTURE,
+          requestId: stage.INTAKE_STAGING_REQUEST_ID,
+          turnstileToken: 'offline-mocked-provider',
+          website: '',
+        };
+        const send = (body = fixture, config = stage) =>
+          submit(body, config, { Origin: api.STAGING_ORIGIN });
+        assert.equal((await send(fixture, env)).status, 403);
+        assert.equal((await submit(fixture, stage)).status, 403);
+        for (const key of [
+          'INTAKE_STAGING_ENABLED',
+          'INTAKE_STAGING_REQUEST_ID',
+          'INTAKE_STAGING_TURNSTILE_SECRET',
+          'INTAKE_STAGING_SITE_KEY',
+        ]) {
+          const incomplete = { ...stage, [key]: undefined };
+          assert.equal((await send(fixture, incomplete)).status, 503);
+          assert.equal((await dispatch(incomplete)).status, 503);
+        }
+        assert.equal(
+          (
+            await send(fixture, {
+              ...stage,
+              CONTACT_TO_EMAIL: 'other@example.test',
+            })
+          ).status,
+          503,
+        );
+        assert.equal(
+          (
+            await send(fixture, {
+              ...stage,
+              INTAKE_STAGING_SITE_KEY: '1x00000000000000000000AA',
+            })
+          ).status,
+          503,
+        );
+        for (const [key, value] of Object.entries({
+          ...api.STAGING_FIXTURE,
+          requestId: stage.INTAKE_STAGING_REQUEST_ID,
+        })) {
+          assert.equal(
+            (
+              await send({
+                ...fixture,
+                [key]: typeof value === 'string' ? value + 'x' : false,
+              })
+            ).status,
+            400,
+          );
+        }
+        assert.equal(
+          (await send({ ...fixture, extra: 'not permitted' })).status,
+          400,
+        );
+        assert.equal(
+          (await db.prepare('SELECT COUNT(*) n FROM intake_rate').first()).n,
+          0,
+        );
+        assert.equal(
+          (await db.prepare('SELECT COUNT(*) n FROM intake_receipts').first())
+            .n,
+          0,
+        );
+        const config = await api.config({
+          env: stage,
+          request: new Request(
+            api.STAGING_ORIGIN + '/api/service-intake-config',
+          ),
+        });
+        const publicConfig = await config.json();
+        assert.deepEqual(publicConfig.fixture, api.STAGING_FIXTURE);
+        assert.equal(publicConfig.requestId, fixture.requestId);
+        assert.equal(
+          JSON.stringify(publicConfig).includes('managed-staging-secret'),
+          false,
+        );
+        const responses = await Promise.all([send(), send(), send()]);
+        assert.deepEqual(
+          responses.map((r) => r.status),
+          [202, 202, 202],
+        );
+        assert.equal(
+          (await db.prepare('SELECT COUNT(*) n FROM intake_receipts').first())
+            .n,
+          1,
+        );
+        provider = () => {
+          throw Error('ambiguous mock');
+        };
+        await Promise.all([dispatch(stage), dispatch(stage)]);
+        assert.equal(emails.length, 1);
+        const mail = JSON.parse(emails[0].body);
+        assert.deepEqual(mail.to, ['service@rwas.team']);
+        assert.equal(mail.subject, '[RWAS TEST—NO CUSTOMER REQUEST]');
+        await db.prepare('UPDATE intake_outbox SET next_attempt_at=0').run();
+        provider = () => Response.json({ id: 'one-logical-email' });
+        await dispatch(stage);
+        assert.equal(emails.length, 2);
+        assert.equal(emails[0].body, emails[1].body);
+        assert.equal(
+          emails[0].headers['Idempotency-Key'],
+          emails[1].headers['Idempotency-Key'],
+        );
+        await dispatch(stage);
+        assert.equal(emails.length, 2);
+        await db.prepare('UPDATE intake_receipts SET created_at=0').run();
+        const changedId = {
+          ...stage,
+          INTAKE_STAGING_REQUEST_ID: crypto.randomUUID(),
+        };
+        assert.equal(
+          (
+            await send(
+              { ...fixture, requestId: changedId.INTAKE_STAGING_REQUEST_ID },
+              changedId,
+            )
+          ).status,
+          429,
+        );
+        await reset();
+        await submit(payload()); // unrelated existing production/customer row
+        await dispatch(stage);
+        assert.equal(emails.length, 0);
+        assert.equal((await send()).status, 429);
+        await reset();
+        await send();
+        await db.prepare("UPDATE intake_outbox SET email_json='{}'").run();
+        await dispatch(stage);
+        assert.equal(emails.length, 0);
       },
     );
     await t.test('per-IP durable admission cap', async () => {

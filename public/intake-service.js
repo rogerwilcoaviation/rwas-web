@@ -2,8 +2,17 @@
 (function () {
   'use strict';
   if (window.createRwasServiceIntake) return;
-  // Existing public ContactForm key (NEXT_PUBLIC_TURNSTILE_SITE_KEY), not a secret.
-  var SITE_KEY = '0x4AAAAAADBTcvCdprG6EEdl';
+  var runtimeConfig;
+  function configuration() {
+    if (!runtimeConfig) runtimeConfig = fetch('/api/service-intake-config', { credentials: 'omit', cache: 'no-store' }).then(function (response) {
+      if (!response.ok) throw new Error('Intake unavailable');
+      return response.json();
+    }).then(function (config) {
+      if (!config.siteKey || (config.staging && (!config.requestId || !config.fixture))) throw new Error('Intake unavailable');
+      return config;
+    }).catch(function (error) { runtimeConfig = null; throw error; });
+    return runtimeConfig;
+  }
   var challengeScript;
   function loadChallenge() {
     if (window.turnstile) return Promise.resolve(window.turnstile);
@@ -41,7 +50,7 @@
     var edit = root.querySelector('[data-edit]');
     var verify = root.querySelector('[data-verify]');
     var check = root.querySelector('[data-check]');
-    var fields = {};
+    var fields = {}, config = null;
     var definitions = [['name', 'Name', 'text', 120, true], ['email', 'Email', 'email', 254, true], ['phone', 'Phone (optional)', 'tel', 40, false], ['aircraft', 'Aircraft (optional)', 'text', 160, false], ['message', 'Service request', 'textarea', 8000, true]];
     definitions.forEach(function (d) {
       var label = document.createElement('label'); label.textContent = d[1]; label.style.display = 'block';
@@ -54,6 +63,18 @@
       label.appendChild(field); form.querySelector('[data-fields]').appendChild(label); fields[d[0]] = field;
     });
     root.querySelectorAll('button').forEach(function (button) { button.style.cssText = 'min-height:44px;margin:4px;padding:8px;max-width:100%;white-space:normal'; });
+    configuration().then(function (value) {
+      config = value;
+      if (!config.staging) return;
+      var fixtureButton = document.createElement('button');
+      fixtureButton.type = 'button'; fixtureButton.textContent = 'Load authorized synthetic test fixture';
+      fixtureButton.addEventListener('click', function () {
+        if (busy || accepted) return;
+        definitions.forEach(function (d) { fields[d[0]].value = config.fixture[d[0]]; });
+        say('Synthetic test only. Review, authorize, and complete the Managed verification before submitting.');
+      });
+      form.prepend(fixtureButton);
+    }).catch(function () { say('Service intake unavailable. Nothing has been sent.'); });
     var payload = null, fingerprint = '', requestId = '', token = '', widgetId = null;
     var receiptToken = '', receiptId = '', busy = false, accepted = false, ambiguous = false;
     var hiddenNodes = [];
@@ -63,9 +84,10 @@
     async function verification() {
       verify.disabled = true;
       try {
+        config = await configuration();
         var turnstile = await loadChallenge();
         if (widgetId === null) widgetId = turnstile.render(root.querySelector('[data-challenge]'), {
-          sitekey: SITE_KEY, action: 'service_intake', size: 'compact', theme: 'light',
+          sitekey: config.siteKey, action: 'service_intake', size: 'compact', theme: 'light',
           callback: function (value) { token = value; update(); },
           'expired-callback': function () { token = ''; update(); },
           'error-callback': function () { token = ''; say('Verification unavailable. Retry verification or call (605) 299-8178.'); update(); }
@@ -75,9 +97,10 @@
       } catch (_) { say('Verification unavailable. Nothing has been sent by this verification step. Retry or call (605) 299-8178.'); }
       update();
     }
-    form.addEventListener('submit', function (event) {
+    form.addEventListener('submit', async function (event) {
       event.preventDefault();
       if (busy || accepted || !form.reportValidity()) return;
+      try { config = await configuration(); } catch (_) { say('Service intake unavailable. Nothing has been sent.'); return; }
       var next = {};
       definitions.forEach(function (d) { next[d[0]] = fields[d[0]].value.normalize('NFC').replace(/\r\n?/g, '\n').trim(); });
       next.email = next.email.toLowerCase();
@@ -87,7 +110,7 @@
       var nextFingerprint = JSON.stringify(next);
       if (nextFingerprint !== fingerprint) {
         if (!window.crypto || typeof window.crypto.randomUUID !== 'function') { say('Secure submission is unavailable in this browser. Call (605) 299-8178.'); return; }
-        requestId = window.crypto.randomUUID(); fingerprint = nextFingerprint;
+        requestId = config.staging ? config.requestId : window.crypto.randomUUID(); fingerprint = nextFingerprint;
       }
       payload = next;
       var list = review.querySelector('dl'); list.replaceChildren();
