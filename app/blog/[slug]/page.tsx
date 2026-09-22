@@ -424,6 +424,11 @@ export default async function BlogArticlePage({
                     />
                   </div>
                 </div>
+                {(article as { image_caption?: string }).image_caption ? (
+                  <figcaption className="np-kicker" style={{ marginTop: '6px' }}>
+                    {(article as { image_caption?: string }).image_caption}
+                  </figcaption>
+                ) : null}
                 {(article as { image_credit?: string }).image_credit ? (
                   <figcaption className="np-kicker" style={{ marginTop: '6px' }}>
                     <a

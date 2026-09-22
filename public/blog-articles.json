@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-09-02T12:45:17.409533+00:00",
-    "total_articles": 31,
+    "last_updated": "2026-09-22T14:07:51.180485+00:00",
+    "total_articles": 32,
     "categories": [
       "regulatory",
       "product-update",
@@ -12,6 +12,37 @@
     ]
   },
   "articles": [
+    {
+      "id": "garmin-fall-2026-rebates-buy-and-save-g1000-nxi",
+      "status": "published",
+      "category": "product-update",
+      "title": "Garmin Fall 2026 Rebates: Buy and Save and G1000 NXi Upgrades",
+      "subtitle": "",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Desk",
+      "date": "2026-09-22",
+      "source": "Garmin customer rebate forms — September 21, 2026",
+      "source_url": "https://www.garmin.com/en-US/promotions/aviation/",
+      "image": "/images/blog/n5171s-garmin-fall-2026.jpg",
+      "image_alt": "Garmin-equipped instrument panel in N5171S",
+      "image_caption": "N5171S cockpit; pictured equipment does not establish rebate eligibility.",
+      "lead": "Garmin’s fall 2026 Buy and Save Certified Avionics Rebate and G1000 NXi Upgrade Rebate cover qualifying purchases from September 21 through November 15, 2026. These are customer rebates with specific equipment and purchase requirements—not a blanket discount or an installed-price quote. If an upgrade is already on your list, now is a good time to have RWAS review your aircraft, existing avionics and proposed equipment against the official terms.",
+      "body": [
+        "Buy and Save starts at $500 for two qualifying certified avionics products, increases to $1,000 for three and $1,500 for four, and reaches a maximum of $8,000 for 17 qualifying purchases per aircraft. Eligible products include certified G5 and GI 275 instruments, GFC 500 and GFC 600 autopilots, GTN Xi navigators, GPS 175/GNC 355/GNX 375 navigators, and GDL 60 with PlaneSync, among other products listed on Garmin’s form. A dual G5 or dual GI 275 kit counts as one qualifying purchase, not two; unit limits also apply. The form permits installation at a later date, but the purchase date on the invoice must fall within the qualifying period. Experimental and non-certified variants do not qualify.",
+        "The separate G1000 NXi offer provides $2,000, $3,500 or $5,000 depending on the exact listed upgrade kit. Examples include $2,000 for listed NAV III, G36, G58 and Cirrus SR2X kits, $3,500 for listed Phenom, PA-46-500TP, TBM, Kodiak, King Air and Mustang packages, and $5,000 specifically for the King Air NXi Autothrottle Legacy LRU Upgrade Kit. Purchases must be new orders to Garmin from a current Garmin Aviation Dealer within the valid period. Only one rebate is allowed per customer aircraft, even if multiple qualifying products are purchased; an aircraft’s model alone does not establish upgrade compatibility or eligibility.",
+        "For either program, submit the completed official form, required serial numbers and a dated, itemized dealer receipt or invoice to rebate@garmin.com by January 22, 2027. These offers are for customers in the United States and Canada, require an authorized Garmin dealer purchase, and exclude refurbished or newly overhauled products. Do not assume rebates can be combined: the NXi offer prohibits combining with another direct Garmin offer, while Buy and Save allows only exceptions expressly noted on its form. Review the current terms at Garmin’s aviation promotions page and keep copies of your paperwork. Call RWAS at (605) 299-8178 or email avionics@rwas.team to review your project and obtain a quote that separates equipment, installation and any qualifying rebate."
+      ],
+      "tags": [
+        "garmin",
+        "avionics",
+        "rebates",
+        "g1000-nxi"
+      ],
+      "approved_at": "2026-09-22T14:04:46Z",
+      "published_at": "2026-09-22T14:07:51.180485+00:00",
+      "cta_label": "Review Garmin aviation promotions",
+      "cta_url": "https://www.garmin.com/en-US/promotions/aviation/"
+    },
     {
       "id": "garmin-salem-aviation-open-house-2026",
       "status": "published",
