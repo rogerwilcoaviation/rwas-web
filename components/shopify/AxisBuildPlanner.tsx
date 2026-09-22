@@ -27,6 +27,10 @@ const EXACT_PRODUCT_IMAGES: Record<
   string,
   { imageUrl: string; imageAlt: string }
 > = {
+  '6420093-5': {
+    imageUrl: '/images/axis/products/6420093-5-mid-continent-chronos-ch93max.jpg',
+    imageAlt: 'Mid-Continent CHRONOS CH93MAX Digital Clock / MAX Power USB Charger',
+  },
   '010-04143-00': {
     imageUrl: '/images/axis/products/010-04143-00-gdu-80p-portrait-display.jpg',
     imageAlt:
