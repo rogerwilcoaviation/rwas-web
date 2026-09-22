@@ -21,6 +21,7 @@ assert.doesNotMatch(policy, /unsafe-inline|unsafe-eval|blob:|report-uri|report-t
 stage(root);
 const wrapper = readFileSync(join(root, '_worker.js/index.js'), 'utf8');
 assert.match(wrapper, /Content-Security-Policy-Report-Only/);
+assert.doesNotMatch(wrapper, /import[^\n]*rwas-csp\.json/); // Pages no-bundle upload does not resolve JSON modules.
 assert.doesNotMatch(wrapper, /set\('Content-Security-Policy'/);
 const routes = JSON.parse(readFileSync(join(root, '_routes.json'), 'utf8'));
 assert.deepEqual(routes.exclude, ['/_next/*', '/ops/*', '/work-order-system/*']);

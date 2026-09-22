@@ -1,5 +1,6 @@
 // jerry-widget.js v3 — structured intake protocol (state/action out of reply text)
 (function () {
+  var widgetScriptUrl = document.currentScript && document.currentScript.src;
   if (window.__jerryWidgetLoaded) return;
   window.__jerryWidgetLoaded = true;
   window.openJerryChat = function() {};
@@ -142,6 +143,7 @@
       '<button type="button" class="jerry-widget-close" aria-label="Close">&times;</button>' +
     '</div>' +
     '<div class="jerry-widget-status"><span class="jerry-widget-dot"></span><span>ONLINE — AVIONICS &amp; SERVICE</span></div>' +
+    '<button type="button" class="jerry-service-open" style="min-height:44px;flex-shrink:0">Request service — review and submit</button>' +
     '<div class="jerry-widget-chat"></div>' +
     '<div class="jerry-widget-error"></div>' +
     '<p class="jerry-widget-privacy" style="margin:0;padding:6px 12px;font:11px/1.4 Arial,sans-serif;color:#333;background:#f7f4ef">Messages are processed by our AI chat service and stored in this tab. Avoid sensitive details. <a href="/privacy" target="_blank" rel="noopener noreferrer" style="color:#17466b;text-decoration:underline">Privacy and retention</a>. Chat alone does not submit a service request.</p>' +
@@ -161,6 +163,33 @@
   var input = panel.querySelector('.jerry-widget-text-input');
   var send = panel.querySelector('.jerry-widget-send');
   var closeBtn = panel.querySelector('.jerry-widget-close');
+
+  // Explicit, isolated service form; chat text/actions never invoke submission.
+  var serviceButton = panel.querySelector('.jerry-service-open');
+  var serviceUi = null;
+  var serviceLoad = null;
+  serviceButton.addEventListener('click', function () {
+    if (serviceUi) { serviceUi.open(); return; }
+    if (serviceLoad) return;
+    serviceButton.disabled = true;
+    serviceLoad = document.createElement('script');
+    serviceLoad.src = new URL('intake-service.js', widgetScriptUrl || window.location.origin + '/jerry-widget.js').href;
+    serviceLoad.onload = function () {
+      serviceButton.disabled = false;
+      if (typeof window.createRwasServiceIntake === 'function') {
+        serviceUi = window.createRwasServiceIntake(panel, serviceButton);
+        serviceUi.open();
+      } else {
+        serviceLoad = null;
+        serviceButton.textContent = 'Service form unavailable — try again';
+      }
+    };
+    serviceLoad.onerror = function () {
+      serviceLoad.remove(); serviceLoad = null; serviceButton.disabled = false;
+      serviceButton.textContent = 'Service form unavailable — try again';
+    };
+    document.head.appendChild(serviceLoad);
+  });
 
   // Shared safe renderer: keep identical in widget and static newspaper chat.
   function renderMessage(target, text) {
@@ -479,7 +508,7 @@
     var session = getSaleSession();
     var pendingListing = getPendingListing();
 
-    if (wantsPendingSubmit(text) && pendingListing) {
+    if (LISTING_UI_ENABLED && wantsPendingSubmit(text) && pendingListing) {
       if (!session || !session.token) {
         addAssistantMessage((function(){ openSellerLoginModal(); return 'Almost there — I just opened the Seller Login. Enter your email, check for the 6-digit code, then come back and say submit my listing.'; })());
         input.focus();

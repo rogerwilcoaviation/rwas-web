@@ -34,7 +34,7 @@ export function stage(root) {
   const original = resolve(workerDir, 'index.js');
   renameSync(original, resolve(workerDir, 'rwas-app.js'));
   writeFileSync(resolve(workerDir, 'rwas-csp.json'), JSON.stringify(policies));
-  writeFileSync(original, `import app from './rwas-app.js';\nimport policies from './rwas-csp.json';\nexport default { ...app, async fetch(request, env, ctx) {\n  const response = await app.fetch(request, env, ctx);\n  if (!(response.headers.get('content-type') || '').includes('text/html')) return response;\n  const path = new URL(request.url).pathname;\n  const policy = policies[path] || policies[path.replace(/\\/$/, '')] || (response.status === 404 ? policies['/404'] : null);\n  if (!policy) return response;\n  const staged = new Response(response.body, response);\n  staged.headers.set('Content-Security-Policy-Report-Only', policy);\n  return staged;\n}};\n`);
+  writeFileSync(original, `import app from './rwas-app.js';\nconst policies = ${JSON.stringify(policies)};\nexport default { ...app, async fetch(request, env, ctx) {\n  const response = await app.fetch(request, env, ctx);\n  if (!(response.headers.get('content-type') || '').includes('text/html')) return response;\n  const path = new URL(request.url).pathname;\n  const policy = policies[path] || policies[path.replace(/\\/$/, '')] || (response.status === 404 ? policies['/404'] : null);\n  if (!policy) return response;\n  const staged = new Response(response.body, response);\n  staged.headers.set('Content-Security-Policy-Report-Only', policy);\n  return staged;\n}};\n`);
   // Ensure HTML traverses the wrapper instead of bypassing it via static routing.
   const routesPath = resolve(root, '_routes.json');
   const routes = JSON.parse(readFileSync(routesPath, 'utf8'));
