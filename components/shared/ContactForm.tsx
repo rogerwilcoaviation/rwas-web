@@ -49,6 +49,7 @@ declare global {
         container: string | HTMLElement,
         opts: {
           sitekey: string;
+          size?: 'normal' | 'compact' | 'flexible';
           callback?: (token: string) => void;
           'error-callback'?: () => void;
           'expired-callback'?: () => void;
@@ -290,6 +291,9 @@ export default function ContactForm() {
       turnstileContainerRef.current,
       {
         sitekey: TURNSTILE_SITE_KEY,
+        // Compact is 150px wide; normal/flexible have a 300px minimum.
+        // Preserve the challenge and token verification at narrow reflow widths.
+        size: 'compact',
         callback: (token) => setTurnstileToken(token),
         'error-callback': () => setTurnstileToken(''),
         'expired-callback': () => setTurnstileToken(''),
