@@ -9,6 +9,7 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import Link from 'next/link';
+import RelatedReading from '@/components/services/RelatedReading';
 import { genPageMetadata } from '@/app/seo';
 
 const pageUrl =
@@ -408,6 +409,7 @@ export default function PreBuyInspectionPage() {
             </div>
           </aside>
         </div>
+        <RelatedReading service="pre-buy-inspection" />
       </main>
 
       <BroadsheetFooter />

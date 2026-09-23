@@ -9,6 +9,7 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import Link from 'next/link';
+import RelatedReading from '@/components/services/RelatedReading';
 import { genPageMetadata } from '@/app/seo';
 
 const pageUrl =
@@ -486,6 +487,7 @@ export default function GarminInstallationNorthernPlainsPage() {
             </div>
           </aside>
         </div>
+        <RelatedReading service="garmin-installation-northern-plains" />
       </main>
 
       <BroadsheetFooter />

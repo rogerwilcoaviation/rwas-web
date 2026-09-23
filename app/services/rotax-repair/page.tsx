@@ -9,6 +9,7 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import Link from 'next/link';
+import RelatedReading from '@/components/services/RelatedReading';
 import { genPageMetadata } from '@/app/seo';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/rotax-repair';
@@ -388,6 +389,7 @@ export default function RotaxRepairPage() {
             </div>
           </aside>
         </div>
+        <RelatedReading service="rotax-repair" />
       </main>
 
       <BroadsheetFooter />

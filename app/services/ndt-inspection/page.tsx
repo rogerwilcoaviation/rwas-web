@@ -9,6 +9,7 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import { genPageMetadata } from '@/app/seo';
+import RelatedReading from '@/components/services/RelatedReading';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/ndt-inspection';
 
@@ -433,6 +434,7 @@ export default function NdtInspectionPage() {
             </div>
           </aside>
         </div>
+        <RelatedReading service="ndt-inspection" />
       </main>
 
       <BroadsheetFooter />

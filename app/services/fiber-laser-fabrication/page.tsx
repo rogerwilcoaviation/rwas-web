@@ -9,6 +9,7 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import Link from 'next/link';
+import RelatedReading from '@/components/services/RelatedReading';
 
 const pageUrl =
   'https://www.rogerwilcoaviation.com/services/fiber-laser-fabrication';
@@ -537,6 +538,7 @@ export default function FiberLaserFabricationPage() {
             </div>
           </aside>
         </div>
+        <RelatedReading service="fiber-laser-fabrication" />
       </main>
 
       <BroadsheetFooter />

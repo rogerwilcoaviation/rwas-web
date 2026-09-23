@@ -79,6 +79,14 @@ def generate_social_posts(title, lead, category, tags):
         "instagram": {"text": ig_text.strip(), "status": "pending"}
     }
 
+def warn_missing_headings(article):
+    """Non-blocking SEO check: articles need '## ' section headings (H2)."""
+    md = article.get("body_markdown") or ""
+    if not re.search(r"(?m)^##\s", md) and len(article.get("body") or []) >= 2:
+        print("WARNING: '%s' has no '## ' section headings. Add --body-markdown "
+              "with '## Heading' lines (renders as H2) before publishing." % article.get("id"))
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate RWAS blog article from Garmin release")
     parser.add_argument("--category", required=True,
@@ -89,6 +97,8 @@ def main():
     parser.add_argument("--source-url", default="")
     parser.add_argument("--lead", required=True, help="Opening paragraph / summary")
     parser.add_argument("--body", action="append", default=[], help="Body paragraphs (repeat for multiple)")
+    parser.add_argument("--body-markdown", default="",
+                        help="Article body as Markdown with '## ' section headings (or @path to a .md file). Rendered as H2s.")
     parser.add_argument("--tags", default="garmin", help="Comma-separated tags")
     parser.add_argument("--status", default="draft", choices=["draft", "approved", "published"])
     parser.add_argument("--byline", default="RWAS Avionics Desk")
@@ -137,6 +147,14 @@ def main():
         "tags": tags,
         "social": social,
     }
+
+    body_md = args.body_markdown
+    if body_md.startswith("@"):
+        with open(body_md[1:], "r") as f:
+            body_md = f.read()
+    if body_md.strip():
+        article["body_markdown"] = body_md.strip()
+    warn_missing_headings(article)
 
     if args.status == "approved":
         article["approved_at"] = now_iso
@@ -192,6 +210,7 @@ if __name__ == "__main__":
                     if "approved_at" not in article:
                         article["approved_at"] = now_iso
                     article["published_at"] = now_iso
+                warn_missing_headings(article)
                 found = True
                 break
 

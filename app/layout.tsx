@@ -183,6 +183,11 @@ export default function RootLayout({
                     postalCode: '57078',
                     addressCountry: 'US',
                   },
+                  geo: {
+                    '@type': 'GeoCoordinates',
+                    latitude: 42.912044,
+                    longitude: -97.383885,
+                  },
                   openingHoursSpecification: [
                     {
                       '@type': 'OpeningHoursSpecification',
@@ -225,6 +230,7 @@ export default function RootLayout({
                   sameAs: [
                     'https://www.facebook.com/rogerwilcoaviationservices/',
                     'https://aea.net/memberdetails.asp?ID=3310',
+                    'https://www.instagram.com/rogerwilcoaviation/',
                   ],
                   founder: {
                     '@type': 'Person',

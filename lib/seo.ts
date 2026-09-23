@@ -82,6 +82,31 @@ export function collectionMetaDescription(collection: {
   );
 }
 
+/**
+ * Imported Garmin catalog copy often reads "<title> Garmin part number X.
+ * Catalog description: <title again>. ..." -- drop the repeated title so the
+ * meta description spends its characters on new information.
+ */
+export function dropRepeatedCatalogTitle(description: string, title: string) {
+  const marker = /Catalog description:\s*/i;
+  const match = marker.exec(description);
+  if (!match) return description;
+  const target = title.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (!target) return description;
+  const rest = description.slice(match.index + match[0].length);
+  let matched = 0;
+  let i = 0;
+  for (; i < rest.length && matched < target.length; i++) {
+    const c = rest[i].toLowerCase();
+    if (!/[a-z0-9]/.test(c)) continue;
+    if (c !== target[matched]) return description;
+    matched++;
+  }
+  if (matched < target.length) return description;
+  const tail = rest.slice(i).replace(/^[\s.,;:]+/, '');
+  return `${description.slice(0, match.index).trimEnd()} ${tail}`.trim();
+}
+
 export function productMetaDescription(product: {
   title: string;
   description?: string | null;
@@ -90,8 +115,11 @@ export function productMetaDescription(product: {
   handle?: string | null;
   variants?: Array<{ sku?: string | null }> | null;
 }) {
-  const description = compactText(product.description || '');
   const title = compactText(product.title);
+  const description = dropRepeatedCatalogTitle(
+    compactText(product.description || ''),
+    title,
+  );
   const vendor = compactText(product.vendor || 'Garmin');
   const type = compactText(product.productType || 'aviation product');
   const sku = product.variants?.find((variant) => variant.sku)?.sku;
@@ -110,6 +138,19 @@ export function productMetaDescription(product: {
   );
 }
 
+function trimDanglingClip(input: string) {
+  let out = input.trimEnd();
+  let prev = '';
+  while (out !== prev) {
+    prev = out;
+    out = out
+      .replace(/[\s,;:/&+\u2013\u2014-]+$/u, '')
+      .replace(/\s+(?:and|with|for|the|of|or|in|to|a|an)$/i, '')
+      .trimEnd();
+  }
+  return out;
+}
+
 export function productSeoTitle(
   title: string,
   productType?: string | null,
@@ -119,25 +160,33 @@ export function productSeoTitle(
   const suffix = ' | RWAS';
   const cleanIdentifier = compactText(identifier || '');
   const identifierSuffix = cleanIdentifier ? ` — ${cleanIdentifier}` : '';
-  const typedTitle =
+  const titleMax = 60 - suffix.length;
+  const withIdentifierMax = titleMax - identifierSuffix.length;
+  const extended =
     clean.length < 20 && productType
       ? `${clean} ${compactText(productType)}`
       : clean;
-  const titleMax = 60 - suffix.length;
-  const withIdentifierMax = titleMax - identifierSuffix.length;
+  // Pad short titles with the product type only when the result still fits;
+  // a clipped type fragment ("Watches &") reads worse than the bare title.
+  const typedTitle =
+    extended.length > withIdentifierMax && clean.length <= withIdentifierMax
+      ? clean
+      : extended;
   if (identifierSuffix && typedTitle.length > withIdentifierMax) {
     const clipped = typedTitle.slice(0, withIdentifierMax);
     const lastSpace = clipped.lastIndexOf(' ');
-    const cleanClip = (
-      lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped
-    ).trimEnd();
+    const cleanClip = trimDanglingClip(
+      lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped,
+    );
     return `${cleanClip}${identifierSuffix}${suffix}`;
   }
   if (typedTitle.length <= withIdentifierMax)
     return `${typedTitle}${identifierSuffix}${suffix}`;
   const clipped = typedTitle.slice(0, titleMax);
   const lastSpace = clipped.lastIndexOf(' ');
-  return `${(lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped).trimEnd()}${suffix}`;
+  return `${trimDanglingClip(
+    lastSpace > 24 ? clipped.slice(0, lastSpace) : clipped,
+  )}${suffix}`;
 }
 
 export function collectionSeoTitle(title: string) {

@@ -9,6 +9,7 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import Link from 'next/link';
+import RelatedReading from '@/components/services/RelatedReading';
 import { genPageMetadata } from '@/app/seo';
 
 const pageUrl =
@@ -424,6 +425,7 @@ export default function Gfc500AutopilotInstallationPage() {
             </div>
           </aside>
         </div>
+        <RelatedReading service="gfc-500-autopilot-installation" />
       </main>
 
       <BroadsheetFooter />

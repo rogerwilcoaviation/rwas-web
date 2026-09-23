@@ -10,6 +10,7 @@ import {
 } from '@/components/shared/broadsheet';
 import { PapaAlphaLaunchFrame } from '@/components/shared/PapaAlphaLaunchFrame';
 import Link from 'next/link';
+import RelatedReading from '@/components/services/RelatedReading';
 import { genPageMetadata } from '@/app/seo';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/services/papa-alpha-tools';
@@ -433,6 +434,7 @@ export default function PapaAlphaToolsPage() {
             </div>
           </aside>
         </div>
+        <RelatedReading service="papa-alpha-tools" />
       </main>
 
       <BroadsheetFooter />
