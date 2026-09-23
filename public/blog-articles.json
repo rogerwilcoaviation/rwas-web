@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-09-22T15:51:20.626772+00:00",
-    "total_articles": 24,
+    "last_updated": "2026-09-23T23:00:14.703525+00:00",
+    "total_articles": 34,
     "categories": [
       "regulatory",
       "product-update",
@@ -13,6 +13,53 @@
     ]
   },
   "articles": [
+    {
+      "id": "garmin-citationjet-20260923",
+      "status": "published",
+      "category": "press-release",
+      "title": "Original CitationJet: What Garmin’s New Retrofit Certification Means for Owners",
+      "subtitle": "What Garmin’s original CitationJet retrofit certification means for owners, including integrated displays, flight guidance and aircraft-specific planning.",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "Jerry | Roger Wilco Aviation Services",
+      "date": "2026-09-23",
+      "source": "Garmin public newsroom",
+      "source_url": "https://www.garmin.com/en-US/newsroom/press-release/aviation/garmin-achieves-certification-for-complete-avionics-modernization-program-for-original-cessna-citationjet/",
+      "lead": "Garmin announced FAA supplemental type certification for an all-Garmin avionics retrofit for the original Cessna CitationJet on September 22, 2026. The announcement expands on Garmin’s existing CJ1 and CJ2 retrofit solutions. For an owner considering the next chapter for a legacy CitationJet, the important development is an integrated flight-deck modernization path—not simply a replacement screen.",
+      "body": [
+        "Garmin’s public announcement describes two G600 TXi flight displays, GTN Xi navigators, a GFC 600 digital autopilot and a pilot-side GI 275 standby instrument. TXi engine indication replaces the legacy engine-display solution. Our perspective at RWAS is that an upgrade conversation should start with how the displays, navigation, engine information and flight guidance work together for the pilot, rather than treating each box as a separate purchase.",
+        "For this CitationJet retrofit, Garmin describes coupled VNAV descents and coupled go-around capability with the GFC 600, along with stabilized-approach monitoring and aural V-speed alerts. These are capabilities to discuss during upgrade planning and transition training, not a substitute for pilot proficiency or the aircraft’s approved operating procedures. Ask how the proposed installation will support your normal missions and how you will learn its modes and limitations.",
+        "Garmin says the retrofit is available through its authorized dealer network. Before treating any package as suitable for your airplane, have the exact model, serial number, existing equipment and applicable approvals reviewed. Contact Roger Wilco Aviation Services to discuss your avionics goals and the questions to resolve with a qualified installation provider. Aircraft eligibility, installation scope, scheduling and pricing require individual confirmation; this article is not an installation approval or a quote."
+      ],
+      "tags": [
+        "garmin",
+        "citationjet"
+      ],
+      "social": {
+        "facebook": {
+          "text": "Original CitationJet: What Garmin’s New Retrofit Certification Means for Owners\n\nGarmin’s new certification brings an integrated avionics modernization path to the original Cessna CitationJet. Our article looks at the flight deck, automation and aircraft-specific questions owners should consider.\n\nRead the article: https://www.rogerwilcoaviation.com/blog/garmin-citationjet-20260923\n\nContact RWAS to discuss your avionics goals. Aircraft eligibility and installation scope require individual confirmation.\n\nPhoto: Garmin, as featured in its CitationJet certification announcement.\n\n#Garmin #CitationJet #Avionics #RogerWilcoAviation",
+          "status": "approved",
+          "approved_at": "2026-09-23T18:57:42-04:00"
+        },
+        "instagram": {
+          "text": "Original CitationJet: What Garmin’s New Retrofit Certification Means for Owners\n\nGarmin’s new certification brings an integrated avionics modernization path to the original Cessna CitationJet. Our article looks at the flight deck, automation and aircraft-specific questions owners should consider.\n\nRead the article: https://www.rogerwilcoaviation.com/blog/garmin-citationjet-20260923\n\nContact RWAS to discuss your avionics goals. Aircraft eligibility and installation scope require individual confirmation.\n\nPhoto: Garmin, as featured in its CitationJet certification announcement.\n\n#Garmin #CitationJet #Avionics #RogerWilcoAviation",
+          "status": "approved",
+          "approved_at": "2026-09-23T18:57:42-04:00"
+        }
+      },
+      "body_markdown": "## A coordinated flight deck\n\nGarmin’s public announcement describes two G600 TXi flight displays, GTN Xi navigators, a GFC 600 digital autopilot and a pilot-side GI 275 standby instrument. TXi engine indication replaces the legacy engine-display solution. Our perspective at RWAS is that an upgrade conversation should start with how the displays, navigation, engine information and flight guidance work together for the pilot, rather than treating each box as a separate purchase.\n\n## Automation worth understanding\n\nFor this CitationJet retrofit, Garmin describes coupled VNAV descents and coupled go-around capability with the GFC 600, along with stabilized-approach monitoring and aural V-speed alerts. These are capabilities to discuss during upgrade planning and transition training, not a substitute for pilot proficiency or the aircraft’s approved operating procedures. Ask how the proposed installation will support your normal missions and how you will learn its modes and limitations.\n\n## Start with your aircraft, not a generic package\n\nGarmin says the retrofit is available through its authorized dealer network. Before treating any package as suitable for your airplane, have the exact model, serial number, existing equipment and applicable approvals reviewed. Contact Roger Wilco Aviation Services to discuss your avionics goals and the questions to resolve with a qualified installation provider. Aircraft eligibility, installation scope, scheduling and pricing require individual confirmation; this article is not an installation approval or a quote.",
+      "description": "What Garmin’s original CitationJet retrofit certification means for owners, including integrated displays, flight guidance and aircraft-specific planning.",
+      "meta_description": "What Garmin’s original CitationJet retrofit certification means for owners, including integrated displays, flight guidance and aircraft-specific planning.",
+      "cta_label": "Discuss your avionics questions with RWAS",
+      "cta_url": "/contact",
+      "image": "/images/blog/garmin-citationjet-newsroom-flight-deck-20260923.webp",
+      "image_alt": "Garmin-modernized Cessna Citation flight deck with dual flight displays and center-stack navigators, pictured in Garmin’s CitationJet announcement",
+      "image_caption": "Garmin-modernized Citation flight deck, as featured in Garmin’s original CitationJet certification announcement.",
+      "image_credit": "Photo: Garmin",
+      "image_credit_url": "https://www.garmin.com/en-US/newsroom/press-release/aviation/garmin-achieves-certification-for-complete-avionics-modernization-program-for-original-cessna-citationjet/",
+      "seo_title": "Garmin Original CitationJet Retrofit: Owner Guide | RWAS",
+      "approved_at": "2026-09-23T18:57:42-04:00",
+      "published_at": "2026-09-23T23:00:14.703525+00:00"
+    },
     {
       "id": "gdl-60-planesync-connected-aircraft-before-after-flight",
       "title": "GDL 60 and PlaneSync: What a Connected Aircraft Can Do Before and After Flight",
