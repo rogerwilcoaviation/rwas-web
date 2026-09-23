@@ -218,7 +218,9 @@ export async function generateMetadata({
       url: articleUrl,
       type: 'article',
       publishedTime:
-        (article as { published_at?: string }).published_at || article.date,
+        article.status === 'published'
+          ? (article as { published_at?: string }).published_at || article.date
+          : undefined,
       modifiedTime: updatedTime,
       authors: article.byline ? [article.byline] : undefined,
       images: [
@@ -334,10 +336,12 @@ export default async function BlogArticlePage({
   return (
     <BroadsheetLayout>
       {/* Article schema.org JSON-LD (P2.4) */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
+      {article.status === 'published' ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        />
+      ) : null}
 
       <Dateline />
       <Masthead />
@@ -353,6 +357,11 @@ export default async function BlogArticlePage({
             padding: '4px 0 18px',
           }}
         >
+          {article.status !== 'published' ? (
+            <p className="np-kicker" role="status">
+              Draft preview — awaiting approval. Unlisted, not password-protected.
+            </p>
+          ) : null}
           <span className="np-kicker">
             {article.category.replace(/-/g, ' ')}
           </span>
