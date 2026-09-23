@@ -91,6 +91,31 @@ try {
     const cases = [
       { name: 'approved', node: { ...variant, product }, allowed: true },
       {
+        name: 'operator-approved GFS 83 maintenance tool',
+        node: {
+          id: 'gid://shopify/ProductVariant/48966499074267',
+          sku: '117-01307-00',
+          product: {
+            id: 'gid://shopify/Product/9399656218843',
+            handle: 'shaft-locking-device-gfs83-117-01307-00',
+            productType: 'Aircraft Maintenance Tools',
+            tags: ['garmin', 'otc-eligible'],
+          },
+        },
+        allowed: true,
+      },
+      {
+        name: 'GFS 83 installed servo remains restricted',
+        node: {
+          id: 'gfs83-servo',
+          sku: '010-01243-00',
+          product: {
+            productType: 'Garmin Dealer Install',
+            tags: ['garmin', 'otc-disabled'],
+          },
+        },
+      },
+      {
         name: 'wrong product',
         node: { ...variant, product: { ...product, id: 'other' } },
       },
