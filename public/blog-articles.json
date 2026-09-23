@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-09-22T15:51:20.626772+00:00",
-    "total_articles": 24,
+    "last_updated": "2026-09-23T22:32:31.512273+00:00",
+    "total_articles": 35,
     "categories": [
       "regulatory",
       "product-update",
@@ -13,6 +13,92 @@
     ]
   },
   "articles": [
+    {
+      "id": "garmin-warranty-registration-20260923",
+      "status": "draft",
+      "category": "product-update",
+      "title": "Garmin Avionics Warranty Registration: What to Check Before Aircraft Handoff",
+      "subtitle": "A practical Garmin avionics handoff checklist: verify warranty registration, understand applicable coverage and retain useful equipment records.",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "Jerry | Roger Wilco Aviation Services",
+      "date": "2026-09-23",
+      "source": "Garmin public aviation support and limited warranty",
+      "source_url": "https://support.garmin.com/en-US/aviation/faq/UWk5Say53z87CiBFBP4Vk7/",
+      "lead": "An avionics upgrade is not just a panel full of new equipment; it also comes with records an owner should understand. Garmin’s public aviation-support guidance recommends checking the warranty status of your avionics through flyGarmin. At RWAS, our advice is to make that check part of the aircraft-handoff conversation, alongside the equipment records and operating information you receive.",
+      "body": [
+        "Garmin provides warranty-registration options for panel-mounted avionics and portable aviation devices through flyGarmin, and its support article directs owners to the warranty search feature to check status. Ask your installer to help reconcile the equipment you purchased with the registration record. If something is missing or unclear, resolve it with the installer or Garmin rather than assuming that a device listed in your account tells the whole warranty story.",
+        "Keep registration status separate from the actual warranty terms. Garmin’s published Aviation Limited Warranty distinguishes between product categories and includes time or flight-hour limits, exclusions and service requirements. It also directs owners of Garmin equipment incorporated in new OEM aircraft to the aircraft manufacturer for warranty information. Confirm the terms that apply to your equipment; do not assume that registration starts a fresh warranty period or extends existing coverage.",
+        "Our practical recommendation is to retain the purchase invoice, installed-equipment list and any registration confirmation with your aircraft records, and ask who to contact if service is needed. Database coverage and renewal questions should be reviewed separately from equipment-warranty questions, with any specific entitlement confirmed before relying on it. Contact Roger Wilco Aviation Services if you would like help identifying the registration and support questions to take to your installer or Garmin."
+      ],
+      "tags": [
+        "garmin",
+        "warranty-registration"
+      ],
+      "social": {
+        "facebook": {
+          "text": "An avionics upgrade is not just a panel full of new equipment; it also comes with records an owner should understand. Garmin’s public aviation-support guidance recommends checking the warranty status of your avionics through flyGarmin. At RWAS, our advice is to make that check part of the aircraft-handoff conversation, alongside the equipment records and operating information you receive.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Warrantyregistration #GarminAvionics #RogerWilcoAviation #YanktonSD #KYKN #FlyGA",
+          "status": "pending"
+        },
+        "instagram": {
+          "text": "An avionics upgrade is not just a panel full of new equipment; it also comes with records an owner should understand. Garmin’s public...\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Warrantyregistration #GarminAvionics #RogerWilcoAviation #YanktonSD #KYKN #FlyGA #Avionics #PilotLife #GeneralAviation",
+          "status": "pending"
+        }
+      },
+      "body_markdown": "## Confirm the registration record\n\nGarmin provides warranty-registration options for panel-mounted avionics and portable aviation devices through flyGarmin, and its support article directs owners to the warranty search feature to check status. Ask your installer to help reconcile the equipment you purchased with the registration record. If something is missing or unclear, resolve it with the installer or Garmin rather than assuming that a device listed in your account tells the whole warranty story.\n\n## Registration is not a promise of extra coverage\n\nKeep registration status separate from the actual warranty terms. Garmin’s published Aviation Limited Warranty distinguishes between product categories and includes time or flight-hour limits, exclusions and service requirements. It also directs owners of Garmin equipment incorporated in new OEM aircraft to the aircraft manufacturer for warranty information. Confirm the terms that apply to your equipment; do not assume that registration starts a fresh warranty period or extends existing coverage.\n\n## Keep a useful handoff record\n\nOur practical recommendation is to retain the purchase invoice, installed-equipment list and any registration confirmation with your aircraft records, and ask who to contact if service is needed. Database coverage and renewal questions should be reviewed separately from equipment-warranty questions, with any specific entitlement confirmed before relying on it. Contact Roger Wilco Aviation Services if you would like help identifying the registration and support questions to take to your installer or Garmin.",
+      "description": "A practical Garmin avionics handoff checklist: verify warranty registration, understand applicable coverage and retain useful equipment records.",
+      "meta_description": "A practical Garmin avionics handoff checklist: verify warranty registration, understand applicable coverage and retain useful equipment records.",
+      "cta_label": "Discuss your avionics questions with RWAS",
+      "cta_url": "/contact",
+      "image": "/images/blog/garmin-warranty-registration-n5171s-20260923.webp",
+      "image_alt": "Garmin-equipped instrument panel in RWAS Cessna R182 N5171S",
+      "image_caption": "N5171S’s Garmin-equipped panel. Photo illustrates installed equipment, not warranty status or coverage.",
+      "image_credit": "Photo: Roger Wilco Aviation Services",
+      "image_credit_url": "https://www.rogerwilcoaviation.com",
+      "seo_title": "Garmin Avionics Warranty Registration Checklist | RWAS"
+    },
+    {
+      "id": "garmin-citationjet-20260923",
+      "status": "draft",
+      "category": "press-release",
+      "title": "Original CitationJet: What Garmin’s New Retrofit Certification Means for Owners",
+      "subtitle": "What Garmin’s original CitationJet retrofit certification means for owners, including integrated displays, flight guidance and aircraft-specific planning.",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "Jerry | Roger Wilco Aviation Services",
+      "date": "2026-09-23",
+      "source": "Garmin public newsroom",
+      "source_url": "https://www.garmin.com/en-US/newsroom/press-release/aviation/garmin-achieves-certification-for-complete-avionics-modernization-program-for-original-cessna-citationjet/",
+      "lead": "Garmin announced FAA supplemental type certification for an all-Garmin avionics retrofit for the original Cessna CitationJet on September 22, 2026. The announcement expands on Garmin’s existing CJ1 and CJ2 retrofit solutions. For an owner considering the next chapter for a legacy CitationJet, the important development is an integrated flight-deck modernization path—not simply a replacement screen.",
+      "body": [
+        "Garmin’s public announcement describes two G600 TXi flight displays, GTN Xi navigators, a GFC 600 digital autopilot and a pilot-side GI 275 standby instrument. TXi engine indication replaces the legacy engine-display solution. Our perspective at RWAS is that an upgrade conversation should start with how the displays, navigation, engine information and flight guidance work together for the pilot, rather than treating each box as a separate purchase.",
+        "For this CitationJet retrofit, Garmin describes coupled VNAV descents and coupled go-around capability with the GFC 600, along with stabilized-approach monitoring and aural V-speed alerts. These are capabilities to discuss during upgrade planning and transition training, not a substitute for pilot proficiency or the aircraft’s approved operating procedures. Ask how the proposed installation will support your normal missions and how you will learn its modes and limitations.",
+        "Garmin says the retrofit is available through its authorized dealer network. Before treating any package as suitable for your airplane, have the exact model, serial number, existing equipment and applicable approvals reviewed. Contact Roger Wilco Aviation Services to discuss your avionics goals and the questions to resolve with a qualified installation provider. Aircraft eligibility, installation scope, scheduling and pricing require individual confirmation; this article is not an installation approval or a quote."
+      ],
+      "tags": [
+        "garmin",
+        "citationjet"
+      ],
+      "social": {
+        "facebook": {
+          "text": "Garmin announced FAA supplemental type certification for an all-Garmin avionics retrofit for the original Cessna CitationJet on September 22, 2026. The announcement expands on Garmin’s existing CJ1 and CJ2 retrofit solutions. For an owner considering the next chapter for a legacy CitationJet, the important development is an integrated flight-deck modernization path—not simply a replacement screen.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Citationjet #GarminAvionics #RogerWilcoAviation #YanktonSD #KYKN #FlyGA",
+          "status": "pending"
+        },
+        "instagram": {
+          "text": "Garmin announced FAA supplemental type certification for an all-Garmin avionics retrofit for the original Cessna CitationJet on September...\n\nAuthorized Garmin dealer.\n(605) 299-8178 | rogerwilcoaviation.com\n\n#Garmin #Citationjet #GarminAvionics #RogerWilcoAviation #YanktonSD #KYKN #FlyGA #Avionics #PilotLife #GeneralAviation",
+          "status": "pending"
+        }
+      },
+      "body_markdown": "## A coordinated flight deck\n\nGarmin’s public announcement describes two G600 TXi flight displays, GTN Xi navigators, a GFC 600 digital autopilot and a pilot-side GI 275 standby instrument. TXi engine indication replaces the legacy engine-display solution. Our perspective at RWAS is that an upgrade conversation should start with how the displays, navigation, engine information and flight guidance work together for the pilot, rather than treating each box as a separate purchase.\n\n## Automation worth understanding\n\nFor this CitationJet retrofit, Garmin describes coupled VNAV descents and coupled go-around capability with the GFC 600, along with stabilized-approach monitoring and aural V-speed alerts. These are capabilities to discuss during upgrade planning and transition training, not a substitute for pilot proficiency or the aircraft’s approved operating procedures. Ask how the proposed installation will support your normal missions and how you will learn its modes and limitations.\n\n## Start with your aircraft, not a generic package\n\nGarmin says the retrofit is available through its authorized dealer network. Before treating any package as suitable for your airplane, have the exact model, serial number, existing equipment and applicable approvals reviewed. Contact Roger Wilco Aviation Services to discuss your avionics goals and the questions to resolve with a qualified installation provider. Aircraft eligibility, installation scope, scheduling and pricing require individual confirmation; this article is not an installation approval or a quote.",
+      "description": "What Garmin’s original CitationJet retrofit certification means for owners, including integrated displays, flight guidance and aircraft-specific planning.",
+      "meta_description": "What Garmin’s original CitationJet retrofit certification means for owners, including integrated displays, flight guidance and aircraft-specific planning.",
+      "cta_label": "Discuss your avionics questions with RWAS",
+      "cta_url": "/contact",
+      "image": "/images/blog/garmin-citationjet-newsroom-flight-deck-20260923.webp",
+      "image_alt": "Garmin-modernized Cessna Citation flight deck with dual flight displays and center-stack navigators, pictured in Garmin’s CitationJet announcement",
+      "image_caption": "Garmin-modernized Citation flight deck, as featured in Garmin’s original CitationJet certification announcement.",
+      "image_credit": "Photo: Garmin",
+      "image_credit_url": "https://www.garmin.com/en-US/newsroom/press-release/aviation/garmin-achieves-certification-for-complete-avionics-modernization-program-for-original-cessna-citationjet/",
+      "seo_title": "Garmin Original CitationJet Retrofit: Owner Guide | RWAS"
+    },
     {
       "id": "gdl-60-planesync-connected-aircraft-before-after-flight",
       "title": "GDL 60 and PlaneSync: What a Connected Aircraft Can Do Before and After Flight",
