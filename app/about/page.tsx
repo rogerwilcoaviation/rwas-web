@@ -50,7 +50,8 @@ export default function AboutPage() {
             built in Yankton for aircraft owners across the Northern Plains.
           </h1>
           <p className="bs-subhead">
-            FAA Part 145 Repair Station &middot; Certificate No. RWSR491E
+            <Link href="/blog/repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414">FAA Part 145 Repair Station</Link>{' '}
+            &middot; Certificate No. RWSR491E
             &middot; RWAS Avionics Desk &middot; KYKN, Yankton
           </p>
           <div className="bs-byline">

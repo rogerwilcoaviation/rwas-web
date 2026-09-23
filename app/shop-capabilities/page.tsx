@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
+import Link from 'next/link';
 import {
   BroadsheetLayout,
   Dateline,
@@ -605,7 +606,7 @@ export default function ShopCapabilitiesPage() {
             <Specimen as="section">
               <span className="bs-kicker">Certifications</span>
               <p>
-                FAA Part 145 Repair Station
+                <Link href="/blog/repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414">FAA Part 145 Repair Station</Link>
                 <br />
                 Certificate #RWSR491E
                 <br />
