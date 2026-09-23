@@ -559,7 +559,7 @@ export default async function BlogArticlePage({
                 <br />
                 Source: {article.source || 'RWAS Desk'}
                 <br />
-                Published:{' '}
+                {article.status === 'published' ? 'Published' : 'Draft date'}:{' '}
                 {article.published_at
                   ? article.published_at.slice(0, 10)
                   : article.date}
