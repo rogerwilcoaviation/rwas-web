@@ -35,6 +35,7 @@ const TYPES = {
   watches: 'Watches & Accessories',
   excluded: 'Garmin Catalog Excluded',
   unclassified: 'Garmin Aviation',
+  maintenanceTools: 'Aircraft Maintenance Tools',
 };
 
 const REQUIRED_STOREFRONT_PUBLICATIONS = [
@@ -278,6 +279,7 @@ const RETIRED_CONSUMER_TYPES = new Set([
 ]);
 const PUBLIC_CATALOG_TYPES = new Set([
   TYPES.experimental,
+  TYPES.maintenanceTools,
   TYPES.dealer,
   TYPES.pilot,
   TYPES.watches,
@@ -591,6 +593,31 @@ function buildPlan(products, collections, publications) {
       continue;
     }
     const record = makePlanRecord(product);
+    // Preserve the exact operator-approved maintenance-tool retail identity.
+    // This is not a GFC 600H system/LRU or a manufacturer OTC clearance.
+    if (
+      product.status === 'ACTIVE' &&
+      product.id === 'gid://shopify/Product/9399656218843' &&
+      product.handle === 'shaft-locking-device-gfs83-117-01307-00' &&
+      product.variants.nodes.length === 1 &&
+      product.variants.nodes[0].id ===
+        'gid://shopify/ProductVariant/48966499074267' &&
+      record.sku === '117-01307-00'
+    ) {
+      setTargetType(
+        record,
+        TYPES.maintenanceTools,
+        'Operator-authorized maintenance tool retail',
+      );
+      normalizeDirectSaleTags(record);
+      for (const tag of ['garmin', 'garmin-retail-policy-2026', 'otc-eligible'])
+        addTag(record.nextTags, tag);
+      addManualCollection(record, COLLECTIONS.retail, collections);
+      removeManualCollection(record, COLLECTIONS.dealerInstall, collections);
+      const finalized = finalizeRecord(record);
+      if (finalized) changes.push(finalized);
+      continue;
+    }
     normalizeRetailTags(record);
 
     const active = product.status === 'ACTIVE';
@@ -1056,6 +1083,7 @@ function auditState(products, collections) {
   });
   const approvedRetailSkus = new Set([
     ...APPROVED_CERTIFIED_OTC,
+    '117-01307-00', // Operator-approved maintenance tool, not an installed LRU.
     ...OFFICIAL_EXPERIMENTAL,
   ]);
   const retailSkus = new Set(retailRendered.map(firstSku));

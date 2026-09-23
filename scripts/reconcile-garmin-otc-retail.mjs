@@ -82,12 +82,29 @@ const OTC_RETAIL_PRODUCTS = [
   },
   { sku: 'K11-00024-27', family: 'GFC 500 Mooney M20 Yaw Damper Install Kit' },
   { sku: '211-00169-01', family: 'Install hardware' },
+  // Operator-authorized maintenance tool, not Garmin clearance of installed LRUs.
+  {
+    sku: '117-01307-00',
+    family: 'GFS 83 maintenance tool',
+    productType: 'Aircraft Maintenance Tools',
+    productId: 'gid://shopify/Product/9399656218843',
+    variantId: 'gid://shopify/ProductVariant/48966499074267',
+    handle: 'shaft-locking-device-gfs83-117-01307-00',
+  },
 ];
 
 const PUBLIC_PRICE_AUTHORITIES = {
+  '117-01307-00': {
+    list_price: 295,
+    source:
+      'Operator authorization to retain existing website price, corroborated by live Shopify 2026-09-23; no repricing or manufacturer clearance implied',
+    priceType: 'Existing retail',
+    accessed: '2026-09-23',
+  },
   '211-00169-01': {
     list_price: 5.0,
-    source: 'Ryan confirmed $5.00 per Garmin website 2026-09-16; corroborated by expired July guide row 1598 and live storefront',
+    source:
+      'Ryan confirmed $5.00 per Garmin website 2026-09-16; corroborated by expired July guide row 1598 and live storefront',
     url: 'https://www.rogerwilcoaviation.com/products/screw-machine-panel-mounting-0-550-black',
     priceType: 'List',
     accessed: '2026-09-16',
@@ -343,6 +360,20 @@ async function buildAudit(
     }
 
     const { product, variant } = matches[0];
+    if (
+      policy.productId &&
+      (product.id !== policy.productId ||
+        variant.id !== policy.variantId ||
+        product.handle !== policy.handle ||
+        product.variants.nodes.length !== 1)
+    ) {
+      records.push({
+        ...policy,
+        state: 'ambiguous-sku',
+        matchCount: matches.length,
+      });
+      continue;
+    }
     const nextTags = normalizeTags(product.tags);
     const currentTagNames = new Set(
       product.tags.map((tag) => tag.toLowerCase()),
@@ -359,7 +390,8 @@ async function buildAudit(
     );
     const expectedPrice = money(authority.list_price);
     const changes = {
-      productType: product.productType !== 'Avionics — Certified',
+      productType:
+        product.productType !== (policy.productType || 'Avionics — Certified'),
       tags: !sameTags(product.tags, nextTags),
       retailPrice: money(variant.price) !== expectedPrice,
       retailCollection: !inRetailCollection,
@@ -394,7 +426,7 @@ async function buildAudit(
 async function updateProduct(record) {
   const product = {
     id: record.productId,
-    productType: 'Avionics — Certified',
+    productType: record.productType || 'Avionics — Certified',
     tags: record.nextTags,
   };
   if (POLICY_DESCRIPTIONS[record.sku]) {
