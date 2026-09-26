@@ -43,6 +43,7 @@ export type PdpPriceCardProps = {
   mapLocked: boolean;
   showQuoteRetailPrice?: boolean;
   verifiedQuoteRetailDisplay?: boolean;
+  showGarminListPriceLabel?: boolean;
   isDealerInstall?: boolean;
   cartPurchaseException?: boolean;
 };
@@ -108,6 +109,7 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
     mapLocked,
     showQuoteRetailPrice = false,
     verifiedQuoteRetailDisplay = false,
+    showGarminListPriceLabel = false,
     isDealerInstall = false,
     cartPurchaseException = false,
   } = props;
@@ -216,11 +218,13 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
       (!isNonOtcGarmin || showQuoteRetailPrice || isDealerInstall) ? (
         <>
           <div className="label">
-            {showQuoteRetailPrice || showGarminRetailPrice
-              ? 'Retail Price'
-              : hasSalePrice
-                ? 'Sale Price'
-                : 'Price'}
+            {showGarminListPriceLabel
+              ? 'Garmin List Price'
+              : showQuoteRetailPrice || showGarminRetailPrice
+                ? 'Retail Price'
+                : hasSalePrice
+                  ? 'Sale Price'
+                  : 'Price'}
           </div>
           <div className="price-row">
             <div className="price">

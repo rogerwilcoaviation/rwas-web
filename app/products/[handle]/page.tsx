@@ -1495,6 +1495,9 @@ export default async function ProductDetailPage({
                 showDualG5KitDetails || Boolean(approvedQuoteRetailPrice)
               }
               verifiedQuoteRetailDisplay={Boolean(approvedQuoteRetailPrice)}
+              showGarminListPriceLabel={
+                firstSku === '010-02326-10' && Boolean(approvedQuoteRetailPrice)
+              }
               isDealerInstall={gating.isDealerInstall}
               cartPurchaseException={cartPurchaseException}
             />
