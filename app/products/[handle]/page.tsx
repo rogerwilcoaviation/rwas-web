@@ -1137,13 +1137,15 @@ export default async function ProductDetailPage({
   const showPapaAlphaGallery =
     galleryImages.length > 1 &&
     ((product.tags || []).some((tag) => /papa-alpha/i.test(tag)) ||
-      (/papa-alpha/i.test(product.handle) || product.handle === 'pa-36-flap-rigging-tool-1'));
+      /papa-alpha/i.test(product.handle) ||
+      product.handle === 'pa-36-flap-rigging-tool-1');
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
   const primaryPrice = product.variants[0]?.price;
-  const approvedQuoteRetailPrice = gating.isGarmin && gating.otc !== 'eligible'
-    ? verifiedQuoteRetailPrice(product, quoteRetailPolicy)
-    : null;
+  const approvedQuoteRetailPrice =
+    gating.isGarmin && gating.otc !== 'eligible'
+      ? verifiedQuoteRetailPrice(product, quoteRetailPolicy)
+      : null;
   const hasSingleVariant = product.variants.length === 1;
   const normalListPrice = product.variants[0]?.compareAtPrice;
   const hasSalePrice = Boolean(
@@ -1178,19 +1180,24 @@ export default async function ProductDetailPage({
   const showDualG5KitDetails =
     product.handle === 'garmin-dual-g5-ai-hsi-kit-k10-00280-51';
   const isAxisSystemListing = product.handle.startsWith('garmin-axis-');
+  const hasItemizedKitContents = /<h2[^>]*>[^<]*kit contents\b/i.test(
+    product.descriptionHtml || '',
+  );
   const cleanDescText = isAxisSystemListing
     ? ''
-    : showDualG5KitDetails
-      ? 'A complete certified dual-display package for an electronic attitude indicator and HSI configuration.'
-      : showPa31RudderTrimApplicability || showPapaAlphaApplicability
-        ? papaAlphaApplicabilityIntro(product) || PA31_RUDDER_TRIM_INTRO
-        : (product.description || '')
-            .replace(/^[^\n]*Buy\s*&\s*Save rebate form\.?\s*\n*/i, '')
-            .replace(
-              /Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi,
-              '',
-            )
-            .trim();
+    : hasItemizedKitContents
+      ? 'Garmin kit components and part numbers are listed below.'
+      : showDualG5KitDetails
+        ? 'A complete certified dual-display package for an electronic attitude indicator and HSI configuration.'
+        : showPa31RudderTrimApplicability || showPapaAlphaApplicability
+          ? papaAlphaApplicabilityIntro(product) || PA31_RUDDER_TRIM_INTRO
+          : (product.description || '')
+              .replace(/^[^\n]*Buy\s*&\s*Save rebate form\.?\s*\n*/i, '')
+              .replace(
+                /Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi,
+                '',
+              )
+              .trim();
   const breadcrumbs = ['Pilot Shop', productTypeLabel, vendor].filter(Boolean);
 
   // Variant payload for the client component — keep only what we need.
@@ -1270,9 +1277,15 @@ export default async function ProductDetailPage({
       if (!primaryPrice) return undefined;
       // A quote-only listing is not an online transactional offer, even when
       // its independently verified retail equipment price is visible.
-      if (gating.isGarmin && gating.otc !== 'eligible' &&
-          quoteRetailPolicy.quoteOnlyAuditProducts.some((row) =>
-            row.productId === product.id && row.handle === product.handle)) return undefined;
+      if (
+        gating.isGarmin &&
+        gating.otc !== 'eligible' &&
+        quoteRetailPolicy.quoteOnlyAuditProducts.some(
+          (row) =>
+            row.productId === product.id && row.handle === product.handle,
+        )
+      )
+        return undefined;
       // Preserve existing quote-offer behavior outside the explicitly audited
       // 521 products; this remediation does not change other listing policies.
       if (gating.isGarmin && gating.otc !== 'eligible') {
@@ -1478,7 +1491,9 @@ export default async function ProductDetailPage({
               stockCheckRequired={gating.stockCheckRequired}
               isGarmin={gating.isGarmin}
               mapLocked={gating.mapLocked}
-              showQuoteRetailPrice={showDualG5KitDetails || Boolean(approvedQuoteRetailPrice)}
+              showQuoteRetailPrice={
+                showDualG5KitDetails || Boolean(approvedQuoteRetailPrice)
+              }
               verifiedQuoteRetailDisplay={Boolean(approvedQuoteRetailPrice)}
               isDealerInstall={gating.isDealerInstall}
               cartPurchaseException={cartPurchaseException}
@@ -1489,7 +1504,7 @@ export default async function ProductDetailPage({
         {/* Detail — article + spec aside */}
         <section className="bs-detail">
           <article>
-            {!cleanDescText ? (
+            {!cleanDescText || hasItemizedKitContents ? (
               <div
                 className="bs-body bs-body--rich"
                 dangerouslySetInnerHTML={{
