@@ -1496,7 +1496,8 @@ export default async function ProductDetailPage({
               }
               verifiedQuoteRetailDisplay={Boolean(approvedQuoteRetailPrice)}
               showGarminListPriceLabel={
-                firstSku === '010-02326-10' && Boolean(approvedQuoteRetailPrice)
+                ['010-02326-10', '010-02326-20', '010-02327-20'].includes(firstSku || '') &&
+                Boolean(approvedQuoteRetailPrice)
               }
               isDealerInstall={gating.isDealerInstall}
               cartPurchaseException={cartPurchaseException}
