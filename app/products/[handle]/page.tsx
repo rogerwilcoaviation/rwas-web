@@ -1313,11 +1313,13 @@ export default async function ProductDetailPage({
         price: primaryPrice.amount,
         priceCurrency: primaryPrice.currencyCode,
         itemCondition: 'https://schema.org/NewCondition',
-        availability: product.availableForSale
-          ? gating.isGarmin
-            ? 'https://schema.org/PreOrder'
-            : 'https://schema.org/InStock'
-          : 'https://schema.org/OutOfStock',
+        availability: product.tags.includes('rwas-custom-bundle')
+          ? undefined
+          : product.availableForSale
+            ? gating.isGarmin
+              ? 'https://schema.org/PreOrder'
+              : 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
         url: canonicalUrl,
         seller: {
           '@type': 'Organization',
@@ -1496,8 +1498,9 @@ export default async function ProductDetailPage({
               }
               verifiedQuoteRetailDisplay={Boolean(approvedQuoteRetailPrice)}
               showGarminListPriceLabel={
-                ['010-02326-10', '010-02326-20', '010-02327-20'].includes(firstSku || '') &&
-                Boolean(approvedQuoteRetailPrice)
+                ['010-02326-10', '010-02326-20', '010-02327-20'].includes(
+                  firstSku || '',
+                ) && Boolean(approvedQuoteRetailPrice)
               }
               isDealerInstall={gating.isDealerInstall}
               cartPurchaseException={cartPurchaseException}
@@ -1577,6 +1580,12 @@ export default async function ProductDetailPage({
                       The best course of action is to call us to confirm
                       availability.
                     </strong>
+                  </>
+                ) : product.tags.includes('rwas-custom-bundle') ? (
+                  <>
+                    This is an RWAS custom-assembled package. Component
+                    availability is confirmed during fulfillment; no stock or
+                    lead-time promise is made on this page.
                   </>
                 ) : gating.otc === 'eligible' ? (
                   <>
