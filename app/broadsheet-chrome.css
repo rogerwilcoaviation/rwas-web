@@ -80,16 +80,25 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 24px;
   align-items: center;
 }
-.broadsheet .bs-masthead__logo {
-  height: 84px;
-  width: auto;
-}
 .broadsheet .bs-masthead__titles {
   text-align: center;
+  width: min(100%, 520px);
+  margin: 0 auto;
+}
+.broadsheet .bs-masthead__logo-frame {
+  width: 100%;
+  aspect-ratio: 3.1;
+  overflow: hidden;
+}
+.broadsheet .bs-masthead__logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform: translateY(-28.5%);
 }
 .broadsheet .bs-masthead__brand {
   font-family: var(--font-display);
@@ -1954,11 +1963,8 @@ body {
     padding: 12px 14px 10px;
   }
   .broadsheet .bs-masthead__inner {
-    grid-template-columns: 44px 1fr;
+    grid-template-columns: 1fr;
     gap: 10px;
-  }
-  .broadsheet .bs-masthead__logo {
-    height: 44px;
   }
   .broadsheet .bs-masthead__brand {
     font-family: Georgia, 'Times New Roman', serif;
