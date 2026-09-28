@@ -82,6 +82,30 @@ const OTC_RETAIL_PRODUCTS = [
   },
   { sku: 'K11-00024-27', family: 'GFC 500 Mooney M20 Yaw Damper Install Kit' },
   { sku: '211-00169-01', family: 'Install hardware' },
+  {
+    sku: '011-00950-01',
+    family: '15/26-pin backshell with hardware',
+    productId: 'gid://shopify/Product/8961821704411',
+    variantId: 'gid://shopify/ProductVariant/47408754360539',
+    handle: 'sub-assy-bkshl-w-hdw-15-26-pin',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '330-00185-26',
+    family: '26-circuit high-density D-sub connector',
+    productId: 'gid://shopify/Product/8961745092827',
+    variantId: 'gid://shopify/ProductVariant/47408684990683',
+    handle: 'conn-hidens-d-sub-mil-crp-26ckt',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
   // Operator-authorized maintenance tool, not Garmin clearance of installed LRUs.
   {
     sku: '117-01307-00',
@@ -94,6 +118,20 @@ const OTC_RETAIL_PRODUCTS = [
 ];
 
 const PUBLIC_PRICE_AUTHORITIES = {
+  '011-00950-01': {
+    list_price: 40,
+    source:
+      'Garmin DRC Quick Order live List Price readback for exact part number',
+    priceType: 'List',
+    accessed: '2026-09-28',
+  },
+  '330-00185-26': {
+    list_price: 30,
+    source:
+      'Garmin DRC Quick Order live List Price readback for exact part number',
+    priceType: 'List',
+    accessed: '2026-09-28',
+  },
   '117-01307-00': {
     list_price: 295,
     source:
@@ -204,8 +242,12 @@ function money(value) {
   return Number(value).toFixed(2);
 }
 
-function normalizeTags(tags) {
-  const kept = tags.filter((tag) => !CONFLICTING_TAGS.has(tag.toLowerCase()));
+function normalizeTags(tags, extraConflictingTags = []) {
+  const conflictingTags = new Set([
+    ...CONFLICTING_TAGS,
+    ...extraConflictingTags.map((tag) => tag.toLowerCase()),
+  ]);
+  const kept = tags.filter((tag) => !conflictingTags.has(tag.toLowerCase()));
   const existing = new Set(kept.map((tag) => tag.toLowerCase()));
   for (const tag of REQUIRED_TAGS) {
     if (!existing.has(tag.toLowerCase())) kept.push(tag);
@@ -308,6 +350,11 @@ async function findSku(sku) {
           status
           tags
           descriptionHtml
+          dealerOnly: metafield(namespace: "custom", key: "dealer_only") {
+            id
+            value
+            type
+          }
           collections(first: 50) { nodes { id handle } }
           variants(first: 100) {
             nodes { id sku price }
@@ -374,7 +421,7 @@ async function buildAudit(
       });
       continue;
     }
-    const nextTags = normalizeTags(product.tags);
+    const nextTags = normalizeTags(product.tags, policy.removeTags);
     const currentTagNames = new Set(
       product.tags.map((tag) => tag.toLowerCase()),
     );
@@ -398,6 +445,9 @@ async function buildAudit(
       description:
         Boolean(POLICY_DESCRIPTIONS[policy.sku]) &&
         product.descriptionHtml.trim() !== POLICY_DESCRIPTIONS[policy.sku],
+      dealerOnlyMetafield: Boolean(
+        policy.removeDealerOnlyMetafield && product.dealerOnly,
+      ),
     };
 
     records.push({
@@ -417,6 +467,7 @@ async function buildAudit(
       nextTags,
       addedTags,
       removedTags,
+      currentDealerOnlyMetafield: product.dealerOnly,
       changes,
     });
   }
@@ -476,6 +527,27 @@ async function addToCollection(record, collection) {
   if (errors.length) throw new Error(JSON.stringify(errors));
 }
 
+async function deleteDealerOnlyMetafield(record) {
+  const result = await shopifyGraphql(
+    `mutation DeleteDealerOnlyMetafield($metafields: [MetafieldIdentifierInput!]!) {
+      metafieldsDelete(metafields: $metafields) {
+        deletedMetafields { ownerId namespace key }
+        userErrors { field message }
+      }
+    }`,
+    {
+      metafields: [
+        {
+          ownerId: record.productId,
+          namespace: 'custom',
+          key: 'dealer_only',
+        },
+      ],
+    },
+  );
+  assertNoUserErrors(result, 'metafieldsDelete');
+}
+
 async function applyAudit(records, collection) {
   const actionable = records.filter(
     (record) => record.state === 'changes-required',
@@ -492,6 +564,9 @@ async function applyAudit(records, collection) {
     if (record.changes.retailCollection) {
       await addToCollection(record, collection);
     }
+    if (record.changes.dealerOnlyMetafield) {
+      await deleteDealerOnlyMetafield(record);
+    }
   }
   return actionable.length;
 }
@@ -502,6 +577,7 @@ function publicRecord(record) {
     variantId: _variantId,
     currentTags: _currentTags,
     nextTags: _nextTags,
+    currentDealerOnlyMetafield: _currentDealerOnlyMetafield,
     ...safe
   } = record;
   return safe;
@@ -552,13 +628,32 @@ async function main() {
       !['verified', 'missing-storefront-product'].includes(record.state),
   );
 
+  const selectedAuthorities = policies.map((policy) => {
+    const reviewed = approvedPublicPrice(policy.sku);
+    const exact = reviewed || PUBLIC_PRICE_AUTHORITIES[policy.sku];
+    const authority = exact || priceAuthority.rows[policy.sku];
+    return {
+      sku: policy.sku,
+      authorityType: exact ? 'exact-current-authority' : 'retained-cache-row',
+      list_price: Number(authority.list_price),
+      priceType: authority.priceType || 'List',
+      source: authority.source || priceAuthority.source,
+      accessed: authority.accessed || authority.asOf || null,
+    };
+  });
+
   const output = {
     mode: apply ? 'apply' : 'dry-run',
     policySource: POLICY_SOURCE,
     priceAuthority: {
-      source: priceAuthority.source,
-      modified: priceAuthority.modified,
-      sha256: priceAuthority.sha256,
+      fallbackSource: {
+        source: priceAuthority.source,
+        modified: priceAuthority.modified,
+        sha256: priceAuthority.sha256,
+        status:
+          'Retained fallback cache; evaluate printed expiry before current use. Not used for SKUs with an exact current authority.',
+      },
+      selectedAuthorities,
       publicSources: Object.entries(PUBLIC_PRICE_AUTHORITIES).map(
         ([sku, authority]) => ({ sku, ...authority }),
       ),
