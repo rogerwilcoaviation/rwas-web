@@ -106,6 +106,42 @@ const OTC_RETAIL_PRODUCTS = [
     ],
     removeDealerOnlyMetafield: true,
   },
+  // OPERATOR-CONFIRMED exact-SKU exceptions (Ryan, 2026-09-28).
+  // These are not manufacturer-document-verified OTC rows and do not create a
+  // blanket rule for kits or components. Preserve the conflicting catalog
+  // evidence in each record so later audits do not misstate the provenance.
+  {
+    sku: '011-03258-00',
+    family: 'Flight Stream 110/210 connector kit',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC exception from Ryan on 2026-09-28',
+    catalogObservation:
+      'August 2026 Rev. 5 aviation catalog page 19 exact row is not green OTC-shaded; Flight Stream 210/510 remains installation-policy included',
+    productId: 'gid://shopify/Product/8961746141403',
+    variantId: 'gid://shopify/ProductVariant/47408685777115',
+    handle: 'connector-kit-flight-stream-110-210',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '325-00122-00',
+    family: 'Four-conductor configuration-module harness',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC exception from Ryan on 2026-09-28',
+    catalogObservation:
+      'No exact entry or green OTC designation found in the current aviation, MRP, or service-parts catalogs',
+    productId: 'gid://shopify/Product/8961772650715',
+    variantId: 'gid://shopify/ProductVariant/47408705732827',
+    handle: 'harness-4-cond-config-module',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
   // Operator-authorized maintenance tool, not Garmin clearance of installed LRUs.
   {
     sku: '117-01307-00',
@@ -118,6 +154,20 @@ const OTC_RETAIL_PRODUCTS = [
 ];
 
 const PUBLIC_PRICE_AUTHORITIES = {
+  '011-03258-00': {
+    list_price: 95,
+    source:
+      'Garmin DRC Quick Order live List Price readback for exact part number; Ryan confirmed this price on 2026-09-28',
+    priceType: 'List',
+    accessed: '2026-09-28',
+  },
+  '325-00122-00': {
+    list_price: 15,
+    source:
+      'Garmin DRC Quick Order live List Price readback for exact part number; Ryan confirmed this price on 2026-09-28',
+    priceType: 'List',
+    accessed: '2026-09-28',
+  },
   '011-00950-01': {
     list_price: 40,
     source:
