@@ -14,13 +14,13 @@ export type MastheadProps = {
  * Masthead — bone ground, gold top hairline + 6px gold double bottom rule.
  * Matches the approved D2 PDP mockup (.np-masthead).
  *
- * Two-column grid: full company wordmark | cert identifier (right).
+ * Three-column grid: logo | brand+tagline (centered) | cert identifier (right).
  * The right column carries the cert number and public operating base (KYKN · Yankton, SD);
  * all other credentials (FAA Part 145, Garmin dealer, AEA, NBAA) live in
  * the CredentialsBar directly below.
  */
 export default function Masthead({
-  logoSrc = '/newspaper/images/logo-2.jpg',
+  logoSrc = '/newspaper/images/logo.png',
   logoAlt = 'Roger Wilco Aviation Services',
   brand = 'Roger Wilco Aviation Services',
   tagline = 'FAA CERT. REPAIR STATION \u00b7 AVIONICS \u00b7 AIRFRAME & POWERPLANT \u00b7 NDT \u00b7 FABRICATION',
@@ -30,17 +30,17 @@ export default function Masthead({
   return (
     <header className="bs-masthead">
       <div className="bs-masthead__inner">
+        <img
+          className="bs-masthead__logo"
+          src={logoSrc}
+          alt={logoAlt}
+          width={256}
+          height={256}
+        />
         <div className="bs-masthead__titles">
-          <div className="bs-masthead__logo-frame">
-            <img
-              className="bs-masthead__logo"
-              src={logoSrc}
-              alt={logoAlt}
-              width={1320}
-              height={1250}
-            />
+          <div className="bs-masthead__brand" aria-label={brand}>
+            {brand}
           </div>
-          <div className="sr-only">{brand}</div>
           {tagline ? (
             <div className="bs-masthead__tagline">{tagline}</div>
           ) : null}
