@@ -95,6 +95,24 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '011-02977-01',
+    family: 'GTX 345 connector kit',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC exception from Ryan on 2026-09-29',
+    catalogObservation:
+      'Retail authorization applies only to this exact connector-kit SKU and does not clear the GTX 345 LRU or related kits',
+    productId: 'gid://shopify/Product/8961824391387',
+    variantId: 'gid://shopify/ProductVariant/47408757506267',
+    handle: 'sub-assy-gtx345-connector-kit',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:install-hardware',
+      'otc-disabled',
+      'stock-check-required',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '330-00185-26',
     family: '26-circuit high-density D-sub connector',
     productId: 'gid://shopify/Product/8961745092827',
@@ -158,6 +176,51 @@ const OTC_RETAIL_PRODUCTS = [
     ],
     removeDealerOnlyMetafield: true,
   },
+  {
+    sku: '011-01169-01',
+    family: 'Ground adapter shell, size 4 and 5',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC and $25-each retail exception from Ryan on 2026-09-29',
+    catalogObservation:
+      'Garmin installation manuals identify this exact component; current manufacturer LIST price was not independently verified',
+    productId: 'gid://shopify/Product/10317702824155',
+    variantId: 'gid://shopify/ProductVariant/50534082183387',
+    handle: 'garmin-ground-adapter-shell-size-4-5-011-01169-01',
+    removeTags: [],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '336-00022-00',
+    family: 'Size 20 mil-crimp socket contact',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC exception from Ryan on 2026-09-29',
+    catalogObservation:
+      'Current Garmin DRC Quick Order identifies this exact SKU as an individually orderable contact',
+    productId: 'gid://shopify/Product/8961746206939',
+    variantId: 'gid://shopify/ProductVariant/47408685842651',
+    handle: 'cont-sckt-mil-crp-size-20',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '336-00055-00',
+    family: 'Size 22 mil-crimp socket contact',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC exception from Ryan on 2026-09-29',
+    catalogObservation:
+      'Current Garmin DRC Quick Order identifies this exact SKU as an individually orderable contact',
+    productId: 'gid://shopify/Product/8961746370779',
+    variantId: 'gid://shopify/ProductVariant/47408686006491',
+    handle: 'contact-sckt-mil-crimp-size-22',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
   // Operator-authorized maintenance tool, not Garmin clearance of installed LRUs.
   {
     sku: '117-01307-00',
@@ -189,6 +252,34 @@ const PUBLIC_PRICE_AUTHORITIES = {
     source:
       'Ryan operator confirmation of exact SKU price and Garmin phone-order supply on 2026-09-29; not independently manufacturer-verified',
     priceType: 'Operator-confirmed retail',
+    accessed: '2026-09-29',
+  },
+  '011-02977-01': {
+    list_price: 130,
+    source:
+      'Garmin DRC Quick Order live List Price readback for exact part number',
+    priceType: 'List',
+    accessed: '2026-09-29',
+  },
+  '011-01169-01': {
+    list_price: 25,
+    source:
+      'Ryan operator confirmation of exact SKU price on 2026-09-29; not independently manufacturer-verified',
+    priceType: 'Operator-confirmed retail',
+    accessed: '2026-09-29',
+  },
+  '336-00022-00': {
+    list_price: 5,
+    source:
+      'Garmin DRC Quick Order live List Price readback for exact part number and quantity 1',
+    priceType: 'List each',
+    accessed: '2026-09-29',
+  },
+  '336-00055-00': {
+    list_price: 5,
+    source:
+      'Garmin DRC Quick Order live List Price readback for exact part number and quantity 1',
+    priceType: 'List each',
     accessed: '2026-09-29',
   },
   '011-00950-01': {
@@ -292,6 +383,16 @@ const GDL_82_DESCRIPTION = `
 `.trim();
 
 const POLICY_DESCRIPTIONS = {
+  '011-00950-01':
+    '<p><strong>Garmin 15/26-Pin Backshell with Hardware</strong></p><p>Garmin part number <strong>011-00950-01</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one backshell-with-hardware subassembly to the order.</p><p>Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>',
+  '011-02977-01':
+    "<p><strong>Garmin GTX 345 Connector Kit</strong></p><p>Garmin part number <strong>011-02977-01</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one Garmin GTX 345 connector kit to the order.</p><p>This listing does not make a separate claim about the kit's individual contents. Confirm compatibility with the intended installation before ordering.</p>",
+  '011-01169-01':
+    '<p><strong>Garmin Ground Adapter Shell, Size 4 &amp; 5</strong></p><p>Garmin part number <strong>011-01169-01</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one ground-adapter subassembly to the order.</p><p>This listing does not include a connector, backshell, contacts, or other connector-kit components. Confirm compatibility with the intended Garmin installation before ordering.</p>',
+  '336-00022-00':
+    '<p><strong>Garmin Size 20 Mil-Crimp Socket Contact</strong></p><p>Garmin part number <strong>336-00022-00</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one contact to the order. This is not a pack or connector kit.</p><p>Confirm wire size, tooling, and connector compatibility before ordering.</p>',
+  '336-00055-00':
+    '<p><strong>Garmin Size 22 Mil-Crimp Socket Contact</strong></p><p>Garmin part number <strong>336-00055-00</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one contact to the order. This is not a pack or connector kit.</p><p>Confirm wire size, tooling, and connector compatibility before ordering.</p>',
   '330-00408-62':
     '<p><strong>Garmin 62-Pin High-Density D-Sub Female Connector</strong></p><p>Garmin part number <strong>330-00408-62</strong>.</p><p>This is a <strong>special-order item</strong> available to order through RWAS and obtained from Garmin by phone order. Garmin availability and delivery timing are confirmed after purchase; this listing does not represent on-hand stock or a delivery estimate.</p><p>Connector contacts, backshell, termination style, and equipment compatibility are not specified by this listing and must be confirmed separately if required.</p>',
   'K10-00280-51': DUAL_G5_DESCRIPTION,

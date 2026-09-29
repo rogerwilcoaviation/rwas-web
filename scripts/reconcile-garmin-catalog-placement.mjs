@@ -122,6 +122,48 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     variantId: 'gid://shopify/ProductVariant/50534059802843',
     handle: 'garmin-62-pin-high-density-d-sub-female-connector-330-00408-62',
   },
+  {
+    sku: '011-02977-01',
+    productId: 'gid://shopify/Product/8961824391387',
+    variantId: 'gid://shopify/ProductVariant/47408757506267',
+    handle: 'sub-assy-gtx345-connector-kit',
+  },
+  {
+    sku: '011-01169-01',
+    productId: 'gid://shopify/Product/10317702824155',
+    variantId: 'gid://shopify/ProductVariant/50534082183387',
+    handle: 'garmin-ground-adapter-shell-size-4-5-011-01169-01',
+  },
+  {
+    sku: '336-00022-00',
+    productId: 'gid://shopify/Product/8961746206939',
+    variantId: 'gid://shopify/ProductVariant/47408685842651',
+    handle: 'cont-sckt-mil-crp-size-20',
+  },
+  {
+    sku: '336-00055-00',
+    productId: 'gid://shopify/Product/8961746370779',
+    variantId: 'gid://shopify/ProductVariant/47408686006491',
+    handle: 'contact-sckt-mil-crimp-size-22',
+  },
+];
+
+// Exact generic hardware items separately reviewed against the current dealer
+// requirements. These are not operator exceptions and are intentionally kept
+// out of Garmin's catalog-shading allowlist above.
+const POLICY_REVIEWED_CERTIFIED_OTC = [
+  {
+    sku: '011-00950-01',
+    productId: 'gid://shopify/Product/8961821704411',
+    variantId: 'gid://shopify/ProductVariant/47408754360539',
+    handle: 'sub-assy-bkshl-w-hdw-15-26-pin',
+  },
+  {
+    sku: '330-00185-26',
+    productId: 'gid://shopify/Product/8961745092827',
+    variantId: 'gid://shopify/ProductVariant/47408684990683',
+    handle: 'conn-hidens-d-sub-mil-crp-26ckt',
+  },
 ];
 
 const OFFICIAL_EXPERIMENTAL = new Set([
@@ -501,8 +543,11 @@ function removeManualCollection(record, handle, collections) {
   record.addCollections.delete(handle);
 }
 
-function isOperatorConfirmedCertifiedOtc(product) {
-  return OPERATOR_CONFIRMED_CERTIFIED_OTC.some(
+function isExactCertifiedOtc(product) {
+  return [
+    ...OPERATOR_CONFIRMED_CERTIFIED_OTC,
+    ...POLICY_REVIEWED_CERTIFIED_OTC,
+  ].some(
     (entry) =>
       product.id === entry.productId &&
       product.handle === entry.handle &&
@@ -516,8 +561,7 @@ function normalizeRetailTags(record, product) {
   let tags = [...record.nextTags];
   if (
     record.currentStatus === 'ACTIVE' &&
-    (APPROVED_CERTIFIED_OTC.has(record.sku) ||
-      isOperatorConfirmedCertifiedOtc(product))
+    (APPROVED_CERTIFIED_OTC.has(record.sku) || isExactCertifiedOtc(product))
   ) {
     tags = removeTags(tags, RETAIL_CONFLICT_TAGS);
     addTag(tags, 'garmin');
