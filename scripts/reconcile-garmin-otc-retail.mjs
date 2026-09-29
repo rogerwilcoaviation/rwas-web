@@ -142,6 +142,22 @@ const OTC_RETAIL_PRODUCTS = [
     ],
     removeDealerOnlyMetafield: true,
   },
+  {
+    sku: '330-00408-62',
+    family: '62-pin high-density D-sub female connector',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC exception from Ryan on 2026-09-29; Garmin phone-order supply confirmed by operator',
+    catalogObservation:
+      'No independent current manufacturer catalog OTC designation was established for this exact SKU',
+    productId: 'gid://shopify/Product/10317697745115',
+    variantId: 'gid://shopify/ProductVariant/50534059802843',
+    handle: 'garmin-62-pin-high-density-d-sub-female-connector-330-00408-62',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
   // Operator-authorized maintenance tool, not Garmin clearance of installed LRUs.
   {
     sku: '117-01307-00',
@@ -167,6 +183,13 @@ const PUBLIC_PRICE_AUTHORITIES = {
       'Garmin DRC Quick Order live List Price readback for exact part number; Ryan confirmed this price on 2026-09-28',
     priceType: 'List',
     accessed: '2026-09-28',
+  },
+  '330-00408-62': {
+    list_price: 67,
+    source:
+      'Ryan operator confirmation of exact SKU price and Garmin phone-order supply on 2026-09-29; not independently manufacturer-verified',
+    priceType: 'Operator-confirmed retail',
+    accessed: '2026-09-29',
   },
   '011-00950-01': {
     list_price: 40,
@@ -269,6 +292,8 @@ const GDL_82_DESCRIPTION = `
 `.trim();
 
 const POLICY_DESCRIPTIONS = {
+  '330-00408-62':
+    '<p><strong>Garmin 62-Pin High-Density D-Sub Female Connector</strong></p><p>Garmin part number <strong>330-00408-62</strong>.</p><p>This is a <strong>special-order item</strong> available to order through RWAS and obtained from Garmin by phone order. Garmin availability and delivery timing are confirmed after purchase; this listing does not represent on-hand stock or a delivery estimate.</p><p>Connector contacts, backshell, termination style, and equipment compatibility are not specified by this listing and must be confirmed separately if required.</p>',
   'K10-00280-51': DUAL_G5_DESCRIPTION,
   '010-01560-31': GDL_82_DESCRIPTION,
 };

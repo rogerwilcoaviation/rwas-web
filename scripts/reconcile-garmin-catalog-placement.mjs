@@ -98,6 +98,32 @@ const APPROVED_CERTIFIED_OTC = new Set([
   '010-02544-31',
 ]);
 
+// Exact operator-confirmed retail exceptions are intentionally separate from
+// Garmin's manufacturer-documented OTC allowlist above. The full identity
+// guard prevents a duplicate or related SKU from inheriting an exception, and
+// keeps catalog placement runs from stripping the retail state merely because
+// an item is absent from the current Garmin catalog export.
+const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
+  {
+    sku: '011-03258-00',
+    productId: 'gid://shopify/Product/8961746141403',
+    variantId: 'gid://shopify/ProductVariant/47408685777115',
+    handle: 'connector-kit-flight-stream-110-210',
+  },
+  {
+    sku: '325-00122-00',
+    productId: 'gid://shopify/Product/8961772650715',
+    variantId: 'gid://shopify/ProductVariant/47408705732827',
+    handle: 'harness-4-cond-config-module',
+  },
+  {
+    sku: '330-00408-62',
+    productId: 'gid://shopify/Product/10317697745115',
+    variantId: 'gid://shopify/ProductVariant/50534059802843',
+    handle: 'garmin-62-pin-high-density-d-sub-female-connector-330-00408-62',
+  },
+];
+
 const OFFICIAL_EXPERIMENTAL = new Set([
   '010-01087-21',
   '010-01056-00',
@@ -475,11 +501,23 @@ function removeManualCollection(record, handle, collections) {
   record.addCollections.delete(handle);
 }
 
-function normalizeRetailTags(record) {
+function isOperatorConfirmedCertifiedOtc(product) {
+  return OPERATOR_CONFIRMED_CERTIFIED_OTC.some(
+    (entry) =>
+      product.id === entry.productId &&
+      product.handle === entry.handle &&
+      product.variants.nodes.length === 1 &&
+      product.variants.nodes[0].id === entry.variantId &&
+      normalizeSku(product.variants.nodes[0].sku) === entry.sku,
+  );
+}
+
+function normalizeRetailTags(record, product) {
   let tags = [...record.nextTags];
   if (
     record.currentStatus === 'ACTIVE' &&
-    APPROVED_CERTIFIED_OTC.has(record.sku)
+    (APPROVED_CERTIFIED_OTC.has(record.sku) ||
+      isOperatorConfirmedCertifiedOtc(product))
   ) {
     tags = removeTags(tags, RETAIL_CONFLICT_TAGS);
     addTag(tags, 'garmin');
@@ -618,7 +656,7 @@ function buildPlan(products, collections, publications) {
       if (finalized) changes.push(finalized);
       continue;
     }
-    normalizeRetailTags(record);
+    normalizeRetailTags(record, product);
 
     const active = product.status === 'ACTIVE';
     const unplaced =
