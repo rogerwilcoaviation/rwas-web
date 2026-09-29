@@ -95,6 +95,19 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '011-00950-03',
+    family: '37/62-pin backshell with hardware',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-09-29',
+    catalogObservation:
+      'Current Garmin DRC Quick Order identifies this exact SKU as Sub-Assy,Bkshl w/Hdw,37/62 Pin, available In Stock; this authorization does not extend to other 011-00950 suffixes',
+    productId: 'gid://shopify/Product/10317737591003',
+    variantId: 'gid://shopify/ProductVariant/50534144999643',
+    handle: 'sub-assy-bkshl-w-hdw-37-62-pin',
+    removeTags: [],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '011-02977-01',
     family: 'GTX 345 connector kit',
     eligibilityAuthority:
@@ -289,6 +302,13 @@ const PUBLIC_PRICE_AUTHORITIES = {
     priceType: 'List',
     accessed: '2026-09-28',
   },
+  '011-00950-03': {
+    list_price: 40,
+    source:
+      'Garmin DRC Quick Order live List Price readback for exact part number',
+    priceType: 'List',
+    accessed: '2026-09-29',
+  },
   '330-00185-26': {
     list_price: 30,
     source:
@@ -385,6 +405,8 @@ const GDL_82_DESCRIPTION = `
 const POLICY_DESCRIPTIONS = {
   '011-00950-01':
     '<p><strong>Garmin 15/26-Pin Backshell with Hardware</strong></p><p>Garmin part number <strong>011-00950-01</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one backshell-with-hardware subassembly to the order.</p><p>Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>',
+  '011-00950-03':
+    '<p><strong>Garmin 37/62-Pin Backshell with Hardware</strong></p><p>Garmin part number <strong>011-00950-03</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one 37/62-pin backshell-with-hardware subassembly to the order.</p><p>Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>',
   '011-02977-01':
     "<p><strong>Garmin GTX 345 Connector Kit</strong></p><p>Garmin part number <strong>011-02977-01</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one Garmin GTX 345 connector kit to the order.</p><p>This listing does not make a separate claim about the kit's individual contents. Confirm compatibility with the intended installation before ordering.</p>",
   '011-01169-01':

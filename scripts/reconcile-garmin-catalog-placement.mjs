@@ -129,6 +129,12 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     handle: 'sub-assy-gtx345-connector-kit',
   },
   {
+    sku: '011-00950-03',
+    productId: 'gid://shopify/Product/10317737591003',
+    variantId: 'gid://shopify/ProductVariant/50534144999643',
+    handle: 'sub-assy-bkshl-w-hdw-37-62-pin',
+  },
+  {
     sku: '011-01169-01',
     productId: 'gid://shopify/Product/10317702824155',
     variantId: 'gid://shopify/ProductVariant/50534082183387',
