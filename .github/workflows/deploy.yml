@@ -36,6 +36,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Offline durable intake and advanced routing regressions
+        run: npm run test:intake
+
       - name: Lint
         run: npm run lint
 

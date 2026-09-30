@@ -49,7 +49,11 @@ export function originAllowed(env: Env, origin: string) {
 // Staging bindings must never authorize a production, hash, or other branch alias.
 export function destinationAllowed(env: Env, request: Request): boolean {
   const origin = new URL(request.url).origin;
-  return staging(env) ? origin === STAGING_ORIGIN : origin !== STAGING_ORIGIN;
+  return staging(env) ? origin === STAGING_ORIGIN : ORIGINS.has(origin);
+}
+// Match the dispatcher Bearer parser: never admit receipts with an unusable secret.
+export function dispatchSecretValid(secret: string | undefined): secret is string {
+  return typeof secret === 'string' && /^[\x21-\x7e]{32,512}$/.test(secret);
 }
 export function stagingFixture(raw: unknown, env: Env): boolean {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return false;
@@ -139,8 +143,7 @@ export function configured(env: Env, turnstile = false): boolean {
   const address = from.match(/^[^<>\r\n]+<([^<>]+)>$/)?.[1] || from;
   return Boolean(
     env.INTAKE_RECEIPTS &&
-      env.INTAKE_DISPATCH_SECRET &&
-      env.INTAKE_DISPATCH_SECRET.length >= 32 &&
+      dispatchSecretValid(env.INTAKE_DISPATCH_SECRET) &&
       env.RESEND_API_KEY?.trim() &&
       email.test(env.CONTACT_TO_EMAIL || '') &&
       email.test(address) &&
