@@ -1,6 +1,7 @@
 import {
   Context,
   destinationAllowed,
+  dispatchSecretValid,
   configured,
   json,
   methodNotAllowed,
@@ -10,7 +11,7 @@ import {
 import { drain } from '../_intake/dispatch';
 export async function onRequestPost({ request, env }: Context) {
   if (!destinationAllowed(env, request)) return unavailable();
-  if (!env.INTAKE_DISPATCH_SECRET || env.INTAKE_DISPATCH_SECRET.length < 32)
+  if (!dispatchSecretValid(env.INTAKE_DISPATCH_SECRET))
     return unavailable();
   const supplied =
     request.headers.get('Authorization')?.match(/^Bearer (\S{1,512})$/)?.[1] ||

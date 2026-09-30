@@ -19,6 +19,12 @@ test('advanced Pages routing reaches actual handlers and preserves existing app'
  assert.equal((await mf.dispatchFetch('https://www.rogerwilcoaviation.com/api/service-intake',{method:'POST',headers:{Origin:'https://evil.test'}})).status,403);
  assert.equal((await mf.dispatchFetch('https://www.rogerwilcoaviation.com/api/intake-dispatch',{method:'POST'})).status,503);
  const config = await mf.dispatchFetch('https://www.rogerwilcoaviation.com/api/service-intake-config');assert.deepEqual(await config.json(), {staging:false,siteKey:'0x4AAAAAADBTcvCdprG6EEdl'});
+ // Destination fencing is enforced by the actual bundled handlers, not only the Origin header.
+ for (const origin of ['https://rwas-web.pages.dev', 'https://main.rwas-web.pages.dev', 'https://abcdef12.rwas-web.pages.dev', 'https://other-branch.rwas-web.pages.dev']) {
+   for (const [path, method] of [['service-intake','POST'],['intake-dispatch','POST'],['service-receipt','GET'],['service-intake-config','GET']]) {
+     assert.equal((await mf.dispatchFetch(origin+'/api/'+path,{method,headers:{Origin:'https://www.rogerwilcoaviation.com'}})).status,503);
+   }
+ }
  const disabled = await mf.dispatchFetch('https://intake-restoration-20260922.rwas-web.pages.dev/faq');assert.equal(disabled.status,503);assert.equal(disabled.headers.get('X-Robots-Tag'),'noindex, nofollow');
  assert.equal(normal.headers.get('X-Robots-Tag'),null);
  await mf.setOptions({modules:true,modulesRules:[{type:'ESModule',include:['**/*.js']}],scriptPath:join(root,'_worker.js/index.js'),modulesRoot:join(root,'_worker.js'),compatibilityDate:'2026-09-01',bindings:{INTAKE_STAGING_MODE:'true'}});

@@ -43,10 +43,12 @@ const env = {
 };
 const originalFetch = globalThis.fetch;
 let emails = [],
+  verifications = 0,
   provider = () =>
     new Response(JSON.stringify({ id: crypto.randomUUID() }), { status: 200 });
 globalThis.fetch = async (url, options) => {
-  if (url === 'https://challenges.cloudflare.com/turnstile/v0/siteverify')
+  if (url === 'https://challenges.cloudflare.com/turnstile/v0/siteverify') {
+    verifications++;
     return Response.json({
       success: true,
       hostname:
@@ -55,6 +57,7 @@ globalThis.fetch = async (url, options) => {
           : 'www.rogerwilcoaviation.com',
       action: 'service_intake',
     });
+  }
   assert.equal(url, 'https://api.resend.com/emails');
   emails.push(options);
   return provider(options);
@@ -105,6 +108,7 @@ const reset = async () => {
     ].map((s) => db.prepare(s)),
   );
   emails = [];
+  verifications = 0;
   provider = () => Response.json({ id: crypto.randomUUID() });
 };
 
@@ -136,6 +140,43 @@ test('durable intake and outbox integration', async (t) => {
         assert.equal(emails.length, 0);
       },
     );
+    await t.test('production configuration rejects missing requirements and unusable dispatch secrets before I/O', async () => {
+      await reset();
+      for (const key of ['INTAKE_RECEIPTS', 'INTAKE_DISPATCH_SECRET', 'RESEND_API_KEY', 'CONTACT_FROM_EMAIL', 'CONTACT_TO_EMAIL', 'TURNSTILE_SECRET_KEY']) {
+        const incomplete = { ...env, [key]: undefined };
+        assert.equal((await submit(payload(), incomplete)).status, 503, key);
+        // Dispatch intentionally does not require Turnstile: queued rows can drain during challenge outages.
+        if (key !== 'TURNSTILE_SECRET_KEY') assert.equal((await dispatch(incomplete)).status, 503, key);
+      }
+      for (const secret of ['', 'x'.repeat(31), ' '.repeat(32), 'x'.repeat(32) + ' y', 'x'.repeat(513), '😀'.repeat(32)]) {
+        const invalid = { ...env, INTAKE_DISPATCH_SECRET: secret };
+        assert.equal((await submit(payload(), invalid)).status, 503);
+        assert.equal((await dispatch(invalid)).status, 503);
+      }
+      assert.equal((await submit(payload(), {...env, INTAKE_STAGING_MODE:'TRUE'})).status, 503);
+      assert.equal(verifications, 0);
+      assert.equal(emails.length, 0);
+      assert.equal((await db.prepare('SELECT COUNT(*) n FROM intake_receipts').first()).n, 0);
+    });
+    await t.test('production bindings cannot authorize preview or foreign destinations even with valid credentials', async () => {
+      await reset();
+      const accepted = await (await submit(payload())).json();
+      const before = verifications;
+      for (const origin of ['https://rwas-web.pages.dev', 'https://main.rwas-web.pages.dev', 'https://abcdef12.rwas-web.pages.dev', 'https://other-branch.rwas-web.pages.dev', api.STAGING_ORIGIN, 'https://evil.test', 'http://www.rogerwilcoaviation.com', 'https://www.rogerwilcoaviation.com:8443']) {
+        assert.equal((await submit(payload(), env, {}, origin)).status, 503, origin);
+        assert.equal((await dispatch(env, env.INTAKE_DISPATCH_SECRET, origin)).status, 503, origin);
+        for (const [handler, path] of [[api.config, 'service-intake-config'], [api.receipt, 'service-receipt']]) {
+          assert.equal((await handler({env, request: new Request(origin + '/api/' + path, {headers: {Authorization: 'Bearer ' + accepted.receiptToken}})})).status, 503, origin + path);
+        }
+      }
+      assert.equal(verifications, before);
+      assert.equal(emails.length, 0);
+      assert.equal((await db.prepare('SELECT COUNT(*) n FROM intake_receipts').first()).n, 1);
+      assert.equal((await db.prepare('SELECT COUNT(*) n FROM intake_attempts').first()).n, 0);
+      const bare = await api.config({env, request: new Request('https://rogerwilcoaviation.com/api/service-intake-config')});
+      assert.equal(bare.status, 200);
+      await reset();
+    });
     await t.test(
       'atomic durable acknowledgement, replay token and conflict',
       async () => {
@@ -163,7 +204,7 @@ test('durable intake and outbox integration', async (t) => {
         );
         const receipt = await api.receipt({
           env,
-          request: new Request('https://example.test', {
+          request: new Request('https://www.rogerwilcoaviation.com/api/service-receipt', {
             headers: { Authorization: `Bearer ${a.receiptToken}` },
           }),
         });
@@ -175,7 +216,7 @@ test('durable intake and outbox integration', async (t) => {
             await api.receipt({
               env,
               request: new Request(
-                `https://example.test?token=${a.receiptToken}`,
+                `https://www.rogerwilcoaviation.com/api/service-receipt?token=${a.receiptToken}`,
               ),
             })
           ).status,

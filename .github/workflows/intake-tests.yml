@@ -1,0 +1,35 @@
+name: Offline durable intake tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'functions/_intake/**'
+      - 'functions/api/service-*.ts'
+      - 'functions/api/intake-dispatch.ts'
+      - 'tests/intake/**'
+      - 'migrations/intake/**'
+      - 'scripts/stage-service-intake.mjs'
+      - 'package*.json'
+      - '.github/workflows/intake-tests.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  intake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      # Local workerd D1 only. Turnstile and Resend fetches are intercepted.
+      # No credentials, deployments, production requests, or scheduled dispatch.
+      - run: npm run test:intake

@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "test:intake": "node --test tests/intake/backend.test.mjs tests/intake/wrapper.test.mjs",
     "dev": "npm run appinfo && cross-env PORT=6006 NODE_OPTIONS='--no-warnings' next dev",
     "build": "npm run appinfo && npm run build:analytics && next build",
     "serve": "next start",
