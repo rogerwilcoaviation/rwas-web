@@ -42,3 +42,11 @@ No authenticated Cloudflare runtime/database/scheduler or Resend account evidenc
 - Add missing-environment, invalid-secret and production-binding destination regression cases, asserting no provider calls or unintended database writes.
 
 These fixes do not activate production or create/send any mail. Review and merge remain separate from the external activation verification above.
+
+## Completion follow-up
+
+John requested completion after the initial draft review. The deployment-blocking SEO count is stale relative to commits `36c5633` and `d235b8b`: they added exactly four GI 275 price-display records, so there are now 199 records, with the original 195 audit rows intact. The regression now pins those four full identity/price/provenance records, preserves the 195-row audit and 521-product scope, and retains all negative identity/price and purchase-restriction checks. No catalog data or retail authorization changed. All existing scoped deployment regressions, lint and TypeScript checks passed locally. The intake suites already passed all 16 cases on Node 22 in [CI](https://github.com/rogerwilcoaviation/rwas-web/actions/runs/36700007420).
+
+The production workflow now attempts a read-only Cloudflare configuration/schema audit after deployment using its existing credential. It reads Pages metadata and only `sqlite_master` schema metadata in the bound D1; it never prints variable values, database IDs, provider errors or customer rows. The output distinguishes binding presence, production/preview database sharing, variable metadata and exact migration-schema match. API denial remains unverified, not missing configuration or successful activation. No provider call, intake submission, dispatch or remote configuration write is made by this audit. A synthetic offline fixture verified the SELECT-only request and secret redaction.
+
+The app confirmed Resend was connected on this follow-up. Provider account checks still require actual callable account tools and evidence; connection alone does not prove key/domain validity or delivery. The dispatcher remains separately owned and is never invoked by the configuration audit.
