@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import { pathToFileURL } from 'node:url';
 import {
   approvedPublicPrice,
   assertReviewedCommercialWrites,
@@ -874,7 +875,19 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  process.stderr.write(`Garmin OTC reconciliation failed: ${error.message}\n`);
-  process.exitCode = 1;
-});
+export {
+  OTC_RETAIL_PRODUCTS,
+  PUBLIC_PRICE_AUTHORITIES,
+  POLICY_DESCRIPTIONS,
+  POLICY_SOURCE,
+  buildAudit,
+  applyAudit,
+};
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href)
+  main().catch((error) => {
+    process.stderr.write(
+      `Garmin OTC reconciliation failed: ${error.message}\n`,
+    );
+    process.exitCode = 1;
+  });

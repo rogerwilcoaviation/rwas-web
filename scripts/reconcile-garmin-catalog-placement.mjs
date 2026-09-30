@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
+import { pathToFileURL } from 'node:url';
 import { assertReviewedCommercialWrites } from './garmin-commercial-review.mjs';
 
 const SHOPIFY_ENV_PATH =
@@ -1171,10 +1172,22 @@ function auditState(products, collections) {
   });
   const approvedRetailSkus = new Set([
     ...APPROVED_CERTIFIED_OTC,
+    ...OPERATOR_CONFIRMED_CERTIFIED_OTC.map((entry) => entry.sku),
+    ...POLICY_REVIEWED_CERTIFIED_OTC.map((entry) => entry.sku),
     '117-01307-00', // Operator-approved maintenance tool, not an installed LRU.
     ...OFFICIAL_EXPERIMENTAL,
   ]);
-  const retailSkus = new Set(retailRendered.map(firstSku));
+  // Exact exceptions retain their full identity guard during verification too.
+  const exactSkus = new Set(
+    [...OPERATOR_CONFIRMED_CERTIFIED_OTC, ...POLICY_REVIEWED_CERTIFIED_OTC].map(
+      (entry) => entry.sku,
+    ),
+  );
+  const approvedRetailRendered = retailRendered.filter(
+    (product) =>
+      !exactSkus.has(firstSku(product)) || isExactCertifiedOtc(product),
+  );
+  const retailSkus = new Set(approvedRetailRendered.map(firstSku));
   const otcConflicts = active.filter((product) => {
     const tags = new Set(product.tags.map((tag) => tag.toLowerCase()));
     return (
@@ -1226,9 +1239,17 @@ function auditState(products, collections) {
   const expectedRetailMissing = [...approvedRetailSkus].filter(
     (sku) => !retailSkus.has(sku),
   );
-  const retailUnexpected = [...retailSkus].filter(
-    (sku) => !approvedRetailSkus.has(sku),
-  );
+  const retailUnexpected = [
+    ...new Set(
+      retailRendered
+        .filter(
+          (product) =>
+            !approvedRetailSkus.has(firstSku(product)) ||
+            (exactSkus.has(firstSku(product)) && !isExactCertifiedOtc(product)),
+        )
+        .map(firstSku),
+    ),
+  ];
   const experimentalMissing = [...OFFICIAL_EXPERIMENTAL].filter(
     (sku) => !experimentalSkus.has(sku),
   );
@@ -1387,9 +1408,19 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  process.stderr.write(
-    `Garmin catalog placement reconciliation failed: ${error.message}\n`,
-  );
-  process.exitCode = 1;
-});
+export {
+  OPERATOR_CONFIRMED_CERTIFIED_OTC,
+  POLICY_REVIEWED_CERTIFIED_OTC,
+  APPROVED_CERTIFIED_OTC,
+  isExactCertifiedOtc,
+  normalizeRetailTags,
+  auditState,
+};
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href)
+  main().catch((error) => {
+    process.stderr.write(
+      `Garmin catalog placement reconciliation failed: ${error.message}\n`,
+    );
+    process.exitCode = 1;
+  });
