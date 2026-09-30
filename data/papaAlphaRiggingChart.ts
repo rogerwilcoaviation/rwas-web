@@ -1,5 +1,6 @@
 // Generated from SharePoint workbook: Rigging Tool Serial Number Chart.xlsx
 // Source of truth confirmed by John Halsted on 2026-06-09.
+// Warrior III kit/bellcrank applicability holds preserve conflicting source values.
 
 export type PapaAlphaChartToolKey = 'kit' | 'rudder' | 'bellcrank' | 'stabilator' | 'aileronFlap' | 'misc';
 
@@ -12,6 +13,7 @@ export type PapaAlphaChartRow = {
   stabilator: string;
   aileronFlap: string;
   misc: string;
+  applicabilityWarning?: string;
 };
 
 export const PAPA_ALPHA_RIGGING_CHART_ROWS: readonly PapaAlphaChartRow[] = [
@@ -198,6 +200,7 @@ export const PAPA_ALPHA_RIGGING_CHART_ROWS: readonly PapaAlphaChartRow[] = [
   {
     "model": "PA-28-161 Warrior III",
     "serials": "2842001 thru 2842420",
+    "applicabilityWarning": "Applicability unresolved: Main chart says BC-04; KT-07 BOM says 2× BC-06. Obtain Papa-Alpha confirmation before aircraft-specific kit or bell crank selection/use.",
     "kit": "KT-07",
     "rudder": "PA-28 Rudder Reference Tool #4",
     "bellcrank": "PA-28/32 Bell Crank Reference Tool #4",
@@ -208,6 +211,7 @@ export const PAPA_ALPHA_RIGGING_CHART_ROWS: readonly PapaAlphaChartRow[] = [
   {
     "model": "PA-28-161 Warrior III",
     "serials": "2816110 thru 2816119",
+    "applicabilityWarning": "Applicability unresolved: Main chart says BC-06; KT-08 BOM says 2× BC-04. Obtain Papa-Alpha confirmation before aircraft-specific kit or bell crank selection/use.",
     "kit": "KT-08",
     "rudder": "PA-28 Rudder Reference Tool #4",
     "bellcrank": "PA-28/44 Bell Crank Reference Tool #6",
