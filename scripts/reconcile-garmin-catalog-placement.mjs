@@ -166,6 +166,12 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
 // out of Garmin's catalog-shading allowlist above.
 const POLICY_REVIEWED_CERTIFIED_OTC = [
   {
+    sku: '006-DA566-02',
+    productId: 'gid://shopify/Product/8961869054171',
+    variantId: 'gid://shopify/ProductVariant/47408830152923',
+    handle: 'gtr-205-audio-panel-enablement',
+  },
+  {
     sku: '011-00950-01',
     productId: 'gid://shopify/Product/8961821704411',
     variantId: 'gid://shopify/ProductVariant/47408754360539',

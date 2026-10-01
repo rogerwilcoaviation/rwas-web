@@ -108,10 +108,10 @@ test('September exact-SKU contracts and mocked reconciliation', async (t) => {
   };
   try {
     assert.deepEqual(POLICY_SOURCE, fixture.policySource);
-    assert.equal(fixture.products.length, 11);
+    assert.equal(fixture.products.length, 12);
     assert.equal(
       new Set(fixture.products.map(({ policy }) => policy.sku)).size,
-      11,
+      12,
     );
     for (const expected of fixture.products) {
       const { policy, price, descriptionHtml, retailAuthority } = expected;

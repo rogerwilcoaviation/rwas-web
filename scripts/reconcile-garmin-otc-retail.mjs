@@ -65,6 +65,19 @@ const OTC_RETAIL_PRODUCTS = [
   { sku: '010-01319-13', family: 'GMA 342' },
   { sku: '010-02480-01', family: 'GTR 205' },
   { sku: '010-02480-02', family: 'GTR 205' },
+  {
+    sku: '006-DA566-02',
+    family: 'GTR 205 Audio Panel Enablement, Download',
+    eligibilityAuthority:
+      'September 2026 Garmin Americas dealer requirements list GTR 205 among products excluded from the installation policy; operator authorized exact-SKU retail sale on 2026-10-01',
+    catalogObservation:
+      'Exact catalog identity is a GTR 205 audio-panel enablement download. Retail eligibility does not imply automatic fulfillment, installation, or activation.',
+    productId: 'gid://shopify/Product/8961869054171',
+    variantId: 'gid://shopify/ProductVariant/47408830152923',
+    handle: 'gtr-205-audio-panel-enablement',
+    removeTags: ['otc-disabled', 'stock-check-required'],
+    removeDealerOnlyMetafield: true,
+  },
   { sku: '010-01788-00', family: 'GMU 11' },
   { sku: '010-01788-01', family: 'GMU 11' },
   { sku: '010-02481-01', family: 'GNC 215' },
@@ -336,6 +349,13 @@ const PUBLIC_PRICE_AUTHORITIES = {
       'Garmin DRC Quick Order live List Price readback for exact part number',
     priceType: 'List',
     accessed: '2026-09-28',
+  },
+  '006-DA566-02': {
+    list_price: 1495,
+    source:
+      'Existing live Shopify retail price preserved by operator instruction; not asserted as current Garmin pricing authority',
+    priceType: 'Existing retail preserved',
+    accessed: '2026-10-01',
   },
   '117-01307-00': {
     list_price: 295,
