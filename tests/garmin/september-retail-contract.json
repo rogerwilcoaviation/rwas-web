@@ -1,5 +1,5 @@
 {
-  "reviewedMain": "2c0a3f77bd8f495de63ced4b0dd89bbc55c2e24d",
+  "reviewedMain": "8f6316b5ebdac00c9eb91fa3624e5d14230475d6",
   "policySource": {
     "title": "2026 Americas Aviation Dealer Requirements",
     "page": 8,
@@ -238,6 +238,27 @@
         "accessed": "2026-09-29"
       },
       "descriptionHtml": "<p><strong>Garmin 37/62-Pin Backshell with Hardware</strong></p><p>Garmin part number <strong>011-00950-03</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one 37/62-pin backshell-with-hardware subassembly to the order.</p><p>Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>",
+      "retailAuthority": "operator-exception"
+    },
+    {
+      "policy": {
+        "sku": "310-00196-00",
+        "family": "Cable, coil cord, 12 conductor, FAA-PMA",
+        "eligibilityAuthority": "Operator-confirmed exact-SKU retail authorization from Ryan on 2026-10-01",
+        "catalogObservation": "The retained September 2026 autopilot price catalog identifies this exact accessory but does not designate OTC eligibility; no direct manufacturer prohibition was established for this exact SKU",
+        "productId": "gid://shopify/Product/9399652352219",
+        "variantId": "gid://shopify/ProductVariant/48966494847195",
+        "handle": "cable-coil-cord-12-conductor-faa-pma-310-00196-00",
+        "removeTags": [],
+        "removeDealerOnlyMetafield": true
+      },
+      "price": {
+        "list_price": 399,
+        "source": "Ryan operator confirmation of exact SKU price on 2026-10-01; not independently manufacturer-verified",
+        "priceType": "Operator-confirmed retail",
+        "accessed": "2026-10-01"
+      },
+      "descriptionHtml": null,
       "retailAuthority": "operator-exception"
     }
   ]

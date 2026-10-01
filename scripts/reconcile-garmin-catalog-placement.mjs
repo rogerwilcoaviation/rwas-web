@@ -153,6 +153,12 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     variantId: 'gid://shopify/ProductVariant/47408686006491',
     handle: 'contact-sckt-mil-crimp-size-22',
   },
+  {
+    sku: '310-00196-00',
+    productId: 'gid://shopify/Product/9399652352219',
+    variantId: 'gid://shopify/ProductVariant/48966494847195',
+    handle: 'cable-coil-cord-12-conductor-faa-pma-310-00196-00',
+  },
 ];
 
 // Exact generic hardware items separately reviewed against the current dealer

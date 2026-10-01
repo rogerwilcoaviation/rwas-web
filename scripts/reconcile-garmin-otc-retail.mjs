@@ -235,6 +235,19 @@ const OTC_RETAIL_PRODUCTS = [
     ],
     removeDealerOnlyMetafield: true,
   },
+  {
+    sku: '310-00196-00',
+    family: 'Cable, coil cord, 12 conductor, FAA-PMA',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-10-01',
+    catalogObservation:
+      'The retained September 2026 autopilot price catalog identifies this exact accessory but does not designate OTC eligibility; no direct manufacturer prohibition was established for this exact SKU',
+    productId: 'gid://shopify/Product/9399652352219',
+    variantId: 'gid://shopify/ProductVariant/48966494847195',
+    handle: 'cable-coil-cord-12-conductor-faa-pma-310-00196-00',
+    removeTags: [],
+    removeDealerOnlyMetafield: true,
+  },
   // Operator-authorized maintenance tool, not Garmin clearance of installed LRUs.
   {
     sku: '117-01307-00',
@@ -295,6 +308,13 @@ const PUBLIC_PRICE_AUTHORITIES = {
       'Garmin DRC Quick Order live List Price readback for exact part number and quantity 1',
     priceType: 'List each',
     accessed: '2026-09-29',
+  },
+  '310-00196-00': {
+    list_price: 399,
+    source:
+      'Ryan operator confirmation of exact SKU price on 2026-10-01; not independently manufacturer-verified',
+    priceType: 'Operator-confirmed retail',
+    accessed: '2026-10-01',
   },
   '011-00950-01': {
     list_price: 40,

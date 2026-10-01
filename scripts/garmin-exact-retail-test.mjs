@@ -108,10 +108,10 @@ test('September exact-SKU contracts and mocked reconciliation', async (t) => {
   };
   try {
     assert.deepEqual(POLICY_SOURCE, fixture.policySource);
-    assert.equal(fixture.products.length, 10);
+    assert.equal(fixture.products.length, 11);
     assert.equal(
       new Set(fixture.products.map(({ policy }) => policy.sku)).size,
-      10,
+      11,
     );
     for (const expected of fixture.products) {
       const { policy, price, descriptionHtml, retailAuthority } = expected;
@@ -298,7 +298,7 @@ test('conflicting evidence and operator price disclaimers remain explicit', () =
     bySku['330-00408-62'].policy.catalogObservation,
     /No independent current manufacturer catalog OTC designation/,
   );
-  for (const sku of ['330-00408-62', '011-01169-01']) {
+  for (const sku of ['330-00408-62', '011-01169-01', '310-00196-00']) {
     assert.equal(bySku[sku].price.priceType, 'Operator-confirmed retail');
     assert.match(
       bySku[sku].price.source,
@@ -342,6 +342,7 @@ test('conflicting evidence and operator price disclaimers remain explicit', () =
     '011-02977-00',
     '330-00408-61',
     '325-00122-01',
+    '310-00196-01',
   ]) {
     assert.ok(!OTC_RETAIL_PRODUCTS.some((p) => p.sku === sku));
     assert.equal(PUBLIC_PRICE_AUTHORITIES[sku], undefined);
