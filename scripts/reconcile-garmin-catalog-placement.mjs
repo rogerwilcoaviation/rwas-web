@@ -124,6 +124,30 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     handle: 'garmin-62-pin-high-density-d-sub-female-connector-330-00408-62',
   },
   {
+    sku: '011-01169-00',
+    productId: 'gid://shopify/Product/8961824129243',
+    variantId: 'gid://shopify/ProductVariant/47408757211355',
+    handle: 'sub-assy-grnd-adaptr-shell-1-3',
+  },
+  {
+    sku: '011-00950-02',
+    productId: 'gid://shopify/Product/8961821868251',
+    variantId: 'gid://shopify/ProductVariant/47408754491611',
+    handle: 'sub-assy-bkshl-w-hdw-25-44-pin',
+  },
+  {
+    sku: '330-90006-01',
+    productId: 'gid://shopify/Product/8961748435163',
+    variantId: 'gid://shopify/ProductVariant/47408687710427',
+    handle: 'dsub-slide-lock-kit-15-26-pin',
+  },
+  {
+    sku: '330-90006-02',
+    productId: 'gid://shopify/Product/10324442120411',
+    variantId: 'gid://shopify/ProductVariant/50555563213019',
+    handle: 'garmin-slide-lock-kit-330-90006-02',
+  },
+  {
     sku: '011-02977-01',
     productId: 'gid://shopify/Product/8961824391387',
     variantId: 'gid://shopify/ProductVariant/47408757506267',

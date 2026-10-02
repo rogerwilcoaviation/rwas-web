@@ -108,10 +108,10 @@ test('September exact-SKU contracts and mocked reconciliation', async (t) => {
   };
   try {
     assert.deepEqual(POLICY_SOURCE, fixture.policySource);
-    assert.equal(fixture.products.length, 12);
+    assert.equal(fixture.products.length, 16);
     assert.equal(
       new Set(fixture.products.map(({ policy }) => policy.sku)).size,
-      12,
+      16,
     );
     for (const expected of fixture.products) {
       const { policy, price, descriptionHtml, retailAuthority } = expected;
@@ -298,7 +298,12 @@ test('conflicting evidence and operator price disclaimers remain explicit', () =
     bySku['330-00408-62'].policy.catalogObservation,
     /No independent current manufacturer catalog OTC designation/,
   );
-  for (const sku of ['330-00408-62', '011-01169-01', '310-00196-00']) {
+  for (const sku of [
+    '330-00408-62',
+    '011-01169-01',
+    '310-00196-00',
+    '330-90006-02',
+  ]) {
     assert.equal(bySku[sku].price.priceType, 'Operator-confirmed retail');
     assert.match(
       bySku[sku].price.source,
@@ -329,7 +334,7 @@ test('conflicting evidence and operator price disclaimers remain explicit', () =
       /wire size, tooling, and connector compatibility/,
     );
   }
-  for (const sku of ['011-00950-01', '011-00950-03']) {
+  for (const sku of ['011-00950-01', '011-00950-02', '011-00950-03']) {
     assert.match(bySku[sku].descriptionHtml, /Sold individually/);
     assert.match(
       bySku[sku].descriptionHtml,
@@ -337,7 +342,7 @@ test('conflicting evidence and operator price disclaimers remain explicit', () =
     );
   }
   for (const sku of [
-    '011-00950-02',
+    '011-00950-04',
     '011-03258-01',
     '011-02977-00',
     '330-00408-61',

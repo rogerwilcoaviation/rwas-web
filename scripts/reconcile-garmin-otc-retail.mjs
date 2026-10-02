@@ -109,6 +109,22 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '011-00950-02',
+    family: '25/44-pin backshell with hardware',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-10-02',
+    catalogObservation:
+      'The operator-confirmed working Garmin pricing guide identifies this exact SKU as Sub-Assy,Bkshl w/Hdw,25/44 Pin; this authorization does not extend to other 011-00950 suffixes',
+    productId: 'gid://shopify/Product/8961821868251',
+    variantId: 'gid://shopify/ProductVariant/47408754491611',
+    handle: 'sub-assy-bkshl-w-hdw-25-44-pin',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '011-00950-03',
     family: '37/62-pin backshell with hardware',
     eligibilityAuthority:
@@ -204,6 +220,22 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '011-01169-00',
+    family: 'Ground adapter shell, size 1 through 3',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-10-02',
+    catalogObservation:
+      'The operator-confirmed working Garmin pricing guide identifies this exact SKU as Sub-Assy,Grnd Adaptr,Shell 1-3; retail authorization does not extend to 011-01169-01 or any connector kit',
+    productId: 'gid://shopify/Product/8961824129243',
+    variantId: 'gid://shopify/ProductVariant/47408757211355',
+    handle: 'sub-assy-grnd-adaptr-shell-1-3',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '011-01169-01',
     family: 'Ground adapter shell, size 4 and 5',
     eligibilityAuthority:
@@ -258,6 +290,35 @@ const OTC_RETAIL_PRODUCTS = [
     productId: 'gid://shopify/Product/9399652352219',
     variantId: 'gid://shopify/ProductVariant/48966494847195',
     handle: 'cable-coil-cord-12-conductor-faa-pma-310-00196-00',
+    removeTags: [],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '330-90006-01',
+    family: 'D-sub slide lock kit, 15/26 pin',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-10-02',
+    catalogObservation:
+      'The operator-confirmed working Garmin pricing guide identifies this exact hardware SKU as DSub Slide Lock Kit,15/26 Pin; no Garmin LRU or related suffix inherits this authorization',
+    productId: 'gid://shopify/Product/8961748435163',
+    variantId: 'gid://shopify/ProductVariant/47408687710427',
+    handle: 'dsub-slide-lock-kit-15-26-pin',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '330-90006-02',
+    family: 'Slide lock kit',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization and $15.00 price from Ryan on 2026-10-02',
+    catalogObservation:
+      'Current Garmin DRC Quick Order recognizes this exact order-enabled connector-category SKU, reports in-stock availability and a 0.192 lb unit weight; the Slide Lock Kit identity is operator-supplied because DRC returned no description',
+    productId: 'gid://shopify/Product/10324442120411',
+    variantId: 'gid://shopify/ProductVariant/50555563213019',
+    handle: 'garmin-slide-lock-kit-330-90006-02',
     removeTags: [],
     removeDealerOnlyMetafield: true,
   },
@@ -329,12 +390,26 @@ const PUBLIC_PRICE_AUTHORITIES = {
     priceType: 'Operator-confirmed retail',
     accessed: '2026-10-01',
   },
+  '011-01169-00': {
+    list_price: 15,
+    source:
+      'Garmin LIST row in the retained July-named guide, which the operator confirmed on 2026-09-29 remains the working pricing guide despite its printed June 30, 2026 expiration; corroborated by the matching live Shopify price on 2026-10-02, without asserting a manufacturer extension',
+    priceType: 'List',
+    accessed: '2026-10-02',
+  },
   '011-00950-01': {
     list_price: 40,
     source:
       'Garmin DRC Quick Order live List Price readback for exact part number',
     priceType: 'List',
     accessed: '2026-09-28',
+  },
+  '011-00950-02': {
+    list_price: 30,
+    source:
+      'Garmin LIST row in the retained July-named guide, which the operator confirmed on 2026-09-29 remains the working pricing guide despite its printed June 30, 2026 expiration; corroborated by the matching live Shopify price on 2026-10-02, without asserting a manufacturer extension',
+    priceType: 'List',
+    accessed: '2026-10-02',
   },
   '011-00950-03': {
     list_price: 40,
@@ -349,6 +424,20 @@ const PUBLIC_PRICE_AUTHORITIES = {
       'Garmin DRC Quick Order live List Price readback for exact part number',
     priceType: 'List',
     accessed: '2026-09-28',
+  },
+  '330-90006-01': {
+    list_price: 10,
+    source:
+      'Garmin LIST row in the retained July-named guide, which the operator confirmed on 2026-09-29 remains the working pricing guide despite its printed June 30, 2026 expiration; corroborated by the matching live Shopify price on 2026-10-02, without asserting a manufacturer extension',
+    priceType: 'List',
+    accessed: '2026-10-02',
+  },
+  '330-90006-02': {
+    list_price: 15,
+    source:
+      'Ryan operator confirmation of exact SKU price on 2026-10-02; not independently manufacturer-verified. Current Garmin DRC Quick Order recognizes the exact SKU but returned $10 LIST, so the operator-authorized $15 retail price is preserved explicitly rather than presented as Garmin LIST',
+    priceType: 'Operator-confirmed retail',
+    accessed: '2026-10-02',
   },
   '006-DA566-02': {
     list_price: 1495,
@@ -446,10 +535,14 @@ const GDL_82_DESCRIPTION = `
 const POLICY_DESCRIPTIONS = {
   '011-00950-01':
     '<p><strong>Garmin 15/26-Pin Backshell with Hardware</strong></p><p>Garmin part number <strong>011-00950-01</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one backshell-with-hardware subassembly to the order.</p><p>Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>',
+  '011-00950-02':
+    '<p><strong>Garmin 25/44-Pin Backshell with Hardware</strong></p><p>Garmin part number <strong>011-00950-02</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one 25/44-pin backshell-with-hardware subassembly to the order.</p><p>Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>',
   '011-00950-03':
     '<p><strong>Garmin 37/62-Pin Backshell with Hardware</strong></p><p>Garmin part number <strong>011-00950-03</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one 37/62-pin backshell-with-hardware subassembly to the order.</p><p>Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>',
   '011-02977-01':
     "<p><strong>Garmin GTX 345 Connector Kit</strong></p><p>Garmin part number <strong>011-02977-01</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one Garmin GTX 345 connector kit to the order.</p><p>This listing does not make a separate claim about the kit's individual contents. Confirm compatibility with the intended installation before ordering.</p>",
+  '011-01169-00':
+    '<p><strong>Garmin Ground Adapter Shell, Size 1–3</strong></p><p>Garmin part number <strong>011-01169-00</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one ground-adapter subassembly to the order.</p><p>This listing does not include a connector, backshell, contacts, or other connector-kit components. Confirm compatibility with the intended Garmin installation before ordering.</p>',
   '011-01169-01':
     '<p><strong>Garmin Ground Adapter Shell, Size 4 &amp; 5</strong></p><p>Garmin part number <strong>011-01169-01</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one ground-adapter subassembly to the order.</p><p>This listing does not include a connector, backshell, contacts, or other connector-kit components. Confirm compatibility with the intended Garmin installation before ordering.</p>',
   '336-00022-00':
@@ -458,6 +551,10 @@ const POLICY_DESCRIPTIONS = {
     '<p><strong>Garmin Size 22 Mil-Crimp Socket Contact</strong></p><p>Garmin part number <strong>336-00055-00</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one contact to the order. This is not a pack or connector kit.</p><p>Confirm wire size, tooling, and connector compatibility before ordering.</p>',
   '330-00408-62':
     '<p><strong>Garmin 62-Pin High-Density D-Sub Female Connector</strong></p><p>Garmin part number <strong>330-00408-62</strong>.</p><p>This is a <strong>special-order item</strong> available to order through RWAS and obtained from Garmin by phone order. Garmin availability and delivery timing are confirmed after purchase; this listing does not represent on-hand stock or a delivery estimate.</p><p>Connector contacts, backshell, termination style, and equipment compatibility are not specified by this listing and must be confirmed separately if required.</p>',
+  '330-90006-01':
+    '<p><strong>Garmin D-Sub Slide Lock Kit, 15/26 Pin</strong></p><p>Garmin part number <strong>330-90006-01</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one slide lock kit to the order.</p><p>Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>',
+  '330-90006-02':
+    '<p><strong>Garmin Slide Lock Kit</strong></p><p>Garmin part number <strong>330-90006-02</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one slide lock kit to the order. Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>',
   'K10-00280-51': DUAL_G5_DESCRIPTION,
   '010-01560-31': GDL_82_DESCRIPTION,
 };
