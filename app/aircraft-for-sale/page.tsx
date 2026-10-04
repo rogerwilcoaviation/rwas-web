@@ -63,19 +63,9 @@ export const metadata: Metadata = {
 };
 
 async function getListings(): Promise<Listing[]> {
-  try {
-    const resp = await fetch(
-      'https://sale-api.rogerwilcoaviation.com/browse?include=sold',
-      { next: { revalidate: 60 } },
-    );
-    if (!resp.ok) return [];
-    const data = (await resp.json()) as { listings?: Listing[] };
-    return (data.listings || []).filter(
-      (l) => !l.status || l.status === 'active' || l.status === 'sold',
-    );
-  } catch {
-    return [];
-  }
+  // Static export must not retain aircraft after archive/deletion. Current
+  // inventory is fetched by ListingsGrid through the same-origin service.
+  return [];
 }
 
 export default async function AircraftForSalePage() {

@@ -16,11 +16,16 @@
 import { useEffect, useState } from 'react';
 import { ListingCard, type Listing } from './listing-card';
 
-const API = 'https://sale-api.rogerwilcoaviation.com';
+const API = '/api/aircraft-sale';
 
-export function ListingsGrid({ initialListings }: { initialListings: Listing[] }) {
+export function ListingsGrid({
+  initialListings,
+}: {
+  initialListings: Listing[];
+}) {
   const [listings, setListings] = useState<Listing[]>(initialListings);
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -30,12 +35,13 @@ export function ListingsGrid({ initialListings }: { initialListings: Listing[] }
       .then((data: { listings?: Listing[] }) => {
         if (cancelled) return;
         const fresh = (data.listings || []).filter(
-          (l) => !l.status || l.status === 'active' || l.status === 'sold',
+          (l) => l.status === 'active' || l.status === 'sold',
         );
         setListings(fresh);
       })
       .catch(() => {
-        // Network or server error — keep showing initialListings rather than blanking
+        setLoadError(true);
+        setListings([]); // Fail closed: never retain removed/archived inventory.
       })
       .finally(() => {
         if (!cancelled) setRefreshing(false);
@@ -45,17 +51,34 @@ export function ListingsGrid({ initialListings }: { initialListings: Listing[] }
     };
   }, []);
 
+  if (loadError)
+    return (
+      <p role="alert" className="a4s-empty">
+        Aircraft inventory is temporarily unavailable. Please refresh or contact
+        RWAS.
+      </p>
+    );
+  if (refreshing && listings.length === 0)
+    return (
+      <p role="status" className="a4s-empty">
+        Loading current aircraft inventory…
+      </p>
+    );
   if (listings.length === 0) {
     return (
       <div className="a4s-empty">
         No aircraft are listed for sale right now. Check back soon — or click{' '}
-        <strong>List Your Aircraft</strong> above to get yours in front of buyers.
+        <strong>List Your Aircraft</strong> above to get yours in front of
+        buyers.
       </div>
     );
   }
 
   return (
-    <div className="a4s-grid" style={{ opacity: refreshing ? 0.88 : 1, transition: 'opacity 200ms' }}>
+    <div
+      className="a4s-grid"
+      style={{ opacity: refreshing ? 0.88 : 1, transition: 'opacity 200ms' }}
+    >
       {listings.map((l) => (
         <ListingCard key={l.id} listing={l} />
       ))}
