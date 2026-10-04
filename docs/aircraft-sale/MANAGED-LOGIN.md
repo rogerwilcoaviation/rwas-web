@@ -1,6 +1,6 @@
 # Selected seller login methods and operator handoff
 
-The user selected email/password, Google and Apple and approved release work. The reference adapter targets [Auth0 Universal Login](https://auth0.com/docs/authenticate/login/auth0-universal-login) with [Authorization Code + PKCE](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce). Existing managed identity service/tenant details have not been supplied. If RWAS already uses another service, adapt and verify that provider before provisioning a duplicate. No subscription or developer membership purchase is made by this change.
+The user selected email/password, Google and Apple and approved release work. The reference adapter targets [Auth0 Universal Login](https://auth0.com/docs/authenticate/login/auth0-universal-login) with [Authorization Code + PKCE](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authorization-code-flow-with-pkce). John has confirmed that he does not have an Auth0 account. The official signup and exact staging setup are in [COMPLETION-SETUP.md](COMPLETION-SETUP.md). If RWAS already uses another service, adapt and verify that provider before provisioning a duplicate. No subscription or developer membership purchase is made by this change.
 
 ## Exact Worker configuration
 
@@ -18,7 +18,7 @@ Existing email-code accounts keep their RWAS profile/listing ownership. A matchi
 
 ## Security event delivery contract
 
-The [Auth0 Post Change Password trigger](https://auth0.com/docs/customize/actions/explore-triggers/post-change-password) can notify an external app to revoke its independent sessions. Configure and test an Action/owned delivery service that POSTs the following to the same environment's `/api/aircraft-sale/auth/events` with `Authorization: Bearer <AUTH_EVENT_SECRET>` over HTTPS:
+The [Auth0 Post Change Password trigger](https://auth0.com/docs/customize/actions/explore-triggers/post-change-password) can notify an external app to revoke its independent sessions. A tested candidate [Post Change Password Action](../../workers/aircraft-sale/auth0/post-change-password.cjs) is included; it uses actual event time and bounded idempotent retries, but is not installed and does not provide a durable queue or account-block sender. Configure and test this Action/owned delivery service that POSTs the following to the same environment's `/api/aircraft-sale/auth/events` with `Authorization: Bearer <AUTH_EVENT_SECRET>` over HTTPS:
 
 ```json
 {
@@ -35,7 +35,7 @@ This endpoint uses a shared bearer secret and replay/time checks; it does not ve
 
 ## Synthetic evidence and staging acceptance
 
-`npm run test:seller` includes 8 identity tests with ephemeral RSA keys, synthetic `.test` identities and intercepted provider HTTP. `node tests/aircraft-sale/identity-browser.mjs` runs actual built Next pages with synthetic hosted pages; every provider page is fulfilled locally, no real password is entered, and no external browser traffic is allowed. Its six checkpoints cover all methods, callback cleanup, account linking with preserved listing ownership, logout, hosted-help cancellation, event-driven revocation and lost-proof/replay failure. This verifies RWAS integration, not actual provider enrollment or recovery.
+`npm run test:seller` includes 8 identity tests and 7 password-reset Action delivery tests with ephemeral RSA keys, synthetic `.test` identities and intercepted provider HTTP. `node tests/aircraft-sale/identity-browser.mjs` runs actual built Next pages with synthetic hosted pages; every provider page is fulfilled locally, no real password is entered, and no external browser traffic is allowed. Its six checkpoints cover all methods, callback cleanup, account linking with preserved listing ownership, logout, hosted-help cancellation, event-driven revocation and lost-proof/replay failure. This verifies RWAS integration, not actual provider enrollment or recovery.
 
 The user explicitly requests unattended creation and acceptance of dedicated noncustomer accounts. Run actual provider-backed acceptance automatically using existing authorized identity/provider and test-mail access; record any unsupported provider interaction as blocked instead of substituting a simulated result. Test signup + verified email, correct/incorrect password, reset + old-password rejection, Google/Apple consent/cancel/relay, missing proof, explicit account linking, blocked account/email-code fallback, profile change, all-session revocation, listing lifecycle and private PDF/video review. Use a staff test identity with only staging review access. Never use customer accounts/listings or production records for destructive acceptance. Source parity, storage, backend binding and migration prerequisites remain in [REVIEW.md](REVIEW.md).
 
