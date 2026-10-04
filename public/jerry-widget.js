@@ -238,7 +238,8 @@
       .trim();
     var fragment = document.createDocumentFragment();
     // Parse only our small formatting vocabulary. Legacy plain <em> wrappers are supported; attributed/nested HTML stays literal.
-    var tokens = /\[([^\]\n]+)\]\((https?:\/\/[^\s<>"'`]+)\)|https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_|\*([^*\n]+)\*|<em>([^<>]+)<\/em>/gi;
+    var tokens =
+      /\[([^\]\n]+)\]\((https?:\/\/[^\s<>"'`]+)\)|https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_|\*([^*\n]+)\*|<em>([^<>]+)<\/em>/gi;
     var cursor = 0;
     var match;
     while ((match = tokens.exec(text))) {
@@ -249,7 +250,9 @@
       var markdownLink = match[1] !== undefined;
       if (markdownLink || /^https?:\/\//i.test(raw)) {
         var candidate = markdownLink ? match[2] : raw;
-        var urlText = markdownLink ? candidate : candidate.replace(/[.,!?:;]+$/, '');
+        var urlText = markdownLink
+          ? candidate
+          : candidate.replace(/[.,!?:;]+$/, '');
         // Remove only unmatched closing punctuation, preserving balanced URL paths.
         var pairs = { ')': '(', ']': '[', '}': '{' };
         while (pairs[urlText.slice(-1)]) {
@@ -273,7 +276,8 @@
         }
         if (safe) {
           // Keep the destination visible; an untrusted label must not hide its URL.
-          if (markdownLink) fragment.appendChild(document.createTextNode(match[1] + ' ('));
+          if (markdownLink)
+            fragment.appendChild(document.createTextNode(match[1] + ' ('));
           var anchor = document.createElement('a');
           anchor.className = 'jerry-message-link';
           anchor.setAttribute('href', urlText);
@@ -281,17 +285,31 @@
           anchor.setAttribute('rel', 'noopener noreferrer');
           anchor.textContent = urlText;
           fragment.appendChild(anchor);
-          fragment.appendChild(document.createTextNode((markdownLink ? ')' : '') + candidate.slice(urlText.length)));
+          fragment.appendChild(
+            document.createTextNode(
+              (markdownLink ? ')' : '') + candidate.slice(urlText.length),
+            ),
+          );
         } else {
           fragment.appendChild(document.createTextNode(raw));
         }
       } else {
-        var italic = match[5] !== undefined || match[6] !== undefined || match[7] !== undefined;
-        if ((match[5] !== undefined || match[6] !== undefined) && (/[\w*]/.test(text.charAt(match.index - 1)) || /[\w*]/.test(text.charAt(tokens.lastIndex)))) {
+        var italic =
+          match[5] !== undefined ||
+          match[6] !== undefined ||
+          match[7] !== undefined;
+        if (
+          (match[5] !== undefined || match[6] !== undefined) &&
+          (/[\w*]/.test(text.charAt(match.index - 1)) ||
+            /[\w*]/.test(text.charAt(tokens.lastIndex)))
+        ) {
           fragment.appendChild(document.createTextNode(raw));
         } else {
           var emphasis = document.createElement(italic ? 'em' : 'strong');
-          renderMessage(emphasis, match[3] || match[4] || match[5] || match[6] || match[7]);
+          renderMessage(
+            emphasis,
+            match[3] || match[4] || match[5] || match[6] || match[7],
+          );
           fragment.appendChild(emphasis);
         }
       }
