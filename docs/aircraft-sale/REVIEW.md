@@ -79,7 +79,7 @@ Design references: [Cloudflare SQLite Durable Object storage](https://developers
 
 ## Publication follow-up
 
-[Draft PR #36](https://github.com/rogerwilcoaviation/rwas-web/pull/36) contains the published isolated repair. All five CI statuses passed at published head `9a899195`. The local recovery/rollout follow-up belongs to the same RWAS/Cloudflare build, as selected by the user; it has not been pushed or deployed. The PR retains draft status until the above prerequisites pass. The broader SEO contract exercises live Worker product/canonical data (99 assertions); staff review has the required main landmark.
+[Draft PR #36](https://github.com/rogerwilcoaviation/rwas-web/pull/36) contains the isolated repair. All five CI statuses passed at earlier published head `9a899195`; fresh CI must verify the recovery/rollout follow-up separately. The follow-up belongs to the existing RWAS/Cloudflare build, as selected by the user, with renewed publication approval. Branch publication may trigger the already approved native preview. The PR retains draft status until the above prerequisites pass; no production merge or backend cutover is performed by publication. The broader SEO contract exercises live Worker product/canonical data (99 assertions); staff review has the required main landmark.
 
 GitHub deployment steps are branch-fenced. Cloudflare's separate native Git integration still automatically builds branch previews; the user approved that behavior. The previous approved preview `https://816fabb4.rwas-web.pages.dev` returned HTTP 503 `Staging destination not allowed` for seller health, so it is not provider-backed acceptance. A follow-up push may create another native preview. Production merge/deployment has not occurred.
 
