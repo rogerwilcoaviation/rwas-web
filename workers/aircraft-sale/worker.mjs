@@ -1,4 +1,5 @@
 import { deliverCode, authorizeReviewer } from './adapters.mjs';
+import { hasProductSnippetEligibility } from '../../lib/product-snippet-eligibility.mjs';
 // Versioned seller API. Requires explicitly provisioned Durable Object + private R2.
 // No legacy KV fallback: migration/import is a separately reviewed operation.
 const HOUR = 3600000,
@@ -153,7 +154,39 @@ const escape = (s) =>
         c
       ],
   );
+export function aircraftProductSchema(listing) {
+  if (!['active', 'sold'].includes(listing.status)) return null;
+  const canonical =
+    'https://www.rogerwilcoaviation.com/aircraft-for-sale/' +
+    encodeURIComponent(listing.id);
+  const product = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: [listing.year, listing.make, listing.model].filter(Boolean).join(' '),
+    url: canonical,
+  };
+  if (
+    listing.price &&
+    Number.isFinite(Number(listing.price)) &&
+    Number(listing.price) > 0
+  )
+    product.offers = {
+      '@type': 'Offer',
+      url: canonical,
+      price: Number(listing.price),
+      priceCurrency: 'USD',
+      availability:
+        listing.status === 'sold'
+          ? 'https://schema.org/OutOfStock'
+          : 'https://schema.org/InStock',
+    };
+  return hasProductSnippetEligibility(product) ? product : null;
+}
 function publicPage(l) {
+  const schema = aircraftProductSchema(l);
+  const canonical =
+    'https://www.rogerwilcoaviation.com/aircraft-for-sale/' +
+    encodeURIComponent(l.id);
   const title = [l.year, l.make, l.model].filter(Boolean).join(' '),
     media =
       l.photos
@@ -181,7 +214,15 @@ function publicPage(l) {
   return new Response(
     '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' +
       escape(title) +
-      ' — RWAS Aircraft Marketplace</title><style>body{background:#f7f4ef;color:#222;max-width:1000px;margin:auto;padding:24px;font:18px Georgia,serif}h1{font-size:40px}a{color:inherit}img,video{width:100%;max-height:600px;object-fit:contain}main{display:grid;gap:20px}dl{display:grid;grid-template-columns:1fr 2fr}dd{margin:8px}dt{margin:8px}section{border-top:1px solid #aaa;padding:20px 0}</style></head><body><nav><a href="/aircraft-for-sale">← Aircraft for sale</a> · <a href="/">Roger Wilco Aviation</a></nav><main><header><p>RWAS Marketplace · ' +
+      ' — RWAS Aircraft Marketplace</title><link rel="canonical" href="' +
+      escape(canonical) +
+      '">' +
+      (schema
+        ? '<script type="application/ld+json">' +
+          JSON.stringify(schema).replace(/</g, '\\u003c') +
+          '</script>'
+        : '') +
+      '<style>body{background:#f7f4ef;color:#222;max-width:1000px;margin:auto;padding:24px;font:18px Georgia,serif}h1{font-size:40px}a{color:inherit}img,video{width:100%;max-height:600px;object-fit:contain}main{display:grid;gap:20px}dl{display:grid;grid-template-columns:1fr 2fr}dd{margin:8px}dt{margin:8px}section{border-top:1px solid #aaa;padding:20px 0}</style></head><body><nav><a href="/aircraft-for-sale">← Aircraft for sale</a> · <a href="/">Roger Wilco Aviation</a></nav><main><header><p>RWAS Marketplace · ' +
       escape(l.status) +
       '</p><h1>' +
       escape(title) +
