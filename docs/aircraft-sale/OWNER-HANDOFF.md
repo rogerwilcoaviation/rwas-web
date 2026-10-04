@@ -1,0 +1,10 @@
+# Owner evidence handoff
+
+Release approval is already recorded. Please supply these facts/artifacts through your existing authorized owner process; this is not another blanket approval request. The agent will not retry the denied seller-source read through Jerry or a different principal.
+
+1. **Source identity:** Cloudflare account, exact deployed sale Worker/route, version/deployment ID, source and binding metadata, source SHA256 and source-format explanation. If code embeds secrets, provide redacted source with original/redacted hashes and a nonsecret redaction record; keep the original private.
+2. **Migration evidence:** consistent read-only listing export, independent ownership ledger, complete paginated object manifest with key/size/MIME/SHA256, snapshot timestamp/write boundary, and private source/destination backups with counts and hashes. Existing destination owner IDs and explicit source→destination listing mappings must be independently verified.
+3. **Resource readiness:** exact isolated staging Worker/SQLite/private R2/Pages binding names, mail sender/adapter, reviewer and security-operator policy metadata. Confirm private bucket enforcement, an exclusive all-writer lease, and permanent append-only migration receipts across purge/cleanup/restore. State what does not exist.
+4. **Provider readiness:** existing identity issuer/tenant, public client ID, connection names, owned Google/Apple registration identifiers, exact callback/logout URLs and monitored reset/block delivery metadata. Owner later operates actual password/MFA/provider screens with dedicated noncustomer staging accounts.
+
+Use the approved private export/workspace location and provide paths/references. Do not paste credential values, sessions, OTPs or customer exports into chat. This evidence handoff requires no new credentials, permissions, security configuration, data migration, listing publication or warranty publication. Missing deployed-format evidence still blocks the real decoder/storage adapter; the [migration framework](MIGRATION.md) is tested only with synthetic fixtures.
