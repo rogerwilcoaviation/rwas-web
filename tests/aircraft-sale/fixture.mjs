@@ -56,17 +56,24 @@ export function fixture() {
   };
   let store = new SellerStore(ctx, env);
   const request = (path, method = 'GET', body, session, headers = {}) =>
-    new Request('http://localhost/api/aircraft-sale' + path, {
-      method,
-      headers: {
-        ...headers,
-        ...(session ? { Authorization: 'Bearer ' + session } : {}),
-        ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+    new Request(
+      (env.AUTH_REDIRECT_URI
+        ? new URL(env.AUTH_REDIRECT_URI).origin
+        : 'http://localhost') +
+        '/api/aircraft-sale' +
+        path,
+      {
+        method,
+        headers: {
+          ...headers,
+          ...(session ? { Authorization: 'Bearer ' + session } : {}),
+          ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+        },
+        ...(body !== undefined
+          ? { body: body instanceof Uint8Array ? body : JSON.stringify(body) }
+          : {}),
       },
-      ...(body !== undefined
-        ? { body: body instanceof Uint8Array ? body : JSON.stringify(body) }
-        : {}),
-    });
+    );
   const call = (...args) => store.fetch(request(...args));
   async function login(address = 'owner@example.test') {
     await call('/send-code', 'POST', { email: address });

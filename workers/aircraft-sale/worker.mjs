@@ -1,4 +1,12 @@
 import { deliverCode, authorizeReviewer } from './adapters.mjs';
+import {
+  identityConfig,
+  randomProof,
+  authorizationUrl,
+  exchangeIdentity,
+  digest,
+  logoutUrl,
+} from './identity.mjs';
 import { hasProductSnippetEligibility } from '../../lib/product-snippet-eligibility.mjs';
 // Versioned seller API. Requires explicitly provisioned Durable Object + private R2.
 // No legacy KV fallback: migration/import is a separately reviewed operation.
@@ -45,6 +53,10 @@ const fields = [
 const empty = () => ({
   version: 2,
   profiles: {},
+  identities: {},
+  identitySecurity: {},
+  authTransactions: {},
+  authEvents: {},
   sessions: {},
   codes: {},
   rates: {},
@@ -420,7 +432,12 @@ export class SellerStore {
     if (!raw) fail(401, 'Please sign in.');
     const key = await hash(raw),
       s = this.state.sessions[key];
-    if (!s || s.expiresAt <= Date.now() || !this.state.profiles[s.userId])
+    if (
+      !s ||
+      s.expiresAt <= Date.now() ||
+      !this.state.profiles[s.userId] ||
+      this.state.profiles[s.userId].disabled
+    )
       fail(401, 'Your session expired. Please sign in again.');
     if (recent && Date.now() - s.createdAt > 600000)
       fail(
@@ -571,6 +588,21 @@ export class SellerStore {
       ),
     };
   }
+  async sessionReply(profile, method = 'email-code') {
+    const raw = token();
+    this.state.sessions[await hash(raw)] = {
+      userId: profile.id,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + DAY,
+      method,
+    };
+    return reply({
+      ok: true,
+      session: raw,
+      name: profile.name,
+      email: profile.email,
+    });
+  }
   async purge(l) {
     if (!this.env.MEDIA) fail(503, 'Media storage is unavailable.');
     if (!l.purging) {
@@ -598,6 +630,220 @@ export class SellerStore {
       method = req.method;
     if (method === 'OPTIONS') return new Response(null, { status: 204 }); // Same-origin service; no wildcard CORS.
     if (path === '/health') return reply({ service: 'seller-v2', schema: 2 });
+    if (path === '/auth/methods' && method === 'GET') {
+      const config = identityConfig(this.env);
+      return reply({ methods: config ? Object.keys(config.methods) : [] });
+    }
+    if (path === '/auth/start' && method === 'POST') {
+      const config = identityConfig(this.env),
+        body = await this.json(req);
+      if (!config || !config.methods[body.method])
+        fail(
+          503,
+          'This sign-in method is not available yet. Use an email code.',
+        );
+      if (
+        url.origin !== config.origin ||
+        (req.headers.get('Origin') &&
+          req.headers.get('Origin') !== config.origin)
+      )
+        fail(403, 'Sign-in destination not allowed.');
+      if (
+        typeof body.proof !== 'string' ||
+        !/^[A-Za-z0-9_-]{43,128}$/.test(body.proof)
+      )
+        fail(400, 'Invalid sign-in request.');
+      const linkUser = body.link === true ? await this.user(req, true) : null;
+      this.rate(
+        'identity-ip:' +
+          (await hash(req.headers.get('CF-Connecting-IP') || 'local')),
+        20,
+      );
+      for (const [key, value] of Object.entries(this.state.authTransactions))
+        if (Date.now() - value.createdAt > 600000)
+          delete this.state.authTransactions[key];
+      const tx = {
+        state: randomProof(),
+        nonce: randomProof(),
+        verifier: randomProof(),
+        browserProof: await digest(body.proof),
+        method: body.method,
+        createdAt: Date.now(),
+        linkUserId: linkUser?.id || null,
+        linkSessionKey: linkUser?.sessionKey || null,
+      };
+      this.state.authTransactions[await digest(tx.state)] = tx;
+      return reply({
+        state: tx.state,
+        authorizationUrl: await authorizationUrl(config, tx),
+      });
+    }
+    if (path === '/auth/finish' && method === 'POST') {
+      const config = identityConfig(this.env),
+        body = await this.json(req);
+      if (
+        !config ||
+        url.origin !== config.origin ||
+        (req.headers.get('Origin') &&
+          req.headers.get('Origin') !== config.origin)
+      )
+        fail(403, 'Sign-in destination not allowed.');
+      if (typeof body.state !== 'string' || typeof body.proof !== 'string')
+        fail(400, 'Invalid sign-in response.');
+      const key = await digest(body.state),
+        tx = this.state.authTransactions[key];
+      if (
+        !tx ||
+        Date.now() - tx.createdAt > 600000 ||
+        tx.browserProof !== (await digest(body.proof))
+      )
+        fail(
+          400,
+          'Sign-in expired or was started in another tab. Please try again.',
+        );
+      delete this.state.authTransactions[key];
+      await this.saveState(this.state);
+      this.rollbackState = structuredClone(this.state); // One-use transaction before contacting the provider.
+      if (body.error)
+        fail(400, 'Sign-in was cancelled. Your account was not changed.');
+      const external = await exchangeIdentity(this.env, config, tx, body.code);
+      const identityKey = await digest(
+        external.issuer + '|' + external.subject,
+      );
+      const security = this.state.identitySecurity[identityKey];
+      if (security?.blocked)
+        fail(403, 'This account is unavailable. Contact RWAS.');
+      if (
+        security?.credentialsChangedAt &&
+        tx.createdAt <= security.credentialsChangedAt
+      )
+        fail(401, 'Credentials changed during sign-in. Please start again.');
+      const existing = this.state.identities[identityKey];
+      let profile;
+      if (tx.linkUserId) {
+        profile = this.state.profiles[tx.linkUserId];
+        const linkedSession = this.state.sessions[tx.linkSessionKey];
+        if (
+          !linkedSession ||
+          linkedSession.userId !== tx.linkUserId ||
+          linkedSession.expiresAt <= Date.now()
+        )
+          fail(401, 'Sign in again before connecting a login.');
+        if (!profile) fail(401, 'Your account is no longer available.');
+        if (existing && existing.userId !== profile.id)
+          fail(409, 'That login already belongs to another RWAS account.');
+      } else if (existing) profile = this.state.profiles[existing.userId];
+      else {
+        if (
+          Object.values(this.state.profiles).some(
+            (p) => p.email === external.email,
+          )
+        )
+          fail(
+            409,
+            'This email already has a RWAS account. Sign in with an email code, then connect this login in Account.',
+          );
+        profile = {
+          id: crypto.randomUUID(),
+          email: external.email,
+          name: external.name,
+          phone: '',
+          location: '',
+          createdAt: Date.now(),
+        };
+        this.state.profiles[profile.id] = profile;
+      }
+      if (!profile) fail(401, 'Your account is no longer available.');
+      if (profile.disabled)
+        fail(403, 'This account is unavailable. Contact RWAS.');
+      if (
+        tx.createdAt <=
+        Math.max(
+          existing?.credentialsChangedAt || 0,
+          profile.sessionRevokedAt || 0,
+        )
+      )
+        fail(401, 'Credentials changed during sign-in. Please start again.');
+      this.state.identities[identityKey] = {
+        userId: profile.id,
+        subject: external.subject,
+        issuer: external.issuer,
+        method: tx.method,
+        createdAt: existing?.createdAt || Date.now(),
+        credentialsChangedAt: existing?.credentialsChangedAt || 0,
+      };
+      this.audit(
+        tx.linkUserId ? 'identity-link' : 'identity-login',
+        profile.id,
+        { method: tx.method },
+      );
+      return this.sessionReply(profile, 'identity');
+    }
+    if (path === '/auth/events' && method === 'POST') {
+      const config = identityConfig(this.env),
+        secret = this.env.AUTH_EVENT_SECRET;
+      const supplied = (req.headers.get('Authorization') || '').replace(
+        /^Bearer /,
+        '',
+      );
+      if (
+        !config ||
+        typeof secret !== 'string' ||
+        secret.length < 32 ||
+        (await digest(supplied)) !== (await digest(secret))
+      )
+        fail(403, 'Provider event not authorized.');
+      const body = await this.json(req);
+      if (
+        !['password-reset', 'account-blocked'].includes(body.kind) ||
+        typeof body.subject !== 'string' ||
+        !body.subject ||
+        body.subject.length > 500 ||
+        typeof body.id !== 'string' ||
+        !/^[A-Za-z0-9_-]{1,128}$/.test(body.id) ||
+        !Number.isFinite(body.issuedAt) ||
+        Math.abs(Date.now() - body.issuedAt) > 300000
+      )
+        fail(400, 'Invalid provider event.');
+      for (const [key, value] of Object.entries(this.state.authEvents))
+        if (Date.now() - value > DAY) delete this.state.authEvents[key];
+      if (this.state.authEvents[body.id]) return reply({ ok: true });
+      const identityKey = await digest(config.issuer + '|' + body.subject);
+      const previous = this.state.identitySecurity[identityKey];
+      this.state.identitySecurity[identityKey] = {
+        credentialsChangedAt: Math.max(
+          previous?.credentialsChangedAt || 0,
+          body.issuedAt,
+        ),
+        blocked: previous?.blocked || body.kind === 'account-blocked',
+      };
+      const identity = this.state.identities[identityKey];
+      if (identity) {
+        const profile = this.state.profiles[identity.userId];
+        if (profile)
+          profile.sessionRevokedAt = Math.max(
+            profile.sessionRevokedAt || 0,
+            body.issuedAt,
+          );
+        identity.credentialsChangedAt = Math.max(
+          identity.credentialsChangedAt || 0,
+          body.issuedAt,
+        );
+        if (
+          body.kind === 'account-blocked' &&
+          this.state.profiles[identity.userId]
+        )
+          this.state.profiles[identity.userId].disabled = true;
+        for (const [key, session] of Object.entries(this.state.sessions))
+          if (session.userId === identity.userId)
+            delete this.state.sessions[key];
+        this.audit('provider-session-revoke', identity.userId, {
+          kind: body.kind,
+        });
+      }
+      this.state.authEvents[body.id] = Date.now();
+      return reply({ ok: true });
+    }
     if (path === '/send-code' && method === 'POST') {
       const b = await this.json(req);
       return this.sendCode(req, b);
@@ -620,13 +866,8 @@ export class SellerStore {
         };
         this.state.profiles[p.id] = p;
       }
-      const raw = token();
-      this.state.sessions[await hash(raw)] = {
-        userId: p.id,
-        createdAt: Date.now(),
-        expiresAt: Date.now() + DAY,
-      };
-      return reply({ ok: true, session: raw, name: p.name, email: p.email });
+      if (p.disabled) fail(403, 'This account is unavailable. Contact RWAS.');
+      return this.sessionReply(p);
     }
     if (path === '/browse' && method === 'GET') {
       const sold = url.searchParams.get('include') === 'sold';
@@ -847,6 +1088,13 @@ export class SellerStore {
     if (path === '/account' && method === 'GET')
       return reply({
         profile: this.state.profiles[u.id],
+        loginMethods: [
+          ...new Set(
+            Object.values(this.state.identities)
+              .filter((i) => i.userId === u.id)
+              .map((i) => i.method),
+          ),
+        ],
         sessions: Object.entries(this.state.sessions)
           .filter(([, s]) => s.userId === u.id && s.expiresAt > Date.now())
           .map(([id, s]) => ({
@@ -893,8 +1141,13 @@ export class SellerStore {
     }
     if (path === '/logout' && method === 'POST') {
       if (req.body) await this.json(req);
+      const external = this.state.sessions[u.sessionKey].method === 'identity';
       delete this.state.sessions[u.sessionKey];
-      return reply({ ok: true });
+      const config = identityConfig(this.env);
+      return reply({
+        ok: true,
+        ...(external && config ? { logoutUrl: logoutUrl(config) } : {}),
+      });
     }
     if (path === '/account/sessions' && method === 'DELETE') {
       const b = await this.json(req);
@@ -916,6 +1169,13 @@ export class SellerStore {
       delete this.state.drafts[u.id];
       for (const [k, s] of Object.entries(this.state.sessions))
         if (s.userId === u.id) delete this.state.sessions[k];
+      for (const [key, identity] of Object.entries(this.state.identities))
+        if (identity.userId === u.id) delete this.state.identities[key];
+      for (const [key, transaction] of Object.entries(
+        this.state.authTransactions,
+      ))
+        if (transaction.linkUserId === u.id)
+          delete this.state.authTransactions[key];
       delete this.state.profiles[u.id];
       this.audit('account-delete', u.id);
       return reply({ ok: true });
