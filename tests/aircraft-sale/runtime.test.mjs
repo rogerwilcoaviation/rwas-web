@@ -125,3 +125,105 @@ test('actual local workerd SQLite Durable Object/R2 login, concurrent create, re
     await mf.dispose();
   }
 });
+
+test('actual workerd SQLite persists audited operator block/reset/unblock and idempotent receipts', async () => {
+  const script = (
+    await build({
+      entryPoints: ['workers/aircraft-sale/worker.mjs'],
+      bundle: true,
+      write: false,
+      format: 'esm',
+      platform: 'browser',
+    })
+  ).outputFiles[0].text;
+  const mf = new Miniflare({
+    modules: true,
+    script,
+    compatibilityDate: '2026-09-01',
+    durableObjects: {
+      SELLER_STORE: { className: 'SellerStore', useSQLite: true },
+    },
+    r2Buckets: ['MEDIA'],
+    bindings: {
+      AUTH_ISSUER: 'https://identity.fixture.test/',
+      AUTH_CLIENT_ID: 'synthetic-client',
+      AUTH_REDIRECT_URI: 'http://localhost/aircraft-for-sale',
+      AUTH_CONNECTIONS: '{}',
+    },
+    serviceBindings: {
+      OPERATOR_AUTH: async (request) =>
+        request.headers.get('Authorization') === 'Bearer fixture-operator'
+          ? Response.json({
+              actor: 'operator@example.test',
+              scope: 'seller-security',
+              authenticatedAt: Date.now(),
+            })
+          : new Response(null, { status: 403 }),
+    },
+  });
+  try {
+    const call = async (path, body, token = 'fixture-operator') => {
+      const response = await mf.dispatchFetch(
+        'http://localhost/api/aircraft-sale/ops/security/' + path,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        },
+      );
+      return new Response(await response.arrayBuffer(), response);
+    };
+    const block = {
+      id: 'runtime-block',
+      kind: 'account-blocked',
+      subject: 'auth0|unknown',
+      occurredAt: Date.now(),
+      reason: 'Synthetic verified provider block',
+      evidenceRef: 'fixture://runtime-operator-case',
+    };
+    assert.equal(
+      (await call('preview', block, 'fixture-reviewer')).status,
+      403,
+    );
+    const proposal = await (await call('preview', block)).json();
+    const applied = await call('apply', {
+      ...block,
+      confirmation: proposal.confirmation,
+    });
+    assert.equal(applied.status, 200);
+    assert.equal((await applied.json()).subjectBlocked, true);
+    assert.equal(
+      (
+        await (
+          await call('apply', { ...block, confirmation: proposal.confirmation })
+        ).json()
+      ).replayed,
+      true,
+    );
+    const unblock = {
+      ...block,
+      id: 'runtime-unblock',
+      kind: 'account-unblocked',
+      occurredAt: Date.now(),
+    };
+    const fresh = await (await call('preview', unblock)).json();
+    assert.equal(
+      (
+        await (
+          await call('apply', { ...unblock, confirmation: fresh.confirmation })
+        ).json()
+      ).subjectBlocked,
+      false,
+    );
+    const receipt = await (await call('receipt', { id: unblock.id })).json();
+    assert.equal(receipt.actor, 'operator@example.test');
+    assert.equal(receipt.audit.kind, 'account-unblocked');
+    assert.equal(receipt.audit.evidenceRef, block.evidenceRef);
+    assert.equal((await call('preview', unblock)).status, 200); // Completed operation returns its persisted receipt, never re-applies.
+  } finally {
+    await mf.dispose();
+  }
+});

@@ -1,0 +1,42 @@
+# PLACEHOLDER ONLY. Do not deploy this file. Replace resource IDs/names in a reviewed
+# copy after verified source, private storage, policy and migration handoff.
+name = "REPLACE_STAGING_SELLER_WORKER"
+account_id = "REPLACE_VERIFIED_CLOUDFLARE_ACCOUNT_ID"
+main = "../../../workers/aircraft-sale/worker.mjs"
+compatibility_date = "2026-09-01"
+workers_dev = false
+
+[vars]
+AUTH_ISSUER = "https://REPLACE_IDENTITY_ISSUER/"
+AUTH_CLIENT_ID = "REPLACE_PUBLIC_CLIENT_ID"
+AUTH_REDIRECT_URI = "https://REPLACE_EXACT_SITE_ORIGIN/aircraft-for-sale"
+# Set AUTH_CONNECTIONS to verified enabled connection names in the reviewed copy.
+# OWNER SECRET STORE ONLY: AUTH_EVENT_SECRET, RESEND_API_KEY (if direct mail).
+# Direct mail alternative: verified FROM_EMAIL; no real value is supplied here.
+# Staff alternative: ACCESS_TEAM_DOMAIN, ACCESS_AUD, REVIEWER_EMAILS.
+# Recovery alternative: distinct OPERATOR_ACCESS_TEAM_DOMAIN, OPERATOR_ACCESS_AUD,
+# OPERATOR_EMAILS. JWT must contain explicit recent auth_time; otherwise use a
+# trusted OPERATOR_AUTH service that verifies actual fresh reauthentication.
+
+[[durable_objects.bindings]]
+name = "SELLER_STORE"
+class_name = "SellerStore"
+[[migrations]]
+tag = "REPLACE_REVIEWED_FIRST_SQLITE_MIGRATION_TAG"
+new_sqlite_classes = ["SellerStore"]
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "REPLACE_STAGING_PRIVATE_R2_BUCKET"
+
+# Use approved existing services instead of direct adapters where appropriate.
+# No service or policy is created by this example.
+# [[services]]
+# binding = "MAILER"
+# service = "REPLACE_APPROVED_MAIL_SERVICE"
+# [[services]]
+# binding = "ADMIN_AUTH"
+# service = "REPLACE_APPROVED_REVIEWER_AUTH_SERVICE"
+# [[services]]
+# binding = "OPERATOR_AUTH"
+# service = "REPLACE_DISTINCT_FRESH_SECURITY_OPERATOR_AUTH_SERVICE"
