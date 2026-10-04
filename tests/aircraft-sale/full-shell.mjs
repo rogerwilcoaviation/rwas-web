@@ -1,12 +1,25 @@
 import { createServer } from 'node:http';
-import { stat, readFile, writeFile } from 'node:fs/promises';
+import { stat, readFile, writeFile, mkdir } from 'node:fs/promises';
 import assert from 'node:assert/strict';
-import { resolve, extname } from 'node:path';
-import { fixture, approve, png, pdf, mp4 } from './fixture.mjs';
+import { resolve, extname, join } from 'node:path';
+import { fixture, approve } from './fixture.mjs';
+import { execFileSync } from 'node:child_process';
+const [png, pdf, mp4] = await Promise.all(
+  ['synthetic.png', 'synthetic.pdf', 'synthetic.mp4'].map(
+    async (name) =>
+      new Uint8Array(
+        await readFile(new URL('./media-fixtures/' + name, import.meta.url)),
+      ),
+  ),
+);
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
     '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs'
 );
+const artifacts = resolve(
+  process.env.TEST_ARTIFACT_DIR || 'tests/aircraft-sale',
+);
+await mkdir(artifacts, { recursive: true });
 class Progress extends Array {
   push(...items) {
     console.log(...items);
@@ -135,7 +148,12 @@ const server = createServer(async (req, res) => {
       undefined,
       req.headers,
     );
-    requests.push({ method: req.method, path, status: response.status });
+    requests.push({
+      method: req.method,
+      path,
+      status: response.status,
+      range: req.headers.range || null,
+    });
     res.writeHead(response.status, Object.fromEntries(response.headers));
     res.end(Buffer.from(await response.arrayBuffer()));
   } catch (e) {
@@ -251,6 +269,19 @@ try {
     { name: 'b.png', mimeType: 'image/png', buffer: Buffer.from(png) },
   ]);
   await page.getByText('Photos (2)', { exact: true }).waitFor();
+  await page.waitForFunction(() => {
+    const images = [...document.querySelectorAll('dialog img')];
+    return (
+      images.length === 2 &&
+      images.every(
+        (image) =>
+          image.complete &&
+          image.naturalWidth === 1 &&
+          image.naturalHeight === 1,
+      )
+    );
+  });
+  results.push('PASS real uploaded PNG photos decode in the seller previews');
   await page.getByRole('button', { name: 'Move Earlier', exact: true }).click();
   await page
     .getByRole('button', { name: 'Move Earlier', exact: true })
@@ -265,6 +296,31 @@ try {
     buffer: Buffer.from(mp4),
   });
   await page.getByText('Videos (1)', { exact: true }).waitFor();
+  await page.waitForFunction(() => {
+    const video = document.querySelector('dialog video');
+    return (
+      video &&
+      video.readyState >= 1 &&
+      video.videoWidth === 320 &&
+      video.videoHeight === 180 &&
+      video.duration >= 1.9
+    );
+  });
+  await page.locator('dialog video').evaluate(async (video) => {
+    video.muted = true;
+    video.currentTime = 1;
+    await new Promise((resolve) =>
+      video.addEventListener('seeked', resolve, { once: true }),
+    );
+    await video.play();
+  });
+  await page.waitForFunction(
+    () => document.querySelector('dialog video')?.currentTime > 1.2,
+  );
+  await page.locator('dialog video').evaluate((video) => video.pause());
+  results.push(
+    'PASS real uploaded H.264 video decodes metadata, seeks and plays in the seller preview',
+  );
   await inputs.nth(2).setInputFiles({
     name: 'log.pdf',
     mimeType: 'application/pdf',
@@ -309,6 +365,17 @@ try {
     new Uint8Array(await readFile(await downloaded[0].path())),
     pdf,
   );
+  const pdfRendered = join(artifacts, 'full-shell-downloaded-pdf.png');
+  const parsedPdf = execFileSync(
+    process.env.PDF_VERIFY_PYTHON || 'python3',
+    [
+      'tests/aircraft-sale/pdf-verify.py',
+      await downloaded[0].path(),
+      pdfRendered,
+    ],
+    { encoding: 'utf8' },
+  ).trim();
+  results.push(parsedPdf);
   await staff.getByRole('button', { name: 'Approve and Publish' }).click();
   await staff
     .getByRole('button', { name: 'Approve and Publish' })
@@ -332,6 +399,35 @@ try {
     .getByRole('heading', { name: '2000 Synthetic Jerry Draft', exact: true })
     .waitFor();
   assert.equal(await buyer.locator('video').count(), 1);
+  await buyer.waitForFunction(() => {
+    const video = document.querySelector('video');
+    return (
+      video &&
+      video.readyState >= 1 &&
+      video.videoWidth === 320 &&
+      video.duration >= 1.9
+    );
+  });
+  await buyer.locator('video').evaluate(async (video) => {
+    video.muted = true;
+    video.currentTime = 1;
+    await new Promise((resolve) =>
+      video.addEventListener('seeked', resolve, { once: true }),
+    );
+    await video.play();
+  });
+  await buyer.waitForFunction(
+    () => document.querySelector('video')?.currentTime > 1.2,
+  );
+  await buyer.locator('video').evaluate((video) => video.pause());
+  assert.ok(
+    requests.some(
+      (r) => r.path.includes('/files/') && r.range && r.status === 206,
+    ),
+  );
+  results.push(
+    'PASS public video range streaming, decoded metadata, playback and seeking',
+  );
   assert.equal(await buyer.locator('a[href*="log.pdf"]').count(), 0);
   const privateStatus = await buyer.evaluate(
     async (key) =>
@@ -454,7 +550,7 @@ try {
     true,
   );
   await page.screenshot({
-    path: 'tests/aircraft-sale/full-shell-mobile.png',
+    path: join(artifacts, 'full-shell-mobile.png'),
     fullPage: true,
   });
   results.push('PASS mobile modal width and no horizontal overflow');
@@ -540,16 +636,19 @@ try {
   results.push('FAIL ' + e.stack);
   process.exitCode = 1;
   if (browser?.contexts()[0]?.pages()[0])
-    await browser.contexts()[0].pages()[0].screenshot({
-      path: 'tests/aircraft-sale/full-shell-failure.png',
-      fullPage: true,
-    });
+    await browser
+      .contexts()[0]
+      .pages()[0]
+      .screenshot({
+        path: join(artifacts, 'full-shell-failure.png'),
+        fullPage: true,
+      });
 } finally {
   await browser?.close();
   server.closeAllConnections();
   await new Promise((r) => server.close(r));
   await writeFile(
-    'tests/aircraft-sale/full-shell-results.json',
+    join(artifacts, 'full-shell-results.json'),
     JSON.stringify(
       {
         results,

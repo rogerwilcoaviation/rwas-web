@@ -6,6 +6,7 @@ import {
   deliverCode,
   authorizeReviewer,
   authorizeOperator,
+  authorizeAccountAdministrator,
 } from './adapters.mjs';
 import {
   identityConfig,
@@ -17,6 +18,15 @@ import {
 } from './identity.mjs';
 import { securityOperation, securityProposal } from './security.mjs';
 import { auth0EventConfig, auth0BlockNotification } from './auth0-events.mjs';
+import {
+  accountHeld,
+  assertAccountOrigin,
+  accountDirectory,
+  accountDetail,
+  accountOperation,
+  accountProposal,
+  applyAccountOperation,
+} from './account-admin.mjs';
 import { hasProductSnippetEligibility } from '../../lib/product-snippet-eligibility.mjs';
 // Versioned seller API. Requires explicitly provisioned Durable Object + private R2.
 // No legacy KV fallback: migration/import is a separately reviewed operation.
@@ -41,6 +51,7 @@ const empty = () => ({
   authEvents: {},
   auth0EventReceipts: {},
   securityOperations: {},
+  accountAdminOperations: {},
   sessions: {},
   codes: {},
   mailRequests: {},
@@ -399,8 +410,7 @@ export class SellerStore {
       !s ||
       s.expiresAt <= Date.now() ||
       !this.state.profiles[s.userId] ||
-      this.state.profiles[s.userId].disabled ||
-      this.state.profiles[s.userId].identityBlocked
+      accountHeld(this.state.profiles[s.userId])
     )
       fail(401, 'Your session expired. Please sign in again.');
     if (recent && Date.now() - s.createdAt > 600000)
@@ -462,6 +472,49 @@ export class SellerStore {
     )
       fail(403, 'Recent security operator authorization required.');
     return identity.actor;
+  }
+  async accountAdministrator(req, recent = false) {
+    const authorization = this.env.ACCOUNT_ADMIN_AUTH || {
+      fetch: (request) => authorizeAccountAdministrator(request, this.env),
+    };
+    const result = await authorization.fetch(
+      new Request('https://internal.invalid/authorize-accounts', {
+        headers: {
+          Authorization: req.headers.get('Authorization') || '',
+          'Cf-Access-Jwt-Assertion':
+            req.headers.get('Cf-Access-Jwt-Assertion') || '',
+        },
+      }),
+    );
+    if (!result.ok)
+      fail(
+        result.status === 503 ? 503 : 403,
+        result.status === 503
+          ? 'Account administration is not configured.'
+          : 'Account administrator access required.',
+      );
+    const identity = await result.json();
+    if (
+      identity.scope !== 'seller-accounts' ||
+      typeof identity.actor !== 'string' ||
+      !identity.actor ||
+      identity.actor.length > 254 ||
+      !Number.isFinite(identity.expiresAt) ||
+      identity.expiresAt <= Date.now()
+    )
+      fail(403, 'Account administrator access required.');
+    const canManage =
+      Number.isFinite(identity.authenticatedAt) &&
+      identity.authenticatedAt >= Date.now() - 600000 &&
+      identity.authenticatedAt <= Date.now() + 30000;
+    if (recent && !canManage)
+      fail(403, 'Sign in again before managing an account.');
+    return {
+      actor: identity.actor,
+      canManage,
+      expiresAt: identity.expiresAt,
+      manageUntil: canManage ? identity.authenticatedAt + 600000 : null,
+    };
   }
   owned(id, u) {
     const l = this.state.listings[id];
@@ -903,7 +956,7 @@ export class SellerStore {
         this.state.profiles[profile.id] = profile;
       }
       if (!profile) fail(401, 'Your account is no longer available.');
-      if (profile.disabled || profile.identityBlocked)
+      if (accountHeld(profile))
         fail(403, 'This account is unavailable. Contact RWAS.');
       if (
         tx.createdAt <=
@@ -927,6 +980,44 @@ export class SellerStore {
         { method: tx.method },
       );
       return this.sessionReply(profile, 'identity');
+    }
+    if (/^\/admin\/accounts(?:\/|$)/.test(path)) {
+      const write = method !== 'GET',
+        identity = await this.accountAdministrator(req, write);
+      assertAccountOrigin(req, this.env, write);
+      if (path === '/admin/accounts' && method === 'GET')
+        return reply({ ...accountDirectory(this.state, url), ...identity });
+      const match = path.match(
+        /^\/admin\/accounts\/([A-Za-z0-9_-]{1,128})(?:\/(preview|apply))?$/,
+      );
+      if (!match) fail(404, 'Account administration action not found.');
+      const [, accountId, action] = match;
+      if (method === 'GET' && !action)
+        return reply({ ...accountDetail(this.state, accountId), ...identity });
+      if (method !== 'POST' || !action) fail(405, 'Method not allowed.');
+      const body = await this.json(req),
+        operation = accountOperation(body);
+      const proposal = await accountProposal(
+        this.state,
+        accountId,
+        operation,
+        identity.actor,
+      );
+      if (proposal.previous)
+        return reply({ ...proposal.previous.result, replayed: true });
+      if (action === 'preview') return reply(proposal.public);
+      if (body.confirmation !== proposal.public.confirmation)
+        fail(409, 'Account changed or confirmation missing. Preview again.');
+      return reply(
+        applyAccountOperation(
+          this.state,
+          accountId,
+          operation,
+          proposal,
+          identity.actor,
+          this.audit.bind(this),
+        ),
+      );
     }
     if (path.startsWith('/ops/security/')) {
       const actor = await this.operator(req);
@@ -1033,7 +1124,7 @@ export class SellerStore {
         revokedSessions,
         subjectBlocked:
           this.state.identitySecurity[proposal.identityKey].blocked,
-        profileBlocked: !!(profile?.disabled || profile?.identityBlocked),
+        profileBlocked: !!profile && accountHeld(profile),
         appliedAt: fence,
       };
       this.audit('operator-security-reconcile', actor, {
@@ -1138,7 +1229,7 @@ export class SellerStore {
         };
         this.state.profiles[p.id] = p;
       }
-      if (p.disabled || p.identityBlocked)
+      if (accountHeld(p))
         fail(403, 'This account is unavailable. Contact RWAS.');
       return this.sessionReply(p);
     }

@@ -86,6 +86,7 @@ export async function securityProposal(state, issuer, operation) {
           id: profile.id,
           disabled: !!profile.disabled,
           identityBlocked: !!profile.identityBlocked,
+          adminSuspended: !!profile.adminSuspended,
           sessionRevokedAt: profile.sessionRevokedAt || 0,
         }
       : null,

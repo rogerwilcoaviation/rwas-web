@@ -28,7 +28,9 @@ async function authorizeAccess(request, env, operator = false) {
   const jwt = request.headers.get('Cf-Access-Jwt-Assertion');
   if (!jwt) return new Response(null, { status: 403 });
   try {
-    const [h, p, s] = jwt.split('.');
+    const parts = jwt.split('.');
+    if (parts.length !== 3) return new Response(null, { status: 403 });
+    const [h, p, s] = parts;
     const decode = (v) =>
       Uint8Array.from(atob(v.replace(/-/g, '+').replace(/_/g, '/')), (c) =>
         c.charCodeAt(0),
@@ -38,7 +40,7 @@ async function authorizeAccess(request, env, operator = false) {
     const issuer = 'https://' + env.ACCESS_TEAM_DOMAIN;
     const authenticatedAt = claim.auth_time * 1000;
     if (
-      (operator &&
+      (operator === true &&
         (!Number.isFinite(claim.auth_time) ||
           !Number.isFinite(authenticatedAt) ||
           authenticatedAt < Date.now() - 600000 ||
@@ -75,9 +77,22 @@ async function authorizeAccess(request, env, operator = false) {
     );
     return valid
       ? Response.json(
-          operator
-            ? { actor: claim.email, scope: 'seller-security', authenticatedAt }
-            : { actor: claim.email },
+          operator === 'accounts'
+            ? {
+                actor: claim.email,
+                scope: 'seller-accounts',
+                authenticatedAt: Number.isFinite(claim.auth_time)
+                  ? authenticatedAt
+                  : null,
+                expiresAt: claim.exp * 1000,
+              }
+            : operator
+              ? {
+                  actor: claim.email,
+                  scope: 'seller-security',
+                  authenticatedAt,
+                }
+              : { actor: claim.email },
         )
       : new Response(null, { status: 403 });
   } catch {
@@ -87,6 +102,24 @@ async function authorizeAccess(request, env, operator = false) {
 
 export const authorizeReviewer = (request, env) =>
   authorizeAccess(request, env);
+// A separate account-administrator audience never inherits reviewer/operator authority.
+export function authorizeAccountAdministrator(request, env) {
+  if (
+    !env.ACCOUNT_ADMIN_ACCESS_AUD ||
+    env.ACCOUNT_ADMIN_ACCESS_AUD === env.ACCESS_AUD ||
+    env.ACCOUNT_ADMIN_ACCESS_AUD === env.OPERATOR_ACCESS_AUD
+  )
+    return new Response(null, { status: 503 });
+  return authorizeAccess(
+    request,
+    {
+      ACCESS_TEAM_DOMAIN: env.ACCOUNT_ADMIN_ACCESS_TEAM_DOMAIN,
+      ACCESS_AUD: env.ACCOUNT_ADMIN_ACCESS_AUD,
+      REVIEWER_EMAILS: env.ACCOUNT_ADMIN_EMAILS,
+    },
+    'accounts',
+  );
+}
 // A distinct Access audience/allowlist; ordinary listing reviewers get no recovery authority.
 export async function authorizeOperator(request, env) {
   if (!env.OPERATOR_ACCESS_AUD || env.OPERATOR_ACCESS_AUD === env.ACCESS_AUD)
