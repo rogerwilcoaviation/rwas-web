@@ -9,6 +9,7 @@ type Review = {
   fields: Record<string, string | number>;
   photos: { key: string; name: string }[];
   videos: { key: string; name: string }[];
+  logbooks: Record<string, { key: string; name: string }[]>;
 };
 export default function SellerReview() {
   const [items, setItems] = useState<Review[]>([]),
@@ -108,6 +109,25 @@ export default function SellerReview() {
               aria-label={f.name}
               style={{ maxWidth: '100%' }}
             />
+          ))}
+          {Object.entries(l.logbooks || {}).map(([category, files]) => (
+            <div key={category}>
+              <h3>
+                {category} records ({files.length})
+              </h3>
+              {files.map((f) => (
+                <p key={f.key}>
+                  <a
+                    href={
+                      SELLER_API + '/admin/files/' + encodeURIComponent(f.key)
+                    }
+                    download={f.name}
+                  >
+                    {f.name}
+                  </a>
+                </p>
+              ))}
+            </div>
           ))}
           <label>
             Review note

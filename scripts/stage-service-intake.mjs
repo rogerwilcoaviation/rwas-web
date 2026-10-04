@@ -32,16 +32,6 @@ import { intake, receipt, dispatch, config, STAGING_ORIGIN } from './rwas-intake
 export default { ...app, async fetch(request, env, ctx) {
  const url = new URL(request.url);
  const path = url.pathname;
- if (/^\\/aircraft-for-sale\\/[^/]+\\/?$/.test(path)) {
-   if (!env.SELLER_API) return new Response('Seller service is not configured.',{status:503});
-   const target = new URL(request.url); target.pathname = '/api/aircraft-sale/listing/' + path.split('/')[2];
-   const headers = new Headers(request.headers); headers.set('Accept','text/html');
-   return env.SELLER_API.fetch(new Request(target, {method:'GET',headers}));
- }
- if (path === '/api/aircraft-sale' || path.startsWith('/api/aircraft-sale/')) {
-   if (!env.SELLER_API) return Response.json({error:'Seller service is not configured.'},{status:503});
-   return env.SELLER_API.fetch(request);
- }
  const isolated = env.INTAKE_STAGING_MODE === 'true' || url.origin === STAGING_ORIGIN;
  const protect = (response) => {
    if (!isolated) return response;
@@ -51,6 +41,19 @@ export default { ...app, async fetch(request, env, ctx) {
  };
  if (url.origin === STAGING_ORIGIN && env.INTAKE_STAGING_MODE !== 'true') return protect(new Response('Staging disabled', {status:503}));
  if (isolated && path === '/robots.txt') return protect(new Response('User-agent: *\\nDisallow: /\\n'));
+
+ if (/^\\/aircraft-for-sale\\/[^/]+\\/?$/.test(path)) {
+   if (env.INTAKE_STAGING_MODE === 'true' && url.origin !== STAGING_ORIGIN) return protect(new Response('Staging destination not allowed', {status:503}));
+   if (!env.SELLER_API) return protect(new Response('Seller service is not configured.',{status:503}));
+   const target = new URL(request.url); target.pathname = '/api/aircraft-sale/listing/' + path.split('/')[2];
+   const headers = new Headers(request.headers); headers.set('Accept','text/html');
+   return protect(await env.SELLER_API.fetch(new Request(target, {method:'GET',headers})));
+ }
+ if (path === '/api/aircraft-sale' || path.startsWith('/api/aircraft-sale/')) {
+   if (env.INTAKE_STAGING_MODE === 'true' && url.origin !== STAGING_ORIGIN) return protect(new Response('Staging destination not allowed', {status:503}));
+   if (!env.SELLER_API) return protect(Response.json({error:'Seller service is not configured.'},{status:503}));
+   return protect(await env.SELLER_API.fetch(request));
+ }
 
  const routes = { '/api/service-intake-config': ['GET', config], '/api/service-intake': ['POST', intake], '/api/service-receipt': ['GET', receipt], '/api/intake-dispatch': ['POST', dispatch] };
  if (Object.prototype.hasOwnProperty.call(routes, path)) {

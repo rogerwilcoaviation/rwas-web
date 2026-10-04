@@ -62,6 +62,23 @@ test('Pages advanced wrapper gates missing seller binding and serves current new
       await (await mf.dispatchFetch('https://fixture.test/faq')).text(),
       'old-static-app',
     );
+    const staging = 'https://intake-restoration-20260922.rwas-web.pages.dev';
+    await mf.setOptions({
+      ...options,
+      bindings: { INTAKE_STAGING_MODE: 'true' },
+      serviceBindings: { SELLER_API: async () => new Response('seller') },
+    });
+    for (const path of [
+      '/api/aircraft-sale/browse',
+      '/aircraft-for-sale/new-id',
+    ]) {
+      const denied = await mf.dispatchFetch('https://fixture.test' + path);
+      assert.equal(denied.status, 503);
+      assert.equal(denied.headers.get('X-Robots-Tag'), 'noindex, nofollow');
+      const permitted = await mf.dispatchFetch(staging + path);
+      assert.equal(permitted.status, 200);
+      assert.equal(permitted.headers.get('X-Robots-Tag'), 'noindex, nofollow');
+    }
   } finally {
     await mf?.dispose();
     await rm(root, { recursive: true, force: true });

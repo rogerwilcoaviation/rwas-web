@@ -32,7 +32,7 @@ Original defect reproductions are retained in the parent task directory, while t
 
 ## Verification result and acceptance matrix
 
-Final verification on Node 22.22.0: **36/36 automated checks passed** (20 seller/API/adapters/migration/routing/runtime checks and 16 existing intake checks). The runtime fixture uses actual workerd SQLite Durable Objects and R2, including stored owner-only PDF retrieval. Browser: **9/9 checkpoints**, 82 loopback requests, no external requests or browser errors. Full `next build` passed (1,916 generated pages), including lint/type checks; standalone repository lint and Worker/test lint passed. Required fonts were fetched read-only. No deployment commands were run.
+Final verification on Node 22.22.0: **42/42 automated checks passed** (26 seller/API/adapters/migration/routing/runtime checks and 16 existing intake checks). The runtime fixture uses actual workerd SQLite Durable Objects and R2, including stored owner-only PDF retrieval. Browser: **10/10 checkpoints**, 89 loopback requests, no external requests or browser errors. Full `next build` passed (1,916 generated pages), including lint/type checks; standalone repository lint and Worker/test lint passed. Required fonts were fetched read-only. No deployment commands were run.
 
 | Workflow                                  | Audited legacy source                                                           | Repair / local result                                           | Live acceptance                                   |
 | ----------------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------- |
@@ -47,6 +47,12 @@ Final verification on Node 22.22.0: **36/36 automated checks passed** (20 seller
 | Staff listing review                      | FAIL: publication could bypass review                                           | PASS: approved identity and exact-revision queue/media review   | BLOCKED: approved reviewer identity settings      |
 
 Priority for release: (P0) verify deployed source, disable/retire legacy insecure routes and cached record URLs through approved cutover; (P0) configure approved private storage/identity bindings and reconcile migration/backups; (P1) staging provider-backed acceptance and rollback rehearsal; (P2) optional additional login-provider choice. Local corrections do not prove deployed vulnerabilities are closed.
+
+## Independent local review follow-up
+
+A separate reviewer inspected commit `efef771` against the audit, reproduced defects with disposable fixtures, then reviewed the follow-up corrections. Fixed: metadata-first durable file/purge deletion intents with hidden retryable recovery; streaming JSON byte cap/cancellation; failed-provider throttling and prior-code preservation; durable counters before mail delivery; archive/trash reorder guards; clearing optional edit fields; staff private PDF links; seller staging-origin/noindex fences. Focused tests include persistence failure before any R2 deletion, final persistence failure after deletion, restart and retry, paginated purge, unavailable storage producing zero mail, and staging wrong-origin rejection. Browser checks cover actual staff PDF download/approval and clearing the previous description.
+
+The reviewer reports **no remaining blocking code defect identified in the reviewed local paths** and independently passed 21/21 focused API tests. This is scoped local implementation acceptance, not a claim of exhaustive defect absence, deployed vulnerability closure, or release approval. Full Next-shell browser integration and real provider/configuration acceptance remain untested. Password, password recovery and Google/Apple remain unresolved pending the user's preference, and no provider has been provisioned. Publication approval remains pending after automatic approval review rejected the push; no PR exists.
 
 ## Rollout sequence — requires explicit owner approval
 

@@ -309,7 +309,7 @@ export class SellerStore {
   }
   async run(req) {
     this.state = await this.loadState();
-    const before = structuredClone(this.state);
+    this.rollbackState = structuredClone(this.state);
     try {
       const result = await this.route(req);
       await this.saveState(this.state);
@@ -318,12 +318,12 @@ export class SellerStore {
       // Persist failed OTP attempts/rate counters, but roll back other partial writes.
       if (!e.persist) {
         for (const k of Object.keys(this.state.files))
-          if (!before.files[k]) {
+          if (!this.rollbackState.files[k]) {
             try {
               await this.env.MEDIA.delete(k);
             } catch {}
           }
-        this.state = before;
+        this.state = this.rollbackState;
       }
       try {
         await this.saveState(this.state);
@@ -341,8 +341,27 @@ export class SellerStore {
   async json(req) {
     if (Number(req.headers.get('content-length') || 0) > 64000)
       fail(413, 'Request too large.');
-    const text = await req.text();
-    if (text.length > 64000) fail(413, 'Request too large.');
+    const reader = req.body?.getReader();
+    if (!reader) fail(400, 'Invalid JSON.');
+    const chunks = [];
+    let size = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > 64000) {
+        await reader.cancel();
+        fail(413, 'Request too large.');
+      }
+      chunks.push(value);
+    }
+    const bytes = new Uint8Array(size);
+    let offset = 0;
+    for (const chunk of chunks) {
+      bytes.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+    const text = new TextDecoder().decode(bytes);
     try {
       return JSON.parse(text);
     } catch {
@@ -422,10 +441,13 @@ export class SellerStore {
       'ip:' + (await hash(req.headers.get('CF-Connecting-IP') || 'local')),
       20,
     );
+    // Commit throttling before external delivery: a storage outage must not send mail.
+    await this.saveState(this.state);
+    this.rollbackState = structuredClone(this.state);
     const value = code(),
       salt = token(),
       key = purpose + ':' + address;
-    this.state.codes[key] = {
+    const pendingCode = {
       digest: await hash(salt + value),
       salt,
       createdAt: Date.now(),
@@ -436,20 +458,32 @@ export class SellerStore {
     const delivery = this.env.MAILER || {
       fetch: async (request) => deliverCode(this.env, await request.json()),
     };
-    const result = await delivery.fetch(
-      new Request('https://internal.invalid/email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: address,
-          code: value,
-          purpose,
-          expiresMinutes: 15,
+    let result;
+    try {
+      result = await delivery.fetch(
+        new Request('https://internal.invalid/email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: address,
+            code: value,
+            purpose,
+            expiresMinutes: 15,
+          }),
         }),
-      }),
-    );
+      );
+    } catch {
+      throw Object.assign(
+        new Error('We could not send a code. Please try again later.'),
+        { status: 503, persist: true },
+      );
+    }
     if (!result.ok)
-      fail(503, 'We could not send a code. Please try again later.');
+      throw Object.assign(
+        new Error('We could not send a code. Please try again later.'),
+        { status: 503, persist: true },
+      );
+    this.state.codes[key] = pendingCode;
     return reply({ ok: true, sent: true });
   }
   async verify(address, value, purpose = 'login', u) {
@@ -498,6 +532,13 @@ export class SellerStore {
   }
   async purge(l) {
     if (!this.env.MEDIA) fail(503, 'Media storage is unavailable.');
+    if (!l.purging) {
+      l.purging = true;
+      for (const f of Object.values(this.state.files))
+        if (f.listingId === l.id) f.deleting = true;
+      await this.saveState(this.state);
+      this.rollbackState = structuredClone(this.state);
+    }
     let cursor;
     do {
       const page = await this.env.MEDIA.list({
@@ -558,7 +599,11 @@ export class SellerStore {
       await this.admin(req);
       const key = decodeURIComponent(path.slice(13)),
         f = this.state.files[key];
-      if (!f || this.state.listings[f.listingId]?.status === 'deleted')
+      if (
+        !f ||
+        f.deleting ||
+        this.state.listings[f.listingId]?.status === 'deleted'
+      )
         fail(404, 'File not found.');
       const obj = await this.env.MEDIA.get(key);
       if (!obj) fail(404, 'File not found.');
@@ -576,7 +621,7 @@ export class SellerStore {
     if (path.startsWith('/files/') && method === 'GET') {
       const key = decodeURIComponent(path.slice(7)),
         f = this.state.files[key];
-      if (!f) fail(404, 'File not found.');
+      if (!f || f.deleting) fail(404, 'File not found.');
       const l = this.state.listings[f.listingId];
       const published =
         l &&
@@ -911,6 +956,8 @@ export class SellerStore {
       const l = this.owned(order[1], u),
         b = await this.json(req),
         photos = this.media(l).filter((f) => f.category === 'photos');
+      if (['deleted', 'archived'].includes(l.status))
+        fail(409, 'Restore the listing before reordering.');
       if (
         !Array.isArray(b.order) ||
         b.order.length !== photos.length ||
@@ -964,6 +1011,10 @@ export class SellerStore {
       const l = this.owned(statusPath[1], u),
         b = await this.json(req),
         next = b.status;
+      if (l.purging)
+        fail(409, 'Permanent deletion is in progress. Retry deletion.');
+      if (next === 'pending' && this.media(l).some((f) => f.deleting))
+        fail(409, 'Finish pending file deletion before review.');
       if (next === 'pending' && ['draft', 'rejected'].includes(l.status)) {
         clean(l.fields, true);
         l.status = 'pending';
@@ -1118,10 +1169,20 @@ export class SellerStore {
         fail(404, 'File not found.');
       if (['deleted', 'archived'].includes(l.status))
         fail(409, 'Restore the listing first.');
+      if (!f.deleting) {
+        f.deleting = true;
+        l.revision++;
+        l.status = 'draft';
+        l.updatedAt = Date.now();
+        this.audit('delete-file-intent', u.id, {
+          listingId: l.id,
+          fileKey: f.key,
+        });
+        await this.saveState(this.state);
+        this.rollbackState = structuredClone(this.state);
+      }
       await this.env.MEDIA.delete(f.key);
       delete this.state.files[f.key];
-      l.revision++;
-      l.status = 'draft';
       return reply({ ok: true });
     }
     fail(404, 'Route not found.');

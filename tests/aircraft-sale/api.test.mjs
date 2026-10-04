@@ -582,3 +582,217 @@ test('staff media review requires authorized reviewer and never exposes private 
     200,
   );
 });
+
+test('review: chunked JSON is capped by bytes and cancelled before full consumption', async () => {
+  const f = fixture();
+  let reads = 0,
+    cancelled = false;
+  const body = new ReadableStream({
+    pull(controller) {
+      reads++;
+      controller.enqueue(new TextEncoder().encode('é'.repeat(20000)));
+    },
+    cancel() {
+      cancelled = true;
+    },
+  });
+  const request = new Request(
+    'https://fixture.test/api/aircraft-sale/send-code',
+    { method: 'POST', body, duplex: 'half' },
+  );
+  const response = await new (
+    await import('../../workers/aircraft-sale/worker.mjs')
+  ).SellerStore(f.ctx, f.env).fetch(request);
+  assert.equal(response.status, 413);
+  assert.ok(cancelled);
+  assert.ok(reads <= 3);
+  assert.equal(f.mail.length, 0);
+});
+test('review: failed mail attempts remain throttled and prior code survives failed resend', async () => {
+  const f = fixture(),
+    address = 'retry@example.test';
+  await f.call('/send-code', 'POST', { email: address });
+  const prior = f.mail.at(-1).code;
+  let deliveries = 0;
+  f.env.MAILER.fetch = async () => {
+    deliveries++;
+    return new Response(null, { status: 503 });
+  };
+  for (let n = 0; n < 4; n++)
+    assert.equal(
+      (await f.call('/send-code', 'POST', { email: address })).status,
+      503,
+    );
+  assert.equal(
+    (await f.call('/send-code', 'POST', { email: address })).status,
+    429,
+  );
+  assert.equal(deliveries, 4);
+  assert.equal(
+    (await f.call('/check-code', 'POST', { email: address, code: prior }))
+      .status,
+    200,
+  );
+});
+test('review: reorder never restores archive or trash', async () => {
+  const f = fixture(),
+    t = await f.login(),
+    l = await create(f, t);
+  const file = (
+    await (
+      await f.call(
+        '/upload?listingId=' + l.id + '&category=photos&filename=x.png',
+        'POST',
+        png,
+        t,
+      )
+    ).json()
+  ).file;
+  for (const status of ['archived', 'deleted']) {
+    await f.call('/listing/' + l.id + '/status', 'POST', { status }, t);
+    assert.equal(
+      (
+        await f.call(
+          '/listings/' + l.id + '/photos/order',
+          'PUT',
+          { order: [file.key] },
+          t,
+        )
+      ).status,
+      409,
+    );
+    assert.equal(f.state().listings[l.id].status, status);
+    await f.call(
+      '/listing/' + l.id + '/status',
+      'POST',
+      { status: 'restore' },
+      t,
+    );
+  }
+});
+test('review: file deletion commits hidden intent before R2 and remains retryable after final save failure', async () => {
+  const f = fixture(),
+    t = await f.login(),
+    l = await create(f, t);
+  const file = (
+    await (
+      await f.call(
+        '/upload?listingId=' + l.id + '&category=photos&filename=x.png',
+        'POST',
+        png,
+        t,
+      )
+    ).json()
+  ).file;
+  const del = () =>
+    f.call(
+      '/delete-file',
+      'POST',
+      { listingId: l.id, category: 'photos', fileKey: file.key },
+      t,
+    );
+  f.storageFailure(true);
+  assert.equal((await del()).status, 503);
+  assert.ok(f.objects.has(file.key));
+  assert.ok(!f.state().files[file.key].deleting);
+  f.storageFailure(false);
+  const originalDelete = f.env.MEDIA.delete;
+  f.env.MEDIA.delete = async (k) => {
+    await originalDelete(k);
+    f.storageFailure(true);
+  };
+  assert.equal((await del()).status, 503);
+  assert.ok(!f.objects.has(file.key));
+  assert.ok(f.state().files[file.key].deleting);
+  f.restart();
+  f.storageFailure(false);
+  assert.equal(
+    (
+      await f.call(
+        '/files/' + encodeURIComponent(file.key),
+        'GET',
+        undefined,
+        t,
+      )
+    ).status,
+    404,
+  );
+  assert.equal((await submit(f, t, l)).status, 409);
+  f.env.MEDIA.delete = originalDelete;
+  assert.equal((await del()).status, 200);
+  assert.ok(!f.state().files[file.key]);
+});
+test('review: paginated purge persists irreversible intent and cannot be restored after interruption', async () => {
+  const f = fixture(),
+    t = await f.login(),
+    l = await create(f, t);
+  for (let i = 0; i < 3; i++)
+    await f.call(
+      '/upload?listingId=' + l.id + '&category=photos&filename=' + i + '.png',
+      'POST',
+      png,
+      t,
+    );
+  await f.call(
+    '/listing/' + l.id + '/status',
+    'POST',
+    { status: 'deleted' },
+    t,
+  );
+  const del = () => f.call('/listings/' + l.id, 'DELETE', { confirm: l.id }, t);
+  f.storageFailure(true);
+  assert.equal((await del()).status, 503);
+  assert.equal(f.objects.size, 3);
+  f.storageFailure(false);
+  f.deleteFailure(true);
+  assert.equal((await del()).status, 503);
+  assert.ok(f.state().listings[l.id].purging);
+  f.restart();
+  assert.equal(
+    (
+      await f.call(
+        '/listing/' + l.id + '/status',
+        'POST',
+        { status: 'restore' },
+        t,
+      )
+    ).status,
+    409,
+  );
+  f.deleteFailure(false);
+  const snapshot = [...f.objects.keys()];
+  let pages = 0;
+  f.env.MEDIA.list = async ({ cursor }) => {
+    pages++;
+    const start = Number(cursor || 0);
+    return {
+      objects: snapshot.slice(start, start + 1).map((key) => ({ key })),
+      truncated: start + 1 < snapshot.length,
+      cursor: String(start + 1),
+    };
+  };
+  assert.equal((await del()).status, 200);
+  assert.equal(pages, 3);
+  assert.equal(f.objects.size, 0);
+  assert.ok(!f.state().listings[l.id]);
+});
+
+test('review: unavailable durable counters prevent mail delivery before any external side effect', async () => {
+  const f = fixture();
+  f.storageFailure(true);
+  for (let i = 0; i < 7; i++)
+    assert.equal(
+      (
+        await f.call('/send-code', 'POST', {
+          email: 'unavailable@example.test',
+        })
+      ).status,
+      503,
+    );
+  assert.equal(f.mail.length, 0);
+  f.storageFailure(false);
+  await f.call('/send-code', 'POST', { email: 'unavailable@example.test' });
+  assert.equal(f.mail.length, 1);
+  f.restart();
+  assert.equal(f.state().rates['email:unavailable@example.test'].count, 1);
+});

@@ -217,7 +217,7 @@ export default function SellerAuthPanel() {
   }
   async function save() {
     const values = Object.fromEntries(
-      Object.entries(form).filter(([, v]) => v.trim() !== ''),
+      Object.entries(form).filter(([, v]) => editing || v.trim() !== ''),
     );
     const data = await api(
       editing ? '/listings/' + editing.id : '/listings',
