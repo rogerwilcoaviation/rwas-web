@@ -12,7 +12,7 @@ assert.ok(!widget.includes('formatMessage('));
 assert.ok(widget.includes('renderMessage(streamMsg, reply)'));
 assert.ok(widget.includes('renderMessage(msg, message.content)'));
 assert.ok(newspaper.includes("if (m.role === 'assistant') renderMessage(bubble, m.content)"));
-assert.ok(read('components/shared/DeferredJerryWidget.tsx').includes('20260911-safe-links'));
+assert.ok(read('components/shared/DeferredJerryWidget.tsx').includes('20261004-safe-markdown'));
 class Node {
   constructor(tag, text = '') { this.tag = tag; this.text = text; this.children = []; this.attrs = {}; }
   appendChild(node) { if (node.tag === '#fragment') this.children.push(...node.children); else this.children.push(node); return node; }
@@ -50,14 +50,25 @@ const cases = [
   ['markdown unsafe', '[click](javascript:alert(1))', []],
   ['HTML unsafe link', '<a href="javascript:alert(1)">click</a>', []],
   ['formatting', '**Bold** and __also bold__ and _italic_', []],
+  ['asterisk italic', '*AOA System Owner’s Manual*', [], 'AOA System Owner’s Manual'],
+  ['asterisk inside word', 'part*number*suffix', [], 'part*number*suffix'],
+  ['markdown link', '[Official manual](https://static.garmin.com/pumac/190-01773-00_0A_Web.pdf)', ['https://static.garmin.com/pumac/190-01773-00_0A_Web.pdf'], 'Official manual (https://static.garmin.com/pumac/190-01773-00_0A_Web.pdf)'],
+  ['markdown outer parentheses', '(see [manual](https://example.com/guide.pdf)).', ['https://example.com/guide.pdf'], '(see manual (https://example.com/guide.pdf)).'],
+  ['markdown balanced URL', '[Section](https://example.com/a_(b)).', ['https://example.com/a_(b)'], 'Section (https://example.com/a_(b)).'],
+  ['markdown deceptive label', '[trusted.example](https://other.example/)', ['https://other.example/'], 'trusted.example (https://other.example/)'],
+  ['markdown credentials', '[Manual](https://user:pass@example.com/)', [], '[Manual](https://user:pass@example.com/)'],
+  ['markdown javascript prefix', 'javascript:[Manual](https://example.com/)', [], 'javascript:[Manual](https://example.com/)'],
+  ['markdown observed reply', 'Source: Garmin’s *AOA System Owner’s Manual*, **190-01773-00 Rev. A**, printed page **4** (viewer page 10; [manual reproduction](https://www.manualslib.com/manual/3852978/Garmin-Gi-260.html?page=10)).', ['https://www.manualslib.com/manual/3852978/Garmin-Gi-260.html?page=10'], 'Source: Garmin’s AOA System Owner’s Manual, 190-01773-00 Rev. A, printed page 4 (viewer page 10; manual reproduction (https://www.manualslib.com/manual/3852978/Garmin-Gi-260.html?page=10)).'],
   ['underscore word', 'part_number_suffix', []],
   ['multiple markers', 'Hello\nLISTING_DRAFT:{}\nLISTING_SAVE:{}', []],
   ['marker stripping', 'Hello\nINTAKE_COMPLETE:{"first_name":"test"}', []],
 ];
-for (const [name, text, expected] of cases) {
+for (const [name, text, expected, expectedDisplay] of cases) {
   const root = new Node('div'); context.renderMessage(root, text);
   const nodes = flatten(root); const links = nodes.filter(n => n.tag === 'a');
   assert.deepEqual(links.map(n => n.attrs.href), expected, name);
+  if (expectedDisplay !== undefined) assert.equal(root.textContent, expectedDisplay, name);
+  if (name === 'asterisk italic') assert.equal(nodes.filter(n => n.tag === 'em').length, 1);
   for (const node of nodes) assert.ok(['div', '#text', 'a', 'strong', 'em'].includes(node.tag), `${name}: unsafe tag`);
   for (const link of links) {
     assert.equal(link.attrs.target, '_blank', name);

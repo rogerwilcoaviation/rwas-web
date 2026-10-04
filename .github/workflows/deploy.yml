@@ -57,6 +57,7 @@ jobs:
 
       - name: Scoped SEO and mocked commerce regressions
         run: |
+          node scripts/jerry-message-regression.mjs
           node scripts/product-snippet-eligibility-test.mjs
           node scripts/catalog-read-only-guard-test.mjs
           node scripts/seo-remediation-test.mjs
