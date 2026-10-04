@@ -326,7 +326,7 @@ export default function SellerAccounts() {
     void load();
   };
   return (
-    <main className="accounts-admin" id="main-content">
+    <main className="accounts-admin" id="main-content" tabIndex={-1}>
       <header>
         <p className="eyebrow">RWAS administration</p>
         <h1>Seller accounts</h1>
