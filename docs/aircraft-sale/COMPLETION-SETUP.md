@@ -1,6 +1,6 @@
 # Exact remaining seller setup
 
-John has confirmed there is no Auth0 account. `admin@rwas.team` is the selected staff reviewer. These are proposed settings; no identity credentials, reviewer grants or production changes below have been applied. Keep Cloudflare hosting and the existing mail service. Warranty remains draft-only.
+John has confirmed there is no Auth0 account. `admin@rwas.team` is the selected staff reviewer. These are proposed settings; no identity credentials, reviewer grants or production changes below have been applied. The exact target/access/effect approval packet is [STAGING-APPROVALS.md](STAGING-APPROVALS.md). Keep Cloudflare hosting and the existing mail service. Warranty remains draft-only.
 
 ## Owner's first action
 
@@ -43,7 +43,7 @@ Candidate: [post-change-password.cjs](../../workers/aircraft-sale/auth0/post-cha
 
 Save/test in the provider editor, then install/bind to **Post Change Password** only after setup authorization. [Official Action lifecycle](https://auth0.com/docs/customize/actions/write-your-first-action).
 
-The sender uses documented `user_id`/`last_password_reset`, derives a stable retry ID from tenant/subject/actual event time, allows only the exact staging/production security endpoints, forbids redirect following, and makes at most three requests with three-second timeouts. It preserves reset time; missing/stale timestamps require reconciliation. [Auth0's trigger is asynchronous/nonblocking](https://auth0.com/docs/customize/actions/explore-triggers/post-change-password): failure does **not** undo the password change. This Action is not a durable queue and does not deliver account-block events. Verify monitoring, missed/late-event reconciliation and a separately authorized block integration before release. See [MANAGED-LOGIN.md](MANAGED-LOGIN.md) and [ROLLOUT.md](ROLLOUT.md).
+The sender uses documented `user_id`/`last_password_reset`, derives a stable retry ID from tenant/subject/actual event time, allows only the exact staging/production security endpoints, forbids redirect following, and makes at most three requests with three-second timeouts. It preserves reset time; missing/stale timestamps require reconciliation. [Auth0's trigger is asynchronous/nonblocking](https://auth0.com/docs/customize/actions/explore-triggers/post-change-password): failure does **not** undo the password change. This Action is not a durable queue and does not deliver account-block events. The separate [native block-event receiver](AUTH0-BLOCK-EVENTS.md) is implemented and tested locally; its dedicated Worker code update, stream setup and actual delivery remain gated. Verify monitoring and missed/late-event reconciliation before release. See [MANAGED-LOGIN.md](MANAGED-LOGIN.md) and [ROLLOUT.md](ROLLOUT.md).
 
 ## Proposed staff review access
 
@@ -69,10 +69,10 @@ Using the existing authorized owner process, verify counts of legacy seller prof
 - Verified complete empty inventory: record it and use a clean cutover; no data export/import needed.
 - Any real records/objects: provide a consistent private export, independent ownership mapping and complete file manifest/bytes/checksums through the approved workspace. Then implement real decoder/import adapters; current migration adapters are synthetic only.
 
-Empty public browse does not prove private drafts, owners or files are absent. Evidence requirements: [OWNER-HANDOFF.md](OWNER-HANDOFF.md).
+Empty public browse does not prove private drafts, owners or files are absent. The [offline inventory preflight](INVENTORY-PREFLIGHT.md) checks owner-supplied normalized evidence, including all four namespaces, pagination, hashes and ownership; it cannot establish actual source completeness or perform an import. Evidence requirements: [OWNER-HANDOFF.md](OWNER-HANDOFF.md).
 
 ## Completion sequence and present evidence
 
-Independent work completed locally: bounded Action sender plus seven tests; per-listing/per-revision notes; staff login/outage errors; expired-access clearing; stale-review refresh; review-page noindex metadata. `npm run test:seller` passes 107 tests; lint/full Next export pass. `npm run test:seller:review-browser` uses the actual export and disposable backend, blocks external traffic and verifies the review changes. Fixtures do not establish real provider/reviewer acceptance.
+Independent source work: bounded Action sender plus seven tests; native block receiver plus seven tests; offline inventory preflight plus five tests; per-listing/per-revision notes; staff login/outage errors; expired-access clearing; stale-review refresh; review-page noindex metadata. `npm run test:seller` includes 119 tests. `npm run test:seller:review-browser` uses the actual export and disposable backend, blocks external traffic and verifies the review changes. Fixtures do not establish real provider/reviewer acceptance; the current validated commit/check results are in the draft PR.
 
 Next: specifically authorized identity/reviewer setup → actual dedicated provider/review/media tests → verified empty inventory or real migration → separately authorized production backend/binding/frontend cutover → production smoke and agreed dedicated acceptance. The draft PR remains unmerged until release prerequisites pass.
