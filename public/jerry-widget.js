@@ -237,8 +237,8 @@
       .replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}\s*$/m, '')
       .trim();
     var fragment = document.createDocumentFragment();
-    // Parse only our small formatting vocabulary. Never parse response HTML.
-    var tokens = /\[([^\]\n]+)\]\((https?:\/\/[^\s<>"'`]+)\)|https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_|\*([^*\n]+)\*/gi;
+    // Parse only our small formatting vocabulary. Legacy plain <em> wrappers are supported; attributed/nested HTML stays literal.
+    var tokens = /\[([^\]\n]+)\]\((https?:\/\/[^\s<>"'`]+)\)|https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_|\*([^*\n]+)\*|<em>([^<>]+)<\/em>/gi;
     var cursor = 0;
     var match;
     while ((match = tokens.exec(text))) {
@@ -286,12 +286,12 @@
           fragment.appendChild(document.createTextNode(raw));
         }
       } else {
-        var italic = match[5] !== undefined || match[6] !== undefined;
-        if (italic && (/[\w*]/.test(text.charAt(match.index - 1)) || /[\w*]/.test(text.charAt(tokens.lastIndex)))) {
+        var italic = match[5] !== undefined || match[6] !== undefined || match[7] !== undefined;
+        if ((match[5] !== undefined || match[6] !== undefined) && (/[\w*]/.test(text.charAt(match.index - 1)) || /[\w*]/.test(text.charAt(tokens.lastIndex)))) {
           fragment.appendChild(document.createTextNode(raw));
         } else {
           var emphasis = document.createElement(italic ? 'em' : 'strong');
-          renderMessage(emphasis, match[3] || match[4] || match[5] || match[6]);
+          renderMessage(emphasis, match[3] || match[4] || match[5] || match[6] || match[7]);
           fragment.appendChild(emphasis);
         }
       }
@@ -829,7 +829,7 @@
         var lastMsg = history[history.length - 1];
         if (lastMsg && lastMsg.role === 'assistant') {
           lastMsg.content +=
-            '\n\n<em>Your progress is saved privately. Review details and submit from the seller panel.</em>';
+            '\n\n_Your progress is saved privately. Review details and submit from the seller panel._';
         }
       }
       saveHistory();

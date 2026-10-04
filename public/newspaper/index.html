@@ -234,12 +234,14 @@ body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
       .replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}\s*$/m, '')
       .trim();
     var fragment = document.createDocumentFragment();
-    // Parse only our small formatting vocabulary. Never parse response HTML.
-    var tokens = /\[([^\]\n]+)\]\((https?:\/\/[^\s<>"'`]+)\)|https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_|\*([^*\n]+)\*/gi;
+    // Parse only our small formatting vocabulary. Legacy plain <em> wrappers are supported; attributed/nested HTML stays literal.
+    var tokens = /\[([^\]\n]+)\]\((https?:\/\/[^\s<>"'`]+)\)|https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_|\*([^*\n]+)\*|<em>([^<>]+)<\/em>/gi;
     var cursor = 0;
     var match;
     while ((match = tokens.exec(text))) {
-      fragment.appendChild(document.createTextNode(text.slice(cursor, match.index)));
+      fragment.appendChild(
+        document.createTextNode(text.slice(cursor, match.index)),
+      );
       var raw = match[0];
       var markdownLink = match[1] !== undefined;
       if (markdownLink || /^https?:\/\//i.test(raw)) {
@@ -256,11 +258,16 @@ body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
         var safe = false;
         try {
           var url = new URL(urlText);
-          safe = (url.protocol === 'https:' || url.protocol === 'http:') &&
-            !!url.hostname && !url.username && !url.password &&
+          safe =
+            (url.protocol === 'https:' || url.protocol === 'http:') &&
+            !!url.hostname &&
+            !url.username &&
+            !url.password &&
             !/[\\\u0000-\u001f\u007f]/.test(urlText) &&
             !/[\w:@/\\=]/.test(text.charAt(match.index - 1));
-        } catch (e) { /* Invalid URLs remain plain text. */ }
+        } catch (e) {
+          /* Invalid URLs remain plain text. */
+        }
         if (safe) {
           // Keep the destination visible; an untrusted label must not hide its URL.
           if (markdownLink) fragment.appendChild(document.createTextNode(match[1] + ' ('));
@@ -276,12 +283,12 @@ body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
           fragment.appendChild(document.createTextNode(raw));
         }
       } else {
-        var italic = match[5] !== undefined || match[6] !== undefined;
-        if (italic && (/[\w*]/.test(text.charAt(match.index - 1)) || /[\w*]/.test(text.charAt(tokens.lastIndex)))) {
+        var italic = match[5] !== undefined || match[6] !== undefined || match[7] !== undefined;
+        if ((match[5] !== undefined || match[6] !== undefined) && (/[\w*]/.test(text.charAt(match.index - 1)) || /[\w*]/.test(text.charAt(tokens.lastIndex)))) {
           fragment.appendChild(document.createTextNode(raw));
         } else {
           var emphasis = document.createElement(italic ? 'em' : 'strong');
-          renderMessage(emphasis, match[3] || match[4] || match[5] || match[6]);
+          renderMessage(emphasis, match[3] || match[4] || match[5] || match[6] || match[7]);
           fragment.appendChild(emphasis);
         }
       }
@@ -290,6 +297,7 @@ body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; }
     fragment.appendChild(document.createTextNode(text.slice(cursor)));
     target.replaceChildren(fragment);
   }
+
 
           function renderHistory() {
             var chat = document.getElementById('jerry-chat');
