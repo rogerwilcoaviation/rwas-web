@@ -64,7 +64,11 @@ export default function SellerReview() {
     }
   }
   return (
-    <main style={{ maxWidth: 1000, margin: '40px auto', padding: 24 }}>
+    <main
+      id="main-content"
+      tabIndex={-1}
+      style={{ maxWidth: 1000, margin: '40px auto', padding: 24 }}
+    >
       <h1>Aircraft listing review</h1>
       <p>
         Staff access is verified by the approved identity service. Review
