@@ -16,7 +16,7 @@ const pageUrl =
 const videoUrl =
   'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-laser-steel-16x9-quote-pause-20260627.mp4';
 const posterUrl =
-  'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg';
+  'https://www.rogerwilcoaviation.com/videos/fabrication/rwas-laser-steel-16x9-20260626-poster-640.webp';
 const socialImageUrl =
   'https://www.rogerwilcoaviation.com/images/social/rwas-laser-steel-1x1-20260626.jpg';
 
@@ -182,7 +182,7 @@ export default function FiberLaserFabricationPage() {
               muted
               controls
               preload="none"
-              poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg"
+              poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster-640.webp"
               playsInline
               aria-label="RWAS laser fabrication video"
             >
@@ -262,6 +262,8 @@ export default function FiberLaserFabricationPage() {
               <Specimen.Image
                 src="/newspaper/images/laser_cutter.webp"
                 alt="Fiber laser cutting equipment in the RWAS shop"
+                width={500}
+                height={304}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -367,6 +369,8 @@ export default function FiberLaserFabricationPage() {
               <Specimen.Image
                 src="/newspaper/images/n5171s_panel.webp"
                 alt="Custom aircraft panel fabricated, powder coated, and printed by RWAS"
+                width={1200}
+                height={521}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 02">
@@ -521,7 +525,7 @@ export default function FiberLaserFabricationPage() {
               <span className="bs-script-accent">
                 &mdash; fabrication desk &mdash;
               </span>
-              <h4>Have a panel or part in mind?</h4>
+              <h3>Have a panel or part in mind?</h3>
               <p>
                 Send photos, dimensions, aircraft context, and the desired
                 finish.

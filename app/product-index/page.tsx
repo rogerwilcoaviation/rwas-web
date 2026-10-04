@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   BroadsheetFooter,
@@ -15,15 +14,14 @@ import {
   getSeoProductHandles,
   isSeoSafeProductHandle,
 } from '@/lib/shopify';
+import { genPageMetadata } from '@/app/seo';
 
-export const metadata: Metadata = {
-  title: { absolute: 'Complete Aviation Product Index | RWAS' },
+export const metadata = genPageMetadata({
+  title: 'Complete Aviation Product Index | RWAS',
   description:
     'Browse the complete RWAS aviation catalog alphabetically, including avionics, pilot gear, watches, accessories, and shop tools.',
-  alternates: {
-    canonical: 'https://www.rogerwilcoaviation.com/product-index',
-  },
-};
+  canonical: 'https://www.rogerwilcoaviation.com/product-index',
+});
 
 export default async function ProductIndexPage() {
   let products: Array<{ id: string; title: string; handle: string }> = [];

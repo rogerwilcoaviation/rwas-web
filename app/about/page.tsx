@@ -50,9 +50,11 @@ export default function AboutPage() {
             built in Yankton for aircraft owners across the Northern Plains.
           </h1>
           <p className="bs-subhead">
-            <Link href="/blog/repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414">FAA Part 145 Repair Station</Link>{' '}
-            &middot; Certificate No. RWSR491E
-            &middot; RWAS Avionics Desk &middot; KYKN, Yankton
+            <Link href="/blog/repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414">
+              FAA Part 145 Repair Station
+            </Link>{' '}
+            &middot; Certificate No. RWSR491E &middot; RWAS Avionics Desk
+            &middot; KYKN, Yankton
           </p>
           <div className="bs-byline">
             Founded 2022 &nbsp;&middot;&nbsp; Avionics &middot; Airframe
@@ -120,6 +122,8 @@ export default function AboutPage() {
                 <Specimen.Image
                   src="/newspaper/images/n5171s_panel.jpg"
                   alt="Custom laser-cut instrument panel for a Cessna 182RG"
+                  width={1200}
+                  height={521}
                 />
               </a>
               <Specimen.CaptionRule />
@@ -344,6 +348,8 @@ export default function AboutPage() {
               <Specimen.Image
                 src="/newspaper/images/laser_cutter.jpg"
                 alt="Fiber laser cutting in the RWAS shop"
+                width={500}
+                height={304}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 02">

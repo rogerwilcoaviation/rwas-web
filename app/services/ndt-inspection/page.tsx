@@ -411,6 +411,8 @@ export default function NdtInspectionPage() {
               <Specimen.Image
                 src="/newspaper/images/laser_cutter.webp"
                 alt="RWAS shop equipment supporting precision aircraft fabrication and inspection work"
+                width={500}
+                height={304}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -423,7 +425,7 @@ export default function NdtInspectionPage() {
               <span className="bs-script-accent">
                 &mdash; intake desk &mdash;
               </span>
-              <h4>Need help scoping it?</h4>
+              <h3>Need help scoping it?</h3>
               <p>Send the aircraft, component, and inspection trigger.</p>
               <a className="cta" href="/contact?reason=service&source=ndt-card">
                 Start request

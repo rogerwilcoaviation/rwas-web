@@ -30,10 +30,7 @@
         "For this CitationJet retrofit, Garmin describes coupled VNAV descents and coupled go-around capability with the GFC 600, along with stabilized-approach monitoring and aural V-speed alerts. These are capabilities to discuss during upgrade planning and transition training, not a substitute for pilot proficiency or the aircraft’s approved operating procedures. Ask how the proposed installation will support your normal missions and how you will learn its modes and limitations.",
         "Garmin says the retrofit is available through its authorized dealer network. Before treating any package as suitable for your airplane, have the exact model, serial number, existing equipment and applicable approvals reviewed. Contact Roger Wilco Aviation Services to discuss your avionics goals and the questions to resolve with a qualified installation provider. Aircraft eligibility, installation scope, scheduling and pricing require individual confirmation; this article is not an installation approval or a quote."
       ],
-      "tags": [
-        "garmin",
-        "citationjet"
-      ],
+      "tags": ["garmin", "citationjet"],
       "social": {
         "facebook": {
           "text": "Original CitationJet: What Garmin’s New Retrofit Certification Means for Owners\n\nGarmin’s new certification brings an integrated avionics modernization path to the original Cessna CitationJet. Our article looks at the flight deck, automation and aircraft-specific questions owners should consider.\n\nRead the article: https://www.rogerwilcoaviation.com/blog/garmin-citationjet-20260923\n\nContact RWAS to discuss your avionics goals. Aircraft eligibility and installation scope require individual confirmation.\n\nPhoto: Garmin, as featured in its CitationJet certification announcement.\n\n#Garmin #CitationJet #Avionics #RogerWilcoAviation",
@@ -83,12 +80,7 @@
       "lead": "A connected aircraft is not just about what happens in the cockpit. It is also about making the work around each flight more convenient: keeping databases moving, checking available aircraft information before leaving home, and getting useful records into your hands afterward.",
       "body": [],
       "body_markdown": "## Less database handling, without skipping the checks\n\nWith compatible avionics and the proper setup, GDL 60 can reduce the manual handling involved in keeping databases current. The aircraft must be registered in flyGarmin, with active PlaneSync and applicable database subscriptions. Downloads use internet-connected Wi-Fi or LTE; terrain downloads use Wi-Fi only.\n\nThe required battery-bus connection allows downloads while the aircraft is otherwise off. Most databases synchronize across the avionics at power-on, while charts synchronize and update in the background.\n\nThe important distinction is simple: **a download is not the same as activation.** Before departure, verify the database status on the avionics. Automation can make the process more convenient, but it does not remove that check from flight preparation.\n\n## Choose connectivity around what you want to do\n\nA Wi-Fi-only PlaneSync plan supports automatic database updates and flight-log uploads over internet-connected Wi-Fi. For an owner whose priority is moving data at the hangar, that is a useful starting point for the conversation.\n\nOn-demand remote aircraft status is different. It requires an LTE-capable PlaneSync plan, cellular reception at the aircraft, internet access on your phone or tablet, and a compatible, adequately powered installation. A Wi-Fi-only plan does not provide that on-demand status capability.\n\nThese cloud features operate on the ground. Your phone having a strong connection does not establish that the airplane has one. Coverage, hangar conditions, service eligibility, and aircraft power all affect what is available when you request it.\n\n## Useful information starts with the right installed sources\n\nDepending on the installation, remote status can include fuel quantity, battery voltage, oil and outside-air temperatures, Hobbs and tach time, active and standby database information, and GPS location.\n\nThose fields are not a universal checklist of what every GDL 60 installation will deliver. The connected equipment, sensors, and power provisions determine the available information. A fuel probe or temperature source may need its own power provision for remote status.\n\n## Current equipment compatibility\n\nThese are the current documented equipment families—not blanket approval for every aircraft. Garmin-approved software, the exact aircraft configuration, and the applicable installation approval determine eligibility and available features.\n\n- **GTN 625Xi, 635Xi, 650Xi, 725Xi and 750Xi:** Compatible navigators. A GTN Xi alone does not supply all engine-monitoring data needed for remote status.\n- **G500 TXi / G600 TXi:** Supported display integration and database functions.\n- **TXi EIS:** Supported engine-data uploads and remote aircraft status with approved sensors and wake-power provisions.\n- **GI 275:** Supported data/database functions. An attitude-only GI 275 does not provide engine or fuel sensing.\n- **GI 275 EIS:** Supported engine logs and remote aircraft status with the appropriate engine interface, sensors and wake-power installation.\n- **G700 TXi:** Listed as compatible in Garmin Pilot’s device table; aircraft-specific approval and features must be checked separately. The G500/G600 TXi retrofit approval does not automatically cover it.\n- **G1000 NXi, G2000, G3000 and G5000:** Supported integrated-flight-deck families, subject to aircraft/OEM software and approval—not a universal GDL 60 retrofit for every aircraft with one of these systems.\n- **G3X / G3X Touch: Not compatible.**\n- **AXIS: Compatibility coming soon.**\n\nFor the examined Part 23 retrofit approval, a **GTN Xi configured as GTN #1** is the minimum required interface. Remote aircraft status additionally requires approved G500/G600 TXi EIS or GI 275 EIS and the specified wake-power installation. These retrofit requirements should not be applied indiscriminately to integrated flight decks. Flight Stream 510/210/110 cannot be combined with GDL 60 under this examined approval.\n\nLegacy non-Xi GTN, GNS and original non-TXi G500/G600 equipment should not be assumed to be direct PlaneSync hosts. Downstream database synchronization is different from full GDL 60 compatibility. RWAS can review the exact panel before recommending an upgrade.\n\n## Read the timestamp before the numbers\n\nA remote dashboard is most useful when you understand how fresh its information is. The headline image shows “Remote Aircraft Status Available,” with aircraft-status readings dated September 16 at 3:20 p.m. and a separate database update timestamp. It is a dated example screen, not evidence of a current live connection or current aircraft condition.\n\nAn old fuel or voltage reading does not describe the airplane right now. A displayed location may be last known rather than current. Check the update time for the information you are reviewing, not just the values that catch your eye.\n\nRemote availability also has an energy cost. Cellular standby uses battery energy, and even deep sleep consumes some energy. Battery-protection limits and configured energy budgets constrain availability. Deep sleep cannot receive the on-demand cellular wake trigger; scheduled wakes are a different mechanism. RWAS can review the approved setup rather than promise indefinite remote access or suggest copying another aircraft's settings.\n\n## After flight, put the records to work\n\nWith compatible equipment, active PlaneSync service, and connectivity, aircraft and engine logs can upload for review in flyGarmin or Garmin Pilot. Selected analysis services require connected accounts.\n\nEasier access to records can support a more informed conversation with your maintenance team. It is not an automatic diagnosis, and some diagnostic uploads still require manual action. Think of the records as useful evidence for review—not a declaration that everything is healthy.\n\n## Prepare at home. Preflight at the aircraft.\n\nImagine checking the available aircraft status while preparing for tomorrow's trip, confirming when it updated, and arriving at the airport better informed. That is the practical appeal of connected aircraft management.\n\nYou still perform the normal aircraft preflight and avionics database checks. Remote information supplements preparation; it does not replace an inspection or determine whether the aircraft is airworthy.\n\n## Plan your connected upgrade with RWAS\n\nStart with your aircraft, not a promise on a feature list. Roger Wilco Aviation Services can review compatibility, installation requirements, and the service options that fit your intended use.\n\nSend your aircraft make, model, year, serial number and N-number, along with your installed avionics and the features you want most. Panel photos and available equipment details can help start that discussion.\n\n**[Contact RWAS](https://www.rogerwilcoaviation.com/contact)** · **(605) 299-8178** · **avionics@rwas.team**\n\nLet's plan a connected upgrade around what your airplane can actually support.\n",
-      "tags": [
-        "Garmin",
-        "GDL 60",
-        "PlaneSync",
-        "Avionics"
-      ],
+      "tags": ["Garmin", "GDL 60", "PlaneSync", "Avionics"],
       "social_status": "not_started"
     },
     {
@@ -111,12 +103,7 @@
         "The separate G1000 NXi offer provides $2,000, $3,500 or $5,000 depending on the exact listed upgrade kit. Examples include $2,000 for listed NAV III, G36, G58 and Cirrus SR2X kits, $3,500 for listed Phenom, PA-46-500TP, TBM, Kodiak, King Air and Mustang packages, and $5,000 specifically for the King Air NXi Autothrottle Legacy LRU Upgrade Kit. Purchases must be new orders to Garmin from a current Garmin Aviation Dealer within the valid period. Only one rebate is allowed per customer aircraft, even if multiple qualifying products are purchased; an aircraft’s model alone does not establish upgrade compatibility or eligibility.",
         "For either program, submit the completed official form, required serial numbers and a dated, itemized dealer receipt or invoice to rebate@garmin.com by January 22, 2027. These offers are for customers in the United States and Canada, require an authorized Garmin dealer purchase, and exclude refurbished or newly overhauled products. Do not assume rebates can be combined: the NXi offer prohibits combining with another direct Garmin offer, while Buy and Save allows only exceptions expressly noted on its form. Review the current terms at Garmin’s aviation promotions page and keep copies of your paperwork. Call RWAS at (605) 299-8178 or email avionics@rwas.team to review your project and obtain a quote that separates equipment, installation and any qualifying rebate."
       ],
-      "tags": [
-        "garmin",
-        "avionics",
-        "rebates",
-        "g1000-nxi"
-      ],
+      "tags": ["garmin", "avionics", "rebates", "g1000-nxi"],
       "approved_at": "2026-09-22T14:04:46Z",
       "published_at": "2026-09-22T14:07:51.180485+00:00",
       "cta_label": "Review Garmin aviation promotions",
@@ -578,10 +565,7 @@
         "There is one operational catch worth saying out loud. Garmin is tying the automatic workflow to the connected ecosystem, not to manual file handling. In other words, SD card uploads are not what drives these integrations. The airplane, the Connext link, the Garmin Pilot app, and the flyGarmin.com account all need to be set up correctly if you want the process to work the way Garmin describes it.",
         "From the shop side, RWAS sees this as a solid value-add for owners who want their panel to do more than display information in flight. We are an authorized Garmin dealer, and we can help owners think through the installation, connectivity, and day-to-day workflow so the panel, the mobile tools, and the post-flight analysis all work together like one system instead of a pile of unrelated features."
       ],
-      "tags": [
-        "garmin",
-        "dealer-memo"
-      ],
+      "tags": ["garmin", "dealer-memo"],
       "social": {
         "facebook": {
           "text": "Garmin just made this Garmin platform more useful after the flight, not just during it.\n\nThis memo covers automatic flight logging through Connext, Garmin Pilot, and flyGarmin.com, with partner integrations that can help owners get better maintenance and operating insight from their data.\n\nRWAS is an authorized Garmin dealer, and we can help you make the panel, connectivity, and workflow actually work together.\n\nReview the article: https://www.rogerwilcoaviation.com/blog/reminder-new-product-preview-and-training-webinars-20260701\nCall (605) 299-8178.\n\n#Garmin #RogerWilcoAviation #Avionics #GarminPilot #Connext #flyGarmin",
@@ -613,12 +597,7 @@
         "The practical next step is to confirm whether your aircraft and proposed Garmin autopilot package qualify under the current program terms. Eligibility, timing, required equipment, and documentation can matter, so it is better to verify the details before assuming a rebate will apply.",
         "RWAS is an authorized Garmin dealer and avionics shop. We can help you check aircraft eligibility, sort through the installation options, quote the package, and plan the work so the rebate opportunity fits a real installation plan instead of becoming paperwork after the fact."
       ],
-      "tags": [
-        "garmin",
-        "autopilot",
-        "rebate",
-        "gfc-500"
-      ],
+      "tags": ["garmin", "autopilot", "rebate", "gfc-500"],
       "social": {
         "facebook": {
           "text": "Garmin has announced a 2026 autopilot rebate program, and that makes this a good time for aircraft owners to revisit a Garmin autopilot upgrade.\n\nRWAS can help confirm aircraft eligibility, review the installation options, and build a real plan around the current program terms.\n\nCall (605) 299-8178.\n\n#Garmin #GFC500 #Autopilot #Avionics #RogerWilcoAviation",
@@ -659,10 +638,7 @@
         "There is one operational catch worth saying out loud. Garmin is tying the automatic workflow to the connected ecosystem, not to manual file handling. In other words, SD card uploads are not what drives these integrations. The airplane, the Connext link, the Garmin Pilot app, and the flyGarmin.com account all need to be set up correctly if you want the process to work the way Garmin describes it.",
         "From the shop side, RWAS sees this as a solid value-add for owners who want their panel to do more than display information in flight. We are an authorized Garmin dealer, and we can help owners think through the installation, connectivity, and day-to-day workflow so the panel, the mobile tools, and the post-flight analysis all work together like one system instead of a pile of unrelated features."
       ],
-      "tags": [
-        "garmin",
-        "dealer-memo"
-      ],
+      "tags": ["garmin", "dealer-memo"],
       "social": {
         "facebook": {
           "text": "Garmin just made this Garmin platform more useful after the flight, not just during it.\n\nThis memo covers automatic flight logging through Connext, Garmin Pilot, and flyGarmin.com, with partner integrations that can help owners get better maintenance and operating insight from their data.\n\nRWAS is an authorized Garmin dealer, and we can help you make the panel, connectivity, and workflow actually work together.\n\nReview the article: https://www.rogerwilcoaviation.com/blog/dealer-product-update-and-training-webinars-20260623\nCall (605) 299-8178.\n\n#Garmin #RogerWilcoAviation #Avionics #GarminPilot #Connext #flyGarmin",
@@ -733,13 +709,7 @@
         "For pilots, the D2 line is Garmin’s aviation-focused smartwatch family: flight-oriented tools on the wrist, everyday smartwatch capability, and a cleaner link between the pilot’s flying life and daily routine. The D2 Mach 2 Pro adds built-in inReach capability, with important limitations: an active subscription is required, coverage is not available everywhere, satellite and LTE services are subject to regional availability, and Garmin notes it is not for in-flight use.",
         "RWAS can help customers confirm which D2 Mach 2 model fits their needs, place an order during the promotion window, and coordinate the Garmin ecosystem around the aircraft, panel, mobile apps, and pilot workflow. If you have been considering a D2 aviation watch, this is a good window to ask about availability before the June 29 deadline."
       ],
-      "tags": [
-        "garmin",
-        "dealer-memo",
-        "d2-mach-2-pro",
-        "d2-mach-2",
-        "g5"
-      ],
+      "tags": ["garmin", "dealer-memo", "d2-mach-2-pro", "d2-mach-2", "g5"],
       "social": {
         "facebook": {
           "text": "Garmin just made D2 Mach 2 Pro more useful after the flight, not just during it.\n\nThis memo covers automatic flight logging through Connext, Garmin Pilot, and flyGarmin.com, with partner integrations that can help owners get better maintenance and operating insight from their data.\n\nRWAS is an authorized Garmin dealer, and we can help you make the panel, connectivity, and workflow actually work together.\n\nReview the article: https://www.rogerwilcoaviation.com/blog/june-dealer-reminders-20260611\nCall (605) 299-8178.\n\n#Garmin #RogerWilcoAviation #Avionics #GarminPilot #Connext #flyGarmin",
@@ -810,10 +780,7 @@
         "There is one operational catch worth saying out loud. Garmin is tying the automatic workflow to the connected ecosystem, not to manual file handling. In other words, SD card uploads are not what drives these integrations. The airplane, the Connext link, the Garmin Pilot app, and the flyGarmin.com account all need to be set up correctly if you want the process to work the way Garmin describes it.",
         "From the shop side, RWAS sees this as a solid value-add for owners who want their panel to do more than display information in flight. We are an authorized Garmin dealer, and we can help owners think through the installation, connectivity, and day-to-day workflow so the panel, the mobile tools, and the post-flight analysis all work together like one system instead of a pile of unrelated features."
       ],
-      "tags": [
-        "garmin",
-        "dealer-memo"
-      ],
+      "tags": ["garmin", "dealer-memo"],
       "social": {
         "facebook": {
           "text": "Garmin just made this Garmin platform more useful after the flight, not just during it.\n\nThis memo covers automatic flight logging through Connext, Garmin Pilot, and flyGarmin.com, with partner integrations that can help owners get better maintenance and operating insight from their data.\n\nRWAS is an authorized Garmin dealer, and we can help you make the panel, connectivity, and workflow actually work together.\n\nReview the article: https://www.rogerwilcoaviation.com/blog/mid-year-price-change-announcement-20260527\nCall (605) 299-8178.\n\n#Garmin #RogerWilcoAviation #Avionics #GarminPilot #Connext #flyGarmin",
@@ -1051,13 +1018,7 @@
         "There is one operational catch worth saying out loud. Garmin is tying the automatic workflow to the connected ecosystem, not to manual file handling. In other words, SD card uploads are not what drives these integrations. The airplane, the Connext link, the Garmin Pilot app, and the flyGarmin.com account all need to be set up correctly if you want the process to work the way Garmin describes it.",
         "From the shop side, RWAS sees this as a solid value-add for owners who want their panel to do more than display information in flight. We are an authorized Garmin dealer, and we can help owners think through the installation, connectivity, and day-to-day workflow so the panel, the mobile tools, and the post-flight analysis all work together like one system instead of a pile of unrelated features."
       ],
-      "tags": [
-        "garmin",
-        "dealer-memo",
-        "g3x-touch",
-        "g5",
-        "gi-275"
-      ],
+      "tags": ["garmin", "dealer-memo", "g3x-touch", "g5", "gi-275"],
       "social": {
         "facebook": {
           "text": "Garmin just made G3X Touch more useful after the flight, not just during it.\n\nThis memo covers automatic flight logging through Connext, Garmin Pilot, and flyGarmin.com, with partner integrations that can help owners get better maintenance and operating insight from their data.\n\nRWAS is an authorized Garmin dealer, and we can help you make the panel, connectivity, and workflow actually work together.\n\nReview the article: https://rogerwilcoaviation.com/blog/article.html?id=lead-times-as-of-42326-20260423\nCall (605) 299-8178.\n\n#Garmin #RogerWilcoAviation #Avionics #GarminPilot #Connext #flyGarmin",
@@ -1154,7 +1115,7 @@
         "part-145",
         "faa"
       ],
-      "image": "/images/blog/repair-station-vs-ap-mechanic-corporate-hangar-1.jpg",
+      "image": "/images/blog/repair-station-vs-ap-mechanic-corporate-hangar-1-800.webp",
       "image_alt": "Corporate turboprop aircraft parked inside a spacious hangar.",
       "published_at": "2026-04-14T21:15:00Z",
       "updated_at": "2026-09-23T08:51:37+00:00",
@@ -1195,11 +1156,7 @@
         "There is an important operational detail here: the automatic workflow depends on Connext wireless transfer to a mobile device running Garmin Pilot, with cloud storage through flyGarmin.com. Manual SD card uploads do not automatically flow into these analysis services. In plain English, if you want the convenience and continuity Garmin is advertising, the airplane, the mobile workflow, and the account setup all need to be configured correctly. That is exactly the sort of detail that tends to get glossed over in marketing copy and then turns into frustration later.",
         "From the shop side, this is a strong value-add for G3X Touch owners who want more than just a good-looking panel. As an authorized Garmin dealer, RWAS can help owners think through not only the display installation itself, but also how that panel fits into the full operating ecosystem, including Garmin Pilot, Connext connectivity, data review, and long-term maintenance visibility. If you are planning a G3X Touch installation, upgrading an existing system, or trying to make better use of the one already in your aircraft, this new flight logging capability is worth paying attention to."
       ],
-      "tags": [
-        "garmin",
-        "garmin-memo",
-        "G3X Touch"
-      ],
+      "tags": ["garmin", "garmin-memo", "G3X Touch"],
       "social": {
         "facebook": {
           "text": "Garmin just made G3X Touch more useful after the flight, not just during it.\n\nAutomatic flight logging now lets G3X Touch owners push flight and engine data wirelessly through Connext to Garmin Pilot, with cloud storage on flyGarmin.com and analysis through partners including FlySto, Savvy Aviation, Navi AI, Jet-Care, and Brazos Safety Systems.\n\nThat means better access to engine trend insight, maintenance visibility, and post-flight analysis without the usual SD-card shuffle.\n\nRWAS is an authorized Garmin dealer, and we can help you set up a G3X Touch system so the panel, connectivity, and workflow all work together the way they should.\n\nRead the draft here: https://www.rogerwilcoaviation.com/blog/article.html?id=auto-flight-logging-now-available-for-g3x-touch-20260414\nCall us at (605) 299-8178.\n\n#Garmin #G3XTouch #GarminPilot #Connext #flyGarmin #SavvyAviation #Avionics #GeneralAviation #RogerWilcoAviation",
@@ -1283,12 +1240,7 @@
         "The promotion is limited to new customers and is positioned as a seasonal push for Garmin Pilot adoption during the spring and summer sales window.",
         "If you want help pairing Garmin Pilot planning with panel upgrades or training support, contact Roger Wilco Aviation Services at (605) 299-8178."
       ],
-      "tags": [
-        "garmin",
-        "garmin-pilot",
-        "promotion",
-        "dealer-memo"
-      ],
+      "tags": ["garmin", "garmin-pilot", "promotion", "dealer-memo"],
       "social": {
         "facebook": {
           "text": "Garmin has launched a new Garmin Pilot promotion for new customers, offering 15 months for the price of 12 on annual Standard and Premium subscriptions purchased between April 7 and July 26, 2026.\n\nContact us at (605) 299-8178 to learn more or schedule service.\n\n#Garmin #Garminpilot #Promotion #Dealermemo #GarminAvionics #RogerWilcoAviation #YanktonSD #KYKN #FlyGA",
@@ -1415,14 +1367,7 @@
         "Roger Wilco Aviation Services, an authorized Garmin dealer and FAA-certificated repair station, is now scheduling GFC 500 installations for these newly approved airframes. The shop has completed multiple GFC 500 installs on Cessna and Piper airframes and brings the same level of expertise to the Beechcraft and Mooney platforms.",
         "Owners interested in upgrading should contact RWAS at (605) 299-8178 to discuss their specific aircraft configuration, estimated installation timeline, and financing options through the RWAS equipment financing program."
       ],
-      "tags": [
-        "garmin",
-        "gfc-500",
-        "autopilot",
-        "stc",
-        "beechcraft",
-        "mooney"
-      ],
+      "tags": ["garmin", "gfc-500", "autopilot", "stc", "beechcraft", "mooney"],
       "social": {
         "facebook": {
           "text": "Big news for Bonanza and Mooney owners! Garmin has expanded GFC 500 autopilot STC coverage to the Beechcraft 33/35/36 series and Mooney M20J/M20K. We're scheduling installations now — call (605) 299-8178 to get on the list.\n\n#GarminAvionics #GFC500 #GeneralAviation #AvionicsUpgrade #RogerWilcoAviation",
@@ -1500,12 +1445,7 @@
         "RWAS maintains tiered pricing for its customers based on project scope. Complete panel upgrade packages, which bundle displays, navigators, autopilots, and installation labor, continue to offer the best value per component compared to individual purchases.",
         "For current pricing on any Garmin product or installation package, contact Roger Wilco Aviation Services at (605) 299-8178 or visit rogerwilcoaviation.com. Financing is available through our equipment financing program for qualifying installations."
       ],
-      "tags": [
-        "garmin",
-        "pricing",
-        "dealer",
-        "spring-2026"
-      ],
+      "tags": ["garmin", "pricing", "dealer", "spring-2026"],
       "social": {
         "facebook": {
           "text": "Garmin spring 2026 pricing is now active. As an authorized dealer, we've updated pricing across all product lines — G3X Touch, GTN Xi, GFC 500/600, transponders, and accessories.\n\nPlanning a panel upgrade? Call (605) 299-8178 for a project quote. Financing available.\n\n#Garmin #AvionicsUpgrade #RogerWilcoAviation",

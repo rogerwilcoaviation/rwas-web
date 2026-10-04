@@ -66,6 +66,22 @@
 /collections/rigging-tools/ /collections/papa-alpha-tools 301
 /collections/on-sale/Garmin-Product-On-Sale/ /collections/on-sale 301
 
+# High-demand retired products with a current successor or tightly related collection.
+/products/forerunner-955-solar-black /products/forerunner-965-carbon-gray-dlc-titanium-bezel-with-black-case-and-black-powder-gray-silicone-band 301
+/products/forerunner-955-black /products/forerunner-965-carbon-gray-dlc-titanium-bezel-with-black-case-and-black-powder-gray-silicone-band 301
+/products/forerunner-955-whitestone /products/forerunner-965-titanium-bezel-with-whitestone-case-and-whitestone-powder-gray-silicone-band 301
+/products/instinct-esports-edition-black-lava /products/instinct-3-50-mm-amoled-black-with-charcoal-band 301
+/products/black-silicone-watch-band /collections/watches-accessories 301
+/products/garmin-quick-release-bands-20-mm-black-azure-comfortfit-fabric-010-13900-00 /collections/watches-accessories 301
+/products/quickfit-26-watch-bands-vented-titanium-bracelet-with-carbon-gray-dlc-coating /collections/watches-accessories 301
+/products/spring-bar-set-for-quickfit-26-watch-bands /collections/watches-accessories 301
+/products/quickfit-22-watch-straps-jacquard-weave-nylon-strap-heathered-black /collections/watches-accessories 301
+/products/garmin-quickfit-26-watch-bands-captain-blue-silicone-010-13989-10 /collections/watches-accessories 301
+/products/ultrafit-nylon-straps-22-mm-black /collections/watches-accessories 301
+/products/garmin-quick-release-bands-20-mm-citron-cloud-blue-comfortfit-fabric-010-14400-03 /collections/watches-accessories 301
+/products/quickfit-22-watch-straps-hardened-swept-link-titanium-bracelet /collections/watches-accessories 301
+/products/quickfit-26-watch-bands-chestnut-leather /collections/watches-accessories 301
+
 # --- RWAS Work Order System SPA deep links ---
 /ops /work-order-system/ops 301
 /ops/* /work-order-system/ops/:splat 301

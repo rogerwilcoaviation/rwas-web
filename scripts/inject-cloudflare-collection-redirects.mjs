@@ -23,7 +23,8 @@ const redirects = {
   '/pages/garmin-avionics-accessories': '/collections/garmin-dealer-install',
   '/pages/shop-capabilities': '/shop-capabilities',
   '/collections/on-sale/Garmin-Product-On-Sale': '/collections/on-sale',
-  '/brochures/papa-alpha-tools-trifold.pdf': '/brochures/papa-alpha-tools/papa-alpha-tools-trifold.pdf',
+  '/brochures/papa-alpha-tools-trifold.pdf':
+    '/brochures/papa-alpha-tools/papa-alpha-tools-trifold.pdf',
   '/contact.html': '/contact',
   '/newspaper/index.html': '/',
   '/aircraft4sale': '/aircraft-for-sale',
@@ -56,6 +57,36 @@ const redirects = {
   '/services/aircraft-maintenance-sioux-falls':
     '/services/aircraft-maintenance',
   '/services/aircraft-maintenance-yankton': '/services/aircraft-maintenance',
+  // Retired product URLs with live Search Console demand (2026-09-05 to
+  // 2026-10-02). Use the closest current successor where one exists and the
+  // tightly related watch collection for retired accessory variants.
+  '/products/forerunner-955-solar-black':
+    '/products/forerunner-965-carbon-gray-dlc-titanium-bezel-with-black-case-and-black-powder-gray-silicone-band',
+  '/products/forerunner-955-black':
+    '/products/forerunner-965-carbon-gray-dlc-titanium-bezel-with-black-case-and-black-powder-gray-silicone-band',
+  '/products/forerunner-955-whitestone':
+    '/products/forerunner-965-titanium-bezel-with-whitestone-case-and-whitestone-powder-gray-silicone-band',
+  '/products/instinct-esports-edition-black-lava':
+    '/products/instinct-3-50-mm-amoled-black-with-charcoal-band',
+  '/products/black-silicone-watch-band': '/collections/watches-accessories',
+  '/products/garmin-quick-release-bands-20-mm-black-azure-comfortfit-fabric-010-13900-00':
+    '/collections/watches-accessories',
+  '/products/quickfit-26-watch-bands-vented-titanium-bracelet-with-carbon-gray-dlc-coating':
+    '/collections/watches-accessories',
+  '/products/spring-bar-set-for-quickfit-26-watch-bands':
+    '/collections/watches-accessories',
+  '/products/quickfit-22-watch-straps-jacquard-weave-nylon-strap-heathered-black':
+    '/collections/watches-accessories',
+  '/products/garmin-quickfit-26-watch-bands-captain-blue-silicone-010-13989-10':
+    '/collections/watches-accessories',
+  '/products/ultrafit-nylon-straps-22-mm-black':
+    '/collections/watches-accessories',
+  '/products/garmin-quick-release-bands-20-mm-citron-cloud-blue-comfortfit-fabric-010-14400-03':
+    '/collections/watches-accessories',
+  '/products/quickfit-22-watch-straps-hardened-swept-link-titanium-bracelet':
+    '/collections/watches-accessories',
+  '/products/quickfit-26-watch-bands-chestnut-leather':
+    '/collections/watches-accessories',
 };
 
 const gonePaths = ['/pages/script-rwas'];

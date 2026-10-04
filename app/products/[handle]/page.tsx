@@ -1362,7 +1362,7 @@ export default async function ProductDetailPage({
                 <a
                   className="bs-product-image-link"
                   href="#product-image-zoom"
-                  aria-label={`Open larger image for ${product.title}`}
+                  aria-label={`Click image to enlarge: ${product.title}`}
                 >
                   <img
                     src={productImageUrl(
@@ -1420,6 +1420,8 @@ export default async function ProductDetailPage({
                         heroImg.altText,
                         product.title,
                       )}
+                      width={1600}
+                      height={1200}
                       style={{
                         maxWidth: '100%',
                         height: 'auto',
@@ -1641,7 +1643,7 @@ export default async function ProductDetailPage({
           {/* Spec aside — built from variant options for now */}
           <aside>
             <div className="bs-spec-card">
-              <h3>Specifications</h3>
+              <h2>Specifications</h2>
               <table>
                 <tbody>
                   {product.vendor ? (

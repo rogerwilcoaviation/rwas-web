@@ -9,15 +9,16 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import Link from 'next/link';
+import { genPageMetadata } from '@/app/seo';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/locations/yankton';
 
-export const metadata = {
-  title: { absolute: 'Aircraft Maintenance & Avionics Shop - Yankton, SD | RWAS' },
+export const metadata = genPageMetadata({
+  title: 'Aircraft Maintenance & Avionics Shop - Yankton, SD | RWAS',
   description:
     'RWAS Repair Station Headquarters is at 3309 Douglas Avenue Unit #3 in Yankton, SD, supporting Garmin avionics, maintenance, NDT, fabrication, and pre-buys.',
-  alternates: { canonical: pageUrl },
-};
+  canonical: pageUrl,
+});
 
 export default function YanktonLocationPage() {
   return (
@@ -62,9 +63,24 @@ export default function YanktonLocationPage() {
                 '@type': 'BreadcrumbList',
                 '@id': `${pageUrl}#breadcrumb`,
                 itemListElement: [
-                  { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.rogerwilcoaviation.com/' },
-                  { '@type': 'ListItem', position: 2, name: 'Locations', item: pageUrl },
-                  { '@type': 'ListItem', position: 3, name: 'Yankton', item: pageUrl },
+                  {
+                    '@type': 'ListItem',
+                    position: 1,
+                    name: 'Home',
+                    item: 'https://www.rogerwilcoaviation.com/',
+                  },
+                  {
+                    '@type': 'ListItem',
+                    position: 2,
+                    name: 'Locations',
+                    item: pageUrl,
+                  },
+                  {
+                    '@type': 'ListItem',
+                    position: 3,
+                    name: 'Yankton',
+                    item: pageUrl,
+                  },
                 ],
               },
             ],
@@ -80,18 +96,25 @@ export default function YanktonLocationPage() {
 
       <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="hero-headline-group" aria-labelledby="yankton-hero">
-          <span className="bs-kicker">Yankton Location &middot; FAA Part 145 Repair Station #RWSR491E</span>
-          <span className="bs-script-accent">&mdash; Yankton dispatch desk &mdash;</span>
+          <span className="bs-kicker">
+            Yankton Location &middot; FAA Part 145 Repair Station #RWSR491E
+          </span>
+          <span className="bs-script-accent">
+            &mdash; Yankton dispatch desk &mdash;
+          </span>
           <h1 id="yankton-hero" className="bs-headline bs-headline--hero">
             Aircraft maintenance and Garmin avionics,
             <br />
             <em>based in Yankton, South Dakota.</em>
           </h1>
           <p className="bs-subhead">
-            Garmin installation &middot; annual inspections &middot; NDT &middot; fabrication &middot; Papa-Alpha tools &middot; pre-buy support
+            Garmin installation &middot; annual inspections &middot; NDT
+            &middot; fabrication &middot; Papa-Alpha tools &middot; pre-buy
+            support
           </p>
           <div className="bs-byline">
-            Repair Station Headquarters &middot; 3309 Douglas Avenue Unit #3 &middot; Yankton, SD 57078 &middot; (605) 299-8178
+            Repair Station Headquarters &middot; 3309 Douglas Avenue Unit #3
+            &middot; Yankton, SD 57078 &middot; (605) 299-8178
           </div>
         </section>
 
@@ -99,14 +122,26 @@ export default function YanktonLocationPage() {
           <div className="about-main">
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Regional Shop</span>
-              <h2 className="bs-headline bs-headline--section">A Northern Plains repair station for aircraft owners who need the whole job handled.</h2>
+              <h2 className="bs-headline bs-headline--section">
+                A Northern Plains repair station for aircraft owners who need
+                the whole job handled.
+              </h2>
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  Roger Wilco Aviation Services operates its Repair Station Headquarters at 3309 Douglas Avenue Unit #3 in Yankton, South Dakota. The shop is built for aircraft owners who need avionics, airframe, powerplant, NDT, fabrication, and documentation coordinated by one accountable team instead of scattered across disconnected vendors.
+                  Roger Wilco Aviation Services operates its Repair Station
+                  Headquarters at 3309 Douglas Avenue Unit #3 in Yankton, South
+                  Dakota. The shop is built for aircraft owners who need
+                  avionics, airframe, powerplant, NDT, fabrication, and
+                  documentation coordinated by one accountable team instead of
+                  scattered across disconnected vendors.
                 </p>
                 <p>
-                  RWAS supports owners across South Dakota, Nebraska, Iowa, Minnesota, North Dakota, Wyoming, and Montana with FAA Part 145 repair-station discipline, Garmin dealer access, in-house panel fabrication, and practical aircraft-maintenance judgment.
+                  RWAS supports owners across South Dakota, Nebraska, Iowa,
+                  Minnesota, North Dakota, Wyoming, and Montana with FAA Part
+                  145 repair-station discipline, Garmin dealer access, in-house
+                  panel fabrication, and practical aircraft-maintenance
+                  judgment.
                 </p>
               </div>
             </Specimen>
@@ -115,43 +150,86 @@ export default function YanktonLocationPage() {
               <Specimen.Image
                 src="/newspaper/images/r182_panel.webp"
                 alt="Garmin avionics panel installation supported by RWAS in Yankton"
+                width={800}
+                height={525}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
-                Garmin panel work, fabrication, and return-to-service documentation coordinated from the RWAS Yankton shop.
+                Garmin panel work, fabrication, and return-to-service
+                documentation coordinated from the RWAS Yankton shop.
               </Specimen.Caption>
             </Specimen>
 
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">What Owners Come Here For</span>
-              <h2 className="bs-headline bs-headline--section">Commercial-intent services with a real address behind them.</h2>
+              <h2 className="bs-headline bs-headline--section">
+                Commercial-intent services with a real address behind them.
+              </h2>
               <hr className="section-rule" />
               <div className="bs-split">
                 <div className="bs-body">
                   <p>
-                    The Yankton location page exists for pilots and aircraft owners searching locally for the exact work RWAS performs. It connects location intent to the deeper service pages where each capability is explained in detail.
+                    The Yankton location page exists for pilots and aircraft
+                    owners searching locally for the exact work RWAS performs.
+                    It connects location intent to the deeper service pages
+                    where each capability is explained in detail.
                   </p>
                 </div>
                 <ul className="bs-svc-list">
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><Link href="/services/garmin-installation-northern-plains">Garmin avionics installation</Link></p>
-                    <p className="bs-svc-desc">G3X Touch, GTN Xi, GFC 500, ADS-B, GI 275, G5, panel planning, and installation documentation.</p>
+                    <p className="bs-svc-name">
+                      <Link href="/services/garmin-installation-northern-plains">
+                        Garmin avionics installation
+                      </Link>
+                    </p>
+                    <p className="bs-svc-desc">
+                      G3X Touch, GTN Xi, GFC 500, ADS-B, GI 275, G5, panel
+                      planning, and installation documentation.
+                    </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><Link href="/services/aircraft-maintenance">Aircraft maintenance and annual inspections</Link></p>
-                    <p className="bs-svc-desc">Annuals, 100-hour inspections, pre-buy support, AOG coordination, prop balancing, and weight certification.</p>
+                    <p className="bs-svc-name">
+                      <Link href="/services/aircraft-maintenance">
+                        Aircraft maintenance and annual inspections
+                      </Link>
+                    </p>
+                    <p className="bs-svc-desc">
+                      Annuals, 100-hour inspections, pre-buy support, AOG
+                      coordination, prop balancing, and weight certification.
+                    </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><Link href="/services/ndt-inspection">Aircraft NDT inspection</Link></p>
-                    <p className="bs-svc-desc">Eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing.</p>
+                    <p className="bs-svc-name">
+                      <Link href="/services/ndt-inspection">
+                        Aircraft NDT inspection
+                      </Link>
+                    </p>
+                    <p className="bs-svc-desc">
+                      Eddy current, dye penetrant, magnetic particle,
+                      ultrasound, visual, and Rockwell hardness testing.
+                    </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><Link href="/services/fiber-laser-fabrication">Fiber laser fabrication</Link></p>
-                    <p className="bs-svc-desc">Panel cutting, laser welding, powder coating, UV printing, bracket work, and aircraft fabrication support.</p>
+                    <p className="bs-svc-name">
+                      <Link href="/services/fiber-laser-fabrication">
+                        Fiber laser fabrication
+                      </Link>
+                    </p>
+                    <p className="bs-svc-desc">
+                      Panel cutting, laser welding, powder coating, UV printing,
+                      bracket work, and aircraft fabrication support.
+                    </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name"><Link href="/services/papa-alpha-tools">Papa-Alpha Piper rigging tools</Link></p>
-                    <p className="bs-svc-desc">RWAS-built rigging reference tools for PA-series Piper aircraft, manufactured and shipped from the shop.</p>
+                    <p className="bs-svc-name">
+                      <Link href="/services/papa-alpha-tools">
+                        Papa-Alpha Piper rigging tools
+                      </Link>
+                    </p>
+                    <p className="bs-svc-desc">
+                      RWAS-built rigging reference tools for PA-series Piper
+                      aircraft, manufactured and shipped from the shop.
+                    </p>
                   </li>
                 </ul>
               </div>
@@ -159,15 +237,25 @@ export default function YanktonLocationPage() {
 
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Before You Fly or Ship Anything</span>
-              <h2 className="bs-headline bs-headline--section">Call the shop with the aircraft, mission, and records.</h2>
+              <h2 className="bs-headline bs-headline--section">
+                Call the shop with the aircraft, mission, and records.
+              </h2>
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  For service planning, include the aircraft make and model, N-number, current location, known squawks, photos, logbook context, desired downtime window, and the decision you are trying to make. RWAS can then route the request to avionics, maintenance, NDT, fabrication, or pre-buy support without starting from a generic intake.
+                  For service planning, include the aircraft make and model,
+                  N-number, current location, known squawks, photos, logbook
+                  context, desired downtime window, and the decision you are
+                  trying to make. RWAS can then route the request to avionics,
+                  maintenance, NDT, fabrication, or pre-buy support without
+                  starting from a generic intake.
                 </p>
               </div>
               <p>
-                <Link className="bs-cta-primary" href="/contact?reason=service&source=yankton-location">
+                <Link
+                  className="bs-cta-primary"
+                  href="/contact?reason=service&source=yankton-location"
+                >
                   Contact the Yankton shop
                 </Link>
                 <Link className="bs-cta-secondary" href="/services">
@@ -177,7 +265,10 @@ export default function YanktonLocationPage() {
             </Specimen>
           </div>
 
-          <aside className="about-rail" aria-label="Yankton location quick reference">
+          <aside
+            className="about-rail"
+            aria-label="Yankton location quick reference"
+          >
             <Specimen as="section">
               <span className="bs-kicker">Repair Station Headquarters</span>
               <p>
@@ -192,7 +283,11 @@ export default function YanktonLocationPage() {
               <p>
                 <a
                   href="tel:+16052998178"
-                  style={{ color: 'var(--ink-900)', textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                  style={{
+                    color: 'var(--ink-900)',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '2px',
+                  }}
                 >
                   (605) 299-8178
                 </a>
@@ -204,7 +299,11 @@ export default function YanktonLocationPage() {
               <p>
                 <a
                   href="mailto:service@rwas.team"
-                  style={{ color: 'var(--ink-900)', textDecoration: 'underline', textUnderlineOffset: '2px' }}
+                  style={{
+                    color: 'var(--ink-900)',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '2px',
+                  }}
                 >
                   service@rwas.team
                 </a>

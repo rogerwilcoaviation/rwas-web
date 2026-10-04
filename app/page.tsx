@@ -157,10 +157,10 @@ export default function Home() {
                 className="bs-specimen-figure"
               >
                 <Specimen.Image
-                  src="/images/axis/garmin-axis-flight-displays-build-system.jpg"
+                  src="/images/axis/garmin-axis-flight-displays-build-system-800.webp"
                   alt="Garmin AXIS 8-inch portrait, 11.6-inch, and 8-inch landscape flight displays"
-                  width={1600}
-                  height={731}
+                  width={800}
+                  height={366}
                   fetchPriority="high"
                   decoding="async"
                 />
@@ -254,7 +254,7 @@ export default function Home() {
                   controls
                   playsInline
                   preload="none"
-                  poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg"
+                  poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster-640.webp"
                   aria-label="RWAS fiber laser fabrication video"
                 >
                   <source

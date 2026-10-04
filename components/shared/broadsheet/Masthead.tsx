@@ -20,7 +20,7 @@ export type MastheadProps = {
  * the CredentialsBar directly below.
  */
 export default function Masthead({
-  logoSrc = '/newspaper/images/logo.png',
+  logoSrc = '/newspaper/images/logo-128.webp',
   logoAlt = 'Roger Wilco Aviation Services',
   brand = 'Roger Wilco Aviation Services',
   tagline = 'FAA CERT. REPAIR STATION \u00b7 AVIONICS \u00b7 AIRFRAME & POWERPLANT \u00b7 NDT \u00b7 FABRICATION',
@@ -34,8 +34,8 @@ export default function Masthead({
           className="bs-masthead__logo"
           src={logoSrc}
           alt={logoAlt}
-          width={256}
-          height={256}
+          width={128}
+          height={128}
         />
         <div className="bs-masthead__titles">
           <div className="bs-masthead__brand" aria-label={brand}>

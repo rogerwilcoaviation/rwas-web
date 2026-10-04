@@ -23,7 +23,7 @@
  */
 export function isShopifyPlaceholderImage(
   url: string | null | undefined,
-  altText?: string | null
+  altText?: string | null,
 ): boolean {
   const haystack = `${url || ''} ${altText || ''}`;
   return (
@@ -39,17 +39,21 @@ export function isShopifyPlaceholderImage(
 function placeholderImageUrl(
   url: string | null | undefined,
   altText?: string | null,
-  handle?: string | null
+  handle?: string | null,
 ): string {
   const haystack = `${handle || ''} ${url || ''} ${altText || ''}`;
   if (/garmin-general-no-product-image-available/i.test(url || '')) {
-    return '/images/products/garmin-general-no-product-image-available.jpg';
+    return '/images/products/garmin-general-no-product-image-available-800.webp';
   }
   if (/papa-alpha|papa alpha|rigging-tool/i.test(haystack)) {
-    return '/newspaper/images/papa_alpha_kit_collection.jpg';
+    return '/newspaper/images/papa_alpha_kit_collection-800.webp';
   }
-  if (/garmin|kit-gfc|kit-gtn|kit-g3x|\bgfc\b|\bgtn\b|\bg3x\b|\bgnx\b|\bgdu\b|\bgdl\b|\bgtx\b|\bgma\b|\bgi\s?\d|ads-b|install kit/i.test(haystack)) {
-    return '/images/products/garmin-no-product-image-available-approved.jpg';
+  if (
+    /garmin|kit-gfc|kit-gtn|kit-g3x|\bgfc\b|\bgtn\b|\bg3x\b|\bgnx\b|\bgdu\b|\bgdl\b|\bgtx\b|\bgma\b|\bgi\s?\d|ads-b|install kit/i.test(
+      haystack,
+    )
+  ) {
+    return '/images/products/garmin-no-product-image-available-approved-800.webp';
   }
   return '/static/no-image.svg';
 }
@@ -58,13 +62,10 @@ export function productImageUrl(
   url: string | null | undefined,
   width: number,
   altText?: string | null,
-  handle?: string | null
+  handle?: string | null,
 ): string {
-  if (
-    handle === 'rigging-kit' &&
-    (!url || /Rudder_Tool_2/i.test(url))
-  ) {
-    return '/newspaper/images/papa_alpha_kit_collection.jpg';
+  if (handle === 'rigging-kit' && (!url || /Rudder_Tool_2/i.test(url))) {
+    return '/newspaper/images/papa_alpha_kit_collection-800.webp';
   }
   if (!url) return placeholderImageUrl(url, altText, handle);
   if (isShopifyPlaceholderImage(url, altText)) {
@@ -80,7 +81,7 @@ export function productImageUrl(
 export function productImageAlt(
   url: string | null | undefined,
   altText: string | null | undefined,
-  fallback: string
+  fallback: string,
 ): string {
   if (altText && !isShopifyPlaceholderImage(url, altText)) return altText;
   return fallback;

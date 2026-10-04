@@ -303,7 +303,7 @@ export default function ServicesPage() {
               muted
               controls
               preload="auto"
-              poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster.jpg"
+              poster="/videos/fabrication/rwas-laser-steel-16x9-20260626-poster-640.webp"
               playsInline
               aria-label="RWAS fiber laser fabrication video"
             >

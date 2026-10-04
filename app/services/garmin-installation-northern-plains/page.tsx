@@ -175,9 +175,9 @@ export default function GarminInstallationNorthernPlainsPage() {
                 <p>
                   Roger Wilco Aviation Services gives aircraft owners a
                   certified Garmin dealer and FAA-certificated repair station at
-                  KYKN in Yankton. Instead of ferrying a piston single or
-                  light twin across multiple states for a panel upgrade, owners
-                  can work with a shop built around Garmin avionics, aircraft
+                  KYKN in Yankton. Instead of ferrying a piston single or light
+                  twin across multiple states for a panel upgrade, owners can
+                  work with a shop built around Garmin avionics, aircraft
                   maintenance, panel fabrication, and return-to-service
                   documentation under one roof.
                 </p>
@@ -195,6 +195,8 @@ export default function GarminInstallationNorthernPlainsPage() {
               <Specimen.Image
                 src="/newspaper/images/r182_panel.webp"
                 alt="Garmin avionics panel installation completed by RWAS in a Cessna 182RG"
+                width={800}
+                height={525}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -316,6 +318,8 @@ export default function GarminInstallationNorthernPlainsPage() {
               <Specimen.Image
                 src="/newspaper/images/g3x_garmin.webp"
                 alt="Garmin G3X Touch avionics display"
+                width={402}
+                height={500}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 02">
@@ -470,7 +474,7 @@ export default function GarminInstallationNorthernPlainsPage() {
               <span className="bs-script-accent">
                 &mdash; avionics desk &mdash;
               </span>
-              <h4>Planning a Garmin panel?</h4>
+              <h3>Planning a Garmin panel?</h3>
               <p>
                 Send aircraft photos and the mission. RWAS will scope the path.
               </p>

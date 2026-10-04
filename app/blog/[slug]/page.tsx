@@ -33,6 +33,7 @@ import {
 } from '@/components/shared/broadsheet';
 import { truncateMeta } from '@/lib/seo';
 import { serviceLinksForBlogArticle } from '@/lib/service-links';
+import { blogImageDimensions } from '@/data/blog-image-dimensions';
 
 function escapeHtml(text: string) {
   return text
@@ -120,10 +121,14 @@ function renderMarkdownBody(markdown?: string) {
       flushList();
       const [, alt, src] = image;
       const isAuthorThumbnail = src.endsWith('/dane-allison.jpg');
+      const dimensions = blogImageDimensions[src];
+      const dimensionAttributes = dimensions
+        ? ` width="${dimensions.width}" height="${dimensions.height}"`
+        : '';
       blocks.push(
         isAuthorThumbnail
-          ? `<figure style="float:right;width:140px;max-width:35%;margin:0 0 18px 24px;"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" style="width:100%;border:1px solid #1a1a1a;display:block;" /><figcaption class="np-kicker" style="margin-top:6px;">${escapeHtml(alt)}</figcaption></figure>`
-          : `<figure style="margin:18px 0;"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" style="width:100%;border:1px solid #1a1a1a;display:block;" /><figcaption class="np-kicker" style="margin-top:6px;">${escapeHtml(alt)}</figcaption></figure>`,
+          ? `<figure style="float:right;width:140px;max-width:35%;margin:0 0 18px 24px;"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}"${dimensionAttributes} loading="lazy" decoding="async" style="width:100%;height:auto;border:1px solid #1a1a1a;display:block;" /><figcaption class="np-kicker" style="margin-top:6px;">${escapeHtml(alt)}</figcaption></figure>`
+          : `<figure style="margin:18px 0;"><img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}"${dimensionAttributes} loading="lazy" decoding="async" style="width:100%;height:auto;border:1px solid #1a1a1a;display:block;" /><figcaption class="np-kicker" style="margin-top:6px;">${escapeHtml(alt)}</figcaption></figure>`,
       );
       continue;
     }
@@ -264,6 +269,9 @@ export default async function BlogArticlePage({
   const ctaUrl = (article as { cta_url?: string }).cta_url;
   const articleImageAlt =
     (article as { image_alt?: string }).image_alt || article.title;
+  const articleImageDimensions = article.image
+    ? blogImageDimensions[article.image]
+    : undefined;
   const relatedServiceLinks = serviceLinksForBlogArticle(article);
 
   const siteUrl = 'https://www.rogerwilcoaviation.com';
@@ -397,12 +405,20 @@ export default async function BlogArticlePage({
                   <a
                     href="#article-image-zoom"
                     className="bs-product-image-link"
-                    aria-label={`Expand ${articleImageAlt}`}
+                    aria-label={`Click image to enlarge: ${articleImageAlt}`}
                   >
                     <img
                       src={article.image}
                       alt={articleImageAlt}
-                      style={{ width: '100%', display: 'block' }}
+                      width={articleImageDimensions?.width}
+                      height={articleImageDimensions?.height}
+                      fetchPriority="high"
+                      decoding="async"
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'block',
+                      }}
                     />
                     <span>Click image to enlarge</span>
                   </a>
@@ -428,20 +444,31 @@ export default async function BlogArticlePage({
                     <img
                       src={article.image}
                       alt={articleImageAlt}
+                      width={articleImageDimensions?.width}
+                      height={articleImageDimensions?.height}
                       loading="lazy"
                       decoding="async"
                     />
                   </div>
                 </div>
                 {(article as { image_caption?: string }).image_caption ? (
-                  <figcaption className="np-kicker" style={{ marginTop: '6px' }}>
+                  <figcaption
+                    className="np-kicker"
+                    style={{ marginTop: '6px' }}
+                  >
                     {(article as { image_caption?: string }).image_caption}
                   </figcaption>
                 ) : null}
                 {(article as { image_credit?: string }).image_credit ? (
-                  <figcaption className="np-kicker" style={{ marginTop: '6px' }}>
+                  <figcaption
+                    className="np-kicker"
+                    style={{ marginTop: '6px' }}
+                  >
                     <a
-                      href={(article as { image_credit_url?: string }).image_credit_url}
+                      href={
+                        (article as { image_credit_url?: string })
+                          .image_credit_url
+                      }
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -451,11 +478,17 @@ export default async function BlogArticlePage({
                       <>
                         {' · '}
                         <a
-                          href={(article as { image_license_url?: string }).image_license_url}
+                          href={
+                            (article as { image_license_url?: string })
+                              .image_license_url
+                          }
                           target="_blank"
                           rel="noreferrer"
                         >
-                          {(article as { image_license?: string }).image_license}
+                          {
+                            (article as { image_license?: string })
+                              .image_license
+                          }
                         </a>
                       </>
                     ) : null}

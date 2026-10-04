@@ -234,7 +234,7 @@ export default function FinancingPage() {
               <span className="bs-script-accent">
                 &mdash; on duty 24/7 &mdash;
               </span>
-              <h4>Talk to Captain Jerry</h4>
+              <h3>Talk to Captain Jerry</h3>
               <p>Financing questions &amp; project scoping</p>
               <a className="cta" href="#ask-jerry">
                 Ask Jerry
@@ -253,6 +253,8 @@ export default function FinancingPage() {
               <Specimen.Image
                 src="/newspaper/images/r182_panel.jpg"
                 alt="Full Garmin G500TXi Suite installation in a Cessna 182RG"
+                width={800}
+                height={525}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">

@@ -556,6 +556,8 @@ export default function ShopCapabilitiesPage() {
               <Specimen.Image
                 src="/newspaper/images/laser_cutter.jpg"
                 alt="Fiber laser cutting in the RWAS shop"
+                width={500}
+                height={304}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -606,7 +608,9 @@ export default function ShopCapabilitiesPage() {
             <Specimen as="section">
               <span className="bs-kicker">Certifications</span>
               <p>
-                <Link href="/blog/repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414">FAA Part 145 Repair Station</Link>
+                <Link href="/blog/repair-station-vs-ap-mechanic-what-aircraft-owners-should-know-20260414">
+                  FAA Part 145 Repair Station
+                </Link>
                 <br />
                 Certificate #RWSR491E
                 <br />
@@ -627,7 +631,7 @@ export default function ShopCapabilitiesPage() {
               <span className="bs-script-accent">
                 &mdash; on duty 24/7 &mdash;
               </span>
-              <h4>Talk to Captain Jerry</h4>
+              <h3>Talk to Captain Jerry</h3>
               <p>Project scoping &amp; scheduling</p>
               <a className="cta" href="#ask-jerry">
                 Ask Jerry
@@ -646,6 +650,8 @@ export default function ShopCapabilitiesPage() {
               <Specimen.Image
                 src="/newspaper/images/r182_panel.jpg"
                 alt="Full Garmin G500TXi Suite installation in a Cessna 182RG"
+                width={800}
+                height={525}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 02">
@@ -663,6 +669,8 @@ export default function ShopCapabilitiesPage() {
               <Specimen.Image
                 src="/newspaper/images/papa_alpha_kit.jpg"
                 alt="Papa-Alpha rigging reference tools"
+                width={500}
+                height={500}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 03">

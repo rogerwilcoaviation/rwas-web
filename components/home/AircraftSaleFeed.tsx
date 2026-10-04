@@ -106,14 +106,14 @@ export default async function AircraftSaleFeed() {
               {photoKey ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={`https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=600&q=80`}
-                  srcSet={`https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=400&q=80 400w, https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=600&q=80 600w, https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=900&q=80 900w`}
-                  sizes="(max-width: 600px) 92vw, (max-width: 1024px) 45vw, 280px"
+                  src={`https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=440&q=78`}
+                  srcSet={`https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=220&q=78 220w, https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=440&q=78 440w, https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=660&q=78 660w`}
+                  sizes="110px"
                   alt={`${l.make || ''} ${l.model || ''}`.trim()}
                   loading="lazy"
                   decoding="async"
-                  width={600}
-                  height={450}
+                  width={440}
+                  height={330}
                   style={{
                     width: '100%',
                     height: '100%',

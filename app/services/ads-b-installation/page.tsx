@@ -187,6 +187,8 @@ export default function AdsBInstallationPage() {
               <Specimen.Image
                 src="/newspaper/images/g3x_garmin.webp"
                 alt="Garmin avionics display and panel equipment used in integrated aircraft avionics planning"
+                width={402}
+                height={500}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -384,7 +386,7 @@ export default function AdsBInstallationPage() {
               <span className="bs-script-accent">
                 &mdash; avionics desk &mdash;
               </span>
-              <h4>Need ADS-B help?</h4>
+              <h3>Need ADS-B help?</h3>
               <p>
                 Send the current transponder, GPS source, panel photos, and what
                 problem you are trying to solve.

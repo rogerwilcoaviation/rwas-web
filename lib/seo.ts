@@ -130,6 +130,13 @@ export function productMetaDescription(product: {
     normalizedTitle.includes('gea 110') &&
     normalizedDescription.includes('gea™ 24');
 
+  // A handful of newly imported Garmin listings currently contain only the
+  // same availability notice. Keep the operational notice, but lead with the
+  // product identity so each search snippet remains useful and unique.
+  if (/^availability notice\s*:/i.test(description)) {
+    return truncateMeta(`${title} from ${vendor}. ${description}`);
+  }
+
   if (!isThinMeta(description) && !modelMismatch)
     return truncateMeta(description);
 

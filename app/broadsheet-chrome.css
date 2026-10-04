@@ -854,6 +854,7 @@ body {
   padding: 20px;
   box-shadow: var(--specimen-shadow);
 }
+.broadsheet .bs-spec-card h2,
 .broadsheet .bs-spec-card h3 {
   margin: 0 0 12px;
   font-family: var(--font-display);
@@ -1211,6 +1212,7 @@ body {
   color: var(--gold-800);
   font-size: 24px;
 }
+.broadsheet .jerry-card h3,
 .broadsheet .jerry-card h4,
 .broadsheet .jerry-card .jerry-card-heading {
   font-family: var(--font-display);
@@ -1225,6 +1227,14 @@ body {
   color: var(--ink-700);
   margin: 0 0 12px;
   font-style: italic;
+}
+
+/* Inline phone/email links in service rails must retain a 24px touch target. */
+.broadsheet .about-rail a[href^='tel:'],
+.broadsheet .about-rail a[href^='mailto:'] {
+  display: inline-block;
+  min-height: 24px;
+  line-height: 24px;
 }
 .broadsheet .jerry-card .cta {
   display: inline-block;
@@ -1840,7 +1850,10 @@ body {
   text-decoration: none !important;
   text-transform: uppercase;
   box-shadow: 4px 4px 0 #151515;
-  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease;
 }
 
 .broadsheet .np-axis-planner-cta:hover,

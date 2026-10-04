@@ -188,6 +188,8 @@ export default function GtnXiNavigatorInstallationPage() {
               <Specimen.Image
                 src="/newspaper/images/r182_panel.webp"
                 alt="Garmin avionics panel installation with navigator and display integration"
+                width={800}
+                height={525}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -382,7 +384,7 @@ export default function GtnXiNavigatorInstallationPage() {
               <span className="bs-script-accent">
                 &mdash; avionics desk &mdash;
               </span>
-              <h4>Planning an IFR navigator?</h4>
+              <h3>Planning an IFR navigator?</h3>
               <p>
                 Send the current stack, panel photos, IFR mission, and any
                 future autopilot or glass-panel plans.

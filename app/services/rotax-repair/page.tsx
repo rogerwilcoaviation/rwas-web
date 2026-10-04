@@ -238,8 +238,10 @@ export default function RotaxRepairPage() {
 
             <Specimen variant="hero" as="figure" className="about-fig">
               <Specimen.Image
-                src="/images/blog/repair-station-vs-ap-mechanic-corporate-hangar-1.jpg"
+                src="/images/blog/repair-station-vs-ap-mechanic-corporate-hangar-1-800.webp"
                 alt="Aircraft maintenance hangar representing RWAS repair-station workflow"
+                width={800}
+                height={532}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -373,7 +375,7 @@ export default function RotaxRepairPage() {
               <span className="bs-script-accent">
                 &mdash; maintenance desk &mdash;
               </span>
-              <h4>Have a Rotax question?</h4>
+              <h3>Have a Rotax question?</h3>
               <p>
                 Send the engine model, aircraft, hours, symptoms, and records.
               </p>

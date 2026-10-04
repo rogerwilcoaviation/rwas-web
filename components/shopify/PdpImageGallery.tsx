@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
+'use client';
 
 // ============================================================================
 // PdpImageGallery — scoped PDP photo gallery for Papa-Alpha multi-image
@@ -75,7 +75,7 @@ export function PdpImageGallery({ images, title, handle }: Props) {
         type="button"
         className="bs-product-image-link pa-gallery-open"
         onClick={() => dialog.current?.showModal()}
-        aria-label={`Open larger image for ${title}`}
+        aria-label={`Click image to enlarge: ${title}`}
       >
         <img
           src={productImageUrl(current.url, 800, current.altText, handle)}
@@ -98,11 +98,16 @@ export function PdpImageGallery({ images, title, handle }: Props) {
         ref={dialog}
         className="pa-gallery-dialog"
         aria-label={`Expanded image for ${title}`}
-        onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) dialog.current?.close();
+        }}
         onKeyDown={(event) => {
           if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
             event.preventDefault();
-            setIndex((value) => (value + (event.key === 'ArrowRight' ? 1 : total - 1)) % total);
+            setIndex(
+              (value) =>
+                (value + (event.key === 'ArrowRight' ? 1 : total - 1)) % total,
+            );
           }
         }}
       >
@@ -118,6 +123,8 @@ export function PdpImageGallery({ images, title, handle }: Props) {
           <img
             src={productImageUrl(current.url, 1600, current.altText, handle)}
             alt={currentAlt}
+            width={1600}
+            height={1200}
             style={{
               maxWidth: '100%',
               height: 'auto',
@@ -141,6 +148,8 @@ export function PdpImageGallery({ images, title, handle }: Props) {
             <img
               src={productImageUrl(img.url, 200, img.altText, handle)}
               alt=""
+              width={200}
+              height={150}
               loading="lazy"
               decoding="async"
             />

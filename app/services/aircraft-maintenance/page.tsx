@@ -191,8 +191,10 @@ export default function AircraftMaintenancePage() {
 
             <Specimen variant="hero" as="figure" className="about-fig">
               <Specimen.Image
-                src="/images/blog/repair-station-vs-ap-mechanic-corporate-hangar-2.jpg"
+                src="/images/blog/repair-station-vs-ap-mechanic-corporate-hangar-2-800.webp"
                 alt="Aircraft in a maintenance hangar representing RWAS repair-station maintenance work"
+                width={800}
+                height={532}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -426,7 +428,7 @@ export default function AircraftMaintenancePage() {
               <span className="bs-script-accent">
                 &mdash; maintenance desk &mdash;
               </span>
-              <h4>Need an annual or pre-buy?</h4>
+              <h3>Need an annual or pre-buy?</h3>
               <p>
                 Send the N-number, records, timing, and the decision you need to
                 make.

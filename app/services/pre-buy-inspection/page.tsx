@@ -185,8 +185,10 @@ export default function PreBuyInspectionPage() {
 
             <Specimen variant="hero" as="figure" className="about-fig">
               <Specimen.Image
-                src="/images/blog/repair-station-vs-ap-mechanic-corporate-hangar-1.jpg"
+                src="/images/blog/repair-station-vs-ap-mechanic-corporate-hangar-1-800.webp"
                 alt="Aircraft in a hangar during inspection workflow"
+                width={800}
+                height={532}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -393,7 +395,7 @@ export default function PreBuyInspectionPage() {
               <span className="bs-script-accent">
                 &mdash; buyer desk &mdash;
               </span>
-              <h4>Looking at an aircraft?</h4>
+              <h3>Looking at an aircraft?</h3>
               <p>
                 Send the listing, records, and what would change your offer.
               </p>

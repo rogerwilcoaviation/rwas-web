@@ -171,6 +171,8 @@ export default function PapaAlphaToolsPage() {
               <Specimen.Image
                 src="/newspaper/images/papa_alpha_kit_collection.webp"
                 alt="Papa-Alpha Piper rigging tools laid out as a kit"
+                width={1600}
+                height={1200}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -394,6 +396,8 @@ export default function PapaAlphaToolsPage() {
               <Specimen.Image
                 src="/brochures/papa-alpha-tools/images/kit-aileron-flap.jpg"
                 alt="Papa-Alpha aileron and flap rigging reference tool"
+                width={1290}
+                height={712}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 02">
@@ -409,6 +413,8 @@ export default function PapaAlphaToolsPage() {
               <Specimen.Image
                 src="/brochures/papa-alpha-tools/images/stabilator.jpg"
                 alt="Papa-Alpha stabilator rigging reference tool"
+                width={1290}
+                height={733}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 03">
@@ -420,7 +426,7 @@ export default function PapaAlphaToolsPage() {
               <span className="bs-script-accent">
                 &mdash; tool desk &mdash;
               </span>
-              <h4>Which tool fits?</h4>
+              <h3>Which tool fits?</h3>
               <p>Send the Piper model and the rigging task.</p>
               <Link
                 className="cta"

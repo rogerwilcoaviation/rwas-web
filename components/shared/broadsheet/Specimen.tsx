@@ -29,8 +29,8 @@ type SpecimenImageProps = {
   src: string;
   alt: string;
   className?: string;
-  width?: number;
-  height?: number;
+  width: number;
+  height: number;
   loading?: 'lazy' | 'eager';
   decoding?: 'sync' | 'async' | 'auto';
   fetchPriority?: 'high' | 'low' | 'auto';
@@ -74,17 +74,23 @@ const SpecimenImage = ({
     className={`specimen__image${className ? ' ' + className : ''}`}
     width={width}
     height={height}
-    loading={loading}
-    decoding={decoding}
+    loading={loading ?? 'lazy'}
+    decoding={decoding ?? 'async'}
     fetchPriority={fetchPriority}
   />
 );
 
 const SpecimenCaptionRule = () => <hr className="specimen__caption-rule" />;
 
-const SpecimenCaption = ({ children, numeral, className }: SpecimenCaptionProps) => (
+const SpecimenCaption = ({
+  children,
+  numeral,
+  className,
+}: SpecimenCaptionProps) => (
   <div className={`specimen__caption-row${className ? ' ' + className : ''}`}>
-    {numeral ? <span className="specimen__figure-numeral">{numeral}</span> : null}
+    {numeral ? (
+      <span className="specimen__figure-numeral">{numeral}</span>
+    ) : null}
     <p className="specimen__caption">{children}</p>
   </div>
 );

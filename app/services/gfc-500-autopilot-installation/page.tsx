@@ -189,6 +189,8 @@ export default function Gfc500AutopilotInstallationPage() {
               <Specimen.Image
                 src="/newspaper/images/r182_panel.webp"
                 alt="RWAS Garmin panel installation showing avionics integration work"
+                width={800}
+                height={525}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -408,7 +410,7 @@ export default function Gfc500AutopilotInstallationPage() {
               <span className="bs-script-accent">
                 &mdash; avionics desk &mdash;
               </span>
-              <h4>Planning an autopilot?</h4>
+              <h3>Planning an autopilot?</h3>
               <p>
                 Send the aircraft, current panel, and what you want the
                 autopilot to do.

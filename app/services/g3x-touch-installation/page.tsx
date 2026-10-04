@@ -188,6 +188,8 @@ export default function G3xTouchInstallationPage() {
               <Specimen.Image
                 src="/newspaper/images/g3x_garmin.webp"
                 alt="Garmin G3X Touch display used for aircraft glass cockpit planning"
+                width={402}
+                height={500}
               />
               <Specimen.CaptionRule />
               <Specimen.Caption numeral="FIG. 01">
@@ -389,7 +391,7 @@ export default function G3xTouchInstallationPage() {
               <span className="bs-script-accent">
                 &mdash; avionics desk &mdash;
               </span>
-              <h4>Planning a glass panel?</h4>
+              <h3>Planning a glass panel?</h3>
               <p>
                 Send the aircraft, panel photos, mission, and what you want the
                 new panel to make easier.
