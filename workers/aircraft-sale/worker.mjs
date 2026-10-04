@@ -16,6 +16,7 @@ import {
   logoutUrl,
 } from './identity.mjs';
 import { securityOperation, securityProposal } from './security.mjs';
+import { auth0EventConfig, auth0BlockNotification } from './auth0-events.mjs';
 import { hasProductSnippetEligibility } from '../../lib/product-snippet-eligibility.mjs';
 // Versioned seller API. Requires explicitly provisioned Durable Object + private R2.
 // No legacy KV fallback: migration/import is a separately reviewed operation.
@@ -38,6 +39,7 @@ const empty = () => ({
   identitySecurity: {},
   authTransactions: {},
   authEvents: {},
+  auth0EventReceipts: {},
   securityOperations: {},
   sessions: {},
   codes: {},
@@ -318,6 +320,7 @@ export class SellerStore {
   }
   async run(req) {
     this.state = await this.loadState();
+    this.state.auth0EventReceipts ||= {};
     this.rollbackState = structuredClone(this.state);
     try {
       const result = await this.route(req);
@@ -702,6 +705,72 @@ export class SellerStore {
     for (const [k, f] of Object.entries(this.state.files))
       if (f.listingId === l.id) delete this.state.files[k];
   }
+  async applyProviderSecurityEvent(body, config) {
+    if (
+      !['password-reset', 'account-blocked'].includes(body.kind) ||
+      typeof body.subject !== 'string' ||
+      !body.subject ||
+      body.subject.length > 500 ||
+      typeof body.id !== 'string' ||
+      !/^[A-Za-z0-9_-]{1,128}$/.test(body.id) ||
+      ['__proto__', 'constructor', 'prototype'].includes(body.id) ||
+      !Number.isFinite(body.issuedAt) ||
+      Math.abs(Date.now() - body.issuedAt) > 300000
+    )
+      fail(400, 'Invalid provider event.');
+    for (const [key, value] of Object.entries(this.state.authEvents))
+      if (Date.now() - value > DAY) delete this.state.authEvents[key];
+    if (Object.hasOwn(this.state.authEvents, body.id))
+      return reply({ ok: true });
+    const identityKey = await digest(config.issuer + '|' + body.subject);
+    const previous = this.state.identitySecurity[identityKey];
+    if (body.issuedAt <= (previous?.unblockedThrough || 0)) {
+      this.state.authEvents[body.id] = Date.now();
+      this.audit('provider-event-already-reconciled', identityKey, {
+        eventId: body.id,
+        kind: body.kind,
+      });
+      return reply({ ok: true, reconciled: true });
+    }
+    this.state.identitySecurity[identityKey] = {
+      ...previous,
+      revision: (previous?.revision || 0) + 1,
+      blockedAt:
+        body.kind === 'account-blocked'
+          ? Math.max(previous?.blockedAt || 0, body.issuedAt)
+          : previous?.blockedAt || 0,
+      credentialsChangedAt: Math.max(
+        previous?.credentialsChangedAt || 0,
+        body.issuedAt,
+      ),
+      blocked: previous?.blocked || body.kind === 'account-blocked',
+    };
+    const identity = this.state.identities[identityKey];
+    if (identity) {
+      const profile = this.state.profiles[identity.userId];
+      if (profile)
+        profile.sessionRevokedAt = Math.max(
+          profile.sessionRevokedAt || 0,
+          body.issuedAt,
+        );
+      identity.credentialsChangedAt = Math.max(
+        identity.credentialsChangedAt || 0,
+        body.issuedAt,
+      );
+      if (
+        body.kind === 'account-blocked' &&
+        this.state.profiles[identity.userId]
+      )
+        this.state.profiles[identity.userId].identityBlocked = true;
+      for (const [key, session] of Object.entries(this.state.sessions))
+        if (session.userId === identity.userId) delete this.state.sessions[key];
+      this.audit('provider-session-revoke', identity.userId, {
+        kind: body.kind,
+      });
+    }
+    this.state.authEvents[body.id] = Date.now();
+    return reply({ ok: true });
+  }
   async route(req) {
     const url = new URL(req.url),
       path = url.pathname.replace(/^\/api\/aircraft-sale/, '') || '/',
@@ -984,6 +1053,52 @@ export class SellerStore {
       };
       return reply(result);
     }
+    if (path === '/auth/auth0-events' && method === 'POST') {
+      const identity = identityConfig(this.env),
+        stream = auth0EventConfig(this.env);
+      if (!identity || !stream) fail(503, 'Provider stream is not configured.');
+      if (
+        url.origin !== identity.origin ||
+        (req.headers.get('Origin') &&
+          req.headers.get('Origin') !== identity.origin)
+      )
+        fail(403, 'Provider stream destination not allowed.');
+      const authorization = req.headers.get('Authorization') || '';
+      if (
+        !authorization.startsWith('Bearer ') ||
+        (await digest(authorization.slice(7))) !== (await digest(stream.secret))
+      )
+        fail(403, 'Provider stream not authorized.');
+      if (
+        !['application/json', 'application/cloudevents+json'].includes(
+          (req.headers.get('Content-Type') || '')
+            .split(';')[0]
+            .trim()
+            .toLowerCase(),
+        )
+      )
+        fail(415, 'Provider stream requires JSON.');
+      const event = await auth0BlockNotification(await this.json(req), stream);
+      const fingerprint = await digest(JSON.stringify(event));
+      const receipt = this.state.auth0EventReceipts[event.id];
+      if (receipt) {
+        if (receipt.fingerprint !== fingerprint)
+          fail(409, 'Provider event identity changed.');
+        return reply({ ok: true, replayed: true });
+      }
+      // An ordinary update or provider unblock cannot clear our sticky security hold.
+      if (!event.blocked) return reply({ ok: true, ignored: true });
+      const result = await this.applyProviderSecurityEvent(event, identity);
+      for (const [key, value] of Object.entries(this.state.auth0EventReceipts))
+        if (Date.now() - value.receivedAt > DAY)
+          delete this.state.auth0EventReceipts[key];
+      // Stored atomically with revocation; no raw provider profile/email/metadata is retained.
+      this.state.auth0EventReceipts[event.id] = {
+        fingerprint,
+        receivedAt: Date.now(),
+      };
+      return result;
+    }
     if (path === '/auth/events' && method === 'POST') {
       const config = identityConfig(this.env),
         secret = this.env.AUTH_EVENT_SECRET;
@@ -999,71 +1114,7 @@ export class SellerStore {
       )
         fail(403, 'Provider event not authorized.');
       const body = await this.json(req);
-      if (
-        !['password-reset', 'account-blocked'].includes(body.kind) ||
-        typeof body.subject !== 'string' ||
-        !body.subject ||
-        body.subject.length > 500 ||
-        typeof body.id !== 'string' ||
-        !/^[A-Za-z0-9_-]{1,128}$/.test(body.id) ||
-        ['__proto__', 'constructor', 'prototype'].includes(body.id) ||
-        !Number.isFinite(body.issuedAt) ||
-        Math.abs(Date.now() - body.issuedAt) > 300000
-      )
-        fail(400, 'Invalid provider event.');
-      for (const [key, value] of Object.entries(this.state.authEvents))
-        if (Date.now() - value > DAY) delete this.state.authEvents[key];
-      if (Object.hasOwn(this.state.authEvents, body.id))
-        return reply({ ok: true });
-      const identityKey = await digest(config.issuer + '|' + body.subject);
-      const previous = this.state.identitySecurity[identityKey];
-      if (body.issuedAt <= (previous?.unblockedThrough || 0)) {
-        this.state.authEvents[body.id] = Date.now();
-        this.audit('provider-event-already-reconciled', identityKey, {
-          eventId: body.id,
-          kind: body.kind,
-        });
-        return reply({ ok: true, reconciled: true });
-      }
-      this.state.identitySecurity[identityKey] = {
-        ...previous,
-        revision: (previous?.revision || 0) + 1,
-        blockedAt:
-          body.kind === 'account-blocked'
-            ? Math.max(previous?.blockedAt || 0, body.issuedAt)
-            : previous?.blockedAt || 0,
-        credentialsChangedAt: Math.max(
-          previous?.credentialsChangedAt || 0,
-          body.issuedAt,
-        ),
-        blocked: previous?.blocked || body.kind === 'account-blocked',
-      };
-      const identity = this.state.identities[identityKey];
-      if (identity) {
-        const profile = this.state.profiles[identity.userId];
-        if (profile)
-          profile.sessionRevokedAt = Math.max(
-            profile.sessionRevokedAt || 0,
-            body.issuedAt,
-          );
-        identity.credentialsChangedAt = Math.max(
-          identity.credentialsChangedAt || 0,
-          body.issuedAt,
-        );
-        if (
-          body.kind === 'account-blocked' &&
-          this.state.profiles[identity.userId]
-        )
-          this.state.profiles[identity.userId].identityBlocked = true;
-        for (const [key, session] of Object.entries(this.state.sessions))
-          if (session.userId === identity.userId)
-            delete this.state.sessions[key];
-        this.audit('provider-session-revoke', identity.userId, {
-          kind: body.kind,
-        });
-      }
-      this.state.authEvents[body.id] = Date.now();
-      return reply({ ok: true });
+      return this.applyProviderSecurityEvent(body, config);
     }
     if (path === '/send-code' && method === 'POST') {
       const b = await this.json(req);

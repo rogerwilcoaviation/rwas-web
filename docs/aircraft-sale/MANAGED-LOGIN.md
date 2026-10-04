@@ -33,6 +33,10 @@ The [Auth0 Post Change Password trigger](https://auth0.com/docs/customize/action
 
 This endpoint uses a shared bearer secret and replay/time checks; it does not verify a payload signature. Merely setting the secret does not prove event delivery. Hook reliability, outage handling, administrative password changes, account blocking and notification failure must be tested in staging. A lost hook leaves existing app sessions until expiry, so monitored delivery and verified operator reconciliation are release requirements. No provider administrative scope or Management API token is requested by the code.
 
+### Native account-block notifications
+
+The separate `/api/aircraft-sale/auth/auth0-events` receiver accepts the documented Auth0 `user.updated` envelope with its own private proof and exact tenant/source/stream validation. It maps `blocked:true` to the existing security operation; ordinary updates/provider unblocks do not clear holds. SQLite receipts are committed with revocation and support safe identical duplicate acknowledgements after restart, without repeating revocation. It has seven offline tests and is not yet deployed/configured in the dedicated Worker. See [AUTH0-BLOCK-EVENTS.md](AUTH0-BLOCK-EVENTS.md) for exact setup, snapshot scope, delivery/monitoring limits and provider acceptance gates, and [STAGING-APPROVALS.md](STAGING-APPROVALS.md) for narrow requested configuration scope.
+
 ## Synthetic evidence and staging acceptance
 
 `npm run test:seller` includes 8 identity tests and 7 password-reset Action delivery tests with ephemeral RSA keys, synthetic `.test` identities and intercepted provider HTTP. `node tests/aircraft-sale/identity-browser.mjs` runs actual built Next pages with synthetic hosted pages; every provider page is fulfilled locally, no real password is entered, and no external browser traffic is allowed. Its six checkpoints cover all methods, callback cleanup, account linking with preserved listing ownership, logout, hosted-help cancellation, event-driven revocation and lost-proof/replay failure. This verifies RWAS integration, not actual provider enrollment or recovery.
