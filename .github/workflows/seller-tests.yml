@@ -18,3 +18,4 @@ jobs:
       - run: npm ci
       # Actual local workerd SQLite/R2 and fake mail/reviewer services only.
       - run: npm run test:seller
+      - run: node scripts/jerry-message-regression.mjs

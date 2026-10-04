@@ -237,9 +237,10 @@
       .replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}\s*$/m, '')
       .trim();
     var fragment = document.createDocumentFragment();
-    // Parse only our small formatting vocabulary. Never parse response HTML.
+    // Parse only our small formatting vocabulary, including legacy plain <em> wrappers.
+    // Attributes and nested HTML stay literal text; never parse response HTML.
     var tokens =
-      /https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_/gi;
+      /https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_|<em>([^<>]+)<\/em>/gi;
     var cursor = 0;
     var match;
     while ((match = tokens.exec(text))) {
@@ -285,16 +286,16 @@
           fragment.appendChild(document.createTextNode(raw));
         }
       } else {
-        var italic = match[3] !== undefined;
+        var italic = match[3] !== undefined || match[4] !== undefined;
         if (
-          italic &&
+          match[3] !== undefined &&
           (/[\w*]/.test(text.charAt(match.index - 1)) ||
             /[\w*]/.test(text.charAt(tokens.lastIndex)))
         ) {
           fragment.appendChild(document.createTextNode(raw));
         } else {
           var emphasis = document.createElement(italic ? 'em' : 'strong');
-          renderMessage(emphasis, match[1] || match[2] || match[3]);
+          renderMessage(emphasis, match[1] || match[2] || match[3] || match[4]);
           fragment.appendChild(emphasis);
         }
       }
@@ -832,7 +833,7 @@
         var lastMsg = history[history.length - 1];
         if (lastMsg && lastMsg.role === 'assistant') {
           lastMsg.content +=
-            '\n\n<em>Your progress is saved privately. Review details and submit from the seller panel.</em>';
+            '\n\n_Your progress is saved privately. Review details and submit from the seller panel._';
         }
       }
       saveHistory();

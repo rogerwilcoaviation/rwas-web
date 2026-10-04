@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { deferUntilIdle } from './deferUntilIdle';
 
-const JERRY_WIDGET_SRC = '/jerry-widget.js?v=20260911-safe-links';
+const JERRY_WIDGET_SRC = '/jerry-widget.js?v=20261001-safe-emphasis';
 
 export default function DeferredJerryWidget() {
   useEffect(() => {
