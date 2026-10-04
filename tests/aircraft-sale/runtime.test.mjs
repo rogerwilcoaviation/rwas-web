@@ -170,6 +170,8 @@ test('actual workerd SQLite persists audited operator block/reset/unblock and id
           headers: {
             Authorization: 'Bearer ' + token,
             'Content-Type': 'application/json',
+            // This fixture checks durable state across requests, independent of Miniflare's HTTP keep-alive reuse.
+            Connection: 'close',
           },
           body: JSON.stringify(body),
         },
