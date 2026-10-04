@@ -41,6 +41,8 @@ const empty = () => ({
   securityOperations: {},
   sessions: {},
   codes: {},
+  mailRequests: {},
+  mailSequences: {},
   rates: {},
   listings: {},
   drafts: {},
@@ -233,6 +235,13 @@ function publicPage(l) {
 }
 const worker = {
   async fetch(request, env) {
+    // Mail tickets/codes are available only through private service-binding RPC.
+    if (
+      /^\/(?:api\/aircraft-sale\/)?_mail(?:\/|$)/.test(
+        new URL(request.url).pathname,
+      )
+    )
+      return reply({ error: 'Not found.' }, 404);
     if (!env.SELLER_STORE)
       return reply({ error: 'Seller service is not configured.' }, 503);
     const id = env.SELLER_STORE.idFromName('seller-v2');
@@ -463,7 +472,7 @@ export class SellerStore {
     r.count++;
     this.state.rates[key] = r;
   }
-  async sendCode(req, body, purpose = 'login', u) {
+  async prepareCode(req, body, purpose = 'login', u) {
     const address = email(body.email);
     if (
       purpose === 'email-change' &&
@@ -492,6 +501,17 @@ export class SellerStore {
       userId: u?.id,
       purpose,
     };
+    return { address, key, pendingCode, value };
+  }
+  async sendCode(req, body, purpose = 'login', u) {
+    if (this.env.MAIL_VIA_PAGES === 'true')
+      fail(503, 'Email delivery must use the configured site.');
+    const { address, key, pendingCode, value } = await this.prepareCode(
+      req,
+      body,
+      purpose,
+      u,
+    );
     const delivery = this.env.MAILER || {
       fetch: async (request) => deliverCode(this.env, await request.json()),
     };
@@ -522,6 +542,81 @@ export class SellerStore {
       );
     this.state.codes[key] = pendingCode;
     return reply({ ok: true, sent: true });
+  }
+  async mailRequest(req, path) {
+    if (
+      this.env.MAIL_VIA_PAGES !== 'true' ||
+      new URL(req.url).origin !== 'https://seller-service.internal'
+    )
+      fail(404, 'Not found.');
+    const body = await this.json(req);
+    this.state.mailRequests ||= {};
+    this.state.mailSequences ||= {};
+    // Expired delivery tickets can never activate or resurrect a consumed code.
+    for (const [id, request] of Object.entries(this.state.mailRequests))
+      if (Date.now() - request.createdAt > 900000)
+        delete this.state.mailRequests[id];
+    if (path === '/_mail/start') {
+      if (!['login', 'email-change'].includes(body.purpose))
+        fail(400, 'Invalid verification purpose.');
+      const u =
+        body.purpose === 'email-change'
+          ? await this.user(req, true)
+          : undefined;
+      const { address, key, pendingCode, value } = await this.prepareCode(
+        req,
+        body,
+        body.purpose,
+        u,
+      );
+      const sequence = (this.state.mailSequences[key] || 0) + 1;
+      this.state.mailSequences[key] = sequence;
+      const ticket = token();
+      this.state.mailRequests[ticket] = {
+        key,
+        sequence,
+        pendingCode,
+        createdAt: Date.now(),
+        status: 'pending',
+      };
+      return reply({
+        ticket,
+        to: address,
+        code: value,
+        purpose: body.purpose,
+        expiresMinutes: 15,
+      });
+    }
+    const item =
+      typeof body.ticket === 'string' &&
+      Object.hasOwn(this.state.mailRequests, body.ticket)
+        ? this.state.mailRequests[body.ticket]
+        : undefined;
+    if (!item) fail(400, 'Verification delivery expired or unavailable.');
+    if (path === '/_mail/cancel') {
+      if (item.status === 'pending') {
+        item.status = 'cancelled';
+        delete item.pendingCode;
+      }
+      return reply({ ok: true });
+    }
+    if (path !== '/_mail/confirm') fail(404, 'Not found.');
+    if (item.status === 'complete') return reply({ ok: true });
+    if (
+      item.status !== 'pending' ||
+      this.state.mailSequences[item.key] !== item.sequence
+    )
+      fail(409, 'A newer verification request exists. Request a new code.');
+    // Email-change delivery must not survive logout, block or session expiry.
+    if (item.pendingCode.purpose === 'email-change') {
+      const u = await this.user(req, true);
+      if (u.id !== item.pendingCode.userId)
+        fail(403, 'Verification owner changed.');
+    }
+    this.state.codes[item.key] = item.pendingCode;
+    item.status = 'complete';
+    delete item.pendingCode;
+    return reply({ ok: true });
   }
   async verify(address, value, purpose = 'login', u) {
     const key = purpose + ':' + address,
@@ -607,6 +702,8 @@ export class SellerStore {
     const url = new URL(req.url),
       path = url.pathname.replace(/^\/api\/aircraft-sale/, '') || '/',
       method = req.method;
+    if (path.startsWith('/_mail/') && method === 'POST')
+      return this.mailRequest(req, path);
     if (method === 'OPTIONS') return new Response(null, { status: 204 }); // Same-origin service; no wildcard CORS.
     if (path === '/health') return reply({ service: 'seller-v2', schema: 2 });
     if (path === '/auth/methods' && method === 'GET') {

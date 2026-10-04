@@ -13,7 +13,8 @@ import { onRequestGet as receipt } from './functions/api/service-receipt';
 import { onRequestPost as dispatch } from './functions/api/intake-dispatch';
 import { onRequestGet as config } from './functions/api/service-intake-config';
 import { STAGING_ORIGIN } from './functions/_intake/core';
-export { intake, receipt, dispatch, config, STAGING_ORIGIN };`,
+import { sellerMail, sellerDestinationAllowed } from './functions/_seller/mail.mjs';
+export { intake, receipt, dispatch, config, STAGING_ORIGIN, sellerMail, sellerDestinationAllowed };`,
     resolveDir: process.cwd(),
     sourcefile: 'intake-entry.ts',
   },
@@ -28,7 +29,7 @@ renameSync(index, resolve(directory, 'rwas-csp-wrapper.js'));
 writeFileSync(
   index,
   `import app from './rwas-csp-wrapper.js';
-import { intake, receipt, dispatch, config, STAGING_ORIGIN } from './rwas-intake.js';
+import { intake, receipt, dispatch, config, STAGING_ORIGIN, sellerMail, sellerDestinationAllowed } from './rwas-intake.js';
 export default { ...app, async fetch(request, env, ctx) {
  const url = new URL(request.url);
  const path = url.pathname;
@@ -43,15 +44,17 @@ export default { ...app, async fetch(request, env, ctx) {
  if (isolated && path === '/robots.txt') return protect(new Response('User-agent: *\\nDisallow: /\\n'));
 
  if (/^\\/aircraft-for-sale\\/[^/]+\\/?$/.test(path)) {
-   if (env.INTAKE_STAGING_MODE === 'true' && url.origin !== STAGING_ORIGIN) return protect(new Response('Staging destination not allowed', {status:503}));
+   if (!sellerDestinationAllowed(request, env, STAGING_ORIGIN)) return protect(new Response('Staging destination not allowed', {status:503}));
    if (!env.SELLER_API) return protect(new Response('Seller service is not configured.',{status:503}));
    const target = new URL(request.url); target.pathname = '/api/aircraft-sale/listing/' + path.split('/')[2];
    const headers = new Headers(request.headers); headers.set('Accept','text/html');
    return protect(await env.SELLER_API.fetch(new Request(target, {method:'GET',headers})));
  }
  if (path === '/api/aircraft-sale' || path.startsWith('/api/aircraft-sale/')) {
-   if (env.INTAKE_STAGING_MODE === 'true' && url.origin !== STAGING_ORIGIN) return protect(new Response('Staging destination not allowed', {status:503}));
+   if (!sellerDestinationAllowed(request, env, STAGING_ORIGIN)) return protect(new Response('Staging destination not allowed', {status:503}));
    if (!env.SELLER_API) return protect(Response.json({error:'Seller service is not configured.'},{status:503}));
+   const mailed = await sellerMail(request, env);
+   if (mailed) return protect(mailed);
    return protect(await env.SELLER_API.fetch(request));
  }
 
@@ -98,14 +101,19 @@ console.log(
 
 // Only the exact authorized preview branch gets this artifact-level rule. Unlike
 // Worker response headers, Pages _headers also covers excluded/static assets.
-const previewBranch = 'intake-restoration-20260922';
+const previewBranches = new Set([
+  'intake-restoration-20260922',
+  'repair/aircraft-seller-workflow',
+]);
 const buildBranches = [
   process.env.CF_PAGES_BRANCH,
   process.env.GITHUB_HEAD_REF,
 ].filter(Boolean);
 if (
   buildBranches.length &&
-  buildBranches.every((branch) => branch === previewBranch)
+  buildBranches.every(
+    (branch) => branch === buildBranches[0] && previewBranches.has(branch),
+  )
 ) {
   const headersPath = resolve(root, '_headers');
   const existing = existsSync(headersPath)

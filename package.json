@@ -28,7 +28,7 @@
     "catalog:former-sale-list-prices": "node scripts/reconcile-former-sale-list-prices.mjs",
     "catalog:experimental-retail": "node scripts/reconcile-experimental-retail.mjs",
     "build:analytics": "node scripts/build-analytics.mjs",
-    "test:seller": "node --test --test-concurrency=1 tests/aircraft-sale/api.test.mjs tests/aircraft-sale/adapters.test.mjs tests/aircraft-sale/migration.test.mjs tests/aircraft-sale/migration-import.test.mjs tests/aircraft-sale/runtime.test.mjs tests/aircraft-sale/routing.test.mjs tests/aircraft-sale/identity.test.mjs tests/aircraft-sale/security.test.mjs",
+    "test:seller": "node --test --test-concurrency=1 tests/aircraft-sale/api.test.mjs tests/aircraft-sale/adapters.test.mjs tests/aircraft-sale/mail.test.mjs tests/aircraft-sale/migration.test.mjs tests/aircraft-sale/migration-import.test.mjs tests/aircraft-sale/runtime.test.mjs tests/aircraft-sale/routing.test.mjs tests/aircraft-sale/identity.test.mjs tests/aircraft-sale/security.test.mjs",
     "test:seller:shell": "node tests/aircraft-sale/full-shell.mjs",
     "test:seller:identity-browser": "node tests/aircraft-sale/identity-browser.mjs",
     "test:seller:chat": "node tests/aircraft-sale/chat-failure.mjs",

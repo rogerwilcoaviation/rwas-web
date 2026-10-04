@@ -91,6 +91,7 @@ export function fixture() {
     objects,
     mail,
     call,
+    callRaw: (req) => store.fetch(req),
     request,
     login,
     state: () => durable.get('state'),

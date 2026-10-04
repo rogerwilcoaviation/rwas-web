@@ -7,10 +7,11 @@ compatibility_date = "2026-09-01"
 
 [vars]
 INTAKE_STAGING_MODE = "true"
-# Staging must match STAGING_ORIGIN in functions/_intake/core.ts exactly.
-# Current value: https://intake-restoration-20260922.rwas-web.pages.dev
-# A new dedicated host requires reviewed source/test adjustment; confirm ownership
-# and isolation before using the existing shared intake staging destination.
+SELLER_STAGING_ORIGIN = "https://repair-aircraft-seller-workf.rwas-web.pages.dev"
+SELLER_MAIL_VIA_PAGES = "true"
+# Seller requests use only this exact dedicated origin. Intake keeps its own
+# STAGING_ORIGIN unchanged. Preserve existing Pages RESEND_API_KEY secret and
+# verified CONTACT_FROM_EMAIL. Do not copy mail credentials into the seller Worker.
 
 [[services]]
 binding = "SELLER_API"
