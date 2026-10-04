@@ -1,79 +1,95 @@
-import { build } from 'esbuild';
 import { createServer } from 'node:http';
-import { readFile, writeFile } from 'node:fs/promises';
+import { stat, readFile, writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
-import { fixture, png, pdf, mp4 } from './fixture.mjs';
+import { resolve, extname } from 'node:path';
+import { fixture, approve, png, pdf, mp4 } from './fixture.mjs';
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
     '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs'
 );
+class Progress extends Array {
+  push(...items) {
+    console.log(...items);
+    return super.push(...items);
+  }
+}
+// Require the real production export rather than a synthetic component shell.
+const exportedHome = await readFile(resolve('out/index.html'), 'utf8');
+assert.ok(
+  !exportedHome.includes('sale-api.rogerwilcoaviation.com/files/'),
+  'Homepage export must not freeze legacy aircraft photos.',
+);
+assert.ok(
+  !/<loc>[^<]*\/aircraft-for-sale\/[^<]+<\/loc>/.test(
+    await readFile(resolve('out/sitemap.xml'), 'utf8'),
+  ),
+  'Static sitemap must not freeze dynamic aircraft IDs.',
+);
 const f = fixture(),
-  results = [],
+  results = new Progress(),
   requests = [],
   blocked = [],
   errors = [];
-const origin = 'http://127.0.0.1:18762';
-const compiled = await build({
-  stdin: {
-    contents:
-      "import React from 'react';import {createRoot}from 'react-dom/client';import Seller from './app/aircraft-for-sale/seller-auth-panel';createRoot(document.getElementById('root')).render(<Seller/>);",
-    resolveDir: process.cwd(),
-    loader: 'tsx',
-  },
-  bundle: true,
-  write: false,
-  format: 'iife',
-  platform: 'browser',
-  jsx: 'automatic',
-  define: { 'process.env.NODE_ENV': '"production"' },
-});
-const staffCompiled = await build({
-  stdin: {
-    contents:
-      "import React from 'react';import {createRoot}from 'react-dom/client';import Review from './app/seller-review/page';createRoot(document.getElementById('root')).render(<Review/>);",
-    resolveDir: process.cwd(),
-    loader: 'tsx',
-  },
-  bundle: true,
-  write: false,
-  format: 'iife',
-  platform: 'browser',
-  jsx: 'automatic',
-  define: { 'process.env.NODE_ENV': '"production"' },
-});
-const widget = await readFile('public/jerry-widget.js', 'utf8');
-let chatCalls = 0;
+const origin = 'http://127.0.0.1:18763';
+let chatCalls = 0,
+  browseFailures = 0;
 const server = createServer(async (req, res) => {
   try {
-    const path = req.url;
-    if (path === '/aircraft-for-sale') {
-      res.setHeader('Content-Type', 'text/html;charset=UTF-8');
-      res.end(
-        '<!doctype html><html><body><h1>Synthetic Seller Acceptance</h1><div id="root"></div><script src="/bundle.js"></script><script src="/jerry-widget.js"></script></body></html>',
+    const url = new URL(req.url, origin),
+      path = url.pathname + url.search;
+    if (!url.pathname.startsWith('/api/aircraft-sale')) {
+      if (/^\/aircraft-for-sale\/[^/]+$/.test(url.pathname)) {
+        const headers = { ...req.headers, accept: 'text/html' };
+        const response = await f.call(
+          '/listing/' + url.pathname.split('/')[2],
+          'GET',
+          undefined,
+          undefined,
+          headers,
+        );
+        requests.push({ method: 'GET', path, status: response.status });
+        res.writeHead(response.status, Object.fromEntries(response.headers));
+        res.end(Buffer.from(await response.arrayBuffer()));
+        return;
+      }
+      const base = resolve('out');
+      let asset = resolve(base, '.' + url.pathname);
+      if (asset !== base && !asset.startsWith(base + '/')) {
+        res.writeHead(403);
+        res.end();
+        return;
+      }
+      if (url.pathname === '/') asset = resolve(base, 'index.html');
+      if (!extname(asset)) asset += req.headers.rsc === '1' ? '.txt' : '.html';
+      try {
+        await stat(asset);
+      } catch {
+        res.writeHead(404);
+        res.end('Not found');
+        return;
+      }
+      const types = {
+        '.html': 'text/html',
+        '.txt': 'text/x-component',
+        '.js': 'text/javascript',
+        '.css': 'text/css',
+        '.png': 'image/png',
+        '.jpg': 'image/jpeg',
+        '.svg': 'image/svg+xml',
+        '.woff2': 'font/woff2',
+        '.json': 'application/json',
+      };
+      res.setHeader(
+        'Content-Type',
+        types[extname(asset)] || 'application/octet-stream',
       );
+      res.end(await readFile(asset));
       return;
     }
-    if (path === '/seller-review') {
-      res.setHeader('Content-Type', 'text/html');
-      res.end(
-        '<!doctype html><html><body><div id="root"></div><script src="/staff.js"></script></body></html>',
-      );
-      return;
-    }
-    if (path === '/staff.js') {
-      res.setHeader('Content-Type', 'text/javascript');
-      res.end(staffCompiled.outputFiles[0].text);
-      return;
-    }
-    if (path === '/bundle.js' || path === '/jerry-widget.js') {
-      res.setHeader('Content-Type', 'text/javascript');
-      res.end(path === '/bundle.js' ? compiled.outputFiles[0].text : widget);
-      return;
-    }
-    // Local fake edge identity; never a production credential or cookie.
+    // Disposable stand-in for the approved edge identity assertion on staff downloads.
     if (
       (req.headers.cookie || '').includes('fixture_reviewer=approved') &&
-      path.startsWith('/api/aircraft-sale/admin/')
+      url.pathname.startsWith('/api/aircraft-sale/admin/')
     )
       req.headers.authorization = 'Bearer fixture-reviewer';
     const chunks = [];
@@ -105,6 +121,13 @@ const server = createServer(async (req, res) => {
       res.end();
       return;
     }
+    if (url.pathname === '/api/aircraft-sale/browse' && browseFailures > 0) {
+      browseFailures--;
+      requests.push({ method: req.method, path, status: 503 });
+      res.writeHead(503, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Synthetic unavailable inventory' }));
+      return;
+    }
     const response = await f.call(
       path.replace('/api/aircraft-sale', ''),
       req.method,
@@ -120,7 +143,7 @@ const server = createServer(async (req, res) => {
     res.end(JSON.stringify({ error: e.message }));
   }
 });
-await new Promise((r) => server.listen(18762, '127.0.0.1', r));
+await new Promise((r) => server.listen(18763, '127.0.0.1', r));
 let browser;
 try {
   browser = await chromium.launch({ headless: true });
@@ -139,12 +162,28 @@ try {
   page.setDefaultTimeout(10000);
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('dialog', (d) => d.accept());
-  await page.goto(origin + '/aircraft-for-sale');
+  await page.goto(origin + '/');
+  await page.locator('a[href="/aircraft-for-sale"]:visible').first().click();
+  await page.waitForURL(origin + '/aircraft-for-sale');
+  results.push(
+    'PASS actual exported Next home-to-aircraft navigation and hydration',
+  );
   await page.getByRole('button', { name: 'Seller Login', exact: true }).click();
   await page.getByLabel('Email', { exact: true }).fill('browser@example.test');
+  const mailer = f.env.MAILER.fetch;
+  f.env.MAILER.fetch = async () => new Response(null, { status: 503 });
   await page.getByRole('button', { name: 'Send Code', exact: true }).click();
+  await page
+    .getByRole('alert')
+    .filter({ hasText: 'We could not send a code.' })
+    .waitFor();
+  f.env.MAILER.fetch = mailer;
+  await page.getByRole('button', { name: 'Send Code', exact: true }).click();
+  results.push('PASS full-shell mail failure feedback and retry');
   await page.getByLabel('Verification code').waitFor();
-  await page.getByLabel('Verification code').fill('000000');
+  await page
+    .getByLabel('Verification code')
+    .fill(f.mail.at(-1).code === '000000' ? '111111' : '000000');
   await page
     .getByRole('button', { name: 'Verify & Sign In', exact: true })
     .click();
@@ -279,6 +318,41 @@ try {
   results.push(
     'PASS actual staff queue downloads private PDF and approves exact revision',
   );
+  const buyer = await context.newPage();
+  buyer.on('pageerror', (e) => errors.push(e.message));
+  await buyer.goto(origin + '/');
+  await buyer
+    .locator('a.bs-listing[href="/aircraft-for-sale/' + l.id + '"]')
+    .waitFor();
+  await buyer.goto(origin + '/aircraft-for-sale');
+  await buyer
+    .locator('a.a4s-card[href="/aircraft-for-sale/' + l.id + '"]')
+    .click();
+  await buyer
+    .getByRole('heading', { name: '2000 Synthetic Jerry Draft', exact: true })
+    .waitFor();
+  assert.equal(await buyer.locator('video').count(), 1);
+  assert.equal(await buyer.locator('a[href*="log.pdf"]').count(), 0);
+  const privateStatus = await buyer.evaluate(
+    async (key) =>
+      (await fetch('/api/aircraft-sale/files/' + encodeURIComponent(key)))
+        .status,
+    Object.values(f.state().files).find((x) => x.category === 'airframe').key,
+  );
+  assert.equal(privateStatus, 401);
+  results.push(
+    'PASS live homepage/card detail navigation, public media and private-record denial',
+  );
+  browseFailures = 1;
+  await buyer.goto(origin + '/aircraft-for-sale');
+  await buyer
+    .getByRole('alert')
+    .filter({ hasText: 'Aircraft inventory is temporarily unavailable' })
+    .waitFor();
+  assert.equal(await buyer.locator('.a4s-card').count(), 0);
+  await buyer.reload();
+  await buyer.locator('.a4s-card').waitFor();
+  results.push('PASS inventory outage fails closed and refresh recovers');
   await page.getByRole('button', { name: 'Refresh', exact: true }).click();
   await page.getByRole('button', { name: 'Pause', exact: true }).click();
   await page.getByRole('button', { name: 'Resume', exact: true }).click();
@@ -286,6 +360,21 @@ try {
   await page.getByText('sold', { exact: true }).waitFor();
   await page.getByRole('button', { name: 'Archive', exact: true }).click();
   await page.getByText('archived', { exact: true }).waitFor();
+  await buyer.goto(origin + '/');
+  await buyer
+    .getByText('No aircraft currently listed.', { exact: false })
+    .waitFor();
+  assert.equal(await buyer.locator('a.bs-listing').count(), 0);
+  const stale = await buyer.goto(origin + '/aircraft-for-sale/' + l.id);
+  assert.ok([401, 404].includes(stale.status()));
+  assert.equal(
+    await buyer
+      .getByRole('heading', { name: '2000 Synthetic Jerry Draft', exact: true })
+      .count(),
+    0,
+  );
+  await buyer.close();
+  results.push('PASS archive removes homepage/inventory and old public detail');
   await page
     .getByRole('button', { name: 'Restore to Draft', exact: true })
     .click();
@@ -365,10 +454,77 @@ try {
     true,
   );
   await page.screenshot({
-    path: 'tests/aircraft-sale/mobile.png',
+    path: 'tests/aircraft-sale/full-shell-mobile.png',
     fullPage: true,
   });
   results.push('PASS mobile modal width and no horizontal overflow');
+  await page
+    .getByRole('button', { name: 'Close seller panel', exact: true })
+    .click();
+  await page.getByRole('button', { name: 'My Listings', exact: true }).click();
+  await page
+    .getByRole('button', { name: 'New Manual Listing', exact: true })
+    .click();
+  for (const [label, value] of [
+    ['Make', 'Synthetic'],
+    ['Model', 'Mobile'],
+    ['Year', '2000'],
+    ['Asking price (USD)', '1'],
+  ])
+    await page.getByLabel(label, { exact: true }).fill(value);
+  await page.getByRole('button', { name: 'Save Draft', exact: true }).click();
+  await page
+    .getByRole('heading', { name: 'Photos, video and records' })
+    .waitFor();
+  const mobileFiles = page.locator('dialog input[type=file]');
+  await mobileFiles.nth(0).setInputFiles({
+    name: 'mobile.png',
+    mimeType: 'image/png',
+    buffer: Buffer.from(png),
+  });
+  await page.getByText('Photos (1)', { exact: true }).waitFor();
+  await mobileFiles.nth(2).setInputFiles({
+    name: 'invalid.pdf',
+    mimeType: 'application/pdf',
+    buffer: Buffer.from('not a PDF'),
+  });
+  await page
+    .getByRole('alert')
+    .filter({ hasText: 'Use a valid JPG' })
+    .waitFor();
+  await mobileFiles.nth(2).setInputFiles({
+    name: 'mobile.pdf',
+    mimeType: 'application/pdf',
+    buffer: Buffer.from(pdf),
+  });
+  await page.getByText('Airframe logbooks (1)', { exact: true }).waitFor();
+  await page
+    .getByRole('button', { name: 'Submit for Review', exact: true })
+    .click();
+  await page.getByText('pending', { exact: true }).waitFor();
+  const mobile = Object.values(f.state().listings)[0];
+  assert.equal((await approve(f, mobile)).status, 200);
+  await page.getByRole('button', { name: 'Refresh', exact: true }).click();
+  await page.getByRole('button', { name: 'Pause', exact: true }).click();
+  await page.getByRole('button', { name: 'Resume', exact: true }).click();
+  await page.getByRole('button', { name: 'Archive', exact: true }).click();
+  await page.getByText('archived', { exact: true }).waitFor();
+  await page
+    .getByRole('button', { name: 'Restore to Draft', exact: true })
+    .click();
+  await page
+    .getByRole('button', { name: 'Move to Trash', exact: true })
+    .click();
+  await page
+    .getByRole('button', { name: 'Delete Permanently', exact: true })
+    .click();
+  await page
+    .getByText('No listings yet. Save a draft to get started.', { exact: true })
+    .waitFor();
+  assert.equal(f.objects.size, 0);
+  results.push(
+    'PASS mobile manual listing, photo/PDF rejection-retry, review/lifecycle and purge',
+  );
   await page
     .getByRole('button', { name: 'Close seller panel', exact: true })
     .click();
@@ -379,20 +535,21 @@ try {
   assert.equal((await f.call('/account', 'GET', undefined, token)).status, 401);
   results.push('PASS UI logout revokes server token');
   assert.equal(errors.length, 0);
-  assert.equal(blocked.length, 0);
+  assert.ok(blocked.every((url) => new URL(url).origin !== origin));
 } catch (e) {
   results.push('FAIL ' + e.stack);
   process.exitCode = 1;
   if (browser?.contexts()[0]?.pages()[0])
     await browser.contexts()[0].pages()[0].screenshot({
-      path: 'tests/aircraft-sale/browser-failure.png',
+      path: 'tests/aircraft-sale/full-shell-failure.png',
       fullPage: true,
     });
 } finally {
   await browser?.close();
+  server.closeAllConnections();
   await new Promise((r) => server.close(r));
   await writeFile(
-    'tests/aircraft-sale/browser-results.json',
+    'tests/aircraft-sale/full-shell-results.json',
     JSON.stringify(
       {
         results,
@@ -401,7 +558,7 @@ try {
         errors,
         chatCalls,
         scope:
-          'Actual seller component and Jerry widget, authenticated deterministic intake, memory-only actual v2 API/storage/mail. No full Next shell or cloud settings.',
+          'Actual production Next static export and navigation, seller/staff dynamically loaded bundles, deferred Jerry widget; disposable v2 API/mail/storage; all external browser traffic blocked. Dynamic details use the same Worker API route as Pages; no cloud settings.',
       },
       null,
       2,
