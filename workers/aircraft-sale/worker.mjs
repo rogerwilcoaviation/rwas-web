@@ -347,11 +347,14 @@ export class SellerStore {
       );
     }
   }
-  async json(req) {
+  async json(req, allowEmpty = false) {
     if (Number(req.headers.get('content-length') || 0) > 64000)
       fail(413, 'Request too large.');
     const reader = req.body?.getReader();
-    if (!reader) fail(400, 'Invalid JSON.');
+    if (!reader) {
+      if (allowEmpty) return {};
+      fail(400, 'Invalid JSON.');
+    }
     const chunks = [];
     let size = 0;
     while (true) {
@@ -364,6 +367,7 @@ export class SellerStore {
       }
       chunks.push(value);
     }
+    if (allowEmpty && size === 0) return {};
     const bytes = new Uint8Array(size);
     let offset = 0;
     for (const chunk of chunks) {
@@ -1358,7 +1362,8 @@ export class SellerStore {
       return reply({ ok: true, email: address });
     }
     if (path === '/logout' && method === 'POST') {
-      if (req.body) await this.json(req);
+      // Service bindings can represent a bodyless POST as an empty stream.
+      await this.json(req, true);
       const external = this.state.sessions[u.sessionKey].method === 'identity';
       delete this.state.sessions[u.sessionKey];
       const config = identityConfig(this.env);

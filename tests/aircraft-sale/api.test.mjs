@@ -51,6 +51,27 @@ test('single-use codes, expiry, attempt lockout, malformed JSON and delivery fai
     503,
   );
 });
+test('logout accepts a forwarded empty POST stream, revokes its session, and still rejects malformed nonempty JSON', async () => {
+  const f = fixture();
+  const session = await f.login();
+  const request = (body) =>
+    new Request('http://localhost/api/aircraft-sale/logout', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + session },
+      body,
+    });
+  assert.equal((await f.callRaw(request('invalid JSON'))).status, 400);
+  assert.equal(
+    (await f.call('/account', 'GET', undefined, session)).status,
+    200,
+  );
+  assert.equal((await f.callRaw(request(new Uint8Array(0)))).status, 200);
+  assert.equal(
+    (await f.call('/account', 'GET', undefined, session)).status,
+    401,
+  );
+});
+
 test('logout revokes token, profiles survive login; verified email change revokes other sessions', async () => {
   const f = fixture(),
     t = await f.login(),
