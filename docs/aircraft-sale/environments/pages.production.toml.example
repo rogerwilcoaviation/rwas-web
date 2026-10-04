@@ -1,0 +1,17 @@
+# PLACEHOLDER ONLY. Merge these additions into verified existing Pages settings.
+# Do not replace existing intake D1/mail/CSP/other bindings with this partial file.
+name = "REPLACE_PRODUCTION_PAGES_PROJECT"
+account_id = "REPLACE_VERIFIED_CLOUDFLARE_ACCOUNT_ID"
+pages_build_output_dir = "../../../.vercel/output/static"
+compatibility_date = "2026-09-01"
+
+[vars]
+INTAKE_STAGING_MODE = "false"
+# Staging must match STAGING_ORIGIN in functions/_intake/core.ts exactly.
+# Current value: https://intake-restoration-20260922.rwas-web.pages.dev
+# A new dedicated host requires reviewed source/test adjustment; confirm ownership
+# and isolation before using the existing shared intake staging destination.
+
+[[services]]
+binding = "SELLER_API"
+service = "REPLACE_PRODUCTION_SELLER_WORKER"

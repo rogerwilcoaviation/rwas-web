@@ -1,52 +1,67 @@
 // Pure, offline preparation only. Does not import, deploy, fetch or delete data.
 import { readFile, writeFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
-const allowed = [
-  'sellerName',
-  'sellerPhone',
-  'sellerLocation',
-  'make',
-  'model',
-  'year',
-  'serialNumber',
-  'nNumber',
-  'totalTime',
-  'engineTime',
-  'engineModel',
-  'propTime',
-  'propModel',
-  'price',
-  'priceLabel',
-  'description',
-  'avionics',
-  'equipmentList',
-  'annualDue',
-  'usefulLoad',
-  'fuelCapacity',
-  'cruiseSpeed',
-  'range',
-  'category',
-  'condition',
-  'damageHistory',
-];
+import {
+  listingFields as allowed,
+  cleanListing,
+} from '../workers/aircraft-sale/listing-fields.mjs';
+const categories = new Set([
+  'photos',
+  'videos',
+  'airframe',
+  'powerplant',
+  'propeller',
+  'adSbCompliance',
+  'misc',
+]);
 export function planLegacy(listings) {
   if (!Array.isArray(listings))
     throw Error('Expected explicit listing export array.');
   const seen = new Set(),
     keys = new Map(),
     owners = new Map(),
-    review = [];
+    review = [],
+    normalizations = [];
   const normalized = listings.map((l) => {
-    if (!l.id || !/^[a-zA-Z0-9_-]+$/.test(l.id) || seen.has(l.id))
+    if (
+      !l ||
+      typeof l !== 'object' ||
+      Array.isArray(l) ||
+      typeof l.id !== 'string' ||
+      !/^[a-zA-Z0-9_-]{1,128}$/.test(l.id) ||
+      ['__proto__', 'constructor', 'prototype'].includes(l.id) ||
+      seen.has(l.id)
+    )
       throw Error('Invalid or duplicate listing ID.');
     seen.add(l.id);
     const email = String(l.sellerEmail || '')
       .trim()
       .toLowerCase();
     if (!/^\S+@[^\s@]+\.[^\s@]+$/.test(email))
-      throw Error('Missing verified ownership mapping for ' + l.id);
+      throw Error(
+        'Missing owner email for ' +
+          l.id +
+          '; independent verification is still required.',
+      );
     owners.set(email, [...(owners.get(email) || []), l.id]);
+    if (
+      (l.photos !== undefined && !Array.isArray(l.photos)) ||
+      (l.videos !== undefined && !Array.isArray(l.videos)) ||
+      (l.logbooks !== undefined &&
+        (!l.logbooks ||
+          typeof l.logbooks !== 'object' ||
+          Array.isArray(l.logbooks)))
+    )
+      throw Error('Invalid media structure for ' + l.id);
+    for (const [category, files] of Object.entries(l.logbooks || {}))
+      if (
+        !categories.has(category) ||
+        ['photos', 'videos'].includes(category) ||
+        !Array.isArray(files)
+      )
+        throw Error('Invalid record category for ' + l.id);
     const files = [
+      ...(l.videos || []).map((f) => ({ ...f, category: 'videos' })),
       ...(l.photos || []).map((f) => ({ ...f, category: 'photos' })),
       ...Object.entries(l.logbooks || {}).flatMap(([category, fs]) =>
         fs.map((f) => ({ ...f, category })),
@@ -54,7 +69,12 @@ export function planLegacy(listings) {
     ];
     for (const f of files) {
       if (
-        !String(f.key).startsWith('listings/' + l.id + '/') ||
+        typeof f.key !== 'string' ||
+        !f.key.startsWith('listings/' + l.id + '/' + f.category + '/') ||
+        /[\\\u0000-\u001f%]/.test(f.key) ||
+        f.key
+          .split('/')
+          .some((part) => !part || part === '.' || part === '..') ||
         keys.has(f.key)
       )
         throw Error('Ambiguous file ownership: ' + f.key);
@@ -65,6 +85,12 @@ export function planLegacy(listings) {
         sourceKey: f.key,
       });
     }
+    for (const key of allowed)
+      if (l[key] !== undefined && !['string', 'number'].includes(typeof l[key]))
+        throw Error('Invalid field type: ' + key);
+    for (const key of allowed)
+      if (typeof l[key] === 'number' && !Number.isFinite(l[key]))
+        throw Error('Invalid numeric field: ' + key);
     const fields = Object.fromEntries(
       allowed.filter((k) => l[k] !== undefined).map((k) => [k, l[k]]),
     );
@@ -75,7 +101,22 @@ export function planLegacy(listings) {
       reason:
         'Explicit owner mapping and content/media review required before publication.',
     });
-    return { id: l.id, ownerEmail: email, fields, proposedStatus: 'draft' };
+    const destinationFields = cleanListing(fields);
+    const changedFields = Object.keys(fields).filter(
+      (key) => fields[key] !== destinationFields[key],
+    );
+    if (changedFields.length)
+      normalizations.push({
+        listingId: l.id,
+        fields: changedFields,
+        rule: 'Same field trimming, numeric conversion and N-number casing as destination API.',
+      });
+    return {
+      id: l.id,
+      ownerEmail: email,
+      fields: destinationFields,
+      proposedStatus: 'draft',
+    };
   });
   return {
     version: 2,
@@ -86,6 +127,7 @@ export function planLegacy(listings) {
     listings: normalized,
     files: [...keys.values()],
     review,
+    normalizations,
     excludes: [
       'all OTPs, sessions, passwords, admin credentials, unauthenticated drafts and orphan files',
     ],

@@ -1,4 +1,12 @@
-import { deliverCode, authorizeReviewer } from './adapters.mjs';
+import {
+  listingFields as fields,
+  cleanListing as clean,
+} from './listing-fields.mjs';
+import {
+  deliverCode,
+  authorizeReviewer,
+  authorizeOperator,
+} from './adapters.mjs';
 import {
   identityConfig,
   randomProof,
@@ -7,6 +15,7 @@ import {
   digest,
   logoutUrl,
 } from './identity.mjs';
+import { securityOperation, securityProposal } from './security.mjs';
 import { hasProductSnippetEligibility } from '../../lib/product-snippet-eligibility.mjs';
 // Versioned seller API. Requires explicitly provisioned Durable Object + private R2.
 // No legacy KV fallback: migration/import is a separately reviewed operation.
@@ -22,34 +31,6 @@ const categories = [
   'adSbCompliance',
   'misc',
 ];
-const fields = [
-  'sellerName',
-  'sellerPhone',
-  'sellerLocation',
-  'make',
-  'model',
-  'year',
-  'serialNumber',
-  'nNumber',
-  'totalTime',
-  'engineTime',
-  'engineModel',
-  'propTime',
-  'propModel',
-  'price',
-  'priceLabel',
-  'description',
-  'avionics',
-  'equipmentList',
-  'annualDue',
-  'usefulLoad',
-  'fuelCapacity',
-  'cruiseSpeed',
-  'range',
-  'category',
-  'condition',
-  'damageHistory',
-];
 const empty = () => ({
   version: 2,
   profiles: {},
@@ -57,6 +38,7 @@ const empty = () => ({
   identitySecurity: {},
   authTransactions: {},
   authEvents: {},
+  securityOperations: {},
   sessions: {},
   codes: {},
   rates: {},
@@ -102,41 +84,6 @@ const code = () => {
   } while (n[0] >= 4294000000);
   return String(n[0] % 1000000).padStart(6, '0');
 };
-function clean(body, complete = false) {
-  if (!body || typeof body !== 'object' || Array.isArray(body))
-    fail(400, 'Invalid listing.');
-  for (const key of Object.keys(body))
-    if (!fields.includes(key)) fail(400, 'Unsupported listing field: ' + key);
-  const out = {};
-  for (const [k, v] of Object.entries(body)) {
-    if (typeof v !== 'string' && typeof v !== 'number')
-      fail(400, 'Invalid ' + k);
-    if (
-      String(v).length >
-      (['description', 'avionics', 'equipmentList'].includes(k) ? 10000 : 300)
-    )
-      fail(400, k + ' is too long.');
-    out[k] = String(v).trim();
-  }
-  if (out.year !== undefined) {
-    const y = Number(out.year);
-    if (!Number.isInteger(y) || y < 1903 || y > new Date().getUTCFullYear() + 1)
-      fail(400, 'Enter a valid aircraft year.');
-    out.year = y;
-  }
-  if (out.price !== undefined) {
-    const p = Number(out.price);
-    if (!Number.isFinite(p) || p <= 0 || p > 1000000000)
-      fail(400, 'Enter a positive asking price.');
-    out.price = p;
-  }
-  if (out.nNumber && !/^N[0-9][A-Z0-9]{0,4}$/.test(out.nNumber.toUpperCase()))
-    fail(400, 'Enter a valid US N-number.');
-  if (out.nNumber) out.nNumber = out.nNumber.toUpperCase();
-  if (complete && (!out.make || !out.model || !out.year || !out.price))
-    fail(400, 'Make, model, year and asking price are required.');
-  return out;
-}
 function publicListing(l) {
   const {
     ownerId,
@@ -436,7 +383,8 @@ export class SellerStore {
       !s ||
       s.expiresAt <= Date.now() ||
       !this.state.profiles[s.userId] ||
-      this.state.profiles[s.userId].disabled
+      this.state.profiles[s.userId].disabled ||
+      this.state.profiles[s.userId].identityBlocked
     )
       fail(401, 'Your session expired. Please sign in again.');
     if (recent && Date.now() - s.createdAt > 600000)
@@ -467,6 +415,37 @@ export class SellerStore {
           : 'Administrative review required.',
       );
     return (await result.json()).actor || 'admin';
+  }
+  async operator(req) {
+    const authorization = this.env.OPERATOR_AUTH || {
+      fetch: (request) => authorizeOperator(request, this.env),
+    };
+    const result = await authorization.fetch(
+      new Request('https://internal.invalid/authorize-security', {
+        headers: {
+          Authorization: req.headers.get('Authorization') || '',
+          'Cf-Access-Jwt-Assertion':
+            req.headers.get('Cf-Access-Jwt-Assertion') || '',
+        },
+      }),
+    );
+    if (!result.ok)
+      fail(
+        result.status === 503 ? 503 : 403,
+        'Security operator authorization required.',
+      );
+    const identity = await result.json();
+    if (
+      identity.scope !== 'seller-security' ||
+      typeof identity.actor !== 'string' ||
+      !identity.actor ||
+      identity.actor.length > 254 ||
+      !Number.isFinite(identity.authenticatedAt) ||
+      identity.authenticatedAt < Date.now() - 600000 ||
+      identity.authenticatedAt > Date.now() + 30000
+    )
+      fail(403, 'Recent security operator authorization required.');
+    return identity.actor;
   }
   owned(id, u) {
     const l = this.state.listings[id];
@@ -754,7 +733,7 @@ export class SellerStore {
         this.state.profiles[profile.id] = profile;
       }
       if (!profile) fail(401, 'Your account is no longer available.');
-      if (profile.disabled)
+      if (profile.disabled || profile.identityBlocked)
         fail(403, 'This account is unavailable. Contact RWAS.');
       if (
         tx.createdAt <=
@@ -779,6 +758,131 @@ export class SellerStore {
       );
       return this.sessionReply(profile, 'identity');
     }
+    if (path.startsWith('/ops/security/')) {
+      const actor = await this.operator(req);
+      const config = identityConfig(this.env);
+      if (!config) fail(503, 'Identity service is not configured.');
+      if (
+        url.origin !== config.origin ||
+        (req.headers.get('Origin') &&
+          req.headers.get('Origin') !== config.origin)
+      )
+        fail(403, 'Operator destination not allowed.');
+      if (method !== 'POST') fail(405, 'Method not allowed.');
+      if (
+        ![
+          '/ops/security/preview',
+          '/ops/security/apply',
+          '/ops/security/receipt',
+        ].includes(path)
+      )
+        fail(404, 'Operator action not found.');
+      const body = await this.json(req);
+      if (path.endsWith('/receipt')) {
+        if (
+          !body ||
+          typeof body.id !== 'string' ||
+          !/^[A-Za-z0-9_-]{1,128}$/.test(body.id) ||
+          ['__proto__', 'constructor', 'prototype'].includes(body.id) ||
+          Object.keys(body).some((key) => key !== 'id')
+        )
+          fail(400, 'Operation ID required.');
+        const receipt = Object.hasOwn(this.state.securityOperations, body.id)
+          ? this.state.securityOperations[body.id]
+          : null;
+        if (!receipt) fail(404, 'Security operation not found.');
+        return reply(receipt);
+      }
+      const operation = securityOperation(body);
+      const inputHash = await digest(
+        JSON.stringify({ issuer: config.issuer, operation }),
+      );
+      const previous = Object.hasOwn(
+        this.state.securityOperations,
+        operation.id,
+      )
+        ? this.state.securityOperations[operation.id]
+        : null;
+      if (previous) {
+        if (previous.actor !== actor || previous.inputHash !== inputHash)
+          fail(409, 'Operation ID already used for another request.');
+        return reply({ ...previous.result, replayed: true });
+      }
+      const proposal = await securityProposal(
+        this.state,
+        config.issuer,
+        operation,
+      );
+      if (path.endsWith('/preview')) return reply(proposal.public);
+      if (body.confirmation !== proposal.public.confirmation)
+        fail(
+          409,
+          'Security state changed or confirmation missing. Preview again.',
+        );
+      const fence = Date.now();
+      const before = this.state.identitySecurity[proposal.identityKey] || {};
+      this.state.identitySecurity[proposal.identityKey] = {
+        ...before,
+        revision: (before.revision || 0) + 1,
+        credentialsChangedAt: Math.max(before.credentialsChangedAt || 0, fence),
+        blocked:
+          operation.kind === 'account-unblocked'
+            ? false
+            : operation.kind === 'account-blocked' || !!before.blocked,
+        blockedAt:
+          operation.kind === 'account-blocked'
+            ? Math.max(before.blockedAt || 0, operation.occurredAt)
+            : before.blockedAt || 0,
+        unblockedThrough:
+          operation.kind === 'account-unblocked'
+            ? operation.occurredAt
+            : before.unblockedThrough || 0,
+      };
+      let revokedSessions = 0;
+      const profile = this.state.profiles[proposal.profileId];
+      if (profile) {
+        profile.sessionRevokedAt = Math.max(
+          profile.sessionRevokedAt || 0,
+          fence,
+        );
+        profile.identityBlocked = Object.entries(this.state.identities).some(
+          ([key, value]) =>
+            value.userId === profile.id &&
+            this.state.identitySecurity[key]?.blocked,
+        );
+        for (const [key, session] of Object.entries(this.state.sessions))
+          if (session.userId === profile.id) {
+            delete this.state.sessions[key];
+            revokedSessions++;
+          }
+      }
+      const result = {
+        ok: true,
+        operationId: operation.id,
+        affectedProfileId: profile?.id || null,
+        revokedSessions,
+        subjectBlocked:
+          this.state.identitySecurity[proposal.identityKey].blocked,
+        profileBlocked: !!(profile?.disabled || profile?.identityBlocked),
+        appliedAt: fence,
+      };
+      this.audit('operator-security-reconcile', actor, {
+        ...operation,
+        issuer: config.issuer,
+        affectedProfileId: profile?.id || null,
+        subject: proposal.identityKey,
+        revokedSessions,
+        subjectBlocked: result.subjectBlocked,
+        profileBlocked: result.profileBlocked,
+      });
+      this.state.securityOperations[operation.id] = {
+        actor,
+        inputHash,
+        result,
+        audit: this.state.audit.at(-1),
+      };
+      return reply(result);
+    }
     if (path === '/auth/events' && method === 'POST') {
       const config = identityConfig(this.env),
         secret = this.env.AUTH_EVENT_SECRET;
@@ -801,16 +905,32 @@ export class SellerStore {
         body.subject.length > 500 ||
         typeof body.id !== 'string' ||
         !/^[A-Za-z0-9_-]{1,128}$/.test(body.id) ||
+        ['__proto__', 'constructor', 'prototype'].includes(body.id) ||
         !Number.isFinite(body.issuedAt) ||
         Math.abs(Date.now() - body.issuedAt) > 300000
       )
         fail(400, 'Invalid provider event.');
       for (const [key, value] of Object.entries(this.state.authEvents))
         if (Date.now() - value > DAY) delete this.state.authEvents[key];
-      if (this.state.authEvents[body.id]) return reply({ ok: true });
+      if (Object.hasOwn(this.state.authEvents, body.id))
+        return reply({ ok: true });
       const identityKey = await digest(config.issuer + '|' + body.subject);
       const previous = this.state.identitySecurity[identityKey];
+      if (body.issuedAt <= (previous?.unblockedThrough || 0)) {
+        this.state.authEvents[body.id] = Date.now();
+        this.audit('provider-event-already-reconciled', identityKey, {
+          eventId: body.id,
+          kind: body.kind,
+        });
+        return reply({ ok: true, reconciled: true });
+      }
       this.state.identitySecurity[identityKey] = {
+        ...previous,
+        revision: (previous?.revision || 0) + 1,
+        blockedAt:
+          body.kind === 'account-blocked'
+            ? Math.max(previous?.blockedAt || 0, body.issuedAt)
+            : previous?.blockedAt || 0,
         credentialsChangedAt: Math.max(
           previous?.credentialsChangedAt || 0,
           body.issuedAt,
@@ -833,7 +953,7 @@ export class SellerStore {
           body.kind === 'account-blocked' &&
           this.state.profiles[identity.userId]
         )
-          this.state.profiles[identity.userId].disabled = true;
+          this.state.profiles[identity.userId].identityBlocked = true;
         for (const [key, session] of Object.entries(this.state.sessions))
           if (session.userId === identity.userId)
             delete this.state.sessions[key];
@@ -866,7 +986,8 @@ export class SellerStore {
         };
         this.state.profiles[p.id] = p;
       }
-      if (p.disabled) fail(403, 'This account is unavailable. Contact RWAS.');
+      if (p.disabled || p.identityBlocked)
+        fail(403, 'This account is unavailable. Contact RWAS.');
       return this.sessionReply(p);
     }
     if (path === '/browse' && method === 'GET') {

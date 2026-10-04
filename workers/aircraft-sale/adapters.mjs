@@ -22,7 +22,7 @@ export async function deliverCode(env, payload) {
 }
 // Staff identities are verified cryptographically; an email header is never trusted.
 // Access application/audience/reviewer settings require separate owner approval.
-export async function authorizeReviewer(request, env) {
+async function authorizeAccess(request, env, operator = false) {
   if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || !env.REVIEWER_EMAILS)
     return new Response(null, { status: 503 });
   const jwt = request.headers.get('Cf-Access-Jwt-Assertion');
@@ -36,7 +36,13 @@ export async function authorizeReviewer(request, env) {
     const header = JSON.parse(new TextDecoder().decode(decode(h))),
       claim = JSON.parse(new TextDecoder().decode(decode(p)));
     const issuer = 'https://' + env.ACCESS_TEAM_DOMAIN;
+    const authenticatedAt = claim.auth_time * 1000;
     if (
+      (operator &&
+        (!Number.isFinite(claim.auth_time) ||
+          !Number.isFinite(authenticatedAt) ||
+          authenticatedAt < Date.now() - 600000 ||
+          authenticatedAt > Date.now() + 30000)) ||
       !/^[a-z0-9-]+\.cloudflareaccess\.com$/.test(env.ACCESS_TEAM_DOMAIN) ||
       header.alg !== 'RS256' ||
       claim.iss !== issuer ||
@@ -68,9 +74,30 @@ export async function authorizeReviewer(request, env) {
       new TextEncoder().encode(h + '.' + p),
     );
     return valid
-      ? Response.json({ actor: claim.email })
+      ? Response.json(
+          operator
+            ? { actor: claim.email, scope: 'seller-security', authenticatedAt }
+            : { actor: claim.email },
+        )
       : new Response(null, { status: 403 });
   } catch {
     return new Response(null, { status: 403 });
   }
+}
+
+export const authorizeReviewer = (request, env) =>
+  authorizeAccess(request, env);
+// A distinct Access audience/allowlist; ordinary listing reviewers get no recovery authority.
+export async function authorizeOperator(request, env) {
+  if (!env.OPERATOR_ACCESS_AUD || env.OPERATOR_ACCESS_AUD === env.ACCESS_AUD)
+    return new Response(null, { status: 503 });
+  return authorizeAccess(
+    request,
+    {
+      ACCESS_TEAM_DOMAIN: env.OPERATOR_ACCESS_TEAM_DOMAIN,
+      ACCESS_AUD: env.OPERATOR_ACCESS_AUD,
+      REVIEWER_EMAILS: env.OPERATOR_EMAILS,
+    },
+    true,
+  );
 }
