@@ -29,6 +29,11 @@
       "status": 200
     },
     {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
       "method": "POST",
       "path": "/api/aircraft-sale/send-code",
       "status": 503
@@ -105,12 +110,12 @@
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/upload?listingId=575124d5-ed7f-442f-ab95-2b93ff2693c7&category=photos&filename=a.png",
+      "path": "/api/aircraft-sale/upload?listingId=199a63fd-9f69-4692-80fc-76cadc6de679&category=photos&filename=a.png",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/upload?listingId=575124d5-ed7f-442f-ab95-2b93ff2693c7&category=photos&filename=b.png",
+      "path": "/api/aircraft-sale/upload?listingId=199a63fd-9f69-4692-80fc-76cadc6de679&category=photos&filename=b.png",
       "status": 200
     },
     {
@@ -125,22 +130,22 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F7491755f-2114-4f9b-befa-d2890a3377c7%2Fa.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2Fa2a80605-96c5-47a3-8818-e06281f573c7%2Fa.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F4cdf6181-52d0-4ff6-b682-f055542be16c%2Fb.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2F59dec3b0-25dc-42c4-b28a-f9240942f129%2Fb.png",
       "status": 200
     },
     {
       "method": "PUT",
-      "path": "/api/aircraft-sale/listings/575124d5-ed7f-442f-ab95-2b93ff2693c7/photos/order",
+      "path": "/api/aircraft-sale/listings/199a63fd-9f69-4692-80fc-76cadc6de679/photos/order",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/upload?listingId=575124d5-ed7f-442f-ab95-2b93ff2693c7&category=videos&filename=clip.mp4",
+      "path": "/api/aircraft-sale/upload?listingId=199a63fd-9f69-4692-80fc-76cadc6de679&category=videos&filename=clip.mp4",
       "status": 200
     },
     {
@@ -165,37 +170,37 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F4cdf6181-52d0-4ff6-b682-f055542be16c%2Fb.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2F59dec3b0-25dc-42c4-b28a-f9240942f129%2Fb.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F7491755f-2114-4f9b-befa-d2890a3377c7%2Fa.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2Fa2a80605-96c5-47a3-8818-e06281f573c7%2Fa.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fvideos%2F9750022c-bad4-4de6-a22f-bf1173a2522b%2Fclip.mp4",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fvideos%2F881f1319-f2ea-410f-8c7e-37496b8ab748%2Fclip.mp4",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F4cdf6181-52d0-4ff6-b682-f055542be16c%2Fb.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2F59dec3b0-25dc-42c4-b28a-f9240942f129%2Fb.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F7491755f-2114-4f9b-befa-d2890a3377c7%2Fa.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2Fa2a80605-96c5-47a3-8818-e06281f573c7%2Fa.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fvideos%2F9750022c-bad4-4de6-a22f-bf1173a2522b%2Fclip.mp4",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fvideos%2F881f1319-f2ea-410f-8c7e-37496b8ab748%2Fclip.mp4",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/upload?listingId=575124d5-ed7f-442f-ab95-2b93ff2693c7&category=airframe&filename=log.pdf",
+      "path": "/api/aircraft-sale/upload?listingId=199a63fd-9f69-4692-80fc-76cadc6de679&category=airframe&filename=log.pdf",
       "status": 200
     },
     {
@@ -210,22 +215,22 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F4cdf6181-52d0-4ff6-b682-f055542be16c%2Fb.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2F59dec3b0-25dc-42c4-b28a-f9240942f129%2Fb.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F7491755f-2114-4f9b-befa-d2890a3377c7%2Fa.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2Fa2a80605-96c5-47a3-8818-e06281f573c7%2Fa.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fvideos%2F9750022c-bad4-4de6-a22f-bf1173a2522b%2Fclip.mp4",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fvideos%2F881f1319-f2ea-410f-8c7e-37496b8ab748%2Fclip.mp4",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/575124d5-ed7f-442f-ab95-2b93ff2693c7/status",
+      "path": "/api/aircraft-sale/listing/199a63fd-9f69-4692-80fc-76cadc6de679/status",
       "status": 200
     },
     {
@@ -245,22 +250,22 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/admin/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F4cdf6181-52d0-4ff6-b682-f055542be16c%2Fb.png",
+      "path": "/api/aircraft-sale/admin/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2F59dec3b0-25dc-42c4-b28a-f9240942f129%2Fb.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/admin/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F7491755f-2114-4f9b-befa-d2890a3377c7%2Fa.png",
+      "path": "/api/aircraft-sale/admin/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2Fa2a80605-96c5-47a3-8818-e06281f573c7%2Fa.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/admin/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fvideos%2F9750022c-bad4-4de6-a22f-bf1173a2522b%2Fclip.mp4",
+      "path": "/api/aircraft-sale/admin/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fvideos%2F881f1319-f2ea-410f-8c7e-37496b8ab748%2Fclip.mp4",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/admin/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fairframe%2F6ffed7ae-1770-4c7c-9f51-773236939888%2Flog.pdf",
+      "path": "/api/aircraft-sale/admin/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fairframe%2F978ae270-1572-4fff-8262-5f8e82b62e3a%2Flog.pdf",
       "status": 200
     },
     {
@@ -280,7 +285,7 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F4cdf6181-52d0-4ff6-b682-f055542be16c%2Fb.png?w=400&q=80",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2F59dec3b0-25dc-42c4-b28a-f9240942f129%2Fb.png?w=400&q=80",
       "status": 200
     },
     {
@@ -290,32 +295,32 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F4cdf6181-52d0-4ff6-b682-f055542be16c%2Fb.png?w=600&q=80",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2F59dec3b0-25dc-42c4-b28a-f9240942f129%2Fb.png?w=600&q=80",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/aircraft-for-sale/575124d5-ed7f-442f-ab95-2b93ff2693c7",
+      "path": "/aircraft-for-sale/199a63fd-9f69-4692-80fc-76cadc6de679",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fvideos%2F9750022c-bad4-4de6-a22f-bf1173a2522b%2Fclip.mp4",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2F59dec3b0-25dc-42c4-b28a-f9240942f129%2Fb.png",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2Fa2a80605-96c5-47a3-8818-e06281f573c7%2Fa.png",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fvideos%2F881f1319-f2ea-410f-8c7e-37496b8ab748%2Fclip.mp4",
       "status": 206
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F4cdf6181-52d0-4ff6-b682-f055542be16c%2Fb.png",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F7491755f-2114-4f9b-befa-d2890a3377c7%2Fa.png",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fairframe%2F6ffed7ae-1770-4c7c-9f51-773236939888%2Flog.pdf",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fairframe%2F978ae270-1572-4fff-8262-5f8e82b62e3a%2Flog.pdf",
       "status": 401
     },
     {
@@ -330,7 +335,7 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F4cdf6181-52d0-4ff6-b682-f055542be16c%2Fb.png?w=600&q=80",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2F59dec3b0-25dc-42c4-b28a-f9240942f129%2Fb.png?w=600&q=80",
       "status": 200
     },
     {
@@ -345,7 +350,7 @@
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/575124d5-ed7f-442f-ab95-2b93ff2693c7/status",
+      "path": "/api/aircraft-sale/listing/199a63fd-9f69-4692-80fc-76cadc6de679/status",
       "status": 200
     },
     {
@@ -360,7 +365,7 @@
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/575124d5-ed7f-442f-ab95-2b93ff2693c7/status",
+      "path": "/api/aircraft-sale/listing/199a63fd-9f69-4692-80fc-76cadc6de679/status",
       "status": 200
     },
     {
@@ -375,7 +380,7 @@
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/575124d5-ed7f-442f-ab95-2b93ff2693c7/status",
+      "path": "/api/aircraft-sale/listing/199a63fd-9f69-4692-80fc-76cadc6de679/status",
       "status": 200
     },
     {
@@ -390,7 +395,7 @@
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/575124d5-ed7f-442f-ab95-2b93ff2693c7/status",
+      "path": "/api/aircraft-sale/listing/199a63fd-9f69-4692-80fc-76cadc6de679/status",
       "status": 200
     },
     {
@@ -410,12 +415,12 @@
     },
     {
       "method": "GET",
-      "path": "/aircraft-for-sale/575124d5-ed7f-442f-ab95-2b93ff2693c7",
+      "path": "/aircraft-for-sale/199a63fd-9f69-4692-80fc-76cadc6de679",
       "status": 401
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/575124d5-ed7f-442f-ab95-2b93ff2693c7/status",
+      "path": "/api/aircraft-sale/listing/199a63fd-9f69-4692-80fc-76cadc6de679/status",
       "status": 200
     },
     {
@@ -430,22 +435,22 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F4cdf6181-52d0-4ff6-b682-f055542be16c%2Fb.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2F59dec3b0-25dc-42c4-b28a-f9240942f129%2Fb.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F7491755f-2114-4f9b-befa-d2890a3377c7%2Fa.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2Fa2a80605-96c5-47a3-8818-e06281f573c7%2Fa.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fvideos%2F9750022c-bad4-4de6-a22f-bf1173a2522b%2Fclip.mp4",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fvideos%2F881f1319-f2ea-410f-8c7e-37496b8ab748%2Fclip.mp4",
       "status": 200
     },
     {
       "method": "PUT",
-      "path": "/api/aircraft-sale/listings/575124d5-ed7f-442f-ab95-2b93ff2693c7",
+      "path": "/api/aircraft-sale/listings/199a63fd-9f69-4692-80fc-76cadc6de679",
       "status": 200
     },
     {
@@ -455,17 +460,17 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F4cdf6181-52d0-4ff6-b682-f055542be16c%2Fb.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2F59dec3b0-25dc-42c4-b28a-f9240942f129%2Fb.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fphotos%2F7491755f-2114-4f9b-befa-d2890a3377c7%2Fa.png",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fphotos%2Fa2a80605-96c5-47a3-8818-e06281f573c7%2Fa.png",
       "status": 200
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2F575124d5-ed7f-442f-ab95-2b93ff2693c7%2Fvideos%2F9750022c-bad4-4de6-a22f-bf1173a2522b%2Fclip.mp4",
+      "path": "/api/aircraft-sale/files/listings%2F199a63fd-9f69-4692-80fc-76cadc6de679%2Fvideos%2F881f1319-f2ea-410f-8c7e-37496b8ab748%2Fclip.mp4",
       "status": 200
     },
     {
@@ -485,7 +490,7 @@
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/575124d5-ed7f-442f-ab95-2b93ff2693c7/status",
+      "path": "/api/aircraft-sale/listing/199a63fd-9f69-4692-80fc-76cadc6de679/status",
       "status": 200
     },
     {
@@ -500,7 +505,7 @@
     },
     {
       "method": "DELETE",
-      "path": "/api/aircraft-sale/listings/575124d5-ed7f-442f-ab95-2b93ff2693c7",
+      "path": "/api/aircraft-sale/listings/199a63fd-9f69-4692-80fc-76cadc6de679",
       "status": 200
     },
     {
@@ -570,7 +575,7 @@
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/upload?listingId=a7c5bdcc-e81a-4c6e-8255-f75385e9035e&category=photos&filename=mobile.png",
+      "path": "/api/aircraft-sale/upload?listingId=39f40732-a284-48a9-b80c-29eb165970a6&category=photos&filename=mobile.png",
       "status": 200
     },
     {
@@ -585,17 +590,17 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2Fa7c5bdcc-e81a-4c6e-8255-f75385e9035e%2Fphotos%2F8a8c5837-5364-4cd5-93e1-8a8fbb2071cb%2Fmobile.png",
+      "path": "/api/aircraft-sale/files/listings%2F39f40732-a284-48a9-b80c-29eb165970a6%2Fphotos%2F98171e2a-5f3b-4f9b-bd5c-582320bc7f0c%2Fmobile.png",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/upload?listingId=a7c5bdcc-e81a-4c6e-8255-f75385e9035e&category=airframe&filename=invalid.pdf",
+      "path": "/api/aircraft-sale/upload?listingId=39f40732-a284-48a9-b80c-29eb165970a6&category=airframe&filename=invalid.pdf",
       "status": 400
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/upload?listingId=a7c5bdcc-e81a-4c6e-8255-f75385e9035e&category=airframe&filename=mobile.pdf",
+      "path": "/api/aircraft-sale/upload?listingId=39f40732-a284-48a9-b80c-29eb165970a6&category=airframe&filename=mobile.pdf",
       "status": 200
     },
     {
@@ -610,12 +615,12 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/files/listings%2Fa7c5bdcc-e81a-4c6e-8255-f75385e9035e%2Fphotos%2F8a8c5837-5364-4cd5-93e1-8a8fbb2071cb%2Fmobile.png",
+      "path": "/api/aircraft-sale/files/listings%2F39f40732-a284-48a9-b80c-29eb165970a6%2Fphotos%2F98171e2a-5f3b-4f9b-bd5c-582320bc7f0c%2Fmobile.png",
       "status": 200
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/a7c5bdcc-e81a-4c6e-8255-f75385e9035e/status",
+      "path": "/api/aircraft-sale/listing/39f40732-a284-48a9-b80c-29eb165970a6/status",
       "status": 200
     },
     {
@@ -626,21 +631,6 @@
     {
       "method": "GET",
       "path": "/api/aircraft-sale/draft",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/aircraft-sale/my-listings",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/aircraft-sale/draft",
-      "status": 200
-    },
-    {
-      "method": "POST",
-      "path": "/api/aircraft-sale/listing/a7c5bdcc-e81a-4c6e-8255-f75385e9035e/status",
       "status": 200
     },
     {
@@ -655,7 +645,7 @@
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/a7c5bdcc-e81a-4c6e-8255-f75385e9035e/status",
+      "path": "/api/aircraft-sale/listing/39f40732-a284-48a9-b80c-29eb165970a6/status",
       "status": 200
     },
     {
@@ -670,7 +660,7 @@
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/a7c5bdcc-e81a-4c6e-8255-f75385e9035e/status",
+      "path": "/api/aircraft-sale/listing/39f40732-a284-48a9-b80c-29eb165970a6/status",
       "status": 200
     },
     {
@@ -685,7 +675,7 @@
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/a7c5bdcc-e81a-4c6e-8255-f75385e9035e/status",
+      "path": "/api/aircraft-sale/listing/39f40732-a284-48a9-b80c-29eb165970a6/status",
       "status": 200
     },
     {
@@ -700,7 +690,22 @@
     },
     {
       "method": "POST",
-      "path": "/api/aircraft-sale/listing/a7c5bdcc-e81a-4c6e-8255-f75385e9035e/status",
+      "path": "/api/aircraft-sale/listing/39f40732-a284-48a9-b80c-29eb165970a6/status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/my-listings",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/draft",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/listing/39f40732-a284-48a9-b80c-29eb165970a6/status",
       "status": 200
     },
     {
@@ -715,7 +720,7 @@
     },
     {
       "method": "DELETE",
-      "path": "/api/aircraft-sale/listings/a7c5bdcc-e81a-4c6e-8255-f75385e9035e",
+      "path": "/api/aircraft-sale/listings/39f40732-a284-48a9-b80c-29eb165970a6",
       "status": 200
     },
     {

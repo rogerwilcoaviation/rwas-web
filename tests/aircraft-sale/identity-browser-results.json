@@ -1,0 +1,247 @@
+{
+  "results": [
+    "PASS hosted email/password synthetic first login, verified identity and clean callback URL",
+    "PASS Google and Apple synthetic redirects, mobile fit, local and provider logout",
+    "PASS explicit Google linking retains existing aircraft ownership",
+    "PASS hosted password-help routing and cancellation preserve current seller account",
+    "PASS authenticated synthetic reset event revokes browser session",
+    "PASS callback replay/missing browser proof rejected and URL scrubbed"
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/start",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/finish",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/logout",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/start",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/finish",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/logout",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/start",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/finish",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/logout",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/start",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/finish",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/account",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/start",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/finish",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/account",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/start",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/account",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/start",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/aircraft-sale/auth/finish",
+      "status": 400
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/my-listings",
+      "status": 401
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/browse?include=sold",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/aircraft-sale/auth/methods",
+      "status": 200
+    }
+  ],
+  "providerPages": [
+    "/authorize",
+    "/v2/logout",
+    "/authorize",
+    "/v2/logout",
+    "/authorize",
+    "/v2/logout",
+    "/authorize",
+    "/authorize",
+    "/authorize",
+    "/authorize"
+  ],
+  "blocked": [],
+  "errors": [],
+  "scope": "Actual Next export with synthetic hosted identity pages, ephemeral RSA provider and disposable Worker state. Hosted pages intercepted locally; no real passwords, provider accounts, email, or network requests. Provider enrollment/recovery remains staging acceptance."
+}

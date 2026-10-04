@@ -21,7 +21,14 @@ type Listing = {
   reviewNote?: string;
   [key: string]: unknown;
 };
+type IdentityMethod = 'password' | 'google' | 'apple';
+const methodLabels: Record<IdentityMethod, string> = {
+  password: 'Email and password',
+  google: 'Google',
+  apple: 'Apple',
+};
 type Account = {
+  loginMethods?: IdentityMethod[];
   profile: { email: string; name: string; phone: string; location: string };
   sessions: {
     id: string;
@@ -31,6 +38,7 @@ type Account = {
   }[];
 };
 const key = 'rwas_sale_v2';
+const identityKey = 'rwas_sale_identity';
 const inputs: [string, string, string?][] = [
   ['make', 'Make'],
   ['model', 'Model'],
@@ -70,6 +78,7 @@ const categories: [string, string][] = [
 
 export default function SellerAuthPanel() {
   const [session, setSession] = useState<Session | null>(null);
+  const [identityMethods, setIdentityMethods] = useState<IdentityMethod[]>([]);
   const [view, setView] = useState<
     'login' | 'listings' | 'edit' | 'account' | null
   >(null);
@@ -111,6 +120,83 @@ export default function SellerAuthPanel() {
       if (s?.token && s.email) setAuth(s);
     } catch {
       sessionStorage.removeItem(key);
+    }
+    void fetch(SELLER_API + '/auth/methods', { cache: 'no-store' })
+      .then(async (response) => {
+        if (response.ok) {
+          const data = await response.json();
+          setIdentityMethods(
+            (data.methods || []).filter((value: string) =>
+              ['password', 'google', 'apple'].includes(value),
+            ),
+          );
+        }
+      })
+      .catch(() => {});
+    const callback = new URL(window.location.href);
+    if (
+      callback.searchParams.has('state') &&
+      (callback.searchParams.has('code') || callback.searchParams.has('error'))
+    ) {
+      const state = callback.searchParams.get('state'),
+        authorizationCode = callback.searchParams.get('code'),
+        providerError = callback.searchParams.get('error');
+      for (const name of ['state', 'code', 'error', 'error_description'])
+        callback.searchParams.delete(name);
+      history.replaceState(
+        null,
+        '',
+        callback.pathname + callback.search + callback.hash,
+      );
+      let pending: { state: string; proof: string; link: boolean } | null =
+        null;
+      try {
+        pending = JSON.parse(sessionStorage.getItem(identityKey) || 'null');
+      } catch {
+        /* Invalid local transaction. */
+      }
+      sessionStorage.removeItem(identityKey);
+      if (!pending || pending.state !== state) {
+        setError(
+          'Sign-in was started in another tab or expired. Please try again.',
+        );
+        setView('login');
+      } else {
+        setBusy(true);
+        void fetch(SELLER_API + '/auth/finish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            state,
+            code: authorizationCode,
+            error: providerError,
+            proof: pending.proof,
+          }),
+        })
+          .then(async (response) => {
+            const data = await response.json();
+            if (!response.ok)
+              throw Error(data.error || 'Sign-in could not be completed.');
+            setAuth({
+              token: data.session,
+              email: data.email,
+              name: data.name,
+            });
+            setMessage(
+              pending?.link ? 'Login method connected.' : 'Signed in.',
+            );
+            setView(null);
+          })
+          .catch((error) => {
+            setError(
+              error instanceof Error
+                ? error.message
+                : 'Sign-in could not be completed.',
+            );
+            setView('login');
+          })
+          .finally(() => setBusy(false));
+      }
     }
     const login = () => {
       setView('login');
@@ -188,6 +274,19 @@ export default function SellerAuthPanel() {
     } finally {
       setBusy(false);
     }
+  }
+  async function beginIdentity(method: IdentityMethod, link = false) {
+    await perform(async () => {
+      const proof =
+        crypto.randomUUID().replaceAll('-', '') +
+        crypto.randomUUID().replaceAll('-', '');
+      const data = await api('/auth/start', 'POST', { method, proof, link });
+      sessionStorage.setItem(
+        identityKey,
+        JSON.stringify({ state: data.state, proof, link }),
+      );
+      window.location.assign(data.authorizationUrl);
+    });
   }
   async function load() {
     const data = await api('/my-listings');
@@ -297,9 +396,11 @@ export default function SellerAuthPanel() {
             disabled={busy}
             onClick={() =>
               void perform(async () => {
-                await api('/logout', 'POST');
+                const result = await api('/logout', 'POST');
+                sessionStorage.removeItem(identityKey);
                 setAuth(null);
                 setView(null);
+                if (result.logoutUrl) window.location.assign(result.logoutUrl);
               })
             }
           >
@@ -338,66 +439,91 @@ export default function SellerAuthPanel() {
         )}
         {message && <p role="status">{message}</p>}
         {view === 'login' && (
-          <form
-            onSubmit={onSubmit(async () => {
-              if (!sent) {
-                await api('/send-code', 'POST', { email });
-                setSent(true);
-                setMessage('Code sent. Check your inbox.');
-              } else {
-                const d = await api('/check-code', 'POST', { email, code });
-                setAuth({ token: d.session, email: d.email, name: d.name });
-                setSent(false);
-                setCode('');
-                setView(null);
-              }
-            })}
-          >
-            <p>
-              Sign in with a one-time email code. No password required. Codes
-              expire after 15 minutes; sessions expire after 24 hours.
-            </p>
-            <label className="seller-field">
-              Email
-              <input
-                id="login-email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                readOnly={sent}
-              />
-            </label>
-            {sent && (
-              <label className="seller-field">
-                Verification code
-                <input
-                  id="login-code"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  pattern="[0-9]{6}"
-                  required
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                />
-              </label>
+          <>
+            {identityMethods.length > 0 && (
+              <nav aria-label="Sign-in methods">
+                {identityMethods.map((method) => (
+                  <button
+                    key={method}
+                    disabled={busy}
+                    onClick={() => void beginIdentity(method)}
+                  >
+                    {method === 'password'
+                      ? methodLabels[method]
+                      : 'Continue with ' + methodLabels[method]}
+                  </button>
+                ))}
+                <p>
+                  Create an account or recover your password on the secure
+                  sign-in page.
+                </p>
+              </nav>
             )}
-            <button disabled={busy}>
-              {busy ? 'Please wait…' : sent ? 'Verify & Sign In' : 'Send Code'}
-            </button>
-            {sent && (
-              <button
-                type="button"
-                onClick={() => {
+            <form
+              onSubmit={onSubmit(async () => {
+                if (!sent) {
+                  await api('/send-code', 'POST', { email });
+                  setSent(true);
+                  setMessage('Code sent. Check your inbox.');
+                } else {
+                  const d = await api('/check-code', 'POST', { email, code });
+                  setAuth({ token: d.session, email: d.email, name: d.name });
                   setSent(false);
                   setCode('');
-                }}
-              >
-                Use different email
+                  setView(null);
+                }
+              })}
+            >
+              <p>
+                Sign in with a one-time email code. No password required. Codes
+                expire after 15 minutes; sessions expire after 24 hours.
+              </p>
+              <label className="seller-field">
+                Email
+                <input
+                  id="login-email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  readOnly={sent}
+                />
+              </label>
+              {sent && (
+                <label className="seller-field">
+                  Verification code
+                  <input
+                    id="login-code"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    pattern="[0-9]{6}"
+                    required
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                  />
+                </label>
+              )}
+              <button disabled={busy}>
+                {busy
+                  ? 'Please wait…'
+                  : sent
+                    ? 'Verify & Sign In'
+                    : 'Send Code'}
               </button>
-            )}
-          </form>
+              {sent && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSent(false);
+                    setCode('');
+                  }}
+                >
+                  Use different email
+                </button>
+              )}
+            </form>
+          </>
         )}
         {view === 'listings' && (
           <>
@@ -598,6 +724,36 @@ export default function SellerAuthPanel() {
         )}
         {view === 'account' && account && (
           <>
+            {identityMethods.length > 0 && (
+              <section aria-label="Connected sign-in methods">
+                <h3>Sign-in methods</h3>
+                <p>
+                  {account.loginMethods?.length
+                    ? 'Connected: ' +
+                      account.loginMethods
+                        .map((method) => methodLabels[method])
+                        .join(', ')
+                    : 'Email-code login. Connect another method to use this same seller account.'}
+                </p>
+                {identityMethods.map((method) => (
+                  <button
+                    key={method}
+                    disabled={busy}
+                    onClick={() => void beginIdentity(method, true)}
+                  >
+                    Connect {methodLabels[method]}
+                  </button>
+                ))}
+                {identityMethods.includes('password') && (
+                  <button
+                    disabled={busy}
+                    onClick={() => void beginIdentity('password')}
+                  >
+                    Password help
+                  </button>
+                )}
+              </section>
+            )}
             <form
               onSubmit={onSubmit(async () => {
                 const data = await api(
@@ -716,7 +872,9 @@ export default function SellerAuthPanel() {
             <h3>Delete account</h3>
             <p>
               Permanently delete your listings first. Account deletion requires
-              a recent sign-in and removes your profile and saved draft.
+              a recent sign-in and removes your RWAS profile, saved draft and
+              connected login links. Your Google, Apple or sign-in-provider
+              account is managed separately.
             </p>
             <button
               disabled={busy}
