@@ -174,7 +174,7 @@
     '<div class="jerry-widget-status"><span class="jerry-widget-dot"></span><span>ONLINE — AVIONICS &amp; SERVICE</span></div>' +
     '<button type="button" class="jerry-service-open" style="min-height:44px;flex-shrink:0">Request service — review and submit</button>' +
     '<div class="jerry-widget-chat"></div>' +
-    '<div class="jerry-widget-error"></div>' +
+    '<div class="jerry-widget-error" role="alert"></div>' +
     '<p class="jerry-widget-privacy" style="margin:0;padding:6px 12px;font:11px/1.4 Arial,sans-serif;color:#333;background:#f7f4ef">Messages are processed by our AI chat service and stored in this tab. Avoid sensitive details. <a href="/privacy" target="_blank" rel="noopener noreferrer" style="color:#17466b;text-decoration:underline">Privacy and retention</a>. Chat alone does not submit a service request.</p>' +
     '<div class="jerry-widget-input">' +
     '<button type="button" class="jerry-widget-attach" title="Attach photos or documents">📎</button>' +
@@ -538,6 +538,7 @@
 
     var session = getSaleSession();
     var pendingListing = getPendingListing();
+    var listingActive = false;
 
     if (LISTING_UI_ENABLED && wantsPendingSubmit(text) && pendingListing) {
       document.dispatchEvent(
@@ -595,6 +596,7 @@
 
       // A chat message never publishes a listing. The seller panel owns review.
       if (LISTING_UI_ENABLED && wantsPendingSubmit(text)) {
+        listingActive = true;
         if (!session) {
           openSellerLoginModal();
           setLoading(false);
@@ -604,7 +606,12 @@
           headers: { Authorization: 'Bearer ' + session.token },
           cache: 'no-store',
         });
-        if (!savedResponse.ok) throw new Error('Please sign in again.');
+        if (!savedResponse.ok) {
+          throw Object.assign(new Error('Seller request failed'), {
+            status: savedResponse.status,
+            sellerRequest: true,
+          });
+        }
         var savedDraft = (await savedResponse.json()).draft;
         setOpen(false);
         document.dispatchEvent(
@@ -661,7 +668,7 @@
         }
       }
 
-      var listingActive =
+      listingActive =
         LISTING_UI_ENABLED &&
         (hasListingIntent(text) ||
           (intakeState && !intakeState.completed && !intakeState.cancelled));
@@ -684,7 +691,10 @@
       );
 
       if (!response.ok) {
-        throw new Error('Chat request failed: ' + response.status);
+        throw Object.assign(new Error('Chat request failed'), {
+          status: response.status,
+          sellerRequest: listingActive,
+        });
       }
 
       var isStreaming = (response.headers.get('content-type') || '').includes(
@@ -825,7 +835,22 @@
       saveHistory();
       render();
     } catch (err) {
-      errorBox.textContent = 'Radio trouble. Try again in a moment.';
+      var retryMessage =
+        'Chat is temporarily unavailable. Your conversation is saved in this tab. Try again in a moment.';
+      if (err.sellerRequest || listingActive) {
+        retryMessage =
+          'Aircraft listing service is temporarily unavailable. Your conversation is saved in this tab. Try again later.';
+        if (err.status === 401)
+          retryMessage =
+            'Your seller session has expired. Sign in again to continue. Your conversation is saved in this tab.';
+        else if (err.status === 403)
+          retryMessage =
+            'Your account cannot access this listing conversation. Your conversation is saved in this tab.';
+      }
+      if (err.status === 429)
+        retryMessage =
+          'Too many requests. Wait a moment before trying again. Your conversation is saved in this tab.';
+      errorBox.textContent = retryMessage;
       errorBox.style.display = 'block';
     } finally {
       setLoading(false);
