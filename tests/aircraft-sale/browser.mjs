@@ -2,7 +2,7 @@ import { build } from 'esbuild';
 import { createServer } from 'node:http';
 import { readFile, writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
-import { fixture, approve, png, pdf, mp4 } from './fixture.mjs';
+import { fixture, png, pdf, mp4 } from './fixture.mjs';
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
     '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs'
@@ -27,6 +27,20 @@ const compiled = await build({
   jsx: 'automatic',
   define: { 'process.env.NODE_ENV': '"production"' },
 });
+const staffCompiled = await build({
+  stdin: {
+    contents:
+      "import React from 'react';import {createRoot}from 'react-dom/client';import Review from './app/seller-review/page';createRoot(document.getElementById('root')).render(<Review/>);",
+    resolveDir: process.cwd(),
+    loader: 'tsx',
+  },
+  bundle: true,
+  write: false,
+  format: 'iife',
+  platform: 'browser',
+  jsx: 'automatic',
+  define: { 'process.env.NODE_ENV': '"production"' },
+});
 const widget = await readFile('public/jerry-widget.js', 'utf8');
 let chatCalls = 0;
 const server = createServer(async (req, res) => {
@@ -37,6 +51,18 @@ const server = createServer(async (req, res) => {
       res.end(
         '<!doctype html><html><body><h1>Synthetic Seller Acceptance</h1><div id="root"></div><script src="/bundle.js"></script><script src="/jerry-widget.js"></script></body></html>',
       );
+      return;
+    }
+    if (path === '/seller-review') {
+      res.setHeader('Content-Type', 'text/html');
+      res.end(
+        '<!doctype html><html><body><div id="root"></div><script src="/staff.js"></script></body></html>',
+      );
+      return;
+    }
+    if (path === '/staff.js') {
+      res.setHeader('Content-Type', 'text/javascript');
+      res.end(staffCompiled.outputFiles[0].text);
       return;
     }
     if (path === '/bundle.js' || path === '/jerry-widget.js') {
@@ -209,7 +235,27 @@ try {
     .waitFor();
   l = Object.values(f.state().listings)[0];
   assert.equal(l.status, 'pending');
-  assert.equal((await approve(f, l)).status, 200);
+  const staff = await context.newPage();
+  await staff.setExtraHTTPHeaders({ Authorization: 'Bearer fixture-reviewer' });
+  staff.on('dialog', (d) => d.accept());
+  await staff.goto(origin + '/seller-review');
+  await staff.getByRole('button', { name: 'Load Review Queue' }).click();
+  const record = staff.getByRole('link', { name: 'log.pdf' });
+  await record.waitFor();
+  const downloaded = await Promise.all([
+    staff.waitForEvent('download'),
+    record.click(),
+  ]);
+  assert.equal(downloaded[0].suggestedFilename(), 'log.pdf');
+  await staff.getByRole('button', { name: 'Approve and Publish' }).click();
+  await staff
+    .getByRole('button', { name: 'Approve and Publish' })
+    .waitFor({ state: 'detached' });
+  assert.equal(Object.values(f.state().listings)[0].status, 'active');
+  await staff.close();
+  results.push(
+    'PASS actual staff queue downloads private PDF and approves exact revision',
+  );
   await page.getByRole('button', { name: 'Refresh', exact: true }).click();
   await page.getByRole('button', { name: 'Pause', exact: true }).click();
   await page.getByRole('button', { name: 'Resume', exact: true }).click();
@@ -226,7 +272,14 @@ try {
   );
   await page.getByRole('button', { name: 'Edit', exact: true }).click();
   await page.getByLabel('Model', { exact: true }).fill('Changed');
+  await page.getByRole('textbox', { name: /^Description/ }).fill('');
   await page.getByRole('button', { name: 'Save Draft', exact: true }).click();
+  await page
+    .getByText('Draft saved. Add media, then submit for review.', {
+      exact: true,
+    })
+    .waitFor();
+  assert.equal(Object.values(f.state().listings)[0].fields.description, '');
   await page
     .getByRole('button', { name: 'Close seller panel', exact: true })
     .click();
