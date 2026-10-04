@@ -75,15 +75,46 @@ async function authorizeAccess(request, env, operator = false) {
       decode(s),
       new TextEncoder().encode(h + '.' + p),
     );
+    let accountAuthenticatedAt = null;
+    if (valid && operator === 'accounts') {
+      // Access application-token iat is issuance time. The authenticated identity
+      // endpoint documents its iat as the user's login time. Bind that response
+      // to the signed subject/email before using it for management freshness.
+      // A lookup failure leaves reads available and management disabled.
+      try {
+        const identityResponse = await fetch(
+          issuer + '/cdn-cgi/access/get-identity',
+          {
+            headers: { Cookie: 'CF_Authorization=' + jwt },
+            redirect: 'error',
+            signal: AbortSignal.timeout(5000),
+          },
+        );
+        const identity = identityResponse.ok
+          ? await identityResponse.json()
+          : null;
+        if (
+          identity &&
+          typeof claim.sub === 'string' &&
+          claim.sub &&
+          identity.user_uuid === claim.sub &&
+          typeof identity.email === 'string' &&
+          identity.email.toLowerCase() === String(claim.email).toLowerCase() &&
+          identity.service_token_status === false &&
+          Number.isSafeInteger(identity.iat) &&
+          identity.iat > 0 &&
+          identity.iat * 1000 <= Date.now() + 30000
+        )
+          accountAuthenticatedAt = identity.iat * 1000;
+      } catch {}
+    }
     return valid
       ? Response.json(
           operator === 'accounts'
             ? {
                 actor: claim.email,
                 scope: 'seller-accounts',
-                authenticatedAt: Number.isFinite(claim.auth_time)
-                  ? authenticatedAt
-                  : null,
+                authenticatedAt: accountAuthenticatedAt,
                 expiresAt: claim.exp * 1000,
               }
             : operator

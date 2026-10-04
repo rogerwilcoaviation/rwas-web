@@ -490,7 +490,7 @@ test('account operations are atomic on persistence failure and replay safely acr
     409,
   );
 });
-test('signed account-administrator JWT verifies distinct audience, signature and identity; absent auth_time never enables writes', async () => {
+test('signed account-administrator JWT verifies distinct authority; fresh management uses bound Cloudflare login metadata rather than JWT issuance', async () => {
   const pair = await crypto.subtle.generateKey(
     {
       name: 'RSASSA-PKCS1-v1_5',
@@ -504,12 +504,25 @@ test('signed account-administrator JWT verifies distinct audience, signature and
   const jwk = await crypto.subtle.exportKey('jwk', pair.publicKey);
   jwk.kid = 'ephemeral-admin';
   const original = globalThis.fetch;
-  globalThis.fetch = async (url) => {
+  let loginIdentity = {
+    email: 'admin@example.test',
+    user_uuid: 'fixture-user',
+    service_token_status: false,
+    iat: null,
+  };
+  let identityStatus = 200,
+    identityLookups = 0;
+  globalThis.fetch = async (url, options) => {
+    if (url === 'https://accounts.cloudflareaccess.com/cdn-cgi/access/certs')
+      return Response.json({ keys: [jwk] });
     assert.equal(
       url,
-      'https://accounts.cloudflareaccess.com/cdn-cgi/access/certs',
+      'https://accounts.cloudflareaccess.com/cdn-cgi/access/get-identity',
     );
-    return Response.json({ keys: [jwk] });
+    assert.ok(options.headers.Cookie.startsWith('CF_Authorization='));
+    assert.equal(options.redirect, 'error');
+    identityLookups++;
+    return Response.json(loginIdentity, { status: identityStatus });
   };
   const env = {
     ACCOUNT_ADMIN_ACCESS_TEAM_DOMAIN: 'accounts.cloudflareaccess.com',
@@ -522,6 +535,8 @@ test('signed account-administrator JWT verifies distinct audience, signature and
     iss: 'https://accounts.cloudflareaccess.com',
     aud: ['accounts-audience'],
     email: 'admin@example.test',
+    sub: 'fixture-user',
+    iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + 60,
     auth_time: Math.floor(Date.now() / 1000),
   };
@@ -548,6 +563,7 @@ test('signed account-administrator JWT verifies distinct audience, signature and
     const response = await authorizeAccountAdministrator(await make(), env);
     assert.equal(response.status, 200);
     assert.equal((await response.json()).scope, 'seller-accounts');
+    assert.equal(identityLookups, 1);
     for (const change of [
       { aud: ['review-audience'] },
       { aud: ['operator-audience'] },
@@ -591,6 +607,83 @@ test('signed account-administrator JWT verifies distinct audience, signature and
       await authorizeAccountAdministrator(await make({ auth_time: null }), env)
     ).json();
     assert.equal(absent.authenticatedAt, null);
+    const fixtureStore = fixture();
+    Object.assign(fixtureStore.env, env, {
+      ACCOUNT_ADMIN_SITE_ORIGIN: 'http://localhost',
+    });
+    const session = await fixtureStore.login();
+    const profile = (
+      await (
+        await fixtureStore.call('/account', 'GET', undefined, session)
+      ).json()
+    ).profile;
+    const jwt = (await make({ auth_time: null })).headers.get(
+      'Cf-Access-Jwt-Assertion',
+    );
+    const headers = {
+      'Cf-Access-Jwt-Assertion': jwt,
+      Origin: 'http://localhost',
+    };
+    const body = {
+      id: 'native-metadata',
+      operation: 'revoke-sessions',
+      reasonCode: 'maintenance',
+    };
+    const preview = () =>
+      fixtureStore.call(
+        '/admin/accounts/' + profile.id + '/preview',
+        'POST',
+        body,
+        undefined,
+        headers,
+      );
+    const now = Math.floor(Date.now() / 1000);
+    // Fresh application token, old actual login: no management authority.
+    loginIdentity = { ...loginIdentity, iat: now - 700 };
+    const old = await (
+      await fixtureStore.call(
+        '/admin/accounts',
+        'GET',
+        undefined,
+        undefined,
+        headers,
+      )
+    ).json();
+    assert.equal(old.canManage, false);
+    assert.equal((await preview()).status, 403);
+    loginIdentity = { ...loginIdentity, iat: now };
+    assert.equal((await preview()).status, 200);
+    const bound = await (
+      await authorizeAccountAdministrator(await make({ auth_time: null }), env)
+    ).json();
+    assert.equal(bound.authenticatedAt, now * 1000);
+    for (const changes of [
+      { user_uuid: 'wrong-user' },
+      { email: 'other@example.test' },
+      { service_token_status: true },
+      { iat: null },
+      { iat: String(now) },
+      { iat: now + 60 },
+    ]) {
+      const valid = loginIdentity;
+      loginIdentity = { ...valid, ...changes };
+      const unsafe = await (
+        await authorizeAccountAdministrator(await make(), env)
+      ).json();
+      assert.equal(unsafe.authenticatedAt, null);
+      assert.equal((await preview()).status, 403);
+      loginIdentity = valid;
+    }
+    identityStatus = 503;
+    const outage = await (
+      await authorizeAccountAdministrator(await make(), env)
+    ).json();
+    assert.equal(outage.authenticatedAt, null);
+    assert.equal((await preview()).status, 403);
+    assert.equal(
+      (await fixtureStore.call('/account', 'GET', undefined, session)).status,
+      200,
+    );
   } finally {
     globalThis.fetch = original;
   }
