@@ -46,44 +46,7 @@ interface Article {
   updated_at?: string;
 }
 
-interface SaleListing {
-  id?: string;
-  status?: string;
-  updatedAt?: string;
-  createdAt?: string;
-}
-
-async function getAircraftListingEntries(
-  siteUrl: string,
-): Promise<MetadataRoute.Sitemap> {
-  try {
-    const response = await fetch(
-      'https://sale-api.rogerwilcoaviation.com/browse?include=sold',
-      {
-        next: { revalidate: 300 },
-      },
-    );
-    if (!response.ok) return [];
-    const data = (await response.json()) as { listings?: SaleListing[] };
-    return (data.listings || [])
-      .filter(
-        (listing) =>
-          listing.id &&
-          (!listing.status ||
-            listing.status === 'active' ||
-            listing.status === 'sold'),
-      )
-      .map((listing) => ({
-        url: `${siteUrl}/aircraft-for-sale/${encodeURIComponent(listing.id as string)}`,
-        ...(listing.updatedAt || listing.createdAt
-          ? { lastModified: listing.updatedAt || listing.createdAt }
-          : {}),
-      }));
-  } catch {
-    return [];
-  }
-}
-
+// Aircraft details are live Worker routes; never freeze inventory URLs into static export.
 async function getShopEntries(siteUrl: string): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
 
@@ -143,15 +106,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         : {}),
     }));
 
-  const [aircraftEntries, shopEntries] = await Promise.all([
-    getAircraftListingEntries(siteUrl),
-    getShopEntries(siteUrl),
-  ]);
+  const shopEntries = await getShopEntries(siteUrl);
 
-  return [
-    ...staticEntries,
-    ...articleEntries,
-    ...aircraftEntries,
-    ...shopEntries,
-  ];
+  return [...staticEntries, ...articleEntries, ...shopEntries];
 }

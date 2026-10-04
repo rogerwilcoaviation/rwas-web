@@ -1,4 +1,8 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { SELLER_API } from '@/lib/seller-api';
 
 type Listing = {
   id: string;
@@ -9,7 +13,7 @@ type Listing = {
   status?: string;
   price?: string | number;
   photos?: Array<{ key: string }>;
-  logbooks?: Record<string, unknown[] | null>;
+  logbooks?: Record<string, unknown[] | { count: number } | null>;
 };
 
 const LOADING_STYLE: React.CSSProperties = {
@@ -21,29 +25,59 @@ const LOADING_STYLE: React.CSSProperties = {
 
 async function getHomepageListings(): Promise<Listing[]> {
   try {
-    const response = await fetch(
-      'https://sale-api.rogerwilcoaviation.com/browse?include=sold',
-      { next: { revalidate: 60 } },
-    );
-    if (!response.ok) return [];
+    const response = await fetch(SELLER_API + '/browse?include=sold', {
+      cache: 'no-store',
+    });
+    if (!response.ok) throw Error('Inventory unavailable');
     const data = (await response.json()) as { listings?: Listing[] };
     // Sold aircraft stay listed (John, 2026-07-26) and follow active inventory.
     return (data.listings || [])
       .filter(
-        (listing) =>
-          !listing.status ||
-          listing.status === 'active' ||
-          listing.status === 'sold',
+        (listing) => listing.status === 'active' || listing.status === 'sold',
       )
       .sort((a, b) => Number(a.status === 'sold') - Number(b.status === 'sold'))
       .slice(0, 4);
   } catch {
-    return [];
+    throw Error('Inventory unavailable');
   }
 }
 
-export default async function AircraftSaleFeed() {
-  const listings = await getHomepageListings();
+export default function AircraftSaleFeed() {
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    getHomepageListings()
+      .then((value) => {
+        if (!cancelled) setListings(value);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setListings([]);
+          setFailed(true);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  if (loading)
+    return (
+      <p role="status" style={LOADING_STYLE}>
+        Loading current aircraft inventory…
+      </p>
+    );
+  if (failed)
+    return (
+      <p role="alert" style={LOADING_STYLE}>
+        Aircraft inventory is temporarily unavailable. Please refresh or contact
+        RWAS.
+      </p>
+    );
 
   if (!listings.length) {
     return (
@@ -68,7 +102,7 @@ export default async function AircraftSaleFeed() {
           : 'Call';
         const lbCount = l.logbooks
           ? Object.values(l.logbooks).reduce<number>(
-              (s, a) => s + (Array.isArray(a) ? a.length : 0),
+              (s, a) => s + (Array.isArray(a) ? a.length : a?.count || 0),
               0,
             )
           : 0;
@@ -78,9 +112,9 @@ export default async function AircraftSaleFeed() {
         const meta = year + (cat ? ' \u00b7 ' + cat : '');
         const isSold = l.status === 'sold';
         return (
-          <Link
+          <a
             key={l.id}
-            href={`/aircraft-for-sale/${l.id}`}
+            href={`/aircraft-for-sale/${encodeURIComponent(l.id)}`}
             className="bs-listing"
           >
             <div className="bs-listing__img" style={{ position: 'relative' }}>
@@ -106,8 +140,8 @@ export default async function AircraftSaleFeed() {
               {photoKey ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={`https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=440&q=78`}
-                  srcSet={`https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=220&q=78 220w, https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=440&q=78 440w, https://sale-api.rogerwilcoaviation.com/files/${photoKey}?w=660&q=78 660w`}
+                  src={`${SELLER_API}/files/${encodeURIComponent(photoKey)}?w=440&q=78`}
+                  srcSet={`${SELLER_API}/files/${encodeURIComponent(photoKey)}?w=220&q=78 220w, ${SELLER_API}/files/${encodeURIComponent(photoKey)}?w=440&q=78 440w, ${SELLER_API}/files/${encodeURIComponent(photoKey)}?w=660&q=78 660w`}
                   sizes="110px"
                   alt={`${l.make || ''} ${l.model || ''}`.trim()}
                   loading="lazy"
@@ -147,7 +181,7 @@ export default async function AircraftSaleFeed() {
                 )}
               </div>
             </div>
-          </Link>
+          </a>
         );
       })}
     </>
