@@ -2,11 +2,16 @@
 # copy after verified source, private storage, policy and migration handoff.
 name = "REPLACE_STAGING_SELLER_WORKER"
 account_id = "REPLACE_VERIFIED_CLOUDFLARE_ACCOUNT_ID"
-main = "../../../workers/aircraft-sale/worker.mjs"
+main = "../../../workers/aircraft-sale/entry.mjs"
 compatibility_date = "2026-09-01"
 workers_dev = false
+preview_urls = false
+routes = []
 
 [vars]
+MAIL_VIA_PAGES = "true"
+# Private RPC mail broker; existing Pages mail secret stays in Pages.
+# For a separately configured direct-mail service, use worker.mjs and omit this flag.
 AUTH_ISSUER = "https://REPLACE_IDENTITY_ISSUER/"
 AUTH_CLIENT_ID = "REPLACE_PUBLIC_CLIENT_ID"
 AUTH_REDIRECT_URI = "https://REPLACE_EXACT_SITE_ORIGIN/aircraft-for-sale"

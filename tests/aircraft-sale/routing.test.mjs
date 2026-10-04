@@ -79,6 +79,38 @@ test('Pages advanced wrapper gates missing seller binding and serves current new
       assert.equal(permitted.status, 200);
       assert.equal(permitted.headers.get('X-Robots-Tag'), 'noindex, nofollow');
     }
+    const seller = 'https://repair-aircraft-seller-workf.rwas-web.pages.dev';
+    await mf.setOptions({
+      ...options,
+      bindings: { INTAKE_STAGING_MODE: 'true', SELLER_STAGING_ORIGIN: seller },
+      serviceBindings: {
+        SELLER_API: async () => new Response('dedicated-seller'),
+      },
+    });
+    for (const path of [
+      '/api/aircraft-sale/health',
+      '/aircraft-for-sale/new-id',
+    ]) {
+      assert.equal(
+        await (await mf.dispatchFetch(seller + path)).text(),
+        'dedicated-seller',
+      );
+      for (const other of [
+        staging,
+        'https://www.rogerwilcoaviation.com',
+        'https://abcdef12.rwas-web.pages.dev',
+      ])
+        assert.equal((await mf.dispatchFetch(other + path)).status, 503);
+    }
+    // Seller permission does not widen any existing intake endpoint's destination.
+    assert.equal(
+      (await mf.dispatchFetch(seller + '/api/service-intake-config')).status,
+      503,
+    );
+    assert.match(
+      await (await mf.dispatchFetch(seller + '/robots.txt')).text(),
+      /Disallow: \//,
+    );
   } finally {
     await mf?.dispose();
     await rm(root, { recursive: true, force: true });
