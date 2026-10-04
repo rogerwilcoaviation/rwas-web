@@ -1,0 +1,15 @@
+# Local-only example. Provisioning/deployment and legacy import require review.
+name = "rwas-seller-local"
+main = "worker.mjs"
+compatibility_date = "2026-09-01"
+[[durable_objects.bindings]]
+name = "SELLER_STORE"
+class_name = "SellerStore"
+[[migrations]]
+tag = "seller-v2-local"
+new_sqlite_classes = ["SellerStore"]
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "seller-local-only"
+# MAILER and ADMIN_AUTH are required service bindings implemented by approved
+# provider adapters. There is no email/token bypass or production legacy fallback.

@@ -63,19 +63,9 @@ export const metadata: Metadata = {
 };
 
 async function getListings(): Promise<Listing[]> {
-  try {
-    const resp = await fetch(
-      'https://sale-api.rogerwilcoaviation.com/browse?include=sold',
-      { next: { revalidate: 60 } },
-    );
-    if (!resp.ok) return [];
-    const data = (await resp.json()) as { listings?: Listing[] };
-    return (data.listings || []).filter(
-      (l) => !l.status || l.status === 'active' || l.status === 'sold',
-    );
-  } catch {
-    return [];
-  }
+  // Static export must not retain aircraft after archive/deletion. Current
+  // inventory is fetched by ListingsGrid through the same-origin service.
+  return [];
 }
 
 export default async function AircraftForSalePage() {
@@ -202,21 +192,23 @@ export default async function AircraftForSalePage() {
               <h3>1. Tell Captain Jerry</h3>
               <p>
                 Click <em>List Your Aircraft</em> and walk through a short
-                13-question intake. Takes about five minutes.
+                guided intake while signed in. Review and save the draft before
+                adding media.
               </p>
             </div>
             <div className="a4s-how-step">
               <h3>2. Add photos &amp; logs</h3>
               <p>
-                You&rsquo;ll get an email link to upload photos and logbook
-                PDFs. Logbooks are optional but help buyers take you seriously.
+                Add photos, video and optional logbook PDFs to your saved draft.
+                Records stay private to you and the RWAS review team.
               </p>
             </div>
             <div className="a4s-how-step">
               <h3>3. RWAS reviews</h3>
               <p>
-                We review every listing before it goes live to catch obvious
-                data problems or safety concerns.
+                Submit your draft for RWAS to review its details and media. It
+                appears publicly after approval; later changes require another
+                review.
               </p>
             </div>
             <div className="a4s-how-step">

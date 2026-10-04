@@ -98,7 +98,7 @@ jobs:
             --branch=main
 
       - name: Deploy preview to Cloudflare Pages
-        if: github.ref != 'refs/heads/main'
+        if: github.ref != 'refs/heads/main' && !startsWith(github.head_ref || github.ref_name, 'repair/aircraft-')
         id: cf-deploy-preview
         uses: cloudflare/wrangler-action@v3
         with:

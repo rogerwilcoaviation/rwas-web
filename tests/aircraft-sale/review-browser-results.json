@@ -1,0 +1,12 @@
+{
+  "checkpoints": [
+    "Access HTML prompts staff sign-in without JSON parsing details",
+    "Unavailable review shows a bounded error",
+    "Expired staff access clears visible private records and unsent notes",
+    "Notes remain isolated by listing and revision after a decision",
+    "Stale approval is rejected, latest revision loaded, old note discarded",
+    "Explicit approval of the refreshed revision succeeds in disposable fixture"
+  ],
+  "pageErrors": 0,
+  "externalRequestsBlocked": 0
+}
