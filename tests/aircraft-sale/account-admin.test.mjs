@@ -490,7 +490,7 @@ test('account operations are atomic on persistence failure and replay safely acr
     409,
   );
 });
-test('signed account-administrator JWT verifies distinct authority; fresh management uses bound Cloudflare login metadata rather than JWT issuance', async () => {
+test('signed account-administrator JWT verifies distinct authority; fresh management uses bound Cloudflare login metadata rather than JWT issuance', async (t) => {
   const pair = await crypto.subtle.generateKey(
     {
       name: 'RSASSA-PKCS1-v1_5',
@@ -657,6 +657,145 @@ test('signed account-administrator JWT verifies distinct authority; fresh manage
       await authorizeAccountAdministrator(await make({ auth_time: null }), env)
     ).json();
     assert.equal(bound.authenticatedAt, now * 1000);
+    await t.test(
+      'observed normal-user identity with omitted service-token fields permits fresh management',
+      async () => {
+        const previous = loginIdentity;
+        loginIdentity = {
+          email: claims.email,
+          user_uuid: claims.sub,
+          iat: now,
+          idp: { id: 'fixture-otp-provider' },
+          amr: ['otp'],
+          common_name: '',
+          version: 1,
+        };
+        const identity = await (
+          await authorizeAccountAdministrator(
+            await make({ auth_time: null }),
+            env,
+          )
+        ).json();
+        assert.equal(identity.authenticatedAt, now * 1000);
+        const directory = await (
+          await fixtureStore.call(
+            '/admin/accounts',
+            'GET',
+            undefined,
+            undefined,
+            headers,
+          )
+        ).json();
+        assert.equal(directory.canManage, true);
+        assert.equal(directory.manageUntil, now * 1000 + 600000);
+        assert.equal((await preview()).status, 200);
+        loginIdentity = previous;
+      },
+    );
+    await t.test(
+      'optional normal-user fields do not admit explicit or malformed service-token indicators',
+      async () => {
+        const previous = loginIdentity;
+        const normal = { email: claims.email, user_uuid: claims.sub, iat: now };
+        for (const changes of [
+          { service_token_status: true },
+          { service_token_status: null },
+          { service_token_status: 'false' },
+          { service_token_status: 0 },
+          { service_token_status: {} },
+          { service_token_id: 'fixture-service-token' },
+          { service_token_id: false },
+          { service_token_id: {} },
+        ]) {
+          loginIdentity = { ...normal, ...changes };
+          const identity = await (
+            await authorizeAccountAdministrator(await make(), env)
+          ).json();
+          assert.equal(identity.authenticatedAt, null, JSON.stringify(changes));
+          assert.equal((await preview()).status, 403);
+        }
+        loginIdentity = {
+          ...normal,
+          service_token_status: false,
+          service_token_id: null,
+        };
+        assert.equal((await preview()).status, 200);
+        for (const changes of [
+          { sub: '' },
+          { sub: null },
+          { sub: 'different-user' },
+          { email: [claims.email] },
+          { common_name: 'fixture-service-token.access' },
+        ]) {
+          const identity = await (
+            await authorizeAccountAdministrator(await make(changes), env)
+          ).json();
+          assert.equal(identity.authenticatedAt, null, JSON.stringify(changes));
+        }
+        loginIdentity = previous;
+      },
+    );
+    await t.test(
+      'reissued tokens and fresh JWT auth_time do not refresh a stale or missing actual login',
+      async () => {
+        const previous = loginIdentity;
+        const normal = { email: claims.email, user_uuid: claims.sub };
+        for (const loginTime of [
+          now - 700,
+          undefined,
+          null,
+          String(now),
+          now + 60,
+        ]) {
+          loginIdentity = {
+            ...normal,
+            ...(loginTime === undefined ? {} : { iat: loginTime }),
+          };
+          const reissued = await make({
+            iat: now,
+            auth_time: now,
+            exp: now + 120,
+          });
+          const reissuedHeaders = {
+            ...headers,
+            'Cf-Access-Jwt-Assertion': reissued.headers.get(
+              'Cf-Access-Jwt-Assertion',
+            ),
+          };
+          const directory = await (
+            await fixtureStore.call(
+              '/admin/accounts',
+              'GET',
+              undefined,
+              undefined,
+              reissuedHeaders,
+            )
+          ).json();
+          assert.equal(directory.canManage, false);
+          assert.equal(directory.manageUntil, null);
+          assert.equal(
+            (
+              await fixtureStore.call(
+                '/admin/accounts/' + profile.id + '/preview',
+                'POST',
+                body,
+                undefined,
+                reissuedHeaders,
+              )
+            ).status,
+            403,
+          );
+          const identity = await (
+            await authorizeAccountAdministrator(reissued, env)
+          ).json();
+          assert.equal(
+            identity.authenticatedAt,
+            loginTime === now - 700 ? loginTime * 1000 : null,
+          );
+        }
+        loginIdentity = previous;
+      },
+    );
     for (const changes of [
       { user_uuid: 'wrong-user' },
       { email: 'other@example.test' },

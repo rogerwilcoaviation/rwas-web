@@ -97,10 +97,17 @@ async function authorizeAccess(request, env, operator = false) {
           identity &&
           typeof claim.sub === 'string' &&
           claim.sub &&
+          typeof claim.email === 'string' &&
           identity.user_uuid === claim.sub &&
           typeof identity.email === 'string' &&
           identity.email.toLowerCase() === String(claim.email).toLowerCase() &&
-          identity.service_token_status === false &&
+          // Normal user identities omit optional service-token fields. A signed,
+          // nonempty user subject bound to the returned UUID/email identifies
+          // the user; explicit or malformed service-token indicators fail closed.
+          (identity.service_token_status === false ||
+            !Object.hasOwn(identity, 'service_token_status')) &&
+          [undefined, null, ''].includes(identity.service_token_id) &&
+          [undefined, null, ''].includes(claim.common_name) &&
           Number.isSafeInteger(identity.iat) &&
           identity.iat > 0 &&
           identity.iat * 1000 <= Date.now() + 30000
