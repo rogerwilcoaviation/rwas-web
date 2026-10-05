@@ -534,6 +534,13 @@ export class SellerStore {
   }
   async prepareCode(req, body, purpose = 'login', u) {
     const address = email(body.email);
+    if (purpose === 'login') {
+      const profile = Object.values(this.state.profiles).find(
+        (p) => p.email === address,
+      );
+      if (profile && accountHeld(profile))
+        fail(403, 'This account is unavailable. Contact RWAS.');
+    }
     if (
       purpose === 'email-change' &&
       Object.values(this.state.profiles).some(

@@ -256,20 +256,13 @@ test('authenticated provider events revoke all app sessions, reject replay/stale
     (await finish(await begin('password'), { sub: 'auth0|synthetic' })).status,
     403,
   );
+  const mailCount = f.mail.length;
   assert.equal(
     (await f.call('/send-code', 'POST', { email: 'identity@example.test' }))
       .status,
-    200,
-  );
-  assert.equal(
-    (
-      await f.call('/check-code', 'POST', {
-        email: 'identity@example.test',
-        code: f.mail.at(-1).code,
-      })
-    ).status,
     403,
   );
+  assert.equal(f.mail.length, mailCount);
 });
 test('identity HTTP provider failures consume transactions once and preserve an existing linked account', async () => {
   const { f, begin, finish } = await setup(),

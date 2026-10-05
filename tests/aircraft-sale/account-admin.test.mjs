@@ -356,7 +356,12 @@ test('suspension and reinstatement preserve listings/media/drafts, revoke only t
     (await s.f.call('/account', 'GET', undefined, s.other)).status,
     200,
   );
-  await s.f.call('/send-code', 'POST', { email: s.profile.email });
+  const mailCount = s.f.mail.length;
+  assert.equal(
+    (await s.f.call('/send-code', 'POST', { email: s.profile.email })).status,
+    403,
+  );
+  assert.equal(s.f.mail.length, mailCount);
   assert.equal(
     (
       await s.f.call('/check-code', 'POST', {
@@ -364,7 +369,7 @@ test('suspension and reinstatement preserve listings/media/drafts, revoke only t
         code: s.f.mail.at(-1).code,
       })
     ).status,
-    403,
+    400,
   );
   const state = s.f.state();
   state.profiles[s.profile.id].identityBlocked = true;

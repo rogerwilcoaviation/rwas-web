@@ -162,16 +162,13 @@ test('native block event revokes linked password/social sessions, fences login a
     (await s.finish(await s.begin('google'), { sub: 'google|owner' })).status,
     403,
   );
-  await s.f.call('/send-code', 'POST', { email: 'identity@example.test' });
+  const mailCount = s.f.mail.length;
   assert.equal(
-    (
-      await s.f.call('/check-code', 'POST', {
-        email: 'identity@example.test',
-        code: s.f.mail.at(-1).code,
-      })
-    ).status,
+    (await s.f.call('/send-code', 'POST', { email: 'identity@example.test' }))
+      .status,
     403,
   );
+  assert.equal(s.f.mail.length, mailCount);
   assert.ok(!JSON.stringify(s.f.state()).includes('PRIVATE-METADATA'));
 });
 

@@ -115,6 +115,38 @@ test('private mail delivery activates only after acceptance, stores no plaintext
   assert.equal(b.delivered.length, 1);
 });
 
+test('held sellers cannot prepare or deliver login codes through either mail adapter', async (t) => {
+  for (const hold of ['adminSuspended', 'identityBlocked', 'disabled']) {
+    await t.test(hold, async () => {
+      const direct = fixture();
+      const session = await direct.login('held@example.test');
+      const profile = (
+        await (await direct.call('/account', 'GET', undefined, session)).json()
+      ).profile;
+      const state = direct.state();
+      state.profiles[profile.id][hold] = true;
+      direct.durable.set('state', state);
+      const before = direct.mail.length;
+      assert.equal(
+        (await direct.call('/send-code', 'POST', { email: profile.email }))
+          .status,
+        403,
+      );
+      assert.equal(direct.mail.length, before);
+
+      const pages = broker();
+      const seeded = structuredClone(direct.state());
+      seeded.profiles[profile.id] = { ...profile, [hold]: true };
+      pages.f.durable.set('state', seeded);
+      const denied = await pages.send(profile.email);
+      assert.equal(denied.status, 403);
+      assert.equal(pages.delivered.length, 0);
+      assert.equal(Object.keys(pages.f.state().mailRequests || {}).length, 0);
+      assert.equal(Object.keys(pages.f.state().codes || {}).length, 0);
+    });
+  }
+});
+
 test('delayed acknowledgement cannot overwrite or resurrect a newer consumed verification code', async () => {
   const b = broker();
   const old = await b.api.createVerification({
