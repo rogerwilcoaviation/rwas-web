@@ -86,7 +86,9 @@ async function authorizeAccess(request, env, operator = false) {
           issuer + '/cdn-cgi/access/get-identity',
           {
             headers: { Cookie: 'CF_Authorization=' + jwt },
-            redirect: 'error',
+            // workerd supports manual/follow only. Never follow a redirect with
+            // the authorization cookie; non-success responses remain read-only.
+            redirect: 'manual',
             signal: AbortSignal.timeout(5000),
           },
         );

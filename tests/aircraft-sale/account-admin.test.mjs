@@ -520,7 +520,7 @@ test('signed account-administrator JWT verifies distinct authority; fresh manage
       'https://accounts.cloudflareaccess.com/cdn-cgi/access/get-identity',
     );
     assert.ok(options.headers.Cookie.startsWith('CF_Authorization='));
-    assert.equal(options.redirect, 'error');
+    assert.equal(options.redirect, 'manual');
     identityLookups++;
     return Response.json(loginIdentity, { status: identityStatus });
   };
