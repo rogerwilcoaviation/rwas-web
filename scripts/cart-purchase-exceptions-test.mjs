@@ -23,7 +23,26 @@ const bundle = async (entry, name) => {
 const policy = JSON.parse(
   readFileSync('data/cart-purchase-exceptions.json', 'utf8'),
 );
-assert.equal(policy.length, 1);
+assert.equal(policy.length, 6);
+assert.deepEqual(
+  policy.slice(1).map((entry) => entry.sku),
+  [
+    '010-04799-00',
+    '010-04148-00',
+    '010-04148-01',
+    '010-04147-00',
+    '010-04147-01',
+  ],
+);
+assert.equal(
+  new Set(policy.map((entry) => entry.productId)).size,
+  policy.length,
+);
+assert.equal(
+  new Set(policy.map((entry) => entry.variantId)).size,
+  policy.length,
+);
+assert.equal(new Set(policy.map((entry) => entry.sku)).size, policy.length);
 const entry = policy[0];
 const product = {
   id: entry.productId,
@@ -33,6 +52,17 @@ const product = {
 };
 const variant = { id: entry.variantId, sku: entry.sku };
 const helpers = await bundle('lib/cart-purchase-exceptions.ts', 'helpers');
+for (const approved of policy) {
+  assert.ok(
+    helpers.isCartPurchaseException({
+      product: {
+        id: approved.productId,
+        handle: approved.handle,
+      },
+      variant: { id: approved.variantId, sku: approved.sku },
+    }),
+  );
+}
 let passed = 0;
 function check(value) {
   assert.ok(value);

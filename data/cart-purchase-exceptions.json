@@ -4,5 +4,35 @@
     "handle": "gtn-750-connector-kit",
     "variantId": "gid://shopify/ProductVariant/47408702423259",
     "sku": "011-02326-02"
+  },
+  {
+    "productId": "gid://shopify/Product/10331282571483",
+    "handle": "garmin-enduro-4-51-mm-titanium-black-comfortfit-band-010-04799-00",
+    "variantId": "gid://shopify/ProductVariant/50587872985307",
+    "sku": "010-04799-00"
+  },
+  {
+    "productId": "gid://shopify/Product/10331282768091",
+    "handle": "garmin-approach-s72-47-mm-carbon-gray-red-black-010-04148-00",
+    "variantId": "gid://shopify/ProductVariant/50587873378523",
+    "sku": "010-04148-00"
+  },
+  {
+    "productId": "gid://shopify/Product/10331282997467",
+    "handle": "garmin-approach-s72-47-mm-silver-citron-fog-gray-010-04148-01",
+    "variantId": "gid://shopify/ProductVariant/50587873771739",
+    "sku": "010-04148-01"
+  },
+  {
+    "productId": "gid://shopify/Product/10331283259611",
+    "handle": "garmin-approach-s72-43-mm-carbon-gray-bronze-pebble-gray-010-04147-00",
+    "variantId": "gid://shopify/ProductVariant/50587874197723",
+    "sku": "010-04147-00"
+  },
+  {
+    "productId": "gid://shopify/Product/10331283488987",
+    "handle": "garmin-approach-s72-43-mm-soft-gold-blush-pink-010-04147-01",
+    "variantId": "gid://shopify/ProductVariant/50587874623707",
+    "sku": "010-04147-01"
   }
 ]
