@@ -94,6 +94,21 @@ try {
   page.on('dialog', (dialog) => dialog.accept());
   await page.goto(origin + '/seller-review');
   const load = page.getByRole('button', { name: 'Load Review Queue' });
+  assert.equal(
+    await page.getByText('No listings are awaiting review.').count(),
+    0,
+  );
+  queueFailure = {
+    status: 401,
+    contentType: 'application/json',
+    body: '{"error":"unauthorized"}',
+  };
+  await load.click();
+  await page
+    .getByRole('alert')
+    .filter({ hasText: 'Sign in with your approved staff account' })
+    .waitFor();
+  checkpoints.push('Unauthorized queue request gives staff sign-in guidance');
   queueFailure = {
     status: 200,
     contentType: 'text/html',
@@ -124,6 +139,36 @@ try {
     ),
   );
   checkpoints.push('Unavailable review shows a bounded error');
+  queueFailure = {
+    status: 200,
+    contentType: 'application/json',
+    body: '{not json',
+  };
+  await load.click();
+  await page
+    .getByRole('alert')
+    .filter({ hasText: 'Review unavailable' })
+    .waitFor();
+  queueFailure = {
+    status: 200,
+    contentType: 'application/json',
+    body: '{"results":[]}',
+  };
+  await load.click();
+  await page
+    .getByRole('alert')
+    .filter({ hasText: 'Review unavailable' })
+    .waitFor();
+  checkpoints.push('Invalid JSON and invalid queue schema fail visibly');
+  queueFailure = {
+    status: 200,
+    contentType: 'application/json',
+    body: '{"listings":[]}',
+  };
+  await load.click();
+  await page.getByText('No listings are awaiting review.').waitFor();
+  assert.equal(await page.locator('main section').count(), 0);
+  checkpoints.push('Successful empty queue is explicitly confirmed');
   await load.click();
   const firstCard = page.locator('main section').filter({
     has: page.getByRole('heading', { name: '2000 Synthetic First Review' }),
@@ -132,6 +177,8 @@ try {
     has: page.getByRole('heading', { name: '2000 Synthetic Second Review' }),
   });
   await firstCard.waitFor();
+  await page.getByText('2 listings are awaiting review.').waitFor();
+  checkpoints.push('Successful pending queue reports its count');
   await firstCard
     .getByRole('textbox', { name: 'Review note' })
     .fill('Private note before session expiry');

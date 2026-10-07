@@ -1,7 +1,11 @@
 {
   "checkpoints": [
+    "Unauthorized queue request gives staff sign-in guidance",
     "Access HTML prompts staff sign-in without JSON parsing details",
     "Unavailable review shows a bounded error",
+    "Invalid JSON and invalid queue schema fail visibly",
+    "Successful empty queue is explicitly confirmed",
+    "Successful pending queue reports its count",
     "Expired staff access clears visible private records and unsent notes",
     "Notes remain isolated by listing and revision after a decision",
     "Stale approval is rejected, latest revision loaded, old note discarded",

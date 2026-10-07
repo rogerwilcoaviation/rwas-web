@@ -40,6 +40,10 @@ export default function SellerReview() {
   const [items, setItems] = useState<Review[]>([]),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false),
+    [queueLoaded, setQueueLoaded] = useState(false),
+    [activity, setActivity] = useState<'idle' | 'loading' | 'reviewing'>(
+      'idle',
+    ),
     [notes, setNotes] = useState<Record<string, string>>({});
   async function loadQueue() {
     const r = await fetch(SELLER_API + '/admin/listings', {
@@ -58,15 +62,19 @@ export default function SellerReview() {
           .map((l) => [noteKey(l), previous[noteKey(l)]]),
       ),
     );
+    setQueueLoaded(true);
   }
   async function load() {
     setBusy(true);
+    setActivity('loading');
+    setQueueLoaded(false);
     setError('');
     try {
       await loadQueue();
     } catch (e) {
       setItems([]);
       setNotes({});
+      setQueueLoaded(false);
       setError(
         e instanceof ReviewRequestError
           ? e.message
@@ -74,6 +82,7 @@ export default function SellerReview() {
       );
     } finally {
       setBusy(false);
+      setActivity('idle');
     }
   }
   async function review(l: Review, decision: string) {
@@ -86,6 +95,7 @@ export default function SellerReview() {
     )
       return;
     setBusy(true);
+    setActivity('reviewing');
     setError('');
     try {
       const r = await fetch(SELLER_API + '/admin/review', {
@@ -107,10 +117,12 @@ export default function SellerReview() {
         } catch {
           setItems([]);
           setNotes({});
+          setQueueLoaded(false);
         }
       } else {
         setItems([]);
         setNotes({});
+        setQueueLoaded(false);
       }
       setError(
         e instanceof ReviewRequestError
@@ -119,6 +131,7 @@ export default function SellerReview() {
       );
     } finally {
       setBusy(false);
+      setActivity('idle');
     }
   }
   return (
@@ -132,10 +145,29 @@ export default function SellerReview() {
         Staff access requires the approved identity service. Review details and
         media before publishing. A changed revision cannot be approved.
       </p>
-      <button onClick={() => void load()} disabled={busy}>
-        Load Review Queue
+      <button
+        type="button"
+        onClick={() => void load()}
+        disabled={busy}
+        aria-busy={activity === 'loading'}
+      >
+        {activity === 'loading' ? 'Loading Review Queue…' : 'Load Review Queue'}
       </button>
+      {activity === 'loading' && <p role="status">Loading review queue…</p>}
+      {activity === 'reviewing' && (
+        <p role="status">Submitting review decision…</p>
+      )}
       {error && <p role="alert">{error}</p>}
+      {queueLoaded && !error && items.length === 0 && (
+        <p role="status">No listings are awaiting review.</p>
+      )}
+      {queueLoaded && !error && items.length > 0 && (
+        <p role="status">
+          {items.length === 1
+            ? '1 listing is awaiting review.'
+            : items.length + ' listings are awaiting review.'}
+        </p>
+      )}
       {items.map((l) => (
         <section key={l.id} style={{ borderTop: '1px solid', marginTop: 24 }}>
           <h2>
