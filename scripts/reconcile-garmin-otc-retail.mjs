@@ -58,7 +58,18 @@ const OTC_RETAIL_PRODUCTS = [
   { sku: 'K10-00202-10', family: 'Garmin AOA System' },
   { sku: 'K10-00202-20', family: 'Garmin AOA System' },
   { sku: '010-01287-00', family: 'GI 260 AOA' },
-  { sku: 'K10-00276-05', family: 'GTX 335 with WAAS kit' },
+  {
+    sku: 'K10-00276-05',
+    family: 'GTX 335 with GPS, GA 35S and GAE 12 kit',
+    eligibilityAuthority:
+      'Aftermarket Price Catalog - October 2026 Rev.2 page 28 green OTC row and September 2026 Americas Dealer Requirements page 8 exact K10-00276-05 installation-policy exemption',
+    catalogObservation:
+      'Current Garmin DRC detail says Available Nov 4, 2026; this is future availability, not an in-stock claim. Authorization does not extend to another GTX 335 or GTX 335R suffix.',
+    productId: 'gid://shopify/Product/8961871610075',
+    variantId: 'gid://shopify/ProductVariant/47408834314459',
+    handle: 'kit-gtx-335-w-gps-ga-35s-gae-12',
+    removeTags: [],
+  },
   { sku: '010-01083-01', family: 'GTX 325' },
   { sku: '010-01319-02', family: 'GMA 345' },
   { sku: '010-01319-10', family: 'GMA 342' },
@@ -334,6 +345,13 @@ const OTC_RETAIL_PRODUCTS = [
 ];
 
 const PUBLIC_PRICE_AUTHORITIES = {
+  'K10-00276-05': {
+    list_price: 3995,
+    source:
+      'Aftermarket Price Catalog - October 2026 Rev.2, published 2026-10-06, page 28 exact K10-00276-05 row',
+    priceType: 'List',
+    accessed: '2026-10-07',
+  },
   '011-03258-00': {
     list_price: 95,
     source:
@@ -533,6 +551,8 @@ const GDL_82_DESCRIPTION = `
 `.trim();
 
 const POLICY_DESCRIPTIONS = {
+  'K10-00276-05':
+    '<p><strong>Garmin GTX 335 with GPS Kit</strong></p><p>Garmin part number <strong>K10-00276-05</strong>.</p><h3>Garmin catalog kit contents</h3><ul>\n<li>GTX 335 ADS-B Out transponder with GPS</li>\n<li>GA 35S GPS/WAAS antenna</li>\n<li>GAE 12 altitude encoder</li>\n</ul><h3>Availability and installation</h3><p><strong>Future availability:</strong> Garmin currently indicates this kit will be available November 4, 2026. This is a special-order item and is not represented as in stock. RWAS confirms Garmin availability and delivery timing after purchase.</p><p>This listing is for equipment only; installation is not included. Aircraft compatibility, approved installation data, configuration, testing, and return to service must be confirmed by appropriately authorized personnel.</p>',
   '011-00950-01':
     '<p><strong>Garmin 15/26-Pin Backshell with Hardware</strong></p><p>Garmin part number <strong>011-00950-01</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one backshell-with-hardware subassembly to the order.</p><p>Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>',
   '011-00950-02':
