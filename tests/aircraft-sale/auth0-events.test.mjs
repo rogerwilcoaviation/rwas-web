@@ -23,6 +23,7 @@ const notification = (changes = {}) => ({
     object: {
       user_id: 'auth0|owner',
       blocked: true,
+      blockedPresent: true,
       email: 'PRIVATE-METADATA@example.test',
       user_metadata: { note: 'PRIVATE-METADATA' },
     },
@@ -85,7 +86,7 @@ test('actual workerd commits stream receipt with SQLite state and preserves dupl
     assert.equal((await send()).status, 200);
     await mf.dispose();
     mf = new Miniflare(options);
-    assert.deepEqual(await (await send()).json(), { ok: true, replayed: true });
+    assert.equal((await (await send()).json()).replayed, true);
     const collision = structuredClone(input);
     collision.time = new Date(Date.now() + 1).toISOString();
     assert.equal((await send(collision)).status, 409);
@@ -241,12 +242,17 @@ test('ordinary user updates/provider unblocks never clear a sticky block', async
   await s.send(notification());
   const update = notification({ id: 'evt_' + 'D'.repeat(22) });
   update.data.object.blocked = false;
-  assert.deepEqual(await (await s.send(update)).json(), {
-    ok: true,
-    ignored: true,
-  });
+  assert.equal(
+    (await (await s.send(update)).json()).outcome,
+    'ignored-unblocked',
+  );
   delete update.data.object.blocked;
-  assert.equal((await s.send(update)).status, 200);
+  update.data.object.blockedPresent = false;
+  update.id = 'evt_' + 'F'.repeat(22);
+  assert.equal(
+    (await (await s.send(update)).json()).outcome,
+    'ignored-no-blocked',
+  );
   assert.equal(s.f.state().profiles[profile.id].identityBlocked, true);
   assert.equal(
     (await s.finish(await s.begin('password'), { sub: 'auth0|owner' })).status,
@@ -268,10 +274,7 @@ test('durable receipts make retries atomic after restart, reject identity reuse,
   const originalNow = Date.now;
   try {
     Date.now = () => originalNow() + 360000;
-    assert.deepEqual(await (await s.send(e)).json(), {
-      ok: true,
-      replayed: true,
-    });
+    assert.equal((await (await s.send(e)).json()).replayed, true);
   } finally {
     Date.now = originalNow;
   }
@@ -337,4 +340,98 @@ test('unknown subject is tombstoned; pre-recovery/out-of-order delivery cannot r
     (await s.finish(await s.begin('password'), { sub: 'auth0|owner' })).status,
     200,
   );
+});
+
+test('ignored receipts are durable, private-data-free and readable only through the bounded account-admin route', async () => {
+  const s = await setup();
+  const absent = notification({ id: 'evt_' + 'G'.repeat(22) });
+  delete absent.data.object.blocked;
+  absent.data.object.blockedPresent = false;
+  const ack = await (await s.send(absent)).json();
+  assert.equal(ack.outcome, 'ignored-no-blocked');
+  assert.match(ack.receiptId, /^a0_[a-f0-9]{64}$/);
+  assert.deepEqual(s.f.state().profiles, {});
+  assert.deepEqual(s.f.state().sessions, {});
+  assert.deepEqual(s.f.state().identitySecurity, {});
+  const stored = s.f.state().auth0EventReceipts[ack.receiptId];
+  assert.equal(stored.outcome, 'ignored-no-blocked');
+  assert.equal(stored.expiresAt - stored.receivedAt, 86400000);
+  const serialized = JSON.stringify(stored);
+  for (const privateValue of [
+    absent.id,
+    absent.data.object.user_id,
+    absent.data.object.email,
+    'PRIVATE-METADATA',
+    token,
+  ])
+    assert.equal(serialized.includes(privateValue), false);
+  assert.equal(
+    (await s.f.call('/admin/auth0-event-receipts/' + ack.receiptId)).status,
+    503,
+  );
+  s.f.env.ACCOUNT_ADMIN_SITE_ORIGIN = 'http://localhost';
+  s.f.env.ACCOUNT_ADMIN_AUTH = {
+    fetch: async (request) =>
+      request.headers.get('Authorization') === 'Bearer fixture-account-admin'
+        ? Response.json({
+            actor: 'admin@example.test',
+            scope: 'seller-accounts',
+            authenticatedAt: Date.now(),
+            expiresAt: Date.now() + 60000,
+          })
+        : new Response(null, { status: 403 }),
+  };
+  assert.equal(
+    (
+      await s.f.call(
+        '/admin/auth0-event-receipts/' + ack.receiptId,
+        'GET',
+        undefined,
+        'wrong',
+      )
+    ).status,
+    403,
+  );
+  const receipt = await (
+    await s.f.call(
+      '/admin/auth0-event-receipts/' + ack.receiptId,
+      'GET',
+      undefined,
+      'fixture-account-admin',
+    )
+  ).json();
+  assert.deepEqual(Object.keys(receipt).sort(), [
+    'outcome',
+    'receiptId',
+    'receivedAt',
+    'source',
+    'stream',
+    'tenant',
+    'time',
+    'type',
+  ]);
+  assert.equal(receipt.outcome, 'ignored-no-blocked');
+  assert.equal(JSON.stringify(receipt).includes(absent.id), false);
+  const realNow = Date.now;
+  try {
+    Date.now = () => stored.expiresAt + 1;
+    assert.equal(
+      (
+        await s.f.call(
+          '/admin/auth0-event-receipts/' + ack.receiptId,
+          'GET',
+          undefined,
+          'fixture-account-admin',
+        )
+      ).status,
+      404,
+    );
+  } finally {
+    Date.now = realNow;
+  }
+  assert.equal(s.f.state().auth0EventReceipts[ack.receiptId], undefined);
+  const freshAck = await (await s.send(absent)).json();
+  assert.equal(freshAck.replayed, false);
+  s.f.restart();
+  assert.equal((await (await s.send(absent)).json()).replayed, true);
 });

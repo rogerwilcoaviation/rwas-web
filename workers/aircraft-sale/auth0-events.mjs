@@ -47,6 +47,8 @@ export async function auth0BlockNotification(body, config) {
     !user.user_id ||
     user.user_id.length > 500 ||
     (user.blocked !== undefined && typeof user.blocked !== 'boolean') ||
+    typeof user.blockedPresent !== 'boolean' ||
+    user.blockedPresent !== Object.hasOwn(user, 'blocked') ||
     (previous?.user_id !== undefined && previous.user_id !== user.user_id)
   )
     fail(400, 'Invalid provider stream event.');
@@ -59,6 +61,7 @@ export async function auth0BlockNotification(body, config) {
     kind: 'account-blocked',
     subject: user.user_id,
     issuedAt,
+    blockedPresent: user.blockedPresent,
     blocked: user.blocked === true,
   };
 }

@@ -329,6 +329,33 @@ export class SellerStore {
         );
     });
   }
+  purgeAuth0EventReceipts(state, now = Date.now()) {
+    state.auth0EventReceipts ||= {};
+    for (const [id, receipt] of Object.entries(state.auth0EventReceipts))
+      if (
+        !receipt ||
+        !Number.isFinite(receipt.expiresAt) ||
+        receipt.expiresAt <= now
+      )
+        delete state.auth0EventReceipts[id];
+  }
+  async scheduleAuth0ReceiptExpiry(state) {
+    if (typeof this.ctx.storage.setAlarm !== 'function') return;
+    const next = Math.min(
+      ...Object.values(state.auth0EventReceipts || {})
+        .map((receipt) => receipt?.expiresAt)
+        .filter(
+          (expiresAt) => Number.isFinite(expiresAt) && expiresAt > Date.now(),
+        ),
+    );
+    if (Number.isFinite(next)) await this.ctx.storage.setAlarm(next);
+  }
+  async alarm() {
+    const state = await this.loadState();
+    this.purgeAuth0EventReceipts(state);
+    await this.saveState(state);
+    await this.scheduleAuth0ReceiptExpiry(state);
+  }
   async run(req) {
     this.state = await this.loadState();
     this.state.auth0EventReceipts ||= {};
@@ -988,6 +1015,32 @@ export class SellerStore {
       );
       return this.sessionReply(profile, 'identity');
     }
+    const receiptMatch = path.match(
+      /^\/admin\/auth0-event-receipts\/(a0_[a-f0-9]{64})$/,
+    );
+    if (receiptMatch) {
+      if (method !== 'GET') fail(405, 'Method not allowed.');
+      if (url.search || url.hash) fail(400, 'Invalid receipt lookup.');
+      await this.accountAdministrator(req, false);
+      assertAccountOrigin(req, this.env, false);
+      this.purgeAuth0EventReceipts(this.state);
+      const receipt = this.state.auth0EventReceipts[receiptMatch[1]];
+      if (!receipt)
+        throw Object.assign(new Error('Event receipt not found.'), {
+          status: 404,
+          persist: true,
+        });
+      return reply({
+        receiptId: receiptMatch[1],
+        type: receipt.type,
+        outcome: receipt.outcome,
+        time: new Date(receipt.eventTime).toISOString(),
+        receivedAt: new Date(receipt.receivedAt).toISOString(),
+        source: receipt.source,
+        tenant: receipt.tenant,
+        stream: receipt.stream,
+      });
+    }
     if (/^\/admin\/accounts(?:\/|$)/.test(path)) {
       const write = method !== 'GET',
         identity = await this.accountAdministrator(req, write);
@@ -1178,24 +1231,38 @@ export class SellerStore {
         fail(415, 'Provider stream requires JSON.');
       const event = await auth0BlockNotification(await this.json(req), stream);
       const fingerprint = await digest(JSON.stringify(event));
+      this.purgeAuth0EventReceipts(this.state);
       const receipt = this.state.auth0EventReceipts[event.id];
       if (receipt) {
         if (receipt.fingerprint !== fingerprint)
           fail(409, 'Provider event identity changed.');
-        return reply({ ok: true, replayed: true });
+        return reply({
+          ok: true,
+          receiptId: event.id,
+          outcome: receipt.outcome,
+          replayed: true,
+        });
       }
-      // An ordinary update or provider unblock cannot clear our sticky security hold.
-      if (!event.blocked) return reply({ ok: true, ignored: true });
-      const result = await this.applyProviderSecurityEvent(event, identity);
-      for (const [key, value] of Object.entries(this.state.auth0EventReceipts))
-        if (Date.now() - value.receivedAt > DAY)
-          delete this.state.auth0EventReceipts[key];
-      // Stored atomically with revocation; no raw provider profile/email/metadata is retained.
+      const outcome = !event.blockedPresent
+        ? 'ignored-no-blocked'
+        : !event.blocked
+          ? 'ignored-unblocked'
+          : 'blocked-applied';
+      if (event.blocked) await this.applyProviderSecurityEvent(event, identity);
+      const receivedAt = Date.now();
       this.state.auth0EventReceipts[event.id] = {
         fingerprint,
-        receivedAt: Date.now(),
+        receivedAt,
+        expiresAt: receivedAt + DAY,
+        type: 'user.updated',
+        outcome,
+        eventTime: event.issuedAt,
+        source: stream.source,
+        tenant: stream.tenant,
+        stream: stream.stream,
       };
-      return result;
+      await this.scheduleAuth0ReceiptExpiry(this.state);
+      return reply({ ok: true, receiptId: event.id, outcome, replayed: false });
     }
     if (path === '/auth/events' && method === 'POST') {
       const config = identityConfig(this.env),
