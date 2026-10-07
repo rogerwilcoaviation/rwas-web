@@ -67,6 +67,38 @@ function normalizedTags(product) {
   return record.nextTags;
 }
 
+test('K10-00276-05 keeps exact current GTX 335 retail authority', () => {
+  const sku = 'K10-00276-05';
+  const policies = OTC_RETAIL_PRODUCTS.filter((policy) => policy.sku === sku);
+  assert.equal(policies.length, 1);
+  assert.deepEqual(
+    {
+      productId: policies[0].productId,
+      variantId: policies[0].variantId,
+      handle: policies[0].handle,
+    },
+    {
+      productId: 'gid://shopify/Product/8961871610075',
+      variantId: 'gid://shopify/ProductVariant/47408834314459',
+      handle: 'kit-gtx-335-w-gps-ga-35s-gae-12',
+    },
+  );
+  assert.deepEqual(PUBLIC_PRICE_AUTHORITIES[sku], {
+    list_price: 3995,
+    source:
+      'Aftermarket Price Catalog - October 2026 Rev.2, published 2026-10-06, page 28 exact K10-00276-05 row',
+    priceType: 'List',
+    accessed: '2026-10-07',
+  });
+  assert.ok(POLICY_DESCRIPTIONS[sku].includes('GA 35S GPS/WAAS antenna'));
+  assert.ok(POLICY_DESCRIPTIONS[sku].includes('GAE 12 altitude encoder'));
+  assert.ok(POLICY_DESCRIPTIONS[sku].includes('November 4, 2026'));
+  assert.ok(POLICY_DESCRIPTIONS[sku].includes('not represented as in stock'));
+  assert.equal(APPROVED_CERTIFIED_OTC.has(sku), true);
+  assert.equal(APPROVED_CERTIFIED_OTC.has('010-01214-01'), false);
+  assert.equal(APPROVED_CERTIFIED_OTC.has('010-01215-41'), false);
+});
+
 test('September exact-SKU contracts and mocked reconciliation', async (t) => {
   const originalFetch = globalThis.fetch;
   const envKeys = [
