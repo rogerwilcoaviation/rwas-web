@@ -118,6 +118,14 @@ try {
   await context.route('**/*', async (route) => {
     const url = new URL(route.request().url());
     if (url.origin === origin) return route.continue();
+    if (url.origin === 'https://sale-api.rogerwilcoaviation.com') {
+      if (url.pathname === '/browse')
+        return route.fulfill({
+          contentType: 'application/json',
+          body: JSON.stringify({ listings: [] }),
+        });
+      return route.fulfill({ status: 404, body: '' });
+    }
     if (url.origin === 'https://identity.fixture.test') {
       providerPages.push(url.pathname);
       if (url.pathname === '/v2/logout')

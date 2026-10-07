@@ -63,9 +63,19 @@ export const metadata: Metadata = {
 };
 
 async function getListings(): Promise<Listing[]> {
-  // Static export must not retain aircraft after archive/deletion. Current
-  // inventory is fetched by ListingsGrid through the same-origin service.
-  return [];
+  try {
+    const resp = await fetch(
+      'https://sale-api.rogerwilcoaviation.com/browse?include=sold',
+      { next: { revalidate: 60 } },
+    );
+    if (!resp.ok) return [];
+    const data = (await resp.json()) as { listings?: Listing[] };
+    return (data.listings || []).filter(
+      (l) => !l.status || l.status === 'active' || l.status === 'sold',
+    );
+  } catch {
+    return [];
+  }
 }
 
 export default async function AircraftForSalePage() {
@@ -206,9 +216,8 @@ export default async function AircraftForSalePage() {
             <div className="a4s-how-step">
               <h3>3. RWAS reviews</h3>
               <p>
-                Submit your draft for RWAS to review its details and media. It
-                appears publicly after approval; later changes require another
-                review.
+                Submit your draft for private RWAS review. New seller-intake
+                submissions remain non-public during this launch.
               </p>
             </div>
             <div className="a4s-how-step">

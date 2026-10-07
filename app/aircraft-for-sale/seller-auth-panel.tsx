@@ -79,6 +79,7 @@ const categories: [string, string][] = [
 export default function SellerAuthPanel() {
   const [session, setSession] = useState<Session | null>(null);
   const [identityMethods, setIdentityMethods] = useState<IdentityMethod[]>([]);
+  const [emailCodeLogin, setEmailCodeLogin] = useState(false);
   const [view, setView] = useState<
     'login' | 'listings' | 'edit' | 'account' | null
   >(null);
@@ -130,6 +131,7 @@ export default function SellerAuthPanel() {
               ['password', 'google', 'apple'].includes(value),
             ),
           );
+          setEmailCodeLogin(data.emailCode === true);
         }
       })
       .catch(() => {});
@@ -333,7 +335,7 @@ export default function SellerAuthPanel() {
     await load();
     setMessage(
       next === 'pending'
-        ? 'Submitted for review. It will appear publicly after approval.'
+        ? 'Submitted for private RWAS review. It will not be published during this intake launch.'
         : 'Listing updated.',
     );
   }
@@ -459,70 +461,72 @@ export default function SellerAuthPanel() {
                 </p>
               </nav>
             )}
-            <form
-              onSubmit={onSubmit(async () => {
-                if (!sent) {
-                  await api('/send-code', 'POST', { email });
-                  setSent(true);
-                  setMessage('Code sent. Check your inbox.');
-                } else {
-                  const d = await api('/check-code', 'POST', { email, code });
-                  setAuth({ token: d.session, email: d.email, name: d.name });
-                  setSent(false);
-                  setCode('');
-                  setView(null);
-                }
-              })}
-            >
-              <p>
-                Sign in with a one-time email code. No password required. Codes
-                expire after 15 minutes; sessions expire after 24 hours.
-              </p>
-              <label className="seller-field">
-                Email
-                <input
-                  id="login-email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  readOnly={sent}
-                />
-              </label>
-              {sent && (
-                <label className="seller-field">
-                  Verification code
-                  <input
-                    id="login-code"
-                    inputMode="numeric"
-                    autoComplete="one-time-code"
-                    pattern="[0-9]{6}"
-                    required
-                    value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                  />
-                </label>
-              )}
-              <button disabled={busy}>
-                {busy
-                  ? 'Please wait…'
-                  : sent
-                    ? 'Verify & Sign In'
-                    : 'Send Code'}
-              </button>
-              {sent && (
-                <button
-                  type="button"
-                  onClick={() => {
+            {emailCodeLogin && (
+              <form
+                onSubmit={onSubmit(async () => {
+                  if (!sent) {
+                    await api('/send-code', 'POST', { email });
+                    setSent(true);
+                    setMessage('Code sent. Check your inbox.');
+                  } else {
+                    const d = await api('/check-code', 'POST', { email, code });
+                    setAuth({ token: d.session, email: d.email, name: d.name });
                     setSent(false);
                     setCode('');
-                  }}
-                >
-                  Use different email
+                    setView(null);
+                  }
+                })}
+              >
+                <p>
+                  Sign in with a one-time email code. No password required.
+                  Codes expire after 15 minutes; sessions expire after 24 hours.
+                </p>
+                <label className="seller-field">
+                  Email
+                  <input
+                    id="login-email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    readOnly={sent}
+                  />
+                </label>
+                {sent && (
+                  <label className="seller-field">
+                    Verification code
+                    <input
+                      id="login-code"
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      pattern="[0-9]{6}"
+                      required
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                    />
+                  </label>
+                )}
+                <button disabled={busy}>
+                  {busy
+                    ? 'Please wait…'
+                    : sent
+                      ? 'Verify & Sign In'
+                      : 'Send Code'}
                 </button>
-              )}
-            </form>
+                {sent && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSent(false);
+                      setCode('');
+                    }}
+                  >
+                    Use different email
+                  </button>
+                )}
+              </form>
+            )}
           </>
         )}
         {view === 'listings' && (
@@ -1060,9 +1064,9 @@ function SellerMedia({
     <section aria-label="Listing media">
       <h3>Photos, video and records</h3>
       <p>
-        Photos and video become public only after review. Aircraft records
-        remain private to your account. Accepted: JPG, PNG, GIF, WebP; MP4/WebM;
-        PDF. Up to 50 MB per file.
+        Photos, video and aircraft records remain private to your account and
+        the RWAS review team during this intake launch. Accepted: JPG, PNG, GIF,
+        WebP; MP4/WebM; PDF. Up to 50 MB per file.
       </p>
       {error && <p role="alert">{error}</p>}
       {message && <p role="status">{message}</p>}

@@ -170,8 +170,27 @@ try {
   });
   await context.route('**/*', async (route) => {
     const url = route.request().url();
-    if (new URL(url).origin === origin) await route.continue();
-    else {
+    const target = new URL(url);
+    if (target.origin === origin) await route.continue();
+    else if (target.origin === 'https://sale-api.rogerwilcoaviation.com') {
+      if (target.pathname === '/browse' && browseFailures > 0) {
+        browseFailures--;
+        return route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          body: JSON.stringify({ error: 'Synthetic unavailable inventory' }),
+        });
+      }
+      const response =
+        target.pathname === '/browse'
+          ? await f.call('/browse' + target.search)
+          : await f.call(target.pathname);
+      await route.fulfill({
+        status: response.status,
+        headers: Object.fromEntries(response.headers),
+        body: Buffer.from(await response.arrayBuffer()),
+      });
+    } else {
       blocked.push(url);
       await route.abort();
     }
@@ -439,16 +458,16 @@ try {
   results.push(
     'PASS live homepage/card detail navigation, public media and private-record denial',
   );
-  browseFailures = 1;
+  // The bounded intake launch deliberately preserves the existing read-only
+  // catalogue behavior: an external refresh outage retains the static legacy cards.
+  browseFailures = 2;
   await buyer.goto(origin + '/aircraft-for-sale');
-  await buyer
-    .getByRole('alert')
-    .filter({ hasText: 'Aircraft inventory is temporarily unavailable' })
-    .waitFor();
-  assert.equal(await buyer.locator('.a4s-card').count(), 0);
+  await buyer.locator('.a4s-card').first().waitFor();
+  assert.ok((await buyer.locator('.a4s-card').count()) > 0);
+  browseFailures = 0;
   await buyer.reload();
   await buyer.locator('.a4s-card').waitFor();
-  results.push('PASS inventory outage fails closed and refresh recovers');
+  results.push('PASS legacy inventory remains readable across refresh outage');
   await page.getByRole('button', { name: 'Refresh', exact: true }).click();
   await page.getByRole('button', { name: 'Pause', exact: true }).click();
   await page.getByRole('button', { name: 'Resume', exact: true }).click();

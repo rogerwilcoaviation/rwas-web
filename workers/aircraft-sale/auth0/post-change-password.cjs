@@ -21,6 +21,10 @@ function createHandler({
     const secrets = event?.secrets || {};
     const endpoint = secrets.RWAS_SECURITY_EVENT_URL;
     const secret = secrets.AUTH_EVENT_SECRET;
+    const secondaryEndpoint = secrets.RWAS_SECONDARY_SECURITY_EVENT_URL;
+    const secondarySecret = secrets.AUTH_SECONDARY_EVENT_SECRET;
+    const secondaryConfigured =
+      secondaryEndpoint !== undefined || secondarySecret !== undefined;
     const tenant = event?.tenant?.id;
     const subject = event?.user?.user_id;
     const timestamp = event?.user?.last_password_reset;
@@ -39,7 +43,14 @@ function createHandler({
       typeof timestamp !== 'string' ||
       !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/.test(
         timestamp,
-      )
+      ) ||
+      (secondaryConfigured &&
+        (!destinations.has(secondaryEndpoint) ||
+          typeof secondarySecret !== 'string' ||
+          secondarySecret.length < 32 ||
+          /[\r\n]/.test(secondarySecret) ||
+          secondaryEndpoint === endpoint ||
+          secondarySecret === secret))
     )
       throw failure();
     const issuedAt = Date.parse(timestamp);
@@ -57,34 +68,43 @@ function createHandler({
       subject,
       issuedAt,
     });
-    for (let attempt = 0; attempt < 3; attempt++) {
-      if (Math.abs(now() - issuedAt) > windowMs) throw failure();
-      let terminal = false;
-      try {
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          redirect: 'error',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + secret,
-          },
-          body,
-          signal: AbortSignal.timeout(3000),
-        });
-        if (response.ok) {
-          if ((await response.json()).ok === true) return;
-        } else {
-          // Bad configuration/proof cannot be repaired by retries; retry only transient failures.
-          terminal =
-            response.status < 500 && ![408, 429].includes(response.status);
-          await response.body?.cancel();
+    const deliver = async ({ endpoint, secret }) => {
+      for (let attempt = 0; attempt < 3; attempt++) {
+        if (Math.abs(now() - issuedAt) > windowMs) throw failure();
+        let terminal = false;
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            redirect: 'error',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + secret,
+            },
+            body,
+            signal: AbortSignal.timeout(3000),
+          });
+          if (response.ok) {
+            if ((await response.json()).ok === true) return;
+          } else {
+            // Bad configuration/proof cannot be repaired by retries; retry only transient failures.
+            terminal =
+              response.status < 500 && ![408, 429].includes(response.status);
+            await response.body?.cancel();
+          }
+        } catch {
+          // Never include provider data, response bodies, subject IDs, or secrets in Action logs.
         }
-      } catch {
-        // Never include provider data, response bodies, subject IDs, or secrets in Action logs.
+        if (terminal || attempt === 2) throw failure();
+        await sleep(250 * (attempt + 1));
       }
-      if (terminal || attempt === 2) throw failure();
-      await sleep(250 * (attempt + 1));
-    }
+    };
+    const targets = [{ endpoint, secret }];
+    if (secondaryConfigured)
+      targets.push({
+        endpoint: secondaryEndpoint,
+        secret: secondarySecret,
+      });
+    await Promise.all(targets.map(deliver));
   };
 }
 exports.onExecutePostChangePassword = createHandler();

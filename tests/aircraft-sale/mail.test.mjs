@@ -515,7 +515,11 @@ test('actual workerd service-binding RPC completes private Pages mail delivery i
         modules: true,
         script: await buildScript('workers/aircraft-sale/entry.mjs'),
         compatibilityDate: '2026-09-01',
-        bindings: { MAIL_VIA_PAGES: 'true' },
+        bindings: {
+          MAIL_VIA_PAGES: 'true',
+          EMAIL_CODE_LOGIN_ENABLED: 'true',
+          PUBLIC_LISTINGS_ENABLED: 'true',
+        },
         durableObjects: {
           SELLER_STORE: { className: 'SellerStore', useSQLite: true },
         },

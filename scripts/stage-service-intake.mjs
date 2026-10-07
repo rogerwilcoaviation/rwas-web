@@ -43,7 +43,7 @@ export default { ...app, async fetch(request, env, ctx) {
  if (url.origin === STAGING_ORIGIN && env.INTAKE_STAGING_MODE !== 'true') return protect(new Response('Staging disabled', {status:503}));
  if (isolated && path === '/robots.txt') return protect(new Response('User-agent: *\\nDisallow: /\\n'));
 
- if (/^\\/aircraft-for-sale\\/[^/]+\\/?$/.test(path)) {
+ if (env.SELLER_PUBLIC_ROUTES_ENABLED === 'true' && /^\\/aircraft-for-sale\\/[^/]+\\/?$/.test(path)) {
    if (!sellerDestinationAllowed(request, env, STAGING_ORIGIN)) return protect(new Response('Staging destination not allowed', {status:503}));
    if (!env.SELLER_API) return protect(new Response('Seller service is not configured.',{status:503}));
    const target = new URL(request.url); target.pathname = '/api/aircraft-sale/listing/' + path.split('/')[2];

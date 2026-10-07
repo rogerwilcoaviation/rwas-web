@@ -21,6 +21,10 @@ test('actual local workerd SQLite Durable Object/R2 login, concurrent create, re
       SELLER_STORE: { className: 'SellerStore', useSQLite: true },
     },
     r2Buckets: ['MEDIA'],
+    bindings: {
+      EMAIL_CODE_LOGIN_ENABLED: 'true',
+      PUBLIC_LISTINGS_ENABLED: 'true',
+    },
     serviceBindings: {
       MAILER: async (req) => {
         mail.push(await req.json());

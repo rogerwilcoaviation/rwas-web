@@ -62,6 +62,45 @@ test('actual Action contract revokes linked sessions and fences a pending social
   assert.equal((await s.finish(pending, { sub: 'google|owner' })).status, 401);
 });
 
+test('optional secondary target receives the same reset with a distinct credential', async () => {
+  const input = event();
+  input.secrets.RWAS_SECONDARY_SECURITY_EVENT_URL =
+    'https://www.rogerwilcoaviation.com/api/aircraft-sale/auth/events';
+  input.secrets.AUTH_SECONDARY_EVENT_SECRET =
+    'synthetic-production-secret-not-a-real-credential';
+  const requests = [];
+  await action.createHandler({
+    fetch: async (url, init) => {
+      requests.push({
+        url,
+        body: init.body,
+        proof: Object.values(init.headers)[1],
+      });
+      return Response.json({ ok: true });
+    },
+  })(input);
+  assert.deepEqual(
+    requests.map((request) => request.url).sort(),
+    [endpoint, input.secrets.RWAS_SECONDARY_SECURITY_EVENT_URL].sort(),
+  );
+  assert.equal(new Set(requests.map((request) => request.body)).size, 1);
+  assert.equal(new Set(requests.map((request) => request.proof)).size, 2);
+  for (const change of [
+    (e) => delete e.secrets.AUTH_SECONDARY_EVENT_SECRET,
+    (e) => {
+      e.secrets.AUTH_SECONDARY_EVENT_SECRET = e.secrets.AUTH_EVENT_SECRET;
+    },
+    (e) => {
+      e.secrets.RWAS_SECONDARY_SECURITY_EVENT_URL =
+        e.secrets.RWAS_SECURITY_EVENT_URL;
+    },
+  ]) {
+    const invalid = structuredClone(input);
+    change(invalid);
+    await assert.rejects(action.createHandler()(invalid), failed);
+  }
+});
+
 test('a lost acknowledgement retries the stable event without revoking a later session', async () => {
   const s = await identityFixture(origin);
   await s.finish(await s.begin('password'), { sub: 'auth0|owner' });

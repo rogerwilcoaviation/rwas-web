@@ -6,6 +6,8 @@ export function fixture() {
   let storageFailure = false,
     deleteFailure = false;
   const env = {
+    EMAIL_CODE_LOGIN_ENABLED: 'true',
+    PUBLIC_LISTINGS_ENABLED: 'true',
     MAILER: {
       fetch: async (request) => {
         mail.push(await request.json());

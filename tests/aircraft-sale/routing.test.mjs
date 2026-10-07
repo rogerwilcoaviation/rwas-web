@@ -33,12 +33,23 @@ test('Pages advanced wrapper gates missing seller binding and serves current new
       503,
     );
     assert.equal(
+      await (
+        await mf.dispatchFetch('https://fixture.test/aircraft-for-sale/new-id')
+      ).text(),
+      'old-static-app',
+    );
+    await mf.setOptions({
+      ...options,
+      bindings: { SELLER_PUBLIC_ROUTES_ENABLED: 'true' },
+    });
+    assert.equal(
       (await mf.dispatchFetch('https://fixture.test/aircraft-for-sale/new-id'))
         .status,
       503,
     );
     await mf.setOptions({
       ...options,
+      bindings: { SELLER_PUBLIC_ROUTES_ENABLED: 'true' },
       serviceBindings: {
         SELLER_API: async (request) =>
           Response.json({
@@ -65,7 +76,10 @@ test('Pages advanced wrapper gates missing seller binding and serves current new
     const staging = 'https://intake-restoration-20260922.rwas-web.pages.dev';
     await mf.setOptions({
       ...options,
-      bindings: { INTAKE_STAGING_MODE: 'true' },
+      bindings: {
+        INTAKE_STAGING_MODE: 'true',
+        SELLER_PUBLIC_ROUTES_ENABLED: 'true',
+      },
       serviceBindings: { SELLER_API: async () => new Response('seller') },
     });
     for (const path of [
@@ -82,7 +96,11 @@ test('Pages advanced wrapper gates missing seller binding and serves current new
     const seller = 'https://repair-aircraft-seller-workf.rwas-web.pages.dev';
     await mf.setOptions({
       ...options,
-      bindings: { INTAKE_STAGING_MODE: 'true', SELLER_STAGING_ORIGIN: seller },
+      bindings: {
+        INTAKE_STAGING_MODE: 'true',
+        SELLER_STAGING_ORIGIN: seller,
+        SELLER_PUBLIC_ROUTES_ENABLED: 'true',
+      },
       serviceBindings: {
         SELLER_API: async () => new Response('dedicated-seller'),
       },

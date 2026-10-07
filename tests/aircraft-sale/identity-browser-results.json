@@ -10,22 +10,12 @@
   "requests": [
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
-      "status": 200
-    },
-    {
-      "method": "GET",
       "path": "/api/aircraft-sale/auth/methods",
       "status": 200
     },
     {
       "method": "POST",
       "path": "/api/aircraft-sale/auth/start",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
       "status": 200
     },
     {
@@ -45,22 +35,12 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
-      "status": 200
-    },
-    {
-      "method": "GET",
       "path": "/api/aircraft-sale/auth/methods",
       "status": 200
     },
     {
       "method": "POST",
       "path": "/api/aircraft-sale/auth/start",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
       "status": 200
     },
     {
@@ -80,22 +60,12 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
-      "status": 200
-    },
-    {
-      "method": "GET",
       "path": "/api/aircraft-sale/auth/methods",
       "status": 200
     },
     {
       "method": "POST",
       "path": "/api/aircraft-sale/auth/start",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
       "status": 200
     },
     {
@@ -115,22 +85,12 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
-      "status": 200
-    },
-    {
-      "method": "GET",
       "path": "/api/aircraft-sale/auth/methods",
       "status": 200
     },
     {
       "method": "POST",
       "path": "/api/aircraft-sale/auth/start",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
       "status": 200
     },
     {
@@ -155,11 +115,6 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
-      "status": 200
-    },
-    {
-      "method": "GET",
       "path": "/api/aircraft-sale/auth/methods",
       "status": 200
     },
@@ -180,11 +135,6 @@
     },
     {
       "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
-      "status": 200
-    },
-    {
-      "method": "GET",
       "path": "/api/aircraft-sale/auth/methods",
       "status": 200
     },
@@ -196,11 +146,6 @@
     {
       "method": "POST",
       "path": "/api/aircraft-sale/auth/start",
-      "status": 200
-    },
-    {
-      "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
       "status": 200
     },
     {
@@ -217,11 +162,6 @@
       "method": "GET",
       "path": "/api/aircraft-sale/my-listings",
       "status": 401
-    },
-    {
-      "method": "GET",
-      "path": "/api/aircraft-sale/browse?include=sold",
-      "status": 200
     },
     {
       "method": "GET",

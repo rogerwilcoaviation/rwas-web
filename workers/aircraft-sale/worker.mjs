@@ -350,7 +350,12 @@ export class SellerStore {
     );
     if (Number.isFinite(next)) await this.ctx.storage.setAlarm(next);
   }
-  async alarm() {
+  alarm() {
+    const operation = this.queue.then(() => this.runAlarm());
+    this.queue = operation.catch(() => {});
+    return operation;
+  }
+  async runAlarm() {
     const state = await this.loadState();
     this.purgeAuth0EventReceipts(state);
     await this.saveState(state);
@@ -651,6 +656,11 @@ export class SellerStore {
       if (Date.now() - request.createdAt > 900000)
         delete this.state.mailRequests[id];
     if (path === '/_mail/start') {
+      if (
+        body.purpose === 'login' &&
+        this.env.EMAIL_CODE_LOGIN_ENABLED !== 'true'
+      )
+        fail(404, 'Email-code sign-in is unavailable.');
       if (!['login', 'email-change'].includes(body.purpose))
         fail(400, 'Invalid verification purpose.');
       const u =
@@ -851,6 +861,21 @@ export class SellerStore {
         this.state.profiles[identity.userId].identityBlocked = true;
       for (const [key, session] of Object.entries(this.state.sessions))
         if (session.userId === identity.userId) delete this.state.sessions[key];
+      for (const [key, code] of Object.entries(this.state.codes))
+        if (
+          code.userId === identity.userId ||
+          (profile && key === 'login:' + profile.email)
+        )
+          delete this.state.codes[key];
+      for (const request of Object.values(this.state.mailRequests || {}))
+        if (
+          request.status === 'pending' &&
+          ((profile && request.key === 'login:' + profile.email) ||
+            request.pendingCode?.userId === identity.userId)
+        ) {
+          request.status = 'cancelled';
+          delete request.pendingCode;
+        }
       this.audit('provider-session-revoke', identity.userId, {
         kind: body.kind,
       });
@@ -868,16 +893,27 @@ export class SellerStore {
     if (path === '/health') return reply({ service: 'seller-v2', schema: 2 });
     if (path === '/auth/methods' && method === 'GET') {
       const config = identityConfig(this.env);
-      return reply({ methods: config ? Object.keys(config.methods) : [] });
+      return reply({
+        methods: config
+          ? Object.keys(config.methods).filter(
+              (method) =>
+                this.env.PASSWORD_ONLY_LOGIN !== 'true' ||
+                method === 'password',
+            )
+          : [],
+        emailCode: this.env.EMAIL_CODE_LOGIN_ENABLED === 'true',
+        publicListings: this.env.PUBLIC_LISTINGS_ENABLED === 'true',
+      });
     }
     if (path === '/auth/start' && method === 'POST') {
       const config = identityConfig(this.env),
         body = await this.json(req);
-      if (!config || !config.methods[body.method])
-        fail(
-          503,
-          'This sign-in method is not available yet. Use an email code.',
-        );
+      if (
+        !config ||
+        !config.methods[body.method] ||
+        (this.env.PASSWORD_ONLY_LOGIN === 'true' && body.method !== 'password')
+      )
+        fail(503, 'This sign-in method is not available.');
       if (
         url.origin !== config.origin ||
         (req.headers.get('Origin') &&
@@ -977,7 +1013,9 @@ export class SellerStore {
         )
           fail(
             409,
-            'This email already has a RWAS account. Sign in with an email code, then connect this login in Account.',
+            this.env.EMAIL_CODE_LOGIN_ENABLED === 'true'
+              ? 'This email already has a RWAS account. Sign in with an email code, then connect this login in Account.'
+              : 'This email already has a RWAS account. Contact RWAS to connect this login.',
           );
         profile = {
           id: crypto.randomUUID(),
@@ -1282,10 +1320,14 @@ export class SellerStore {
       return this.applyProviderSecurityEvent(body, config);
     }
     if (path === '/send-code' && method === 'POST') {
+      if (this.env.EMAIL_CODE_LOGIN_ENABLED !== 'true')
+        fail(404, 'Email-code sign-in is unavailable.');
       const b = await this.json(req);
       return this.sendCode(req, b);
     }
     if (path === '/check-code' && method === 'POST') {
+      if (this.env.EMAIL_CODE_LOGIN_ENABLED !== 'true')
+        fail(404, 'Email-code sign-in is unavailable.');
       const b = await this.json(req),
         address = email(b.email);
       await this.verify(address, b.code);
@@ -1308,6 +1350,8 @@ export class SellerStore {
       return this.sessionReply(p);
     }
     if (path === '/browse' && method === 'GET') {
+      if (this.env.PUBLIC_LISTINGS_ENABLED !== 'true')
+        return reply({ listings: [] });
       const sold = url.searchParams.get('include') === 'sold';
       return reply({
         listings: Object.values(this.state.listings)
@@ -1344,6 +1388,7 @@ export class SellerStore {
       if (!f || f.deleting) fail(404, 'File not found.');
       const l = this.state.listings[f.listingId];
       const published =
+        this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
         l &&
         ['active', 'sold'].includes(l.status) &&
         ['photos', 'videos'].includes(f.category);
@@ -1411,19 +1456,19 @@ export class SellerStore {
     if (path.startsWith('/listing/') && method === 'GET') {
       const l = this.state.listings[path.slice(9)];
       if (!l) fail(404, 'Listing not found.');
-      if (!['active', 'sold'].includes(l.status)) {
+      const published =
+        this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
+        ['active', 'sold'].includes(l.status);
+      if (!published) {
         const u = await this.user(req);
         if (l.ownerId !== u.id) fail(404, 'Listing not found.');
       }
       if ((req.headers.get('Accept') || '').includes('text/html')) {
-        if (!['active', 'sold'].includes(l.status))
-          fail(404, 'Listing not found.');
+        if (!published) fail(404, 'Listing not found.');
         return publicPage(publicListing(this.hydrate(l)));
       }
       return reply({
-        listing: ['active', 'sold'].includes(l.status)
-          ? publicListing(this.hydrate(l))
-          : this.hydrate(l),
+        listing: published ? publicListing(this.hydrate(l)) : this.hydrate(l),
       });
     }
     if (path === '/admin/listings' && method === 'GET') {
@@ -1444,6 +1489,11 @@ export class SellerStore {
         fail(409, 'Listing changed. Review the latest revision.');
       if (!['approve', 'reject'].includes(b.decision))
         fail(400, 'Invalid review decision.');
+      if (
+        b.decision === 'approve' &&
+        this.env.PUBLIC_LISTINGS_ENABLED !== 'true'
+      )
+        fail(409, 'Public listing activation is disabled.');
       if (b.decision === 'approve') {
         clean(l.fields, true);
         l.approvedRevision = l.revision;
@@ -1766,12 +1816,16 @@ export class SellerStore {
         };
       } else if (next === 'paused' && l.status === 'active')
         l.status = 'paused';
+      else if (next === 'active' && this.env.PUBLIC_LISTINGS_ENABLED !== 'true')
+        fail(409, 'Public listing activation is disabled.');
       else if (
         next === 'active' &&
         l.status === 'paused' &&
         l.approvedRevision === l.revision
       )
         l.status = 'active';
+      else if (next === 'sold' && this.env.PUBLIC_LISTINGS_ENABLED !== 'true')
+        fail(409, 'Public listing activation is disabled.');
       else if (next === 'sold' && ['active', 'paused'].includes(l.status))
         l.status = 'sold';
       else if (

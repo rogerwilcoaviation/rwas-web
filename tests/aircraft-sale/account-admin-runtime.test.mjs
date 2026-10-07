@@ -151,7 +151,11 @@ test('actual workerd SQLite persists account operation and replay after process 
       SELLER_STORE: { className: 'SellerStore', useSQLite: true },
     },
     durableObjectsPersist: root,
-    bindings: { ACCOUNT_ADMIN_SITE_ORIGIN: 'http://localhost' },
+    bindings: {
+      ACCOUNT_ADMIN_SITE_ORIGIN: 'http://localhost',
+      EMAIL_CODE_LOGIN_ENABLED: 'true',
+      PUBLIC_LISTINGS_ENABLED: 'true',
+    },
     serviceBindings: {
       MAILER: async (request) => {
         mail.push(await request.json());
