@@ -333,6 +333,22 @@ const OTC_RETAIL_PRODUCTS = [
     removeTags: [],
     removeDealerOnlyMetafield: true,
   },
+  {
+    sku: 'K00-00745-00',
+    family: 'GCU 475/476/477 replacement knob set',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC retail exception from Ryan on 2026-10-08',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC exact product page on 2026-10-08 identifies K00-00745-00 as the GCU 475/476/477 Replacement Knob Set, lists it as In Stock and order-enabled; retained Aviation Service Parts Price List page 10 identifies the three included knobs. Authorization excludes neighboring K00-00746-00 for GCU 275/276/478.',
+    productId: 'gid://shopify/Product/8961781235931',
+    variantId: 'gid://shopify/ProductVariant/47408713924827',
+    handle: 'kit-gcu-475-476-477-replacement-knob-set',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:install-hardware',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
   // Operator-authorized maintenance tool, not Garmin clearance of installed LRUs.
   {
     sku: '117-01307-00',
@@ -345,6 +361,13 @@ const OTC_RETAIL_PRODUCTS = [
 ];
 
 const PUBLIC_PRICE_AUTHORITIES = {
+  'K00-00745-00': {
+    list_price: 80,
+    source:
+      'Fresh authenticated Garmin DRC exact product page for K00-00745-00, read 2026-10-08; customer List Price shown as $80.00',
+    priceType: 'List',
+    accessed: '2026-10-08',
+  },
   'K10-00276-05': {
     list_price: 3995,
     source:
@@ -551,6 +574,8 @@ const GDL_82_DESCRIPTION = `
 `.trim();
 
 const POLICY_DESCRIPTIONS = {
+  'K00-00745-00':
+    '<p><strong>Garmin GCU 475/476/477 Replacement Knob Set</strong></p><p>Garmin part number <strong>K00-00745-00</strong>.</p><h3>Kit contents</h3><ul>\n<li>1 × inner knob — 430-00030-10</li>\n<li>1 × outer knob — 430-00031-10</li>\n<li>1 × joystick knob — 430-00035-10</li>\n</ul><h3>Compatibility and availability</h3><p>This exact kit is for the <strong>GCU 475, GCU 476, and GCU 477</strong>. It is not the K00-00746-00 knob set for GCU 275/276/478.</p><p>Garmin reported this item in stock when RWAS verified it on October 8, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p><p>This listing is for the replacement knob set only, not a controller or installation service. Confirm the installed controller model before ordering.</p>',
   'K10-00276-05':
     '<p><strong>Garmin GTX 335 with GPS Kit</strong></p><p>Garmin part number <strong>K10-00276-05</strong>.</p><h3>Garmin catalog kit contents</h3><ul>\n<li>GTX 335 ADS-B Out transponder with GPS</li>\n<li>GA 35S GPS/WAAS antenna</li>\n<li>GAE 12 altitude encoder</li>\n</ul><h3>Availability and installation</h3><p><strong>Future availability:</strong> Garmin currently indicates this kit will be available November 4, 2026. This is a special-order item and is not represented as in stock. RWAS confirms Garmin availability and delivery timing after purchase.</p><p>This listing is for equipment only; installation is not included. Aircraft compatibility, approved installation data, configuration, testing, and return to service must be confirmed by appropriately authorized personnel.</p>',
   '011-00950-01':
