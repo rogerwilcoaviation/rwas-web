@@ -202,21 +202,22 @@ export default async function AircraftForSalePage() {
               <h3>1. Tell Captain Jerry</h3>
               <p>
                 Click <em>List Your Aircraft</em> and walk through a short
-                13-question intake. Takes about five minutes.
+                guided intake while signed in. Review and save the draft before
+                adding media.
               </p>
             </div>
             <div className="a4s-how-step">
               <h3>2. Add photos &amp; logs</h3>
               <p>
-                You&rsquo;ll get an email link to upload photos and logbook
-                PDFs. Logbooks are optional but help buyers take you seriously.
+                Add photos, video and optional logbook PDFs to your saved draft.
+                Records stay private to you and the RWAS review team.
               </p>
             </div>
             <div className="a4s-how-step">
               <h3>3. RWAS reviews</h3>
               <p>
-                We review every listing before it goes live to catch obvious
-                data problems or safety concerns.
+                Submit your draft for private RWAS review. New seller-intake
+                submissions remain non-public during this launch.
               </p>
             </div>
             <div className="a4s-how-step">

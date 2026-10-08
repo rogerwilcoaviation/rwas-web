@@ -1,0 +1,38 @@
+name = "rwas-seller-production-20261006"
+account_id = "08c51088fd98ea9214af8a0ae226663c"
+main = "entry.mjs"
+compatibility_date = "2026-09-01"
+workers_dev = false
+
+[vars]
+AUTH_ISSUER = "https://dev-enkgj0dnenb3r4f8.us.auth0.com/"
+AUTH_CLIENT_ID = "Mlq6Jxop8tmRBauhITMPDquKxWtgnN6y"
+AUTH_REDIRECT_URI = "https://www.rogerwilcoaviation.com/aircraft-for-sale"
+AUTH_CONNECTIONS = "{\"password\":\"Username-Password-Authentication\"}"
+PASSWORD_ONLY_LOGIN = "true"
+EMAIL_CODE_LOGIN_ENABLED = "false"
+PUBLIC_LISTINGS_ENABLED = "false"
+MAIL_VIA_PAGES = "true"
+ACCESS_TEAM_DOMAIN = "john-08c.cloudflareaccess.com"
+ACCESS_AUD = "7af12c6b5590fb8587bf05051942c48da7a93677b2f8918cbb550afa48d22f97"
+REVIEWER_EMAILS = "admin@rwas.team"
+ACCOUNT_ADMIN_ACCESS_TEAM_DOMAIN = "john-08c.cloudflareaccess.com"
+ACCOUNT_ADMIN_ACCESS_AUD = "8538aaf1a79d7dde5d3253090705ad039e09db558b9c9f4cfc33788df2518bec"
+ACCOUNT_ADMIN_EMAILS = "admin@rwas.team"
+ACCOUNT_ADMIN_SITE_ORIGIN = "https://www.rogerwilcoaviation.com"
+
+[[durable_objects.bindings]]
+name = "SELLER_STORE"
+class_name = "SellerStore"
+
+[[migrations]]
+tag = "seller-production-20261007-first"
+new_sqlite_classes = ["SellerStore"]
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "rwas-seller-production-20261006"
+
+[observability.logs]
+enabled = true
+invocation_logs = true

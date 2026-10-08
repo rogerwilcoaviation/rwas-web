@@ -3,55 +3,77 @@
   var widgetScriptUrl = document.currentScript && document.currentScript.src;
   if (window.__jerryWidgetLoaded) return;
   window.__jerryWidgetLoaded = true;
-  window.openJerryChat = function() {};
+  window.openJerryChat = function () {};
 
   var isShopify = typeof window.Shopify !== 'undefined';
 
   if (isShopify) {
     function forceShopifyHeaderMatch() {
-      var section = document.getElementById('shopify-section-sections--20057122865371__header') || document.querySelector('[id^="shopify-section-"]');
+      var section =
+        document.getElementById(
+          'shopify-section-sections--20057122865371__header',
+        ) || document.querySelector('[id^="shopify-section-"]');
       if (!section) return false;
       var page = section.querySelector('.np-page');
       if (!page) return false;
       section.style.setProperty('background', '#ddd9d2', 'important');
       section.style.setProperty('padding', '20px 0', 'important');
       page.style.setProperty('display', 'block', 'important');
-      page.style.setProperty('width', 'min(1200px, calc(100% - 40px))', 'important');
+      page.style.setProperty(
+        'width',
+        'min(1200px, calc(100% - 40px))',
+        'important',
+      );
       page.style.setProperty('max-width', '1200px', 'important');
       page.style.setProperty('margin', '20px auto', 'important');
       page.style.setProperty('background', '#f7f4ef', 'important');
       page.style.setProperty('border', '1px solid #1a1a1a', 'important');
-      page.style.setProperty('box-shadow', '0 2px 12px rgba(0,0,0,0.15)', 'important');
-      page.style.setProperty('font-family', "Georgia, 'Times New Roman', serif", 'important');
+      page.style.setProperty(
+        'box-shadow',
+        '0 2px 12px rgba(0,0,0,0.15)',
+        'important',
+      );
+      page.style.setProperty(
+        'font-family',
+        "Georgia, 'Times New Roman', serif",
+        'important',
+      );
       page.style.setProperty('padding', '0', 'important');
       return true;
     }
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', forceShopifyHeaderMatch, { once: true });
+      document.addEventListener('DOMContentLoaded', forceShopifyHeaderMatch, {
+        once: true,
+      });
     } else {
       forceShopifyHeaderMatch();
     }
     var tries = 0;
-    var timer = setInterval(function() {
+    var timer = setInterval(function () {
       tries += 1;
       if (forceShopifyHeaderMatch() || tries > 20) clearInterval(timer);
     }, 300);
   }
 
   var STORAGE_KEY = 'jerry-chat-history';
-  var SESSION_ID = 'jerry-session-' + Date.now() + '-' + Math.random().toString(36).slice(2,8);
-  var LISTING_UI_ENABLED = /^\/aircraft-for-sale(?:\/|$)/.test(window.location.pathname || '');
+  var SESSION_ID =
+    'jerry-session-' +
+    Date.now() +
+    '-' +
+    Math.random().toString(36).slice(2, 8);
+  var LISTING_UI_ENABLED = /^\/aircraft-for-sale(?:\/|$)/.test(
+    window.location.pathname || '',
+  );
   // Cloudflare Worker routes are bound on the apex host, not www.
   // Keep the website on www, but send chat traffic to the apex /api/chat route.
-  var apiUrl = isShopify
-    ? 'https://rogerwilcoaviation.com/api/chat'
-    : 'https://rogerwilcoaviation.com/api/chat';
+  var apiUrl = 'https://rogerwilcoaviation.com/api/chat';
 
   var defaultHistory = [
     {
       role: 'assistant',
-      content: 'Captain Jerry here. Avionics question, service inquiry, or just looking around — what can I do for you? — Capt. Jerry, RWAS'
-    }
+      content:
+        'Captain Jerry here. Avionics question, service inquiry, or just looking around — what can I do for you? — Capt. Jerry, RWAS',
+    },
   ];
 
   function loadHistory() {
@@ -59,9 +81,14 @@
       var raw = sessionStorage.getItem(STORAGE_KEY);
       if (!raw) return defaultHistory.slice();
       var parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed) || !parsed.length) return defaultHistory.slice();
+      if (!Array.isArray(parsed) || !parsed.length)
+        return defaultHistory.slice();
       return parsed.filter(function (m) {
-        return m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string';
+        return (
+          m &&
+          (m.role === 'user' || m.role === 'assistant') &&
+          typeof m.content === 'string'
+        );
       });
     } catch (e) {
       return defaultHistory.slice();
@@ -83,7 +110,8 @@
   // worker never has to scan message history for marker tokens.
   var intakeState = null;
 
-  var css = '' +
+  var css =
+    '' +
     '.jerry-widget-bubble{position:fixed;right:16px;bottom:16px;z-index:999999;width:56px;height:56px;border-radius:50%;border:2px solid #d1b074;background:#1a1a1a;box-shadow:0 4px 16px rgba(0,0,0,.35);padding:0;cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center}' +
     '.jerry-widget-bubble span{color:#d1b074;font-family:Arial,sans-serif;font-size:22px;font-weight:700;line-height:1}' +
     '.jerry-widget-backdrop{position:fixed;inset:0;z-index:999997;background:rgba(0,0,0,.32);display:none}' +
@@ -114,9 +142,9 @@
     '.jerry-thinking-dots span:nth-child(2){animation-delay:.2s}' +
     '.jerry-thinking-dots span:nth-child(3){animation-delay:.4s}' +
     '@keyframes jerryDots{0%,80%,100%{opacity:.2}40%{opacity:1}}' +
-'.jerry-widget-attach{background:none;border:none;font-size:18px;cursor:pointer;padding:4px 6px;opacity:.5;flex-shrink:0;line-height:1}' +
+    '.jerry-widget-attach{background:none;border:none;font-size:18px;cursor:pointer;padding:4px 6px;opacity:.5;flex-shrink:0;line-height:1}' +
     '.jerry-widget-attach:hover{opacity:1}' +
-        '@media (max-width:480px){.jerry-widget-panel{right:0;left:0;bottom:0;width:100%;max-width:100%;height:75vh}.jerry-widget-bubble{right:12px;bottom:12px;width:52px;height:52px}}';
+    '@media (max-width:480px){.jerry-widget-panel{right:0;left:0;bottom:0;width:100%;max-width:100%;height:75vh}.jerry-widget-bubble{right:12px;bottom:12px;width:52px;height:52px}}';
 
   var style = document.createElement('style');
   style.setAttribute('data-jerry-widget', 'true');
@@ -134,24 +162,25 @@
 
   var panel = document.createElement('div');
   panel.className = 'jerry-widget-panel';
-  panel.innerHTML = '' +
+  panel.innerHTML =
+    '' +
     '<div class="jerry-widget-header">' +
-      '<div class="jerry-widget-title-wrap">' +
-        '<div class="jerry-widget-title">CAPTAIN JERRY</div>' +
-        '<div class="jerry-widget-sub">Avionics &amp; Service</div>' +
-      '</div>' +
-      '<button type="button" class="jerry-widget-close" aria-label="Close">&times;</button>' +
+    '<div class="jerry-widget-title-wrap">' +
+    '<div class="jerry-widget-title">CAPTAIN JERRY</div>' +
+    '<div class="jerry-widget-sub">Avionics &amp; Service</div>' +
+    '</div>' +
+    '<button type="button" class="jerry-widget-close" aria-label="Close">&times;</button>' +
     '</div>' +
     '<div class="jerry-widget-status"><span class="jerry-widget-dot"></span><span>ONLINE — AVIONICS &amp; SERVICE</span></div>' +
     '<button type="button" class="jerry-service-open" style="min-height:44px;flex-shrink:0">Request service — review and submit</button>' +
     '<div class="jerry-widget-chat"></div>' +
-    '<div class="jerry-widget-error"></div>' +
+    '<div class="jerry-widget-error" role="alert"></div>' +
     '<p class="jerry-widget-privacy" style="margin:0;padding:6px 12px;font:11px/1.4 Arial,sans-serif;color:#333;background:#f7f4ef">Messages are processed by our AI chat service and stored in this tab. Avoid sensitive details. <a href="/privacy" target="_blank" rel="noopener noreferrer" style="color:#17466b;text-decoration:underline">Privacy and retention</a>. Chat alone does not submit a service request.</p>' +
     '<div class="jerry-widget-input">' +
-      '<button type="button" class="jerry-widget-attach" title="Attach photos or documents">📎</button>' +
-      '<input type="file" class="jerry-file-input" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx" style="display:none" />' +
-      '<input type="text" class="jerry-widget-text-input" placeholder="Ask Jerry anything…" />' +
-      '<button type="button" class="jerry-widget-send">Send</button>' +
+    '<button type="button" class="jerry-widget-attach" title="Attach photos or documents">📎</button>' +
+    '<input type="file" class="jerry-file-input" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx" style="display:none" />' +
+    '<input type="text" class="jerry-widget-text-input" placeholder="Ask Jerry anything…" />' +
+    '<button type="button" class="jerry-widget-send">Send</button>' +
     '</div>';
 
   document.body.appendChild(backdrop);
@@ -169,11 +198,17 @@
   var serviceUi = null;
   var serviceLoad = null;
   serviceButton.addEventListener('click', function () {
-    if (serviceUi) { serviceUi.open(); return; }
+    if (serviceUi) {
+      serviceUi.open();
+      return;
+    }
     if (serviceLoad) return;
     serviceButton.disabled = true;
     serviceLoad = document.createElement('script');
-    serviceLoad.src = new URL('intake-service.js', widgetScriptUrl || window.location.origin + '/jerry-widget.js').href;
+    serviceLoad.src = new URL(
+      'intake-service.js',
+      widgetScriptUrl || window.location.origin + '/jerry-widget.js',
+    ).href;
     serviceLoad.onload = function () {
       serviceButton.disabled = false;
       if (typeof window.createRwasServiceIntake === 'function') {
@@ -185,7 +220,9 @@
       }
     };
     serviceLoad.onerror = function () {
-      serviceLoad.remove(); serviceLoad = null; serviceButton.disabled = false;
+      serviceLoad.remove();
+      serviceLoad = null;
+      serviceButton.disabled = false;
       serviceButton.textContent = 'Service form unavailable — try again';
     };
     document.head.appendChild(serviceLoad);
@@ -200,17 +237,22 @@
       .replace(/LISTING_INTAKE_STATE:\{[\s\S]*?\}\s*$/m, '')
       .trim();
     var fragment = document.createDocumentFragment();
-    // Parse only our small formatting vocabulary. Never parse response HTML.
-    var tokens = /\[([^\]\n]+)\]\((https?:\/\/[^\s<>"'`]+)\)|https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_|\*([^*\n]+)\*/gi;
+    // Parse only our small formatting vocabulary. Legacy plain <em> wrappers are supported; attributed/nested HTML stays literal.
+    var tokens =
+      /\[([^\]\n]+)\]\((https?:\/\/[^\s<>"'`]+)\)|https?:\/\/[^\s<>"'`]+|\*\*([^*\n]+)\*\*|__([^_\n]+)__|_([^_\n]+)_|\*([^*\n]+)\*|<em>([^<>]+)<\/em>/gi;
     var cursor = 0;
     var match;
     while ((match = tokens.exec(text))) {
-      fragment.appendChild(document.createTextNode(text.slice(cursor, match.index)));
+      fragment.appendChild(
+        document.createTextNode(text.slice(cursor, match.index)),
+      );
       var raw = match[0];
       var markdownLink = match[1] !== undefined;
       if (markdownLink || /^https?:\/\//i.test(raw)) {
         var candidate = markdownLink ? match[2] : raw;
-        var urlText = markdownLink ? candidate : candidate.replace(/[.,!?:;]+$/, '');
+        var urlText = markdownLink
+          ? candidate
+          : candidate.replace(/[.,!?:;]+$/, '');
         // Remove only unmatched closing punctuation, preserving balanced URL paths.
         var pairs = { ')': '(', ']': '[', '}': '{' };
         while (pairs[urlText.slice(-1)]) {
@@ -222,14 +264,20 @@
         var safe = false;
         try {
           var url = new URL(urlText);
-          safe = (url.protocol === 'https:' || url.protocol === 'http:') &&
-            !!url.hostname && !url.username && !url.password &&
+          safe =
+            (url.protocol === 'https:' || url.protocol === 'http:') &&
+            !!url.hostname &&
+            !url.username &&
+            !url.password &&
             !/[\\\u0000-\u001f\u007f]/.test(urlText) &&
             !/[\w:@/\\=]/.test(text.charAt(match.index - 1));
-        } catch (e) { /* Invalid URLs remain plain text. */ }
+        } catch (e) {
+          /* Invalid URLs remain plain text. */
+        }
         if (safe) {
           // Keep the destination visible; an untrusted label must not hide its URL.
-          if (markdownLink) fragment.appendChild(document.createTextNode(match[1] + ' ('));
+          if (markdownLink)
+            fragment.appendChild(document.createTextNode(match[1] + ' ('));
           var anchor = document.createElement('a');
           anchor.className = 'jerry-message-link';
           anchor.setAttribute('href', urlText);
@@ -237,17 +285,31 @@
           anchor.setAttribute('rel', 'noopener noreferrer');
           anchor.textContent = urlText;
           fragment.appendChild(anchor);
-          fragment.appendChild(document.createTextNode((markdownLink ? ')' : '') + candidate.slice(urlText.length)));
+          fragment.appendChild(
+            document.createTextNode(
+              (markdownLink ? ')' : '') + candidate.slice(urlText.length),
+            ),
+          );
         } else {
           fragment.appendChild(document.createTextNode(raw));
         }
       } else {
-        var italic = match[5] !== undefined || match[6] !== undefined;
-        if (italic && (/[\w*]/.test(text.charAt(match.index - 1)) || /[\w*]/.test(text.charAt(tokens.lastIndex)))) {
+        var italic =
+          match[5] !== undefined ||
+          match[6] !== undefined ||
+          match[7] !== undefined;
+        if (
+          (match[5] !== undefined || match[6] !== undefined) &&
+          (/[\w*]/.test(text.charAt(match.index - 1)) ||
+            /[\w*]/.test(text.charAt(tokens.lastIndex)))
+        ) {
           fragment.appendChild(document.createTextNode(raw));
         } else {
           var emphasis = document.createElement(italic ? 'em' : 'strong');
-          renderMessage(emphasis, match[3] || match[4] || match[5] || match[6]);
+          renderMessage(
+            emphasis,
+            match[3] || match[4] || match[5] || match[6] || match[7],
+          );
           fragment.appendChild(emphasis);
         }
       }
@@ -270,14 +332,20 @@
         msg.textContent = message.content;
       }
       // Seller/listing escape hatch is only valid on aircraft-for-sale pages.
-      if (LISTING_UI_ENABLED && message.role === 'assistant' && !message.content.includes('submitted for review')) {
-        var isListing = history.some(function(m) {
+      if (
+        LISTING_UI_ENABLED &&
+        message.role === 'assistant' &&
+        !message.content.includes('submitted for review')
+      ) {
+        var isListing = history.some(function (m) {
           return m.role === 'user' && hasListingIntent(m.content);
         });
         if (isListing) {
           var esc = document.createElement('div');
-          esc.style.cssText = 'margin-top:6px;font-family:Arial,sans-serif;font-size:9px;';
-          esc.innerHTML = '<a href="#sell" style="color:#888;text-decoration:underline;cursor:pointer" onclick="event.preventDefault();event.stopPropagation();document.dispatchEvent(new CustomEvent(&quot;rwas:open-manual-form&quot;));">Prefer to fill out the form manually?</a>';
+          esc.style.cssText =
+            'margin-top:6px;font-family:Arial,sans-serif;font-size:9px;';
+          esc.innerHTML =
+            '<a href="#sell" style="color:#888;text-decoration:underline;cursor:pointer" onclick="event.preventDefault();event.stopPropagation();document.dispatchEvent(new CustomEvent(&quot;rwas:open-manual-form&quot;));">Prefer to fill out the form manually?</a>';
           msg.appendChild(esc);
         }
       }
@@ -290,7 +358,7 @@
   function setOpen(next) {
     open = !!next;
     panel.style.display = open ? 'flex' : 'none';
-    bubble.style.display = open ? "none" : "flex";
+    bubble.style.display = open ? 'none' : 'flex';
     backdrop.style.display = open ? 'block' : 'none';
     if (open) {
       setTimeout(function () {
@@ -312,7 +380,8 @@
     thinkRow.id = 'jerry-thinking';
     var thinkMsg = document.createElement('div');
     thinkMsg.className = 'jerry-widget-msg jerry-thinking-msg';
-    thinkMsg.innerHTML = '<span class="jerry-thinking-dots"><span>.</span><span>.</span><span>.</span></span> Jerry is thinking';
+    thinkMsg.innerHTML =
+      '<span class="jerry-thinking-dots"><span>.</span><span>.</span><span>.</span></span> Jerry is thinking';
     thinkRow.appendChild(thinkMsg);
     chat.appendChild(thinkRow);
     chat.scrollTop = chat.scrollHeight;
@@ -329,20 +398,25 @@
     }
   }
 
-
   // __rwas_auth_helpers__
   function openSellerLoginModal() {
     try {
       document.dispatchEvent(new CustomEvent('rwas:open-seller-login'));
     } catch (e) {
-      console.warn('[Jerry widget] could not dispatch rwas:open-seller-login', e);
+      console.warn(
+        '[Jerry widget] could not dispatch rwas:open-seller-login',
+        e,
+      );
     }
   }
   function openManualFormModal() {
     try {
       document.dispatchEvent(new CustomEvent('rwas:open-manual-form'));
     } catch (e) {
-      console.warn('[Jerry widget] could not dispatch rwas:open-manual-form', e);
+      console.warn(
+        '[Jerry widget] could not dispatch rwas:open-manual-form',
+        e,
+      );
     }
   }
 
@@ -357,43 +431,40 @@
 
   function getSaleSession() {
     try {
-      var stored = normalizeSaleSession(JSON.parse(localStorage.getItem('rwas_sale_session') || 'null'));
+      var stored = normalizeSaleSession(
+        JSON.parse(sessionStorage.getItem('rwas_sale_v2') || 'null'),
+      );
       if (stored) return stored;
     } catch (e) {}
     return normalizeSaleSession(window.rwasSaleSession || null);
   }
 
+  // Listing progress is private server state, never an unscoped browser draft.
   function getPendingListing() {
-    try {
-      return JSON.parse(localStorage.getItem('rwas_pending_listing') || 'null');
-    } catch (e) {
-      return null;
-    }
+    return null;
   }
-
-  function setPendingListing(data) {
-    try {
-      localStorage.setItem('rwas_pending_listing', JSON.stringify(data));
-    } catch (e) {}
-  }
-
-  function clearPendingListing() {
-    try {
-      localStorage.removeItem('rwas_pending_listing');
-    } catch (e) {}
-  }
-
-  function fileExt(name) {
-    var parts = String(name || '').toLowerCase().split('.');
-    return parts.length > 1 ? parts.pop() : '';
-  }
+  function setPendingListing() {}
+  function clearPendingListing() {}
 
   function validateWidgetUpload(file) {
     var ext = fileExt(file && file.name);
     if (['heic', 'heif', 'tif', 'tiff'].includes(ext)) {
       return 'HEIC and TIFF files cannot be displayed in browsers. Please convert to JPG or PNG before uploading.';
     }
-    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx', 'xls', 'xlsx'].includes(ext)) {
+    if (
+      [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+        'webp',
+        'pdf',
+        'doc',
+        'docx',
+        'xls',
+        'xlsx',
+      ].includes(ext)
+    ) {
       return '';
     }
     return 'Only JPG, JPEG, PNG, GIF, WebP, PDF, DOC, DOCX, XLS, and XLSX files are allowed.';
@@ -409,94 +480,68 @@
     // Tight first-person seller-intent only. Mirrors LISTING_SELLER_INTENT_RE in
     // intake-bridge/worker.js so buyer queries ("how many do you have for sale?")
     // don't trigger the Seller Login modal. Fixed 2026-04-17.
-    return /\b(i (want|need|would like|wanna) to (list|sell|post)|i'?d like to (list|sell|post)|list my (aircraft|plane|airplane)|sell my (aircraft|plane|airplane)|post my (aircraft|plane|airplane)|put my (aircraft|plane|airplane) (up )?for sale|asking price for my|how (do|can) i list (my|an aircraft))\b/i.test(String(text || ''));
+    return /\b(i (want|need|would like|wanna) to (list|sell|post)|i'?d like to (list|sell|post)|list my (aircraft|plane|airplane)|sell my (aircraft|plane|airplane)|post my (aircraft|plane|airplane)|put my (aircraft|plane|airplane) (up )?for sale|asking price for my|how (do|can) i list (my|an aircraft))\b/i.test(
+      String(text || ''),
+    );
   }
 
   function wantsPendingSubmit(text) {
-    return /^\s*(submit( my listing)?|file it|send it)\s*$/i.test(String(text || ''));
+    return /^\s*(submit( my listing)?|file it|send it)\s*$/i.test(
+      String(text || ''),
+    );
   }
 
   function extractTaggedJson(text, tag) {
-    var re = new RegExp(tag + ':(\{[\s\S]*?\})');
-    var match = String(text || '').match(re);
-    if (!match) return null;
-    try {
-      return JSON.parse(match[1]);
-    } catch (e) {
-      return { __parseError: true, __raw: match[1] };
+    text = String(text || '');
+    var begin = text.indexOf(tag + ':');
+    if (begin < 0) return null;
+    begin += tag.length + 1;
+    if (text[begin] !== '{') return null;
+    var depth = 0,
+      inString = false,
+      escaped = false;
+    for (var i = begin; i < text.length; i++) {
+      var c = text[i];
+      if (inString) {
+        if (escaped) escaped = false;
+        else if (c === String.fromCharCode(92)) escaped = true;
+        else if (c === '"') inString = false;
+        continue;
+      }
+      if (c === '"') {
+        inString = true;
+        continue;
+      }
+      if (c === '{') depth++;
+      if (c === '}' && --depth === 0) {
+        try {
+          return JSON.parse(text.slice(begin, i + 1));
+        } catch {
+          return null;
+        }
+      }
     }
+    return null;
   }
 
-  async function handleListingActions(replyText) {
-    var messages = [];
-    if (!LISTING_UI_ENABLED) return messages;
-    var session = getSaleSession();
-    var listingDraft = extractTaggedJson(replyText, 'LISTING_DRAFT');
-    var listingSave = extractTaggedJson(replyText, 'LISTING_SAVE');
-
-    if (listingDraft) {
-      if (listingDraft.__parseError) {
-        messages.push('I had trouble reading the listing draft Jerry generated. Please try again.');
-      } else if (!session || !session.token) {
-        messages.push((function(){ openSellerLoginModal(); return 'Please sign in through Seller Login — I just opened the login box for you — then say submit again.'; })());
-      } else if (!window.confirm('Submit this aircraft listing for RWAS review?')) {
-        messages.push('Listing not submitted. You can review your details before submitting.');
-      } else {
-        try {
-          var createResponse = await fetch('https://sale-api.rogerwilcoaviation.com/listings', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + session.token
-            },
-            body: JSON.stringify(listingDraft)
-          });
-          var createData = await createResponse.json().catch(function() { return {}; });
-          if (!createResponse.ok) {
-            if (createResponse.status === 401) {
-              setPendingListing(listingDraft);
-              messages.push((function(){ openSellerLoginModal(); return 'Almost there — I just opened the Seller Login. Enter your email, check for the 6-digit code, then come back and say submit my listing.'; })());
-            } else {
-              messages.push(createData.error || ('Listing submission failed: ' + createResponse.status));
-            }
-          } else {
-            clearPendingListing();
-            messages.push('\u2705 Your listing has been submitted for review!\n\nStatus: PENDING — our team will review it shortly.\nOnce approved, it goes Active on the marketplace.\n\nView your listing: click My Listings at the top of the page to see status and manage your listing.');
-            // Also show a toast notification on the page
-            if (typeof window.toast === 'function') window.toast('Listing submitted! Status: Pending Review');
-          }
-        } catch (e) {
-          messages.push('Listing submission failed. Please try again in a moment.');
-        }
-      }
+  async function handleListingActions(replyText, structuredDraft) {
+    if (!LISTING_UI_ENABLED) return [];
+    var draft =
+      structuredDraft ||
+      extractTaggedJson(replyText, 'LISTING_DRAFT') ||
+      extractTaggedJson(replyText, 'LISTING_SAVE');
+    if (!draft || draft.__parseError) return [];
+    if (!getSaleSession()) {
+      openSellerLoginModal();
+      return ['Sign in, then review your draft in My Listings.'];
     }
-
-    if (listingSave) {
-      if (listingSave.__parseError) {
-        messages.push('I had trouble reading the saved draft Jerry generated. Please try again.');
-      } else if (!session || !session.email) {
-        messages.push((function(){ openSellerLoginModal(); return 'Please sign in through Seller Login — I just opened the login box for you — then say save draft again.'; })());
-      } else {
-        try {
-          listingSave.email = session.email;
-          var draftResponse = await fetch('https://sale-api.rogerwilcoaviation.com/draft', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream, application/json' },
-            body: JSON.stringify(listingSave)
-          });
-          var draftData = await draftResponse.json().catch(function() { return {}; });
-          if (!draftResponse.ok) {
-            messages.push(draftData.error || ('Draft save failed: ' + draftResponse.status));
-          } else {
-            messages.push('Draft saved. Come back anytime and say continue my listing.');
-          }
-        } catch (e) {
-          messages.push('Draft save failed. Please try again in a moment.');
-        }
-      }
-    }
-
-    return messages;
+    setOpen(false);
+    document.dispatchEvent(
+      new CustomEvent('rwas:seller-draft', { detail: draft }),
+    );
+    return [
+      'Your details are ready to review. Save the draft in My Listings, add photos, video and records, then choose Submit for Review. Nothing has been published.',
+    ];
   }
 
   async function submitMessage() {
@@ -511,50 +556,29 @@
 
     var session = getSaleSession();
     var pendingListing = getPendingListing();
+    var listingActive = false;
 
     if (LISTING_UI_ENABLED && wantsPendingSubmit(text) && pendingListing) {
-      if (!session || !session.token) {
-        addAssistantMessage((function(){ openSellerLoginModal(); return 'Almost there — I just opened the Seller Login. Enter your email, check for the 6-digit code, then come back and say submit my listing.'; })());
-        input.focus();
-        return;
-      }
-      setLoading(true);
-      await new Promise(function (resolve) {
-        requestAnimationFrame(function () {
-          requestAnimationFrame(resolve);
-        });
-      });
-      try {
-        var pendingResponse = await fetch('https://sale-api.rogerwilcoaviation.com/listings', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + session.token
-          },
-          body: JSON.stringify(pendingListing)
-        });
-        var pendingData = await pendingResponse.json().catch(function() { return {}; });
-        if (!pendingResponse.ok) {
-          if (pendingResponse.status === 401) {
-            addAssistantMessage((function(){ openSellerLoginModal(); return 'Almost there — I just opened the Seller Login. Enter your email, check for the 6-digit code, then come back and say submit my listing.'; })());
-          } else {
-            addAssistantMessage(pendingData.error || ('Listing submission failed: ' + pendingResponse.status));
-          }
-        } else {
-          clearPendingListing();
-          addAssistantMessage('Your listing has been submitted for review! You can manage it from My Listings.');
-        }
-      } catch (err) {
-        addAssistantMessage('Listing submission failed. Please try again in a moment.');
-      } finally {
-        setLoading(false);
-        input.focus();
-      }
+      document.dispatchEvent(
+        new CustomEvent('rwas:seller-draft', { detail: pendingListing }),
+      );
+      addAssistantMessage(
+        'Review and save your draft in My Listings, then choose Submit for Review.',
+      );
       return;
     }
 
-    if (LISTING_UI_ENABLED && hasListingIntent(text) && (!session || !session.token)) {
-      addAssistantMessage((function(){ openSellerLoginModal(); return 'Before we get started, I need to verify your email. I just opened the Seller Login — enter your email, check for the 6-digit code, and come back and say ready.'; })());
+    if (
+      LISTING_UI_ENABLED &&
+      hasListingIntent(text) &&
+      (!session || !session.token)
+    ) {
+      addAssistantMessage(
+        (function () {
+          openSellerLoginModal();
+          return 'Before we get started, I need to verify your email. I just opened the Seller Login — enter your email, check for the 6-digit code, and come back and say ready.';
+        })(),
+      );
       input.focus();
       return;
     }
@@ -567,234 +591,133 @@
     });
 
     try {
-      var apiMessages = history.map(function (m) { return { role: m.role, content: m.content }; });
-      if (LISTING_UI_ENABLED && hasListingIntent(text) && session && session.email) {
+      var apiMessages = history.map(function (m) {
+        return { role: m.role, content: m.content };
+      });
+      if (
+        LISTING_UI_ENABLED &&
+        hasListingIntent(text) &&
+        session &&
+        session.email
+      ) {
         var lastIdx = apiMessages.length - 1;
         apiMessages[lastIdx] = {
           role: apiMessages[lastIdx].role,
-          content: apiMessages[lastIdx].content + '\n\n' + '[System context: Seller is authenticated as ' + session.email + '. Login is confirmed — skip any login instructions and proceed directly to collecting the tail number.]'
+          content:
+            apiMessages[lastIdx].content +
+            '\n\n' +
+            '[System context: Seller is authenticated as ' +
+            session.email +
+            '. Login is confirmed — skip any login instructions and proceed directly to collecting the tail number.]',
         };
       }
 
-      // ── Direct listing submission from widget ──
-    var submitRe = /^\s*(list it|submit|post it|list as is|list it as is|submit my listing|file it|send it|that.?s it.* list|go ahead.* list|yes.* list)\b/i;
-    if (LISTING_UI_ENABLED && submitRe.test(text)) {
-      if (!session || !session.token) {
-        console.warn('[Jerry widget] list-it blocked, missing sale session token', session || null);
-        history.push({ role: 'assistant', content: (function(){ openSellerLoginModal(); return 'You need to log in before I can submit the listing — I just opened the login box. Verify your email, then tell me to submit it again.\n\n\u2014 Capt. Jerry, RWAS'; })() });
-        saveHistory();
-        render();
+      // A chat message never publishes a listing. The seller panel owns review.
+      if (LISTING_UI_ENABLED && wantsPendingSubmit(text)) {
+        listingActive = true;
+        if (!session) {
+          openSellerLoginModal();
+          setLoading(false);
+          return;
+        }
+        var savedResponse = await fetch('/api/aircraft-sale/draft', {
+          headers: { Authorization: 'Bearer ' + session.token },
+          cache: 'no-store',
+        });
+        if (!savedResponse.ok) {
+          throw Object.assign(new Error('Seller request failed'), {
+            status: savedResponse.status,
+            sellerRequest: true,
+          });
+        }
+        var savedDraft = (await savedResponse.json()).draft;
+        setOpen(false);
+        document.dispatchEvent(
+          new CustomEvent('rwas:seller-draft', {
+            detail: (savedDraft && (savedDraft.fields || savedDraft)) || {},
+          }),
+        );
+        addAssistantMessage(
+          'Review your details in the seller panel, then save and submit your draft.',
+        );
         setLoading(false);
-        input.focus();
         return;
       }
-      // Parse conversation history to extract listing fields
-      var allText = history.map(function(m){ return m.content; }).join('\n');
-      var extracted = {};
-      
-      // N-number
-      var nn = allText.match(/\bN(\d{1,5}[A-Za-z]{0,2})\b/);
-      if (nn) extracted.nNumber = 'N' + nn[1];
-      
-      // FAA data from system context
-      var faaMatch = allText.match(/FAA Registry[^:]*:\n([\s\S]*?)\nConfirm/);
-      if (faaMatch) {
-        var faaLines = faaMatch[1].split('\n');
-        faaLines.forEach(function(line) {
-          var aircraft = line.match(/Aircraft:\s*(?:(\d{4})\s+)?(.+?)\s+(\S+.*)$/);
-          if (aircraft) {
-            if (aircraft[1]) extracted.year = parseInt(aircraft[1]);
-            extracted.make = (aircraft[2] || '').trim();
-            extracted.model = (aircraft[3] || '').trim();
-          }
-          var serial = line.match(/Serial:\s*(.+)/);
-          if (serial) extracted.serialNumber = serial[1].trim();
-          var engine = line.match(/Engine:\s*(.+)/);
-          if (engine) extracted.engineModel = engine[1].trim();
-          var type = line.match(/Type:\s*(.+)/);
-          if (type) {
-            var t = type[1].toLowerCase();
-            if (t.includes('single')) extracted.category = 'single-piston';
-            else if (t.includes('multi')) extracted.category = 'multi-piston';
-            else if (t.includes('rotor')) extracted.category = 'helicopter';
-          }
-        });
-      }
-      
-      // Price — search user messages only, and avoid N-number false positives
-      var userText = history.filter(function(m) { return m.role === 'user'; }).map(function(m) { return m.content; }).join('\n');
-      var pricePatterns = [
-        /\$\s*([\d,]{5,})\b/,                                   // $300,000
-        /(?:asking|price|priced?|want|take|listed?\s+at)[^\d\n]*\$?([\d,]{5,})\b/i,
-        /(^|[^A-Za-z0-9N])([1-9][\d,]{4,})\b/gm                  // 5+ digits not preceded by N
-      ];
-      for (var pi = 0; pi < pricePatterns.length; pi++) {
-        if (pricePatterns[pi].global) {
-          var match;
-          while ((match = pricePatterns[pi].exec(userText)) !== null) {
-            extracted.price = (match[2] || match[1] || '').replace(/,/g, '');
-            if (extracted.price) break;
-          }
-          if (extracted.price) break;
-        } else {
-          var pm = userText.match(pricePatterns[pi]);
-          if (pm) {
-            extracted.price = (pm[2] || pm[1] || '').replace(/,/g, '');
-            break;
-          }
-        }
-      }
-      
-      // Seller name
-      var nameMatch = allText.match(/(?:name|Name)[^:]*:\s*([A-Z][a-z]+ [A-Z][a-z]+)/);
-      if (!nameMatch) {
-        // Try to find name from user messages (first message with first+last pattern)
-        history.forEach(function(m) {
-          if (m.role === 'user' && !nameMatch) {
-            var nm = m.content.match(/^([A-Z][a-z]+ [A-Z][a-z]+)/);
-            if (nm) nameMatch = nm;
-          }
-        });
-      }
-      if (nameMatch) extracted.sellerName = nameMatch[1] || nameMatch[0];
-      
-      // Phone
-      var phone = allText.match(/(\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4})/);
-      if (phone) extracted.sellerPhone = phone[1];
-      
-      // Location
-      var loc = allText.match(/the Northern Plains[,\s]*(?:South Dakota|SD|south dakota)/i);
-      if (loc) extracted.sellerLocation = 'the Northern Plains';
-      if (!extracted.sellerLocation) {
-        var locMatch = allText.match(/([A-Z][a-z]+(?:\s[A-Z][a-z]+)?)[,\s]+(?:SD|ND|MN|IA|NE|MT|WY|CO|KS|MO|WI|IL)/);
-        if (locMatch) extracted.sellerLocation = locMatch[0];
-      }
-      
-      // Total time
-      var tt = allText.match(/(?:total time|TT)[^\d]*(\d{3,5})/i);
-      if (tt) extracted.totalTime = tt[1];
-      
-      // Engine time  
-      var et = allText.match(/(?:SMOH|engine time|since overhaul)[^\d]*(\d{2,5})/i);
-      if (et) extracted.engineTime = et[1];
-      
-      // Avionics
-      var avMatch = allText.match(/(?:avionics|panel|stack)[:\s]*([^\n]+)/i);
-      if (avMatch) extracted.avionics = avMatch[1].trim();
-      
-      // Description
-      var descMatch = allText.match(/(?:description|condition)[:\s]*([^\n]{20,})/i);
-      if (descMatch) extracted.description = descMatch[1].trim();
-      
-      // Damage history
-      if (/no damage|damage.?none|clean history/i.test(allText)) extracted.damageHistory = 'none';
-      
-      // Set defaults
-      if (!extracted.make) extracted.make = 'Unknown';
-      if (!extracted.model) extracted.model = 'Unknown';
-      if (!extracted.year) extracted.year = 0;
-      if (!extracted.price) extracted.price = '0';
-      if (!extracted.category) extracted.category = 'single-piston';
-      if (!extracted.condition) extracted.condition = 'used';
-      if (!extracted.sellerName) extracted.sellerName = session.name || session.email || '';
-      if (!extracted.sellerLocation) extracted.sellerLocation = '';
-      if (!extracted.sellerPhone) extracted.sellerPhone = '';
-      
-      // Submit to API
-      setLoading(true);
-      try {
-        extracted.year = parseInt(extracted.year, 10) || 0;
-        extracted.price = String(extracted.price || '0').replace(/[^\d]/g, '') || '0';
-        var payload = Object.assign({}, extracted, { uploadSessionId: SESSION_ID });
-        console.log('[Jerry widget] list-it extracted payload', payload);
-        console.log('[Jerry widget] list-it auth', {
-          email: session.email || null,
-          hasToken: !!session.token,
-          tokenPreview: session.token ? String(session.token).slice(0, 8) + '…' : null
-        });
-        console.log('Submitting listing:', JSON.stringify(extracted));
-        console.log('Auth token:', session.token ? session.token.slice(0,8) + '...' : 'NONE');
-        var subRes = await fetch('https://sale-api.rogerwilcoaviation.com/listings', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + session.token
-          },
-          body: JSON.stringify(payload)
-        });
-        var subText = await subRes.text();
-        var subData = null;
+
+      // FAA N-number lookup via our proxy
+      var nnMatch = text.match(/\bN\s?-?\s?(\d{1,5}[A-Za-z]{0,2})\b/i);
+      if (nnMatch && !LISTING_UI_ENABLED) {
         try {
-          subData = subText ? JSON.parse(subText) : null;
-        } catch (parseErr) {
-          console.warn('[Jerry widget] list-it response was not JSON', subText, parseErr);
-        }
-        console.log('[Jerry widget] list-it API response', {
-          status: subRes.status,
-          ok: subRes.ok,
-          body: subData || subText
-        });
-        var listingId = (subData && (subData.id || (subData.listing && subData.listing.id))) || '';
-        if (subRes.ok && listingId) {
-          history.push({ role: 'assistant', content: '\u2705 Your listing has been submitted!\n\nStatus: PENDING \u2014 our team will review it shortly.\nOnce approved, it goes Active on the marketplace.\n\nListing ID: ' + listingId + '\nView and update your listing anytime from My Listings.\n\n\u2014 Capt. Jerry, RWAS' });
-          saveHistory();
-          render();
-          if (typeof window.toast === 'function') window.toast('Listing submitted! Status: Pending');
-        } else {
-          if (subRes.status === 401) {
-            setPendingListing(payload);
+          var nClean = nnMatch[0].replace(/^[Nn]-?\s*/, '').toUpperCase();
+          var faaRes = await fetch(
+            'https://sale-api.rogerwilcoaviation.com/faa-lookup?n=' + nClean,
+          );
+          var faaData = await faaRes.json();
+          if (faaData.found) {
+            var faaParts = [];
+            var aircraft =
+              (faaData.year ? faaData.year + ' ' : '') +
+              faaData.manufacturer +
+              ' ' +
+              faaData.model;
+            if (aircraft.trim()) faaParts.push('Aircraft: ' + aircraft.trim());
+            if (faaData.serial) faaParts.push('Serial: ' + faaData.serial);
+            if (faaData.type) faaParts.push('Type: ' + faaData.type);
+            if (faaData.engineMfr)
+              faaParts.push(
+                'Engine: ' +
+                  faaData.engineMfr +
+                  (faaData.engineModel ? ' ' + faaData.engineModel : ''),
+              );
+            if (faaData.status) faaParts.push('Status: ' + faaData.status);
+            if (faaData.city && faaData.state)
+              faaParts.push('Location: ' + faaData.city + ', ' + faaData.state);
+            if (faaParts.length > 0) {
+              history[history.length - 1].content +=
+                '\n[System: FAA Registry for N' +
+                nClean +
+                ':\n' +
+                faaParts.join('\n') +
+                '\nConfirm these details with the seller.]';
+            }
           }
-          console.error('List-it submission error:', subRes.status, JSON.stringify(subData));
-          history.push({ role: 'assistant', content: 'Listing submission failed: ' + ((subData && subData.error) || subText || ('HTTP ' + subRes.status) || 'Unknown error') + '. Please try again or use the manual form.\n\n\u2014 Capt. Jerry, RWAS' });
-          saveHistory();
-          render();
+        } catch (e) {
+          /* FAA lookup failed */
         }
-      } catch(e) {
-        console.error('[Jerry widget] list-it network error', e);
-        history.push({ role: 'assistant', content: 'Network error submitting listing. Please try again.\n\n\u2014 Capt. Jerry, RWAS' });
-        saveHistory();
-        render();
-      } finally {
-        setLoading(false);
-        input.focus();
       }
-      return;
-    }
 
-// FAA N-number lookup via our proxy
-    var nnMatch = text.match(/\bN\s?-?\s?(\d{1,5}[A-Za-z]{0,2})\b/i);
-    if (nnMatch) {
-      try {
-        var nClean = nnMatch[0].replace(/^[Nn]-?\s*/, '').toUpperCase();
-        var faaRes = await fetch('https://sale-api.rogerwilcoaviation.com/faa-lookup?n=' + nClean);
-        var faaData = await faaRes.json();
-        if (faaData.found) {
-          var faaParts = [];
-          var aircraft = (faaData.year ? faaData.year + ' ' : '') + faaData.manufacturer + ' ' + faaData.model;
-          if (aircraft.trim()) faaParts.push('Aircraft: ' + aircraft.trim());
-          if (faaData.serial) faaParts.push('Serial: ' + faaData.serial);
-          if (faaData.type) faaParts.push('Type: ' + faaData.type);
-          if (faaData.engineMfr) faaParts.push('Engine: ' + faaData.engineMfr + (faaData.engineModel ? ' ' + faaData.engineModel : ''));
-          if (faaData.status) faaParts.push('Status: ' + faaData.status);
-          if (faaData.city && faaData.state) faaParts.push('Location: ' + faaData.city + ', ' + faaData.state);
-          if (faaParts.length > 0) {
-            history[history.length - 1].content += '\n[System: FAA Registry for N' + nClean + ':\n' + faaParts.join('\n') + '\nConfirm these details with the seller.]';
-          }
-        }
-      } catch(e) { /* FAA lookup failed */ }
-    }
-
-    var response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: apiMessages, state: intakeState, listingUi: LISTING_UI_ENABLED })
-      });
+      listingActive =
+        LISTING_UI_ENABLED &&
+        (hasListingIntent(text) ||
+          (intakeState && !intakeState.completed && !intakeState.cancelled));
+      var response = await fetch(
+        listingActive ? '/api/aircraft-sale/intake' : apiUrl,
+        {
+          method: 'POST',
+          headers: Object.assign(
+            { 'Content-Type': 'application/json' },
+            listingActive && session
+              ? { Authorization: 'Bearer ' + session.token }
+              : {},
+          ),
+          body: JSON.stringify({
+            messages: apiMessages,
+            state: intakeState,
+            listingUi: listingActive,
+          }),
+        },
+      );
 
       if (!response.ok) {
-        throw new Error('Chat request failed: ' + response.status);
+        throw Object.assign(new Error('Chat request failed'), {
+          status: response.status,
+          sellerRequest: listingActive,
+        });
       }
 
-      var isStreaming = (response.headers.get('content-type') || '').includes('text/event-stream');
+      var isStreaming = (response.headers.get('content-type') || '').includes(
+        'text/event-stream',
+      );
 
       if (isStreaming) {
         // ── Streaming mode: show words as they arrive ──
@@ -840,7 +763,7 @@
                     reply = sEvt.cleanReply;
                   }
                 }
-              } catch(spe) {}
+              } catch (spe) {}
             }
           }
         }
@@ -850,18 +773,26 @@
       } else {
         // ── Non-streaming fallback ──
         var data = await response.json();
-      var reply = data && (data.reply || data.message || data.content || (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content));
-      if (!reply) {
-        throw new Error('No reply returned');
-      }
-      // v3 protocol: latch structured state/action and prefer cleanReply.
-      if (data && Object.prototype.hasOwnProperty.call(data, 'state')) {
-        intakeState = data.state;
-      }
-      if (data && data.action) window.__lastStreamAction = data.action;
-      if (data && typeof data.cleanReply === 'string' && data.cleanReply) {
-        reply = data.cleanReply;
-      }
+        var reply =
+          data &&
+          (data.reply ||
+            data.message ||
+            data.content ||
+            (data.choices &&
+              data.choices[0] &&
+              data.choices[0].message &&
+              data.choices[0].message.content));
+        if (!reply) {
+          throw new Error('No reply returned');
+        }
+        // v3 protocol: latch structured state/action and prefer cleanReply.
+        if (data && Object.prototype.hasOwnProperty.call(data, 'state')) {
+          intakeState = data.state;
+        }
+        if (data && data.action) window.__lastStreamAction = data.action;
+        if (data && typeof data.cleanReply === 'string' && data.cleanReply) {
+          reply = data.cleanReply;
+        }
       }
 
       var rawReply = String(reply);
@@ -876,34 +807,68 @@
       if (_v3Action && _v3Action.type === 'listing_draft' && _v3Action.draft) {
         // Append marker block so existing extractTaggedJson picks it up.
         if (!/LISTING_DRAFT:/.test(actionReplyShim)) {
-          actionReplyShim = actionReplyShim + '\n\nLISTING_DRAFT:' + JSON.stringify(_v3Action.draft);
+          actionReplyShim =
+            actionReplyShim +
+            '\n\nLISTING_DRAFT:' +
+            JSON.stringify(_v3Action.draft);
         }
       }
-      var actionMessages = await handleListingActions(actionReplyShim);
+      var actionMessages = await handleListingActions(
+        actionReplyShim,
+        _v3Action && _v3Action.type === 'listing_draft'
+          ? _v3Action.draft
+          : null,
+      );
       var cleanReply = rawReply;
-      
+
       // Service completion text is never authorization for marketplace writes.
-      cleanReply = cleanReply.replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '').trim();
-      cleanReply = cleanReply.replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '').trim();
-      cleanReply = cleanReply.replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '').trim();
+      cleanReply = cleanReply
+        .replace(/INTAKE_COMPLETE:\{[\s\S]*?\}\s*$/m, '')
+        .trim();
+      cleanReply = cleanReply
+        .replace(/LISTING_DRAFT:\{[\s\S]*?\}\s*$/m, '')
+        .trim();
+      cleanReply = cleanReply
+        .replace(/LISTING_SAVE:\{[\s\S]*?\}\s*$/m, '')
+        .trim();
       if (actionMessages.length) {
-        cleanReply = cleanReply ? (cleanReply + '\n\n' + actionMessages.join('\n')) : actionMessages.join('\n');
+        cleanReply = cleanReply
+          ? cleanReply + '\n\n' + actionMessages.join('\n')
+          : actionMessages.join('\n');
       }
       history.push({ role: 'assistant', content: cleanReply });
       // Append listing-only guidance only on aircraft-for-sale pages.
-      var isListingConvo = LISTING_UI_ENABLED && history.some(function(m) {
-        return m.role === 'user' && hasListingIntent(m.content);
-      });
+      var isListingConvo =
+        LISTING_UI_ENABLED &&
+        history.some(function (m) {
+          return m.role === 'user' && hasListingIntent(m.content);
+        });
       if (isListingConvo && !cleanReply.includes('submitted')) {
         var lastMsg = history[history.length - 1];
         if (lastMsg && lastMsg.role === 'assistant') {
-          lastMsg.content += '\n\n<em>If you would like to list before the end of the intake, simply say "list it" at any time.</em>';
+          lastMsg.content +=
+            '\n\n_Your progress is saved privately. Review details and submit from the seller panel._';
         }
       }
       saveHistory();
       render();
     } catch (err) {
-      errorBox.textContent = 'Radio trouble. Try again in a moment.';
+      var retryMessage =
+        'Chat is temporarily unavailable. Your conversation is saved in this tab. Try again in a moment.';
+      if (err.sellerRequest || listingActive) {
+        retryMessage =
+          'Aircraft listing service is temporarily unavailable. Your conversation is saved in this tab. Try again later.';
+        if (err.status === 401)
+          retryMessage =
+            'Your seller session has expired. Sign in again to continue. Your conversation is saved in this tab.';
+        else if (err.status === 403)
+          retryMessage =
+            'Your account cannot access this listing conversation. Your conversation is saved in this tab.';
+      }
+      if (err.status === 429)
+        retryMessage =
+          'Too many requests. Wait a moment before trying again. Your conversation is saved in this tab.';
+      errorBox.textContent = retryMessage;
       errorBox.style.display = 'block';
     } finally {
       setLoading(false);
@@ -911,9 +876,15 @@
     }
   }
 
-  bubble.addEventListener('click', function () { setOpen(true); });
-  backdrop.addEventListener('click', function () { setOpen(false); });
-  closeBtn.addEventListener('click', function () { setOpen(false); });
+  bubble.addEventListener('click', function () {
+    setOpen(true);
+  });
+  backdrop.addEventListener('click', function () {
+    setOpen(false);
+  });
+  closeBtn.addEventListener('click', function () {
+    setOpen(false);
+  });
   send.addEventListener('click', submitMessage);
 
   function renderUploadStatus(target, file, status, note, imageUrl) {
@@ -921,34 +892,52 @@
     if (imageUrl) {
       try {
         var parsed = new URL(imageUrl);
-        if (parsed.protocol === 'https:' && parsed.origin === 'https://sale-api.rogerwilcoaviation.com' && parsed.pathname.startsWith('/files/')) {
+        if (
+          parsed.protocol === 'https:' &&
+          parsed.origin === 'https://sale-api.rogerwilcoaviation.com' &&
+          parsed.pathname.startsWith('/files/')
+        ) {
           var image = document.createElement('img');
-          image.src = parsed.href; image.alt = 'Uploaded image preview';
-          image.style.cssText = 'max-width:180px;border:1px solid #ccc;margin:4px 0;display:block';
+          image.src = parsed.href;
+          image.alt = 'Uploaded image preview';
+          image.style.cssText =
+            'max-width:180px;border:1px solid #ccc;margin:4px 0;display:block';
           target.appendChild(image);
         }
-      } catch (_) { /* invalid media URL is not rendered */ }
+      } catch (_) {
+        /* invalid media URL is not rendered */
+      }
     }
-    var name = document.createElement('strong'); name.textContent = file.name;
+    var name = document.createElement('strong');
+    name.textContent = file.name;
     target.appendChild(name);
-    var text = document.createElement('span'); text.textContent = ' — ' + status;
+    var text = document.createElement('span');
+    text.textContent = ' — ' + status;
     target.appendChild(text);
-    if (note) { var detail = document.createElement('div'); detail.textContent = String(note); target.appendChild(detail); }
+    if (note) {
+      var detail = document.createElement('div');
+      detail.textContent = String(note);
+      target.appendChild(detail);
+    }
   }
 
   // File upload handler
   var attachBtn = panel.querySelector('.jerry-widget-attach');
   var fileInput = panel.querySelector('.jerry-file-input');
   if (attachBtn && fileInput) {
-    attachBtn.addEventListener('click', function() { fileInput.click(); });
-    fileInput.addEventListener('change', async function() {
+    attachBtn.addEventListener('click', function () {
+      fileInput.click();
+    });
+    fileInput.addEventListener('change', async function () {
       var files = Array.from(fileInput.files || []);
       if (!files.length) return;
       fileInput.value = '';
       for (var i = 0; i < files.length; i++) {
         var file = files[i];
         var ext = fileExt(file.name);
-        var isImg = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext) || file.type.startsWith('image/');
+        var isImg =
+          ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext) ||
+          file.type.startsWith('image/');
         var uid = 'up-' + Date.now() + '-' + i;
         var row = document.createElement('div');
         row.className = 'jerry-widget-row user';
@@ -964,29 +953,64 @@
           var validationError = validateWidgetUpload(file);
           if (validationError) {
             var invalidEl = document.getElementById(uid);
-            if (invalidEl) renderUploadStatus(invalidEl.querySelector('.jerry-widget-msg'), file, validationError);
+            if (invalidEl)
+              renderUploadStatus(
+                invalidEl.querySelector('.jerry-widget-msg'),
+                file,
+                validationError,
+              );
             continue;
           }
-          var url = 'https://sale-api.rogerwilcoaviation.com/chat-upload?filename=' + encodeURIComponent(file.name) + '&sessionId=' + encodeURIComponent(SESSION_ID);
-          var sess = JSON.parse(localStorage.getItem('rwas_sale_session') || 'null');
-          var h = {};
-          if (sess && sess.token) h['Authorization'] = 'Bearer ' + sess.token;
-          var r = await fetch(url, { method: 'POST', headers: h, body: file });
-          var d = await r.json();
+          if (LISTING_UI_ENABLED) {
+            document.dispatchEvent(
+              new CustomEvent('rwas:seller-draft', {
+                detail: getPendingListing() || {},
+              }),
+            );
+            var attachmentRow = document.getElementById(uid);
+            if (attachmentRow)
+              renderUploadStatus(
+                attachmentRow.querySelector('.jerry-widget-msg'),
+                file,
+                'Add this file in your saved listing draft.',
+              );
+            continue;
+          }
+          throw new Error('Use the contact form to share service attachments.');
+          var d = {};
           var el = document.getElementById(uid);
           if (el) {
             var m = el.querySelector('.jerry-widget-msg');
             if (d.ok) {
-              renderUploadStatus(m, file, 'uploaded', d.note, isImg ? d.url : null);
-              history.push({ role: 'user', content: '[Uploaded ' + (isImg ? 'photo' : 'document') + ': ' + file.name + ']' });
+              renderUploadStatus(
+                m,
+                file,
+                'uploaded',
+                d.note,
+                isImg ? d.url : null,
+              );
+              history.push({
+                role: 'user',
+                content:
+                  '[Uploaded ' +
+                  (isImg ? 'photo' : 'document') +
+                  ': ' +
+                  file.name +
+                  ']',
+              });
               saveHistory();
             } else {
               renderUploadStatus(m, file, d.error || 'failed');
             }
           }
-        } catch(e) {
+        } catch (e) {
           var el = document.getElementById(uid);
-          if (el) renderUploadStatus(el.querySelector('.jerry-widget-msg'), file, 'Network error');
+          if (el)
+            renderUploadStatus(
+              el.querySelector('.jerry-widget-msg'),
+              file,
+              'Network error',
+            );
         }
       }
     });
@@ -999,22 +1023,38 @@
   setOpen(false);
 
   // Expose global open function for nav links
-  window.openJerryChat = function() { setOpen(true); };
-  window.jerryChat = function(msg) { setOpen(true); if(msg) { input.value = msg; setTimeout(submitMessage, 300); } };
+  window.openJerryChat = function () {
+    setOpen(true);
+  };
+  window.jerryChat = function (msg) {
+    setOpen(true);
+    if (msg) {
+      input.value = msg;
+      setTimeout(submitMessage, 300);
+    }
+  };
 
   // Auto-intercept Ask Jerry links
-  document.addEventListener("click", function(e) {
-    var target = e.target;
-    while (target && target !== document) {
-      if (target.tagName === "A" && (target.textContent.trim() === "Ask Jerry" || target.getAttribute("href") === "#ask-jerry")) {
-        e.preventDefault();
-        e.stopPropagation();
-        setOpen(true);
-        return;
+  document.addEventListener(
+    'click',
+    function (e) {
+      var target = e.target;
+      while (target && target !== document) {
+        if (
+          target.tagName === 'A' &&
+          (target.textContent.trim() === 'Ask Jerry' ||
+            target.getAttribute('href') === '#ask-jerry')
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(true);
+          return;
+        }
+        target = target.parentElement;
       }
-      target = target.parentElement;
-    }
-  }, true);
+    },
+    true,
+  );
 })();
 
 // ---------------------------------------------------------------------------
@@ -1023,9 +1063,9 @@
 // seeds the first intake message. Keyed on the intent string so future pages
 // can add e.g. data-jerry-intent="pre-buy-inspection" without rewiring.
 // ---------------------------------------------------------------------------
-(function() {
+(function () {
   var INTENT_SEEDS = {
-    'list-aircraft': 'I want to list my aircraft for sale.'
+    'list-aircraft': 'I want to list my aircraft for sale.',
   };
   function onClick(e) {
     var node = e.target;
@@ -1043,7 +1083,7 @@
     }
   }
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       document.addEventListener('click', onClick, true);
     });
   } else {

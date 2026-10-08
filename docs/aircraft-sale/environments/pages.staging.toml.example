@@ -1,0 +1,18 @@
+# PLACEHOLDER ONLY. Merge these additions into verified existing Pages settings.
+# Do not replace existing intake D1/mail/CSP/other bindings with this partial file.
+name = "REPLACE_STAGING_PAGES_PROJECT"
+account_id = "REPLACE_VERIFIED_CLOUDFLARE_ACCOUNT_ID"
+pages_build_output_dir = "../../../.vercel/output/static"
+compatibility_date = "2026-09-01"
+
+[vars]
+INTAKE_STAGING_MODE = "true"
+SELLER_STAGING_ORIGIN = "https://repair-aircraft-seller-workf.rwas-web.pages.dev"
+SELLER_MAIL_VIA_PAGES = "true"
+# Seller requests use only this exact dedicated origin. Intake keeps its own
+# STAGING_ORIGIN unchanged. Preserve existing Pages RESEND_API_KEY secret and
+# verified CONTACT_FROM_EMAIL. Do not copy mail credentials into the seller Worker.
+
+[[services]]
+binding = "SELLER_API"
+service = "REPLACE_STAGING_SELLER_WORKER"

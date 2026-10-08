@@ -1,1425 +1,1219 @@
+/* eslint-disable @next/next/no-img-element -- Authenticated blob previews cannot use the public image optimizer. */
 'use client';
-
-/*
- * Seller Auth Panel — Aircraft 4 Sale
- * ------------------------------------
- * Client component that handles:
- *  - Magic-link email login  (→ localStorage.rwas_sale_session)
- *  - My Listings dashboard   (edit, pause/resume, mark sold, delete)
- *  - Manual listing form     (alternative to Jerry intake)
- *  - Edit listing form
- *
- * Also listens for DOM events fired by jerry-widget.js:
- *   'rwas:open-seller-login'  → opens login modal
- *   'rwas:open-manual-form'   → opens manual listing form (logs in first if needed)
- *
- * Backend endpoints (all on https://sale-api.rogerwilcoaviation.com):
- *   POST /send-code              { email, name?, contactType?: 'email' }
- *   POST /check-code             { email, code }  → { session, name }
- *   GET  /my-listings            Authorization: Bearer <session>
- *   POST /listings               create
- *   PUT  /listings/:id           edit
- *   DELETE /listings/:id         remove
- *   POST /listing/:id/status     { status: 'active'|'paused'|'sold'|'deleted' }
- */
-
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { PhotoManager } from './photo-manager';
-import { LogbookManager } from './logbook-manager';
-
-const API = 'https://sale-api.rogerwilcoaviation.com';
-const SESSION_KEY = 'rwas_sale_session';
-
-// ─────────────────────────── Types ───────────────────────────
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { SELLER_API } from '@/lib/seller-api';
 
 type Session = { token: string; email: string; name: string };
-
+type Media = {
+  key: string;
+  name: string;
+  category: string;
+  type: string;
+  size: number;
+};
 type Listing = {
   id: string;
-  status?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  sellerEmail?: string;
-  sellerName?: string;
-  sellerPhone?: string;
-  sellerLocation?: string;
-  make?: string;
-  model?: string;
-  year?: string | number;
-  serialNumber?: string;
-  nNumber?: string;
-  totalTime?: string;
-  engineTime?: string;
-  engineModel?: string;
-  propTime?: string;
-  propModel?: string;
-  price?: string | number;
-  priceLabel?: string;
-  description?: string;
-  avionics?: string;
-  equipmentList?: string;
-  annualDue?: string;
-  usefulLoad?: string;
-  fuelCapacity?: string;
-  cruiseSpeed?: string;
-  range?: string;
-  category?: string;
-  condition?: string;
-  damageHistory?: string;
-  photos?: Array<{ key: string; name?: string }>;
-  logbooks?: {
-    airframe?: Array<{ key: string; name?: string; size?: number }>;
-    powerplant?: Array<{ key: string; name?: string; size?: number }>;
-    propeller?: Array<{ key: string; name?: string; size?: number }>;
-    adSbCompliance?: Array<{ key: string; name?: string; size?: number }>;
-    misc?: Array<{ key: string; name?: string; size?: number }>;
-  };
+  status: string;
+  revision: number;
+  photos: Media[];
+  videos: Media[];
+  logbooks: Record<string, Media[]>;
+  reviewNote?: string;
+  [key: string]: unknown;
 };
-
-type ModalKind =
-  | null
-  | 'login'
-  | 'my-listings'
-  | 'edit'
-  | 'manual'
-  | 'confirm-delete';
-
-// ─────────────────────── Session helpers ───────────────────────
-
-function loadSession(): Session | null {
-  if (typeof window === 'undefined') return null;
-  try {
-    const raw = localStorage.getItem(SESSION_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as Record<string, unknown>;
-    const token = String(parsed.token || parsed.session || '');
-    const email = String(parsed.email || parsed.userEmail || '');
-    const name = String(parsed.name || parsed.userName || '');
-    if (!token || !email) return null;
-    return { token, email, name };
-  } catch {
-    return null;
-  }
-}
-
-function persistSession(s: Session | null) {
-  if (typeof window === 'undefined') return;
-  if (s) {
-    localStorage.setItem(SESSION_KEY, JSON.stringify(s));
-  } else {
-    localStorage.removeItem(SESSION_KEY);
-  }
-  (window as unknown as { rwasSaleSession?: Session | null }).rwasSaleSession = s;
-  document.dispatchEvent(
-    new CustomEvent('rwas:session-changed', { detail: s }),
-  );
-}
-
-// Fire Jerry widget open with a seed message
-function openJerryWithSeed(seed: string) {
-  const w = window as unknown as { jerryChat?: (s: string) => void };
-  if (typeof w.jerryChat === 'function') {
-    w.jerryChat(seed);
-  }
-}
-
-// ─────────────────────────── Styles ───────────────────────────
-
-const modalOverlayStyle: React.CSSProperties = {
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  background: 'rgba(20, 18, 14, 0.55)',
-  display: 'flex',
-  alignItems: 'flex-start',
-  justifyContent: 'center',
-  padding: '40px 16px',
-  zIndex: 9999,
-  overflowY: 'auto',
+type IdentityMethod = 'password' | 'google' | 'apple';
+const methodLabels: Record<IdentityMethod, string> = {
+  password: 'Email and password',
+  google: 'Google',
+  apple: 'Apple',
 };
-
-const modalStyle: React.CSSProperties = {
-  background: '#f7f4ef',
-  border: '2px solid #1a1a1a',
-  maxWidth: 560,
-  width: '100%',
-  padding: '24px 28px',
-  fontFamily: "Georgia, 'Times New Roman', serif",
-  color: '#1a1a1a',
-  boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
-  margin: '0 auto',
+type Account = {
+  loginMethods?: IdentityMethod[];
+  profile: { email: string; name: string; phone: string; location: string };
+  sessions: {
+    id: string;
+    current: boolean;
+    createdAt: number;
+    expiresAt: number;
+  }[];
 };
-
-const modalWideStyle: React.CSSProperties = { ...modalStyle, maxWidth: 820 };
-
-const modalTitleStyle: React.CSSProperties = {
-  fontFamily: "Georgia, 'Times New Roman', serif",
-  fontSize: 22,
-  fontWeight: 700,
-  margin: '0 0 4px',
-};
-
-const modalKickerStyle: React.CSSProperties = {
-  fontFamily: 'Arial, sans-serif',
-  fontSize: 10,
-  fontWeight: 700,
-  textTransform: 'uppercase',
-  letterSpacing: '0.18em',
-  color: '#777',
-  display: 'block',
-  marginBottom: 4,
-};
-
-const labelStyle: React.CSSProperties = {
-  display: 'block',
-  fontFamily: 'Arial, sans-serif',
-  fontSize: 10,
-  fontWeight: 700,
-  textTransform: 'uppercase',
-  letterSpacing: '0.12em',
-  color: '#333',
-  margin: '14px 0 4px',
-};
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '8px 10px',
-  fontFamily: 'Arial, sans-serif',
-  fontSize: 13,
-  color: '#1a1a1a',
-  background: '#fff',
-  border: '1px solid #8a8a8a',
-  boxSizing: 'border-box',
-};
-
-const textareaStyle: React.CSSProperties = {
-  ...inputStyle,
-  minHeight: 72,
-  fontFamily: 'Georgia, serif',
-  fontSize: 13,
-  lineHeight: 1.4,
-};
-
-const primaryBtnStyle: React.CSSProperties = {
-  display: 'inline-block',
-  padding: '10px 22px',
-  background: '#C49A2A',
-  color: '#111',
-  fontFamily: 'Arial, sans-serif',
-  fontSize: 11,
-  fontWeight: 700,
-  textTransform: 'uppercase',
-  letterSpacing: '0.12em',
-  border: '1px solid #111',
-  cursor: 'pointer',
-};
-
-const secondaryBtnStyle: React.CSSProperties = {
-  ...primaryBtnStyle,
-  background: 'transparent',
-  color: '#111',
-};
-
-const ghostBtnStyle: React.CSSProperties = {
-  ...primaryBtnStyle,
-  background: 'transparent',
-  color: '#555',
-  border: '1px solid #aaa',
-};
-
-const dangerBtnStyle: React.CSSProperties = {
-  ...primaryBtnStyle,
-  background: '#a33d2a',
-  color: '#fff',
-};
-
-const errorStyle: React.CSSProperties = {
-  fontFamily: 'Arial, sans-serif',
-  fontSize: 12,
-  color: '#a33d2a',
-  margin: '10px 0 0',
-};
-
-const mutedStyle: React.CSSProperties = {
-  fontFamily: 'Arial, sans-serif',
-  fontSize: 12,
-  color: '#666',
-  lineHeight: 1.5,
-};
-
-// Simple grid for field columns inside manual/edit form
-const twoColStyle: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
-  gap: '0 14px',
-};
-
-// ─────────────────────────── Main ───────────────────────────
+const key = 'rwas_sale_v2';
+const identityKey = 'rwas_sale_identity';
+const inputs: [string, string, string?][] = [
+  ['make', 'Make'],
+  ['model', 'Model'],
+  ['year', 'Year', 'number'],
+  ['price', 'Asking price (USD)', 'number'],
+  ['nNumber', 'N-number'],
+  ['serialNumber', 'Serial number'],
+  ['totalTime', 'Airframe total time'],
+  ['engineTime', 'Engine time'],
+  ['engineModel', 'Engine model'],
+  ['propTime', 'Propeller time'],
+  ['propModel', 'Propeller model'],
+  ['sellerName', 'Seller name'],
+  ['sellerPhone', 'Seller phone'],
+  ['sellerLocation', 'Location'],
+  ['annualDue', 'Annual due'],
+  ['usefulLoad', 'Useful load'],
+  ['fuelCapacity', 'Fuel capacity'],
+  ['cruiseSpeed', 'Cruise speed'],
+  ['range', 'Range'],
+];
+const longInputs: [string, string][] = [
+  ['description', 'Description'],
+  ['avionics', 'Avionics'],
+  ['equipmentList', 'Equipment list'],
+  ['damageHistory', 'Damage history'],
+];
+const categories: [string, string][] = [
+  ['photos', 'Photos'],
+  ['videos', 'Videos'],
+  ['airframe', 'Airframe logbooks'],
+  ['powerplant', 'Powerplant logbooks'],
+  ['propeller', 'Propeller logbooks'],
+  ['adSbCompliance', 'AD / SB compliance'],
+  ['misc', 'Other records'],
+];
 
 export default function SellerAuthPanel() {
   const [session, setSession] = useState<Session | null>(null);
-  const [modal, setModal] = useState<ModalKind>(null);
-  const [myListings, setMyListings] = useState<Listing[] | null>(null);
-  const [listingsError, setListingsError] = useState<string>('');
-  const [editingListing, setEditingListing] = useState<Listing | null>(null);
-  const [pendingDelete, setPendingDelete] = useState<Listing | null>(null);
-
-  // Mount: hydrate session, wire event listeners
+  const [identityMethods, setIdentityMethods] = useState<IdentityMethod[]>([]);
+  const [emailCodeLogin, setEmailCodeLogin] = useState(false);
+  const [view, setView] = useState<
+    'login' | 'listings' | 'edit' | 'account' | null
+  >(null);
+  const [email, setEmail] = useState(''),
+    [code, setCode] = useState(''),
+    [sent, setSent] = useState(false);
+  const [savedDraft, setSavedDraft] = useState<Record<string, unknown> | null>(
+    null,
+  );
+  const [items, setItems] = useState<Listing[]>([]),
+    [editing, setEditing] = useState<Listing | null>(null);
+  const [form, setForm] = useState<Record<string, string>>({}),
+    [account, setAccount] = useState<Account | null>(null);
+  const [message, setMessage] = useState(''),
+    [error, setError] = useState(''),
+    [busy, setBusy] = useState(false);
+  const [newEmail, setNewEmail] = useState(''),
+    [emailCode, setEmailCode] = useState(''),
+    [emailSent, setEmailSent] = useState(false);
+  const dialog = useRef<HTMLDialogElement>(null),
+    submission = useRef(crypto.randomUUID());
+  const setAuth = (s: Session | null) => {
+    setSession(s);
+    if (s) sessionStorage.setItem(key, JSON.stringify(s));
+    else sessionStorage.removeItem(key);
+    // Compatibility envelope shared with the listing widget; no token logging.
+    (window as unknown as { rwasSaleSession: Session | null }).rwasSaleSession =
+      s;
+    document.dispatchEvent(
+      new CustomEvent('rwas:session-changed', { detail: s }),
+    );
+  };
   useEffect(() => {
-    setSession(loadSession());
-    const onOpenLogin = () => setModal('login');
-    const onOpenManual = () => {
-      if (loadSession()) setModal('manual');
-      else setModal('login');
-    };
-    document.addEventListener('rwas:open-seller-login', onOpenLogin);
-    document.addEventListener('rwas:open-manual-form', onOpenManual);
-    return () => {
-      document.removeEventListener('rwas:open-seller-login', onOpenLogin);
-      document.removeEventListener('rwas:open-manual-form', onOpenManual);
-    };
-  }, []);
-
-  const fetchMyListings = useCallback(async (sess: Session) => {
-    setListingsError('');
-    setMyListings(null);
+    localStorage.removeItem('rwas_sale_session'); // Legacy sessions are not accepted by v2.
     try {
-      const resp = await fetch(API + '/my-listings', {
-        headers: { Authorization: 'Bearer ' + sess.token },
-      });
-      if (resp.status === 401) {
-        persistSession(null);
-        setSession(null);
-        setListingsError('Your session expired — please log in again.');
-        setModal('login');
+      const s = JSON.parse(
+        sessionStorage.getItem(key) || 'null',
+      ) as Session | null;
+      if (s?.token && s.email) setAuth(s);
+    } catch {
+      sessionStorage.removeItem(key);
+    }
+    void fetch(SELLER_API + '/auth/methods', { cache: 'no-store' })
+      .then(async (response) => {
+        if (response.ok) {
+          const data = await response.json();
+          setIdentityMethods(
+            (data.methods || []).filter((value: string) =>
+              ['password', 'google', 'apple'].includes(value),
+            ),
+          );
+          setEmailCodeLogin(data.emailCode === true);
+        }
+      })
+      .catch(() => {});
+    const callback = new URL(window.location.href);
+    if (
+      callback.searchParams.has('state') &&
+      (callback.searchParams.has('code') || callback.searchParams.has('error'))
+    ) {
+      const state = callback.searchParams.get('state'),
+        authorizationCode = callback.searchParams.get('code'),
+        providerError = callback.searchParams.get('error');
+      for (const name of ['state', 'code', 'error', 'error_description'])
+        callback.searchParams.delete(name);
+      history.replaceState(
+        null,
+        '',
+        callback.pathname + callback.search + callback.hash,
+      );
+      let pending: { state: string; proof: string; link: boolean } | null =
+        null;
+      try {
+        pending = JSON.parse(sessionStorage.getItem(identityKey) || 'null');
+      } catch {
+        /* Invalid local transaction. */
+      }
+      sessionStorage.removeItem(identityKey);
+      if (!pending || pending.state !== state) {
+        setError(
+          'Sign-in was started in another tab or expired. Please try again.',
+        );
+        setView('login');
+      } else {
+        setBusy(true);
+        void fetch(SELLER_API + '/auth/finish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            state,
+            code: authorizationCode,
+            error: providerError,
+            proof: pending.proof,
+          }),
+        })
+          .then(async (response) => {
+            const data = await response.json();
+            if (!response.ok)
+              throw Error(data.error || 'Sign-in could not be completed.');
+            setAuth({
+              token: data.session,
+              email: data.email,
+              name: data.name,
+            });
+            setMessage(
+              pending?.link ? 'Login method connected.' : 'Signed in.',
+            );
+            setView(null);
+          })
+          .catch((error) => {
+            setError(
+              error instanceof Error
+                ? error.message
+                : 'Sign-in could not be completed.',
+            );
+            setView('login');
+          })
+          .finally(() => setBusy(false));
+      }
+    }
+    const login = () => {
+      setView('login');
+      setSent(false);
+      setError('');
+    };
+    const draft = (event: Event) => {
+      const current = (window as unknown as { rwasSaleSession?: Session })
+        .rwasSaleSession;
+      if (!current) {
+        login();
         return;
       }
-      const data = (await resp.json()) as { listings?: Listing[] };
-      setMyListings(data.listings || []);
-    } catch {
-      setListingsError('Could not load your listings. Try again in a moment.');
-      setMyListings([]);
-    }
+      const details = (event as CustomEvent).detail || {};
+      setEditing(null);
+      submission.current = crypto.randomUUID();
+      setForm(
+        Object.fromEntries(
+          [...inputs, ...longInputs].map(([k]) => [
+            k,
+            String(details[k] ?? ''),
+          ]),
+        ),
+      );
+      setView('edit');
+      setMessage(
+        'Review these details from Jerry. Save a private draft, then submit it for review.',
+      );
+    };
+    document.addEventListener('rwas:seller-draft', draft);
+    document.addEventListener('rwas:open-seller-login', login);
+    return () => {
+      document.removeEventListener('rwas:open-seller-login', login);
+      document.removeEventListener('rwas:seller-draft', draft);
+    };
   }, []);
-
-  const handleLoginSuccess = (s: Session, nextModal: ModalKind = null) => {
-    persistSession(s);
-    setSession(s);
-    setModal(nextModal);
-  };
-
-  const handleSignOut = () => {
-    persistSession(null);
-    setSession(null);
-    setMyListings(null);
-    setModal(null);
-  };
-
-  const handleOpenMyListings = async () => {
+  useEffect(() => {
+    if (view && !dialog.current?.open) dialog.current?.showModal();
+    else if (!view && dialog.current?.open) dialog.current.close();
+  }, [view]);
+  async function api(
+    path: string,
+    method = 'GET',
+    body?: unknown,
+    extra?: Record<string, string>,
+  ) {
+    const resp = await fetch(SELLER_API + path, {
+      method,
+      cache: 'no-store',
+      headers: {
+        ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+        ...(session ? { Authorization: 'Bearer ' + session.token } : {}),
+        ...extra,
+      },
+      ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+    });
+    const data = await resp.json();
+    if (resp.status === 401) {
+      setAuth(null);
+      setView('login');
+      setSent(false);
+    }
+    if (!resp.ok)
+      throw Error(data.error || 'The request could not be completed.');
+    return data;
+  }
+  async function perform(fn: () => Promise<void>) {
+    setBusy(true);
+    setError('');
+    setMessage('');
+    try {
+      await fn();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Please try again.');
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function beginIdentity(method: IdentityMethod, link = false) {
+    await perform(async () => {
+      const proof =
+        crypto.randomUUID().replaceAll('-', '') +
+        crypto.randomUUID().replaceAll('-', '');
+      const data = await api('/auth/start', 'POST', { method, proof, link });
+      sessionStorage.setItem(
+        identityKey,
+        JSON.stringify({ state: data.state, proof, link }),
+      );
+      window.location.assign(data.authorizationUrl);
+    });
+  }
+  async function load() {
+    const data = await api('/my-listings');
+    setItems(data.listings);
+    setSavedDraft((await api('/draft')).draft);
+    return data.listings as Listing[];
+  }
+  async function openListings() {
     if (!session) {
-      setModal('login');
+      setView('login');
       return;
     }
-    setModal('my-listings');
-    await fetchMyListings(session);
+    setView('listings');
+    await perform(async () => {
+      await load();
+    });
+  }
+  function edit(l: Listing | null) {
+    setEditing(l);
+    submission.current = crypto.randomUUID();
+    setForm(
+      Object.fromEntries(
+        [...inputs, ...longInputs].map(([k]) => [k, String(l?.[k] ?? '')]),
+      ),
+    );
+    setView('edit');
+  }
+  async function save() {
+    const values = Object.fromEntries(
+      Object.entries(form).filter(([, v]) => editing || v.trim() !== ''),
+    );
+    const data = await api(
+      editing ? '/listings/' + editing.id : '/listings',
+      editing ? 'PUT' : 'POST',
+      values,
+      editing ? undefined : { 'Idempotency-Key': submission.current },
+    );
+    setEditing(data.listing);
+    setMessage('Draft saved. Add media, then submit for review.');
+    await load();
+  }
+  async function status(l: Listing, next: string) {
+    await api('/listing/' + l.id + '/status', 'POST', { status: next });
+    await load();
+    setMessage(
+      next === 'pending'
+        ? 'Submitted for private RWAS review. It will not be published during this intake launch.'
+        : 'Listing updated.',
+    );
+  }
+  const onSubmit = (fn: () => Promise<void>) => (e: FormEvent) => {
+    e.preventDefault();
+    void perform(fn);
   };
-
-  const handleListAircraft = () => {
-    if (session) {
-      openJerryWithSeed('I want to list my aircraft for sale.');
+  async function openAccount() {
+    setView('account');
+    await perform(async () => setAccount(await api('/account')));
+  }
+  async function jerry() {
+    if (!session) {
+      setView('login');
+      return;
+    }
+    const w = window as unknown as { jerryChat?: (s: string) => void };
+    if (w.jerryChat) {
+      setView(null);
+      w.jerryChat('I want to list my aircraft for sale.');
     } else {
-      setModal('login');
+      setMessage('Jerry is unavailable. You can start with the manual form.');
+      await openListings();
     }
-  };
-
-  const handleStatusChange = async (listing: Listing, status: string) => {
-    if (!session) return;
-    try {
-      const resp = await fetch(API + '/listing/' + listing.id + '/status', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + session.token,
-        },
-        body: JSON.stringify({ status }),
-      });
-      if (!resp.ok) {
-        const data = (await resp.json().catch(() => ({}))) as { error?: string };
-        alert(data.error || 'Status change failed (' + resp.status + ')');
-        return;
-      }
-      await fetchMyListings(session);
-    } catch {
-      alert('Network error changing status. Try again.');
-    }
-  };
-
-  const handleConfirmDelete = async () => {
-    if (!session || !pendingDelete) return;
-    try {
-      const resp = await fetch(API + '/listings/' + pendingDelete.id, {
-        method: 'DELETE',
-        headers: { Authorization: 'Bearer ' + session.token },
-      });
-      if (!resp.ok && resp.status !== 404) {
-        const data = (await resp.json().catch(() => ({}))) as { error?: string };
-        alert(data.error || 'Delete failed (' + resp.status + ')');
-        return;
-      }
-      setPendingDelete(null);
-      setModal('my-listings');
-      await fetchMyListings(session);
-    } catch {
-      alert('Network error deleting listing. Try again.');
-    }
-  };
-
+  }
+  const row = (name: string, label: string, type = 'text') => (
+    <label key={name} className="seller-field">
+      {label}
+      <input
+        name={name}
+        type={type}
+        value={form[name] || ''}
+        onChange={(e) => setForm({ ...form, [name]: e.target.value })}
+        maxLength={300}
+        min={type === 'number' ? 1 : undefined}
+      />
+    </label>
+  );
   return (
     <>
-      {/* ── Buttons rendered inline inside the a4s-cta-row ── */}
-      <button
-        type="button"
-        className="a4s-cta-btn"
-        onClick={handleListAircraft}
-      >
+      <button className="a4s-cta-btn" onClick={() => void jerry()}>
         List Your Aircraft
       </button>
-
-      {!session ? (
-        <button
-          type="button"
-          className="a4s-cta-btn secondary"
-          onClick={() => setModal('login')}
-        >
-          Seller Login
-        </button>
-      ) : (
+      <button
+        className="a4s-cta-btn secondary"
+        onClick={() => void openListings()}
+      >
+        {session ? 'My Listings' : 'Seller Login'}
+      </button>
+      {session && (
         <>
           <button
-            type="button"
             className="a4s-cta-btn secondary"
-            onClick={handleOpenMyListings}
-            title={'Signed in as ' + session.email}
+            onClick={() => void openAccount()}
           >
-            My Listings
+            Account
           </button>
           <button
-            type="button"
             className="a4s-cta-btn secondary"
-            onClick={handleSignOut}
-            style={{ fontSize: 10, padding: '10px 14px' }}
+            disabled={busy}
+            onClick={() =>
+              void perform(async () => {
+                const result = await api('/logout', 'POST');
+                sessionStorage.removeItem(identityKey);
+                setAuth(null);
+                setView(null);
+                if (result.logoutUrl) window.location.assign(result.logoutUrl);
+              })
+            }
           >
             Sign Out
           </button>
         </>
       )}
-
-      {/* ── Modals ── */}
-      {modal === 'login' && (
-        <LoginModal
-          onClose={() => setModal(null)}
-          onSuccess={(s) => handleLoginSuccess(s, null)}
-        />
-      )}
-
-      {modal === 'my-listings' && session && (
-        <MyListingsModal
-          listings={myListings}
-          error={listingsError}
-          session={session}
-          onClose={() => setModal(null)}
-          onEdit={(l) => {
-            setEditingListing(l);
-            setModal('edit');
-          }}
-          onDelete={(l) => {
-            setPendingDelete(l);
-            setModal('confirm-delete');
-          }}
-          onStatusChange={handleStatusChange}
-          onNewManual={() => setModal('manual')}
-          onNewJerry={() => {
-            setModal(null);
-            openJerryWithSeed('I want to list my aircraft for sale.');
-          }}
-        />
-      )}
-
-      {modal === 'edit' && session && editingListing && (
-        <EditListingModal
-          listing={editingListing}
-          session={session}
-          onClose={() => {
-            setEditingListing(null);
-            setModal('my-listings');
-            void fetchMyListings(session);
-          }}
-        />
-      )}
-
-      {modal === 'manual' && (
-        <ManualFormModal
-          session={session}
-          onSessionRequired={() => setModal('login')}
-          onClose={() => setModal(null)}
-          onSuccess={async (newListing) => {
-            if (session) {
-              setModal('my-listings');
-              await fetchMyListings(session);
-            } else {
-              setModal(null);
-            }
-          }}
-        />
-      )}
-
-      {modal === 'confirm-delete' && pendingDelete && (
-        <ConfirmDeleteModal
-          listing={pendingDelete}
-          onCancel={() => {
-            setPendingDelete(null);
-            setModal('my-listings');
-          }}
-          onConfirm={handleConfirmDelete}
-        />
-      )}
-    </>
-  );
-}
-
-// ─────────────────────── Login Modal ───────────────────────
-
-function LoginModal({
-  onClose,
-  onSuccess,
-}: {
-  onClose: () => void;
-  onSuccess: (s: Session) => void;
-}) {
-  const [step, setStep] = useState<'email' | 'code'>('email');
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [code, setCode] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleSendCode = async (e: FormEvent) => {
-    e.preventDefault();
-    setError('');
-    const trimmed = email.trim().toLowerCase();
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(trimmed)) {
-      setError('Please enter a valid email address.');
-      return;
-    }
-    setLoading(true);
-    try {
-      const resp = await fetch(API + '/send-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: trimmed,
-          name: name.trim(),
-          contactType: 'email',
-        }),
-      });
-      const data = (await resp.json().catch(() => ({}))) as {
-        error?: string;
-        ok?: boolean;
-      };
-      if (!resp.ok) {
-        setError(data.error || 'Could not send code (' + resp.status + ')');
-        return;
-      }
-      setStep('code');
-    } catch {
-      setError('Network error. Try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerifyCode = async (e: FormEvent) => {
-    e.preventDefault();
-    setError('');
-    const trimmedCode = code.trim();
-    if (!/^\d{4,8}$/.test(trimmedCode)) {
-      setError('Enter the code from your email.');
-      return;
-    }
-    setLoading(true);
-    try {
-      const resp = await fetch(API + '/check-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: email.trim().toLowerCase(),
-          code: trimmedCode,
-        }),
-      });
-      const data = (await resp.json().catch(() => ({}))) as {
-        ok?: boolean;
-        verified?: boolean;
-        session?: string;
-        name?: string;
-        error?: string;
-      };
-      if (!resp.ok || !data.session) {
-        setError(data.error || 'Code was rejected. Try again.');
-        return;
-      }
-      onSuccess({
-        token: data.session,
-        email: email.trim().toLowerCase(),
-        name: data.name || name.trim() || '',
-      });
-    } catch {
-      setError('Network error verifying the code.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div style={modalOverlayStyle} onClick={onClose}>
-      <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
-        <span style={modalKickerStyle}>RWAS Marketplace</span>
-        <h2 style={modalTitleStyle}>Seller Login</h2>
-        <p style={mutedStyle}>
-          Enter your email to get a one-time code. No password required. Your
-          session lasts 24 hours.
-        </p>
-
-        {step === 'email' && (
-          <form onSubmit={handleSendCode}>
-            <label style={labelStyle} htmlFor="login-email">
-              Email address
-            </label>
-            <input
-              id="login-email"
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={inputStyle}
-              placeholder="you@example.com"
-              autoFocus
-              required
-            />
-
-            <label style={labelStyle} htmlFor="login-name">
-              Name <span style={{ color: '#888', fontWeight: 400 }}>(optional — first time only)</span>
-            </label>
-            <input
-              id="login-name"
-              type="text"
-              autoComplete="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              style={inputStyle}
-              placeholder="Jane Seller"
-            />
-
-            {error && <div style={errorStyle}>{error}</div>}
-
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                gap: 8,
-                marginTop: 18,
-              }}
-            >
-              <button type="button" style={ghostBtnStyle} onClick={onClose}>
-                Cancel
-              </button>
-              <button type="submit" style={primaryBtnStyle} disabled={loading}>
-                {loading ? 'Sending…' : 'Send Code'}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {step === 'code' && (
-          <form onSubmit={handleVerifyCode}>
-            <p style={mutedStyle}>
-              We emailed a 6-digit code to <strong>{email}</strong>. Check your
-              inbox (and spam) and enter it below.
-            </p>
-            <label style={labelStyle} htmlFor="login-code">
-              Verification code
-            </label>
-            <input
-              id="login-code"
-              type="text"
-              inputMode="numeric"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              style={{ ...inputStyle, fontSize: 22, letterSpacing: '0.3em', textAlign: 'center' }}
-              placeholder="000000"
-              autoFocus
-              required
-            />
-
-            {error && <div style={errorStyle}>{error}</div>}
-
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                gap: 8,
-                marginTop: 18,
-                alignItems: 'center',
-              }}
-            >
-              <button
-                type="button"
-                style={{ ...ghostBtnStyle, border: 'none', background: 'transparent' }}
-                onClick={() => {
-                  setStep('email');
-                  setCode('');
-                  setError('');
-                }}
-              >
-                ← Use different email
-              </button>
-              <button type="submit" style={primaryBtnStyle} disabled={loading}>
-                {loading ? 'Verifying…' : 'Verify & Sign In'}
-              </button>
-            </div>
-          </form>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────── My Listings Modal ───────────────────
-
-function MyListingsModal({
-  listings,
-  error,
-  session,
-  onClose,
-  onEdit,
-  onDelete,
-  onStatusChange,
-  onNewJerry,
-  onNewManual,
-}: {
-  listings: Listing[] | null;
-  error: string;
-  session: Session;
-  onClose: () => void;
-  onEdit: (l: Listing) => void;
-  onDelete: (l: Listing) => void;
-  onStatusChange: (l: Listing, status: string) => void | Promise<void>;
-  onNewJerry: () => void;
-  onNewManual: () => void;
-}) {
-  return (
-    <div style={modalOverlayStyle} onClick={onClose}>
-      <div style={modalWideStyle} onClick={(e) => e.stopPropagation()}>
-        <span style={modalKickerStyle}>Signed in as {session.email}</span>
-        <h2 style={modalTitleStyle}>My Listings</h2>
-
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 8,
-            margin: '12px 0 16px',
-          }}
-        >
-          <button type="button" style={primaryBtnStyle} onClick={onNewJerry}>
-            + New Listing (with Jerry)
-          </button>
-          <button type="button" style={secondaryBtnStyle} onClick={onNewManual}>
-            + Manual Form
-          </button>
+      <dialog
+        ref={dialog}
+        className="seller-dialog"
+        aria-labelledby="seller-title"
+        onCancel={() => setView(null)}
+      >
+        <header>
+          <h2 id="seller-title">
+            {view === 'login'
+              ? 'Seller Login'
+              : view === 'account'
+                ? 'Your Account'
+                : view === 'edit'
+                  ? 'Listing Draft'
+                  : 'My Listings'}
+          </h2>
           <button
             type="button"
-            style={ghostBtnStyle}
-            onClick={onClose}
-            title="Close"
+            aria-label="Close seller panel"
+            onClick={() => setView(null)}
           >
             Close
           </button>
-        </div>
-
-        {error && <div style={errorStyle}>{error}</div>}
-
-        {listings === null && (
-          <div style={mutedStyle}>Loading your listings…</div>
+        </header>
+        {error && (
+          <p role="alert" className="seller-error">
+            {error}
+          </p>
         )}
-
-        {listings && listings.length === 0 && (
-          <div
-            style={{
-              border: '1px dashed #aaa',
-              padding: 24,
-              textAlign: 'center',
-              background: 'rgba(255,255,255,0.5)',
-              fontFamily: 'Arial, sans-serif',
-              fontSize: 12,
-              color: '#555',
-            }}
-          >
-            You haven&rsquo;t created any listings yet. Use the buttons above
-            to start one.
-          </div>
+        {message && <p role="status">{message}</p>}
+        {view === 'login' && (
+          <>
+            {identityMethods.length > 0 && (
+              <nav aria-label="Sign-in methods">
+                {identityMethods.map((method) => (
+                  <button
+                    key={method}
+                    disabled={busy}
+                    onClick={() => void beginIdentity(method)}
+                  >
+                    {method === 'password'
+                      ? methodLabels[method]
+                      : 'Continue with ' + methodLabels[method]}
+                  </button>
+                ))}
+                <p>
+                  Create an account or recover your password on the secure
+                  sign-in page.
+                </p>
+              </nav>
+            )}
+            {emailCodeLogin && (
+              <form
+                onSubmit={onSubmit(async () => {
+                  if (!sent) {
+                    await api('/send-code', 'POST', { email });
+                    setSent(true);
+                    setMessage('Code sent. Check your inbox.');
+                  } else {
+                    const d = await api('/check-code', 'POST', { email, code });
+                    setAuth({ token: d.session, email: d.email, name: d.name });
+                    setSent(false);
+                    setCode('');
+                    setView(null);
+                  }
+                })}
+              >
+                <p>
+                  Sign in with a one-time email code. No password required.
+                  Codes expire after 15 minutes; sessions expire after 24 hours.
+                </p>
+                <label className="seller-field">
+                  Email
+                  <input
+                    id="login-email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    readOnly={sent}
+                  />
+                </label>
+                {sent && (
+                  <label className="seller-field">
+                    Verification code
+                    <input
+                      id="login-code"
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      pattern="[0-9]{6}"
+                      required
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                    />
+                  </label>
+                )}
+                <button disabled={busy}>
+                  {busy
+                    ? 'Please wait…'
+                    : sent
+                      ? 'Verify & Sign In'
+                      : 'Send Code'}
+                </button>
+                {sent && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSent(false);
+                      setCode('');
+                    }}
+                  >
+                    Use different email
+                  </button>
+                )}
+              </form>
+            )}
+          </>
         )}
-
-        {listings && listings.length > 0 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {listings.map((l) => (
-              <ListingRow
-                key={l.id}
-                listing={l}
-                onEdit={() => onEdit(l)}
-                onDelete={() => onDelete(l)}
-                onStatusChange={(s) => onStatusChange(l, s)}
-              />
+        {view === 'listings' && (
+          <>
+            <nav>
+              <button onClick={() => edit(null)}>New Manual Listing</button>
+              <button onClick={() => void jerry()}>List with Jerry</button>
+              <button
+                disabled={busy}
+                onClick={() =>
+                  void perform(async () => {
+                    await load();
+                  })
+                }
+              >
+                Refresh
+              </button>
+            </nav>
+            {savedDraft && (
+              <button
+                disabled={busy}
+                onClick={() => {
+                  if (savedDraft.intake) {
+                    void jerry();
+                  } else {
+                    setEditing(null);
+                    submission.current = crypto.randomUUID();
+                    setForm(
+                      Object.fromEntries(
+                        [...inputs, ...longInputs].map(([k]) => [
+                          k,
+                          String(savedDraft[k] ?? ''),
+                        ]),
+                      ),
+                    );
+                    setView('edit');
+                  }
+                }}
+              >
+                Resume Saved Draft
+              </button>
+            )}
+            {!items.length && !busy && (
+              <p>No listings yet. Save a draft to get started.</p>
+            )}
+            {items.map((l) => (
+              <article className="seller-listing" key={l.id}>
+                <h3>
+                  {String(l.year || '')} {String(l.make || 'New')}{' '}
+                  {String(l.model || 'draft')}
+                </h3>
+                <p>
+                  Status: <strong>{l.status}</strong>
+                </p>
+                {l.reviewNote && <p>{l.reviewNote}</p>}
+                <div className="seller-actions">
+                  {!['deleted', 'archived'].includes(l.status) && (
+                    <button onClick={() => edit(l)}>Edit</button>
+                  )}
+                  {['draft', 'rejected'].includes(l.status) && (
+                    <button
+                      disabled={busy}
+                      onClick={() => void perform(() => status(l, 'pending'))}
+                    >
+                      Submit for Review
+                    </button>
+                  )}
+                  {l.status === 'active' && (
+                    <button
+                      disabled={busy}
+                      onClick={() => void perform(() => status(l, 'paused'))}
+                    >
+                      Pause
+                    </button>
+                  )}
+                  {l.status === 'paused' && (
+                    <button
+                      disabled={busy}
+                      onClick={() => void perform(() => status(l, 'active'))}
+                    >
+                      Resume
+                    </button>
+                  )}
+                  {['active', 'paused'].includes(l.status) && (
+                    <button
+                      disabled={busy}
+                      onClick={() => void perform(() => status(l, 'sold'))}
+                    >
+                      Mark Sold
+                    </button>
+                  )}
+                  {!['deleted', 'archived'].includes(l.status) && (
+                    <button
+                      disabled={busy}
+                      onClick={() => void perform(() => status(l, 'archived'))}
+                    >
+                      Archive
+                    </button>
+                  )}
+                  {['archived', 'deleted'].includes(l.status) && (
+                    <button
+                      disabled={busy}
+                      onClick={() => void perform(() => status(l, 'restore'))}
+                    >
+                      Restore to Draft
+                    </button>
+                  )}
+                  {l.status !== 'deleted' ? (
+                    <button
+                      disabled={busy}
+                      onClick={() => {
+                        if (
+                          window.confirm(
+                            'Move this listing to trash? You can restore it as a draft.',
+                          )
+                        )
+                          void perform(() => status(l, 'deleted'));
+                      }}
+                    >
+                      Move to Trash
+                    </button>
+                  ) : (
+                    <button
+                      disabled={busy}
+                      onClick={() => {
+                        if (
+                          window.confirm(
+                            'Permanently delete this listing and all its files? This cannot be undone.',
+                          )
+                        )
+                          void perform(async () => {
+                            await api('/listings/' + l.id, 'DELETE', {
+                              confirm: l.id,
+                            });
+                            await load();
+                          });
+                      }}
+                    >
+                      Delete Permanently
+                    </button>
+                  )}
+                </div>
+              </article>
             ))}
-          </div>
+          </>
         )}
-      </div>
-    </div>
-  );
-}
-
-function ListingRow({
-  listing,
-  onEdit,
-  onDelete,
-  onStatusChange,
-}: {
-  listing: Listing;
-  onEdit: () => void;
-  onDelete: () => void;
-  onStatusChange: (status: string) => void | Promise<void>;
-}) {
-  const status = (listing.status || 'pending').toLowerCase();
-  const title =
-    [listing.year, listing.make, listing.model].filter(Boolean).join(' ') ||
-    listing.nNumber ||
-    'Untitled listing';
-  const price = listing.price
-    ? '$' + Number(String(listing.price).replace(/[^\d]/g, '')).toLocaleString()
-    : '';
-
-  const statusColor =
-    status === 'active' || status === 'approved'
-      ? '#1f6b3a'
-      : status === 'paused'
-      ? '#8a6a00'
-      : status === 'sold'
-      ? '#4a4a4a'
-      : status === 'rejected' || status === 'deleted'
-      ? '#a33d2a'
-      : '#8a6a00'; // pending
-
-  return (
-    <div
-      style={{
-        border: '1px solid #1a1a1a',
-        padding: '12px 14px',
-        background: 'rgba(255,255,255,0.7)',
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        gap: '8px 16px',
-      }}
-    >
-      <div style={{ flex: '1 1 220px', minWidth: 220 }}>
-        <div
-          style={{
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            fontSize: 15,
-            fontWeight: 700,
-          }}
-        >
-          {title}
-        </div>
-        <div
-          style={{
-            fontFamily: 'Arial, sans-serif',
-            fontSize: 11,
-            color: '#555',
-            marginTop: 2,
-            display: 'flex',
-            gap: 10,
-            flexWrap: 'wrap',
-          }}
-        >
-          {listing.nNumber && <span>{listing.nNumber}</span>}
-          {price && <span>{price}</span>}
-          <span
-            style={{
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              color: statusColor,
-            }}
-          >
-            {status}
-          </span>
-        </div>
-      </div>
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-        <button
-          type="button"
-          style={{ ...secondaryBtnStyle, padding: '6px 12px', fontSize: 10 }}
-          onClick={onEdit}
-        >
-          Edit
-        </button>
-        {status === 'active' && (
-          <button
-            type="button"
-            style={{ ...secondaryBtnStyle, padding: '6px 12px', fontSize: 10 }}
-            onClick={() => onStatusChange('paused')}
-          >
-            Pause
-          </button>
+        {view === 'edit' && (
+          <>
+            <form onSubmit={onSubmit(save)}>
+              <p>
+                Save your work as a private draft. Changes to listing details or
+                media require a new review before publication.
+              </p>
+              <div className="seller-fields">
+                {inputs.map(([k, l, t]) => row(k, l, t))}
+              </div>
+              {longInputs.map(([k, l]) => (
+                <label key={k} className="seller-field">
+                  {l}
+                  <textarea
+                    rows={4}
+                    value={form[k] || ''}
+                    maxLength={10000}
+                    onChange={(e) => setForm({ ...form, [k]: e.target.value })}
+                  />
+                </label>
+              ))}
+              <button disabled={busy}>{busy ? 'Saving…' : 'Save Draft'}</button>
+            </form>
+            {editing ? (
+              <>
+                <SellerMedia
+                  listing={editing}
+                  session={session!}
+                  onBusy={setBusy}
+                  onChange={async () => {
+                    const list = await load();
+                    setEditing(list.find((l) => l.id === editing.id) || null);
+                  }}
+                />
+                <button
+                  disabled={busy}
+                  onClick={() =>
+                    void perform(async () => {
+                      await status(editing, 'pending');
+                      setView('listings');
+                    })
+                  }
+                >
+                  Submit for Review
+                </button>
+              </>
+            ) : (
+              <p>
+                Save a draft before adding photos, video, or aircraft records.
+              </p>
+            )}
+          </>
         )}
-        {status === 'paused' && (
-          <button
-            type="button"
-            style={{ ...secondaryBtnStyle, padding: '6px 12px', fontSize: 10 }}
-            onClick={() => onStatusChange('active')}
-          >
-            Resume
-          </button>
+        {view === 'account' && account && (
+          <>
+            {identityMethods.length > 0 && (
+              <section aria-label="Connected sign-in methods">
+                <h3>Sign-in methods</h3>
+                <p>
+                  {account.loginMethods?.length
+                    ? 'Connected: ' +
+                      account.loginMethods
+                        .map((method) => methodLabels[method])
+                        .join(', ')
+                    : 'Email-code login. Connect another method to use this same seller account.'}
+                </p>
+                {identityMethods.map((method) => (
+                  <button
+                    key={method}
+                    disabled={busy}
+                    onClick={() => void beginIdentity(method, true)}
+                  >
+                    Connect {methodLabels[method]}
+                  </button>
+                ))}
+                {identityMethods.includes('password') && (
+                  <button
+                    disabled={busy}
+                    onClick={() => void beginIdentity('password')}
+                  >
+                    Password help
+                  </button>
+                )}
+              </section>
+            )}
+            <form
+              onSubmit={onSubmit(async () => {
+                const data = await api(
+                  '/account',
+                  'PATCH',
+                  account.profile.email
+                    ? {
+                        name: account.profile.name,
+                        phone: account.profile.phone,
+                        location: account.profile.location,
+                      }
+                    : {},
+                );
+                setAccount({ ...account, profile: data.profile });
+                setMessage('Profile updated.');
+              })}
+            >
+              <p>Signed in as {account.profile.email}</p>
+              {(['name', 'phone', 'location'] as const).map((k) => (
+                <label className="seller-field" key={k}>
+                  {k}
+                  <input
+                    value={account.profile[k]}
+                    onChange={(e) =>
+                      setAccount({
+                        ...account,
+                        profile: { ...account.profile, [k]: e.target.value },
+                      })
+                    }
+                    maxLength={200}
+                  />
+                </label>
+              ))}
+              <button disabled={busy}>Save Profile</button>
+            </form>
+            <form
+              onSubmit={onSubmit(async () => {
+                if (!emailSent) {
+                  await api('/account/email-code', 'POST', { email: newEmail });
+                  setEmailSent(true);
+                } else {
+                  await api('/account/email', 'PUT', {
+                    email: newEmail,
+                    code: emailCode,
+                  });
+                  setAuth({
+                    ...session!,
+                    email: newEmail.trim().toLowerCase(),
+                  });
+                  setAccount(await api('/account'));
+                  setEmailSent(false);
+                  setMessage(
+                    'Email verified and updated. Other sessions have been revoked.',
+                  );
+                }
+              })}
+            >
+              <h3>Change email</h3>
+              <label className="seller-field">
+                New email
+                <input
+                  type="email"
+                  required
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                />
+              </label>
+              {emailSent && (
+                <label className="seller-field">
+                  New email code
+                  <input
+                    inputMode="numeric"
+                    pattern="[0-9]{6}"
+                    required
+                    value={emailCode}
+                    onChange={(e) => setEmailCode(e.target.value)}
+                  />
+                </label>
+              )}
+              <button disabled={busy}>
+                {emailSent ? 'Verify New Email' : 'Send New Email Code'}
+              </button>
+            </form>
+            <h3>Active sessions</h3>
+            {account.sessions.map((s) => (
+              <p key={s.id}>
+                {s.current ? 'This session' : 'Other session'} · expires{' '}
+                {new Date(s.expiresAt).toLocaleString()}{' '}
+                {!s.current && (
+                  <button
+                    disabled={busy}
+                    onClick={() =>
+                      void perform(async () => {
+                        await api('/account/sessions', 'DELETE', { id: s.id });
+                        setAccount(await api('/account'));
+                      })
+                    }
+                  >
+                    Revoke
+                  </button>
+                )}
+              </p>
+            ))}
+            <button
+              disabled={busy}
+              onClick={() =>
+                void perform(async () => {
+                  await api('/account/sessions', 'DELETE', { all: true });
+                  setAccount(await api('/account'));
+                  setMessage('Other sessions revoked.');
+                })
+              }
+            >
+              Sign Out Other Sessions
+            </button>
+            <h3>Delete account</h3>
+            <p>
+              Permanently delete your listings first. Account deletion requires
+              a recent sign-in and removes your RWAS profile, saved draft and
+              connected login links. Your Google, Apple or sign-in-provider
+              account is managed separately.
+            </p>
+            <button
+              disabled={busy}
+              onClick={() => {
+                const confirm = window.prompt(
+                  'Type your current email to permanently delete your account.',
+                );
+                if (confirm)
+                  void perform(async () => {
+                    await api('/account', 'DELETE', { confirm });
+                    setAuth(null);
+                    setView(null);
+                  });
+              }}
+            >
+              Delete Account
+            </button>
+          </>
         )}
-        {status !== 'sold' && (
-          <button
-            type="button"
-            style={{ ...secondaryBtnStyle, padding: '6px 12px', fontSize: 10 }}
-            onClick={() => onStatusChange('sold')}
-          >
-            Mark Sold
-          </button>
-        )}
-        <button
-          type="button"
-          style={{ ...dangerBtnStyle, padding: '6px 12px', fontSize: 10 }}
-          onClick={onDelete}
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────── Confirm Delete Modal ───────────────────
-
-function ConfirmDeleteModal({
-  listing,
-  onCancel,
-  onConfirm,
-}: {
-  listing: Listing;
-  onCancel: () => void;
-  onConfirm: () => void;
-}) {
-  const title =
-    [listing.year, listing.make, listing.model].filter(Boolean).join(' ') ||
-    listing.nNumber ||
-    'this listing';
-  return (
-    <div style={modalOverlayStyle} onClick={onCancel}>
-      <div style={modalStyle} onClick={(e) => e.stopPropagation()}>
-        <h2 style={modalTitleStyle}>Delete listing?</h2>
-        <p style={mutedStyle}>
-          Are you sure you want to delete <strong>{title}</strong>? This removes
-          it from the marketplace. If you just want to stop showing it for now,
-          cancel and use <em>Pause</em> instead.
-        </p>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            gap: 8,
-            marginTop: 18,
-          }}
-        >
-          <button type="button" style={ghostBtnStyle} onClick={onCancel}>
-            Cancel
-          </button>
-          <button type="button" style={dangerBtnStyle} onClick={onConfirm}>
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────── Shared listing-form fields ───────────────────
-
-type ListingForm = {
-  sellerName: string;
-  sellerPhone: string;
-  sellerLocation: string;
-  make: string;
-  model: string;
-  year: string;
-  serialNumber: string;
-  nNumber: string;
-  totalTime: string;
-  engineTime: string;
-  engineModel: string;
-  propTime: string;
-  propModel: string;
-  price: string;
-  priceLabel: string;
-  description: string;
-  avionics: string;
-  equipmentList: string;
-  annualDue: string;
-  usefulLoad: string;
-  fuelCapacity: string;
-  cruiseSpeed: string;
-  range: string;
-  category: string;
-  condition: string;
-  damageHistory: string;
-};
-
-const emptyListingForm: ListingForm = {
-  sellerName: '',
-  sellerPhone: '',
-  sellerLocation: '',
-  make: '',
-  model: '',
-  year: '',
-  serialNumber: '',
-  nNumber: '',
-  totalTime: '',
-  engineTime: '',
-  engineModel: '',
-  propTime: '',
-  propModel: '',
-  price: '',
-  priceLabel: '',
-  description: '',
-  avionics: '',
-  equipmentList: '',
-  annualDue: '',
-  usefulLoad: '',
-  fuelCapacity: '',
-  cruiseSpeed: '',
-  range: '',
-  category: 'single-piston',
-  condition: 'used',
-  damageHistory: 'none',
-};
-
-function listingToForm(l: Listing): ListingForm {
-  return {
-    sellerName: l.sellerName || '',
-    sellerPhone: l.sellerPhone || '',
-    sellerLocation: l.sellerLocation || '',
-    make: l.make || '',
-    model: l.model || '',
-    year: l.year ? String(l.year) : '',
-    serialNumber: l.serialNumber || '',
-    nNumber: l.nNumber || '',
-    totalTime: l.totalTime || '',
-    engineTime: l.engineTime || '',
-    engineModel: l.engineModel || '',
-    propTime: l.propTime || '',
-    propModel: l.propModel || '',
-    price: l.price ? String(l.price) : '',
-    priceLabel: l.priceLabel || '',
-    description: l.description || '',
-    avionics: l.avionics || '',
-    equipmentList: l.equipmentList || '',
-    annualDue: l.annualDue || '',
-    usefulLoad: l.usefulLoad || '',
-    fuelCapacity: l.fuelCapacity || '',
-    cruiseSpeed: l.cruiseSpeed || '',
-    range: l.range || '',
-    category: l.category || 'single-piston',
-    condition: l.condition || 'used',
-    damageHistory: l.damageHistory || 'none',
-  };
-}
-
-function ListingFormFields({
-  value,
-  onChange,
-}: {
-  value: ListingForm;
-  onChange: (patch: Partial<ListingForm>) => void;
-}) {
-  const set = <K extends keyof ListingForm>(k: K) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-  ) => onChange({ [k]: e.target.value } as Partial<ListingForm>);
-
-  return (
-    <>
-      <div style={twoColStyle}>
-        <div>
-          <label style={labelStyle}>Seller name</label>
-          <input style={inputStyle} value={value.sellerName} onChange={set('sellerName')} />
-        </div>
-        <div>
-          <label style={labelStyle}>Seller phone</label>
-          <input style={inputStyle} value={value.sellerPhone} onChange={set('sellerPhone')} placeholder="605-555-1212" />
-        </div>
-      </div>
-
-      <label style={labelStyle}>Location (city, state)</label>
-      <input style={inputStyle} value={value.sellerLocation} onChange={set('sellerLocation')} placeholder="the Northern Plains" />
-
-      <div style={twoColStyle}>
-        <div>
-          <label style={labelStyle}>N-number</label>
-          <input style={inputStyle} value={value.nNumber} onChange={set('nNumber')} placeholder="N12345" />
-        </div>
-        <div>
-          <label style={labelStyle}>Year</label>
-          <input style={inputStyle} value={value.year} onChange={set('year')} placeholder="1980" />
-        </div>
-      </div>
-
-      <div style={twoColStyle}>
-        <div>
-          <label style={labelStyle}>Make</label>
-          <input style={inputStyle} value={value.make} onChange={set('make')} placeholder="CESSNA" />
-        </div>
-        <div>
-          <label style={labelStyle}>Model</label>
-          <input style={inputStyle} value={value.model} onChange={set('model')} placeholder="R182" />
-        </div>
-      </div>
-
-      <div style={twoColStyle}>
-        <div>
-          <label style={labelStyle}>Serial number</label>
-          <input style={inputStyle} value={value.serialNumber} onChange={set('serialNumber')} />
-        </div>
-        <div>
-          <label style={labelStyle}>Category</label>
-          <select style={inputStyle} value={value.category} onChange={set('category')}>
-            <option value="single-piston">Single-engine piston</option>
-            <option value="multi-piston">Multi-engine piston</option>
-            <option value="turboprop">Turboprop</option>
-            <option value="jet">Jet</option>
-            <option value="experimental">Experimental</option>
-            <option value="lsa">LSA</option>
-            <option value="helicopter">Helicopter</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-      </div>
-
-      <div style={twoColStyle}>
-        <div>
-          <label style={labelStyle}>Total time (TT)</label>
-          <input style={inputStyle} value={value.totalTime} onChange={set('totalTime')} placeholder="5432.1" />
-        </div>
-        <div>
-          <label style={labelStyle}>Engine time (SMOH)</label>
-          <input style={inputStyle} value={value.engineTime} onChange={set('engineTime')} placeholder="842" />
-        </div>
-      </div>
-
-      <div style={twoColStyle}>
-        <div>
-          <label style={labelStyle}>Engine model</label>
-          <input style={inputStyle} value={value.engineModel} onChange={set('engineModel')} placeholder="Lycoming O-540" />
-        </div>
-        <div>
-          <label style={labelStyle}>Propeller time</label>
-          <input style={inputStyle} value={value.propTime} onChange={set('propTime')} />
-        </div>
-      </div>
-
-      <label style={labelStyle}>Propeller model</label>
-      <input style={inputStyle} value={value.propModel} onChange={set('propModel')} placeholder="McCauley B3D32C412" />
-
-      <div style={twoColStyle}>
-        <div>
-          <label style={labelStyle}>Price (USD)</label>
-          <input style={inputStyle} value={value.price} onChange={set('price')} placeholder="300000" />
-        </div>
-        <div>
-          <label style={labelStyle}>Price label (optional)</label>
-          <input style={inputStyle} value={value.priceLabel} onChange={set('priceLabel')} placeholder='e.g. "Make offer"' />
-        </div>
-      </div>
-
-      <div style={twoColStyle}>
-        <div>
-          <label style={labelStyle}>Condition</label>
-          <select style={inputStyle} value={value.condition} onChange={set('condition')}>
-            <option value="new">New</option>
-            <option value="used">Used</option>
-            <option value="project">Project</option>
-            <option value="damaged">Damaged</option>
-          </select>
-        </div>
-        <div>
-          <label style={labelStyle}>Damage history</label>
-          <select style={inputStyle} value={value.damageHistory} onChange={set('damageHistory')}>
-            <option value="none">None known</option>
-            <option value="repaired">Repaired</option>
-            <option value="current">Current damage</option>
-          </select>
-        </div>
-      </div>
-
-      <div style={twoColStyle}>
-        <div>
-          <label style={labelStyle}>Annual due</label>
-          <input style={inputStyle} value={value.annualDue} onChange={set('annualDue')} placeholder="2026-08" />
-        </div>
-        <div>
-          <label style={labelStyle}>Useful load (lb)</label>
-          <input style={inputStyle} value={value.usefulLoad} onChange={set('usefulLoad')} />
-        </div>
-      </div>
-
-      <div style={twoColStyle}>
-        <div>
-          <label style={labelStyle}>Fuel capacity (gal)</label>
-          <input style={inputStyle} value={value.fuelCapacity} onChange={set('fuelCapacity')} />
-        </div>
-        <div>
-          <label style={labelStyle}>Cruise speed (kt)</label>
-          <input style={inputStyle} value={value.cruiseSpeed} onChange={set('cruiseSpeed')} />
-        </div>
-      </div>
-
-      <label style={labelStyle}>Range (nm)</label>
-      <input style={inputStyle} value={value.range} onChange={set('range')} />
-
-      <label style={labelStyle}>Avionics (short summary)</label>
-      <textarea style={textareaStyle} value={value.avionics} onChange={set('avionics')} placeholder="Garmin GTN 650, GFC 500, G5 PFD…" />
-
-      <label style={labelStyle}>Equipment list</label>
-      <textarea style={textareaStyle} value={value.equipmentList} onChange={set('equipmentList')} placeholder="Any extras, mods, or installed options." />
-
-      <label style={labelStyle}>Description / notes for buyers</label>
-      <textarea style={{ ...textareaStyle, minHeight: 110 }} value={value.description} onChange={set('description')} />
+      </dialog>
+      <style jsx>{`
+        .seller-dialog {
+          width: min(860px, 94vw);
+          max-height: 90vh;
+          border: 1px solid #222;
+          border-radius: 8px;
+          padding: 24px;
+          background: #f7f4ef;
+          color: #222;
+        }
+        .seller-dialog::backdrop {
+          background: #0008;
+        }
+        header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+        }
+        h2 {
+          font-size: 26px;
+        }
+        h3 {
+          font-size: 20px;
+          margin: 16px 0 8px;
+        }
+        p {
+          margin: 12px 0;
+          line-height: 1.5;
+        }
+        .seller-field {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          margin: 12px 0;
+          font:
+            14px Arial,
+            sans-serif;
+        }
+        input,
+        textarea {
+          border: 1px solid #777;
+          border-radius: 4px;
+          background: white;
+          color: #222;
+          padding: 10px;
+          width: 100%;
+        }
+        .seller-fields {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0 20px;
+        }
+        button {
+          padding: 9px 14px;
+          border: 1px solid #333;
+          border-radius: 4px;
+          margin: 4px;
+          background: #fff;
+          cursor: pointer;
+        }
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible {
+          outline: 3px solid #b26c22;
+          outline-offset: 3px;
+        }
+        button:disabled {
+          opacity: 0.6;
+          cursor: wait;
+        }
+        .seller-error {
+          color: #9b2222;
+        }
+        .seller-listing {
+          border-top: 1px solid #aaa;
+          padding: 16px 0;
+        }
+        .seller-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+        @media (max-width: 600px) {
+          .seller-fields {
+            grid-template-columns: 1fr;
+          }
+          .seller-dialog {
+            padding: 16px;
+          }
+        }
+      `}</style>
     </>
   );
 }
 
-// ─────────────────── Manual Form Modal ───────────────────
-
-function ManualFormModal({
-  session,
-  onSessionRequired,
-  onClose,
-  onSuccess,
-}: {
-  session: Session | null;
-  onSessionRequired: () => void;
-  onClose: () => void;
-  onSuccess: (listing: Listing) => void;
-}) {
-  const [form, setForm] = useState<ListingForm>({
-    ...emptyListingForm,
-    sellerName: session?.name || '',
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    if (!session) onSessionRequired();
-  }, [session, onSessionRequired]);
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!session) {
-      onSessionRequired();
-      return;
-    }
-    setError('');
-    if (!form.make.trim() || !form.model.trim() || !form.year.trim()) {
-      setError('Make, model, and year are required.');
-      return;
-    }
-    setLoading(true);
-    try {
-      const payload = {
-        ...form,
-        sellerEmail: session.email,
-        year: parseInt(form.year, 10) || form.year,
-        price: form.price.replace(/[^\d]/g, '') || '0',
-      };
-      const resp = await fetch(API + '/listings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + session.token,
-        },
-        body: JSON.stringify(payload),
-      });
-      const data = (await resp.json().catch(() => ({}))) as {
-        error?: string;
-        listing?: Listing;
-        id?: string;
-      };
-      if (!resp.ok) {
-        setError(data.error || 'Submission failed (' + resp.status + ')');
-        return;
-      }
-      onSuccess(data.listing || { id: data.id || '' });
-    } catch {
-      setError('Network error. Try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div style={modalOverlayStyle} onClick={onClose}>
-      <div style={modalWideStyle} onClick={(e) => e.stopPropagation()}>
-        <span style={modalKickerStyle}>RWAS Marketplace</span>
-        <h2 style={modalTitleStyle}>List Your Aircraft — Manual Form</h2>
-        <p style={mutedStyle}>
-          Fill in the fields you know. You can upload photos and logbooks after
-          submission from <em>My Listings</em>. Everything is editable later.
-        </p>
-
-        <form onSubmit={handleSubmit}>
-          <ListingFormFields
-            value={form}
-            onChange={(patch) => setForm((f) => ({ ...f, ...patch }))}
-          />
-
-          {error && <div style={errorStyle}>{error}</div>}
-
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: 8,
-              marginTop: 20,
-              position: 'sticky',
-              bottom: 0,
-              background: '#f7f4ef',
-              paddingTop: 12,
-              borderTop: '1px solid #ddd',
-            }}
-          >
-            <button type="button" style={ghostBtnStyle} onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" style={primaryBtnStyle} disabled={loading}>
-              {loading ? 'Submitting…' : 'Submit for Review'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────── Edit Listing Modal ───────────────────
-
-function EditListingModal({
+function SellerMedia({
   listing,
   session,
-  onClose,
+  onChange,
+  onBusy,
 }: {
   listing: Listing;
   session: Session;
-  onClose: () => void;
+  onChange: () => Promise<void>;
+  onBusy: (busy: boolean) => void;
 }) {
-  const [form, setForm] = useState<ListingForm>(listingToForm(listing));
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const [busy, setBusy] = useState(false),
+    [error, setError] = useState(''),
+    [message, setMessage] = useState('');
+  const [urls, setUrls] = useState<Record<string, string>>({});
+  useEffect(() => {
+    let alive = true;
+    const made: string[] = [];
+    setUrls({});
+    const media = [...listing.photos, ...listing.videos];
+    void Promise.all(
+      media.map(async (f) => {
+        const r = await fetch(
+          SELLER_API + '/files/' + encodeURIComponent(f.key),
+          { headers: { Authorization: 'Bearer ' + session.token } },
+        );
+        if (r.ok) {
+          const url = URL.createObjectURL(await r.blob());
+          made.push(url);
+          if (alive) setUrls((old) => ({ ...old, [f.key]: url }));
+        }
+      }),
+    ).catch(() => setError('Could not preview media.'));
+    return () => {
+      alive = false;
+      made.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [listing, session.token]);
+  async function action(fn: () => Promise<void>) {
+    setBusy(true);
+    onBusy(true);
     setError('');
-    setLoading(true);
     try {
-      const payload = {
-        ...form,
-        sellerEmail: session.email,
-        year: parseInt(form.year, 10) || form.year,
-        price: form.price.replace(/[^\d]/g, '') || '0',
-      };
-      const resp = await fetch(API + '/listings/' + listing.id, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + session.token,
-        },
-        body: JSON.stringify(payload),
-      });
-      const data = (await resp.json().catch(() => ({}))) as {
-        error?: string;
-      };
-      if (!resp.ok) {
-        setError(data.error || 'Save failed (' + resp.status + ')');
-        return;
-      }
-      onClose();
-    } catch {
-      setError('Network error. Try again.');
+      await fn();
+      await onChange();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Media request failed.');
     } finally {
-      setLoading(false);
+      setBusy(false);
+      onBusy(false);
     }
-  };
-
+  }
+  async function request(path: string, method: string, body: unknown) {
+    const r = await fetch(SELLER_API + path, {
+      method,
+      headers: {
+        Authorization: 'Bearer ' + session.token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    const d = await r.json();
+    if (!r.ok) throw Error(d.error);
+    return d;
+  }
   return (
-    <div style={modalOverlayStyle} onClick={onClose}>
-      <div style={modalWideStyle} onClick={(e) => e.stopPropagation()}>
-        <span style={modalKickerStyle}>Listing ID {listing.id}</span>
-        <h2 style={modalTitleStyle}>Edit Listing</h2>
-
-        <form onSubmit={handleSubmit}>
-          <ListingFormFields
-            value={form}
-            onChange={(patch) => setForm((f) => ({ ...f, ...patch }))}
-          />
-
-          <PhotoManager
-            listingId={listing.id}
-            initialPhotos={(listing.photos || []) as { key: string; name?: string }[]}
-            sessionToken={session.token}
-          />
-
-          <LogbookManager
-            listingId={listing.id}
-            initialLogbooks={(listing.logbooks || {}) as import('./logbook-manager').Logbooks}
-            sessionToken={session.token}
-          />
-
-          {error && <div style={errorStyle}>{error}</div>}
-
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: 8,
-              marginTop: 20,
-              position: 'sticky',
-              bottom: 0,
-              background: '#f7f4ef',
-              paddingTop: 12,
-              borderTop: '1px solid #ddd',
-            }}
+    <section aria-label="Listing media">
+      <h3>Photos, video and records</h3>
+      <p>
+        Photos, video and aircraft records remain private to your account and
+        the RWAS review team during this intake launch. Accepted: JPG, PNG, GIF,
+        WebP; MP4/WebM; PDF. Up to 50 MB per file.
+      </p>
+      {error && <p role="alert">{error}</p>}
+      {message && <p role="status">{message}</p>}
+      {categories.map(([category, label]) => {
+        const files =
+          category === 'photos'
+            ? listing.photos
+            : category === 'videos'
+              ? listing.videos
+              : listing.logbooks[category] || [];
+        return (
+          <fieldset
+            key={category}
+            style={{ padding: 16, margin: '16px 0', border: '1px solid #aaa' }}
           >
-            <button type="button" style={ghostBtnStyle} onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" style={primaryBtnStyle} disabled={loading}>
-              {loading ? 'Saving…' : 'Save Changes'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+            <legend>
+              {label} ({files.length})
+            </legend>
+            <label>
+              Add {label.toLowerCase()}
+              <input
+                type="file"
+                multiple
+                disabled={busy}
+                accept={
+                  category === 'photos'
+                    ? 'image/jpeg,image/png,image/gif,image/webp'
+                    : category === 'videos'
+                      ? 'video/mp4,video/webm'
+                      : 'application/pdf'
+                }
+                onChange={(e) => {
+                  const selected = Array.from(e.target.files || []);
+                  e.target.value = '';
+                  void action(async () => {
+                    for (const f of selected) {
+                      if (f.size > 50 * 1024 * 1024)
+                        throw Error('50 MB per file limit.');
+                      setMessage('Uploading ' + f.name + '…');
+                      const r = await fetch(
+                        SELLER_API +
+                          '/upload?listingId=' +
+                          listing.id +
+                          '&category=' +
+                          category +
+                          '&filename=' +
+                          encodeURIComponent(f.name),
+                        {
+                          method: 'POST',
+                          headers: { Authorization: 'Bearer ' + session.token },
+                          body: f,
+                        },
+                      );
+                      const d = await r.json();
+                      if (!r.ok) throw Error(d.error);
+                    }
+                    setMessage(
+                      'Upload complete. Submit the updated draft for review.',
+                    );
+                  });
+                }}
+              />
+            </label>
+            {files.map((f, i) => (
+              <div key={f.key} style={{ marginTop: 12 }}>
+                {category === 'photos' && urls[f.key] && (
+                  <img
+                    src={urls[f.key]}
+                    alt={f.name}
+                    style={{ maxWidth: '100%', maxHeight: 200 }}
+                  />
+                )}
+                {category === 'videos' && urls[f.key] && (
+                  <video
+                    src={urls[f.key]}
+                    controls
+                    preload="metadata"
+                    aria-label={f.name}
+                    style={{ maxWidth: '100%' }}
+                  />
+                )}
+                <p>{f.name}</p>
+                {!['photos', 'videos'].includes(category) && (
+                  <button
+                    disabled={busy}
+                    onClick={() =>
+                      void action(async () => {
+                        const r = await fetch(
+                          SELLER_API + '/files/' + encodeURIComponent(f.key),
+                          {
+                            headers: {
+                              Authorization: 'Bearer ' + session.token,
+                            },
+                          },
+                        );
+                        if (!r.ok)
+                          throw Error('Could not download this record.');
+                        const url = URL.createObjectURL(await r.blob()),
+                          a = document.createElement('a');
+                        a.href = url;
+                        a.download = f.name;
+                        a.click();
+                        setTimeout(() => URL.revokeObjectURL(url), 1000);
+                      })
+                    }
+                  >
+                    Download
+                  </button>
+                )}
+                {category === 'photos' && i > 0 && (
+                  <button
+                    disabled={busy}
+                    onClick={() =>
+                      void action(async () => {
+                        const order = files.map((x) => x.key);
+                        [order[i - 1], order[i]] = [order[i], order[i - 1]];
+                        await request(
+                          '/listings/' + listing.id + '/photos/order',
+                          'PUT',
+                          { order },
+                        );
+                      })
+                    }
+                  >
+                    Move Earlier
+                  </button>
+                )}
+                <button
+                  disabled={busy}
+                  onClick={() => {
+                    if (window.confirm('Delete ' + f.name + '?'))
+                      void action(async () => {
+                        await request('/delete-file', 'POST', {
+                          listingId: listing.id,
+                          category,
+                          fileKey: f.key,
+                        });
+                      });
+                  }}
+                >
+                  Delete {f.name}
+                </button>
+              </div>
+            ))}
+          </fieldset>
+        );
+      })}
+    </section>
   );
 }

@@ -15,11 +15,12 @@ const DEFAULT_POLICIES: PolicyLink[] = [
   { href: '/cookies', label: 'Cookies' },
   { href: '/security', label: 'Security' },
   { href: '/status', label: 'Status' },
+  { href: '/seller-review', label: 'Staff Login' },
 ];
 
 /**
  * BroadsheetFooter — ink-900 footer with gold double top rule.
- * Top row: policy links (Terms · Privacy · Cookies · Security · Status).
+ * Top row: compact site links, including the staff sign-in entry point.
  * Bottom row: brand + copyright.
  */
 export default function BroadsheetFooter({
@@ -28,7 +29,7 @@ export default function BroadsheetFooter({
 }: BroadsheetFooterProps) {
   return (
     <footer className="bs-footer">
-      <nav className="bs-footer__policies" aria-label="Policies">
+      <nav className="bs-footer__policies" aria-label="Footer navigation">
         {DEFAULT_POLICIES.map((p, i) => (
           <React.Fragment key={p.href}>
             {i > 0 && (

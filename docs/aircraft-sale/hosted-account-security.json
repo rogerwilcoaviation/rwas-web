@@ -1,0 +1,49 @@
+{
+  "origin": "https://repair-aircraft-seller-workf.rwas-web.pages.dev",
+  "commit": "75a560496cd52b1152a946902527da6b5b5d2333",
+  "workerVersion": "c24c70c2-3afc-4404-9e1c-b051e3465fca",
+  "checks": [
+    {
+      "check": "Real hosted email-code authentication for primary account/session",
+      "result": "pass"
+    },
+    {
+      "check": "Real hosted email-code authentication for secondary account/session",
+      "result": "pass"
+    },
+    {
+      "check": "Authenticated second account cannot discover/read/edit/trash/purge/reorder/upload/delete owner listing, file or saved draft; owner data preserved",
+      "result": "pass"
+    },
+    {
+      "check": "Account deletion rejects wrong confirmation and retained listings; deletes only temporary secondary account and revokes its session",
+      "result": "pass"
+    },
+    {
+      "check": "Real hosted email-code authentication for alternate account/session",
+      "result": "pass"
+    },
+    {
+      "check": "Real UI verified email change rejects invalid/replayed codes, retains profile/listing/file ownership and revokes another valid session",
+      "result": "pass"
+    },
+    {
+      "check": "Synthetic cross-owner listing/file/draft purged; retained primary account signed out with no browser errors",
+      "result": "pass"
+    }
+  ],
+  "errors": [],
+  "secondaryDeleted": true,
+  "syntheticListingPurged": true,
+  "retainedProfile": "Primary synthetic profile retained at second dedicated receiving inbox, signed out with no listings or saved draft.",
+  "evidenceLimits": "UI assertions include successful login/mail/email-change/logout responses. Detailed request array captures direct API requests; no independent R2 census or managed-provider/staff acceptance.",
+  "requestCount": 40,
+  "directStatuses": {
+    "200": 22,
+    "201": 1,
+    "400": 3,
+    "401": 4,
+    "404": 9,
+    "409": 1
+  }
+}
