@@ -12,6 +12,8 @@ export default function ClerkProductionPanel({
   onSignedIn: (session: ClerkProductionSession) => void;
 }) {
   const mount = useRef<HTMLDivElement>(null);
+  const signedIn = useRef(onSignedIn);
+  signedIn.current = onSignedIn;
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -27,7 +29,7 @@ export default function ClerkProductionPanel({
           completing = true;
           try {
             const session = await client.connect();
-            if (active) onSignedIn(session);
+            if (active) signedIn.current(session);
           } catch {
             if (active)
               setError('Sign-in could not be completed. Please try again.');
@@ -51,7 +53,7 @@ export default function ClerkProductionPanel({
       active = false;
       cleanup();
     };
-  }, [onSignedIn]);
+  }, []);
 
   return (
     <section aria-label="Secure seller sign-in">
