@@ -28,17 +28,29 @@ const harness = [
   ' results.officialLoaded = true;',
   ' results.officialUiInitializations = globalThis.__OFFICIAL_UI_INITIALIZATIONS__ || 0;',
   ' results.officialUiVersion = globalThis.__internal_ClerkUICtor?.version;',
+  " const jwt = (azp) => ['e30', btoa(JSON.stringify({ azp })).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', ''), 'signature'].join('.');",
   ' class ClerkMock {',
-  "  constructor(key) { results.key = key; this.session = { getToken: async (options) => { results.tokenOptions = options; return 'offline.default.jwt'; } }; }",
+  "  constructor(key) { results.key = key; const tokens = [jwt('https://accounts.rogerwilcoaviation.com'), jwt('https://www.rogerwilcoaviation.com')]; this.session = { clearCache: () => { results.cacheClears = (results.cacheClears || 0) + 1; }, getToken: async (options) => { (results.tokenOptions ||= []).push(options); return tokens.shift() || jwt('https://www.rogerwilcoaviation.com'); } }; }",
   '  async load(options) { results.mockLoaded = true; results.mockReceivedUi = Boolean(options?.ui); }',
-  "  mountSignIn(element, options) { results.mountOptions = options; element.dataset.clerkMounted = 'true'; }",
-  '  unmountSignIn() {}',
+  "  mountSignIn(element, options) { results.signInOptions = options; element.dataset.clerkMounted = 'sign-in'; }",
+  "  mountSignUp(element, options) { results.signUpOptions = options; element.dataset.clerkMounted = 'sign-up'; }",
+  '  unmountSignIn() { results.signInUnmounted = true; }',
+  '  unmountSignUp() { results.signUpUnmounted = true; }',
   '  addListener() { return () => {}; }',
   '  async signOut() { results.signedOut = true; }',
   ' }',
   ' const client = await getClerkProductionBrowser({ ClerkConstructor: ClerkMock });',
-  " client.mountSignIn(document.querySelector('#mount'));",
+  " const mount = document.querySelector('#mount');",
+  " const unmountSignIn = client.mountAuthentication(mount, '');",
+  ' unmountSignIn();',
+  " const unmountSignUp = client.mountAuthentication(mount, '?seller-auth=sign-up');",
+  ' unmountSignUp();',
   ' results.session = await client.connect();',
+  ' class WrongOriginClerk extends ClerkMock {',
+  "  constructor(key) { super(key); this.session = { clearCache: () => { results.wrongOriginCacheClears = (results.wrongOriginCacheClears || 0) + 1; }, getToken: async () => { results.wrongOriginTokenCalls = (results.wrongOriginTokenCalls || 0) + 1; return jwt('https://accounts.rogerwilcoaviation.com'); } }; }",
+  ' }',
+  ' const wrongOriginClient = await getClerkProductionBrowser({ ClerkConstructor: WrongOriginClerk });',
+  ' try { await wrongOriginClient.connect(); results.wrongOriginRejected = false; } catch { results.wrongOriginRejected = true; }',
   " results.methodOff = isClerkProductionMethodEnabled({ methods: ['clerk-production'] }, false);",
   " results.methodOn = isClerkProductionMethodEnabled({ methods: ['clerk-production'] }, true);",
   ' results.host = CLERK_PRODUCTION_HOST;',
@@ -65,6 +77,63 @@ await build({
   legalComments: 'none',
 });
 const bundle = await readFile(output, 'utf8');
+const parentOutput = '/tmp/rwas-clerk-production-parent-test.js';
+await build({
+  stdin: {
+    contents:
+      'import React from "react"; import { createRoot } from "react-dom/client"; import Seller from ' +
+      JSON.stringify(
+        new URL(
+          '../../app/aircraft-for-sale/seller-auth-panel.tsx',
+          import.meta.url,
+        ).pathname,
+      ) +
+      '; createRoot(document.querySelector("#root")).render(React.createElement(Seller));',
+    resolveDir: process.cwd(),
+    sourcefile: 'clerk-production-parent-harness.ts',
+    loader: 'ts',
+  },
+  outfile: parentOutput,
+  bundle: true,
+  format: 'iife',
+  platform: 'browser',
+  target: ['es2022'],
+  jsx: 'automatic',
+  define: { 'process.env.NODE_ENV': '"production"' },
+  plugins: [
+    {
+      name: 'mock-clerk-parent-boundary',
+      setup(builder) {
+        builder.onResolve({ filter: /clerk-production-browser$/ }, () => ({
+          path: 'browser',
+          namespace: 'clerk-parent',
+        }));
+        builder.onResolve({ filter: /clerk-production-panel$/ }, () => ({
+          path: 'panel',
+          namespace: 'clerk-parent',
+        }));
+        builder.onLoad(
+          { filter: /^browser$/, namespace: 'clerk-parent' },
+          () => ({
+            loader: 'js',
+            contents:
+              'export const isClerkProductionMethodEnabled = data => Array.isArray(data?.methods) && data.methods.includes("clerk-production"); export const getClerkProductionBrowser = async () => { throw new Error("unused"); };',
+          }),
+        );
+        builder.onLoad(
+          { filter: /^panel$/, namespace: 'clerk-parent' },
+          () => ({
+            loader: 'js',
+            resolveDir: process.cwd(),
+            contents:
+              'import React from "react"; export default function Panel(){ return React.createElement("div", { "data-clerk-parent": "mounted" }, window.location.search); }',
+          }),
+        );
+      },
+    },
+  ],
+});
+const parentBundle = await readFile(parentOutput, 'utf8');
 const productionSources =
   (await readFile(source, 'utf8')) + (await readFile(uiSource, 'utf8'));
 assert.doesNotMatch(productionSources, /prototypes|clerk-isolated|pk_test_/);
@@ -148,7 +217,7 @@ try {
   assert.equal(await page.locator('body').getAttribute('data-result'), 'pass');
   assert.equal(
     await page.locator('#mount').getAttribute('data-clerk-mounted'),
-    'true',
+    'sign-up',
   );
   const result = await page.evaluate(() => globalThis.__RESULTS__);
   assert.equal(result.officialLoaded, true);
@@ -169,8 +238,35 @@ try {
   );
   assert.equal(result.key, result.expectedKey);
   assert.equal(result.host, 'clerk.rogerwilcoaviation.com');
-  assert.deepEqual(result.tokenOptions, { skipCache: true });
+  assert.equal(result.cacheClears, 1);
+  assert.deepEqual(result.tokenOptions, Array(4).fill({ skipCache: true }));
+  assert.equal(result.wrongOriginRejected, true);
+  assert.equal(result.wrongOriginCacheClears, 1);
+  assert.equal(result.wrongOriginTokenCalls, 2);
   assert.equal(result.mockReceivedUi, false);
+  assert.equal(result.signInUnmounted, true);
+  assert.equal(result.signUpUnmounted, true);
+  assert.deepEqual(result.signInOptions, {
+    routing: 'hash',
+    forceRedirectUrl: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+    fallbackRedirectUrl: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+    signUpUrl:
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=sign-up',
+    signUpForceRedirectUrl:
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+    signUpFallbackRedirectUrl:
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+  });
+  assert.deepEqual(result.signUpOptions, {
+    routing: 'hash',
+    forceRedirectUrl: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+    fallbackRedirectUrl: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+    signInUrl: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+    signInForceRedirectUrl:
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+    signInFallbackRedirectUrl:
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+  });
   assert.equal(apiCalls.length, 3);
   assert.deepEqual(
     apiCalls.map(({ path, method }) => ({ path, method })),
@@ -186,8 +282,13 @@ try {
       { path: '/api/aircraft-sale/account', method: 'GET' },
     ],
   );
+  const canonicalToken = apiCalls[0].headers['x-clerk-session-token'];
+  assert.equal(
+    JSON.parse(Buffer.from(canonicalToken.split('.')[1], 'base64url')).azp,
+    'https://www.rogerwilcoaviation.com',
+  );
   for (const call of apiCalls)
-    assert.equal(call.headers['x-clerk-session-token'], 'offline.default.jwt');
+    assert.equal(call.headers['x-clerk-session-token'], canonicalToken);
   assert.equal(
     apiCalls[0].headers.origin,
     'https://www.rogerwilcoaviation.com',
@@ -213,6 +314,53 @@ try {
   });
   assert.equal(result.methodOff, false);
   assert.equal(result.methodOn, true);
+
+  const parent = await browser.newPage();
+  parent.setDefaultTimeout(5000);
+  await parent.route('**/*', async (route) => {
+    const url = new URL(route.request().url());
+    if (url.pathname === '/parent.js')
+      return route.fulfill({
+        status: 200,
+        contentType: 'text/javascript',
+        body: parentBundle,
+      });
+    if (url.pathname === '/api/aircraft-sale/auth/methods')
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          methods: ['clerk-production'],
+          emailCode: false,
+        }),
+      });
+    return route.fulfill({
+      status: 200,
+      contentType: 'text/html',
+      body: '<!doctype html><html><body><div id="root"></div><script src="/parent.js"></script></body></html>',
+    });
+  });
+  await parent.goto(
+    'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=sign-up',
+  );
+  const parentPanel = parent.locator('[data-clerk-parent="mounted"]');
+  await parentPanel.waitFor({ state: 'attached' });
+  assert.equal(await parentPanel.textContent(), '?seller-auth=sign-up');
+  await parent.getByRole('button', { name: 'Close seller panel' }).click();
+  await parentPanel.waitFor({ state: 'detached' });
+  assert.equal(
+    parent.url(),
+    'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+  );
+  await parent.goto(
+    'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=invalid',
+  );
+  await parent.waitForFunction(() => !location.search);
+  assert.equal(
+    await parent.locator('[data-clerk-parent="mounted"]').count(),
+    0,
+  );
+
   const refused = await browser.newPage();
   await refused.route('**/*', serve);
   await refused.goto('https://rogerwilcoaviation.com/offline-clerk-test');

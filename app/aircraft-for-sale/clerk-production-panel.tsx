@@ -36,11 +36,11 @@ export default function ClerkProductionPanel({
           }
         };
         const unsubscribe = client.addSessionListener(() => void complete());
-        client.mountSignIn(element);
+        const unmount = client.mountAuthentication(element);
         if (client.hasSession()) await complete();
         cleanup = () => {
           unsubscribe();
-          client.unmountSignIn(element);
+          unmount();
         };
       })
       .catch(() => {

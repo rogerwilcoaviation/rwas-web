@@ -11,6 +11,8 @@ export const CLERK_PRODUCTION_PUBLISHABLE_KEY =
 const SELLER_ROOT = '/api/aircraft-sale';
 const START_PATH = SELLER_ROOT + '/auth/clerk-production/start';
 const FINISH_PATH = SELLER_ROOT + '/auth/clerk-production/finish';
+const SELLER_URL = CLERK_PRODUCTION_ORIGIN + '/aircraft-for-sale';
+const SIGN_UP_URL = SELLER_URL + '?seller-auth=sign-up';
 
 type ClerkConstructor = new (publishableKey: string) => Clerk;
 type ClerkProductionOptions = {
@@ -63,6 +65,20 @@ function safeString(value: unknown, maximum: number) {
     : '';
 }
 
+function tokenAuthorizedParty(token: string) {
+  try {
+    const payload = token.split('.')[1];
+    if (!payload) return '';
+    const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
+    const claims = JSON.parse(
+      atob(normalized + '='.repeat((4 - (normalized.length % 4)) % 4)),
+    ) as { azp?: unknown };
+    return typeof claims.azp === 'string' ? claims.azp : '';
+  } catch {
+    return '';
+  }
+}
+
 export class ClerkProductionBrowser {
   private readonly clerk: Clerk;
   private readonly request: typeof fetch;
@@ -77,15 +93,31 @@ export class ClerkProductionBrowser {
     return Boolean(this.clerk.session);
   }
 
-  mountSignIn(element: HTMLDivElement) {
+  mountAuthentication(
+    element: HTMLDivElement,
+    search = window.location.search,
+  ) {
+    const signUp = new URLSearchParams(search).get('seller-auth') === 'sign-up';
+    if (signUp) {
+      this.clerk.mountSignUp(element, {
+        routing: 'hash',
+        forceRedirectUrl: SELLER_URL,
+        fallbackRedirectUrl: SELLER_URL,
+        signInUrl: SELLER_URL,
+        signInForceRedirectUrl: SELLER_URL,
+        signInFallbackRedirectUrl: SELLER_URL,
+      });
+      return () => this.clerk.unmountSignUp(element);
+    }
     this.clerk.mountSignIn(element, {
-      fallbackRedirectUrl: CLERK_PRODUCTION_ORIGIN + '/aircraft-for-sale',
-      signUpFallbackRedirectUrl: CLERK_PRODUCTION_ORIGIN + '/aircraft-for-sale',
+      routing: 'hash',
+      forceRedirectUrl: SELLER_URL,
+      fallbackRedirectUrl: SELLER_URL,
+      signUpUrl: SIGN_UP_URL,
+      signUpForceRedirectUrl: SELLER_URL,
+      signUpFallbackRedirectUrl: SELLER_URL,
     });
-  }
-
-  unmountSignIn(element: HTMLDivElement) {
-    this.clerk.unmountSignIn(element);
+    return () => this.clerk.unmountSignIn(element);
   }
 
   addSessionListener(listener: () => void) {
@@ -95,8 +127,18 @@ export class ClerkProductionBrowser {
   }
 
   async token() {
-    const token = await this.clerk.session?.getToken({ skipCache: true });
-    if (!token) throw new Error('Clerk sign-in is required.');
+    const session = this.clerk.session;
+    if (!session) throw new Error('Clerk sign-in is required.');
+    let token = await session.getToken({ skipCache: true });
+    if (token && tokenAuthorizedParty(token) !== CLERK_PRODUCTION_ORIGIN) {
+      // A token carried back from Account Portal can still be scoped to the
+      // hosted accounts origin. Discard it and ask Clerk for a new token from
+      // this canonical browser context; never broaden the backend allowlist.
+      session.clearCache();
+      token = await session.getToken({ skipCache: true });
+    }
+    if (!token || tokenAuthorizedParty(token) !== CLERK_PRODUCTION_ORIGIN)
+      throw new Error('Clerk sign-in is required.');
     return token;
   }
 

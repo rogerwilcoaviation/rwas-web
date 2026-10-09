@@ -51,6 +51,17 @@ type Account = {
 };
 const key = 'rwas_sale_v2';
 const identityKey = 'rwas_sale_identity';
+
+function clearSellerAuthRoute() {
+  const current = new URL(window.location.href);
+  if (!current.searchParams.has('seller-auth')) return;
+  current.searchParams.delete('seller-auth');
+  history.replaceState(
+    null,
+    '',
+    current.pathname + current.search + current.hash,
+  );
+}
 const inputs: [string, string, string?][] = [
   ['make', 'Make'],
   ['model', 'Model'],
@@ -167,6 +178,11 @@ export default function SellerAuthPanel() {
           setEmailCodeLogin(data.emailCode === true);
           const clerkEnabled = isClerkProductionMethodEnabled(data);
           setClerkProduction(clerkEnabled);
+          const clerkRoute = new URL(window.location.href).searchParams.get(
+            'seller-auth',
+          );
+          if (clerkRoute === 'sign-up' && clerkEnabled) setView('clerk');
+          else if (clerkRoute !== null) clearSellerAuthRoute();
           if (storedSession?.provider === 'clerk-production') {
             if (clerkEnabled && storedSession.email && storedSession.token)
               setAuth(storedSession);
@@ -275,6 +291,10 @@ export default function SellerAuthPanel() {
       document.removeEventListener('rwas:seller-draft', draft);
     };
   }, []);
+  const closeSellerPanel = () => {
+    clearSellerAuthRoute();
+    setView(null);
+  };
   useEffect(() => {
     if (view && !dialog.current?.open) dialog.current?.showModal();
     else if (!view && dialog.current?.open) dialog.current.close();
@@ -459,7 +479,7 @@ export default function SellerAuthPanel() {
         ref={dialog}
         className="seller-dialog"
         aria-labelledby="seller-title"
-        onCancel={() => setView(null)}
+        onCancel={closeSellerPanel}
       >
         <header>
           <h2 id="seller-title">
@@ -476,7 +496,7 @@ export default function SellerAuthPanel() {
           <button
             type="button"
             aria-label="Close seller panel"
-            onClick={() => setView(null)}
+            onClick={closeSellerPanel}
           >
             Close
           </button>
@@ -592,7 +612,7 @@ export default function SellerAuthPanel() {
             onSignedIn={(next) => {
               setAuth(next);
               setMessage('Signed in.');
-              setView(null);
+              closeSellerPanel();
             }}
           />
         )}
