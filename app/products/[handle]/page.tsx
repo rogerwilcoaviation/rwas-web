@@ -519,6 +519,7 @@ type PapaAlphaApplicabilityRow = {
   model: string;
   serials: string;
   tool: string;
+  unresolved?: boolean;
 };
 
 const PAPA_ALPHA_APPLICABILITY_TOOL_KEYS: Record<
@@ -545,7 +546,13 @@ function papaAlphaSpreadsheetRowsForHandle(
   return PAPA_ALPHA_RIGGING_CHART_ROWS.map((row) => ({
     model: row.model,
     serials: row.serials || 'N/A',
-    tool: spreadsheetToolValue(row[toolKey]),
+    tool:
+      row.applicabilityWarning && (toolKey === 'kit' || toolKey === 'bellcrank')
+        ? row.applicabilityWarning
+        : spreadsheetToolValue(row[toolKey]),
+    unresolved: Boolean(
+      row.applicabilityWarning && (toolKey === 'kit' || toolKey === 'bellcrank'),
+    ),
   }));
 }
 
@@ -773,8 +780,11 @@ function PapaAlphaApplicabilityGuide({
   const rows = parsePapaAlphaApplicabilityRows(product);
   const kitContents =
     product.handle === 'rigging-kit' ? PAPA_ALPHA_RIGGING_KIT_CONTENTS : [];
-  const supportedRows = rows.filter((row) => row.tool !== 'N/A');
-  const notApplicableRows = rows.length - supportedRows.length;
+  const supportedRows = rows.filter(
+    (row) => row.tool !== 'N/A' && !row.unresolved,
+  );
+  const notApplicableRows = rows.filter((row) => row.tool === 'N/A').length;
+  const unresolvedRows = rows.filter((row) => row.unresolved).length;
   const toolCounts = Array.from(
     supportedRows.reduce((counts, row) => {
       counts.set(row.tool, (counts.get(row.tool) || 0) + 1);
@@ -794,6 +804,13 @@ function PapaAlphaApplicabilityGuide({
       <div className="bs-section-kicker">Application chart</div>
       <h2>{config.heading}</h2>
       <p>{config.intro}</p>
+      {unresolvedRows ? (
+        <p>
+          {unresolvedRows} Warrior III ranges have unresolved source-chart
+          conflicts and are excluded from supported ranges and tool options.
+          Obtain Papa-Alpha confirmation before aircraft-specific selection/use.
+        </p>
+      ) : null}
 
       <div className="bs-pa31-summary" aria-label="Applicability summary">
         <div className="bs-pa31-summary-item tool-one">
@@ -1186,7 +1203,9 @@ export default async function ProductDetailPage({
   const cleanDescText = isAxisSystemListing
     ? ''
     : hasItemizedKitContents
-      ? 'Garmin kit components and part numbers are listed below.'
+      ? product.tags.includes('rwas-custom-bundle')
+        ? 'Package contents and source-chart applicability warnings are listed below.'
+        : 'Garmin kit components and part numbers are listed below.'
       : showDualG5KitDetails
         ? 'A complete certified dual-display package for an electronic attitude indicator and HSI configuration.'
         : showPa31RudderTrimApplicability || showPapaAlphaApplicability
