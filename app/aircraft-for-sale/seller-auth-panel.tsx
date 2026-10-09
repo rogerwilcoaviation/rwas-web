@@ -118,6 +118,7 @@ export default function SellerAuthPanel() {
   const [identityMethods, setIdentityMethods] = useState<IdentityMethod[]>([]);
   const [clerkProduction, setClerkProduction] = useState(false);
   const [emailCodeLogin, setEmailCodeLogin] = useState(false);
+  const [clerkRouteStage, setClerkRouteStage] = useState('');
   const [view, setView] = useState<
     'login' | 'clerk' | 'listings' | 'edit' | 'account' | null
   >(null);
@@ -166,31 +167,49 @@ export default function SellerAuthPanel() {
     } catch {
       sessionStorage.removeItem(key);
     }
+    const requestedClerkRoute = new URL(window.location.href).searchParams.get(
+      'seller-auth',
+    );
+    if (requestedClerkRoute !== null) setClerkRouteStage('methods-loading');
     void fetch(SELLER_API + '/auth/methods', { cache: 'no-store' })
       .then(async (response) => {
-        if (response.ok) {
-          const data = await response.json();
-          setIdentityMethods(
-            (data.methods || []).filter((value: string) =>
-              ['password', 'google', 'apple'].includes(value),
-            ),
+        if (!response.ok) throw new Error('methods unavailable');
+        const data = await response.json();
+        setIdentityMethods(
+          (data.methods || []).filter((value: string) =>
+            ['password', 'google', 'apple'].includes(value),
+          ),
+        );
+        setEmailCodeLogin(data.emailCode === true);
+        const clerkEnabled = isClerkProductionMethodEnabled(data);
+        setClerkProduction(clerkEnabled);
+        const clerkRoute = new URL(window.location.href).searchParams.get(
+          'seller-auth',
+        );
+        if (
+          ['sign-up', 'complete'].includes(clerkRoute || '') &&
+          clerkEnabled
+        ) {
+          setClerkRouteStage('panel-requested');
+          setView('clerk');
+        } else if (clerkRoute !== null) {
+          setClerkRouteStage(
+            clerkEnabled ? 'route-invalid' : 'method-unavailable',
           );
-          setEmailCodeLogin(data.emailCode === true);
-          const clerkEnabled = isClerkProductionMethodEnabled(data);
-          setClerkProduction(clerkEnabled);
-          const clerkRoute = new URL(window.location.href).searchParams.get(
-            'seller-auth',
-          );
-          if (clerkRoute === 'sign-up' && clerkEnabled) setView('clerk');
-          else if (clerkRoute !== null) clearSellerAuthRoute();
-          if (storedSession?.provider === 'clerk-production') {
-            if (clerkEnabled && storedSession.email && storedSession.token)
-              setAuth(storedSession);
-            else sessionStorage.removeItem(key);
-          }
+          clearSellerAuthRoute();
+        }
+        if (storedSession?.provider === 'clerk-production') {
+          if (clerkEnabled && storedSession.email && storedSession.token)
+            setAuth(storedSession);
+          else sessionStorage.removeItem(key);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        if (requestedClerkRoute !== null) {
+          setClerkRouteStage('methods-failed');
+          clearSellerAuthRoute();
+        }
+      });
     const callback = new URL(window.location.href);
     if (
       callback.searchParams.has('state') &&
@@ -438,6 +457,9 @@ export default function SellerAuthPanel() {
   );
   return (
     <>
+      {clerkRouteStage && (
+        <span hidden data-rwas-clerk-route-stage={clerkRouteStage} />
+      )}
       <button className="a4s-cta-btn" onClick={() => void jerry()}>
         List Your Aircraft
       </button>

@@ -178,6 +178,11 @@ test('post-rerender verification keeps one listener and completes the real RWAS 
     await page.waitForFunction(
       () => globalThis.__CLERK_LIFECYCLE__.listenerAdds === 1,
     );
+    await page.waitForFunction(
+      () =>
+        document.querySelector('[data-rwas-clerk-stage]')?.dataset
+          .rwasClerkStage === 'provider-session-absent',
+    );
     for (let index = 0; index < 4; index += 1) {
       await page.evaluate(() => globalThis.__CLERK_LIFECYCLE__.rerender());
       await page.waitForTimeout(0);
@@ -202,6 +207,12 @@ test('post-rerender verification keeps one listener and completes the real RWAS 
       () => globalThis.__CLERK_LIFECYCLE__.callbacks.length === 1,
     );
     const state = await page.evaluate(() => globalThis.__CLERK_LIFECYCLE__);
+    assert.equal(
+      await page
+        .locator('[data-rwas-clerk-stage]')
+        .getAttribute('data-rwas-clerk-stage'),
+      'complete',
+    );
     assert.equal(state.callbacks[0].version, 4);
     assert.deepEqual(state.callbacks[0].session, {
       provider: 'clerk-production',
@@ -247,7 +258,7 @@ test('post-rerender verification keeps one listener and completes the real RWAS 
   }
 });
 
-test('unmount during an initial-session handshake cleans up immediately', async () => {
+test('existing-session handoff skips SignIn mount and cleans up immediately', async () => {
   const bundle = await bundleHarness();
   const browser = await chromium.launch({ headless: true });
   let releaseStart;
@@ -334,8 +345,8 @@ test('unmount during an initial-session handshake cleans up immediately', async 
     assert.deepEqual(cleaned, {
       listenerAdds: 1,
       listenerRemoves: 1,
-      mounts: 1,
-      unmounts: 1,
+      mounts: 0,
+      unmounts: 0,
       callbacks: 0,
     });
     releaseStart();

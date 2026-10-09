@@ -13,6 +13,17 @@ const START_PATH = SELLER_ROOT + '/auth/clerk-production/start';
 const FINISH_PATH = SELLER_ROOT + '/auth/clerk-production/finish';
 const SELLER_URL = CLERK_PRODUCTION_ORIGIN + '/aircraft-for-sale';
 const SIGN_UP_URL = SELLER_URL + '?seller-auth=sign-up';
+const HANDOFF_URL = SELLER_URL + '?seller-auth=complete';
+
+export type ClerkProductionHandoffStage =
+  | 'provider-session-present'
+  | 'clerk-token-request'
+  | 'rwas-start-request'
+  | 'rwas-start-accepted'
+  | 'rwas-finish-request'
+  | 'rwas-finish-accepted'
+  | 'rwas-account-request'
+  | 'complete';
 
 type ClerkConstructor = new (publishableKey: string) => Clerk;
 type ClerkProductionOptions = {
@@ -101,21 +112,21 @@ export class ClerkProductionBrowser {
     if (signUp) {
       this.clerk.mountSignUp(element, {
         routing: 'hash',
-        forceRedirectUrl: SELLER_URL,
-        fallbackRedirectUrl: SELLER_URL,
-        signInUrl: SELLER_URL,
-        signInForceRedirectUrl: SELLER_URL,
-        signInFallbackRedirectUrl: SELLER_URL,
+        forceRedirectUrl: HANDOFF_URL,
+        fallbackRedirectUrl: HANDOFF_URL,
+        signInUrl: HANDOFF_URL,
+        signInForceRedirectUrl: HANDOFF_URL,
+        signInFallbackRedirectUrl: HANDOFF_URL,
       });
       return () => this.clerk.unmountSignUp(element);
     }
     this.clerk.mountSignIn(element, {
       routing: 'hash',
-      forceRedirectUrl: SELLER_URL,
-      fallbackRedirectUrl: SELLER_URL,
+      forceRedirectUrl: HANDOFF_URL,
+      fallbackRedirectUrl: HANDOFF_URL,
       signUpUrl: SIGN_UP_URL,
-      signUpForceRedirectUrl: SELLER_URL,
-      signUpFallbackRedirectUrl: SELLER_URL,
+      signUpForceRedirectUrl: HANDOFF_URL,
+      signUpFallbackRedirectUrl: HANDOFF_URL,
     });
     return () => this.clerk.unmountSignIn(element);
   }
@@ -142,39 +153,66 @@ export class ClerkProductionBrowser {
     return token;
   }
 
-  async connect() {
+  async connect(
+    observe: (stage: ClerkProductionHandoffStage) => void = () => {},
+  ) {
     if (this.connecting) return this.connecting;
-    this.connecting = this.connectOnce().finally(() => {
+    this.connecting = this.connectOnce(observe).finally(() => {
       this.connecting = null;
     });
     return this.connecting;
   }
 
-  private async connectOnce(): Promise<ClerkProductionSession> {
-    const start = await this.post(START_PATH, {});
+  private async connectOnce(
+    observe: (stage: ClerkProductionHandoffStage) => void,
+  ): Promise<ClerkProductionSession> {
+    observe('provider-session-present');
+    const start = await this.post(
+      START_PATH,
+      {},
+      'rwas-start-request',
+      'rwas-start-accepted',
+      observe,
+    );
     const nonce = safeString(start.nonce, 512);
     if (!nonce) throw new Error('RWAS sign-in could not be started.');
-    const finish = await this.post(FINISH_PATH, { nonce });
+    const finish = await this.post(
+      FINISH_PATH,
+      { nonce },
+      'rwas-finish-request',
+      'rwas-finish-accepted',
+      observe,
+    );
     const session = safeString(finish.session, 512);
     const csrf = safeString(finish.csrf, 512);
     if (!session || !csrf)
       throw new Error('RWAS sign-in could not be completed.');
-    const account = await this.account(session, csrf);
+    const account = await this.account(session, csrf, observe);
     const profile = account.profile as Record<string, unknown> | undefined;
     const email = safeString(profile?.email, 320);
     const name = safeString(profile?.name, 300);
     if (!email) throw new Error('RWAS sign-in could not be completed.');
+    observe('complete');
     return { provider: 'clerk-production', token: session, csrf, email, name };
   }
 
-  private async post(path: string, body: Record<string, unknown>) {
+  private async post(
+    path: string,
+    body: Record<string, unknown>,
+    requestStage: ClerkProductionHandoffStage,
+    acceptedStage: ClerkProductionHandoffStage,
+    observe: (stage: ClerkProductionHandoffStage) => void,
+  ) {
     assertClerkProductionBoundary(productionLocation());
+    observe('clerk-token-request');
+    const clerkToken = await this.token();
+    observe(requestStage);
     const response = await this.request(path, {
       method: 'POST',
       credentials: 'same-origin',
       cache: 'no-store',
       headers: {
-        'X-Clerk-Session-Token': await this.token(),
+        'X-Clerk-Session-Token': clerkToken,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
@@ -185,18 +223,26 @@ export class ClerkProductionBrowser {
     > | null;
     if (!response.ok || !result)
       throw new Error('RWAS sign-in could not be completed.');
+    observe(acceptedStage);
     return result;
   }
 
-  private async account(session: string, csrf: string) {
+  private async account(
+    session: string,
+    csrf: string,
+    observe: (stage: ClerkProductionHandoffStage) => void,
+  ) {
     assertClerkProductionBoundary(productionLocation());
+    observe('clerk-token-request');
+    const clerkToken = await this.token();
+    observe('rwas-account-request');
     const response = await this.request(SELLER_ROOT + '/account', {
       method: 'GET',
       credentials: 'same-origin',
       cache: 'no-store',
       headers: {
         Authorization: 'Bearer ' + session,
-        'X-Clerk-Session-Token': await this.token(),
+        'X-Clerk-Session-Token': clerkToken,
         'X-RWAS-CSRF': csrf,
       },
     });

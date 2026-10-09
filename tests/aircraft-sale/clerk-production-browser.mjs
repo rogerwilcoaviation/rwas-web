@@ -45,7 +45,7 @@ const harness = [
   ' unmountSignIn();',
   " const unmountSignUp = client.mountAuthentication(mount, '?seller-auth=sign-up');",
   ' unmountSignUp();',
-  ' results.session = await client.connect();',
+  ' results.handoffStages = []; results.session = await client.connect(stage => results.handoffStages.push(stage));',
   ' class WrongOriginClerk extends ClerkMock {',
   "  constructor(key) { super(key); this.session = { clearCache: () => { results.wrongOriginCacheClears = (results.wrongOriginCacheClears || 0) + 1; }, getToken: async () => { results.wrongOriginTokenCalls = (results.wrongOriginTokenCalls || 0) + 1; return jwt('https://accounts.rogerwilcoaviation.com'); } }; }",
   ' }',
@@ -248,24 +248,29 @@ try {
   assert.equal(result.signUpUnmounted, true);
   assert.deepEqual(result.signInOptions, {
     routing: 'hash',
-    forceRedirectUrl: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
-    fallbackRedirectUrl: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+    forceRedirectUrl:
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
+    fallbackRedirectUrl:
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
     signUpUrl:
       'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=sign-up',
     signUpForceRedirectUrl:
-      'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
     signUpFallbackRedirectUrl:
-      'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
   });
   assert.deepEqual(result.signUpOptions, {
     routing: 'hash',
-    forceRedirectUrl: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
-    fallbackRedirectUrl: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
-    signInUrl: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+    forceRedirectUrl:
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
+    fallbackRedirectUrl:
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
+    signInUrl:
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
     signInForceRedirectUrl:
-      'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
     signInFallbackRedirectUrl:
-      'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+      'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
   });
   assert.equal(apiCalls.length, 3);
   assert.deepEqual(
@@ -305,6 +310,18 @@ try {
     'Bearer offline-core-session',
   );
   assert.equal(apiCalls[2].headers['x-rwas-csrf'], 'offline-csrf');
+  assert.deepEqual(result.handoffStages, [
+    'provider-session-present',
+    'clerk-token-request',
+    'rwas-start-request',
+    'rwas-start-accepted',
+    'clerk-token-request',
+    'rwas-finish-request',
+    'rwas-finish-accepted',
+    'clerk-token-request',
+    'rwas-account-request',
+    'complete',
+  ]);
   assert.deepEqual(result.session, {
     provider: 'clerk-production',
     token: 'offline-core-session',
@@ -317,6 +334,7 @@ try {
 
   const parent = await browser.newPage();
   parent.setDefaultTimeout(5000);
+  let methodsFail = false;
   await parent.route('**/*', async (route) => {
     const url = new URL(route.request().url());
     if (url.pathname === '/parent.js')
@@ -327,7 +345,7 @@ try {
       });
     if (url.pathname === '/api/aircraft-sale/auth/methods')
       return route.fulfill({
-        status: 200,
+        status: methodsFail ? 503 : 200,
         contentType: 'application/json',
         body: JSON.stringify({
           methods: ['clerk-production'],
@@ -353,9 +371,47 @@ try {
     'https://www.rogerwilcoaviation.com/aircraft-for-sale',
   );
   await parent.goto(
+    'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
+  );
+  await parentPanel.waitFor({ state: 'attached' });
+  assert.equal(await parentPanel.textContent(), '?seller-auth=complete');
+  assert.equal(
+    await parent
+      .locator('[data-rwas-clerk-route-stage]')
+      .getAttribute('data-rwas-clerk-route-stage'),
+    'panel-requested',
+  );
+  await parent.getByRole('button', { name: 'Close seller panel' }).click();
+  await parentPanel.waitFor({ state: 'detached' });
+  assert.equal(
+    parent.url(),
+    'https://www.rogerwilcoaviation.com/aircraft-for-sale',
+  );
+  await parent.goto(
     'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=invalid',
   );
   await parent.waitForFunction(() => !location.search);
+  assert.equal(
+    await parent.locator('[data-clerk-parent="mounted"]').count(),
+    0,
+  );
+  assert.equal(
+    await parent
+      .locator('[data-rwas-clerk-route-stage]')
+      .getAttribute('data-rwas-clerk-route-stage'),
+    'route-invalid',
+  );
+  methodsFail = true;
+  await parent.goto(
+    'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
+  );
+  await parent.waitForFunction(() => !location.search);
+  assert.equal(
+    await parent
+      .locator('[data-rwas-clerk-route-stage]')
+      .getAttribute('data-rwas-clerk-route-stage'),
+    'methods-failed',
+  );
   assert.equal(
     await parent.locator('[data-clerk-parent="mounted"]').count(),
     0,
