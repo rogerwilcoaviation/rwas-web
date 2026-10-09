@@ -72,6 +72,7 @@ async function providerGet(env, path, fetchImpl, authStage) {
       headers: {
         Accept: 'application/json',
         Authorization: 'Bearer ' + env.CLERK_PRODUCTION_SECRET_KEY,
+        'Clerk-API-Version': '2025-04-10',
       },
     });
   } catch {

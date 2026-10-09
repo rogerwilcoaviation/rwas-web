@@ -86,6 +86,7 @@ function providerFixture() {
     if (String(url) === CLERK_PRODUCTION.issuer + '/.well-known/jwks.json')
       return Response.json({ keys: [jwk] });
     assert.equal(init.headers.Authorization, 'Bearer ' + secret);
+    assert.equal(init.headers['Clerk-API-Version'], '2025-04-10');
     if (String(url).endsWith('/sessions/' + session.id))
       return Response.json(session);
     if (String(url).endsWith('/users/' + user.id)) return Response.json(user);
