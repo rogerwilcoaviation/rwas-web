@@ -16,7 +16,7 @@ const uiSource = new URL(
 ).pathname;
 const output = '/tmp/rwas-clerk-production-browser-test.js';
 const harness = [
-  'import { CLERK_PRODUCTION_HOST, CLERK_PRODUCTION_PUBLISHABLE_KEY, getClerkProductionBrowser, isClerkProductionMethodEnabled } from ' +
+  'import { CLERK_PRODUCTION_HOST, CLERK_PRODUCTION_PUBLISHABLE_KEY, clerkProductionFailureTelemetry, getClerkProductionBrowser, isClerkProductionMethodEnabled } from ' +
     JSON.stringify(source) +
     ';',
   'import { CLERK_PRODUCTION_UI_URL, CLERK_PRODUCTION_UI_VERSION } from ' +
@@ -51,6 +51,11 @@ const harness = [
   ' }',
   ' const wrongOriginClient = await getClerkProductionBrowser({ ClerkConstructor: WrongOriginClerk });',
   ' try { await wrongOriginClient.connect(); results.wrongOriginRejected = false; } catch { results.wrongOriginRejected = true; }',
+  ' class DiagnosticClerk extends ClerkMock { constructor(key) { super(key); this.session = { clearCache: () => {}, getToken: async () => jwt("https://www.rogerwilcoaviation.com") }; } }',
+  ' const diagnosticClient = await getClerkProductionBrowser({ ClerkConstructor: DiagnosticClerk, fetch: async () => new Response(JSON.stringify({ error: "redacted" }), { status: 401, headers: { "Content-Type": "application/json", "X-RWAS-Clerk-Failure-Stage": "jwt-claims" } }) });',
+  ' try { await diagnosticClient.connect(); } catch (error) { results.failureTelemetry = clerkProductionFailureTelemetry(error); }',
+  ' const untrustedDiagnosticClient = await getClerkProductionBrowser({ ClerkConstructor: DiagnosticClerk, fetch: async () => new Response("not-json", { status: 418, headers: { "X-RWAS-Clerk-Failure-Stage": "injected-value" } }) });',
+  ' try { await untrustedDiagnosticClient.connect(); } catch (error) { results.untrustedFailureTelemetry = clerkProductionFailureTelemetry(error); }',
   " results.methodOff = isClerkProductionMethodEnabled({ methods: ['clerk-production'] }, false);",
   " results.methodOn = isClerkProductionMethodEnabled({ methods: ['clerk-production'] }, true);",
   ' results.host = CLERK_PRODUCTION_HOST;',
@@ -243,6 +248,14 @@ try {
   assert.equal(result.wrongOriginRejected, true);
   assert.equal(result.wrongOriginCacheClears, 1);
   assert.equal(result.wrongOriginTokenCalls, 2);
+  assert.deepEqual(result.failureTelemetry, {
+    status: '401',
+    serverStage: 'jwt-claims',
+  });
+  assert.deepEqual(result.untrustedFailureTelemetry, {
+    status: 'other-http',
+    serverStage: '',
+  });
   assert.equal(result.mockReceivedUi, false);
   assert.equal(result.signInUnmounted, true);
   assert.equal(result.signUpUnmounted, true);

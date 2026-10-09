@@ -68,12 +68,29 @@ const empty = () => ({
   audit: [],
   outbox: {},
 });
-const reply = (data, status = 200) =>
+const clerkFailureStages = new Set([
+  'runtime-config',
+  'request-origin',
+  'session-token',
+  'jwt-format',
+  'jwt-header',
+  'jwt-jwks',
+  'jwt-key',
+  'jwt-signature',
+  'jwt-claims',
+  'provider-session',
+  'provider-user',
+  'provider-account',
+  'provider-email',
+  'provider-password-state',
+]);
+const reply = (data, status = 200, headers = {}) =>
   Response.json(data, {
     status,
     headers: {
       'Cache-Control': 'no-store',
       'X-Content-Type-Options': 'nosniff',
+      ...headers,
     },
   });
 const fail = (status, message) => {
@@ -383,10 +400,7 @@ export class SellerStore {
           await req.arrayBuffer();
         } catch {}
       }
-      if (
-        this.env.CLERK_PRODUCTION_ENABLED === 'true' &&
-        e.providerIdentity
-      ) {
+      if (this.env.CLERK_PRODUCTION_ENABLED === 'true' && e.providerIdentity) {
         this.state = structuredClone(this.rollbackState);
         const key = await digest(
           e.providerIdentity.issuer + '|' + e.providerIdentity.subject,
@@ -424,6 +438,9 @@ export class SellerStore {
       try {
         await this.saveState(this.state);
       } catch {}
+      const clerkFailureStage = clerkFailureStages.has(e.authStage)
+        ? e.authStage
+        : '';
       return reply(
         {
           error: e.status
@@ -431,6 +448,9 @@ export class SellerStore {
             : 'The request could not be saved. Please retry.',
         },
         e.status || 503,
+        clerkFailureStage
+          ? { 'X-RWAS-Clerk-Failure-Stage': clerkFailureStage }
+          : {},
       );
     }
   }
@@ -1114,12 +1134,16 @@ export class SellerStore {
       (path.startsWith('/auth/') ||
         ['/send-code', '/check-code'].includes(path))
     ) {
-      if (path === '/auth/methods' && method === 'GET')
+      if (path === '/auth/methods' && method === 'GET') {
+        // Advertise Clerk only when the complete runtime configuration used by
+        // the start/finish routes is valid for this exact production origin.
+        clerkProductionConfig(this.env, req);
         return reply({
           methods: ['clerk-production'],
           emailCode: false,
           publicListings: false,
         });
+      }
       fail(
         404,
         'Alternate login is disabled when production Clerk is enabled.',

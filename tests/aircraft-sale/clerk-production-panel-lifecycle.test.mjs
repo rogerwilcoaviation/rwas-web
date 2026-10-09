@@ -93,6 +93,7 @@ async function bundleHarness() {
                 ' clerk.session = makeSession();',
                 ' state.listener({ session: clerk.session });',
                 '};',
+                'export const clerkProductionFailureTelemetry = error => error?.telemetry || { status: "", serverStage: "" };',
                 'export const getClerkProductionBrowser = async () => client;',
               ].join('\n'),
             }),

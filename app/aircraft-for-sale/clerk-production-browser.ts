@@ -39,6 +39,51 @@ export type ClerkProductionSession = {
   name: string;
 };
 
+export type ClerkProductionFailureTelemetry = {
+  status: string;
+  serverStage: string;
+};
+
+const SAFE_HTTP_STATUSES = new Set([
+  400, 401, 403, 404, 405, 409, 413, 429, 500, 502, 503, 504,
+]);
+const SAFE_SERVER_STAGES = new Set([
+  'runtime-config',
+  'request-origin',
+  'session-token',
+  'jwt-format',
+  'jwt-header',
+  'jwt-jwks',
+  'jwt-key',
+  'jwt-signature',
+  'jwt-claims',
+  'provider-session',
+  'provider-user',
+  'provider-account',
+  'provider-email',
+  'provider-password-state',
+]);
+
+class ClerkProductionRequestError extends Error {
+  readonly telemetry: ClerkProductionFailureTelemetry;
+
+  constructor(status: string, serverStage = '') {
+    super('RWAS sign-in could not be completed.');
+    this.telemetry = {
+      status,
+      serverStage: SAFE_SERVER_STAGES.has(serverStage) ? serverStage : '',
+    };
+  }
+}
+
+export function clerkProductionFailureTelemetry(
+  error: unknown,
+): ClerkProductionFailureTelemetry {
+  return error instanceof ClerkProductionRequestError
+    ? error.telemetry
+    : { status: '', serverStage: '' };
+}
+
 function productionLocation() {
   if (typeof window === 'undefined')
     throw new Error('Clerk production authentication requires a browser.');
@@ -207,22 +252,35 @@ export class ClerkProductionBrowser {
     observe('clerk-token-request');
     const clerkToken = await this.token();
     observe(requestStage);
-    const response = await this.request(path, {
-      method: 'POST',
-      credentials: 'same-origin',
-      cache: 'no-store',
-      headers: {
-        'X-Clerk-Session-Token': clerkToken,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
+    let response: Response;
+    try {
+      response = await this.request(path, {
+        method: 'POST',
+        credentials: 'same-origin',
+        cache: 'no-store',
+        headers: {
+          'X-Clerk-Session-Token': clerkToken,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+    } catch {
+      throw new ClerkProductionRequestError('network');
+    }
+    const serverStage =
+      response.headers.get('X-RWAS-Clerk-Failure-Stage') || '';
     const result = (await response.json().catch(() => null)) as Record<
       string,
       unknown
     > | null;
-    if (!response.ok || !result)
-      throw new Error('RWAS sign-in could not be completed.');
+    if (!response.ok)
+      throw new ClerkProductionRequestError(
+        SAFE_HTTP_STATUSES.has(response.status)
+          ? String(response.status)
+          : 'other-http',
+        serverStage,
+      );
+    if (!result) throw new ClerkProductionRequestError('non-json');
     observe(acceptedStage);
     return result;
   }
@@ -236,22 +294,35 @@ export class ClerkProductionBrowser {
     observe('clerk-token-request');
     const clerkToken = await this.token();
     observe('rwas-account-request');
-    const response = await this.request(SELLER_ROOT + '/account', {
-      method: 'GET',
-      credentials: 'same-origin',
-      cache: 'no-store',
-      headers: {
-        Authorization: 'Bearer ' + session,
-        'X-Clerk-Session-Token': clerkToken,
-        'X-RWAS-CSRF': csrf,
-      },
-    });
+    let response: Response;
+    try {
+      response = await this.request(SELLER_ROOT + '/account', {
+        method: 'GET',
+        credentials: 'same-origin',
+        cache: 'no-store',
+        headers: {
+          Authorization: 'Bearer ' + session,
+          'X-Clerk-Session-Token': clerkToken,
+          'X-RWAS-CSRF': csrf,
+        },
+      });
+    } catch {
+      throw new ClerkProductionRequestError('network');
+    }
+    const serverStage =
+      response.headers.get('X-RWAS-Clerk-Failure-Stage') || '';
     const result = (await response.json().catch(() => null)) as Record<
       string,
       unknown
     > | null;
-    if (!response.ok || !result)
-      throw new Error('RWAS sign-in could not be completed.');
+    if (!response.ok)
+      throw new ClerkProductionRequestError(
+        SAFE_HTTP_STATUSES.has(response.status)
+          ? String(response.status)
+          : 'other-http',
+        serverStage,
+      );
+    if (!result) throw new ClerkProductionRequestError('non-json');
     return result;
   }
 

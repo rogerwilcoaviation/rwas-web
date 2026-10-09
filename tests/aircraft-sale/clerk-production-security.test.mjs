@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { generateKeyPairSync, sign, webcrypto } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import {
   CLERK_PRODUCTION,
   clerkProductionConfig,
@@ -12,6 +13,21 @@ globalThis.crypto ||= webcrypto;
 
 const secret = 'sk_live_fixture_not_a_credential';
 const origin = CLERK_PRODUCTION.origin;
+const contractSession = JSON.parse(
+  readFileSync(
+    new URL(
+      './fixtures/clerk-backend-session-2025-04-10.json',
+      import.meta.url,
+    ),
+    'utf8',
+  ),
+);
+const contractUser = JSON.parse(
+  readFileSync(
+    new URL('./fixtures/clerk-backend-user-2025-04-10.json', import.meta.url),
+    'utf8',
+  ),
+);
 
 function providerFixture() {
   const { privateKey, publicKey } = generateKeyPairSync('rsa', {
@@ -19,31 +35,27 @@ function providerFixture() {
   });
   const jwk = publicKey.export({ format: 'jwk' });
   Object.assign(jwk, { kid: 'production-fixture', alg: 'RS256', use: 'sig' });
-  const session = {
+  const session = structuredClone(contractSession);
+  Object.assign(session, {
     id: 'sess_Production',
     user_id: 'user_Production',
-    status: 'active',
     expire_at: Date.now() + 3600000,
     created_at: Date.now() - 10000,
-  };
-  const user = {
+  });
+  const user = structuredClone(contractUser);
+  Object.assign(user, {
     id: 'user_Production',
-    banned: false,
-    locked: false,
     primary_email_address_id: 'email_primary',
-    email_addresses: [
-      {
-        id: 'email_primary',
-        email_address: 'owner@example.test',
-        verification: { status: 'verified' },
-      },
-    ],
     password_last_updated_at: 1000,
     first_name: 'Fixture',
     last_name: 'Owner',
     public_metadata: { role: 'admin' },
     totp_enabled: true,
-  };
+  });
+  Object.assign(user.email_addresses[0], {
+    id: 'email_primary',
+    email_address: 'owner@example.test',
+  });
   const jwt = (overrides = {}) => {
     const header = Buffer.from(
       JSON.stringify({ alg: 'RS256', kid: jwk.kid, typ: 'JWT' }),
@@ -246,6 +258,47 @@ test('direct HTTP adapter requires exact signed claims and canonical session/use
       error.providerIdentity?.blocked === true &&
       error.providerIdentity.subject === p.user.id,
   );
+});
+
+test('runtime advertising fails closed and Clerk errors expose only bounded stages', async () => {
+  const p = providerFixture();
+  await assert.rejects(
+    () =>
+      clerkProductionIdentity(env(), request(p.jwt({ aud: 'wrong' })), p.fetch),
+    (error) => error.status === 401 && error.authStage === 'jwt-claims',
+  );
+  p.session.status = 'revoked';
+  await assert.rejects(
+    () => clerkProductionIdentity(env(), request(p.jwt()), p.fetch),
+    (error) => error.status === 401 && error.authStage === 'provider-session',
+  );
+
+  const f = fixture();
+  Object.assign(f.env, env(), {
+    CLERK_PRODUCTION_SECRET_KEY: '',
+    AUTH_REDIRECT_URI: origin + '/aircraft-for-sale',
+  });
+  const unavailable = await f.call('/auth/methods', 'GET');
+  assert.equal(unavailable.status, 503);
+  assert.equal(
+    JSON.stringify(await unavailable.json()).includes('clerk-production'),
+    false,
+  );
+
+  f.env.CLERK_PRODUCTION_SECRET_KEY = secret;
+  const rejected = await f.call(
+    '/auth/clerk-production/start',
+    'POST',
+    {},
+    undefined,
+    { Origin: origin, 'X-Clerk-Session-Token': 'not-a-jwt' },
+  );
+  assert.equal(rejected.status, 401);
+  assert.equal(
+    rejected.headers.get('X-RWAS-Clerk-Failure-Stage'),
+    'jwt-format',
+  );
+  assert.deepEqual(Object.keys(await rejected.json()), ['error']);
 });
 
 test('production core keeps trusted legacy sessions, rejects email migration, and persists reset fences', async () => {

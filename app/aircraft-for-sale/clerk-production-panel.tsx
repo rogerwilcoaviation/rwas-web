@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import {
+  clerkProductionFailureTelemetry,
   getClerkProductionBrowser,
   type ClerkProductionHandoffStage,
   type ClerkProductionSession,
@@ -24,6 +25,8 @@ export default function ClerkProductionPanel({
   >('client-loading');
   const currentStage = useRef(stage);
   const [failureStage, setFailureStage] = useState('');
+  const [failureStatus, setFailureStatus] = useState('');
+  const [serverFailureStage, setServerFailureStage] = useState('');
   const observe = (next: ClerkProductionHandoffStage) => {
     currentStage.current = next;
     setStage(next);
@@ -43,9 +46,12 @@ export default function ClerkProductionPanel({
           try {
             const session = await client.connect(observe);
             if (active) signedIn.current(session);
-          } catch {
+          } catch (caught) {
             if (active) {
+              const telemetry = clerkProductionFailureTelemetry(caught);
               setFailureStage(currentStage.current);
+              setFailureStatus(telemetry.status);
+              setServerFailureStage(telemetry.serverStage);
               setStage('failed');
               setError('Sign-in could not be completed. Please try again.');
             }
@@ -88,6 +94,8 @@ export default function ClerkProductionPanel({
       aria-label="Secure seller sign-in"
       data-rwas-clerk-stage={stage}
       data-rwas-clerk-failure-stage={failureStage || undefined}
+      data-rwas-clerk-failure-status={failureStatus || undefined}
+      data-rwas-clerk-server-stage={serverFailureStage || undefined}
     >
       <p>
         Sign in, create an account, verify your email, or reset your password
