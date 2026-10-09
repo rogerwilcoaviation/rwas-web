@@ -78,8 +78,9 @@ async function bundleHarness() {
                   JSON.stringify(browserSource) +
                   ';',
                 'const state = globalThis.__CLERK_LIFECYCLE__;',
+                'const makeSession = () => ({ clearCache() {}, async getToken(options) { state.tokenOptions.push(options); return state.canonicalJwt; } });',
                 'const clerk = {',
-                ' session: null,',
+                ' session: state.initialSession ? makeSession() : null,',
                 ' addListener(listener) { state.listenerAdds++; state.listener = listener; return () => { state.listenerRemoves++; }; },',
                 ' mountSignIn() { state.mounts++; },',
                 ' unmountSignIn() { state.unmounts++; },',
@@ -89,7 +90,7 @@ async function bundleHarness() {
                 '};',
                 'const client = new ClerkProductionBrowser(clerk, fetch);',
                 'state.completeVerification = () => {',
-                ' clerk.session = { clearCache() {}, async getToken(options) { state.tokenOptions.push(options); return state.canonicalJwt; } };',
+                ' clerk.session = makeSession();',
                 ' state.listener({ session: clerk.session });',
                 '};',
                 'export const getClerkProductionBrowser = async () => client;',
@@ -113,6 +114,7 @@ test('post-rerender verification keeps one listener and completes the real RWAS 
       ({ token }) => {
         globalThis.__CLERK_LIFECYCLE__ = {
           canonicalJwt: token,
+          initialSession: false,
           listenerAdds: 0,
           listenerRemoves: 0,
           mounts: 0,
@@ -241,6 +243,113 @@ test('post-rerender verification keeps one listener and completes the real RWAS 
     }));
     assert.deepEqual(after, { listenerRemoves: 1, unmounts: 1 });
   } finally {
+    await browser.close();
+  }
+});
+
+test('unmount during an initial-session handshake cleans up immediately', async () => {
+  const bundle = await bundleHarness();
+  const browser = await chromium.launch({ headless: true });
+  let releaseStart;
+  const startGate = new Promise((resolve) => {
+    releaseStart = resolve;
+  });
+  try {
+    const page = await browser.newPage();
+    const calls = [];
+    await page.addInitScript(
+      ({ token }) => {
+        globalThis.__CLERK_LIFECYCLE__ = {
+          canonicalJwt: token,
+          initialSession: true,
+          listenerAdds: 0,
+          listenerRemoves: 0,
+          mounts: 0,
+          unmounts: 0,
+          tokenOptions: [],
+          callbacks: [],
+        };
+      },
+      { token: canonicalJwt },
+    );
+    await page.route('**/*', async (route) => {
+      const request = route.request();
+      const url = new URL(request.url());
+      if (url.pathname === '/panel.js')
+        return route.fulfill({
+          status: 200,
+          contentType: 'text/javascript',
+          body: bundle,
+        });
+      if (url.pathname.startsWith('/api/aircraft-sale/')) {
+        calls.push(url.pathname);
+        if (url.pathname.endsWith('/start')) {
+          await startGate;
+          return route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ nonce: 'initial-session-nonce' }),
+          });
+        }
+        if (url.pathname.endsWith('/finish'))
+          return route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              session: 'initial-session-rwas-session',
+              csrf: 'initial-session-csrf',
+            }),
+          });
+        return route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            profile: { email: 'fixture@example.test', name: 'Fixture Seller' },
+          }),
+        });
+      }
+      return route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<!doctype html><html><body><div id="root"></div><script src="/panel.js"></script></body></html>',
+      });
+    });
+
+    await page.goto('https://www.rogerwilcoaviation.com/aircraft-for-sale');
+    await page.waitForFunction(
+      () => globalThis.__CLERK_LIFECYCLE__.tokenOptions.length === 1,
+    );
+    assert.deepEqual(calls, ['/api/aircraft-sale/auth/clerk-production/start']);
+    await page.evaluate(() => globalThis.__CLERK_LIFECYCLE__.unmountRoot());
+    await page.waitForFunction(
+      () => globalThis.__CLERK_LIFECYCLE__.listenerRemoves === 1,
+    );
+    const cleaned = await page.evaluate(() => ({
+      listenerAdds: globalThis.__CLERK_LIFECYCLE__.listenerAdds,
+      listenerRemoves: globalThis.__CLERK_LIFECYCLE__.listenerRemoves,
+      mounts: globalThis.__CLERK_LIFECYCLE__.mounts,
+      unmounts: globalThis.__CLERK_LIFECYCLE__.unmounts,
+      callbacks: globalThis.__CLERK_LIFECYCLE__.callbacks.length,
+    }));
+    assert.deepEqual(cleaned, {
+      listenerAdds: 1,
+      listenerRemoves: 1,
+      mounts: 1,
+      unmounts: 1,
+      callbacks: 0,
+    });
+    releaseStart();
+    await page.waitForFunction(
+      () => globalThis.__CLERK_LIFECYCLE__.tokenOptions.length === 3,
+    );
+    assert.equal(
+      await page.evaluate(
+        () => globalThis.__CLERK_LIFECYCLE__.callbacks.length,
+      ),
+      0,
+    );
+  } finally {
+    releaseStart?.();
     await browser.close();
   }
 });
