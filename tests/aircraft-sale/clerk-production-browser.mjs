@@ -1,0 +1,231 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { build } from 'esbuild';
+
+const { chromium } = await import(
+  process.env.PLAYWRIGHT_MODULE ||
+    '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs'
+);
+const source = new URL(
+  '../../app/aircraft-for-sale/clerk-production-browser.ts',
+  import.meta.url,
+).pathname;
+const uiSource = new URL(
+  '../../app/aircraft-for-sale/clerk-production-ui.ts',
+  import.meta.url,
+).pathname;
+const output = '/tmp/rwas-clerk-production-browser-test.js';
+const harness = [
+  'import { CLERK_PRODUCTION_HOST, CLERK_PRODUCTION_PUBLISHABLE_KEY, getClerkProductionBrowser, isClerkProductionMethodEnabled } from ' +
+    JSON.stringify(source) +
+    ';',
+  'import { CLERK_PRODUCTION_UI_URL, CLERK_PRODUCTION_UI_VERSION } from ' +
+    JSON.stringify(uiSource) +
+    ';',
+  'const results = {};',
+  'try {',
+  ' await getClerkProductionBrowser();',
+  ' results.officialLoaded = true;',
+  ' results.officialUiInitializations = globalThis.__OFFICIAL_UI_INITIALIZATIONS__ || 0;',
+  ' results.officialUiVersion = globalThis.__internal_ClerkUICtor?.version;',
+  ' class ClerkMock {',
+  "  constructor(key) { results.key = key; this.session = { getToken: async (options) => { results.tokenOptions = options; return 'offline.default.jwt'; } }; }",
+  '  async load(options) { results.mockLoaded = true; results.mockReceivedUi = Boolean(options?.ui); }',
+  "  mountSignIn(element, options) { results.mountOptions = options; element.dataset.clerkMounted = 'true'; }",
+  '  unmountSignIn() {}',
+  '  addListener() { return () => {}; }',
+  '  async signOut() { results.signedOut = true; }',
+  ' }',
+  ' const client = await getClerkProductionBrowser({ ClerkConstructor: ClerkMock });',
+  " client.mountSignIn(document.querySelector('#mount'));",
+  ' results.session = await client.connect();',
+  " results.methodOff = isClerkProductionMethodEnabled({ methods: ['clerk-production'] }, false);",
+  " results.methodOn = isClerkProductionMethodEnabled({ methods: ['clerk-production'] }, true);",
+  ' results.host = CLERK_PRODUCTION_HOST;',
+  ' results.expectedKey = CLERK_PRODUCTION_PUBLISHABLE_KEY;',
+  ' results.uiUrl = CLERK_PRODUCTION_UI_URL;',
+  ' results.uiVersion = CLERK_PRODUCTION_UI_VERSION;',
+  " document.body.dataset.result = 'pass';",
+  "} catch (error) { results.error = error.message; document.body.dataset.result = 'refused'; }",
+  'globalThis.__RESULTS__ = results;',
+].join(String.fromCharCode(10));
+await build({
+  stdin: {
+    contents: harness,
+    resolveDir: process.cwd(),
+    sourcefile: 'clerk-production-browser-harness.ts',
+    loader: 'ts',
+  },
+  outfile: output,
+  bundle: true,
+  format: 'esm',
+  platform: 'browser',
+  target: ['es2022'],
+  minify: true,
+  legalComments: 'none',
+});
+const bundle = await readFile(output, 'utf8');
+const productionSources =
+  (await readFile(source, 'utf8')) + (await readFile(uiSource, 'utf8'));
+assert.doesNotMatch(productionSources, /prototypes|clerk-isolated|pk_test_/);
+const html =
+  '<!doctype html><html><body><div id="mount"></div><script type="module" src="/adapter.js"></script></body></html>';
+const browser = await chromium.launch({ headless: true });
+try {
+  const apiCalls = [];
+  const clerkRequests = [];
+  const serve = async (route) => {
+    const request = route.request();
+    const url = new URL(request.url());
+    if (url.pathname === '/adapter.js')
+      return route.fulfill({
+        status: 200,
+        contentType: 'text/javascript',
+        body: bundle,
+      });
+    if (
+      request.url() ===
+      'https://clerk.rogerwilcoaviation.com/npm/@clerk/ui@1.39.0/dist/ui.browser.js'
+    ) {
+      clerkRequests.push(request.url());
+      return route.fulfill({
+        status: 200,
+        contentType: 'text/javascript',
+        body: "globalThis.__internal_ClerkUICtor = class ClerkUI { static version = '1.39.0'; constructor() { globalThis.__OFFICIAL_UI_INITIALIZATIONS__ = (globalThis.__OFFICIAL_UI_INITIALIZATIONS__ || 0) + 1; } };",
+      });
+    }
+    if (url.hostname === 'clerk.rogerwilcoaviation.com') {
+      clerkRequests.push(request.url());
+      return route.fulfill({
+        status: 503,
+        contentType: 'application/json',
+        body: '{}',
+      });
+    }
+    if (url.pathname.startsWith('/api/aircraft-sale/')) {
+      apiCalls.push({
+        path: url.pathname,
+        method: request.method(),
+        headers: request.headers(),
+        body: request.postData(),
+      });
+      if (url.pathname.endsWith('/start'))
+        return route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ nonce: 'one-use-offline-nonce' }),
+        });
+      if (url.pathname.endsWith('/finish')) {
+        assert.equal(
+          JSON.parse(request.postData()).nonce,
+          'one-use-offline-nonce',
+        );
+        return route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            session: 'offline-core-session',
+            csrf: 'offline-csrf',
+          }),
+        });
+      }
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          profile: { email: 'seller@example.test', name: 'Seller' },
+        }),
+      });
+    }
+    return route.fulfill({ status: 200, contentType: 'text/html', body: html });
+  };
+  const page = await browser.newPage();
+  await page.route('**/*', serve);
+  await page.goto('https://www.rogerwilcoaviation.com/offline-clerk-test');
+  await page.waitForFunction(() => document.body.dataset.result, null, {
+    timeout: 20_000,
+  });
+  assert.equal(await page.locator('body').getAttribute('data-result'), 'pass');
+  assert.equal(
+    await page.locator('#mount').getAttribute('data-clerk-mounted'),
+    'true',
+  );
+  const result = await page.evaluate(() => globalThis.__RESULTS__);
+  assert.equal(result.officialLoaded, true);
+  assert.equal(result.officialUiInitializations, 1);
+  assert.equal(result.officialUiVersion, '1.39.0');
+  assert.equal(result.uiVersion, '1.39.0');
+  assert.equal(
+    result.uiUrl,
+    'https://clerk.rogerwilcoaviation.com/npm/@clerk/ui@1.39.0/dist/ui.browser.js',
+  );
+  assert.ok(
+    clerkRequests.some((url) => url === result.uiUrl),
+    'the official production UI asset was requested',
+  );
+  assert.ok(
+    clerkRequests.some((url) => url.includes('/v1/environment')),
+    'the compiled official Clerk client initialized',
+  );
+  assert.equal(result.key, result.expectedKey);
+  assert.equal(result.host, 'clerk.rogerwilcoaviation.com');
+  assert.deepEqual(result.tokenOptions, { skipCache: true });
+  assert.equal(result.mockReceivedUi, false);
+  assert.equal(apiCalls.length, 3);
+  assert.deepEqual(
+    apiCalls.map(({ path, method }) => ({ path, method })),
+    [
+      {
+        path: '/api/aircraft-sale/auth/clerk-production/start',
+        method: 'POST',
+      },
+      {
+        path: '/api/aircraft-sale/auth/clerk-production/finish',
+        method: 'POST',
+      },
+      { path: '/api/aircraft-sale/account', method: 'GET' },
+    ],
+  );
+  for (const call of apiCalls)
+    assert.equal(call.headers['x-clerk-session-token'], 'offline.default.jwt');
+  assert.equal(
+    apiCalls[0].headers.origin,
+    'https://www.rogerwilcoaviation.com',
+  );
+  assert.equal(
+    apiCalls[1].headers.origin,
+    'https://www.rogerwilcoaviation.com',
+  );
+  assert.equal(apiCalls[2].headers.origin, undefined);
+  assert.equal(apiCalls[0].headers['content-type'], 'application/json');
+  assert.equal(apiCalls[0].headers.authorization, undefined);
+  assert.equal(
+    apiCalls[2].headers.authorization,
+    'Bearer offline-core-session',
+  );
+  assert.equal(apiCalls[2].headers['x-rwas-csrf'], 'offline-csrf');
+  assert.deepEqual(result.session, {
+    provider: 'clerk-production',
+    token: 'offline-core-session',
+    csrf: 'offline-csrf',
+    email: 'seller@example.test',
+    name: 'Seller',
+  });
+  assert.equal(result.methodOff, false);
+  assert.equal(result.methodOn, true);
+  const refused = await browser.newPage();
+  await refused.route('**/*', serve);
+  await refused.goto('https://rogerwilcoaviation.com/offline-clerk-test');
+  await refused.waitForFunction(() => document.body.dataset.result);
+  assert.equal(
+    await refused.locator('body').getAttribute('data-result'),
+    'refused',
+  );
+  const refusal = await refused.evaluate(() => globalThis.__RESULTS__);
+  assert.match(refusal.error, /unavailable here/);
+  console.log(
+    'production Clerk official UI/client init and browser request boundary: PASS',
+  );
+} finally {
+  await browser.close();
+}

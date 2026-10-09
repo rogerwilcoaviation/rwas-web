@@ -38,6 +38,7 @@
     "test:seller:media-browser": "node tests/aircraft-sale/full-shell.mjs"
   },
   "dependencies": {
+    "@clerk/clerk-js": "^6.38.1",
     "@hookform/resolvers": "^5.9.1",
     "@radix-ui/react-accessible-icon": "^1.1.7",
     "@radix-ui/react-accordion": "^1.2.12",

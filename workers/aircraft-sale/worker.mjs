@@ -1,4 +1,8 @@
 import {
+  clerkProductionConfig,
+  clerkProductionIdentity,
+} from './clerk-production.mjs';
+import {
   listingFields as fields,
   cleanListing as clean,
 } from './listing-fields.mjs';
@@ -370,6 +374,43 @@ export class SellerStore {
       await this.saveState(this.state);
       return result;
     } catch (e) {
+      if (
+        this.env.CLERK_PRODUCTION_ENABLED === 'true' &&
+        req.body &&
+        !req.bodyUsed
+      ) {
+        try {
+          await req.arrayBuffer();
+        } catch {}
+      }
+      if (
+        this.env.CLERK_PRODUCTION_ENABLED === 'true' &&
+        e.providerIdentity
+      ) {
+        this.state = structuredClone(this.rollbackState);
+        const key = await digest(
+          e.providerIdentity.issuer + '|' + e.providerIdentity.subject,
+        );
+        this.state.identitySecurity[key] = {
+          ...this.state.identitySecurity[key],
+          ...(e.providerIdentity.blocked ? { blocked: true } : {}),
+          ...(Number.isFinite(e.providerIdentity.credentialsChangedAt)
+            ? {
+                credentialsChangedAt: Math.max(
+                  this.state.identitySecurity[key]?.credentialsChangedAt || 0,
+                  e.providerIdentity.credentialsChangedAt,
+                ),
+              }
+            : {}),
+        };
+        const id = this.state.identities[key]?.userId;
+        if (id)
+          for (const [sessionKey, record] of Object.entries(
+            this.state.sessions,
+          ))
+            if (record.userId === id) delete this.state.sessions[sessionKey];
+        e.persist = true;
+      }
       // Persist failed OTP attempts/rate counters, but roll back other partial writes.
       if (!e.persist) {
         for (const k of Object.keys(this.state.files))
@@ -445,6 +486,48 @@ export class SellerStore {
       accountHeld(this.state.profiles[s.userId])
     )
       fail(401, 'Your session expired. Please sign in again.');
+    if (s.method === 'clerk-production') {
+      const config = clerkProductionConfig(this.env, req);
+      if (!config || req.headers.get('X-RWAS-CSRF') !== s.csrf)
+        fail(403, 'Production session proof rejected.');
+      const current = await clerkProductionIdentity(this.env, req);
+      if (
+        current.issuer !== s.issuer ||
+        current.subject !== s.subject ||
+        current.providerSessionId !== s.providerSessionId
+      )
+        fail(401, 'Provider session changed. Please sign in again.');
+      if (current.passwordLastUpdatedAt !== s.passwordLastUpdatedAt) {
+        const changedAt = Date.now();
+        const security = (this.state.identitySecurity[s.identityKey] ||= {});
+        security.providerResetHold = true;
+        security.providerResetGeneration = current.passwordLastUpdatedAt;
+        security.providerResetSessionId = s.providerSessionId;
+        security.credentialsChangedAt = Math.max(
+          security.credentialsChangedAt || 0,
+          changedAt,
+        );
+        this.state.profiles[s.userId].sessionRevokedAt = Math.max(
+          this.state.profiles[s.userId].sessionRevokedAt || 0,
+          changedAt,
+        );
+        for (const [sessionKey, record] of Object.entries(this.state.sessions))
+          if (record.userId === s.userId)
+            delete this.state.sessions[sessionKey];
+        throw Object.assign(new Error('Session was revoked.'), {
+          status: 401,
+          persist: true,
+        });
+      }
+      const security = this.state.identitySecurity[s.identityKey];
+      if (
+        security?.blocked ||
+        security?.providerResetHold ||
+        (security?.credentialsChangedAt || 0) >= s.createdAt ||
+        (this.state.profiles[s.userId].sessionRevokedAt || 0) >= s.createdAt
+      )
+        fail(401, 'Session was revoked.');
+    }
     if (recent && Date.now() - s.createdAt > 600000)
       fail(
         401,
@@ -891,6 +974,157 @@ export class SellerStore {
       return this.mailRequest(req, path);
     if (method === 'OPTIONS') return new Response(null, { status: 204 }); // Same-origin service; no wildcard CORS.
     if (path === '/health') return reply({ service: 'seller-v2', schema: 2 });
+    if (path.startsWith('/auth/clerk-production/')) {
+      const config = clerkProductionConfig(this.env, req);
+      if (!config) fail(404, 'Not found.');
+      if (method !== 'POST') fail(405, 'Method not allowed.');
+      if (req.headers.get('Origin') !== config.origin)
+        fail(403, 'Origin rejected.');
+      const body = await this.json(req);
+      if (path === '/auth/clerk-production/start') {
+        const initiated = await clerkProductionIdentity(this.env, req);
+        this.rate(
+          'clerk-production-login:' +
+            (await digest(initiated.issuer + '|' + initiated.subject)),
+          20,
+        );
+        for (const [key, value] of Object.entries(this.state.authTransactions))
+          if (value.expiresAt <= Date.now())
+            delete this.state.authTransactions[key];
+        const nonce = token();
+        this.state.authTransactions[await hash(nonce)] = {
+          method: 'clerk-production',
+          origin: config.origin,
+          issuer: initiated.issuer,
+          subject: initiated.subject,
+          providerSessionId: initiated.providerSessionId,
+          passwordLastUpdatedAt: initiated.passwordLastUpdatedAt,
+          createdAt: Date.now(),
+          expiresAt: Date.now() + 300000,
+        };
+        return reply({ nonce });
+      }
+      if (path !== '/auth/clerk-production/finish') fail(404, 'Not found.');
+      const nonceKey = await hash(String(body.nonce || ''));
+      const tx = this.state.authTransactions[nonceKey];
+      if (!tx || tx.method !== 'clerk-production' || tx.expiresAt <= Date.now())
+        fail(401, 'Login transaction expired.');
+      delete this.state.authTransactions[nonceKey];
+      await this.saveState(this.state);
+      this.rollbackState = structuredClone(this.state);
+      const external = await clerkProductionIdentity(this.env, req);
+      if (
+        tx.origin !== config.origin ||
+        tx.issuer !== external.issuer ||
+        tx.subject !== external.subject ||
+        tx.providerSessionId !== external.providerSessionId ||
+        tx.passwordLastUpdatedAt !== external.passwordLastUpdatedAt
+      )
+        fail(401, 'Login transaction identity mismatch.');
+      const identityKey = await digest(
+        external.issuer + '|' + external.subject,
+      );
+      const security = this.state.identitySecurity[identityKey];
+      if (
+        security?.blocked ||
+        tx.createdAt <= (security?.credentialsChangedAt || 0)
+      )
+        fail(403, 'Account unavailable.');
+      const existing = this.state.identities[identityKey];
+      let profile = existing && this.state.profiles[existing.userId];
+      if (!existing) {
+        if (
+          Object.values(this.state.profiles).some(
+            (candidate) => candidate.email === external.email,
+          )
+        )
+          fail(409, 'Accounts are never linked by email.');
+        profile = {
+          id: crypto.randomUUID(),
+          email: external.email,
+          name: external.name || '',
+          phone: '',
+          location: '',
+          createdAt: Date.now(),
+        };
+        this.state.profiles[profile.id] = profile;
+      }
+      if (
+        !profile ||
+        accountHeld(profile) ||
+        tx.createdAt <=
+          Math.max(
+            existing?.credentialsChangedAt || 0,
+            profile.sessionRevokedAt || 0,
+          )
+      )
+        fail(403, 'Account unavailable.');
+      if (security?.providerResetHold) {
+        // Clear only our provider-reset hold. Manual profile flags, identity
+        // blocks, and revocation fences above remain authoritative and intact.
+        // A new nonce or refreshed JWT on the old provider session is not recovery.
+        if (
+          !Number.isSafeInteger(security.providerResetGeneration) ||
+          security.providerResetGeneration <= 0 ||
+          !Number.isSafeInteger(external.passwordLastUpdatedAt) ||
+          external.passwordLastUpdatedAt < security.providerResetGeneration ||
+          !Number.isSafeInteger(external.providerSessionCreatedAt) ||
+          external.providerSessionCreatedAt <= external.passwordLastUpdatedAt ||
+          external.providerSessionCreatedAt <= security.credentialsChangedAt ||
+          external.providerSessionCreatedAt > tx.createdAt ||
+          !security.providerResetSessionId ||
+          external.providerSessionId === security.providerResetSessionId
+        )
+          fail(403, 'Fresh provider sign-in required.');
+        security.providerResetHold = false;
+        this.audit('provider-reset-recovered', profile.id, {
+          method: 'clerk-production',
+        });
+      }
+      this.state.identities[identityKey] = {
+        userId: profile.id,
+        issuer: external.issuer,
+        subject: external.subject,
+        method: 'clerk-production',
+        createdAt: existing?.createdAt || Date.now(),
+        credentialsChangedAt: existing?.credentialsChangedAt || 0,
+      };
+      const raw = token(),
+        csrf = token();
+      this.state.sessions[await hash(raw)] = {
+        userId: profile.id,
+        method: 'clerk-production',
+        csrf,
+        identityKey,
+        issuer: external.issuer,
+        subject: external.subject,
+        providerSessionId: external.providerSessionId,
+        passwordLastUpdatedAt: external.passwordLastUpdatedAt,
+        createdAt: Date.now(),
+        expiresAt: Math.min(
+          Date.now() + DAY,
+          external.providerSessionExpiresAt,
+        ),
+      };
+      this.audit('identity-login', profile.id, { method: 'clerk-production' });
+      return reply({ ok: true, session: raw, csrf });
+    }
+    if (
+      this.env.CLERK_PRODUCTION_ENABLED === 'true' &&
+      (path.startsWith('/auth/') ||
+        ['/send-code', '/check-code'].includes(path))
+    ) {
+      if (path === '/auth/methods' && method === 'GET')
+        return reply({
+          methods: ['clerk-production'],
+          emailCode: false,
+          publicListings: false,
+        });
+      fail(
+        404,
+        'Alternate login is disabled when production Clerk is enabled.',
+      );
+    }
     if (path === '/auth/methods' && method === 'GET') {
       const config = identityConfig(this.env);
       return reply({

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -132,5 +132,55 @@ test('Pages advanced wrapper gates missing seller binding and serves current new
   } finally {
     await mf?.dispose();
     await rm(root, { recursive: true, force: true });
+  }
+});
+
+test('seller API wildcard is staged on restrictive route builds and conflicting exclusions stop publishing', async () => {
+  for (const exclude of [[], ['/api/*']]) {
+    const root = await mkdtemp(join(tmpdir(), 'seller-route-gate-'));
+    try {
+      await mkdir(join(root, '_worker.js'));
+      await writeFile(
+        join(root, '_worker.js/index.js'),
+        'export default {fetch(){return new Response("static")}}',
+      );
+      await writeFile(
+        join(root, '_routes.json'),
+        JSON.stringify({
+          version: 1,
+          include: ['/api/service-intake'],
+          exclude,
+        }),
+      );
+      if (exclude.length) {
+        assert.throws(
+          () =>
+            execFileSync(
+              process.execPath,
+              ['scripts/stage-service-intake.mjs', root],
+              { stdio: 'pipe' },
+            ),
+          /bypass intake or seller API/,
+        );
+      } else {
+        execFileSync(process.execPath, [
+          'scripts/stage-service-intake.mjs',
+          root,
+        ]);
+        const routes = JSON.parse(
+          await readFile(join(root, '_routes.json'), 'utf8'),
+        );
+        assert.ok(routes.include.includes('/api/aircraft-sale'));
+        assert.ok(routes.include.includes('/api/aircraft-sale/*'));
+        const source = await readFile(
+          join(root, '_worker.js/index.js'),
+          'utf8',
+        );
+        assert.match(source, /env\.SELLER_API\.fetch\(request\)/);
+        assert.match(source, /Seller service is not configured/);
+      }
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   }
 });

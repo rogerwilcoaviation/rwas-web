@@ -2,8 +2,20 @@
 'use client';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { SELLER_API } from '@/lib/seller-api';
+import ClerkProductionPanel from './clerk-production-panel';
+import {
+  getClerkProductionBrowser,
+  isClerkProductionMethodEnabled,
+  type ClerkProductionSession,
+} from './clerk-production-browser';
 
-type Session = { token: string; email: string; name: string };
+type Auth0Session = {
+  provider?: 'auth0';
+  token: string;
+  email: string;
+  name: string;
+};
+type Session = Auth0Session | ClerkProductionSession;
 type Media = {
   key: string;
   name: string;
@@ -76,12 +88,27 @@ const categories: [string, string][] = [
   ['misc', 'Other records'],
 ];
 
+async function sellerSessionHeaders(
+  session: Session,
+): Promise<Record<string, string>> {
+  if (session.provider === 'clerk-production') {
+    const client = await getClerkProductionBrowser();
+    return {
+      Authorization: 'Bearer ' + session.token,
+      'X-Clerk-Session-Token': await client.token(),
+      'X-RWAS-CSRF': session.csrf,
+    };
+  }
+  return { Authorization: 'Bearer ' + session.token };
+}
+
 export default function SellerAuthPanel() {
   const [session, setSession] = useState<Session | null>(null);
   const [identityMethods, setIdentityMethods] = useState<IdentityMethod[]>([]);
+  const [clerkProduction, setClerkProduction] = useState(false);
   const [emailCodeLogin, setEmailCodeLogin] = useState(false);
   const [view, setView] = useState<
-    'login' | 'listings' | 'edit' | 'account' | null
+    'login' | 'clerk' | 'listings' | 'edit' | 'account' | null
   >(null);
   const [email, setEmail] = useState(''),
     [code, setCode] = useState(''),
@@ -114,11 +141,17 @@ export default function SellerAuthPanel() {
   };
   useEffect(() => {
     localStorage.removeItem('rwas_sale_session'); // Legacy sessions are not accepted by v2.
+    let storedSession: Session | null = null;
     try {
-      const s = JSON.parse(
+      storedSession = JSON.parse(
         sessionStorage.getItem(key) || 'null',
       ) as Session | null;
-      if (s?.token && s.email) setAuth(s);
+      if (
+        storedSession?.email &&
+        storedSession.token &&
+        storedSession.provider !== 'clerk-production'
+      )
+        setAuth(storedSession);
     } catch {
       sessionStorage.removeItem(key);
     }
@@ -132,6 +165,13 @@ export default function SellerAuthPanel() {
             ),
           );
           setEmailCodeLogin(data.emailCode === true);
+          const clerkEnabled = isClerkProductionMethodEnabled(data);
+          setClerkProduction(clerkEnabled);
+          if (storedSession?.provider === 'clerk-production') {
+            if (clerkEnabled && storedSession.email && storedSession.token)
+              setAuth(storedSession);
+            else sessionStorage.removeItem(key);
+          }
         }
       })
       .catch(() => {});
@@ -245,12 +285,14 @@ export default function SellerAuthPanel() {
     body?: unknown,
     extra?: Record<string, string>,
   ) {
+    const headers = session ? await sellerSessionHeaders(session) : {};
     const resp = await fetch(SELLER_API + path, {
       method,
       cache: 'no-store',
+      credentials: 'same-origin',
       headers: {
         ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
-        ...(session ? { Authorization: 'Bearer ' + session.token } : {}),
+        ...headers,
         ...extra,
       },
       ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
@@ -398,7 +440,10 @@ export default function SellerAuthPanel() {
             disabled={busy}
             onClick={() =>
               void perform(async () => {
+                const provider = session.provider;
                 const result = await api('/logout', 'POST');
+                if (provider === 'clerk-production')
+                  await (await getClerkProductionBrowser()).signOut();
                 sessionStorage.removeItem(identityKey);
                 setAuth(null);
                 setView(null);
@@ -420,11 +465,13 @@ export default function SellerAuthPanel() {
           <h2 id="seller-title">
             {view === 'login'
               ? 'Seller Login'
-              : view === 'account'
-                ? 'Your Account'
-                : view === 'edit'
-                  ? 'Listing Draft'
-                  : 'My Listings'}
+              : view === 'clerk'
+                ? 'Secure Seller Login'
+                : view === 'account'
+                  ? 'Your Account'
+                  : view === 'edit'
+                    ? 'Listing Draft'
+                    : 'My Listings'}
           </h2>
           <button
             type="button"
@@ -442,6 +489,17 @@ export default function SellerAuthPanel() {
         {message && <p role="status">{message}</p>}
         {view === 'login' && (
           <>
+            {clerkProduction && (
+              <nav aria-label="RWAS secure sign-in">
+                <button disabled={busy} onClick={() => setView('clerk')}>
+                  Continue with RWAS secure sign-in
+                </button>
+                <p>
+                  Includes password sign-in, verified-email account creation,
+                  and password recovery.
+                </p>
+              </nav>
+            )}
             {identityMethods.length > 0 && (
               <nav aria-label="Sign-in methods">
                 {identityMethods.map((method) => (
@@ -528,6 +586,15 @@ export default function SellerAuthPanel() {
               </form>
             )}
           </>
+        )}
+        {view === 'clerk' && clerkProduction && (
+          <ClerkProductionPanel
+            onSignedIn={(next) => {
+              setAuth(next);
+              setMessage('Signed in.');
+              setView(null);
+            }}
+          />
         )}
         {view === 'listings' && (
           <>
@@ -1019,7 +1086,10 @@ function SellerMedia({
       media.map(async (f) => {
         const r = await fetch(
           SELLER_API + '/files/' + encodeURIComponent(f.key),
-          { headers: { Authorization: 'Bearer ' + session.token } },
+          {
+            credentials: 'same-origin',
+            headers: await sellerSessionHeaders(session),
+          },
         );
         if (r.ok) {
           const url = URL.createObjectURL(await r.blob());
@@ -1032,7 +1102,7 @@ function SellerMedia({
       alive = false;
       made.forEach((url) => URL.revokeObjectURL(url));
     };
-  }, [listing, session.token]);
+  }, [listing, session]);
   async function action(fn: () => Promise<void>) {
     setBusy(true);
     onBusy(true);
@@ -1050,8 +1120,9 @@ function SellerMedia({
   async function request(path: string, method: string, body: unknown) {
     const r = await fetch(SELLER_API + path, {
       method,
+      credentials: 'same-origin',
       headers: {
-        Authorization: 'Bearer ' + session.token,
+        ...(await sellerSessionHeaders(session)),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
@@ -1116,7 +1187,8 @@ function SellerMedia({
                           encodeURIComponent(f.name),
                         {
                           method: 'POST',
-                          headers: { Authorization: 'Bearer ' + session.token },
+                          credentials: 'same-origin',
+                          headers: await sellerSessionHeaders(session),
                           body: f,
                         },
                       );
@@ -1157,9 +1229,8 @@ function SellerMedia({
                         const r = await fetch(
                           SELLER_API + '/files/' + encodeURIComponent(f.key),
                           {
-                            headers: {
-                              Authorization: 'Bearer ' + session.token,
-                            },
+                            credentials: 'same-origin',
+                            headers: await sellerSessionHeaders(session),
                           },
                         );
                         if (!r.ok)
