@@ -27,6 +27,7 @@ const CLIENT_STAGES = new Set<ClerkProductionHandoffStage>([
   'complete',
 ]);
 const FAILURE_STATUSES = new Set([
+  '',
   'network',
   'other-http',
   'non-json',
@@ -156,9 +157,15 @@ export default function ClerkProductionPanel({
               terminalFailure = true;
               const telemetry = clerkProductionFailureTelemetry(caught);
               const observedAt = new Date().toISOString();
+              const observedStage = currentStage.current;
+              const clientStage = CLIENT_STAGES.has(
+                observedStage as ClerkProductionHandoffStage,
+              )
+                ? (observedStage as ClerkProductionHandoffStage)
+                : 'provider-session-present';
               writeFailureLatch({
                 attemptCount: 1,
-                clientStage: currentStage.current,
+                clientStage,
                 status: telemetry.status,
                 serverStage: telemetry.serverStage,
                 observedAt,
