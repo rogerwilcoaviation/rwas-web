@@ -8,6 +8,90 @@ import {
   type ClerkProductionSession,
 } from './clerk-production-browser';
 
+const FAILURE_LATCH = 'rwas-clerk-production-failure-v1';
+type FailureLatch = {
+  attemptCount: 1;
+  clientStage: ClerkProductionHandoffStage;
+  status: string;
+  serverStage: string;
+  observedAt: string;
+};
+const CLIENT_STAGES = new Set<ClerkProductionHandoffStage>([
+  'provider-session-present',
+  'clerk-token-request',
+  'rwas-start-request',
+  'rwas-start-accepted',
+  'rwas-finish-request',
+  'rwas-finish-accepted',
+  'rwas-account-request',
+  'complete',
+]);
+const FAILURE_STATUSES = new Set([
+  'network',
+  'other-http',
+  'non-json',
+  '400',
+  '401',
+  '403',
+  '404',
+  '405',
+  '409',
+  '413',
+  '429',
+  '500',
+  '502',
+  '503',
+  '504',
+]);
+const SERVER_STAGES = new Set([
+  '',
+  'runtime-config',
+  'request-origin',
+  'session-token',
+  'jwt-format',
+  'jwt-header',
+  'jwt-jwks',
+  'jwt-key',
+  'jwt-signature',
+  'jwt-claims',
+  'provider-session',
+  'provider-user',
+  'provider-account',
+  'provider-email',
+  'provider-password-state',
+]);
+function readFailureLatch(): FailureLatch | null {
+  try {
+    const raw = sessionStorage.getItem(FAILURE_LATCH);
+    if (!raw) return null;
+    const value = JSON.parse(raw) as FailureLatch;
+    return value?.attemptCount === 1 &&
+      CLIENT_STAGES.has(value.clientStage) &&
+      FAILURE_STATUSES.has(value.status) &&
+      SERVER_STAGES.has(value.serverStage) &&
+      typeof value.observedAt === 'string' &&
+      !Number.isNaN(Date.parse(value.observedAt))
+      ? value
+      : null;
+  } catch {
+    return null;
+  }
+}
+function writeFailureLatch(value: FailureLatch) {
+  sessionStorage.setItem(FAILURE_LATCH, JSON.stringify(value));
+  history.replaceState({ ...(history.state || {}), [FAILURE_LATCH]: true }, '');
+}
+function failureStorageReady() {
+  try {
+    const probe = FAILURE_LATCH + '-probe';
+    sessionStorage.setItem(probe, '1');
+    sessionStorage.removeItem(probe);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export default function ClerkProductionPanel({
   onSignedIn,
 }: {
@@ -35,6 +119,23 @@ export default function ClerkProductionPanel({
   };
 
   useEffect(() => {
+    if (!failureStorageReady()) {
+      setFailureStage('client-loading');
+      setStage('failed');
+      setError('Secure sign-in is unavailable. Please use another method.');
+      return;
+    }
+    const retained = readFailureLatch();
+    if (retained) {
+      currentStage.current = retained.clientStage;
+      setFailureAttemptCount(retained.attemptCount);
+      setFailureStage(retained.clientStage);
+      setFailureStatus(retained.status);
+      setServerFailureStage(retained.serverStage);
+      setStage('failed');
+      setError('Sign-in could not be completed. Please try again.');
+      return;
+    }
     let active = true;
     let cleanup = () => {};
     void getClerkProductionBrowser()
@@ -54,6 +155,14 @@ export default function ClerkProductionPanel({
             if (active) {
               terminalFailure = true;
               const telemetry = clerkProductionFailureTelemetry(caught);
+              const observedAt = new Date().toISOString();
+              writeFailureLatch({
+                attemptCount: 1,
+                clientStage: currentStage.current,
+                status: telemetry.status,
+                serverStage: telemetry.serverStage,
+                observedAt,
+              });
               setFailureAttemptCount(attempts.current);
               setFailureStage(currentStage.current);
               setFailureStatus(telemetry.status);

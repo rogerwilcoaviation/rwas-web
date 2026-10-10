@@ -434,6 +434,20 @@ test('first failed handoff preserves bounded stage and blocks same-mount retry',
     );
     await page.waitForTimeout(20);
     assert.equal(starts, 1);
+    await page.reload();
+    await page.waitForFunction(
+      () =>
+        document.querySelector('[data-rwas-clerk-stage]')?.dataset
+          .rwasClerkStage === 'failed',
+    );
+    const retained = await page
+      .locator('[data-rwas-clerk-stage]')
+      .evaluate((element) => ({ ...element.dataset }));
+    assert.equal(retained.rwasClerkFailureStage, 'rwas-start-request');
+    assert.equal(retained.rwasClerkFailureStatus, '503');
+    assert.equal(retained.rwasClerkServerStage, 'provider-session');
+    assert.equal(retained.rwasClerkFailureAttempt, '1');
+    assert.equal(starts, 1);
   } finally {
     await browser.close();
   }
