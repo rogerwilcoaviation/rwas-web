@@ -365,3 +365,76 @@ test('existing-session handoff skips SignIn mount and cleans up immediately', as
     await browser.close();
   }
 });
+
+test('first failed handoff preserves bounded stage and blocks same-mount retry', async () => {
+  const bundle = await bundleHarness();
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage();
+    let starts = 0;
+    await page.addInitScript(
+      ({ token }) => {
+        globalThis.__CLERK_LIFECYCLE__ = {
+          canonicalJwt: token,
+          initialSession: false,
+          listenerAdds: 0,
+          listenerRemoves: 0,
+          mounts: 0,
+          unmounts: 0,
+          tokenOptions: [],
+          callbacks: [],
+        };
+      },
+      { token: canonicalJwt },
+    );
+    await page.route('**/*', async (route) => {
+      const url = new URL(route.request().url());
+      if (url.pathname === '/panel.js')
+        return route.fulfill({
+          status: 200,
+          contentType: 'text/javascript',
+          body: bundle,
+        });
+      if (url.pathname.endsWith('/auth/clerk-production/start')) {
+        starts += 1;
+        return route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          headers: { 'X-RWAS-Clerk-Failure-Stage': 'provider-session' },
+          body: JSON.stringify({ error: 'redacted' }),
+        });
+      }
+      return route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<!doctype html><html><body><div id="root"></div><script src="/panel.js"></script></body></html>',
+      });
+    });
+    await page.goto('https://www.rogerwilcoaviation.com/aircraft-for-sale');
+    await page.waitForFunction(
+      () => globalThis.__CLERK_LIFECYCLE__.listenerAdds === 1,
+    );
+    await page.evaluate(() =>
+      globalThis.__CLERK_LIFECYCLE__.completeVerification(),
+    );
+    await page.waitForFunction(
+      () =>
+        document.querySelector('[data-rwas-clerk-stage]')?.dataset
+          .rwasClerkStage === 'failed',
+    );
+    const marker = await page
+      .locator('[data-rwas-clerk-stage]')
+      .evaluate((element) => ({ ...element.dataset }));
+    assert.equal(marker.rwasClerkFailureStage, 'rwas-start-request');
+    assert.equal(marker.rwasClerkFailureStatus, '503');
+    assert.equal(marker.rwasClerkServerStage, 'provider-session');
+    assert.equal(marker.rwasClerkFailureAttempt, '1');
+    await page.evaluate(() =>
+      globalThis.__CLERK_LIFECYCLE__.completeVerification(),
+    );
+    await page.waitForTimeout(20);
+    assert.equal(starts, 1);
+  } finally {
+    await browser.close();
+  }
+});
