@@ -528,7 +528,7 @@ test('metadata interruption compensates uploaded object; public HTML escapes str
         Accept: 'text/html',
       })
     ).status,
-    401,
+    404,
   );
 });
 
@@ -816,4 +816,56 @@ test('review: unavailable durable counters prevent mail delivery before any exte
   assert.equal(f.mail.length, 1);
   f.restart();
   assert.equal(f.state().rates['email:unavailable@example.test'].count, 1);
+});
+
+test('staff bounded acceptance publication is explicit and reversible', async () => {
+  const f = fixture();
+  f.env.PUBLIC_LISTINGS_ENABLED = 'false';
+  f.env.CLERK_ACCEPTANCE_ENABLED = 'true';
+  const t = await f.login(),
+    l = await create(f, t);
+  await submit(f, t, l);
+  assert.equal(
+    (
+      await f.call(
+        '/admin/review',
+        'POST',
+        {
+          listingId: l.id,
+          revision: l.revision,
+          decision: 'acceptance-approve',
+        },
+        'fixture-reviewer',
+      )
+    ).status,
+    200,
+  );
+  assert.equal((await f.call('/listing/' + l.id)).status, 200);
+  assert.equal((await (await f.call('/browse')).json()).listings.length, 1);
+  assert.equal(f.state().listings[l.id].status, 'pending');
+  assert.equal(
+    (
+      await f.call(
+        '/admin/review',
+        'POST',
+        {
+          listingId: l.id,
+          revision: l.revision,
+          decision: 'acceptance-unpublish',
+        },
+        'fixture-reviewer',
+      )
+    ).status,
+    200,
+  );
+  assert.equal(
+    (
+      await f.call('/listing/' + l.id, 'GET', undefined, undefined, {
+        Accept: 'text/html',
+      })
+    ).status,
+    404,
+  );
+  assert.deepEqual((await (await f.call('/browse')).json()).listings, []);
+  assert.equal(f.state().listings[l.id].acceptancePublicUntil, undefined);
 });

@@ -145,6 +145,10 @@ function publicListing(l) {
     ),
   };
 }
+const acceptancePublished = (listing, env, now = Date.now()) =>
+  env.CLERK_ACCEPTANCE_ENABLED === 'true' &&
+  Number.isFinite(listing?.acceptancePublicUntil) &&
+  listing.acceptancePublicUntil > now;
 const escape = (s) =>
   String(s ?? '').replace(
     /[&<>"']/g,
@@ -1612,12 +1616,20 @@ export class SellerStore {
       return this.sessionReply(p);
     }
     if (path === '/browse' && method === 'GET') {
-      if (this.env.PUBLIC_LISTINGS_ENABLED !== 'true')
+      if (
+        this.env.PUBLIC_LISTINGS_ENABLED !== 'true' &&
+        this.env.CLERK_ACCEPTANCE_ENABLED !== 'true'
+      )
         return reply({ listings: [] });
       const sold = url.searchParams.get('include') === 'sold';
       return reply({
         listings: Object.values(this.state.listings)
-          .filter((l) => l.status === 'active' || (sold && l.status === 'sold'))
+          .filter(
+            (l) =>
+              acceptancePublished(l, this.env) ||
+              l.status === 'active' ||
+              (sold && l.status === 'sold'),
+          )
           .map((l) => publicListing(this.hydrate(l))),
       });
     }
@@ -1650,9 +1662,10 @@ export class SellerStore {
       if (!f || f.deleting) fail(404, 'File not found.');
       const l = this.state.listings[f.listingId];
       const published =
-        this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
         l &&
-        ['active', 'sold'].includes(l.status) &&
+        (acceptancePublished(l, this.env) ||
+          (this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
+            ['active', 'sold'].includes(l.status))) &&
         ['photos', 'videos'].includes(f.category);
       if (!published) {
         const u = await this.user(req);
@@ -1719,8 +1732,14 @@ export class SellerStore {
       const l = this.state.listings[path.slice(9)];
       if (!l) fail(404, 'Listing not found.');
       const published =
-        this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
-        ['active', 'sold'].includes(l.status);
+        acceptancePublished(l, this.env) ||
+        (this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
+          ['active', 'sold'].includes(l.status));
+      if (
+        !published &&
+        (req.headers.get('Accept') || '').includes('text/html')
+      )
+        fail(404, 'Listing not found.');
       if (!published) {
         const u = await this.user(req);
         if (l.ownerId !== u.id) fail(404, 'Listing not found.');
@@ -1745,29 +1764,50 @@ export class SellerStore {
       const actor = await this.admin(req),
         b = await this.json(req),
         l = this.state.listings[b.listingId];
-      if (!l || l.status !== 'pending')
-        fail(409, 'Listing is not awaiting review.');
+      if (!l) fail(404, 'Listing not found.');
       if (b.revision !== l.revision)
         fail(409, 'Listing changed. Review the latest revision.');
-      if (!['approve', 'reject'].includes(b.decision))
+      if (
+        ['acceptance-approve', 'acceptance-unpublish'].includes(b.decision) &&
+        this.env.CLERK_ACCEPTANCE_ENABLED !== 'true'
+      )
+        fail(409, 'Bounded acceptance publication is disabled.');
+      if (b.decision === 'acceptance-unpublish') {
+        if (!acceptancePublished(l, this.env))
+          fail(409, 'Listing is not acceptance-published.');
+        delete l.acceptancePublicUntil;
+        l.updatedAt = Date.now();
+        this.audit('acceptance-publication-rollback', actor, {
+          listingId: l.id,
+          revision: l.revision,
+        });
+        return reply({ ok: true, listing: this.hydrate(l) });
+      }
+      if (l.status !== 'pending')
+        fail(409, 'Listing is not awaiting review.');
+      if (!['approve', 'reject', 'acceptance-approve'].includes(b.decision))
         fail(400, 'Invalid review decision.');
       if (
         b.decision === 'approve' &&
         this.env.PUBLIC_LISTINGS_ENABLED !== 'true'
       )
         fail(409, 'Public listing activation is disabled.');
-      if (b.decision === 'approve') {
+      if (b.decision === 'acceptance-approve') {
+        clean(l.fields, true);
+        l.acceptancePublicUntil = Date.now() + 10 * 60 * 1000;
+      } else if (b.decision === 'approve') {
         clean(l.fields, true);
         l.approvedRevision = l.revision;
         l.status = 'active';
+        delete this.state.outbox[l.id + ':' + l.revision];
       } else {
         l.status = 'rejected';
         l.reviewNote = String(b.note || 'Please update your listing.').slice(
           0,
           1000,
         );
+        delete this.state.outbox[l.id + ':' + l.revision];
       }
-      delete this.state.outbox[l.id + ':' + l.revision];
       l.updatedAt = Date.now();
       this.audit('review', actor, {
         listingId: l.id,
