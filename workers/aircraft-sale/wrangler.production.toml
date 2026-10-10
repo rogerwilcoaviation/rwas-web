@@ -2,6 +2,9 @@ name = "rwas-seller-production-20261006"
 account_id = "08c51088fd98ea9214af8a0ae226663c"
 main = "entry.mjs"
 compatibility_date = "2026-09-01"
+# Route same-zone Clerk custom-domain JWKS requests through Cloudflare's public
+# front door instead of bypassing Cloudflare security to the zone origin.
+compatibility_flags = ["global_fetch_strictly_public"]
 workers_dev = false
 
 [vars]

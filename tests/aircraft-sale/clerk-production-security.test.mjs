@@ -302,6 +302,53 @@ test('runtime advertising fails closed and Clerk errors expose only bounded stag
   assert.deepEqual(Object.keys(await rejected.json()), ['error']);
 });
 
+test('JWKS transport and key-contract failures remain fail closed with bounded stages', async () => {
+  const cases = [
+    {
+      name: 'transport rejection',
+      replace: async () => {
+        throw new Error('network detail must remain private');
+      },
+      status: 503,
+      stage: 'jwt-jwks',
+    },
+    {
+      name: 'provider unavailable',
+      replace: async () => new Response('unavailable', { status: 503 }),
+      status: 503,
+      stage: 'jwt-jwks',
+    },
+    {
+      name: 'non-JSON response',
+      replace: async () =>
+        new Response('<html>not json</html>', { status: 200 }),
+      status: 503,
+      stage: 'jwt-jwks',
+    },
+    {
+      name: 'missing matching signing key',
+      replace: async () => Response.json({ keys: [] }),
+      status: 401,
+      stage: 'jwt-key',
+    },
+  ];
+  for (const failure of cases) {
+    const p = providerFixture();
+    const fetch = async (url, init) =>
+      String(url) === CLERK_PRODUCTION.issuer + '/.well-known/jwks.json'
+        ? failure.replace()
+        : p.fetch(url, init);
+    await assert.rejects(
+      () => clerkProductionIdentity(env(), request(p.jwt()), fetch),
+      (error) =>
+        error.status === failure.status &&
+        error.authStage === failure.stage &&
+        !error.message.includes('network detail'),
+      failure.name,
+    );
+  }
+});
+
 test('production core keeps trusted legacy sessions, rejects email migration, and persists reset fences', async () => {
   const p = providerFixture();
   const f = fixture();
