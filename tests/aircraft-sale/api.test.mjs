@@ -883,4 +883,60 @@ test('staff bounded acceptance publication is explicit and reversible', async ()
   );
   assert.deepEqual((await (await f.call('/browse')).json()).listings, []);
   assert.equal(f.state().listings[l.id].acceptancePublicUntil, undefined);
+  assert.equal(f.state().listings[l.id].acceptanceApprovedRevision, undefined);
+
+  const pending = f.state().listings[l.id];
+  assert.equal(
+    (
+      await f.call(
+        '/admin/review',
+        'POST',
+        {
+          listingId: l.id,
+          revision: pending.revision,
+          decision: 'acceptance-approve',
+        },
+        'fixture-reviewer',
+      )
+    ).status,
+    200,
+  );
+  const edited = (
+    await (
+      await f.call('/listings/' + l.id, 'PUT', { model: 'Edited after review' }, t)
+    ).json()
+  ).listing;
+  assert.equal(edited.status, 'draft');
+  assert.ok(f.state().listings[l.id].acceptancePublicUntil);
+  assert.notEqual(
+    f.state().listings[l.id].acceptanceApprovedRevision,
+    f.state().listings[l.id].revision,
+  );
+  assert.deepEqual((await (await f.call('/browse')).json()).listings, []);
+  assert.equal(
+    (
+      await f.call('/listing/' + l.id, 'GET', undefined, undefined, {
+        Accept: 'text/html',
+      })
+    ).status,
+    404,
+  );
+  assert.equal((await f.call('/listing/' + l.id, 'GET', undefined, t)).status, 200);
+  assert.equal(
+    (
+      await f.call(
+        '/admin/review',
+        'POST',
+        {
+          listingId: l.id,
+          revision: edited.revision,
+          decision: 'acceptance-unpublish',
+        },
+        'fixture-reviewer',
+      )
+    ).status,
+    200,
+  );
+  assert.equal(f.state().listings[l.id].acceptancePublicUntil, undefined);
+  assert.equal(f.state().listings[l.id].acceptanceApprovedRevision, undefined);
 });

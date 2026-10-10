@@ -130,6 +130,8 @@ function publicListing(l) {
     fields,
     revision,
     approvedRevision,
+    acceptanceApprovedRevision,
+    acceptancePublicUntil,
     archiveFrom,
     deleteFrom,
     deletedAt,
@@ -147,7 +149,10 @@ function publicListing(l) {
 }
 const acceptancePublished = (listing, env, now = Date.now()) =>
   env.CLERK_ACCEPTANCE_ENABLED === 'true' &&
-  Number.isFinite(listing?.acceptancePublicUntil) &&
+  listing?.status === 'pending' &&
+  Number.isInteger(listing.acceptanceApprovedRevision) &&
+  listing.acceptanceApprovedRevision === listing.revision &&
+  Number.isFinite(listing.acceptancePublicUntil) &&
   listing.acceptancePublicUntil > now;
 const escape = (s) =>
   String(s ?? '').replace(
@@ -1773,9 +1778,13 @@ export class SellerStore {
       )
         fail(409, 'Bounded acceptance publication is disabled.');
       if (b.decision === 'acceptance-unpublish') {
-        if (!acceptancePublished(l, this.env))
-          fail(409, 'Listing is not acceptance-published.');
+        if (
+          !Number.isFinite(l.acceptancePublicUntil) ||
+          !Number.isInteger(l.acceptanceApprovedRevision)
+        )
+          fail(409, 'Listing has no acceptance publication marker.');
         delete l.acceptancePublicUntil;
+        delete l.acceptanceApprovedRevision;
         l.updatedAt = Date.now();
         this.audit('acceptance-publication-rollback', actor, {
           listingId: l.id,
@@ -1794,6 +1803,7 @@ export class SellerStore {
         fail(409, 'Public listing activation is disabled.');
       if (b.decision === 'acceptance-approve') {
         clean(l.fields, true);
+        l.acceptanceApprovedRevision = l.revision;
         l.acceptancePublicUntil = Date.now() + 10 * 60 * 1000;
       } else if (b.decision === 'approve') {
         clean(l.fields, true);
