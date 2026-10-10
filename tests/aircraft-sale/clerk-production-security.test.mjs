@@ -92,7 +92,7 @@ function providerFixture() {
     if (String(url).endsWith('/users/' + user.id)) return Response.json(user);
     return new Response(null, { status: 404 });
   };
-  return { session, user, jwt, fetch, calls };
+  return { session, user, jwk, jwt, fetch, calls };
 }
 
 const env = () => ({
@@ -217,6 +217,7 @@ test('direct HTTP adapter requires exact signed claims and canonical session/use
     name: 'Fixture Owner',
   });
   assert.equal(p.calls.length, 3);
+  assert.ok(p.calls.every(({ init }) => init.redirect === 'manual'));
   assert.ok(p.calls.every(({ url }) => !url.includes('accounts.dev')));
   for (const claims of [
     { iss: 'https://wrong.example' },
@@ -302,7 +303,7 @@ test('runtime advertising fails closed and Clerk errors expose only bounded stag
   assert.deepEqual(Object.keys(await rejected.json()), ['error']);
 });
 
-test('JWKS transport and key-contract failures remain fail closed with bounded stages', async () => {
+test('JWKS failures are fail closed and deterministically separated', async () => {
   const cases = [
     {
       name: 'transport rejection',
@@ -310,33 +311,53 @@ test('JWKS transport and key-contract failures remain fail closed with bounded s
         throw new Error('network detail must remain private');
       },
       status: 503,
-      stage: 'jwt-jwks',
+      stage: 'jwt-jwks-fetch',
     },
     {
-      name: 'provider unavailable',
-      replace: async () => new Response('unavailable', { status: 503 }),
+      name: 'non-success status',
+      replace: async () => new Response('unavailable', { status: 403 }),
       status: 503,
-      stage: 'jwt-jwks',
+      stage: 'jwt-jwks-status',
     },
     {
       name: 'non-JSON response',
       replace: async () =>
         new Response('<html>not json</html>', { status: 200 }),
       status: 503,
-      stage: 'jwt-jwks',
+      stage: 'jwt-jwks-json',
+    },
+    {
+      name: 'invalid JWKS root schema',
+      replace: async () => Response.json({}),
+      status: 503,
+      stage: 'jwt-jwks-schema',
+    },
+    {
+      name: 'duplicate matching kid',
+      replace: async (provider) =>
+        Response.json({ keys: [provider.jwk, { ...provider.jwk }] }),
+      status: 503,
+      stage: 'jwt-jwks-schema',
+    },
+    {
+      name: 'invalid matching JWK schema',
+      replace: async (provider) =>
+        Response.json({ keys: [{ ...provider.jwk, kty: 'EC' }] }),
+      status: 503,
+      stage: 'jwt-jwks-schema',
     },
     {
       name: 'missing matching signing key',
       replace: async () => Response.json({ keys: [] }),
       status: 401,
-      stage: 'jwt-key',
+      stage: 'jwt-key-selection',
     },
   ];
   for (const failure of cases) {
     const p = providerFixture();
     const fetch = async (url, init) =>
       String(url) === CLERK_PRODUCTION.issuer + '/.well-known/jwks.json'
-        ? failure.replace()
+        ? failure.replace(p)
         : p.fetch(url, init);
     await assert.rejects(
       () => clerkProductionIdentity(env(), request(p.jwt()), fetch),

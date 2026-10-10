@@ -68,7 +68,7 @@ async function providerGet(env, path, fetchImpl, authStage) {
   try {
     response = await fetchImpl(API + path, {
       method: 'GET',
-      redirect: 'error',
+      redirect: 'manual',
       headers: {
         Accept: 'application/json',
         Authorization: 'Bearer ' + env.CLERK_PRODUCTION_SECRET_KEY,
@@ -98,42 +98,99 @@ async function verifyJwt(token, fetchImpl) {
   try {
     jwksResponse = await fetchImpl(ISSUER + '/.well-known/jwks.json', {
       method: 'GET',
-      redirect: 'error',
+      redirect: 'manual',
       headers: { Accept: 'application/json' },
     });
   } catch {
-    throw reject(503, 'Clerk is temporarily unavailable.', 'jwt-jwks');
+    throw reject(503, 'Clerk is temporarily unavailable.', 'jwt-jwks-fetch');
   }
-  const jwks = await readJson(jwksResponse, true, 'jwt-jwks');
-  const candidates = Array.isArray(jwks.keys)
-    ? jwks.keys.filter(
-        (key) =>
-          key?.kid === header.kid &&
-          key.kty === 'RSA' &&
-          key.alg === 'RS256' &&
-          (!key.use || key.use === 'sig'),
-      )
-    : [];
-  if (candidates.length !== 1)
-    throw reject(401, 'Invalid Clerk session.', 'jwt-key');
+  if (!jwksResponse.ok)
+    throw reject(503, 'Clerk is temporarily unavailable.', 'jwt-jwks-status');
+  let jwks;
+  try {
+    jwks = await jwksResponse.json();
+  } catch {
+    throw reject(
+      503,
+      'Clerk returned invalid signing metadata.',
+      'jwt-jwks-json',
+    );
+  }
+  if (!jwks || typeof jwks !== 'object' || !Array.isArray(jwks.keys))
+    throw reject(
+      503,
+      'Clerk returned invalid signing metadata.',
+      'jwt-jwks-schema',
+    );
+  const matching = jwks.keys.filter(
+    (candidate) => candidate?.kid === header.kid,
+  );
+  if (matching.length === 0)
+    throw reject(401, 'Invalid Clerk session.', 'jwt-key-selection');
+  if (matching.length !== 1)
+    throw reject(
+      503,
+      'Clerk returned invalid signing metadata.',
+      'jwt-jwks-schema',
+    );
+  const candidate = matching[0];
+  if (
+    candidate.kty !== 'RSA' ||
+    candidate.alg !== 'RS256' ||
+    (candidate.use !== undefined && candidate.use !== 'sig') ||
+    (candidate.key_ops !== undefined &&
+      (!Array.isArray(candidate.key_ops) ||
+        !candidate.key_ops.includes('verify'))) ||
+    typeof candidate.n !== 'string' ||
+    !/^[A-Za-z0-9_-]{342,2048}$/.test(candidate.n) ||
+    typeof candidate.e !== 'string' ||
+    !/^[A-Za-z0-9_-]{1,16}$/.test(candidate.e)
+  )
+    throw reject(
+      503,
+      'Clerk returned invalid signing metadata.',
+      'jwt-jwks-schema',
+    );
   let key;
   try {
     key = await crypto.subtle.importKey(
       'jwk',
-      candidates[0],
+      candidate,
       { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
       false,
       ['verify'],
     );
   } catch {
-    throw reject(503, 'Clerk returned an invalid signing key.', 'jwt-key');
+    throw reject(
+      503,
+      'Clerk returned an invalid signing key.',
+      'jwt-key-import',
+    );
   }
-  const valid = await crypto.subtle.verify(
-    'RSASSA-PKCS1-v1_5',
-    key,
-    decode(parts[2]),
-    new TextEncoder().encode(parts[0] + '.' + parts[1]),
-  );
+  if (
+    key.type !== 'public' ||
+    key.algorithm?.name !== 'RSASSA-PKCS1-v1_5' ||
+    !Number.isInteger(key.algorithm?.modulusLength) ||
+    key.algorithm.modulusLength < 2048 ||
+    !Array.isArray(key.usages) ||
+    !key.usages.includes('verify')
+  )
+    throw reject(
+      503,
+      'Clerk returned an invalid signing key.',
+      'jwt-jwks-schema',
+    );
+  let valid;
+  try {
+    valid = await crypto.subtle.verify(
+      'RSASSA-PKCS1-v1_5',
+      key,
+      decode(parts[2]),
+      new TextEncoder().encode(parts[0] + '.' + parts[1]),
+    );
+  } catch {
+    throw reject(401, 'Invalid Clerk session.', 'jwt-signature');
+  }
   if (!valid) throw reject(401, 'Invalid Clerk session.', 'jwt-signature');
   const now = Math.floor(Date.now() / 1000);
   if (
