@@ -823,7 +823,13 @@ test('staff bounded acceptance publication is explicit and reversible', async ()
   f.env.PUBLIC_LISTINGS_ENABLED = 'false';
   f.env.CLERK_ACCEPTANCE_ENABLED = 'true';
   const t = await f.login(),
-    l = await create(f, t);
+    ordinary = await create(f, t, fields, 'ordinary-active'),
+    l = await create(f, t, fields, 'acceptance-pending');
+  f.env.PUBLIC_LISTINGS_ENABLED = 'true';
+  await submit(f, t, ordinary);
+  assert.equal((await approve(f, ordinary)).status, 200);
+  assert.equal(f.state().listings[ordinary.id].status, 'active');
+  f.env.PUBLIC_LISTINGS_ENABLED = 'false';
   await submit(f, t, l);
   assert.equal(
     (
@@ -841,7 +847,16 @@ test('staff bounded acceptance publication is explicit and reversible', async ()
     200,
   );
   assert.equal((await f.call('/listing/' + l.id)).status, 200);
-  assert.equal((await (await f.call('/browse')).json()).listings.length, 1);
+  const visible = (await (await f.call('/browse')).json()).listings;
+  assert.deepEqual(visible.map((item) => item.id), [l.id]);
+  assert.equal(
+    (
+      await f.call('/listing/' + ordinary.id, 'GET', undefined, undefined, {
+        Accept: 'text/html',
+      })
+    ).status,
+    404,
+  );
   assert.equal(f.state().listings[l.id].status, 'pending');
   assert.equal(
     (

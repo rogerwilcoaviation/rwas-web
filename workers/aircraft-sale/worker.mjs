@@ -1627,8 +1627,8 @@ export class SellerStore {
           .filter(
             (l) =>
               acceptancePublished(l, this.env) ||
-              l.status === 'active' ||
-              (sold && l.status === 'sold'),
+              (this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
+                (l.status === 'active' || (sold && l.status === 'sold'))),
           )
           .map((l) => publicListing(this.hydrate(l))),
       });
