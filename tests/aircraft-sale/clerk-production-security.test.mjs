@@ -401,6 +401,7 @@ test('production core keeps trusted legacy sessions, rejects email migration, an
     assert.deepEqual(await (await f.call('/auth/methods', 'GET')).json(), {
       methods: ['clerk-production'],
       emailCode: false,
+      existingAccountLink: 'fresh-email-code-session',
       publicListings: false,
     });
     assert.equal((await f.call('/auth/start', 'POST', {})).status, 404);

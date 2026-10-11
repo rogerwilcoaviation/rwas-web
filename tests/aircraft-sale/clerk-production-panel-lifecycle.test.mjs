@@ -245,6 +245,22 @@ test('post-rerender verification keeps one listener and completes the real RWAS 
     assert.equal(calls[2].headers['x-rwas-csrf'], 'post-rerender-csrf');
     assert.deepEqual(state.tokenOptions, Array(3).fill({ skipCache: true }));
 
+    await page.evaluate(() =>
+      globalThis.__CLERK_LIFECYCLE__.completeVerification(),
+    );
+    await page.waitForTimeout(20);
+    assert.equal(
+      calls.length,
+      3,
+      'later provider updates cannot repeat a completed handoff',
+    );
+    assert.equal(
+      await page.evaluate(
+        () => globalThis.__CLERK_LIFECYCLE__.callbacks.length,
+      ),
+      1,
+    );
+
     await page.evaluate(() => globalThis.__CLERK_LIFECYCLE__.unmountRoot());
     await page.waitForFunction(
       () => globalThis.__CLERK_LIFECYCLE__.listenerRemoves === 1,
@@ -255,6 +271,93 @@ test('post-rerender verification keeps one listener and completes the real RWAS 
     }));
     assert.deepEqual(after, { listenerRemoves: 1, unmounts: 1 });
   } finally {
+    await browser.close();
+  }
+});
+
+test('a failed handoff after dialog removal still preserves the terminal failure through reload', async () => {
+  const bundle = await bundleHarness();
+  const browser = await chromium.launch({ headless: true });
+  let releaseStart;
+  const startGate = new Promise((resolve) => {
+    releaseStart = resolve;
+  });
+  let starts = 0;
+  try {
+    const page = await browser.newPage();
+    await page.addInitScript(
+      ({ token }) => {
+        globalThis.__CLERK_LIFECYCLE__ = {
+          canonicalJwt: token,
+          initialSession: true,
+          listenerAdds: 0,
+          listenerRemoves: 0,
+          mounts: 0,
+          unmounts: 0,
+          tokenOptions: [],
+          callbacks: [],
+        };
+      },
+      { token: canonicalJwt },
+    );
+    await page.route('**/*', async (route) => {
+      const url = new URL(route.request().url());
+      if (url.pathname === '/panel.js')
+        return route.fulfill({
+          status: 200,
+          contentType: 'text/javascript',
+          body: bundle,
+        });
+      if (url.pathname.endsWith('/auth/clerk-production/start')) {
+        starts += 1;
+        await startGate;
+        return route.fulfill({
+          status: 503,
+          contentType: 'application/json',
+          headers: { 'X-RWAS-Clerk-Failure-Stage': 'provider-session' },
+          body: JSON.stringify({ error: 'redacted' }),
+        });
+      }
+      return route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<!doctype html><html><body><div id="root"></div><script src="/panel.js"></script></body></html>',
+      });
+    });
+    await page.goto('https://www.rogerwilcoaviation.com/aircraft-for-sale');
+    await page.waitForFunction(
+      () => globalThis.__CLERK_LIFECYCLE__.tokenOptions.length === 1,
+    );
+    await page.evaluate(() => globalThis.__CLERK_LIFECYCLE__.unmountRoot());
+    releaseStart();
+    await page.waitForFunction(() =>
+      Boolean(sessionStorage.getItem('rwas-clerk-production-failure-v1')),
+    );
+    assert.equal(
+      await page.evaluate(
+        () => globalThis.__CLERK_LIFECYCLE__.callbacks.length,
+      ),
+      0,
+    );
+    await page.reload();
+    await page.waitForFunction(
+      () =>
+        document.querySelector('[data-rwas-clerk-stage]')?.dataset
+          .rwasClerkStage === 'failed',
+    );
+    assert.equal(starts, 1);
+    assert.equal(
+      await page
+        .locator('[data-rwas-clerk-stage]')
+        .getAttribute('data-rwas-clerk-failure-status'),
+      '503',
+    );
+    assert.match(
+      await page.getByRole('alert').textContent(),
+      /Further attempts in this tab are paused/,
+    );
+  } finally {
+    releaseStart?.();
     await browser.close();
   }
 });

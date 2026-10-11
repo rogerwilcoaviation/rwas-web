@@ -131,7 +131,7 @@ await build({
             loader: 'js',
             resolveDir: process.cwd(),
             contents:
-              'import React from "react"; export default function Panel(){ return React.createElement("div", { "data-clerk-parent": "mounted" }, window.location.search); }',
+              'import React from "react"; export function ClerkProductionAccountPanel(){ return React.createElement("div", { "data-clerk-account-parent": "mounted" }); } export default function Panel(){ return React.createElement("div", { "data-clerk-parent": "mounted" }, window.location.search); }',
           }),
         );
       },

@@ -1,7 +1,16 @@
 import {
   clerkProductionConfig,
   clerkProductionIdentity,
+  sellerPublicListingsEnabled,
 } from './clerk-production.mjs';
+import {
+  clerkLinkOwner,
+  clerkLinkInput,
+  clerkLinkIdentity,
+  clerkLinkTransaction,
+  clerkLinkFinishProof,
+  clerkLinkProviderProof,
+} from './clerk-existing-account.mjs';
 import {
   listingFields as fields,
   cleanListing as clean,
@@ -1011,9 +1020,104 @@ export class SellerStore {
       const config = clerkProductionConfig(this.env, req);
       if (!config) fail(404, 'Not found.');
       if (method !== 'POST') fail(405, 'Method not allowed.');
-      if (req.headers.get('Origin') !== config.origin)
+      const linkFinishing = path === '/auth/clerk-production/link/finish';
+      if (!linkFinishing && req.headers.get('Origin') !== config.origin)
         fail(403, 'Origin rejected.');
       const body = await this.json(req);
+      if (path === '/auth/clerk-production/link/start' || linkFinishing) {
+        let tx;
+        if (linkFinishing) {
+          const nonceKey = await hash(
+            typeof body?.nonce === 'string' ? body.nonce : '',
+          );
+          tx = this.state.authTransactions[nonceKey];
+          if (!tx || tx.method !== 'clerk-production-link')
+            fail(401, 'Account connection expired. Start again.');
+          // Persist consumption before validating either credential or proof.
+          // Failed provider calls, changed owners and rejected CSRF cannot replay.
+          delete this.state.authTransactions[nonceKey];
+          await this.saveState(this.state);
+          this.rollbackState = structuredClone(this.state);
+          if (
+            !Number.isSafeInteger(tx.expiresAt) ||
+            tx.expiresAt <= Date.now()
+          )
+            fail(401, 'Account connection expired. Start again.');
+          if (req.headers.get('Origin') !== config.origin)
+            fail(403, 'Origin rejected.');
+        }
+        clerkLinkInput(req, body, linkFinishing);
+        const ownerSessionKey = await hash(
+          (req.headers.get('Authorization') || '').replace(/^Bearer /, ''),
+        );
+        const owner = clerkLinkOwner(this.state, ownerSessionKey);
+        if (linkFinishing)
+          await clerkLinkFinishProof(tx, owner, req, body, config.origin);
+        const external = await clerkProductionIdentity(this.env, req);
+        if (linkFinishing) clerkLinkProviderProof(tx, external);
+        const identityKey = await clerkLinkIdentity(
+          this.state,
+          owner,
+          external,
+          tx?.createdAt || Date.now(),
+        );
+        if (!linkFinishing) {
+          this.rate('clerk-production-link:' + owner.profile.id, 10);
+          for (const [key, value] of Object.entries(this.state.authTransactions))
+            if (value.expiresAt <= Date.now())
+              delete this.state.authTransactions[key];
+          const nonce = token(),
+            csrf = token();
+          this.state.authTransactions[await hash(nonce)] =
+            await clerkLinkTransaction(
+              owner,
+              external,
+              config.origin,
+              body.proof,
+              csrf,
+            );
+          return reply({ nonce, csrf });
+        }
+        this.state.identities[identityKey] = {
+          userId: owner.profile.id,
+          issuer: external.issuer,
+          subject: external.subject,
+          method: 'clerk-production',
+          createdAt: Date.now(),
+          credentialsChangedAt: 0,
+        };
+        // Complete the cutover by retiring existing RWAS bearer sessions. No
+        // seller profile, listing owner or pre-existing identity is rewritten.
+        for (const [key, session] of Object.entries(this.state.sessions))
+          if (session.userId === owner.profile.id)
+            delete this.state.sessions[key];
+        for (const [key, transaction] of Object.entries(
+          this.state.authTransactions,
+        ))
+          if (transaction.linkUserId === owner.profile.id)
+            delete this.state.authTransactions[key];
+        const raw = token(),
+          csrf = token();
+        this.state.sessions[await hash(raw)] = {
+          userId: owner.profile.id,
+          method: 'clerk-production',
+          csrf,
+          identityKey,
+          issuer: external.issuer,
+          subject: external.subject,
+          providerSessionId: external.providerSessionId,
+          passwordLastUpdatedAt: external.passwordLastUpdatedAt,
+          createdAt: Date.now(),
+          expiresAt: Math.min(
+            Date.now() + DAY,
+            external.providerSessionExpiresAt,
+          ),
+        };
+        this.audit('identity-link', owner.profile.id, {
+          method: 'clerk-production',
+        });
+        return reply({ ok: true, session: raw, csrf });
+      }
       if (path === '/auth/clerk-production/start') {
         const initiated = await clerkProductionIdentity(this.env, req);
         this.rate(
@@ -1154,7 +1258,8 @@ export class SellerStore {
         return reply({
           methods: ['clerk-production'],
           emailCode: false,
-          publicListings: false,
+          existingAccountLink: 'fresh-email-code-session',
+          publicListings: sellerPublicListingsEnabled(this.env),
         });
       }
       fail(
@@ -1173,7 +1278,7 @@ export class SellerStore {
             )
           : [],
         emailCode: this.env.EMAIL_CODE_LOGIN_ENABLED === 'true',
-        publicListings: this.env.PUBLIC_LISTINGS_ENABLED === 'true',
+        publicListings: sellerPublicListingsEnabled(this.env),
       });
     }
     if (path === '/auth/start' && method === 'POST') {
@@ -1622,7 +1727,7 @@ export class SellerStore {
     }
     if (path === '/browse' && method === 'GET') {
       if (
-        this.env.PUBLIC_LISTINGS_ENABLED !== 'true' &&
+        !sellerPublicListingsEnabled(this.env) &&
         this.env.CLERK_ACCEPTANCE_ENABLED !== 'true'
       )
         return reply({ listings: [] });
@@ -1632,7 +1737,7 @@ export class SellerStore {
           .filter(
             (l) =>
               acceptancePublished(l, this.env) ||
-              (this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
+              (sellerPublicListingsEnabled(this.env) &&
                 (l.status === 'active' || (sold && l.status === 'sold'))),
           )
           .map((l) => publicListing(this.hydrate(l))),
@@ -1669,7 +1774,7 @@ export class SellerStore {
       const published =
         l &&
         (acceptancePublished(l, this.env) ||
-          (this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
+          (sellerPublicListingsEnabled(this.env) &&
             ['active', 'sold'].includes(l.status))) &&
         ['photos', 'videos'].includes(f.category);
       if (!published) {
@@ -1738,7 +1843,7 @@ export class SellerStore {
       if (!l) fail(404, 'Listing not found.');
       const published =
         acceptancePublished(l, this.env) ||
-        (this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
+        (sellerPublicListingsEnabled(this.env) &&
           ['active', 'sold'].includes(l.status));
       if (
         !published &&
@@ -1798,7 +1903,7 @@ export class SellerStore {
         fail(400, 'Invalid review decision.');
       if (
         b.decision === 'approve' &&
-        this.env.PUBLIC_LISTINGS_ENABLED !== 'true'
+        !sellerPublicListingsEnabled(this.env)
       )
         fail(409, 'Public listing activation is disabled.');
       if (b.decision === 'acceptance-approve') {
@@ -2128,7 +2233,7 @@ export class SellerStore {
         };
       } else if (next === 'paused' && l.status === 'active')
         l.status = 'paused';
-      else if (next === 'active' && this.env.PUBLIC_LISTINGS_ENABLED !== 'true')
+      else if (next === 'active' && !sellerPublicListingsEnabled(this.env))
         fail(409, 'Public listing activation is disabled.');
       else if (
         next === 'active' &&
@@ -2136,7 +2241,7 @@ export class SellerStore {
         l.approvedRevision === l.revision
       )
         l.status = 'active';
-      else if (next === 'sold' && this.env.PUBLIC_LISTINGS_ENABLED !== 'true')
+      else if (next === 'sold' && !sellerPublicListingsEnabled(this.env))
         fail(409, 'Public listing activation is disabled.');
       else if (next === 'sold' && ['active', 'paused'].includes(l.status))
         l.status = 'sold';

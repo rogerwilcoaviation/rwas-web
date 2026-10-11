@@ -11,6 +11,8 @@ export const CLERK_PRODUCTION_PUBLISHABLE_KEY =
 const SELLER_ROOT = '/api/aircraft-sale';
 const START_PATH = SELLER_ROOT + '/auth/clerk-production/start';
 const FINISH_PATH = SELLER_ROOT + '/auth/clerk-production/finish';
+const LINK_START_PATH = SELLER_ROOT + '/auth/clerk-production/link/start';
+const LINK_FINISH_PATH = SELLER_ROOT + '/auth/clerk-production/link/finish';
 const SELLER_URL = CLERK_PRODUCTION_ORIGIN + '/aircraft-for-sale';
 const SIGN_UP_URL = SELLER_URL + '?seller-auth=sign-up';
 const HANDOFF_URL = SELLER_URL + '?seller-auth=complete';
@@ -26,6 +28,11 @@ export type ClerkProductionHandoffStage =
   | 'complete';
 
 type ClerkConstructor = new (publishableKey: string) => Clerk;
+// Clerk's official modal interface supports getContainer. Derive the shared
+// profile fields from the installed SDK without importing its internal package.
+type ClerkUserProfileModalProps = NonNullable<
+  Parameters<Clerk['openUserProfile']>[0]
+> & { getContainer: () => HTMLElement | null };
 type ClerkProductionOptions = {
   location?: Pick<Location, 'origin' | 'hostname' | 'protocol' | 'port'>;
   ClerkConstructor?: ClerkConstructor;
@@ -35,6 +42,18 @@ export type ClerkProductionSession = {
   provider: 'clerk-production';
   token: string;
   csrf: string;
+  email: string;
+  name: string;
+};
+
+export type ClerkProductionIdentityState = {
+  sessionId: string;
+  userId: string;
+  userUpdatedAt: number | null;
+};
+
+export type ClerkProductionLinkOwner = {
+  token: string;
   email: string;
   name: string;
 };
@@ -139,6 +158,8 @@ export class ClerkProductionBrowser {
   private readonly clerk: Clerk;
   private readonly request: typeof fetch;
   private connecting: Promise<ClerkProductionSession> | null = null;
+  private linking: Promise<ClerkProductionSession> | null = null;
+  private linkingOwnerToken: string | null = null;
 
   constructor(clerk: Clerk, request: typeof fetch) {
     this.clerk = clerk;
@@ -147,6 +168,34 @@ export class ClerkProductionBrowser {
 
   hasSession() {
     return Boolean(this.clerk.session);
+  }
+
+  identityState(): ClerkProductionIdentityState {
+    return {
+      sessionId: this.clerk.session?.id || '',
+      userId: this.clerk.user?.id || '',
+      userUpdatedAt: this.clerk.user?.updatedAt?.getTime() ?? null,
+    };
+  }
+
+  addIdentityListener(listener: (state: ClerkProductionIdentityState) => void) {
+    return this.clerk.addListener(({ session, user }) => {
+      listener({
+        sessionId: session?.id || '',
+        userId: user?.id || '',
+        userUpdatedAt: user?.updatedAt?.getTime() ?? null,
+      });
+    });
+  }
+
+  openAccount(element: HTMLDivElement) {
+    assertClerkProductionBoundary(productionLocation());
+    if (!this.hasSession()) throw new Error('Clerk sign-in is required.');
+    // The official modal API supplies this container to Clerk's portals, so
+    // secondary settings dialogs stay inside the seller dialog's top layer.
+    const props: ClerkUserProfileModalProps = { getContainer: () => element };
+    this.clerk.openUserProfile(props);
+    return () => this.clerk.closeUserProfile();
   }
 
   mountAuthentication(
@@ -228,6 +277,69 @@ export class ClerkProductionBrowser {
       'rwas-finish-accepted',
       observe,
     );
+    return this.acceptSession(finish, observe);
+  }
+
+  async link(
+    owner: ClerkProductionLinkOwner,
+    observe: (stage: ClerkProductionHandoffStage) => void = () => {},
+  ) {
+    if (this.linking) {
+      if (owner.token !== this.linkingOwnerToken)
+        throw new Error('Another RWAS account connection is in progress.');
+      return this.linking;
+    }
+    this.linkingOwnerToken = owner.token;
+    this.linking = this.linkOnce(owner, observe).finally(() => {
+      this.linking = null;
+      this.linkingOwnerToken = null;
+    });
+    return this.linking;
+  }
+
+  private async linkOnce(
+    owner: ClerkProductionLinkOwner,
+    observe: (stage: ClerkProductionHandoffStage) => void,
+  ): Promise<ClerkProductionSession> {
+    const ownerToken = safeString(owner.token, 512);
+    if (!ownerToken) throw new Error('An existing RWAS sign-in is required.');
+    const bytes = crypto.getRandomValues(new Uint8Array(32));
+    const proof = btoa(String.fromCharCode(...bytes))
+      .replaceAll('+', '-')
+      .replaceAll('/', '_')
+      .replaceAll('=', '');
+    const ownerHeaders = {
+      Authorization: 'Bearer ' + ownerToken,
+      'X-RWAS-Link-Proof': proof,
+    };
+    observe('provider-session-present');
+    const start = await this.post(
+      LINK_START_PATH,
+      { proof, confirm: true },
+      'rwas-start-request',
+      'rwas-start-accepted',
+      observe,
+      ownerHeaders,
+    );
+    const nonce = safeString(start.nonce, 512);
+    const csrf = safeString(start.csrf, 512);
+    if (!nonce || !csrf)
+      throw new Error('RWAS account connection could not be started.');
+    const finish = await this.post(
+      LINK_FINISH_PATH,
+      { nonce, proof, confirm: true },
+      'rwas-finish-request',
+      'rwas-finish-accepted',
+      observe,
+      { ...ownerHeaders, 'X-RWAS-CSRF': csrf },
+    );
+    return this.acceptSession(finish, observe);
+  }
+
+  private async acceptSession(
+    finish: Record<string, unknown>,
+    observe: (stage: ClerkProductionHandoffStage) => void,
+  ): Promise<ClerkProductionSession> {
     const session = safeString(finish.session, 512);
     const csrf = safeString(finish.csrf, 512);
     if (!session || !csrf)
@@ -247,6 +359,7 @@ export class ClerkProductionBrowser {
     requestStage: ClerkProductionHandoffStage,
     acceptedStage: ClerkProductionHandoffStage,
     observe: (stage: ClerkProductionHandoffStage) => void,
+    extraHeaders: Record<string, string> = {},
   ) {
     assertClerkProductionBoundary(productionLocation());
     observe('clerk-token-request');
@@ -259,6 +372,7 @@ export class ClerkProductionBrowser {
         credentials: 'same-origin',
         cache: 'no-store',
         headers: {
+          ...extraHeaders,
           'X-Clerk-Session-Token': clerkToken,
           'Content-Type': 'application/json',
         },

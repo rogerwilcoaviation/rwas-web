@@ -5,7 +5,9 @@ import {
   clerkProductionFailureTelemetry,
   getClerkProductionBrowser,
   type ClerkProductionHandoffStage,
+  type ClerkProductionLinkOwner,
   type ClerkProductionSession,
+  type ClerkProductionBrowser,
 } from './clerk-production-browser';
 
 const FAILURE_LATCH = 'rwas-clerk-production-failure-v1';
@@ -95,11 +97,14 @@ function failureStorageReady() {
 
 export default function ClerkProductionPanel({
   onSignedIn,
+  linkOwner,
 }: {
   onSignedIn: (session: ClerkProductionSession) => void;
+  linkOwner?: ClerkProductionLinkOwner;
 }) {
   const mount = useRef<HTMLDivElement>(null);
   const signedIn = useRef(onSignedIn);
+  const owner = useRef(linkOwner);
   signedIn.current = onSignedIn;
   const [error, setError] = useState('');
   const [stage, setStage] = useState<
@@ -114,11 +119,6 @@ export default function ClerkProductionPanel({
   const [failureStage, setFailureStage] = useState('');
   const [failureStatus, setFailureStatus] = useState('');
   const [serverFailureStage, setServerFailureStage] = useState('');
-  const observe = (next: ClerkProductionHandoffStage) => {
-    currentStage.current = next;
-    setStage(next);
-  };
-
   useEffect(() => {
     if (!failureStorageReady()) {
       setFailureStage('client-loading');
@@ -134,48 +134,68 @@ export default function ClerkProductionPanel({
       setFailureStatus(retained.status);
       setServerFailureStage(retained.serverStage);
       setStage('failed');
-      setError('Sign-in could not be completed. Please try again.');
+      setError(
+        'Sign-in could not be completed. Further attempts in this tab are paused. Please use another sign-in method or contact RWAS for help.',
+      );
       return;
     }
     let active = true;
     let cleanup = () => {};
+    const observe = (next: ClerkProductionHandoffStage) => {
+      currentStage.current = next;
+      if (active) setStage(next);
+    };
     void getClerkProductionBrowser()
       .then(async (client) => {
         if (!active || !mount.current) return;
         const element = mount.current;
         let completing = false;
+        let completed = false;
         let terminalFailure = false;
         const complete = async () => {
-          if (completing || terminalFailure || !client.hasSession()) return;
+          if (
+            !active ||
+            completing ||
+            completed ||
+            terminalFailure ||
+            !client.hasSession()
+          )
+            return;
           completing = true;
           attempts.current += 1;
           try {
-            const session = await client.connect(observe);
+            const session = owner.current
+              ? await client.link(owner.current, observe)
+              : await client.connect(observe);
+            completed = true;
             if (active) signedIn.current(session);
           } catch (caught) {
+            terminalFailure = true;
+            const telemetry = clerkProductionFailureTelemetry(caught);
+            const observedAt = new Date().toISOString();
+            const observedStage = currentStage.current;
+            const clientStage = CLIENT_STAGES.has(
+              observedStage as ClerkProductionHandoffStage,
+            )
+              ? (observedStage as ClerkProductionHandoffStage)
+              : 'provider-session-present';
+            // Closing a dialog does not erase the result of its handoff.
+            writeFailureLatch({
+              attemptCount: 1,
+              clientStage,
+              status: telemetry.status,
+              serverStage: telemetry.serverStage,
+              observedAt,
+            });
             if (active) {
-              terminalFailure = true;
-              const telemetry = clerkProductionFailureTelemetry(caught);
-              const observedAt = new Date().toISOString();
-              const observedStage = currentStage.current;
-              const clientStage = CLIENT_STAGES.has(
-                observedStage as ClerkProductionHandoffStage,
-              )
-                ? (observedStage as ClerkProductionHandoffStage)
-                : 'provider-session-present';
-              writeFailureLatch({
-                attemptCount: 1,
-                clientStage,
-                status: telemetry.status,
-                serverStage: telemetry.serverStage,
-                observedAt,
-              });
               setFailureAttemptCount(attempts.current);
               setFailureStage(currentStage.current);
               setFailureStatus(telemetry.status);
               setServerFailureStage(telemetry.serverStage);
               setStage('failed');
-              setError('Sign-in could not be completed. Please try again.');
+              setError(
+                'Sign-in could not be completed. Further attempts in this tab are paused. Please use another sign-in method or contact RWAS for help.',
+              );
             }
           } finally {
             completing = false;
@@ -221,10 +241,75 @@ export default function ClerkProductionPanel({
       data-rwas-clerk-server-stage={serverFailureStage || undefined}
     >
       <p>
-        Sign in, create an account, verify your email, or reset your password
-        with the secure RWAS identity service.
+        {linkOwner
+          ? 'Sign in to the secure identity account you want to connect to your existing RWAS seller account. Your RWAS contact profile and aircraft stay with your existing account.'
+          : 'Sign in, create an account, verify your email, or reset your password with the secure RWAS identity service.'}
       </p>
       {error && <p role="alert">{error}</p>}
+      <div ref={mount} />
+    </section>
+  );
+}
+
+export function ClerkProductionAccountPanel() {
+  const mount = useRef<HTMLDivElement>(null);
+  const client = useRef<ClerkProductionBrowser | null>(null);
+  const cleanup = useRef(() => {});
+  const [ready, setReady] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    let active = true;
+    void getClerkProductionBrowser()
+      .then((browser) => {
+        if (!active || !mount.current) return;
+        client.current = browser;
+        setReady(true);
+      })
+      .catch(() => {
+        if (active)
+          setError(
+            'Secure account settings are unavailable. Please sign in again.',
+          );
+      });
+    return () => {
+      active = false;
+      client.current = null;
+      cleanup.current();
+    };
+  }, []);
+
+  return (
+    <section aria-label="Secure sign-in account settings">
+      <h3>Sign-in and security</h3>
+      <p>
+        Manage your sign-in email, password, connected accounts, and secure
+        sign-in sessions here. Available options depend on your identity
+        account. Password changes can require a new sign-in to RWAS.
+      </p>
+      <p>
+        Your RWAS contact profile and contact email are managed separately
+        below.
+      </p>
+      {error && <p role="alert">{error}</p>}
+      <button
+        type="button"
+        disabled={!ready}
+        onClick={() => {
+          if (!client.current || !mount.current) return;
+          try {
+            cleanup.current();
+            cleanup.current = client.current.openAccount(mount.current);
+            setError('');
+          } catch {
+            setError(
+              'Secure account settings are unavailable. Please sign in again.',
+            );
+          }
+        }}
+      >
+        Manage sign-in and security
+      </button>
       <div ref={mount} />
     </section>
   );

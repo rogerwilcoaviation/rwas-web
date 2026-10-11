@@ -46,13 +46,28 @@ async function readJson(
   }
 }
 
+// Persistent publication is a separate rollout mode. The acceptance release
+// stays private by default, and cannot also enable ordinary public listings.
+export function sellerPublicListingsEnabled(env) {
+  return (
+    env.PUBLIC_LISTINGS_ENABLED === 'true' &&
+    (env.CLERK_PRODUCTION_ENABLED !== 'true' ||
+      (env.CLERK_PUBLIC_LISTINGS_ENABLED === 'true' &&
+        env.CLERK_ACCEPTANCE_ENABLED !== 'true'))
+  );
+}
+
 export function clerkProductionConfig(env, req) {
   if (env.CLERK_PRODUCTION_ENABLED !== 'true') return null;
+  const publicMode = env.CLERK_PUBLIC_LISTINGS_ENABLED ?? 'false';
+  const publicationConfigured =
+    (env.PUBLIC_LISTINGS_ENABLED === 'false' && publicMode === 'false') ||
+    (sellerPublicListingsEnabled(env) && publicMode === 'true');
   if (
     !env.CLERK_PRODUCTION_SECRET_KEY ||
     typeof env.CLERK_PRODUCTION_SECRET_KEY !== 'string' ||
     !env.CLERK_PRODUCTION_SECRET_KEY.startsWith('sk_live_') ||
-    env.PUBLIC_LISTINGS_ENABLED !== 'false' ||
+    !publicationConfigured ||
     new URL(req.url).origin !== ORIGIN
   )
     throw reject(
