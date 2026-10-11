@@ -17,6 +17,7 @@ const RETRYABLE_STATUSES = new Set(['network', '429', '503']);
 type RetryIdentity = Pick<ClerkProductionIdentityState, 'sessionId' | 'userId'>;
 type FailureLatch = {
   attemptCount: number;
+  pending?: boolean;
   attemptId?: string;
   retryIdentity?: RetryIdentity;
   clientStage: ClerkProductionHandoffStage;
@@ -41,7 +42,9 @@ function sameIdentity(left: RetryIdentity, right: RetryIdentity) {
 }
 function canRetryFailure(value: FailureLatch) {
   return Boolean(
-    RETRYABLE_STATUSES.has(value.status) &&
+    (value.pending === true
+      ? value.status === '' && value.serverStage === ''
+      : RETRYABLE_STATUSES.has(value.status)) &&
       value.attemptCount < MAX_ATTEMPTS &&
       typeof value.attemptId === 'string' &&
       value.attemptId.length === 36 &&
@@ -102,6 +105,7 @@ function readFailureLatch(): FailureLatch | null {
     return Number.isSafeInteger(value?.attemptCount) &&
       value.attemptCount >= 1 &&
       value.attemptCount <= MAX_ATTEMPTS &&
+      (value.pending === undefined || typeof value.pending === 'boolean') &&
       CLIENT_STAGES.has(value.clientStage) &&
       FAILURE_STATUSES.has(value.status) &&
       SERVER_STAGES.has(value.serverStage) &&
@@ -117,15 +121,23 @@ function writeFailureLatch(value: FailureLatch) {
   sessionStorage.setItem(FAILURE_LATCH, JSON.stringify(value));
   history.replaceState({ ...(history.state || {}), [FAILURE_LATCH]: true }, '');
 }
+function sameFailureLatch(
+  current: FailureLatch | null,
+  expected: FailureLatch,
+) {
+  return Boolean(
+    current &&
+      current.attemptId === expected.attemptId &&
+      current.attemptCount === expected.attemptCount &&
+      current.status === expected.status &&
+      Boolean(current.pending) === Boolean(expected.pending) &&
+      (!expected.retryIdentity ||
+        (current.retryIdentity &&
+          sameIdentity(expected.retryIdentity, current.retryIdentity))),
+  );
+}
 function clearFailureLatch(expected: FailureLatch) {
-  const current = readFailureLatch();
-  if (
-    !current ||
-    current.attemptId !== expected.attemptId ||
-    current.attemptCount !== expected.attemptCount ||
-    current.status !== expected.status
-  )
-    return false;
+  if (!sameFailureLatch(readFailureLatch(), expected)) return false;
   sessionStorage.removeItem(FAILURE_LATCH);
   const state = { ...(history.state || {}) };
   delete state[FAILURE_LATCH];
@@ -173,7 +185,7 @@ export default function ClerkProductionPanel({
   const [retryAvailable, setRetryAvailable] = useState(false);
   const [retryPending, setRetryPending] = useState(false);
   const retryAction = useRef<() => Promise<void>>(async () => {});
-  const expectedRetryIdentity = useRef<RetryIdentity | null>(null);
+  const authorizedRetry = useRef<FailureLatch | null>(null);
   useEffect(() => {
     const generation = ++panelGeneration;
     panelController?.abort();
@@ -194,7 +206,7 @@ export default function ClerkProductionPanel({
       setRetryAvailable(retryable);
       setError(
         retryable
-          ? `Secure sign-in is temporarily unavailable. You can retry in this tab. Up to ${MAX_ATTEMPTS} attempts are allowed; ${MAX_ATTEMPTS - failure.attemptCount} remaining.`
+          ? `${failure.pending ? 'The previous secure sign-in was interrupted. Start a fresh attempt in this tab.' : 'Secure sign-in is temporarily unavailable. You can retry in this tab.'} Up to ${MAX_ATTEMPTS} attempts are allowed; ${MAX_ATTEMPTS - failure.attemptCount} remaining.`
           : 'Sign-in could not be completed. Further attempts in this tab are paused. Please use another sign-in method or contact RWAS for help.',
       );
       retryAction.current = async () => {
@@ -215,7 +227,7 @@ export default function ClerkProductionPanel({
             );
             return;
           }
-          if (!clearFailureLatch(failure)) {
+          if (!sameFailureLatch(readFailureLatch(), failure)) {
             setRetryAvailable(false);
             setError(
               'The sign-in attempt changed. Please reopen seller sign-in.',
@@ -223,7 +235,7 @@ export default function ClerkProductionPanel({
             return;
           }
           attempts.current = failure.attemptCount;
-          expectedRetryIdentity.current = failure.retryIdentity;
+          authorizedRetry.current = failure;
           setRetryAvailable(false);
           setFailureAttemptCount(0);
           setFailureStage('');
@@ -249,7 +261,17 @@ export default function ClerkProductionPanel({
       setError('Secure sign-in is unavailable. Please use another method.');
     } else {
       const retained = readFailureLatch();
-      if (retained) {
+      const requested = authorizedRetry.current;
+      authorizedRetry.current = null;
+      const priorAttempt =
+        retained && requested && sameFailureLatch(retained, requested)
+          ? retained
+          : null;
+      if (requested && !retained) {
+        setRetryAvailable(false);
+        setStage('failed');
+        setError('The sign-in attempt changed. Please reopen seller sign-in.');
+      } else if (retained && !priorAttempt) {
         attempts.current = retained.attemptCount;
         showFailure(retained);
       } else {
@@ -277,13 +299,59 @@ export default function ClerkProductionPanel({
               completing = true;
               const binding = client.identityState();
               const attemptId = crypto.randomUUID();
-              attempts.current += 1;
+              let pending: FailureLatch | null = null;
               try {
                 if (
-                  expectedRetryIdentity.current &&
-                  !sameIdentity(expectedRetryIdentity.current, binding)
-                )
-                  throw new Error('Secure sign-in changed before retry.');
+                  priorAttempt &&
+                  (!canRetryFailure(priorAttempt) ||
+                    !priorAttempt.retryIdentity ||
+                    !sameIdentity(priorAttempt.retryIdentity, binding))
+                ) {
+                  failed = true;
+                  showFailure(priorAttempt);
+                  setRetryAvailable(false);
+                  setError(
+                    'Your secure sign-in changed. Please sign in again or contact RWAS for help.',
+                  );
+                  return;
+                }
+                if (!owner.current) {
+                  const stored = readFailureLatch();
+                  if (
+                    priorAttempt
+                      ? !sameFailureLatch(stored, priorAttempt)
+                      : stored !== null
+                  ) {
+                    failed = true;
+                    if (stored) showFailure(stored);
+                    setRetryAvailable(false);
+                    setError(
+                      'The sign-in attempt changed. Please reopen seller sign-in.',
+                    );
+                    return;
+                  }
+                }
+                attempts.current = (priorAttempt?.attemptCount || 0) + 1;
+                if (!owner.current) {
+                  pending = {
+                    attemptCount: attempts.current,
+                    attemptId,
+                    pending: true,
+                    clientStage: 'provider-session-present',
+                    status: '',
+                    serverStage: '',
+                    observedAt: new Date().toISOString(),
+                    ...(sameIdentity(binding, binding)
+                      ? {
+                          retryIdentity: {
+                            sessionId: binding.sessionId,
+                            userId: binding.userId,
+                          },
+                        }
+                      : {}),
+                  };
+                  writeFailureLatch(pending);
+                }
                 const session = owner.current
                   ? await client.link(owner.current, observe)
                   : await client.connect(observe, controller.signal);
@@ -295,6 +363,8 @@ export default function ClerkProductionPanel({
                   throw new Error(
                     'Secure sign-in changed during authentication.',
                   );
+                if (pending && !clearFailureLatch(pending))
+                  throw new Error('The secure sign-in attempt changed.');
                 completed = true;
                 signedIn.current(session);
               } catch (caught) {
@@ -304,6 +374,18 @@ export default function ClerkProductionPanel({
                 )
                   return;
                 failed = true;
+                if (pending && !sameFailureLatch(readFailureLatch(), pending)) {
+                  const stored = readFailureLatch();
+                  if (stored && isCurrent()) showFailure(stored);
+                  else if (isCurrent()) {
+                    setStage('failed');
+                    setRetryAvailable(false);
+                    setError(
+                      'Secure sign-in is unavailable. Please use another method.',
+                    );
+                  }
+                  return;
+                }
                 const telemetry = clerkProductionFailureTelemetry(caught);
                 const observedStage = currentStage.current;
                 const failure: FailureLatch = {

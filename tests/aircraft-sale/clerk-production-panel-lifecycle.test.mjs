@@ -333,8 +333,10 @@ test('a terminal validation failure stays latched through dialog removal and rel
       () => globalThis.__CLERK_LIFECYCLE__.tokenOptions.length === 1,
     );
     releaseStart();
-    await page.waitForFunction(() =>
-      Boolean(sessionStorage.getItem('rwas-clerk-production-failure-v1')),
+    await page.waitForFunction(
+      () =>
+        JSON.parse(sessionStorage.getItem('rwas-clerk-production-failure-v1'))
+          ?.status === '401',
     );
     await page.evaluate(() => globalThis.__CLERK_LIFECYCLE__.unmountRoot());
     assert.equal(
@@ -370,7 +372,7 @@ test('a terminal validation failure stays latched through dialog removal and rel
   }
 });
 
-test('existing-session handoff skips SignIn mount and cleans up immediately', async () => {
+test('existing-session handoff cancels immediately and retains its pending attempt through reload', async () => {
   const bundle = await bundleHarness();
   const browser = await chromium.launch({ headless: true });
   let releaseStart;
@@ -470,15 +472,27 @@ test('existing-session handoff skips SignIn mount and cleans up immediately', as
       ),
       1,
     );
-    assert.equal(
-      await page.evaluate(() =>
-        sessionStorage.getItem('rwas-clerk-production-failure-v1'),
-      ),
-      null,
+    const pending = await page.evaluate(() =>
+      JSON.parse(sessionStorage.getItem('rwas-clerk-production-failure-v1')),
     );
+    assert.equal(pending.attemptCount, 1);
+    assert.equal(pending.pending, true);
     assert.equal(
       await page.evaluate(
         () => globalThis.__CLERK_LIFECYCLE__.callbacks.length,
+      ),
+      0,
+    );
+    await page.reload();
+    await waitFailed(page);
+    assert.deepEqual(calls, ['/api/aircraft-sale/auth/clerk-production/start']);
+    assert.equal(
+      await page.getByRole('button', { name: 'Retry secure sign-in' }).count(),
+      1,
+    );
+    assert.equal(
+      await page.evaluate(
+        () => globalThis.__CLERK_LIFECYCLE__.tokenOptions.length,
       ),
       0,
     );
@@ -958,7 +972,7 @@ test('a retry callback waiting on browser loading cannot clear the latch after p
   }
 });
 
-test('cancelled retry transactions cannot finish or overwrite a succeeding panel handshake', async () => {
+test('cancelled unknown-finish retry retains its budget and requires a fresh explicit successor handshake', async () => {
   const bundle = await bundleHarness();
   const browser = await chromium.launch({ headless: true });
   let release;
@@ -980,15 +994,16 @@ test('cancelled retry transactions cannot finish or overwrite a succeeding panel
           const number = ++starts;
           if (number === 1)
             return jsonReply(route, 503, { error: 'temporary outage' });
-          if (number === 2) {
-            startedRetry();
-            await gate;
-          }
           return jsonReply(route, 200, { nonce: 'nonce-' + number });
         }
         if (path.endsWith('/finish')) {
           const nonce = request.postDataJSON().nonce;
+          assert.equal(finishes.includes(nonce), false, 'never replay a nonce');
           finishes.push(nonce);
+          if (nonce === 'nonce-2') {
+            startedRetry();
+            await gate;
+          }
           return jsonReply(route, 200, {
             session: 'session-' + nonce,
             csrf: 'csrf-' + nonce,
@@ -1004,12 +1019,31 @@ test('cancelled retry transactions cannot finish or overwrite a succeeding panel
     await retryStarted;
     assert.equal(starts, 2);
     await page.evaluate(() => globalThis.__CLERK_LIFECYCLE__.replacePanel());
+    await waitFailed(page);
+    const pending = await page.evaluate(
+      (key) => JSON.parse(sessionStorage.getItem(key)),
+      failureKey,
+    );
+    assert.equal(pending.attemptCount, 2);
+    assert.equal(pending.pending, true);
+    assert.equal(starts, 2, 'reopening cannot automatically resume a retry');
+    assert.deepEqual(finishes, ['nonce-2']);
+    assert.match(
+      await page.getByRole('alert').textContent(),
+      /interrupted.*fresh attempt.*1 remaining/,
+    );
+    await page.evaluate(() =>
+      globalThis.__CLERK_LIFECYCLE__.completeVerification(),
+    );
+    await page.waitForTimeout(10);
+    assert.equal(starts, 2, 'provider updates cannot resume a pending retry');
+    await page.getByRole('button', { name: 'Retry secure sign-in' }).click();
     await waitComplete(page);
     assert.equal(starts, 3);
-    assert.deepEqual(finishes, ['nonce-3']);
+    assert.deepEqual(finishes, ['nonce-2', 'nonce-3']);
     release();
     await page.waitForTimeout(20);
-    assert.deepEqual(finishes, ['nonce-3']);
+    assert.deepEqual(finishes, ['nonce-2', 'nonce-3']);
     assert.equal(
       await page.evaluate((key) => sessionStorage.getItem(key), failureKey),
       null,
@@ -1022,6 +1056,109 @@ test('cancelled retry transactions cannot finish or overwrite a succeeding panel
     assert.equal(callbacks[0].session.token, 'session-nonce-3');
   } finally {
     release?.();
+    await browser.close();
+  }
+});
+
+test('pending retries keep all three invoked attempts across repeated remounts and reloads', async () => {
+  const bundle = await bundleHarness();
+  const browser = await chromium.launch({ headless: true });
+  try {
+    for (const replace of ['remount', 'reload']) {
+      let starts = 0;
+      const finishes = [];
+      const releases = [];
+      const waiters = new Map();
+      const page = await retryPage(
+        browser,
+        bundle,
+        async (route, request, path) => {
+          if (path.endsWith('/start')) {
+            const count = ++starts;
+            return count === 1
+              ? jsonReply(route, 503, { error: 'temporary outage' })
+              : jsonReply(route, 200, { nonce: 'bounded-' + count });
+          }
+          assert.equal(path.endsWith('/finish'), true);
+          const nonce = request.postDataJSON().nonce;
+          assert.equal(finishes.includes(nonce), false, 'never replay a nonce');
+          finishes.push(nonce);
+          await new Promise((resolve) => {
+            releases.push(resolve);
+            waiters.get(nonce)();
+          });
+          return jsonReply(route, 200, {
+            session: 'late-' + nonce,
+            csrf: 'late-csrf-' + nonce,
+          });
+        },
+      );
+      try {
+        await waitFailed(page);
+        for (const count of [2, 3]) {
+          const invoked = new Promise((resolve) => {
+            waiters.set('bounded-' + count, resolve);
+          });
+          await page
+            .getByRole('button', { name: 'Retry secure sign-in' })
+            .click();
+          await invoked;
+          if (replace === 'reload') await page.reload();
+          else
+            await page.evaluate(() =>
+              globalThis.__CLERK_LIFECYCLE__.replacePanel(),
+            );
+          await waitFailed(page);
+          const pending = await page.evaluate(
+            (key) => JSON.parse(sessionStorage.getItem(key)),
+            failureKey,
+          );
+          assert.equal(pending.attemptCount, count);
+          assert.equal(pending.pending, true);
+          assert.equal(starts, count);
+          await page.evaluate(() =>
+            globalThis.__CLERK_LIFECYCLE__.completeVerification(),
+          );
+          await page.waitForTimeout(10);
+          assert.equal(
+            starts,
+            count,
+            'cancelled handoffs require explicit resume',
+          );
+        }
+        assert.equal(starts, 3);
+        assert.deepEqual(finishes, ['bounded-2', 'bounded-3']);
+        assert.equal(
+          await page
+            .getByRole('button', { name: 'Retry secure sign-in' })
+            .count(),
+          0,
+        );
+        for (const release of releases) release();
+        await page.waitForTimeout(20);
+        assert.equal(starts, 3);
+        assert.equal(
+          await page.evaluate(
+            () => globalThis.__CLERK_LIFECYCLE__.callbacks.length,
+          ),
+          0,
+        );
+        const exhausted = await page.evaluate(
+          (key) => JSON.parse(sessionStorage.getItem(key)),
+          failureKey,
+        );
+        assert.equal(exhausted.attemptCount, 3);
+        assert.equal(exhausted.pending, true);
+        assert.match(
+          await page.getByRole('alert').textContent(),
+          /Further attempts in this tab are paused/,
+        );
+      } finally {
+        for (const release of releases) release();
+        await page.close();
+      }
+    }
+  } finally {
     await browser.close();
   }
 });
