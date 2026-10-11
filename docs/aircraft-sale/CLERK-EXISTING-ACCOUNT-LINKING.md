@@ -7,8 +7,10 @@ matching email.
 
 ## Implemented boundary
 
-The existing RWAS session must have been issued by the independent email-code
-login, must be less than ten minutes old, and must remain live through finish.
+The existing RWAS credential must either be an independent email-code session
+less than ten minutes old, or the restricted owner proof issued by the dedicated
+[Auth0 owner reauthentication flow](CLERK-AUTH0-OWNER-REAUTH.md). It must remain
+live through finish.
 Both profile holds and security/revocation fences for every identity already
 attached to that seller remain authoritative. The verified Clerk identity must
 remain unchanged across the transaction and must not already belong to any RWAS
@@ -21,6 +23,10 @@ RWAS `Authorization: Bearer ...`, `X-Clerk-Session-Token`, and
 `X-RWAS-Link-Proof` containing the same browser proof. The canonical production
 Origin is required. Start returns a nonce and a separate server-issued CSRF
 proof. The transaction expires after five minutes.
+
+For the dedicated Auth0 owner proof, both link requests additionally require
+`X-RWAS-Owner-CSRF` from owner authentication. That proof is scoped to the exact
+Clerk subject, session and password generation that initiated reauthentication.
 
 `POST /api/aircraft-sale/auth/clerk-production/link/finish` adds that nonce to the
 same body and adds `X-RWAS-CSRF` containing the start response's CSRF proof. The
@@ -37,12 +43,14 @@ Clerk RWAS session and its CSRF proof. The browser must replace its owner envelo
 only after explicit finish succeeds. A Clerk session listener must not initiate
 linking automatically.
 
-## Remaining established-account migration blocker
+## Existing Auth0 owners and the remaining ownership boundary
 
-Clerk mode continues to disable `/send-code`, `/check-code` and the old provider
-`/auth/start` and `/auth/finish` routes. Consequently, this flow can use only an
-already fresh email-code owner session from before cutover. A signed-out seller,
-an expired owner session, or an old provider session requires staff review.
+Clerk mode continues to disable `/send-code`, `/check-code` and the ordinary
+provider `/auth/start` and `/auth/finish` routes. The email-code path therefore
+requires an already fresh pre-cutover session. Established Auth0 password owners
+with an exact persisted subject-to-profile mapping in the current seller store
+can instead use the purpose-limited owner reauthentication flow. It never mints
+general Auth0 seller access or creates an owner profile in Clerk mode.
 
 The historical `method: "identity"` session has only an RWAS user ID and local
 creation/expiry times. It does not retain the exact provider identity or an
@@ -52,14 +60,12 @@ valid historical bearer as fresh provider-owner proof would therefore weaken
 authentication, so this linking route rejects it.
 
 A separate migration protocol must first establish the exact persisted legacy
-identity-to-seller relationship and independently prove fresh authentication of
-that legacy subject, with current provider block/reset/revocation checks. It must
-then bind that owner proof to the verified Clerk subject using an origin-bound,
-one-use transaction and repeat held-account/collision checks at durable commit.
-The browser must never supply a trusted owner ID, and staff must never authorize
-the association solely from matching email. A reviewed preview/apply receipt
-would make any proposed staff-assisted mapping concrete and auditable before
-activation. That protocol is not included in this candidate.
+identity-to-seller relationship when no current-store mapping exists. The new
+Auth0 path refuses unknown subjects even when their verified email matches a
+seller. The original separate legacy backend's ownership/schema is not proven
+by this source, and no account or listing import is included. Such unmapped
+accounts require separately verified ownership evidence; matching email or a
+browser-supplied owner ID cannot supply it.
 
 ## Synthetic verification
 

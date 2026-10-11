@@ -10,7 +10,18 @@ import {
   clerkLinkTransaction,
   clerkLinkFinishProof,
   clerkLinkProviderProof,
+  clerkLinkOwnerProviderProof,
 } from './clerk-existing-account.mjs';
+import {
+  CLERK_OWNER_PURPOSE,
+  CLERK_OWNER_METHOD,
+  clerkOwnerConfig,
+  clerkOwnerInput,
+  clerkOwnerProviderBinding,
+  clerkOwnerProviderProof,
+  clerkOwnerFinishProof,
+  clerkOwnerAccount,
+} from './clerk-owner-reauth.mjs';
 import {
   listingFields as fields,
   cleanListing as clean,
@@ -528,6 +539,11 @@ export class SellerStore {
       accountHeld(this.state.profiles[s.userId])
     )
       fail(401, 'Your session expired. Please sign in again.');
+    if (s.method === CLERK_OWNER_METHOD || s.scope === 'clerk-link-only')
+      fail(
+        401,
+        'Owner authentication can only connect an existing seller account.',
+      );
     if (s.method === 'clerk-production') {
       const config = clerkProductionConfig(this.env, req);
       if (!config || req.headers.get('X-RWAS-CSRF') !== s.csrf)
@@ -1021,9 +1037,134 @@ export class SellerStore {
       if (!config) fail(404, 'Not found.');
       if (method !== 'POST') fail(405, 'Method not allowed.');
       const linkFinishing = path === '/auth/clerk-production/link/finish';
-      if (!linkFinishing && req.headers.get('Origin') !== config.origin)
+      const ownerFinishing = path === '/auth/clerk-production/owner/finish';
+      if (
+        !linkFinishing &&
+        !ownerFinishing &&
+        req.headers.get('Origin') !== config.origin
+      )
         fail(403, 'Origin rejected.');
       const body = await this.json(req);
+      if (path === '/auth/clerk-production/owner/start' || ownerFinishing) {
+        const ownerConfig = clerkOwnerConfig(this.env, config.origin);
+        let tx;
+        if (ownerFinishing) {
+          const key = await digest(
+            typeof body?.state === 'string' ? body.state : '',
+          );
+          tx = this.state.authTransactions[key];
+          if (!tx || tx.purpose !== CLERK_OWNER_PURPOSE)
+            fail(401, 'Owner authentication expired. Start again.');
+          delete this.state.authTransactions[key];
+          await this.saveState(this.state);
+          this.rollbackState = structuredClone(this.state);
+          if (!Number.isSafeInteger(tx.expiresAt) || tx.expiresAt <= Date.now())
+            fail(401, 'Owner authentication expired. Start again.');
+          if (req.headers.get('Origin') !== config.origin)
+            fail(403, 'Origin rejected.');
+          if (!ownerConfig)
+            fail(503, 'Existing-owner authentication is unavailable.');
+          await clerkOwnerFinishProof(tx, req, body, ownerConfig);
+          if (body.error)
+            fail(
+              400,
+              'Owner authentication was cancelled. Your account was not changed.',
+            );
+        } else {
+          if (!ownerConfig)
+            fail(503, 'Existing-owner authentication is unavailable.');
+          clerkOwnerInput(req, body);
+        }
+        const currentClerk = await clerkProductionIdentity(this.env, req);
+        if (ownerFinishing) clerkOwnerProviderProof(tx, currentClerk);
+        if (!ownerFinishing) {
+          const clerkIdentityKey = await digest(
+            currentClerk.issuer + '|' + currentClerk.subject,
+          );
+          const security = this.state.identitySecurity[clerkIdentityKey];
+          if (security?.blocked || security?.providerResetHold)
+            fail(403, 'Account unavailable.');
+          if (this.state.identities[clerkIdentityKey])
+            fail(
+              409,
+              'That secure login is already connected to a seller account.',
+            );
+          this.rate('clerk-owner-reauth:' + clerkIdentityKey, 10);
+          this.rate(
+            'clerk-owner-ip:' +
+              (await hash(req.headers.get('CF-Connecting-IP') || 'local')),
+            20,
+          );
+          for (const [key, value] of Object.entries(
+            this.state.authTransactions,
+          ))
+            if (value.expiresAt <= Date.now())
+              delete this.state.authTransactions[key];
+          const csrf = token();
+          tx = {
+            purpose: CLERK_OWNER_PURPOSE,
+            method: 'password',
+            state: randomProof(),
+            nonce: randomProof(),
+            verifier: randomProof(),
+            browserProof: await digest(body.proof),
+            csrfProof: await digest(csrf),
+            origin: config.origin,
+            ownerIssuer: ownerConfig.issuer,
+            ownerClientId: ownerConfig.clientId,
+            ownerCallback: ownerConfig.callback,
+            ...clerkOwnerProviderBinding(currentClerk),
+            clerkSessionExpiresAt: currentClerk.providerSessionExpiresAt,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 300000,
+          };
+          this.state.authTransactions[await digest(tx.state)] = tx;
+          return reply({
+            state: tx.state,
+            csrf,
+            authorizationUrl: await authorizationUrl(ownerConfig, tx),
+          });
+        }
+        const external = await exchangeIdentity(
+          this.env,
+          ownerConfig,
+          tx,
+          body.code,
+        );
+        const owner = await clerkOwnerAccount(this.state, external, tx);
+        await clerkLinkIdentity(this.state, owner, currentClerk, tx.createdAt);
+        const raw = token(),
+          ownerCsrf = token();
+        const expiresAt = Math.min(
+          Date.now() + 300000,
+          owner.authenticatedAt + 600000,
+          tx.clerkSessionExpiresAt,
+        );
+        this.state.sessions[await hash(raw)] = {
+          method: CLERK_OWNER_METHOD,
+          scope: 'clerk-link-only',
+          userId: owner.profile.id,
+          identityKey: owner.identityKey,
+          issuer: external.issuer,
+          subject: external.subject,
+          authenticatedAt: owner.authenticatedAt,
+          ownerCsrf,
+          ...clerkOwnerProviderBinding(currentClerk),
+          createdAt: Date.now(),
+          expiresAt,
+        };
+        this.audit('clerk-owner-proof-issued', owner.profile.id, {
+          method: 'password',
+        });
+        return reply({
+          ok: true,
+          ownerProof: raw,
+          ownerCsrf,
+          expiresAt,
+          email: owner.profile.email,
+          name: owner.profile.name,
+        });
+      }
       if (path === '/auth/clerk-production/link/start' || linkFinishing) {
         let tx;
         if (linkFinishing) {
@@ -1038,10 +1179,7 @@ export class SellerStore {
           delete this.state.authTransactions[nonceKey];
           await this.saveState(this.state);
           this.rollbackState = structuredClone(this.state);
-          if (
-            !Number.isSafeInteger(tx.expiresAt) ||
-            tx.expiresAt <= Date.now()
-          )
+          if (!Number.isSafeInteger(tx.expiresAt) || tx.expiresAt <= Date.now())
             fail(401, 'Account connection expired. Start again.');
           if (req.headers.get('Origin') !== config.origin)
             fail(403, 'Origin rejected.');
@@ -1050,10 +1188,16 @@ export class SellerStore {
         const ownerSessionKey = await hash(
           (req.headers.get('Authorization') || '').replace(/^Bearer /, ''),
         );
-        const owner = clerkLinkOwner(this.state, ownerSessionKey);
+        const owner = clerkLinkOwner(
+          this.state,
+          ownerSessionKey,
+          Date.now(),
+          identityConfig(this.env)?.issuer,
+        );
         if (linkFinishing)
           await clerkLinkFinishProof(tx, owner, req, body, config.origin);
         const external = await clerkProductionIdentity(this.env, req);
+        clerkLinkOwnerProviderProof(owner, external, req);
         if (linkFinishing) clerkLinkProviderProof(tx, external);
         const identityKey = await clerkLinkIdentity(
           this.state,
@@ -1063,7 +1207,9 @@ export class SellerStore {
         );
         if (!linkFinishing) {
           this.rate('clerk-production-link:' + owner.profile.id, 10);
-          for (const [key, value] of Object.entries(this.state.authTransactions))
+          for (const [key, value] of Object.entries(
+            this.state.authTransactions,
+          ))
             if (value.expiresAt <= Date.now())
               delete this.state.authTransactions[key];
           const nonce = token(),
@@ -1249,7 +1395,11 @@ export class SellerStore {
     if (
       this.env.CLERK_PRODUCTION_ENABLED === 'true' &&
       (path.startsWith('/auth/') ||
-        ['/send-code', '/check-code'].includes(path))
+        ['/send-code', '/check-code'].includes(path)) &&
+      !(
+        method === 'POST' &&
+        ['/auth/events', '/auth/auth0-events'].includes(path)
+      )
     ) {
       if (path === '/auth/methods' && method === 'GET') {
         // Advertise Clerk only when the complete runtime configuration used by
@@ -1259,6 +1409,9 @@ export class SellerStore {
           methods: ['clerk-production'],
           emailCode: false,
           existingAccountLink: 'fresh-email-code-session',
+          ...(clerkOwnerConfig(this.env, new URL(req.url).origin)
+            ? { existingAccountOwnerReauth: 'auth0-password' }
+            : {}),
           publicListings: sellerPublicListingsEnabled(this.env),
         });
       }
@@ -1352,6 +1505,8 @@ export class SellerStore {
       delete this.state.authTransactions[key];
       await this.saveState(this.state);
       this.rollbackState = structuredClone(this.state); // One-use transaction before contacting the provider.
+      if (tx.purpose !== undefined || !config.methods[tx.method])
+        fail(400, 'Sign-in transaction belongs to another flow. Start again.');
       if (body.error)
         fail(400, 'Sign-in was cancelled. Your account was not changed.');
       const external = await exchangeIdentity(this.env, config, tx, body.code);
@@ -1845,10 +2000,7 @@ export class SellerStore {
         acceptancePublished(l, this.env) ||
         (sellerPublicListingsEnabled(this.env) &&
           ['active', 'sold'].includes(l.status));
-      if (
-        !published &&
-        (req.headers.get('Accept') || '').includes('text/html')
-      )
+      if (!published && (req.headers.get('Accept') || '').includes('text/html'))
         fail(404, 'Listing not found.');
       if (!published) {
         const u = await this.user(req);
@@ -1897,14 +2049,10 @@ export class SellerStore {
         });
         return reply({ ok: true, listing: this.hydrate(l) });
       }
-      if (l.status !== 'pending')
-        fail(409, 'Listing is not awaiting review.');
+      if (l.status !== 'pending') fail(409, 'Listing is not awaiting review.');
       if (!['approve', 'reject', 'acceptance-approve'].includes(b.decision))
         fail(400, 'Invalid review decision.');
-      if (
-        b.decision === 'approve' &&
-        !sellerPublicListingsEnabled(this.env)
-      )
+      if (b.decision === 'approve' && !sellerPublicListingsEnabled(this.env))
         fail(409, 'Public listing activation is disabled.');
       if (b.decision === 'acceptance-approve') {
         clean(l.fields, true);
