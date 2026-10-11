@@ -241,7 +241,6 @@ export default function SellerAuthPanel() {
         delete window.rwasSellerSessionRejected;
     };
     // Both callbacks read the current session ref rather than a rendered envelope.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     if (!clerkSessionToken || session?.provider !== 'clerk-production') return;
