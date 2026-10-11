@@ -50,6 +50,9 @@ const requiredSources = [
   'app/aircraft-for-sale/seller-auth-panel.tsx',
   'app/aircraft-for-sale/clerk-production-browser.ts',
   'app/aircraft-for-sale/clerk-production-panel.tsx',
+  'app/aircraft-for-sale/clerk-owner-reauth.ts',
+  'app/aircraft-for-sale/seller-request-facade.ts',
+  'public/jerry-widget.js',
   'lib/public-aircraft-marketplace.mjs',
 ];
 for (const path of requiredSources) {
@@ -74,6 +77,11 @@ assert.ok(
   bundledJavascript.includes('Public browse unavailable.') &&
     bundledJavascript.includes('Invalid public browse response.'),
   'Export must contain the current dual-source marketplace bundle.',
+);
+assert.ok(
+  bundledJavascript.includes('rwasSellerRequestHeaders') &&
+    bundledJavascript.includes('Connect existing seller account'),
+  'Export must contain the current owner authentication and widget header bridge.',
 );
 const exportedHome = await readFile(join(exportedRoot, 'index.html'), 'utf8');
 assert.ok(
