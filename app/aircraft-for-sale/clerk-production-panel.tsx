@@ -8,16 +8,47 @@ import {
   type ClerkProductionLinkOwner,
   type ClerkProductionSession,
   type ClerkProductionBrowser,
+  type ClerkProductionIdentityState,
 } from './clerk-production-browser';
 
 const FAILURE_LATCH = 'rwas-clerk-production-failure-v1';
+const MAX_ATTEMPTS = 3;
+const RETRYABLE_STATUSES = new Set(['network', '429', '503']);
+type RetryIdentity = Pick<ClerkProductionIdentityState, 'sessionId' | 'userId'>;
 type FailureLatch = {
-  attemptCount: 1;
+  attemptCount: number;
+  attemptId?: string;
+  retryIdentity?: RetryIdentity;
   clientStage: ClerkProductionHandoffStage;
   status: string;
   serverStage: string;
   observedAt: string;
 };
+let panelGeneration = 0;
+let panelController: AbortController | null = null;
+
+function sameIdentity(left: RetryIdentity, right: RetryIdentity) {
+  return Boolean(
+    typeof left.sessionId === 'string' &&
+      left.sessionId.length > 0 &&
+      left.sessionId.length <= 500 &&
+      typeof left.userId === 'string' &&
+      left.userId.length > 0 &&
+      left.userId.length <= 500 &&
+      left.sessionId === right.sessionId &&
+      left.userId === right.userId,
+  );
+}
+function canRetryFailure(value: FailureLatch) {
+  return Boolean(
+    RETRYABLE_STATUSES.has(value.status) &&
+      value.attemptCount < MAX_ATTEMPTS &&
+      typeof value.attemptId === 'string' &&
+      value.attemptId.length === 36 &&
+      value.retryIdentity &&
+      sameIdentity(value.retryIdentity, value.retryIdentity),
+  );
+}
 const CLIENT_STAGES = new Set<ClerkProductionHandoffStage>([
   'provider-session-present',
   'clerk-token-request',
@@ -68,7 +99,9 @@ function readFailureLatch(): FailureLatch | null {
     const raw = sessionStorage.getItem(FAILURE_LATCH);
     if (!raw) return null;
     const value = JSON.parse(raw) as FailureLatch;
-    return value?.attemptCount === 1 &&
+    return Number.isSafeInteger(value?.attemptCount) &&
+      value.attemptCount >= 1 &&
+      value.attemptCount <= MAX_ATTEMPTS &&
       CLIENT_STAGES.has(value.clientStage) &&
       FAILURE_STATUSES.has(value.status) &&
       SERVER_STAGES.has(value.serverStage) &&
@@ -83,6 +116,21 @@ function readFailureLatch(): FailureLatch | null {
 function writeFailureLatch(value: FailureLatch) {
   sessionStorage.setItem(FAILURE_LATCH, JSON.stringify(value));
   history.replaceState({ ...(history.state || {}), [FAILURE_LATCH]: true }, '');
+}
+function clearFailureLatch(expected: FailureLatch) {
+  const current = readFailureLatch();
+  if (
+    !current ||
+    current.attemptId !== expected.attemptId ||
+    current.attemptCount !== expected.attemptCount ||
+    current.status !== expected.status
+  )
+    return false;
+  sessionStorage.removeItem(FAILURE_LATCH);
+  const state = { ...(history.state || {}) };
+  delete state[FAILURE_LATCH];
+  history.replaceState(state, '');
+  return true;
 }
 function failureStorageReady() {
   try {
@@ -121,117 +169,206 @@ export default function ClerkProductionPanel({
   const [failureStage, setFailureStage] = useState('');
   const [failureStatus, setFailureStatus] = useState('');
   const [serverFailureStage, setServerFailureStage] = useState('');
+  const [retryCycle, setRetryCycle] = useState(0);
+  const [retryAvailable, setRetryAvailable] = useState(false);
+  const [retryPending, setRetryPending] = useState(false);
+  const retryAction = useRef<() => Promise<void>>(async () => {});
+  const expectedRetryIdentity = useRef<RetryIdentity | null>(null);
   useEffect(() => {
+    const generation = ++panelGeneration;
+    panelController?.abort();
+    const controller = new AbortController();
+    panelController = controller;
+    let active = true;
+    let retrying = false;
+    let cleanup = () => {};
+    const isCurrent = () => active && generation === panelGeneration;
+    const showFailure = (failure: FailureLatch) => {
+      currentStage.current = failure.clientStage;
+      setFailureAttemptCount(failure.attemptCount);
+      setFailureStage(failure.clientStage);
+      setFailureStatus(failure.status);
+      setServerFailureStage(failure.serverStage);
+      setStage('failed');
+      const retryable = !owner.current && canRetryFailure(failure);
+      setRetryAvailable(retryable);
+      setError(
+        retryable
+          ? `Secure sign-in is temporarily unavailable. You can retry in this tab. Up to ${MAX_ATTEMPTS} attempts are allowed; ${MAX_ATTEMPTS - failure.attemptCount} remaining.`
+          : 'Sign-in could not be completed. Further attempts in this tab are paused. Please use another sign-in method or contact RWAS for help.',
+      );
+      retryAction.current = async () => {
+        if (!isCurrent() || retrying || !retryable) return;
+        retrying = true;
+        setRetryPending(true);
+        try {
+          const client = await getClerkProductionBrowser();
+          if (!isCurrent()) return;
+          if (
+            !client.hasSession() ||
+            !failure.retryIdentity ||
+            !sameIdentity(failure.retryIdentity, client.identityState())
+          ) {
+            setRetryAvailable(false);
+            setError(
+              'Your secure sign-in changed. Please sign in again or contact RWAS for help.',
+            );
+            return;
+          }
+          if (!clearFailureLatch(failure)) {
+            setRetryAvailable(false);
+            setError(
+              'The sign-in attempt changed. Please reopen seller sign-in.',
+            );
+            return;
+          }
+          attempts.current = failure.attemptCount;
+          expectedRetryIdentity.current = failure.retryIdentity;
+          setRetryAvailable(false);
+          setFailureAttemptCount(0);
+          setFailureStage('');
+          setFailureStatus('');
+          setServerFailureStage('');
+          setError('');
+          setStage('client-loading');
+          setRetryCycle((value) => value + 1);
+        } catch {
+          if (isCurrent())
+            setError(
+              'Secure sign-in is temporarily unavailable. Please try again later.',
+            );
+        } finally {
+          retrying = false;
+          if (isCurrent()) setRetryPending(false);
+        }
+      };
+    };
     if (!failureStorageReady()) {
       setFailureStage('client-loading');
       setStage('failed');
       setError('Secure sign-in is unavailable. Please use another method.');
-      return;
-    }
-    const retained = readFailureLatch();
-    if (retained) {
-      currentStage.current = retained.clientStage;
-      setFailureAttemptCount(retained.attemptCount);
-      setFailureStage(retained.clientStage);
-      setFailureStatus(retained.status);
-      setServerFailureStage(retained.serverStage);
-      setStage('failed');
-      setError(
-        'Sign-in could not be completed. Further attempts in this tab are paused. Please use another sign-in method or contact RWAS for help.',
-      );
-      return;
-    }
-    let active = true;
-    let cleanup = () => {};
-    const observe = (next: ClerkProductionHandoffStage) => {
-      currentStage.current = next;
-      if (active) setStage(next);
-    };
-    void getClerkProductionBrowser()
-      .then(async (client) => {
-        if (!active || !mount.current) return;
-        const element = mount.current;
-        let completing = false;
-        let completed = false;
-        let terminalFailure = false;
-        const complete = async () => {
-          if (
-            !active ||
-            completing ||
-            completed ||
-            terminalFailure ||
-            !client.hasSession()
-          )
-            return;
-          completing = true;
-          attempts.current += 1;
-          try {
-            const session = owner.current
-              ? await client.link(owner.current, observe)
-              : await client.connect(observe);
-            completed = true;
-            if (active) signedIn.current(session);
-          } catch (caught) {
-            terminalFailure = true;
-            const telemetry = clerkProductionFailureTelemetry(caught);
-            const observedAt = new Date().toISOString();
-            const observedStage = currentStage.current;
-            const clientStage = CLIENT_STAGES.has(
-              observedStage as ClerkProductionHandoffStage,
-            )
-              ? (observedStage as ClerkProductionHandoffStage)
-              : 'provider-session-present';
-            // Closing a dialog does not erase the result of its handoff.
-            writeFailureLatch({
-              attemptCount: 1,
-              clientStage,
-              status: telemetry.status,
-              serverStage: telemetry.serverStage,
-              observedAt,
-            });
-            if (active) {
-              setFailureAttemptCount(attempts.current);
+    } else {
+      const retained = readFailureLatch();
+      if (retained) {
+        attempts.current = retained.attemptCount;
+        showFailure(retained);
+      } else {
+        const observe = (next: ClerkProductionHandoffStage) => {
+          if (!isCurrent()) return;
+          currentStage.current = next;
+          setStage(next);
+        };
+        void getClerkProductionBrowser()
+          .then(async (client) => {
+            if (!isCurrent() || !mount.current) return;
+            const element = mount.current;
+            let completing = false;
+            let completed = false;
+            let failed = false;
+            const complete = async () => {
+              if (
+                !isCurrent() ||
+                completing ||
+                completed ||
+                failed ||
+                !client.hasSession()
+              )
+                return;
+              completing = true;
+              const binding = client.identityState();
+              const attemptId = crypto.randomUUID();
+              attempts.current += 1;
+              try {
+                if (
+                  expectedRetryIdentity.current &&
+                  !sameIdentity(expectedRetryIdentity.current, binding)
+                )
+                  throw new Error('Secure sign-in changed before retry.');
+                const session = owner.current
+                  ? await client.link(owner.current, observe)
+                  : await client.connect(observe, controller.signal);
+                if (!isCurrent()) return;
+                if (
+                  !owner.current &&
+                  !sameIdentity(binding, client.identityState())
+                )
+                  throw new Error(
+                    'Secure sign-in changed during authentication.',
+                  );
+                completed = true;
+                signedIn.current(session);
+              } catch (caught) {
+                if (
+                  generation !== panelGeneration ||
+                  (!owner.current && controller.signal.aborted)
+                )
+                  return;
+                failed = true;
+                const telemetry = clerkProductionFailureTelemetry(caught);
+                const observedStage = currentStage.current;
+                const failure: FailureLatch = {
+                  attemptCount: attempts.current,
+                  attemptId,
+                  clientStage: CLIENT_STAGES.has(
+                    observedStage as ClerkProductionHandoffStage,
+                  )
+                    ? (observedStage as ClerkProductionHandoffStage)
+                    : 'provider-session-present',
+                  status: telemetry.status,
+                  serverStage: telemetry.serverStage,
+                  observedAt: new Date().toISOString(),
+                  ...(!owner.current && sameIdentity(binding, binding)
+                    ? {
+                        retryIdentity: {
+                          sessionId: binding.sessionId,
+                          userId: binding.userId,
+                        },
+                      }
+                    : {}),
+                };
+                writeFailureLatch(failure);
+                if (isCurrent()) showFailure(failure);
+              } finally {
+                completing = false;
+              }
+            };
+            const unsubscribe = client.addSessionListener(
+              () => void complete(),
+            );
+            cleanup = unsubscribe;
+            if (client.hasSession()) {
+              await complete();
+              return;
+            }
+            const unmount = client.mountAuthentication(element);
+            cleanup = () => {
+              unsubscribe();
+              unmount();
+            };
+            if (client.hasSession()) await complete();
+            else {
+              currentStage.current = 'provider-session-absent';
+              setStage('provider-session-absent');
+            }
+          })
+          .catch(() => {
+            if (isCurrent()) {
               setFailureStage(currentStage.current);
-              setFailureStatus(telemetry.status);
-              setServerFailureStage(telemetry.serverStage);
               setStage('failed');
               setError(
-                'Sign-in could not be completed. Further attempts in this tab are paused. Please use another sign-in method or contact RWAS for help.',
+                'Secure sign-in is unavailable. Please use another method.',
               );
             }
-          } finally {
-            completing = false;
-          }
-        };
-        const unsubscribe = client.addSessionListener(() => void complete());
-        cleanup = unsubscribe;
-        if (client.hasSession()) {
-          await complete();
-          return;
-        }
-        const unmount = client.mountAuthentication(element);
-        cleanup = () => {
-          unsubscribe();
-          unmount();
-        };
-        if (client.hasSession()) await complete();
-        else {
-          currentStage.current = 'provider-session-absent';
-          setStage('provider-session-absent');
-        }
-      })
-      .catch(() => {
-        if (active) {
-          setFailureStage(currentStage.current);
-          setStage('failed');
-          setError('Secure sign-in is unavailable. Please use another method.');
-        }
-      });
+          });
+      }
+    }
     return () => {
       active = false;
+      controller.abort();
       cleanup();
+      if (panelController === controller) panelController = null;
     };
-  }, []);
+  }, [retryCycle]);
 
   return (
     <section
@@ -248,6 +385,15 @@ export default function ClerkProductionPanel({
           : 'Sign in, create an account, verify your email, or reset your password with the secure RWAS identity service.'}
       </p>
       {error && <p role="alert">{error}</p>}
+      {retryAvailable && (
+        <button
+          type="button"
+          disabled={retryPending}
+          onClick={() => void retryAction.current()}
+        >
+          Retry secure sign-in
+        </button>
+      )}
       {!linkOwner && failureStatus === '409' && onConnectExisting && (
         <button type="button" onClick={onConnectExisting}>
           Connect existing seller account

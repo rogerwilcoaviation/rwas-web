@@ -194,6 +194,7 @@ export class ClerkProductionBrowser {
   private readonly clerk: Clerk;
   private readonly request: typeof fetch;
   private connecting: Promise<ClerkProductionSession> | null = null;
+  private connectingSignal: AbortSignal | undefined;
   private linking: Promise<ClerkProductionSession> | null = null;
   private linkingOwnerToken: string | null = null;
 
@@ -285,16 +286,25 @@ export class ClerkProductionBrowser {
 
   async connect(
     observe: (stage: ClerkProductionHandoffStage) => void = () => {},
+    signal?: AbortSignal,
   ) {
-    if (this.connecting) return this.connecting;
-    this.connecting = this.connectOnce(observe).finally(() => {
-      this.connecting = null;
+    signal?.throwIfAborted();
+    if (this.connecting && !this.connectingSignal?.aborted)
+      return this.connecting;
+    this.connectingSignal = signal;
+    const connecting = this.connectOnce(observe, signal).finally(() => {
+      if (this.connecting === connecting) {
+        this.connecting = null;
+        this.connectingSignal = undefined;
+      }
     });
-    return this.connecting;
+    this.connecting = connecting;
+    return connecting;
   }
 
   private async connectOnce(
     observe: (stage: ClerkProductionHandoffStage) => void,
+    signal?: AbortSignal,
   ): Promise<ClerkProductionSession> {
     observe('provider-session-present');
     const start = await this.post(
@@ -303,6 +313,8 @@ export class ClerkProductionBrowser {
       'rwas-start-request',
       'rwas-start-accepted',
       observe,
+      {},
+      signal,
     );
     const nonce = safeString(start.nonce, 512);
     if (!nonce) throw new Error('RWAS sign-in could not be started.');
@@ -312,8 +324,10 @@ export class ClerkProductionBrowser {
       'rwas-finish-request',
       'rwas-finish-accepted',
       observe,
+      {},
+      signal,
     );
-    return this.acceptSession(finish, observe);
+    return this.acceptSession(finish, observe, signal);
   }
 
   async link(
@@ -465,12 +479,13 @@ export class ClerkProductionBrowser {
   private async acceptSession(
     finish: Record<string, unknown>,
     observe: (stage: ClerkProductionHandoffStage) => void,
+    signal?: AbortSignal,
   ): Promise<ClerkProductionSession> {
     const session = safeString(finish.session, 512);
     const csrf = safeString(finish.csrf, 512);
     if (!session || !csrf)
       throw new Error('RWAS sign-in could not be completed.');
-    const account = await this.account(session, csrf, observe);
+    const account = await this.account(session, csrf, observe, signal);
     const profile = account.profile as Record<string, unknown> | undefined;
     const email = safeString(profile?.email, 320);
     const name = safeString(profile?.name, 300);
@@ -486,10 +501,13 @@ export class ClerkProductionBrowser {
     acceptedStage: ClerkProductionHandoffStage,
     observe: (stage: ClerkProductionHandoffStage) => void,
     extraHeaders: Record<string, string> = {},
+    signal?: AbortSignal,
   ) {
+    signal?.throwIfAborted();
     assertClerkProductionBoundary(productionLocation());
     observe('clerk-token-request');
     const clerkToken = await this.token();
+    signal?.throwIfAborted();
     observe(requestStage);
     let response: Response;
     try {
@@ -497,6 +515,7 @@ export class ClerkProductionBrowser {
         method: 'POST',
         credentials: 'same-origin',
         cache: 'no-store',
+        signal,
         headers: {
           ...extraHeaders,
           'X-Clerk-Session-Token': clerkToken,
@@ -505,14 +524,17 @@ export class ClerkProductionBrowser {
         body: JSON.stringify(body),
       });
     } catch {
+      signal?.throwIfAborted();
       throw new ClerkProductionRequestError('network');
     }
+    signal?.throwIfAborted();
     const serverStage =
       response.headers.get('X-RWAS-Clerk-Failure-Stage') || '';
     const result = (await response.json().catch(() => null)) as Record<
       string,
       unknown
     > | null;
+    signal?.throwIfAborted();
     if (!response.ok)
       throw new ClerkProductionRequestError(
         SAFE_HTTP_STATUSES.has(response.status)
@@ -529,10 +551,13 @@ export class ClerkProductionBrowser {
     session: string,
     csrf: string,
     observe: (stage: ClerkProductionHandoffStage) => void,
+    signal?: AbortSignal,
   ) {
+    signal?.throwIfAborted();
     assertClerkProductionBoundary(productionLocation());
     observe('clerk-token-request');
     const clerkToken = await this.token();
+    signal?.throwIfAborted();
     observe('rwas-account-request');
     let response: Response;
     try {
@@ -540,6 +565,7 @@ export class ClerkProductionBrowser {
         method: 'GET',
         credentials: 'same-origin',
         cache: 'no-store',
+        signal,
         headers: {
           Authorization: 'Bearer ' + session,
           'X-Clerk-Session-Token': clerkToken,
@@ -547,14 +573,17 @@ export class ClerkProductionBrowser {
         },
       });
     } catch {
+      signal?.throwIfAborted();
       throw new ClerkProductionRequestError('network');
     }
+    signal?.throwIfAborted();
     const serverStage =
       response.headers.get('X-RWAS-Clerk-Failure-Stage') || '';
     const result = (await response.json().catch(() => null)) as Record<
       string,
       unknown
     > | null;
+    signal?.throwIfAborted();
     if (!response.ok)
       throw new ClerkProductionRequestError(
         SAFE_HTTP_STATUSES.has(response.status)
