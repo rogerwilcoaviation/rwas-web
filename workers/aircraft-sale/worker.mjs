@@ -52,6 +52,12 @@ import {
   applyAccountOperation,
 } from './account-admin.mjs';
 import { hasProductSnippetEligibility } from '../../lib/product-snippet-eligibility.mjs';
+import {
+  ConservationCapture,
+  ConservationError,
+  isConservationRequest,
+  loadConservationRows,
+} from './conservation.mjs';
 // Versioned seller API. Requires explicitly provisioned Durable Object + private R2.
 // No legacy KV fallback: migration/import is a separately reviewed operation.
 const HOUR = 3600000,
@@ -322,10 +328,7 @@ export class SellerStore {
     this.ctx = ctx;
     this.env = env;
     this.queue = Promise.resolve();
-    if (ctx.storage.sql)
-      ctx.storage.sql.exec(
-        'CREATE TABLE IF NOT EXISTS seller_records (bucket TEXT NOT NULL, record_key TEXT NOT NULL, value TEXT NOT NULL, PRIMARY KEY(bucket, record_key))',
-      );
+    this.schemaReady = false;
   }
   fetch(req) {
     const operation = this.queue.then(() => this.run(req));
@@ -335,6 +338,14 @@ export class SellerStore {
   async loadState() {
     if (!this.ctx.storage.sql)
       return (await this.ctx.storage.get('state')) || empty(); // memory fixture only
+    // Normal business/mail/alarm processing retains its existing initializer.
+    // A conservation read never creates a missing table on a fresh instance.
+    if (!this.schemaReady) {
+      this.ctx.storage.sql.exec(
+        'CREATE TABLE IF NOT EXISTS seller_records (bucket TEXT NOT NULL, record_key TEXT NOT NULL, value TEXT NOT NULL, PRIMARY KEY(bucket, record_key))',
+      );
+      this.schemaReady = true;
+    }
     const state = empty();
     for (const row of this.ctx.storage.sql
       .exec(
@@ -416,6 +427,10 @@ export class SellerStore {
     await this.scheduleAuth0ReceiptExpiry(state);
   }
   async run(req) {
+    // Wider account/business digests require the separately scoped account-read
+    // administrator. Keep this on the queue, outside BOTH persistence paths:
+    // normal loadState drops unknown buckets and normal error handling saves.
+    if (isConservationRequest(req)) return this.readConservation(req);
     this.state = await this.loadState();
     this.state.auth0EventReceipts ||= {};
     this.rollbackState = structuredClone(this.state);
@@ -485,6 +500,27 @@ export class SellerStore {
           ? { 'X-RWAS-Clerk-Failure-Stage': clerkFailureStage }
           : {},
       );
+    }
+  }
+  async readConservation(req) {
+    if (req.method !== 'GET')
+      return reply({ error: 'Conservation capture is read-only.', code: 'READ_ONLY_METHOD' }, 405, { Allow: 'GET' });
+    try {
+      assertAccountOrigin(req, this.env, false);
+      const identity = await this.accountAdministrator(req, false);
+      this.conservationCapture ||= new ConservationCapture({
+        loadRows: () => loadConservationRows(this.ctx.storage),
+        media: this.env.MEDIA,
+      });
+      return reply(await this.conservationCapture.handle(req, identity.actor));
+    } catch (error) {
+      // Never expose provider/storage messages, record keys, customer values or
+      // any auth payload; never save/rollback/audit after capture failures.
+      if (error instanceof ConservationError)
+        return reply({ error: error.message, code: error.code }, error.status);
+      const status = error.status === 403 ? 403 : 503;
+      return reply({ error: 'Conservation account authorization or read unavailable.',
+        code: status === 403 ? 'ACCOUNT_ADMIN_REQUIRED' : 'CAPTURE_UNAVAILABLE' }, status);
     }
   }
   async json(req, allowEmpty = false) {
