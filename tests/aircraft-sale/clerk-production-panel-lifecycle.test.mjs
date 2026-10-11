@@ -1116,9 +1116,23 @@ test('pending retries keep all three invoked attempts across repeated remounts a
           assert.equal(pending.attemptCount, count);
           assert.equal(pending.pending, true);
           assert.equal(starts, count);
-          await page.evaluate(() =>
-            globalThis.__CLERK_LIFECYCLE__.completeVerification(),
-          );
+          if (replace === 'remount')
+            await page.evaluate(() =>
+              globalThis.__CLERK_LIFECYCLE__.completeVerification(),
+            );
+          else {
+            const blocked = await page.evaluate(() => ({
+              listenerAdds: globalThis.__CLERK_LIFECYCLE__.listenerAdds,
+              listenerInstalled:
+                typeof globalThis.__CLERK_LIFECYCLE__.listener === 'function',
+              tokenRequests: globalThis.__CLERK_LIFECYCLE__.tokenOptions.length,
+            }));
+            assert.deepEqual(blocked, {
+              listenerAdds: 0,
+              listenerInstalled: false,
+              tokenRequests: 0,
+            });
+          }
           await page.waitForTimeout(10);
           assert.equal(
             starts,
