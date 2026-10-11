@@ -315,32 +315,57 @@ test('SQL capture rejects unknown buckets/tables, generated columns, hidden KV, 
   assert.equal(kvReads, 0);
   const columns = ['bucket', 'record_key', 'value'].map((name, i) => ({ name, type: 'TEXT', notnull: 1, pk: [1, 2, 0][i], dflt_value: null, hidden: 0 }));
   function sqlFixture(change = {}) {
-    const queries = [];
-    const storage = { list: async () => change.kv || new Map(), sql: { exec(query) {
+    const queries = [], kvOptions = [];
+    const storage = { list: async (options) => { kvOptions.push(options); return change.kv || new Map(); }, sql: { exec(query) {
       queries.push(query);
-      const result = query.includes('sqlite_schema') ? change.tables || [{ name: 'seller_records', type: 'table' }, { name: '__cf_kv', type: 'table' }]
+      const result = query.includes('sqlite_schema') ? change.tables || [{ name: 'seller_records', type: 'table' }, { name: '_cf_KV', type: 'table' }]
         : query.includes('table_xinfo') ? change.columns || columns
           : query.includes('DISTINCT bucket') ? change.buckets || [{ bucket: 'profiles' }]
             : query.includes('COUNT(*)') ? change.total || [{ count: 1, bytes: 2 }]
               : change.rows || [{ bucket: 'profiles', record_key: 'synthetic', value: '{}' }];
       return { toArray: () => result };
     } } };
-    return { storage, queries };
+    return { storage, queries, kvOptions };
   }
-  const documentedEmpty = sqlFixture();
-  assert.deepEqual(await loadConservationRows(documentedEmpty.storage),
-    [{ bucket: 'profiles', key: 'synthetic', value: {} }]);
+  for (const tables of [undefined, [{ name: 'seller_records', type: 'table' }]]) {
+    const nativeEmpty = sqlFixture({ tables });
+    assert.deepEqual(await loadConservationRows(nativeEmpty.storage),
+      [{ bucket: 'profiles', key: 'synthetic', value: {} }]);
+    assert.deepEqual(nativeEmpty.kvOptions, [{ limit: 1 }]);
+    assert.ok(!nativeEmpty.queries.some((query) => /(?:FROM|table_xinfo\()\s*_cf_KV/.test(query)));
+  }
+  for (const result of ['missing', 'throw', null, {}, []]) {
+    const unavailable = sqlFixture();
+    unavailable.storage.list = result === 'missing' ? undefined : async (options) => {
+      unavailable.kvOptions.push(options);
+      if (result === 'throw') throw new Error('NONSECRET_UNRETAINED_KV_ERROR');
+      return result;
+    };
+    await assert.rejects(loadConservationRows(unavailable.storage), (failure) =>
+      failure.code === 'KV_SCOPE_UNAVAILABLE' && failure.status === 503 &&
+      !failure.message.includes('NONSECRET_UNRETAINED'));
+    assert.deepEqual(unavailable.kvOptions, result === 'missing' ? [] : [{ limit: 1 }]);
+    assert.ok(!unavailable.queries.some((query) => query.includes('DISTINCT bucket')));
+  }
+  for (const [name, type] of [['__cf_kv', 'table'], ['_cf_kv', 'table'], ['_CF_KV', 'table'],
+    ['_cf_KV_extra', 'table'], ['_cf_OTHER', 'table'], ['_cf_KV', 'view'], ['__cf_kv', 'view']]) {
+    const unknown = sqlFixture({ tables: [{ name: 'seller_records', type: 'table' }, { name, type }] });
+    await assert.rejects(loadConservationRows(unknown.storage), error('UNKNOWN_PERSISTED_SCHEMA'));
+    assert.equal(unknown.kvOptions.length, 0);
+  }
   for (const [change, code] of [
     [{ buckets: [{ bucket: 'future_business' }] }, 'UNKNOWN_PERSISTED_BUCKET'],
     [{ tables: [{ name: 'seller_records', type: 'table' }, { name: 'sqliteExtra', type: 'table' }] }, 'UNKNOWN_PERSISTED_SCHEMA'],
     [{ tables: [{ name: 'seller_records', type: 'table' }, { name: 'sqliteExtra', type: 'view' }] }, 'UNKNOWN_PERSISTED_SCHEMA'],
     [{ columns: [...columns, { name: 'generated', hidden: 3 }] }, 'UNKNOWN_PERSISTED_SCHEMA'],
     [{ kv: new Map([['unknown-private-key', 'private-value']]) }, 'UNEXPECTED_KV_STATE'],
+    [{ tables: [{ name: 'seller_records', type: 'table' }], kv: new Map([['unknown-private-key', 'private-value']]) }, 'UNEXPECTED_KV_STATE'],
     [{ rows: [{ bucket: 'profiles', record_key: 'synthetic', value: '{"same":1,"same":2}' }] }, 'INVALID_BUSINESS_ROW'],
     [{ total: [{ count: CONSERVATION_LIMITS.maxRecords + 1, bytes: 2 }] }, 'BUSINESS_BYTE_LIMIT'],
   ]) {
     const fixture = sqlFixture(change);
     await assert.rejects(loadConservationRows(fixture.storage), error(code));
+    if (code === 'UNEXPECTED_KV_STATE') assert.deepEqual(fixture.kvOptions, [{ limit: 1 }]);
     assert.ok(fixture.queries.every((x) => /^(SELECT|PRAGMA)/.test(x)));
     if (change.total) assert.ok(!fixture.queries.some((x) => x.startsWith('SELECT bucket, record_key')));
   }

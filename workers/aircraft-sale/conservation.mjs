@@ -106,7 +106,7 @@ export async function loadConservationRows(storage, { allowMemoryFixture = false
       "SELECT name, type FROM sqlite_schema WHERE type IN ('table','view') AND substr(name,1,7) <> 'sqlite_'",
     ).toArray();
     if (!tables.some((x) => x.name === 'seller_records' && x.type === 'table') ||
-        tables.some((x) => !['seller_records', '__cf_kv'].includes(x.name) || x.type !== 'table'))
+        tables.some((x) => !['seller_records', '_cf_KV'].includes(x.name) || x.type !== 'table'))
       reject(409, 'UNKNOWN_PERSISTED_SCHEMA');
     const columns = storage.sql.exec('PRAGMA table_xinfo(seller_records)').toArray();
     const expected = [['bucket', 1], ['record_key', 2], ['value', 0]];
@@ -114,10 +114,13 @@ export async function loadConservationRows(storage, { allowMemoryFixture = false
       x.name !== expected[i][0] || x.type !== 'TEXT' || x.notnull !== 1 ||
       x.pk !== expected[i][1] || x.dflt_value !== null || x.hidden !== 0))
       reject(409, 'UNKNOWN_PERSISTED_SCHEMA');
-    // Cloudflare documents __cf_kv as hidden from direct SQL. Verify the KV
-    // interface is empty rather than silently excluding another persisted store.
+    // workerd reserves _cf_KV for the native KV interface. The documented
+    // __cf_kv spelling is user-accessible in the reviewed runtime, not an alias.
+    // Always prove native KV empty, even when its deferred table is absent.
     if (typeof storage.list !== 'function') reject(503, 'KV_SCOPE_UNAVAILABLE');
-    const kv = await storage.list({ limit: 1 });
+    let kv;
+    try { kv = await storage.list({ limit: 1 }); }
+    catch { reject(503, 'KV_SCOPE_UNAVAILABLE'); }
     if (!(kv instanceof Map)) reject(503, 'KV_SCOPE_UNAVAILABLE');
     if (kv.size) reject(409, 'UNEXPECTED_KV_STATE');
     const buckets = storage.sql.exec('SELECT DISTINCT bucket FROM seller_records').toArray();
