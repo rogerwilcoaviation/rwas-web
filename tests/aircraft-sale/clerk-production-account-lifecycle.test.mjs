@@ -95,7 +95,7 @@ async function bundleHarness(mode = 'seller') {
                 'export { clerkProductionFailureTelemetry, isClerkProductionMethodEnabled };',
                 'const state = globalThis.__CLERK_ACCOUNT_STATE__;',
                 'const listeners = new Set();',
-                'const makeSession = () => ({ id: "sess_fixture", clearCache() {}, async getToken(options) { state.tokenOptions.push(options); return state.canonicalJwt; } });',
+                'const makeSession = () => ({ id: "sess_fixture", clearCache() {}, async getToken(options) { state.tokenOptions.push(options); if (state.tokenFailure) throw Object.assign(new Error("fixture token outage"), state.tokenFailure === "network" ? {} : { status: state.tokenFailure }); return state.canonicalJwt; } });',
                 'const clerk = {',
                 ' session: state.initialProviderSession || sessionStorage.getItem("rwas_fixture_provider_active") === "1" ? makeSession() : null,',
                 ' user: { id: "user_fixture", updatedAt: new Date(1000), primaryEmailAddress: { emailAddress: "signin@example.test" } },',
@@ -113,6 +113,7 @@ async function bundleHarness(mode = 'seller') {
                 'state.endProviderSession = () => { clerk.session = null; state.emit(); };',
                 'state.switchProviderSession = () => { clerk.session.id = "sess_other"; state.emit(); };',
                 'state.providerEmail = () => clerk.user.primaryEmailAddress.emailAddress;',
+                'state.signInProvider = () => { clerk.session = makeSession(); state.emit(); };',
                 'const client = new ClerkProductionBrowser(clerk, fetch);',
                 'export const getClerkProductionBrowser = async () => { if (state.delayBrowser) await new Promise(resolve => { state.releaseBrowser = resolve; }); return client; };',
               ].join('\n'),
@@ -130,6 +131,10 @@ async function fixturePage(browser, bundle, options = {}) {
   const calls = [];
   let contactEmail = fixtureSession.email;
   let rejectedAccountStatus = 0;
+  let ownerRedirectFlow = null;
+  await page.exposeFunction('fixtureRecordOwnerFlow', (flow) => {
+    ownerRedirectFlow = flow;
+  });
   await page.addInitScript(
     ({
       session,
@@ -137,9 +142,38 @@ async function fixturePage(browser, bundle, options = {}) {
       delayBrowser,
       failProviderSignOut,
       initialProviderSession,
+      initialOwnerFlow,
+      retainedConflict,
     }) => {
+      const originalSetItem = Storage.prototype.setItem;
+      Storage.prototype.setItem = function (key, value) {
+        originalSetItem.call(this, key, value);
+        if (key === 'rwas_sale_clerk_owner_reauth') {
+          const flow = JSON.parse(value);
+          if (flow.phase === 'reauth')
+            void globalThis.fixtureRecordOwnerFlow(flow);
+        }
+      };
       if (session)
         sessionStorage.setItem('rwas_sale_v2', JSON.stringify(session));
+      if (initialOwnerFlow && !sessionStorage.getItem('fixture-owner-seeded')) {
+        sessionStorage.setItem(
+          'rwas_sale_clerk_owner_reauth',
+          JSON.stringify(initialOwnerFlow),
+        );
+        sessionStorage.setItem('fixture-owner-seeded', '1');
+      }
+      if (retainedConflict)
+        sessionStorage.setItem(
+          'rwas-clerk-production-failure-v1',
+          JSON.stringify({
+            attemptCount: 1,
+            clientStage: 'rwas-finish-request',
+            status: '409',
+            serverStage: '',
+            observedAt: new Date().toISOString(),
+          }),
+        );
       globalThis.__CLERK_ACCOUNT_STATE__ = {
         canonicalJwt: token,
         delayBrowser,
@@ -165,11 +199,31 @@ async function fixturePage(browser, bundle, options = {}) {
       delayBrowser: options.delayBrowser === true,
       failProviderSignOut: options.failProviderSignOut === true,
       initialProviderSession: options.initialProviderSession !== false,
+      initialOwnerFlow: options.initialOwnerFlow || null,
+      retainedConflict: options.retainedConflict === true,
     },
   );
   await page.route('**/*', async (route) => {
     const request = route.request();
     const url = new URL(request.url());
+    if (url.origin === 'https://fixture-auth0.example.test') {
+      assert.equal(url.pathname, '/authorize');
+      assert.equal(url.searchParams.get('max_age'), '0');
+      assert.equal(url.searchParams.get('prompt'), 'login');
+      const callback =
+        origin +
+        '/aircraft-for-sale?state=' +
+        encodeURIComponent(url.searchParams.get('state')) +
+        '&code=fixture-owner-code';
+      return route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body:
+          '<!doctype html><button id="return">Return from password fixture</button><script>document.querySelector("#return").onclick=()=>location.assign(' +
+          JSON.stringify(callback) +
+          ')</script>',
+      });
+    }
     assert.equal(url.origin, origin, 'all requests are intercepted fixtures');
     if (url.pathname === '/panel.js')
       return route.fulfill({
@@ -194,8 +248,44 @@ async function fixturePage(browser, bundle, options = {}) {
           ...(options.linkAvailable
             ? { existingAccountLink: 'fresh-email-code-session' }
             : {}),
+          ...(options.ownerAvailable
+            ? { existingAccountOwnerReauth: 'auth0-password' }
+            : {}),
         };
-      else if (call.path === '/auth/clerk-production/link/start')
+      else if (call.path === '/auth/clerk-production/start')
+        body = { nonce: 'fixture-login-nonce', csrf: 'fixture-login-csrf' };
+      else if (call.path === '/auth/clerk-production/finish') {
+        status = 409;
+        body = { error: 'Existing seller account requires connection.' };
+      } else if (call.path === '/auth/clerk-production/owner/start') {
+        const authorization = new URL(
+          'https://fixture-auth0.example.test/authorize',
+        );
+        authorization.search = new URLSearchParams({
+          state: 'fixture-owner-state',
+          max_age: '0',
+          prompt: 'login',
+          redirect_uri: origin + '/aircraft-for-sale',
+        }).toString();
+        body = {
+          state: 'fixture-owner-state',
+          csrf: 'fixture-owner-start-csrf',
+          authorizationUrl: authorization.href,
+        };
+      } else if (call.path === '/auth/clerk-production/owner/finish') {
+        status = options.rejectOwnerFinish || 200;
+        body =
+          status !== 200
+            ? { error: 'Existing identity could not be verified.' }
+            : {
+                ok: true,
+                ownerProof: 'fixture-restricted-owner-proof',
+                ownerCsrf: 'fixture-owner-proof-csrf',
+                expiresAt: Date.now() + (options.ownerProofTtl ?? 300000),
+                email: 'existing-contact@example.test',
+                name: 'Existing Seller',
+              };
+      } else if (call.path === '/auth/clerk-production/link/start')
         body = { nonce: 'fixture-link-nonce', csrf: 'fixture-link-start-csrf' };
       else if (call.path === '/auth/clerk-production/link/finish') {
         if (options.linkFinishGate) await options.linkFinishGate;
@@ -237,7 +327,9 @@ async function fixturePage(browser, bundle, options = {}) {
         status = options.logoutStatus || 200;
         body =
           status === 200 ? { ok: true } : { error: 'Fixture logout rejected.' };
-      } else assert.fail('Unexpected fixture request: ' + call.path);
+      } else if (call.path === '/draft') body = { draft: null };
+      else if (call.path === '/intake') body = { ok: true };
+      else assert.fail('Unexpected fixture request: ' + call.path);
       return route.fulfill({
         status,
         contentType: 'application/json',
@@ -258,6 +350,7 @@ async function fixturePage(browser, bundle, options = {}) {
     rejectAccount: (status = 401) => {
       rejectedAccountStatus = status;
     },
+    ownerRedirectFlow: () => ownerRedirectFlow,
   };
 }
 
@@ -267,6 +360,509 @@ async function openSettings(page) {
     .click();
   await page.locator('[data-clerk-account-fixture]').waitFor();
 }
+
+test('existing password account recovery preserves the failed login latch and keeps owner proof out of ordinary seller access until confirmation', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const bundle = await bundleHarness();
+    const fixture = await fixturePage(browser, bundle, {
+      storeSession: false,
+      ownerAvailable: true,
+    });
+    const { page, calls } = fixture;
+    await page
+      .getByRole('button', { name: 'Seller Login', exact: true })
+      .click();
+    await page
+      .getByRole('button', { name: 'Continue with RWAS secure sign-in' })
+      .click();
+    await page.locator('[data-rwas-clerk-failure-status="409"]').waitFor();
+    await page
+      .getByRole('button', {
+        name: 'Connect existing seller account',
+        exact: true,
+      })
+      .click();
+    await page
+      .getByRole('button', { name: 'Return from password fixture' })
+      .waitFor();
+    const pending = fixture.ownerRedirectFlow();
+    assert.equal(pending.purpose, 'clerk-owner');
+    assert.equal(pending.phase, 'reauth');
+    assert.equal(pending.state, 'fixture-owner-state');
+    assert.equal(pending.csrf, 'fixture-owner-start-csrf');
+    assert.match(pending.proof, /^[A-Za-z0-9_-]{43}$/);
+    assert.equal(
+      await page.evaluate(() => sessionStorage.getItem('rwas_sale_v2')),
+      null,
+    );
+    await page
+      .getByRole('button', { name: 'Return from password fixture' })
+      .click();
+    await page
+      .getByRole('button', { name: 'Connect this seller account', exact: true })
+      .waitFor();
+    assert.equal(
+      await page.evaluate(() => sessionStorage.getItem('rwas_sale_v2')),
+      null,
+    );
+    assert.equal(
+      await page.evaluate(() => window.rwasSaleSession ?? null),
+      null,
+    );
+    assert.equal(
+      await page.evaluate(() => typeof window.rwasSellerRequestHeaders),
+      'undefined',
+    );
+    assert.equal(
+      calls.filter((call) => call.path.includes('/link/')).length,
+      0,
+    );
+    const ownerFinish = calls.find(
+      (call) => call.path === '/auth/clerk-production/owner/finish',
+    );
+    assert.equal(ownerFinish.headers.authorization, undefined);
+    assert.equal(ownerFinish.headers['x-rwas-link-proof'], pending.proof);
+    assert.equal(ownerFinish.headers['x-rwas-csrf'], pending.csrf);
+    assert.equal(ownerFinish.headers['x-clerk-session-token'], canonicalJwt);
+    assert.equal(ownerFinish.body.state, pending.state);
+    assert.equal(ownerFinish.body.code, 'fixture-owner-code');
+    assert.equal(ownerFinish.body.confirm, true);
+    const ordinaryFinishCount = calls.filter(
+      (call) => call.path === '/auth/clerk-production/finish',
+    ).length;
+    await page.reload();
+    await page
+      .getByRole('button', { name: 'Connect this seller account', exact: true })
+      .waitFor();
+    assert.equal(
+      calls.filter((call) => call.path.includes('/link/')).length,
+      0,
+      'reload does not confirm the connection',
+    );
+    assert.equal(
+      calls.filter((call) => call.path === '/auth/clerk-production/finish')
+        .length,
+      ordinaryFinishCount,
+      'purpose callback never replays ordinary enrollment',
+    );
+    await page
+      .getByRole('button', { name: 'Connect this seller account', exact: true })
+      .click();
+    await page.waitForFunction(
+      () =>
+        JSON.parse(sessionStorage.getItem('rwas_sale_v2') || 'null')
+          ?.provider === 'clerk-production',
+    );
+    const linking = calls.filter((call) => call.path.includes('/link/'));
+    assert.equal(linking.length, 2);
+    for (const call of linking) {
+      assert.equal(
+        call.headers.authorization,
+        'Bearer fixture-restricted-owner-proof',
+      );
+      assert.equal(
+        call.headers['x-rwas-owner-csrf'],
+        'fixture-owner-proof-csrf',
+      );
+      assert.equal(call.headers['x-clerk-session-token'], canonicalJwt);
+    }
+    assert.equal(linking[1].headers['x-rwas-csrf'], 'fixture-link-start-csrf');
+    assert.equal(
+      await page.evaluate(() =>
+        sessionStorage.getItem('rwas_sale_clerk_owner_reauth'),
+      ),
+      null,
+    );
+    assert.equal(
+      await page.evaluate(
+        () =>
+          JSON.parse(sessionStorage.getItem('rwas-clerk-production-failure-v1'))
+            .status,
+      ),
+      '409',
+    );
+    assert.equal(
+      calls.some(
+        (call) =>
+          ['/account', '/intake', '/draft', '/my-listings'].includes(
+            call.path,
+          ) &&
+          call.headers.authorization ===
+            'Bearer fixture-restricted-owner-proof',
+      ),
+      false,
+    );
+  } finally {
+    await browser.close();
+  }
+});
+
+test('owner callbacks fail closed on missing state, wrong state, expiry, or terminal provider verification denial', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const bundle = await bundleHarness();
+    const now = Date.now();
+    for (const scenario of [
+      { search: '?code=fixture-code', state: 'expected' },
+      { search: '?state=wrong&code=fixture-code', state: 'expected' },
+      {
+        search: '?state=expected&code=fixture-code',
+        state: 'expected',
+        requestedAt: now - 300001,
+      },
+      {
+        search: '?state=expected&code=fixture-code',
+        state: 'expected',
+        rejectOwnerFinish: 403,
+      },
+      {
+        search: '?state=expected&error=access_denied',
+        state: 'expected',
+        rejectOwnerFinish: 401,
+      },
+    ]) {
+      const { page, calls } = await fixturePage(browser, bundle, {
+        storeSession: false,
+        ownerAvailable: true,
+        ...scenario,
+        initialOwnerFlow: {
+          purpose: 'clerk-owner',
+          phase: 'reauth',
+          state: scenario.state,
+          proof: 'a'.repeat(43),
+          csrf: 'owner-start-csrf',
+          requestedAt: scenario.requestedAt ?? now,
+        },
+      });
+      await page.getByRole('alert').waitFor();
+      await page.waitForFunction(
+        () => sessionStorage.getItem('rwas_sale_clerk_owner_reauth') === null,
+      );
+      assert.equal(
+        await page.evaluate(() => sessionStorage.getItem('rwas_sale_v2')),
+        null,
+      );
+      assert.equal(
+        calls.some(
+          (call) =>
+            call.path === '/auth/finish' ||
+            call.path.includes('/link/') ||
+            call.path === '/auth/clerk-production/finish',
+        ),
+        false,
+      );
+      assert.equal(
+        calls.filter(
+          (call) => call.path === '/auth/clerk-production/owner/finish',
+        ).length,
+        scenario.rejectOwnerFinish ? 1 : 0,
+      );
+      await page.close();
+    }
+  } finally {
+    await browser.close();
+  }
+});
+
+test('dedicated owner identity flow signs into Clerk before password verification without replaying the failed enrollment', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const bundle = await bundleHarness();
+    const fixture = await fixturePage(browser, bundle, {
+      storeSession: false,
+      ownerAvailable: true,
+      retainedConflict: true,
+      initialProviderSession: false,
+      initialOwnerFlow: {
+        purpose: 'clerk-owner',
+        phase: 'identity',
+        requestedAt: Date.now(),
+      },
+    });
+    const { page, calls } = fixture;
+    await page.locator('[data-clerk-sign-in-fixture]').waitFor();
+    assert.equal(
+      calls.some((call) => call.path.includes('/auth/clerk-production/')),
+      false,
+    );
+    await page.evaluate(() =>
+      globalThis.__CLERK_ACCOUNT_STATE__.signInProvider(),
+    );
+    await page
+      .getByRole('button', { name: 'Return from password fixture' })
+      .waitFor();
+    assert.equal(
+      calls.filter((call) => call.path === '/auth/clerk-production/owner/start')
+        .length,
+      1,
+    );
+    assert.equal(
+      calls.some(
+        (call) =>
+          call.path === '/auth/clerk-production/start' ||
+          call.path === '/auth/clerk-production/finish',
+      ),
+      false,
+    );
+    assert.equal(fixture.ownerRedirectFlow().purpose, 'clerk-owner');
+  } finally {
+    await browser.close();
+  }
+});
+
+test('expired owner proof cannot be confirmed or sent to an account connection endpoint', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const bundle = await bundleHarness();
+    const { page, calls } = await fixturePage(browser, bundle, {
+      storeSession: false,
+      ownerAvailable: true,
+      initialOwnerFlow: {
+        purpose: 'clerk-owner',
+        phase: 'confirmation',
+        requestedAt: Date.now(),
+        token: 'expired-owner-proof',
+        ownerCsrf: 'owner-csrf',
+        expiresAt: Date.now() - 1,
+        email: 'existing-contact@example.test',
+        name: 'Existing Seller',
+      },
+    });
+    await page.getByRole('alert').waitFor();
+    assert.equal(
+      await page
+        .getByRole('button', { name: 'Connect this seller account' })
+        .count(),
+      0,
+    );
+    assert.equal(
+      calls.some(
+        (call) => call.path.includes('/link/') || call.path.includes('/owner/'),
+      ),
+      false,
+    );
+    assert.equal(
+      await page.evaluate(() =>
+        sessionStorage.getItem('rwas_sale_clerk_owner_reauth'),
+      ),
+      null,
+    );
+    assert.equal(
+      await page.evaluate(() => typeof window.rwasSellerRequestHeaders),
+      'undefined',
+    );
+  } finally {
+    await browser.close();
+  }
+});
+
+test('unmounting an owner callback before SDK readiness cannot consume the verification or create seller access', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const bundle = await bundleHarness();
+    const { page, calls } = await fixturePage(browser, bundle, {
+      storeSession: false,
+      ownerAvailable: true,
+      delayBrowser: true,
+      search: '?state=expected&code=fixture-code',
+      initialOwnerFlow: {
+        purpose: 'clerk-owner',
+        phase: 'reauth',
+        state: 'expected',
+        proof: 'a'.repeat(43),
+        csrf: 'owner-start-csrf',
+        requestedAt: Date.now(),
+      },
+    });
+    await page.waitForFunction(
+      () =>
+        typeof globalThis.__CLERK_ACCOUNT_STATE__.releaseBrowser === 'function',
+    );
+    await page.evaluate(async () => {
+      const state = globalThis.__CLERK_ACCOUNT_STATE__;
+      state.unmountRoot();
+      state.releaseBrowser();
+      await new Promise(requestAnimationFrame);
+    });
+    assert.equal(
+      calls.some(
+        (call) =>
+          call.path.includes('/owner/') ||
+          call.path.includes('/link/') ||
+          call.path === '/auth/finish',
+      ),
+      false,
+    );
+    assert.equal(
+      await page.evaluate(() => sessionStorage.getItem('rwas_sale_v2')),
+      null,
+    );
+    assert.equal(
+      await page.evaluate(() => typeof window.rwasSellerRequestHeaders),
+      'undefined',
+    );
+  } finally {
+    await browser.close();
+  }
+});
+
+test('owner connection denial clears the restricted proof and preserves an existing ordinary account', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const bundle = await bundleHarness();
+    const { page, calls } = await fixturePage(browser, bundle, {
+      ownerAvailable: true,
+      rejectLink: true,
+      sessionEnvelope: fixtureOwnerSession,
+      initialOwnerFlow: {
+        purpose: 'clerk-owner',
+        phase: 'confirmation',
+        requestedAt: Date.now(),
+        token: 'fixture-restricted-owner-proof',
+        ownerCsrf: 'fixture-owner-proof-csrf',
+        expiresAt: Date.now() + 300000,
+        email: 'existing-contact@example.test',
+        name: 'Existing Seller',
+      },
+    });
+    await page
+      .getByRole('button', { name: 'Connect this seller account', exact: true })
+      .click();
+    await page.getByRole('alert').waitFor();
+    assert.equal(
+      await page.evaluate(() =>
+        sessionStorage.getItem('rwas_sale_clerk_owner_reauth'),
+      ),
+      null,
+    );
+    assert.deepEqual(
+      await page.evaluate(() =>
+        JSON.parse(sessionStorage.getItem('rwas_sale_v2')),
+      ),
+      fixtureOwnerSession,
+    );
+    assert.equal(
+      calls.filter((call) => call.path === '/auth/clerk-production/link/finish')
+        .length,
+      1,
+    );
+    await page
+      .getByRole('button', { name: 'Start account connection again' })
+      .waitFor();
+  } finally {
+    await browser.close();
+  }
+});
+
+test('widget facade uses the loaded official client and disappears on provider invalidation or unmount', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const bundle = await bundleHarness();
+    const { page } = await fixturePage(browser, bundle);
+    await page.waitForFunction(
+      () => typeof window.rwasSellerRequestHeaders === 'function',
+    );
+    const headers = await page.evaluate(() =>
+      window.rwasSellerRequestHeaders('/api/aircraft-sale/intake'),
+    );
+    assert.equal(headers.Authorization, 'Bearer fixture-rwas-session');
+    assert.equal(headers['X-Clerk-Session-Token'], canonicalJwt);
+    assert.equal(headers['X-RWAS-CSRF'], fixtureSession.csrf);
+    assert.equal(
+      await page.evaluate(
+        () => globalThis.__CLERK_ACCOUNT_STATE__.tokenOptions.at(-1).skipCache,
+      ),
+      true,
+    );
+    assert.equal(
+      await page.evaluate(() => typeof window.Clerk),
+      'undefined',
+      'the facade uses its client, not a global SDK assumption',
+    );
+    await page.evaluate(() =>
+      window.rwasSellerSessionRejected('different-old-token'),
+    );
+    assert.equal(
+      await page.evaluate(() => typeof window.rwasSellerRequestHeaders),
+      'function',
+    );
+    await page.evaluate(() =>
+      globalThis.__CLERK_ACCOUNT_STATE__.endProviderSession(),
+    );
+    await page.waitForFunction(
+      () => typeof window.rwasSellerRequestHeaders === 'undefined',
+    );
+    assert.equal(
+      await page.evaluate(() => typeof window.rwasSellerSessionRejected),
+      'undefined',
+    );
+    await page.close();
+    const second = await fixturePage(browser, bundle);
+    await second.page.waitForFunction(
+      () => typeof window.rwasSellerRequestHeaders === 'function',
+    );
+    await second.page.evaluate(() =>
+      globalThis.__CLERK_ACCOUNT_STATE__.unmountRoot(),
+    );
+    assert.equal(
+      await second.page.evaluate(() => typeof window.rwasSellerRequestHeaders),
+      'undefined',
+    );
+    assert.equal(
+      await second.page.evaluate(() => typeof window.rwasSellerSessionRejected),
+      'undefined',
+    );
+  } finally {
+    await browser.close();
+  }
+});
+
+test('fresh official SDK token outages keep the panel session and its bridge available for retry', async () => {
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const bundle = await bundleHarness();
+    const { page } = await fixturePage(browser, bundle);
+    await page.waitForFunction(
+      () => typeof window.rwasSellerRequestHeaders === 'function',
+    );
+    for (const failure of ['network', 503, 429]) {
+      const status = await page.evaluate(async (failure) => {
+        globalThis.__CLERK_ACCOUNT_STATE__.tokenFailure = failure;
+        try {
+          await window.rwasSellerRequestHeaders('/api/aircraft-sale/intake');
+          return 200;
+        } catch (error) {
+          // Match the widget's terminal-response policy against the actual panel bridge.
+          if (error.status === 401 || error.status === 403)
+            window.rwasSellerSessionRejected('fixture-rwas-session');
+          return error.status;
+        }
+      }, failure);
+      assert.equal(status, failure === 429 ? 429 : 503);
+      assert.deepEqual(
+        await page.evaluate(() =>
+          JSON.parse(sessionStorage.getItem('rwas_sale_v2')),
+        ),
+        fixtureSession,
+      );
+      assert.equal(
+        await page.evaluate(() => typeof window.rwasSellerRequestHeaders),
+        'function',
+      );
+    }
+    await page.evaluate(() => {
+      globalThis.__CLERK_ACCOUNT_STATE__.tokenFailure = null;
+    });
+    const headers = await page.evaluate(() =>
+      window.rwasSellerRequestHeaders('/api/aircraft-sale/intake'),
+    );
+    assert.equal(headers['X-Clerk-Session-Token'], canonicalJwt);
+    assert.equal(headers.Authorization, 'Bearer fixture-rwas-session');
+  } finally {
+    await browser.close();
+  }
+});
 
 test('controlled UserProfile opens in its supplied container and closes with its component', async () => {
   const bundle = await bundleHarness('account');

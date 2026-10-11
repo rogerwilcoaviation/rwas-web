@@ -98,9 +98,11 @@ function failureStorageReady() {
 export default function ClerkProductionPanel({
   onSignedIn,
   linkOwner,
+  onConnectExisting,
 }: {
   onSignedIn: (session: ClerkProductionSession) => void;
   linkOwner?: ClerkProductionLinkOwner;
+  onConnectExisting?: () => void;
 }) {
   const mount = useRef<HTMLDivElement>(null);
   const signedIn = useRef(onSignedIn);
@@ -244,6 +246,63 @@ export default function ClerkProductionPanel({
         {linkOwner
           ? 'Sign in to the secure identity account you want to connect to your existing RWAS seller account. Your RWAS contact profile and aircraft stay with your existing account.'
           : 'Sign in, create an account, verify your email, or reset your password with the secure RWAS identity service.'}
+      </p>
+      {error && <p role="alert">{error}</p>}
+      {!linkOwner && failureStatus === '409' && onConnectExisting && (
+        <button type="button" onClick={onConnectExisting}>
+          Connect existing seller account
+        </button>
+      )}
+      <div ref={mount} />
+    </section>
+  );
+}
+
+export function ClerkOwnerIdentityPanel({ onReady }: { onReady: () => void }) {
+  const mount = useRef<HTMLDivElement>(null);
+  const ready = useRef(onReady);
+  ready.current = onReady;
+  const [error, setError] = useState('');
+  useEffect(() => {
+    let active = true;
+    let completed = false;
+    let cleanup = () => {};
+    void getClerkProductionBrowser()
+      .then((client) => {
+        if (!active || !mount.current) return;
+        const complete = () => {
+          if (!active || completed || !client.hasSession()) return;
+          completed = true;
+          ready.current();
+        };
+        const unsubscribe = client.addSessionListener(complete);
+        cleanup = unsubscribe;
+        if (client.hasSession()) complete();
+        else {
+          const unmount = client.mountAuthentication(mount.current);
+          cleanup = () => {
+            unsubscribe();
+            unmount();
+          };
+          complete();
+        }
+      })
+      .catch(() => {
+        if (active)
+          setError(
+            'Secure sign-in is unavailable. Please start account connection again.',
+          );
+      });
+    return () => {
+      active = false;
+      cleanup();
+    };
+  }, []);
+  return (
+    <section aria-label="Sign in before connecting an existing seller account">
+      <p>
+        Sign in to your secure RWAS identity, then verify the password account
+        you previously used for RWAS.
       </p>
       {error && <p role="alert">{error}</p>}
       <div ref={mount} />
