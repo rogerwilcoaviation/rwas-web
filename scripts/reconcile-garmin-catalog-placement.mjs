@@ -183,6 +183,12 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     variantId: 'gid://shopify/ProductVariant/48966494847195',
     handle: 'cable-coil-cord-12-conductor-faa-pma-310-00196-00',
   },
+  {
+    sku: '011-04895-00',
+    productId: 'gid://shopify/Product/8961818362075',
+    variantId: 'gid://shopify/ProductVariant/47408750985435',
+    handle: 'sub-assy-ap-disc-trim-int-switch',
+  },
 ];
 
 // Exact generic hardware items separately reviewed against the current dealer
