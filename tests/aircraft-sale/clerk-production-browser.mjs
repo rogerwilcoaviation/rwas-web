@@ -122,7 +122,7 @@ await build({
           () => ({
             loader: 'js',
             contents:
-              'export const isClerkProductionMethodEnabled = data => Array.isArray(data?.methods) && data.methods.includes("clerk-production"); export const getClerkProductionBrowser = async () => { throw new Error("unused"); };',
+              'export const CLERK_PRODUCTION_ORIGIN = "https://www.rogerwilcoaviation.com"; export const isClerkProductionMethodEnabled = data => Array.isArray(data?.methods) && data.methods.includes("clerk-production"); export const getClerkProductionBrowser = async () => { throw new Error("unused"); };',
           }),
         );
         builder.onLoad(
