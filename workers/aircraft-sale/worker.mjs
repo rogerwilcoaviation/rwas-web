@@ -426,7 +426,8 @@ export class SellerStore {
     } catch (error) {
       // Do not return provider/storage payloads or enter save/rollback/audit.
       if (error instanceof ConservationError)
-        return reply({ error: error.message, code: error.code }, error.status);
+        return reply({ error: error.message, code: error.code,
+          ...(error.metadataReason ? { metadataReason: error.metadataReason } : {}) }, error.status);
       const status = error.status === 403 ? 403 : 503;
       return reply(
         {

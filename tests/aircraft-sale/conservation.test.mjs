@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { SellerStore } from '../../workers/aircraft-sale/worker.mjs';
 import {
-  ConservationCapture, CONSERVATION_BUCKETS, CONSERVATION_LIMITS,
+  ConservationCapture, ConservationError, CONSERVATION_BUCKETS, CONSERVATION_LIMITS,
   CONSERVATION_SCHEMA, canonicalConservationJson, conservationMediaId,
   conservationRecordId, loadConservationRows, isConservationRequest,
 } from '../../workers/aircraft-sale/conservation.mjs';
@@ -229,6 +229,149 @@ test('native empty storage-class marker is conserved distinctly from Standard an
   await assert.rejects(f.capture.handle(request(), 'account-admin@example.test'), error('INVALID_MEDIA_METADATA'));
 });
 
+test('known unset HTTP fields and full-range suffix preserve every complete-capture digest across LIST, GET, HEAD and terminal reads', async () => {
+  const fields = ['contentType', 'contentLanguage', 'contentDisposition',
+    'contentEncoding', 'cacheControl', 'cacheExpiry'];
+  const prepare = (nativeAt) => {
+    const f = captureFixture();
+    const objects = [...f.objects.values()];
+    objects[0].httpMetadata = {};
+    objects[1].httpMetadata = { contentType: 'application/pdf', contentLanguage: '',
+      contentDisposition: 'inline', contentEncoding: 'identity', cacheControl: 'private' };
+    objects[2].httpMetadata = { cacheExpiry: new Date('2026-11-01T00:00:00Z') };
+    const nativeHttp = (object) => ({ ...object, httpMetadata:
+      { ...Object.fromEntries(fields.map((key) => [key, undefined])), ...object.httpMetadata } });
+    const list = f.media.list, get = f.media.get, head = f.media.head;
+    let lists = 0;
+    f.media.list = async (...args) => {
+      const page = await list(...args);
+      const stage = ++lists === 1 ? 'list' : 'terminal';
+      return nativeAt === 'all' || nativeAt === stage
+        ? { ...page, objects: page.objects.map(nativeHttp) } : page;
+    };
+    for (const [method, read] of [['get', get], ['head', head]])
+      f.media[method] = async (...args) => {
+        const object = await read(...args), range = { offset: 0, length: object.size };
+        return nativeAt === 'all' || nativeAt === method
+          ? { ...nativeHttp(object), range: { ...range, suffix: undefined } }
+          : { ...object, range };
+      };
+    return f;
+  };
+  const conserved = (pages) => pages.map(({ captureId, nextCursor, observedAt, ...page }) => page);
+  const baseline = prepare('omitted');
+  const expected = await finish(baseline, await baseline.capture.handle(request(), 'account-admin@example.test'));
+  for (const nativeAt of ['list', 'get', 'head', 'terminal', 'all']) {
+    const f = prepare(nativeAt);
+    const pages = await finish(f, await f.capture.handle(request(), 'account-admin@example.test'));
+    assert.deepEqual(conserved(pages), conserved(expected), nativeAt);
+    assert.deepEqual(['list', 'get', 'head'].map((method) =>
+      f.calls.filter((call) => call.method === method).length), [2, 3, 3]);
+    for (const object of f.objects.values()) {
+      const descriptor = pages.flatMap((page) => page.media).find((item) =>
+        item.objectKey === sha('seller-v2-media-key-v1\0' + object.key));
+      const metadata = { key: object.key, version: object.version, size: object.size,
+        etag: object.etag, uploaded: object.uploaded.toISOString(), storageClass: object.storageClass,
+        httpMetadata: Object.fromEntries(Object.entries(object.httpMetadata).map(([key, value]) =>
+          [key, value instanceof Date ? value.toISOString() : value])), customMetadata: object.customMetadata };
+      assert.equal(descriptor.inventoryMetadataSha256, sha(canonicalConservationJson(metadata)));
+      assert.equal(descriptor.metadataSha256, sha(canonicalConservationJson({ ...metadata,
+        checksums: {}, ssecKeyMd5: null, bodyRange: { offset: 0, length: object.size },
+        headRange: { offset: 0, length: object.size } })));
+      assert.equal(descriptor.bytesSha256, sha(object.bytes));
+      assert.equal(descriptor.bytes, object.size);
+    }
+  }
+});
+
+test('unset HTTP normalization retains defined metadata drift and rejects unknown undefined fields at every read stage', async () => {
+  for (const stage of ['list', 'get', 'head', 'terminal']) {
+    for (const invalid of ['unknown', 'changed']) {
+      if (stage === 'list' && invalid === 'changed') continue;
+      const f = captureFixture();
+      for (const object of f.objects.values()) object.httpMetadata.cacheExpiry = undefined;
+      const transform = (object) => ({ ...object, httpMetadata: { ...object.httpMetadata,
+        ...(invalid === 'unknown' ? { unknownOptional: undefined } : { contentType: 'changed-defined-value' }) } });
+      if (stage === 'list' || stage === 'terminal') {
+        const list = f.media.list;
+        let lists = 0;
+        f.media.list = async (...args) => {
+          const page = await list(...args);
+          return ++lists === (stage === 'list' ? 1 : 2)
+            ? { ...page, objects: page.objects.map(transform) } : page;
+        };
+      } else {
+        const read = f.media[stage];
+        f.media[stage] = async (...args) => transform(await read(...args));
+      }
+      await assert.rejects(async () => finish(f,
+        await f.capture.handle(request(), 'account-admin@example.test')),
+      error(invalid === 'unknown' ? 'UNSUPPORTED_MEDIA_METADATA'
+        : stage === 'terminal' ? 'MEDIA_INVENTORY_CHANGED' : 'MEDIA_CHANGED'));
+      assert.equal(f.capture.cursors.size, 0);
+    }
+  }
+});
+
+test('invalid media values stay fail-closed with only fixed metadataReason tags after account authorization', async () => {
+  const cases = [
+    [(object) => { object.key = 'private-invalid\0key'; }, 'MEDIA_KEY'],
+    [(object) => { object.version = null; }, 'MEDIA_VERSION'],
+    [(object) => { object.etag = ''; }, 'MEDIA_ETAG'],
+    [(object) => { object.size = -1; }, 'MEDIA_SIZE'],
+    [(object) => { object.uploaded = new Date(NaN); }, 'MEDIA_UPLOADED'],
+    [(object) => { object.storageClass = 'private-unrecognized-class'; }, 'MEDIA_STORAGE_CLASS'],
+    ...[null, [], 'private-invalid-container'].map((value) =>
+      [(object) => { object.httpMetadata = value; }, 'HTTP_METADATA_CONTAINER']),
+    ...['contentType', 'contentLanguage', 'contentDisposition', 'contentEncoding', 'cacheControl']
+      .flatMap((key) => [null, 0, false, {}].map((value) =>
+        [(object) => { object.httpMetadata[key] = value; }, 'HTTP_METADATA_VALUE'])),
+    ...[null, 'private-invalid-date', 0, new Date(NaN)].map((value) =>
+      [(object) => { object.httpMetadata.cacheExpiry = value; }, 'HTTP_CACHE_EXPIRY']),
+    ...[null, []].map((value) =>
+      [(object) => { object.customMetadata = value; }, 'CUSTOM_METADATA_CONTAINER']),
+    ...[undefined, null, 0].map((value) =>
+      [(object) => { object.customMetadata.synthetic = value; }, 'CUSTOM_METADATA_VALUE']),
+    ...[undefined, null, 'private-unknown-value'].map((value) =>
+      [(object) => { object.httpMetadata.privateUnknownField = value; }, undefined, 'UNSUPPORTED_MEDIA_METADATA']),
+  ];
+  let allowed = false, checks = 0;
+  const store = new SellerStore({ storage: {} }, {
+    ACCOUNT_ADMIN_SITE_ORIGIN: origin,
+    ACCOUNT_ADMIN_AUTH: { fetch: async () => {
+      checks++;
+      return allowed ? Response.json({ actor: 'account-admin@example.test',
+        scope: 'seller-accounts', expiresAt: Date.now() + 60000 }) : new Response(null, { status: 403 });
+    } },
+  });
+  store.loadState = store.saveState = store.audit = () => { throw new Error('Capture must bypass ordinary persistence'); };
+  const rejected = captureFixture();
+  rejected.objects.values().next().value.httpMetadata.cacheControl = null;
+  store.conservationCapture = rejected.capture;
+  const denied = await store.fetch(request());
+  assert.equal(denied.status, 403);
+  assert.equal((await denied.json()).metadataReason, undefined);
+  assert.equal(rejected.reads(), 0);
+  assert.equal(rejected.calls.length, 0);
+  allowed = true;
+  for (const [mutate, metadataReason, code = 'INVALID_MEDIA_METADATA'] of cases) {
+    const f = captureFixture();
+    mutate(f.objects.values().next().value);
+    store.conservationCapture = f.capture;
+    const response = await store.fetch(request());
+    assert.equal(response.status, 409);
+    assert.deepEqual(await response.json(), {
+      error: 'Conservation capture unavailable. Start a fresh capture after resolving the reported condition.',
+      code, ...(metadataReason ? { metadataReason } : {}),
+    });
+    assert.equal(f.capture.cursors.size, 0);
+    assert.ok(f.calls.every((call) => call.method === 'list'));
+  }
+  assert.equal(checks, cases.length + 1);
+  assert.equal(new ConservationError(409, 'INVALID_MEDIA_METADATA', 'private-provider-payload').metadataReason, undefined);
+  assert.equal(new ConservationError(409, 'MEDIA_CHANGED', 'MEDIA_KEY').metadataReason, undefined);
+});
+
 test('native full-object ranges include zero bytes and are hashed; partial and malformed ranges cannot yield complete', async () => {
   const bindRange = (f, rangeFor, response = 'both') => {
     const get = f.media.get, head = f.media.head;
@@ -255,7 +398,13 @@ test('native full-object ranges include zero bytes and are hashed; partial and m
     (object) => ({ offset: 1, length: object.size }),
     (object) => ({ offset: 0, length: object.size - 1 }),
     (object) => ({ offset: 0, length: object.size, suffix: 0 }),
+    (object) => ({ offset: 0, length: object.size, suffix: null }),
+    (object) => ({ offset: 0, length: object.size, suffix: 'unset' }),
     (object) => ({ offset: 0, length: object.size, extra: true }),
+    (object) => ({ offset: 0, length: object.size, extra: undefined }),
+    (object) => Object.defineProperty({ offset: 0, length: object.size }, 'suffix', { value: undefined }),
+    (object) => ({ offset: 0, length: object.size, get suffix() { return undefined; } }),
+    (object) => ({ offset: 0, length: object.size, [Symbol('extra')]: undefined }),
     () => ({ offset: 0, length: Infinity }),
   ]) {
     for (const response of ['get', 'head']) {
