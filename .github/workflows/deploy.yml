@@ -80,6 +80,7 @@ jobs:
           node scripts/garmin-commercial-review-test.mjs
           node scripts/cart-private-pricing-test.mjs
           node scripts/cart-private-runtime-test.mjs
+          node scripts/cart-stale-id-recovery-test.mjs
           node scripts/cart-native-refresh-test.mjs
           node scripts/cart-purchase-exceptions-test.mjs
           node scripts/papa-alpha-variant-selection-test.mjs

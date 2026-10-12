@@ -372,38 +372,58 @@ export const onRequestPost = async ({ request, env }: Ctx) => {
       cartLinesAdd?: CartOperation;
     };
     let cart: StorefrontCart | null | undefined;
+    const createCart = async () => {
+      const data = (await shopify(env, CART_CREATE, {
+        merchandiseId,
+        quantity,
+      })) as CartPayload | undefined;
+      const errors = data?.cartCreate?.userErrors || [];
+      return { cart: data?.cartCreate?.cart, errors };
+    };
+
     if (body.cartId) {
       const data = (await shopify(env, CART_LINES_ADD, {
         cartId: body.cartId,
         merchandiseId,
         quantity,
       })) as CartPayload | undefined;
-      if (data?.cartLinesAdd?.userErrors?.length) {
+      const errors = data?.cartLinesAdd?.userErrors || [];
+      const missingCart = errors.some((error) =>
+        /specified cart does not exist/i.test(error.message),
+      );
+      if (missingCart) {
+        // Storefront cart IDs are persisted in the browser and can expire.
+        // Recover by creating a replacement cart only after the requested
+        // merchandise has passed the same server-side eligibility gate above.
+        const replacement = await createCart();
+        if (replacement.errors.length) {
+          return jsonResponse(
+            {
+              error: replacement.errors
+                .map((error) => error.message)
+                .join('; '),
+            },
+            400,
+          );
+        }
+        cart = replacement.cart;
+      } else if (errors.length) {
         return jsonResponse(
-          {
-            error: data.cartLinesAdd.userErrors
-              .map((e) => e.message)
-              .join('; '),
-          },
+          { error: errors.map((error) => error.message).join('; ') },
           400,
         );
       } else {
         cart = data?.cartLinesAdd?.cart;
       }
     } else {
-      const data = (await shopify(env, CART_CREATE, {
-        merchandiseId,
-        quantity,
-      })) as CartPayload | undefined;
-      if (data?.cartCreate?.userErrors?.length) {
+      const created = await createCart();
+      if (created.errors.length) {
         return jsonResponse(
-          {
-            error: data.cartCreate.userErrors.map((e) => e.message).join('; '),
-          },
+          { error: created.errors.map((error) => error.message).join('; ') },
           400,
         );
       }
-      cart = data?.cartCreate?.cart;
+      cart = created.cart;
     }
 
     if (!cart) return jsonResponse({ error: 'Cart operation failed' }, 502);
