@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-11",
+  "asOf": "2026-10-12",
   "mode": "public-price-only",
   "containsPrivatePrices": false,
   "products": [
@@ -256,6 +256,22 @@
       "publicPrice": "670.00",
       "previousRetail": "820.00",
       "canonicalIdentityReviewed": true
+    },
+    {
+      "sku": "010-02303-00",
+      "productId": "gid://shopify/Product/9039560278235",
+      "variantId": "gid://shopify/ProductVariant/47932474786011",
+      "handle": "aera-760",
+      "publicPrice": "1725.00",
+      "previousRetail": "1725.00"
+    },
+    {
+      "sku": "010-02904-30",
+      "productId": "gid://shopify/Product/8961746567387",
+      "variantId": "gid://shopify/ProductVariant/47408686137563",
+      "handle": "d2-mach-2-47-mm-titanium-oxford-brown-leather-band",
+      "publicPrice": "1349.99",
+      "previousRetail": "1349.99"
     }
   ]
 }
