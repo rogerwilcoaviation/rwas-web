@@ -57,12 +57,12 @@ jobs:
 
       - name: Install pinned browser contract test runtime
         run: |
-          npm install --no-save --package-lock=false --ignore-scripts playwright@1.62.1
-          npx playwright install --with-deps chromium
+          npm install --prefix "${RUNNER_TEMP}/rwas-browser-runtime" --no-save --package-lock=false --ignore-scripts playwright@1.62.1
+          "${RUNNER_TEMP}/rwas-browser-runtime/node_modules/.bin/playwright" install --with-deps chromium
 
       - name: Isolated production Clerk security and compiled browser contracts
         env:
-          PLAYWRIGHT_MODULE: ${{ github.workspace }}/node_modules/playwright/index.mjs
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/rwas-browser-runtime/node_modules/playwright/index.mjs
         run: |
           node --test tests/aircraft-sale/clerk-production-security.test.mjs
           node tests/aircraft-sale/clerk-production-browser.mjs
