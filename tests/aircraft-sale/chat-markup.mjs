@@ -1,15 +1,41 @@
 import assert from 'node:assert/strict';
 import { readFile, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+
+const historicalRevision = 'a72e67eef602f647e3af833065a18697c29899c5';
+const historicalSha256 = '2b58df9c6660d30b9f44522576151eee5c6b7dd27e6e06bbd03b6ed6c324c6e0';
+const explicitBeforeSource = process.env.CHAT_MARKUP_BEFORE_SOURCE;
+if (process.env.CHAT_MARKUP_BEFORE_SOURCE_SHA256) {
+  assert.equal(process.env.CHAT_MARKUP_BEFORE_SOURCE_SHA256, historicalSha256,
+    'The before control must use the pinned historical public widget');
+}
+let beforeBytes;
+try {
+  beforeBytes = explicitBeforeSource
+    ? await readFile(explicitBeforeSource)
+    : execFileSync('git', [
+        '-C', fileURLToPath(new URL('../..', import.meta.url)),
+        'show', historicalRevision + ':public/jerry-widget.js',
+      ], { maxBuffer: 256 * 1024, stdio: ['ignore', 'pipe', 'pipe'] });
+} catch {
+  throw new Error(
+    'Historical markup before control is unavailable. Supply CHAT_MARKUP_BEFORE_SOURCE ' +
+    'with the unmodified public/jerry-widget.js from ' + historicalRevision +
+    ' (SHA256 ' + historicalSha256 + '). The raw <em> regression control cannot be skipped.',
+  );
+}
+assert.ok(beforeBytes.byteLength <= 256 * 1024, 'Historical public widget exceeds its source bound');
+assert.equal(createHash('sha256').update(beforeBytes).digest('hex'), historicalSha256,
+  'Historical markup before-source SHA256 mismatch');
+const before = beforeBytes.toString('utf8');
 
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
     '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs'
 );
-const widget = await readFile('public/jerry-widget.js', 'utf8');
-const before = execFileSync('git', ['show', 'a72e67e:public/jerry-widget.js'], {
-  encoding: 'utf8',
-});
+const widget = await readFile(new URL('../../public/jerry-widget.js', import.meta.url), 'utf8');
 const origin = 'http://localhost';
 const note =
   'If you would like to list before the end of the intake, simply say "list it" at any time.';
@@ -26,8 +52,10 @@ try {
   for (const mode of ['before', 'history', 'json', 'stream', 'unsafe']) {
     const context = await browser.newContext({
       viewport: { width: 393, height: 800 },
+      serviceWorkers: 'block',
     });
     const errors = [];
+    const unexpectedRequests = [];
     let chatCalls = 0;
     await context.addInitScript(
       ({ reply, mode }) => {
@@ -54,7 +82,7 @@ try {
       if (url === origin + '/aircraft-for-sale') {
         await route.fulfill({
           contentType: 'text/html',
-          body: '<!doctype html><html><head><meta charset="utf-8"></head><body><script src="/jerry-widget.js"></script></body></html>',
+          body: '<!doctype html><html><head><meta charset="utf-8"><link rel="icon" href="data:,"></head><body><script src="/jerry-widget.js"></script></body></html>',
         });
       } else if (url === origin + '/jerry-widget.js') {
         await route.fulfill({
@@ -90,7 +118,8 @@ try {
           });
         }
       } else {
-        throw new Error('Unexpected browser request: ' + url);
+        unexpectedRequests.push(url);
+        await route.abort();
       }
     });
     try {
@@ -159,6 +188,7 @@ try {
         }
       }
       assert.deepEqual(errors, []);
+      assert.deepEqual(unexpectedRequests, []);
       if (
         process.env.CHAT_MARKUP_EVIDENCE_DIR &&
         ['before', 'history'].includes(mode)
@@ -174,6 +204,13 @@ try {
         mode,
         result: 'PASS',
         scope: 'intercepted mobile browser; no live chat or account requests',
+        ...(mode === 'before' ? {
+          beforeControl: {
+            kind: explicitBeforeSource ? 'explicit-public-source' : 'local-git-object',
+            revision: historicalRevision,
+            sha256: historicalSha256,
+          },
+        } : {}),
       });
       console.log('PASS ' + mode);
     } finally {

@@ -92,6 +92,8 @@ export async function authorizationUrl(config, transaction) {
     prompt: 'login',
   }))
     url.searchParams.set(key, value);
+  if (transaction.purpose === 'clerk-owner-reauth')
+    url.searchParams.set('max_age', '0');
   return url.href;
 }
 async function providerFetch(env, request) {
@@ -105,12 +107,14 @@ async function providerFetch(env, request) {
   }
 }
 export async function exchangeIdentity(env, config, transaction, code) {
+  const ownerProof = transaction.purpose === 'clerk-owner-reauth';
   if (typeof code !== 'string' || !code || code.length > 2048)
     fail(400, 'Invalid sign-in response.');
   const response = await providerFetch(
     env,
     new Request(new URL('oauth/token', config.issuer), {
       method: 'POST',
+      ...(ownerProof ? { redirect: 'manual' } : {}),
       signal: AbortSignal.timeout(10000),
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -176,15 +180,35 @@ export async function exchangeIdentity(env, config, transaction, code) {
       claims.email.length > 254
     )
       fail(400, 'Verify your email with the sign-in provider and try again.');
+    if (
+      ownerProof &&
+      (claims.act !== undefined ||
+        !Number.isSafeInteger(claims.auth_time) ||
+        claims.auth_time <= 0 ||
+        claims.auth_time > Math.floor(now) ||
+        claims.auth_time < Math.floor(transaction.createdAt / 1000) ||
+        now - claims.auth_time >= 600 ||
+        !Number.isSafeInteger(claims.iat) ||
+        !Number.isSafeInteger(claims.exp))
+    )
+      fail(401, 'Fresh existing-owner authentication required.');
     const certs = await providerFetch(
       env,
       new Request(new URL('.well-known/jwks.json', config.issuer), {
         signal: AbortSignal.timeout(10000),
+        ...(ownerProof ? { redirect: 'manual' } : {}),
       }),
     );
     if (!certs.ok)
       fail(503, 'Sign-in provider is unavailable. Please try again.');
-    const jwk = (await certs.json()).keys.find(
+    const keys = (await certs.json()).keys;
+    if (
+      ownerProof &&
+      (!Array.isArray(keys) ||
+        keys.filter((key) => key?.kid === header.kid).length !== 1)
+    )
+      fail(401, 'Invalid identity signing metadata.');
+    const jwk = keys.find(
       (key) =>
         key.kid === header.kid &&
         key.kty === 'RSA' &&
@@ -192,6 +216,13 @@ export async function exchangeIdentity(env, config, transaction, code) {
         (!key.alg || key.alg === 'RS256'),
     );
     if (!jwk) fail(400, 'Invalid identity token.');
+    if (
+      ownerProof &&
+      (jwk.alg !== 'RS256' ||
+        (jwk.key_ops !== undefined &&
+          (!Array.isArray(jwk.key_ops) || !jwk.key_ops.includes('verify'))))
+    )
+      fail(401, 'Invalid identity signing metadata.');
     const key = await crypto.subtle.importKey(
       'jwk',
       jwk,
@@ -199,6 +230,8 @@ export async function exchangeIdentity(env, config, transaction, code) {
       false,
       ['verify'],
     );
+    if (ownerProof && key.algorithm.modulusLength < 2048)
+      fail(401, 'Invalid identity signing key.');
     if (
       !(await crypto.subtle.verify(
         'RSASSA-PKCS1-v1_5',
@@ -213,6 +246,7 @@ export async function exchangeIdentity(env, config, transaction, code) {
       email: claims.email.trim().toLowerCase(),
       name: typeof claims.name === 'string' ? claims.name.slice(0, 300) : '',
       issuer: config.issuer,
+      ...(ownerProof ? { authenticatedAt: claims.auth_time * 1000 } : {}),
     };
   } catch (error) {
     if (error.status) throw error;

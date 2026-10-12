@@ -1,5 +1,9 @@
 import { accountHeld } from './account-admin.mjs';
 import { digest } from './identity.mjs';
+import {
+  CLERK_OWNER_METHOD,
+  clerkOwnerProviderProof,
+} from './clerk-owner-reauth.mjs';
 
 const RECENT_OWNER = 600000;
 const LINK_LIFETIME = 300000;
@@ -7,10 +11,14 @@ const fail = (status, message) => {
   throw Object.assign(new Error(message), { status });
 };
 
-// Email-code sessions are an independent RWAS credential. Historical provider
-// sessions do not retain a provider session/subject proof and cannot be upgraded
-// here merely because their local bearer token is still valid.
-export function clerkLinkOwner(state, sessionKey, now = Date.now()) {
+// Historical provider bearers cannot be upgraded from their timestamp alone.
+// Dedicated owner proofs retain fresh signed authentication and exact mapping.
+export function clerkLinkOwner(
+  state,
+  sessionKey,
+  now = Date.now(),
+  configuredIssuer,
+) {
   const session = state.sessions[sessionKey];
   const profile = session && state.profiles[session.userId];
   if (
@@ -24,14 +32,36 @@ export function clerkLinkOwner(state, sessionKey, now = Date.now()) {
     session.expiresAt <= now
   )
     fail(401, 'A fresh existing RWAS owner sign-in is required.');
-  if (session.method !== 'email-code')
+  if (!['email-code', CLERK_OWNER_METHOD].includes(session.method))
     fail(
       403,
       'This existing sign-in requires RWAS account review before connecting Clerk.',
     );
+  let authenticatedAt = session.createdAt;
+  if (session.method === CLERK_OWNER_METHOD) {
+    const identity = state.identities[session.identityKey];
+    authenticatedAt = session.authenticatedAt;
+    if (
+      session.scope !== 'clerk-link-only' ||
+      !Number.isSafeInteger(authenticatedAt) ||
+      authenticatedAt <= 0 ||
+      authenticatedAt > now ||
+      now - authenticatedAt >= RECENT_OWNER ||
+      session.issuer !== configuredIssuer ||
+      !identity ||
+      identity.userId !== session.userId ||
+      identity.issuer !== session.issuer ||
+      identity.subject !== session.subject ||
+      identity.method !== 'password'
+    )
+      fail(
+        403,
+        'Existing-owner authentication no longer matches this account.',
+      );
+  }
   if (
     accountHeld(profile) ||
-    session.createdAt <= (profile.sessionRevokedAt || 0)
+    authenticatedAt <= (profile.sessionRevokedAt || 0)
   )
     fail(403, 'Account unavailable.');
   for (const [key, identity] of Object.entries(state.identities)) {
@@ -40,7 +70,7 @@ export function clerkLinkOwner(state, sessionKey, now = Date.now()) {
     if (
       security?.blocked ||
       security?.providerResetHold ||
-      session.createdAt <=
+      authenticatedAt <=
         Math.max(
           identity.credentialsChangedAt || 0,
           security?.credentialsChangedAt || 0,
@@ -49,6 +79,13 @@ export function clerkLinkOwner(state, sessionKey, now = Date.now()) {
       fail(403, 'Account unavailable.');
   }
   return { profile, session, sessionKey };
+}
+
+export function clerkLinkOwnerProviderProof(owner, external, request) {
+  if (owner.session.method !== CLERK_OWNER_METHOD) return;
+  if (request.headers.get('X-RWAS-Owner-CSRF') !== owner.session.ownerCsrf)
+    fail(403, 'Existing-owner CSRF proof rejected.');
+  clerkOwnerProviderProof(owner.session, external);
 }
 
 export function clerkLinkInput(request, body, finishing = false) {

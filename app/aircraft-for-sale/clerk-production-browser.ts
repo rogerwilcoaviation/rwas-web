@@ -13,6 +13,8 @@ const START_PATH = SELLER_ROOT + '/auth/clerk-production/start';
 const FINISH_PATH = SELLER_ROOT + '/auth/clerk-production/finish';
 const LINK_START_PATH = SELLER_ROOT + '/auth/clerk-production/link/start';
 const LINK_FINISH_PATH = SELLER_ROOT + '/auth/clerk-production/link/finish';
+const OWNER_START_PATH = SELLER_ROOT + '/auth/clerk-production/owner/start';
+const OWNER_FINISH_PATH = SELLER_ROOT + '/auth/clerk-production/owner/finish';
 const SELLER_URL = CLERK_PRODUCTION_ORIGIN + '/aircraft-for-sale';
 const SIGN_UP_URL = SELLER_URL + '?seller-auth=sign-up';
 const HANDOFF_URL = SELLER_URL + '?seller-auth=complete';
@@ -39,6 +41,7 @@ type ClerkProductionOptions = {
   fetch?: typeof fetch;
 };
 export type ClerkProductionSession = {
+  purpose?: never;
   provider: 'clerk-production';
   token: string;
   csrf: string;
@@ -52,11 +55,30 @@ export type ClerkProductionIdentityState = {
   userUpdatedAt: number | null;
 };
 
-export type ClerkProductionLinkOwner = {
+type ExistingClerkLinkOwner = {
+  purpose?: never;
   token: string;
   email: string;
   name: string;
 };
+export type ClerkProductionOwnerTransaction = {
+  purpose: 'clerk-owner';
+  state: string;
+  proof: string;
+  csrf: string;
+  requestedAt: number;
+};
+export type ClerkProductionOwnerProof = {
+  purpose: 'clerk-owner';
+  token: string;
+  ownerCsrf: string;
+  expiresAt: number;
+  email: string;
+  name: string;
+};
+export type ClerkProductionLinkOwner =
+  | ExistingClerkLinkOwner
+  | ClerkProductionOwnerProof;
 
 export type ClerkProductionFailureTelemetry = {
   status: string;
@@ -154,10 +176,25 @@ function tokenAuthorizedParty(token: string) {
   }
 }
 
+function createLinkProof() {
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  return btoa(String.fromCharCode(...bytes))
+    .replaceAll('+', '-')
+    .replaceAll('/', '_')
+    .replaceAll('=', '');
+}
+
+function clerkSignInRequired() {
+  return Object.assign(new Error('Clerk sign-in is required.'), {
+    status: 401,
+  });
+}
+
 export class ClerkProductionBrowser {
   private readonly clerk: Clerk;
   private readonly request: typeof fetch;
   private connecting: Promise<ClerkProductionSession> | null = null;
+  private connectingSignal: AbortSignal | undefined;
   private linking: Promise<ClerkProductionSession> | null = null;
   private linkingOwnerToken: string | null = null;
 
@@ -233,7 +270,7 @@ export class ClerkProductionBrowser {
 
   async token() {
     const session = this.clerk.session;
-    if (!session) throw new Error('Clerk sign-in is required.');
+    if (!session) throw clerkSignInRequired();
     let token = await session.getToken({ skipCache: true });
     if (token && tokenAuthorizedParty(token) !== CLERK_PRODUCTION_ORIGIN) {
       // A token carried back from Account Portal can still be scoped to the
@@ -243,22 +280,31 @@ export class ClerkProductionBrowser {
       token = await session.getToken({ skipCache: true });
     }
     if (!token || tokenAuthorizedParty(token) !== CLERK_PRODUCTION_ORIGIN)
-      throw new Error('Clerk sign-in is required.');
+      throw clerkSignInRequired();
     return token;
   }
 
   async connect(
     observe: (stage: ClerkProductionHandoffStage) => void = () => {},
+    signal?: AbortSignal,
   ) {
-    if (this.connecting) return this.connecting;
-    this.connecting = this.connectOnce(observe).finally(() => {
-      this.connecting = null;
+    signal?.throwIfAborted();
+    if (this.connecting && !this.connectingSignal?.aborted)
+      return this.connecting;
+    this.connectingSignal = signal;
+    const connecting = this.connectOnce(observe, signal).finally(() => {
+      if (this.connecting === connecting) {
+        this.connecting = null;
+        this.connectingSignal = undefined;
+      }
     });
-    return this.connecting;
+    this.connecting = connecting;
+    return connecting;
   }
 
   private async connectOnce(
     observe: (stage: ClerkProductionHandoffStage) => void,
+    signal?: AbortSignal,
   ): Promise<ClerkProductionSession> {
     observe('provider-session-present');
     const start = await this.post(
@@ -267,6 +313,8 @@ export class ClerkProductionBrowser {
       'rwas-start-request',
       'rwas-start-accepted',
       observe,
+      {},
+      signal,
     );
     const nonce = safeString(start.nonce, 512);
     if (!nonce) throw new Error('RWAS sign-in could not be started.');
@@ -276,8 +324,10 @@ export class ClerkProductionBrowser {
       'rwas-finish-request',
       'rwas-finish-accepted',
       observe,
+      {},
+      signal,
     );
-    return this.acceptSession(finish, observe);
+    return this.acceptSession(finish, observe, signal);
   }
 
   async link(
@@ -303,14 +353,20 @@ export class ClerkProductionBrowser {
   ): Promise<ClerkProductionSession> {
     const ownerToken = safeString(owner.token, 512);
     if (!ownerToken) throw new Error('An existing RWAS sign-in is required.');
-    const bytes = crypto.getRandomValues(new Uint8Array(32));
-    const proof = btoa(String.fromCharCode(...bytes))
-      .replaceAll('+', '-')
-      .replaceAll('/', '_')
-      .replaceAll('=', '');
+    if (
+      owner.purpose === 'clerk-owner' &&
+      (!safeString(owner.ownerCsrf, 512) ||
+        !Number.isSafeInteger(owner.expiresAt) ||
+        owner.expiresAt <= Date.now())
+    )
+      throw new Error('Existing account verification expired.');
+    const proof = createLinkProof();
     const ownerHeaders = {
       Authorization: 'Bearer ' + ownerToken,
       'X-RWAS-Link-Proof': proof,
+      ...(owner.purpose === 'clerk-owner'
+        ? { 'X-RWAS-Owner-CSRF': owner.ownerCsrf }
+        : {}),
     };
     observe('provider-session-present');
     const start = await this.post(
@@ -336,15 +392,100 @@ export class ClerkProductionBrowser {
     return this.acceptSession(finish, observe);
   }
 
+  async startOwnerReauthentication() {
+    const proof = createLinkProof();
+    const result = await this.post(
+      OWNER_START_PATH,
+      { proof, confirm: true },
+      'rwas-start-request',
+      'rwas-start-accepted',
+      () => {},
+      { 'X-RWAS-Link-Proof': proof },
+    );
+    const state = safeString(result.state, 512);
+    const csrf = safeString(result.csrf, 512);
+    const authorizationUrl = safeString(result.authorizationUrl, 4096);
+    const authorization = new URL(authorizationUrl);
+    if (
+      !state ||
+      !csrf ||
+      authorization.protocol !== 'https:' ||
+      authorization.username ||
+      authorization.password ||
+      authorization.searchParams.get('state') !== state ||
+      authorization.searchParams.get('max_age') !== '0' ||
+      authorization.searchParams.get('prompt') !== 'login' ||
+      authorization.searchParams.get('redirect_uri') !== SELLER_URL
+    )
+      throw new Error('Existing account verification is unavailable.');
+    const transaction: ClerkProductionOwnerTransaction = {
+      purpose: 'clerk-owner',
+      state,
+      proof,
+      csrf,
+      requestedAt: Date.now(),
+    };
+    return {
+      transaction,
+      authorizationUrl,
+    };
+  }
+
+  async finishOwnerReauthentication(
+    transaction: ClerkProductionOwnerTransaction,
+    code: string | null,
+    providerError: string | null,
+  ): Promise<ClerkProductionOwnerProof> {
+    const age = Date.now() - transaction.requestedAt;
+    if (transaction.purpose !== 'clerk-owner' || age < 0 || age >= 300000)
+      throw new Error('Existing account verification expired.');
+    const result = await this.post(
+      OWNER_FINISH_PATH,
+      {
+        state: transaction.state,
+        code,
+        ...(providerError ? { error: providerError } : {}),
+        proof: transaction.proof,
+        confirm: true,
+      },
+      'rwas-finish-request',
+      'rwas-finish-accepted',
+      () => {},
+      {
+        'X-RWAS-Link-Proof': transaction.proof,
+        'X-RWAS-CSRF': transaction.csrf,
+      },
+    );
+    const token = safeString(result.ownerProof, 512);
+    const ownerCsrf = safeString(result.ownerCsrf, 512);
+    const email = safeString(result.email, 320);
+    const name =
+      typeof result.name === 'string' && result.name.length <= 300
+        ? result.name
+        : '';
+    const expiresAt = result.expiresAt;
+    if (
+      !token ||
+      !ownerCsrf ||
+      !email ||
+      typeof expiresAt !== 'number' ||
+      !Number.isSafeInteger(expiresAt) ||
+      expiresAt <= Date.now()
+    )
+      throw new Error('Existing account verification could not be completed.');
+    return { purpose: 'clerk-owner', token, ownerCsrf, expiresAt, email, name };
+  }
+
   private async acceptSession(
     finish: Record<string, unknown>,
     observe: (stage: ClerkProductionHandoffStage) => void,
+    signal?: AbortSignal,
   ): Promise<ClerkProductionSession> {
     const session = safeString(finish.session, 512);
     const csrf = safeString(finish.csrf, 512);
     if (!session || !csrf)
       throw new Error('RWAS sign-in could not be completed.');
-    const account = await this.account(session, csrf, observe);
+    const account = await this.account(session, csrf, observe, signal);
     const profile = account.profile as Record<string, unknown> | undefined;
     const email = safeString(profile?.email, 320);
     const name = safeString(profile?.name, 300);
@@ -360,10 +501,13 @@ export class ClerkProductionBrowser {
     acceptedStage: ClerkProductionHandoffStage,
     observe: (stage: ClerkProductionHandoffStage) => void,
     extraHeaders: Record<string, string> = {},
+    signal?: AbortSignal,
   ) {
+    signal?.throwIfAborted();
     assertClerkProductionBoundary(productionLocation());
     observe('clerk-token-request');
     const clerkToken = await this.token();
+    signal?.throwIfAborted();
     observe(requestStage);
     let response: Response;
     try {
@@ -371,6 +515,7 @@ export class ClerkProductionBrowser {
         method: 'POST',
         credentials: 'same-origin',
         cache: 'no-store',
+        signal,
         headers: {
           ...extraHeaders,
           'X-Clerk-Session-Token': clerkToken,
@@ -379,14 +524,17 @@ export class ClerkProductionBrowser {
         body: JSON.stringify(body),
       });
     } catch {
+      signal?.throwIfAborted();
       throw new ClerkProductionRequestError('network');
     }
+    signal?.throwIfAborted();
     const serverStage =
       response.headers.get('X-RWAS-Clerk-Failure-Stage') || '';
     const result = (await response.json().catch(() => null)) as Record<
       string,
       unknown
     > | null;
+    signal?.throwIfAborted();
     if (!response.ok)
       throw new ClerkProductionRequestError(
         SAFE_HTTP_STATUSES.has(response.status)
@@ -403,10 +551,13 @@ export class ClerkProductionBrowser {
     session: string,
     csrf: string,
     observe: (stage: ClerkProductionHandoffStage) => void,
+    signal?: AbortSignal,
   ) {
+    signal?.throwIfAborted();
     assertClerkProductionBoundary(productionLocation());
     observe('clerk-token-request');
     const clerkToken = await this.token();
+    signal?.throwIfAborted();
     observe('rwas-account-request');
     let response: Response;
     try {
@@ -414,6 +565,7 @@ export class ClerkProductionBrowser {
         method: 'GET',
         credentials: 'same-origin',
         cache: 'no-store',
+        signal,
         headers: {
           Authorization: 'Bearer ' + session,
           'X-Clerk-Session-Token': clerkToken,
@@ -421,14 +573,17 @@ export class ClerkProductionBrowser {
         },
       });
     } catch {
+      signal?.throwIfAborted();
       throw new ClerkProductionRequestError('network');
     }
+    signal?.throwIfAborted();
     const serverStage =
       response.headers.get('X-RWAS-Clerk-Failure-Stage') || '';
     const result = (await response.json().catch(() => null)) as Record<
       string,
       unknown
     > | null;
+    signal?.throwIfAborted();
     if (!response.ok)
       throw new ClerkProductionRequestError(
         SAFE_HTTP_STATUSES.has(response.status)
