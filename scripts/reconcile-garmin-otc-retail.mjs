@@ -321,6 +321,22 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '117-00931-00',
+    family: 'Two-hole .156-inch bridle cable clamp with label',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC retail authorization from Ryan on 2026-10-12',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC exact product page on 2026-10-12 identifies this exact individual BRIDLE CABLE CLAMP, .156, WITH LABEL at $70.00 List/$52.50 Dealer, In Stock and order-enabled. GFC 600 principal installation manual 190-01937-00 Rev 39 identifies 117-00931-00 as the two-hole clamp for .156-inch (5/32-inch) main cable, 1.500-inch length. Garmin model-installation addendum 190-01937-03 Rev 15 identifies two of this clamp inside kit 011-04888-02; that kit is not included in this authorization. Retail eligibility is separate from aircraft installation applicability.',
+    productId: 'gid://shopify/Product/8961742667995',
+    variantId: 'gid://shopify/ProductVariant/47408683253979',
+    handle: 'bridle-cable-clamp-156-with-label',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '330-90006-01',
     family: 'D-sub slide lock kit, 15/26 pin',
     eligibilityAuthority:
@@ -377,6 +393,13 @@ const OTC_RETAIL_PRODUCTS = [
 ];
 
 const PUBLIC_PRICE_AUTHORITIES = {
+  '117-00931-00': {
+    list_price: 70,
+    source:
+      'Fresh authenticated Garmin DRC exact product page for 117-00931-00, read 2026-10-12; customer List Price shown as $70.00',
+    priceType: 'List',
+    accessed: '2026-10-12',
+  },
   '011-04895-00': {
     list_price: 75,
     source:
@@ -597,6 +620,8 @@ const GDL_82_DESCRIPTION = `
 `.trim();
 
 const POLICY_DESCRIPTIONS = {
+  '117-00931-00':
+    '<p><strong>Garmin Bridle Cable Clamp, .156, with Label</strong></p><p>Garmin part number <strong>117-00931-00</strong>.</p><h3>Exact item</h3><p>This listing is for <strong>one individual two-hole clamp</strong> for .156-inch (5/32-inch) main cable, 1.500 inches long. It is not Garmin kit 011-04888-02 and does not include a second clamp or other kit contents.</p><h3>Applicability and availability</h3><p>Aircraft and autopilot applicability, approved installation data, cable and clamp compatibility, installation, and return to service must be confirmed separately by appropriately authorized personnel.</p><p>Garmin reported this exact item in stock when RWAS verified it on October 12, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
   '011-04895-00':
     '<p><strong>Garmin AP DISC/TRIM INT Switch Sub-Assembly</strong></p><p>Garmin part number <strong>011-04895-00</strong>.</p><h3>Identity and compatibility</h3><p>Garmin GFC 500 principal installation manual 190-02291-00 Revision 34 identifies this exact AP DISC/TRIM INT switch kit. Revision A and B kits contain the MB2000-series switch; Revision C contains the M8805-series switch.</p><p>This listing is for the switch sub-assembly only. Aircraft eligibility, installed-system compatibility, approved data, installation, and return to service must be confirmed separately by appropriately authorized personnel.</p><h3>Availability</h3><p>Garmin reported this item in stock when RWAS verified it on October 12, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
   'K00-00745-00':
