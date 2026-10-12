@@ -3,6 +3,7 @@ import {
   clerkProductionIdentity,
   sellerPublicListingsEnabled,
 } from './clerk-production.mjs';
+import { mailAuthenticationRequest } from './mail-context.mjs';
 import {
   clerkLinkOwner,
   clerkLinkInput,
@@ -827,6 +828,22 @@ export class SellerStore {
     )
       fail(404, 'Not found.');
     const body = await this.json(req);
+    // Only this private service-binding route may reconstruct the canonical
+    // auth request. Public origin checks and Clerk verification stay unchanged.
+    const mailOwner = async () => {
+      if (!body.context && this.env.CLERK_PRODUCTION_ENABLED !== 'true')
+        return this.user(req, true);
+      const authenticated = mailAuthenticationRequest(
+        body.context,
+        req.headers.get('Authorization') || '',
+      );
+      if (!clerkProductionConfig(this.env, authenticated))
+        fail(503, 'Production Clerk authentication is unavailable.');
+      const owner = await this.user(authenticated, true);
+      if (this.state.sessions[owner.sessionKey]?.method !== 'clerk-production')
+        fail(403, 'Production Clerk sign-in is required.');
+      return owner;
+    };
     this.state.mailRequests ||= {};
     this.state.mailSequences ||= {};
     // Expired delivery tickets can never activate or resurrect a consumed code.
@@ -841,10 +858,7 @@ export class SellerStore {
         fail(404, 'Email-code sign-in is unavailable.');
       if (!['login', 'email-change'].includes(body.purpose))
         fail(400, 'Invalid verification purpose.');
-      const u =
-        body.purpose === 'email-change'
-          ? await this.user(req, true)
-          : undefined;
+      const u = body.purpose === 'email-change' ? await mailOwner() : undefined;
       const { address, key, pendingCode, value } = await this.prepareCode(
         req,
         body,
@@ -891,7 +905,7 @@ export class SellerStore {
       fail(409, 'A newer verification request exists. Request a new code.');
     // Email-change delivery must not survive logout, block or session expiry.
     if (item.pendingCode.purpose === 'email-change') {
-      const u = await this.user(req, true);
+      const u = await mailOwner();
       if (u.id !== item.pendingCode.userId)
         fail(403, 'Verification owner changed.');
     }

@@ -26,17 +26,17 @@ export default class SellerService extends WorkerEntrypoint {
     );
     return { status: response.status, ...(await response.json()) };
   }
-  createVerification({ email, purpose, authorization, ip }) {
+  createVerification({ email, purpose, authorization, ip, context }) {
     return this.#mail(
       'start',
-      { email, purpose },
+      { email, purpose, ...(context ? { context } : {}) },
       { Authorization: authorization || '', 'CF-Connecting-IP': ip || '' },
     );
   }
-  confirmVerification({ ticket, authorization }) {
+  confirmVerification({ ticket, authorization, context }) {
     return this.#mail(
       'confirm',
-      { ticket },
+      { ticket, ...(context ? { context } : {}) },
       { Authorization: authorization || '' },
     );
   }
