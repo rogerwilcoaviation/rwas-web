@@ -381,6 +381,34 @@ const OTC_RETAIL_PRODUCTS = [
     ],
     removeDealerOnlyMetafield: true,
   },
+  {
+    sku: '010-02303-00',
+    family: 'aera 760 portable aviation GPS navigator, North America',
+    productType: 'Pilot Gear',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-10-12; portable navigator is not an installed product covered by the Garmin Installation Policy',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC exact product page on 2026-10-12 identifies exact North America SKU 010-02303-00 at $1,725.00 List/$1,293.75 Dealer, In Stock and order-enabled. October 2026 Aviation Dealer Price Catalog Rev.2 page 33 lists $1,725.00 List and $1,599.00 MRP and limits this suffix to the United States, Canada and Mexico. Authorization excludes 010-02303-01/-02/-03 and all other aera products.',
+    productId: 'gid://shopify/Product/9039560278235',
+    variantId: 'gid://shopify/ProductVariant/47932474786011',
+    handle: 'aera-760',
+    removeTags: [],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '010-02904-30',
+    family: 'D2 Mach 2 47 mm aviator smartwatch, North America',
+    productType: 'Watches & Accessories',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-10-12; wearable is not an installed product covered by the Garmin Installation Policy',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC exact product page on 2026-10-12 identifies exact North America SKU 010-02904-30 at $1,349.99 List/$1,012.49 Dealer, In Stock and order-enabled. October 2026 Aviation Dealer Price Catalog Rev.2 page 35 lists $1,349.99 List and $1,349.99 MRP. Authorization excludes 010-02904-31/-32, 010-02905 variants and all other D2 products; existing promotion content is preserved but does not authorize an expired offer.',
+    productId: 'gid://shopify/Product/8961746567387',
+    variantId: 'gid://shopify/ProductVariant/47408686137563',
+    handle: 'd2-mach-2-47-mm-titanium-oxford-brown-leather-band',
+    removeTags: [],
+    removeDealerOnlyMetafield: true,
+  },
   // Operator-authorized maintenance tool, not Garmin clearance of installed LRUs.
   {
     sku: '117-01307-00',
@@ -393,6 +421,20 @@ const OTC_RETAIL_PRODUCTS = [
 ];
 
 const PUBLIC_PRICE_AUTHORITIES = {
+  '010-02303-00': {
+    list_price: 1725,
+    source:
+      'Fresh authenticated Garmin DRC exact product page and October 2026 Aviation Dealer Price Catalog Rev.2 page 33 for 010-02303-00; customer List Price shown as $1,725.00 and MRP $1,599.00',
+    priceType: 'List',
+    accessed: '2026-10-12',
+  },
+  '010-02904-30': {
+    list_price: 1349.99,
+    source:
+      'Fresh authenticated Garmin DRC exact product page and October 2026 Aviation Dealer Price Catalog Rev.2 page 35 for 010-02904-30; customer List Price and MRP both shown as $1,349.99',
+    priceType: 'List',
+    accessed: '2026-10-12',
+  },
   '117-00931-00': {
     list_price: 70,
     source:
