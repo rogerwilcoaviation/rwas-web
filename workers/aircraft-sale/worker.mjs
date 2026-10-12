@@ -517,7 +517,8 @@ export class SellerStore {
       // Never expose provider/storage messages, record keys, customer values or
       // any auth payload; never save/rollback/audit after capture failures.
       if (error instanceof ConservationError)
-        return reply({ error: error.message, code: error.code }, error.status);
+        return reply({ error: error.message, code: error.code,
+          ...(error.metadataReason ? { metadataReason: error.metadataReason } : {}) }, error.status);
       const status = error.status === 403 ? 403 : 503;
       return reply({ error: 'Conservation account authorization or read unavailable.',
         code: status === 403 ? 'ACCOUNT_ADMIN_REQUIRED' : 'CAPTURE_UNAVAILABLE' }, status);

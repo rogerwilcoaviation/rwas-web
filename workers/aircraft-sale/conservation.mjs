@@ -43,14 +43,21 @@ const knownBuckets = new Set([
 const encoder = new TextEncoder();
 const hex = (value) => Array.from(new Uint8Array(value),
   (x) => x.toString(16).padStart(2, '0')).join('');
+const mediaMetadataReasons = new Set([
+  'MEDIA_KEY', 'MEDIA_VERSION', 'MEDIA_ETAG', 'MEDIA_SIZE', 'MEDIA_UPLOADED',
+  'MEDIA_STORAGE_CLASS', 'HTTP_METADATA_CONTAINER', 'HTTP_CACHE_EXPIRY',
+  'HTTP_METADATA_VALUE', 'CUSTOM_METADATA_CONTAINER', 'CUSTOM_METADATA_VALUE',
+]);
 export class ConservationError extends Error {
-  constructor(status, code) {
+  constructor(status, code, metadataReason) {
     super('Conservation capture unavailable. Start a fresh capture after resolving the reported condition.');
     this.status = status;
     this.code = code;
+    if (code === 'INVALID_MEDIA_METADATA' && mediaMetadataReasons.has(metadataReason))
+      this.metadataReason = metadataReason;
   }
 }
-const reject = (status, code) => { throw new ConservationError(status, code); };
+const reject = (status, code, reason) => { throw new ConservationError(status, code, reason); };
 export function canonicalConservationJson(value, depth = 0) {
   if (depth > 64) reject(409, 'UNSUPPORTED_BUSINESS_VALUE');
   if (value === null || typeof value === 'boolean' || typeof value === 'string')
@@ -224,38 +231,46 @@ async function businessSnapshot(rows, work) {
 const httpFields = new Set(['contentType', 'contentLanguage', 'contentDisposition',
   'contentEncoding', 'cacheControl', 'cacheExpiry']);
 function inventoryMetadata(object) {
-  if (!object || !validKey(object.key) || typeof object.version !== 'string' ||
-      !object.version || object.version.length > 1024 || typeof object.etag !== 'string' ||
-      !object.etag || object.etag.length > 1024 || !Number.isSafeInteger(object.size) || object.size < 0)
-    reject(409, 'INVALID_MEDIA_METADATA');
+  if (!object || !validKey(object.key))
+    reject(409, 'INVALID_MEDIA_METADATA', 'MEDIA_KEY');
+  if (typeof object.version !== 'string' || !object.version || object.version.length > 1024)
+    reject(409, 'INVALID_MEDIA_METADATA', 'MEDIA_VERSION');
+  if (typeof object.etag !== 'string' || !object.etag || object.etag.length > 1024)
+    reject(409, 'INVALID_MEDIA_METADATA', 'MEDIA_ETAG');
+  if (!Number.isSafeInteger(object.size) || object.size < 0)
+    reject(409, 'INVALID_MEDIA_METADATA', 'MEDIA_SIZE');
   if (object.size > CONSERVATION_LIMITS.maxObjectBytes) reject(413, 'OBJECT_BYTE_LIMIT');
   if (!(object.uploaded instanceof Date) || !Number.isFinite(object.uploaded.getTime()))
-    reject(409, 'INVALID_MEDIA_METADATA');
+    reject(409, 'INVALID_MEDIA_METADATA', 'MEDIA_UPLOADED');
   // Actual local workerd can report an empty native marker. Preserve that exact
   // value in the digest; it is not evidence of either documented storage class.
   if (object.storageClass !== undefined && !['', 'Standard', 'InfrequentAccess'].includes(object.storageClass))
-    reject(409, 'INVALID_MEDIA_METADATA');
+    reject(409, 'INVALID_MEDIA_METADATA', 'MEDIA_STORAGE_CLASS');
   const httpMetadata = {};
   if (object.httpMetadata !== undefined &&
       (!object.httpMetadata || Object.getPrototypeOf(object.httpMetadata) !== Object.prototype))
-    reject(409, 'INVALID_MEDIA_METADATA');
+    reject(409, 'INVALID_MEDIA_METADATA', 'HTTP_METADATA_CONTAINER');
   for (const [key, value] of Object.entries(object.httpMetadata || {})) {
     if (!httpFields.has(key)) reject(409, 'UNSUPPORTED_MEDIA_METADATA');
+    // Native JSG structs can expose unset optional fields as enumerable undefined.
+    // Normalize only known unset fields; every defined metadata value stays bound.
+    if (value === undefined) continue;
     if (key === 'cacheExpiry') {
       if (!(value instanceof Date) || !Number.isFinite(value.getTime()))
-        reject(409, 'INVALID_MEDIA_METADATA');
+        reject(409, 'INVALID_MEDIA_METADATA', 'HTTP_CACHE_EXPIRY');
       httpMetadata[key] = value.toISOString();
     } else {
-      if (typeof value !== 'string') reject(409, 'INVALID_MEDIA_METADATA');
+      if (typeof value !== 'string') reject(409, 'INVALID_MEDIA_METADATA', 'HTTP_METADATA_VALUE');
       httpMetadata[key] = value;
     }
   }
   const customMetadata = object.customMetadata || {};
   if (object.customMetadata !== undefined && !object.customMetadata)
-    reject(409, 'INVALID_MEDIA_METADATA');
-  if (Object.getPrototypeOf(customMetadata) !== Object.prototype ||
-      Object.values(customMetadata).some((x) => typeof x !== 'string'))
-    reject(409, 'INVALID_MEDIA_METADATA');
+    reject(409, 'INVALID_MEDIA_METADATA', 'CUSTOM_METADATA_CONTAINER');
+  if (Object.getPrototypeOf(customMetadata) !== Object.prototype)
+    reject(409, 'INVALID_MEDIA_METADATA', 'CUSTOM_METADATA_CONTAINER');
+  if (Object.values(customMetadata).some((x) => typeof x !== 'string'))
+    reject(409, 'INVALID_MEDIA_METADATA', 'CUSTOM_METADATA_VALUE');
   const metadata = { key: object.key, version: object.version, size: object.size,
     etag: object.etag, uploaded: object.uploaded.toISOString(),
     storageClass: object.storageClass ?? null, httpMetadata, customMetadata };
@@ -324,9 +339,13 @@ function completeMediaRange(object) {
   if (object.range === undefined) return null;
   const range = object.range;
   if (!range || Object.getPrototypeOf(range) !== Object.prototype ||
-      Object.getOwnPropertySymbols(range).length || Object.getOwnPropertyNames(range).length !== 2 ||
-      Object.keys(range).sort().join(',') !== 'length,offset' ||
+      Object.getOwnPropertySymbols(range).length)
+    reject(409, 'MEDIA_CHANGED');
+  const keys = Object.keys(range).sort().join(',');
+  if (Object.getOwnPropertyNames(range).length !== Object.keys(range).length ||
+      !['length,offset', 'length,offset,suffix'].includes(keys) ||
       Object.values(Object.getOwnPropertyDescriptors(range)).some((x) => x.get || x.set) ||
+      (Object.hasOwn(range, 'suffix') && range.suffix !== undefined) ||
       !Number.isSafeInteger(range.offset) || !Number.isSafeInteger(range.length) ||
       range.offset !== 0 || range.length !== object.size)
     reject(409, 'MEDIA_CHANGED');
