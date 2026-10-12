@@ -590,7 +590,7 @@ const rwasCartFixed = rwasCart
   )
   .replace(
     'if(d?.cartLinesAdd?.userErrors?.length){const f=await shop(q.create,{merchandiseId,quantity});cart=f?.cartCreate?.cart}',
-    'if(d?.cartLinesAdd?.userErrors?.length){return j({error:d.cartLinesAdd.userErrors.map(x=>x.message).join("; ")},400)}',
+    'const errors=d?.cartLinesAdd?.userErrors||[];if(errors.some(x=>/specified cart does not exist/i.test(x.message))){const replacement=await shop(q.create,{merchandiseId,quantity}),created=replacement?.cartCreate,createErrors=created?.userErrors||[];if(createErrors.length)return j({error:createErrors.map(x=>x.message).join("; ")},400);cart=created?.cart}else if(errors.length){return j({error:errors.map(x=>x.message).join("; ")},400)}',
   )
   .replace(
     'else{const d=await shop(q.create,{merchandiseId,quantity});cart=d?.cartCreate?.cart}',
