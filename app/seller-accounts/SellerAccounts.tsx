@@ -218,6 +218,43 @@ export default function SellerAccounts() {
       if (g === generation.current) setBusy(false);
     }
   }
+  async function refreshAuthority() {
+    const g = ++generation.current;
+    setBusy(true);
+    setError('');
+    setNotice('');
+    setPending(null);
+    try {
+      const d = await request('?limit=1');
+      if (g !== generation.current) return;
+      if (
+        typeof d.actor !== 'string' ||
+        !d.actor ||
+        typeof d.canManage !== 'boolean' ||
+        !Number.isFinite(d.expiresAt) ||
+        d.expiresAt <= Date.now() ||
+        (d.canManage
+          ? !Number.isFinite(d.manageUntil) || d.manageUntil <= Date.now()
+          : d.manageUntil !== null)
+      )
+        throw new AccountRequestError(502);
+      setAuthority({
+        actor: d.actor,
+        canManage: d.canManage,
+        expiresAt: d.expiresAt,
+        manageUntil: d.manageUntil,
+      });
+      setNotice(
+        d.canManage
+          ? 'Account management is available. Review your changes before continuing.'
+          : 'Read-only access confirmed. Recent administrator verification is still required to make changes.',
+      );
+    } catch (e) {
+      if (g === generation.current) failure(e);
+    } finally {
+      if (g === generation.current) setBusy(false);
+    }
+  }
   async function detail(id: string, g: number) {
     const d = await request('/' + encodeURIComponent(id));
     if (g !== generation.current) return null;
@@ -360,12 +397,19 @@ export default function SellerAccounts() {
       {error ? <p role="alert">{error}</p> : null}
       {notice ? <p role="status">{notice}</p> : null}
       {authority ? (
-        <p>
-          Signed in as {authority.actor}.{' '}
-          {authority.canManage
-            ? 'Account management available.'
-            : 'Read-only access. Sign in again to manage accounts.'}
-        </p>
+        <div aria-label="Administrator access">
+          <p>
+            Signed in as {authority.actor}.{' '}
+            {authority.canManage
+              ? 'Account management available.'
+              : 'Read-only access. Your sign-in is active, but account changes require administrator verification within the last ten minutes. Reopening this page can reuse your current login.'}
+          </p>
+          {!authority.canManage ? (
+            <button type="button" disabled={busy} onClick={refreshAuthority}>
+              Check management access
+            </button>
+          ) : null}
+        </div>
       ) : (
         <p>Approved account administrator access is required.</p>
       )}

@@ -52,6 +52,16 @@ jobs:
       - name: Offline durable intake and advanced routing regressions
         run: npm run test:intake
 
+      - name: Install isolated account-access browser runtime
+        run: |
+          npm install --prefix "${RUNNER_TEMP}/rwas-browser-runtime" --no-save --package-lock=false --ignore-scripts playwright@1.62.1
+          "${RUNNER_TEMP}/rwas-browser-runtime/node_modules/.bin/playwright" install --with-deps chromium
+
+      - name: Account access refresh and private-state regression
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/rwas-browser-runtime/node_modules/playwright/index.mjs
+        run: node tests/aircraft-sale/account-authority-refresh.browser.mjs
+
       - name: Lint
         run: npm run lint
 
