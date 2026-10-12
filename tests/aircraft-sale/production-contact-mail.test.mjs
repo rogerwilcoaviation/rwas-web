@@ -342,6 +342,27 @@ test('missing/wrong Clerk proof, CSRF, exact origin and stale RWAS sessions fail
   assert.equal(Object.keys(state.mailRequests || {}).length, 0);
 });
 
+test('explicit cross-site production request is rejected before provider verification or mail despite valid paired credentials', async (t) => {
+  const f = await fixture(t),
+    headers = await f.login(),
+    providerReads = f.outbound.length;
+  const response = await f.call(
+    '/account/email-code',
+    'POST',
+    { email: 'cross-site@example.test' },
+    { ...headers, 'Sec-Fetch-Site': 'cross-site' },
+  );
+  assert.equal(response.status, 403);
+  assert.deepEqual(await response.json(), {
+    error: 'Request origin rejected.',
+  });
+  assert.equal(f.outbound.length, providerReads);
+  assert.equal(f.delivered.length, 0);
+  const state = await f.state();
+  assert.equal(Object.keys(state.codes).length, 0);
+  assert.equal(Object.keys(state.mailRequests || {}).length, 0);
+});
+
 test('legacy/Auth0 ownership plus fake unbound Clerk context cannot enter the production mail bridge', async (t) => {
   const f = await fixture(t),
     raw = 'l'.repeat(40);

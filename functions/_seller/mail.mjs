@@ -54,6 +54,8 @@ export async function sellerMail(request, env) {
     return reply({ error: 'Verification destination not allowed.' }, 403);
   if (production && path !== '/api/aircraft-sale/account/email-code')
     return reply({ error: 'Email-code sign-in is unavailable.' }, 404);
+  if (production && request.headers.get('Sec-Fetch-Site') === 'cross-site')
+    return reply({ error: 'Request origin rejected.' }, 403);
   let context;
   if (production) {
     try {
