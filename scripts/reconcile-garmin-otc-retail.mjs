@@ -305,6 +305,22 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '011-04895-00',
+    family: 'AP DISC/TRIM INT switch sub-assembly',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC retail authorization from Ryan on 2026-10-12',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC exact product page and current September Rev 1 2026 Autopilot Price Catalog identify this exact orderable switch at $75.00 List/$56.25 Dealer and In Stock, without an exact MAP or MRP field. GFC 500 principal installation manual 190-02291-00 Rev 34 Table 3-1 and Note 6 identify the AP DISC/TRIM INT switch kit and its switch-series revisions. Retail eligibility is separate from aircraft installation applicability.',
+    productId: 'gid://shopify/Product/8961818362075',
+    variantId: 'gid://shopify/ProductVariant/47408750985435',
+    handle: 'sub-assy-ap-disc-trim-int-switch',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '330-90006-01',
     family: 'D-sub slide lock kit, 15/26 pin',
     eligibilityAuthority:
@@ -361,6 +377,13 @@ const OTC_RETAIL_PRODUCTS = [
 ];
 
 const PUBLIC_PRICE_AUTHORITIES = {
+  '011-04895-00': {
+    list_price: 75,
+    source:
+      'Fresh authenticated Garmin DRC exact product page and current Autopilot Price Catalog - September Rev 1 2026 exact row for 011-04895-00; customer List Price shown as $75.00',
+    priceType: 'List',
+    accessed: '2026-10-12',
+  },
   'K00-00745-00': {
     list_price: 80,
     source:
@@ -574,6 +597,8 @@ const GDL_82_DESCRIPTION = `
 `.trim();
 
 const POLICY_DESCRIPTIONS = {
+  '011-04895-00':
+    '<p><strong>Garmin AP DISC/TRIM INT Switch Sub-Assembly</strong></p><p>Garmin part number <strong>011-04895-00</strong>.</p><h3>Identity and compatibility</h3><p>Garmin GFC 500 principal installation manual 190-02291-00 Revision 34 identifies this exact AP DISC/TRIM INT switch kit. Revision A and B kits contain the MB2000-series switch; Revision C contains the M8805-series switch.</p><p>This listing is for the switch sub-assembly only. Aircraft eligibility, installed-system compatibility, approved data, installation, and return to service must be confirmed separately by appropriately authorized personnel.</p><h3>Availability</h3><p>Garmin reported this item in stock when RWAS verified it on October 12, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
   'K00-00745-00':
     '<p><strong>Garmin GCU 475/476/477 Replacement Knob Set</strong></p><p>Garmin part number <strong>K00-00745-00</strong>.</p><h3>Kit contents</h3><ul>\n<li>1 × inner knob — 430-00030-10</li>\n<li>1 × outer knob — 430-00031-10</li>\n<li>1 × joystick knob — 430-00035-10</li>\n</ul><h3>Compatibility and availability</h3><p>This exact kit is for the <strong>GCU 475, GCU 476, and GCU 477</strong>. It is not the K00-00746-00 knob set for GCU 275/276/478.</p><p>Garmin reported this item in stock when RWAS verified it on October 8, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p><p>This listing is for the replacement knob set only, not a controller or installation service. Confirm the installed controller model before ordering.</p>',
   'K10-00276-05':
