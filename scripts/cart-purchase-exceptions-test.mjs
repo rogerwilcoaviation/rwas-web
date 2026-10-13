@@ -23,7 +23,7 @@ const bundle = async (entry, name) => {
 const policy = JSON.parse(
   readFileSync('data/cart-purchase-exceptions.json', 'utf8'),
 );
-assert.equal(policy.length, 6);
+assert.equal(policy.length, 7);
 assert.deepEqual(
   policy.slice(1).map((entry) => entry.sku),
   [
@@ -32,6 +32,7 @@ assert.deepEqual(
     '010-04148-01',
     '010-04147-00',
     '010-04147-01',
+    '010-02904-21',
   ],
 );
 assert.equal(
@@ -43,7 +44,8 @@ assert.equal(
   policy.length,
 );
 assert.equal(new Set(policy.map((entry) => entry.sku)).size, policy.length);
-const entry = policy[0];
+const entry = policy.find((candidate) => candidate.sku === '010-02904-21');
+assert.ok(entry);
 const product = {
   id: entry.productId,
   handle: entry.handle,
@@ -154,7 +156,7 @@ try {
         node: { ...variant, product: { ...product, handle: 'other' } },
       },
       { name: 'wrong variant', node: { ...variant, id: 'other', product } },
-      { name: 'wrong sku', node: { ...variant, sku: '011-02326-01', product } },
+      { name: 'wrong sku', node: { ...variant, sku: '010-02904-20', product } },
       { name: 'missing sku', node: { id: variant.id, product } },
       {
         name: 'dealer neighbor',
