@@ -1116,6 +1116,20 @@ export default async function ProductDetailPage({
   if (cartPurchaseException) {
     gating.otc = 'eligible';
   }
+  // Some Storefront responses omit variant images even when Admin mappings
+  // exist. For these two tools only, use the verified numbered photo alt text.
+  if (product.handle === PA31_RUDDER_TRIM_HANDLE) {
+    for (const variant of product.variants) {
+      const number =
+        variant.sku === 'RT-01' ? '1' : variant.sku === 'RT-02' ? '2' : null;
+      if (number && !variant.image) {
+        variant.image =
+          product.images.find((image) =>
+            image.altText?.endsWith(`Rudder Trim Rigging Tool #${number}`),
+          ) || null;
+      }
+    }
+  }
   const imageCandidates = productImageCandidates(product);
   const heroImg =
     (product.handle === PA31_RUDDER_TRIM_HANDLE
