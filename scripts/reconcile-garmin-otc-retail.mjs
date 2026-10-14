@@ -342,7 +342,7 @@ const OTC_RETAIL_PRODUCTS = [
     eligibilityAuthority:
       'Operator-confirmed exact-SKU OTC retail authorization from Ryan on 2026-10-14',
     catalogObservation:
-      'Fresh authenticated Garmin DRC Quick Order exact product readback on 2026-10-14 identifies Cable Assy,Ball Ends,25" at $70.00 List/$52.50 Dealer, In Stock and order-enabled. The current MRP List 10-7-2026 and exact marketing-memo search contain no row for 233-20003-00. Retail eligibility is an operator-authorized exact-SKU exception and remains separate from aircraft or installation applicability.',
+      'Fresh authenticated Garmin DRC Quick Order exact product readback on 2026-10-14 identifies Cable Assy,Ball Ends,25" at $70.00 List, In Stock and order-enabled. The current MRP List 10-7-2026 and exact marketing-memo search contain no row for 233-20003-00. Retail eligibility is an operator-authorized exact-SKU exception and remains separate from aircraft or installation applicability.',
     productId: 'gid://shopify/Product/8961743519963',
     variantId: 'gid://shopify/ProductVariant/47408683811035',
     handle: 'cable-assy-ball-ends-25',
