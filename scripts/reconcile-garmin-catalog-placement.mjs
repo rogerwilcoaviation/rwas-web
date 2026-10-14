@@ -189,6 +189,12 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     variantId: 'gid://shopify/ProductVariant/47408750985435',
     handle: 'sub-assy-ap-disc-trim-int-switch',
   },
+  {
+    sku: '233-20003-00',
+    productId: 'gid://shopify/Product/8961743519963',
+    variantId: 'gid://shopify/ProductVariant/47408683811035',
+    handle: 'cable-assy-ball-ends-25',
+  },
 ];
 
 // Exact generic hardware items separately reviewed against the current dealer

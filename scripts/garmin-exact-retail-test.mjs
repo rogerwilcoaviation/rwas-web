@@ -99,6 +99,47 @@ test('K10-00276-05 keeps exact current GTX 335 retail authority', () => {
   assert.equal(APPROVED_CERTIFIED_OTC.has('010-01215-41'), false);
 });
 
+test('233-20003-00 keeps exact operator-authorized retail identity and current List price', () => {
+  const sku = '233-20003-00';
+  const policies = OTC_RETAIL_PRODUCTS.filter((policy) => policy.sku === sku);
+  assert.equal(policies.length, 1);
+  assert.deepEqual(
+    {
+      productId: policies[0].productId,
+      variantId: policies[0].variantId,
+      handle: policies[0].handle,
+    },
+    {
+      productId: 'gid://shopify/Product/8961743519963',
+      variantId: 'gid://shopify/ProductVariant/47408683811035',
+      handle: 'cable-assy-ball-ends-25',
+    },
+  );
+  assert.deepEqual(PUBLIC_PRICE_AUTHORITIES[sku], {
+    list_price: 70,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 233-20003-00 on 2026-10-14; customer List Price shown as $70.00',
+    priceType: 'List',
+    accessed: '2026-10-14',
+  });
+  assert.equal(POLICY_DESCRIPTIONS[sku], undefined);
+  assert.deepEqual(
+    OPERATOR_CONFIRMED_CERTIFIED_OTC.filter((entry) => entry.sku === sku),
+    [
+      {
+        sku,
+        productId: 'gid://shopify/Product/8961743519963',
+        variantId: 'gid://shopify/ProductVariant/47408683811035',
+        handle: 'cable-assy-ball-ends-25',
+      },
+    ],
+  );
+  assert.ok(
+    !OTC_RETAIL_PRODUCTS.some((policy) => policy.sku === '233-20003-01'),
+  );
+  assert.doesNotThrow(() => assertReviewedCommercialWrites([sku]));
+});
+
 test('September exact-SKU contracts and mocked reconciliation', async (t) => {
   const originalFetch = globalThis.fetch;
   const envKeys = [

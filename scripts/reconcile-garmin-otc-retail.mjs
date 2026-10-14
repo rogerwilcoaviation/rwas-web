@@ -337,6 +337,22 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '233-20003-00',
+    family: 'Cable assembly with ball ends, 25 inch',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC retail authorization from Ryan on 2026-10-14',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback on 2026-10-14 identifies Cable Assy,Ball Ends,25" at $70.00 List/$52.50 Dealer, In Stock and order-enabled. The current MRP List 10-7-2026 and exact marketing-memo search contain no row for 233-20003-00. Retail eligibility is an operator-authorized exact-SKU exception and remains separate from aircraft or installation applicability.',
+    productId: 'gid://shopify/Product/8961743519963',
+    variantId: 'gid://shopify/ProductVariant/47408683811035',
+    handle: 'cable-assy-ball-ends-25',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:install-hardware',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '330-90006-01',
     family: 'D-sub slide lock kit, 15/26 pin',
     eligibilityAuthority:
@@ -441,6 +457,13 @@ const PUBLIC_PRICE_AUTHORITIES = {
       'Fresh authenticated Garmin DRC exact product page for 117-00931-00, read 2026-10-12; customer List Price shown as $70.00',
     priceType: 'List',
     accessed: '2026-10-12',
+  },
+  '233-20003-00': {
+    list_price: 70,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 233-20003-00 on 2026-10-14; customer List Price shown as $70.00',
+    priceType: 'List',
+    accessed: '2026-10-14',
   },
   '011-04895-00': {
     list_price: 75,
