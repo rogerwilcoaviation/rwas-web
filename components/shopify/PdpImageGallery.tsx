@@ -11,7 +11,7 @@
 // active thumbnail, aria-live position counter. Keyboard free via buttons.
 // ============================================================================
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { productImageAlt, productImageUrl } from '@/lib/product-image';
 
 export interface PdpGalleryImage {
@@ -30,6 +30,22 @@ export function PdpImageGallery({ images, title, handle }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
   const total = images.length;
   const current = images[Math.min(index, total - 1)];
+
+  useEffect(() => {
+    function handleVariantChange(event: Event) {
+      const imageUrl = (
+        event as CustomEvent<{ image?: { url?: string | null } | null }>
+      ).detail?.image?.url;
+      if (!imageUrl) return;
+      const nextIndex = images.findIndex((image) => image.url === imageUrl);
+      if (nextIndex >= 0) setIndex(nextIndex);
+    }
+
+    window.addEventListener('rwas-pdp-variant-change', handleVariantChange);
+    return () =>
+      window.removeEventListener('rwas-pdp-variant-change', handleVariantChange);
+  }, [images]);
+
   if (!current) return null;
   const currentAlt = productImageAlt(current.url, current.altText, title);
 

@@ -1118,15 +1118,28 @@ export default async function ProductDetailPage({
   }
   const imageCandidates = productImageCandidates(product);
   const heroImg =
+    (product.handle === PA31_RUDDER_TRIM_HANDLE
+      ? product.variants[0]?.image
+      : null) ??
     imageCandidates.find(
       (image) => !isShopifyPlaceholderImage(image.url, image.altText),
-    ) ?? imageCandidates[0];
+    ) ??
+    imageCandidates[0];
   // Scoped visible gallery: Papa-Alpha products with 2+ real photos get
   // thumbnail browsing. All other products keep the existing hero markup.
   const galleryImages = (() => {
     const seen = new Set<string>();
     const list: Array<{ url: string; altText: string | null }> = [];
-    for (const image of imageCandidates) {
+    const orderedCandidates =
+      product.handle === PA31_RUDDER_TRIM_HANDLE
+        ? [
+            ...product.variants
+              .map((variant) => variant.image)
+              .filter(isProductImage),
+            ...imageCandidates,
+          ]
+        : imageCandidates;
+    for (const image of orderedCandidates) {
       if (!image?.url || seen.has(image.url)) continue;
       if (isShopifyPlaceholderImage(image.url, image.altText)) continue;
       seen.add(image.url);
@@ -1220,6 +1233,7 @@ export default async function ProductDetailPage({
       compareAtPrice: v.compareAtPrice,
       availableForSale: v.availableForSale,
       selectedOptions,
+      image: v.image,
     };
   });
   const canonicalUrl = `https://www.rogerwilcoaviation.com/products/${encodeURIComponent(product.handle)}`;

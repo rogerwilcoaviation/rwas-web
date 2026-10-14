@@ -32,6 +32,7 @@ export type PdpVariant = {
   compareAtPrice?: Money | null;
   availableForSale: boolean;
   selectedOptions: Array<{ name: string; value: string }>;
+  image?: { url: string; altText?: string | null } | null;
 };
 
 export type PdpPriceCardProps = {
@@ -136,6 +137,14 @@ export default function PdpPriceCard(props: PdpPriceCardProps) {
     () => variants.find((v) => v.id === selectedId) || variants[0],
     [variants, selectedId],
   );
+
+  useEffect(() => {
+    if (selected?.image) {
+      window.dispatchEvent(
+        new CustomEvent('rwas-pdp-variant-change', { detail: selected }),
+      );
+    }
+  }, [selected]);
 
   const otcEligible = otc === 'eligible';
   const isNonOtcGarmin = isGarmin && !otcEligible && !isDealerInstall;
