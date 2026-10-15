@@ -11,7 +11,7 @@
 // active thumbnail, aria-live position counter. Keyboard free via buttons.
 // ============================================================================
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { productImageAlt, productImageUrl } from '@/lib/product-image';
 
 export interface PdpGalleryImage {
@@ -28,6 +28,8 @@ interface Props {
 export function PdpImageGallery({ images, title, handle }: Props) {
   const [index, setIndex] = useState(0);
   const dialog = useRef<HTMLDialogElement>(null);
+  const opener = useRef<HTMLButtonElement>(null);
+  const dialogTitleId = useId();
   const total = images.length;
   const current = images[Math.min(index, total - 1)];
 
@@ -43,7 +45,10 @@ export function PdpImageGallery({ images, title, handle }: Props) {
 
     window.addEventListener('rwas-pdp-variant-change', handleVariantChange);
     return () =>
-      window.removeEventListener('rwas-pdp-variant-change', handleVariantChange);
+      window.removeEventListener(
+        'rwas-pdp-variant-change',
+        handleVariantChange,
+      );
   }, [images]);
 
   if (!current) return null;
@@ -88,6 +93,7 @@ export function PdpImageGallery({ images, title, handle }: Props) {
         }
       `}</style>
       <button
+        ref={opener}
         type="button"
         className="bs-product-image-link pa-gallery-open"
         onClick={() => dialog.current?.showModal()}
@@ -113,7 +119,8 @@ export function PdpImageGallery({ images, title, handle }: Props) {
       <dialog
         ref={dialog}
         className="pa-gallery-dialog"
-        aria-label={`Expanded image for ${title}`}
+        aria-labelledby={dialogTitleId}
+        onClose={() => opener.current?.focus()}
         onClick={(event) => {
           if (event.target === event.currentTarget) dialog.current?.close();
         }}
@@ -128,7 +135,11 @@ export function PdpImageGallery({ images, title, handle }: Props) {
         }}
       >
         <div className="bs-product-image-lightbox__panel">
+          <h2 id={dialogTitleId} className="sr-only">
+            Expanded image for {title}
+          </h2>
           <button
+            autoFocus
             type="button"
             className="bs-product-image-lightbox__close"
             onClick={() => dialog.current?.close()}
@@ -151,30 +162,32 @@ export function PdpImageGallery({ images, title, handle }: Props) {
           />
         </div>
       </dialog>
-      <div className="pa-thumbs" aria-label="Product photo thumbnails">
-        {images.map((img, i) => (
-          <button
-            key={img.url}
-            type="button"
-            className="pa-thumb"
-            onClick={() => setIndex(i)}
-            aria-label={`View photo ${i + 1} of ${total}: ${productImageAlt(img.url, img.altText, title)}`}
-            aria-current={i === index ? 'true' : undefined}
-          >
-            <img
-              src={productImageUrl(img.url, 200, img.altText, handle)}
-              alt=""
-              width={200}
-              height={150}
-              loading="lazy"
-              decoding="async"
-            />
-          </button>
-        ))}
-        <span className="pa-counter" aria-live="polite">
-          {index + 1} / {total}
-        </span>
-      </div>
+      {total > 1 && (
+        <div className="pa-thumbs" aria-label="Product photo thumbnails">
+          {images.map((img, i) => (
+            <button
+              key={img.url}
+              type="button"
+              className="pa-thumb"
+              onClick={() => setIndex(i)}
+              aria-label={`View photo ${i + 1} of ${total}: ${productImageAlt(img.url, img.altText, title)}`}
+              aria-current={i === index ? 'true' : undefined}
+            >
+              <img
+                src={productImageUrl(img.url, 200, img.altText, handle)}
+                alt=""
+                width={200}
+                height={150}
+                loading="lazy"
+                decoding="async"
+              />
+            </button>
+          ))}
+          <span className="pa-counter" aria-live="polite">
+            {index + 1} / {total}
+          </span>
+        </div>
+      )}
     </>
   );
 }

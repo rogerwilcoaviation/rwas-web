@@ -20,7 +20,7 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Garmin Avionics Installation and Retail","provider":{"@type":"Organization","name":"Roger Wilco Aviation Services","url":"https://www.rogerwilcoaviation.com"},"areaServed":"United States","serviceType":"Garmin avionics installation, retail, and support","url":"https://www.rogerwilcoaviation.com/garmin"}</script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+body { background: #ddd9d2; font-family: Georgia, 'Times New Roman', serif; overflow-x: hidden; }
 body::before {
   content: "";
   position: fixed;
@@ -303,6 +303,38 @@ body > * { position: relative; z-index: 1; }
   font-family: Georgia, serif; font-style: italic;
   font-size: 13px; color: #888;
 }
+
+:focus-visible { outline: 3px solid #235a91; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-text { animation: none; }
+}
+
+@media (max-width: 700px) {
+  .page { width: 100%; min-width: 0; margin: 0; border-width: 0; box-shadow: none; }
+  .dateline { flex-wrap: wrap; gap: 4px 12px; padding: 6px 14px; }
+  .masthead { flex-wrap: wrap; justify-content: center; gap: 10px; padding: 12px 14px; }
+  .masthead-logo { width: 52px; height: 52px; }
+  .masthead-center { min-width: 0; }
+  .masthead-name { font-size: clamp(22px, 7vw, 30px); white-space: normal; }
+  .masthead-rule { margin-inline: 12px; }
+  .masthead-tagline { white-space: normal; line-height: 1.45; }
+  .masthead-right { width: 100%; text-align: center; }
+  .edition-bar { flex-wrap: wrap; gap: 5px 0; padding: 7px 8px; text-align: center; }
+  .edition-bar span { white-space: normal; padding: 0 8px; }
+  .np-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .np-nav a { min-width: 0; padding: 10px 8px; border-bottom: 1px solid #c0bbb4; overflow-wrap: anywhere; text-align: center; }
+  .ticker-bar { padding-inline: 14px; }
+  .body { padding-inline: 14px; }
+  .section-title { font-size: clamp(30px, 10vw, 38px); }
+  .panel-planner-hero { grid-template-columns: 1fr; }
+  .panel-planner-button { white-space: normal; text-align: center; }
+  .content-grid { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .col-divider { height: 1px; margin: 0; }
+  .memo-summary { text-align: left; }
+  .cta-phone { font-size: clamp(20px, 7vw, 24px); }
+  .footer { flex-direction: column; gap: 8px; padding: 16px 14px; text-align: center; }
+}
 </style>
 </head>
 <body>
@@ -333,7 +365,7 @@ body > * { position: relative; z-index: 1; }
     <span>Now accepting spring scheduling</span>
   </div>
 
-  <nav class="np-nav">
+  <nav class="np-nav" aria-label="Primary navigation">
     <a href="/">Home</a>
     <a class="jerry" href="#" onclick="window.openJerryChat();return false;">Ask Jerry</a>
     <a class="active" href="/collections/avionics-certified">Garmin</a>
@@ -358,7 +390,7 @@ body > * { position: relative; z-index: 1; }
     </span>
   </div>
 
-  <div class="body">
+  <main class="body" id="main-content">
 
     <div class="section-header">
       <h1 class="section-title">Garmin Avionics</h1>
@@ -423,12 +455,12 @@ body > * { position: relative; z-index: 1; }
 
     <div id="updated-stamp" class="updated"></div>
 
-  </div>
+  </main>
 
-  <div class="footer">
+  <footer class="footer">
     <span class="footer-name">Roger Wilco Aviation Services</span>
     <span>&copy; 2026 RWAS &middot; All Rights Reserved</span>
-  </div>
+  </footer>
 
 </div>
 

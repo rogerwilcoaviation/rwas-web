@@ -1139,8 +1139,8 @@ export default async function ProductDetailPage({
       (image) => !isShopifyPlaceholderImage(image.url, image.altText),
     ) ??
     imageCandidates[0];
-  // Scoped visible gallery: Papa-Alpha products with 2+ real photos get
-  // thumbnail browsing. All other products keep the existing hero markup.
+  // All product images use the same accessible native-dialog lightbox. Products
+  // with multiple real photos also receive thumbnail browsing.
   const galleryImages = (() => {
     const seen = new Set<string>();
     const list: Array<{ url: string; altText: string | null }> = [];
@@ -1161,11 +1161,6 @@ export default async function ProductDetailPage({
     }
     return list;
   })();
-  const showPapaAlphaGallery =
-    galleryImages.length > 1 &&
-    ((product.tags || []).some((tag) => /papa-alpha/i.test(tag)) ||
-      /papa-alpha/i.test(product.handle) ||
-      product.handle === 'pa-36-flap-rigging-tool-1');
   const vendor = product.vendor || 'RWAS';
   const firstSku = product.variants[0]?.sku;
   const primaryPrice = product.variants[0]?.price;
@@ -1364,88 +1359,16 @@ export default async function ProductDetailPage({
         {/* Hero — photo + summary */}
         <section className="bs-hero">
           <figure className="bs-photo-box">
-            {showPapaAlphaGallery ? (
+            {heroImg ? (
               <PdpImageGallery
-                images={galleryImages}
+                images={
+                  galleryImages.length
+                    ? galleryImages
+                    : [{ url: heroImg.url, altText: heroImg.altText ?? null }]
+                }
                 title={product.title}
                 handle={handle}
               />
-            ) : heroImg ? (
-              <>
-                <a
-                  className="bs-product-image-link"
-                  href="#product-image-zoom"
-                  aria-label={`Click image to enlarge: ${product.title}`}
-                >
-                  <img
-                    src={productImageUrl(
-                      heroImg.url,
-                      800,
-                      heroImg.altText || product.title,
-                      handle,
-                    )}
-                    alt={productImageAlt(
-                      heroImg.url,
-                      heroImg.altText,
-                      product.title,
-                    )}
-                    width={800}
-                    height={600}
-                    style={{
-                      width: '100%',
-                      height: 'auto',
-                      display: 'block',
-                      background: '#fff',
-                    }}
-                    fetchPriority="high"
-                    decoding="async"
-                    loading="eager"
-                  />
-                  <span>Click image to enlarge</span>
-                </a>
-                <div
-                  id="product-image-zoom"
-                  className="bs-product-image-lightbox"
-                  aria-label={`Expanded image for ${product.title}`}
-                >
-                  <a
-                    className="bs-product-image-lightbox__backdrop"
-                    href="#"
-                    aria-label="Close expanded image"
-                  />
-                  <div className="bs-product-image-lightbox__panel">
-                    <a
-                      className="bs-product-image-lightbox__close"
-                      href="#"
-                      aria-label="Close expanded image"
-                    >
-                      ×
-                    </a>
-                    <img
-                      src={productImageUrl(
-                        heroImg.url,
-                        1600,
-                        heroImg.altText || product.title,
-                        handle,
-                      )}
-                      alt={productImageAlt(
-                        heroImg.url,
-                        heroImg.altText,
-                        product.title,
-                      )}
-                      width={1600}
-                      height={1200}
-                      style={{
-                        maxWidth: '100%',
-                        height: 'auto',
-                        display: 'block',
-                      }}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                </div>
-              </>
             ) : (
               <div
                 style={{
