@@ -53,7 +53,9 @@ export default function SiteSearch({
       .catch(() => {
         if (active) setLoadFailed(true);
       });
-    window.requestAnimationFrame(() => inputRef.current?.focus());
+    window.requestAnimationFrame(() =>
+      inputRef.current?.focus({ preventScroll: true }),
+    );
     return () => {
       active = false;
     };
@@ -78,7 +80,9 @@ export default function SiteSearch({
     document.body.style.left = '0';
     document.body.style.right = '0';
     document.body.style.width = '100%';
-    window.requestAnimationFrame(() => inputRef.current?.focus());
+    window.requestAnimationFrame(() =>
+      inputRef.current?.focus({ preventScroll: true }),
+    );
 
     return () => {
       document.documentElement.style.overflow = htmlOverflow;
@@ -114,7 +118,9 @@ export default function SiteSearch({
     setOpen(false);
     setQuery('');
     if (restoreFocus) {
-      window.requestAnimationFrame(() => triggerRef.current?.focus());
+      window.requestAnimationFrame(() =>
+        triggerRef.current?.focus({ preventScroll: true }),
+      );
     }
   }
 
@@ -216,7 +222,9 @@ export default function SiteSearch({
                 className="mt-2 min-h-11 border border-black px-4 py-2 text-sm font-bold uppercase tracking-[0.08em] hover:bg-black hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                 onClick={() => {
                   setQuery('');
-                  window.requestAnimationFrame(() => inputRef.current?.focus());
+                  window.requestAnimationFrame(() =>
+                    inputRef.current?.focus({ preventScroll: true }),
+                  );
                 }}
               >
                 Clear search

@@ -235,7 +235,12 @@ test('search modal exposes clear/status behavior and locks background scroll', a
   assert.match(source, />\s*Clear search\s*</);
   assert.match(source, /document\.documentElement\.style\.overflow = 'hidden'/);
   assert.match(source, /document\.body\.style\.overflow = 'hidden'/);
+  assert.match(source, /document\.body\.style\.position = 'fixed'/);
+  assert.ok(source.includes('document.body.style.top = `-${scrollY}px`'));
   assert.match(source, /window\.scrollTo\(scrollX, scrollY\)/);
-  assert.match(source, /triggerRef\.current\?\.focus\(\)/);
+  assert.match(
+    source,
+    /triggerRef\.current\?\.focus\(\{ preventScroll: true \}\)/,
+  );
   assert.match(source, /\{' '}\s*found\./);
 });
