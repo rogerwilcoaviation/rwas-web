@@ -38,11 +38,11 @@ const photos: PhotoItem[] = [
   },
   {
     kind: 'photo',
-    src: '/media/services/custom-printing-finishing/textured-trim-ring-fee4061a.webp',
+    src: '/media/services/custom-printing-finishing/special-order-powder-coated-adaptor-plate-fee4061a.webp',
     width: 738,
     height: 1600,
-    caption: 'Textured trim ring',
-    alt: 'Hand holding a small black textured square trim ring',
+    caption: 'Special-order powder-coated adaptor plate',
+    alt: 'Hand holding a black textured special-order powder-coated adaptor plate',
     categories: ['coating'],
   },
   {
@@ -92,11 +92,11 @@ const photos: PhotoItem[] = [
   },
   {
     kind: 'photo',
-    src: '/media/services/custom-printing-finishing/paired-coated-panels-dd686895.webp',
+    src: '/media/services/custom-printing-finishing/before-after-panel-replacement-dd686895.webp',
     width: 738,
     height: 1600,
-    caption: 'Paired coated panels',
-    alt: 'Two black instrument panels with rectangular and circular cutouts resting on a machine bed',
+    caption: 'Before and after: supplied panel and finished replacement',
+    alt: 'Supplied panel and finished replacement shown together on a machine bed',
     categories: ['coating'],
   },
   {
