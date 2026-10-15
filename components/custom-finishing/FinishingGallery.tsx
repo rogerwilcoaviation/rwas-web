@@ -16,8 +16,6 @@ type PhotoItem = {
 
 const VIDEO_SRC =
   '/media/services/custom-printing-finishing/powder-coated-panel-9f07aa85.mp4';
-const ABSTRACT_PRINTS_VIDEO_SRC =
-  '/media/services/custom-printing-finishing/abstract-prints-030b35c2.mp4';
 
 const photos: PhotoItem[] = [
   {
@@ -131,10 +129,8 @@ export default function FinishingGallery() {
   const [filter, setFilter] = useState<GalleryFilter>('all');
   const [activePhoto, setActivePhoto] = useState<PhotoItem | null>(null);
   const [videoStarted, setVideoStarted] = useState(false);
-  const [abstractVideoStarted, setAbstractVideoStarted] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const abstractVideoRef = useRef<HTMLVideoElement>(null);
   const lastPhotoButton = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
@@ -158,24 +154,14 @@ export default function FinishingGallery() {
     void video.play().catch(() => setVideoStarted(false));
   };
 
-  const startAbstractVideo = () => {
-    const video = abstractVideoRef.current;
-    if (!video) return;
-    video.src = ABSTRACT_PRINTS_VIDEO_SRC;
-    video.load();
-    setAbstractVideoStarted(true);
-    void video.play().catch(() => setAbstractVideoStarted(false));
-  };
-
   const changeFilter = (nextFilter: GalleryFilter) => {
-    [videoRef.current, abstractVideoRef.current].forEach((video) => {
-      if (!video) return;
+    const video = videoRef.current;
+    if (video) {
       video.pause();
       video.removeAttribute('src');
       video.load();
-    });
+    }
     setVideoStarted(false);
-    setAbstractVideoStarted(false);
     setFilter(nextFilter);
   };
 
@@ -183,7 +169,6 @@ export default function FinishingGallery() {
     (photo) => filter === 'all' || photo.categories.includes(filter),
   );
   const showVideo = filter === 'all' || filter === 'coating';
-  const showAbstractVideo = filter === 'all' || filter === 'printing';
 
   return (
     <section className="finishing-gallery" aria-labelledby="gallery-title">
@@ -263,34 +248,6 @@ export default function FinishingGallery() {
             <figcaption>{photo.caption}</figcaption>
           </figure>
         ))}
-
-        {showAbstractVideo && (
-          <figure className="finishing-media-card finishing-video-card">
-            <div className="finishing-video-frame">
-              <video
-                ref={abstractVideoRef}
-                controls
-                playsInline
-                preload="none"
-                poster="/media/services/custom-printing-finishing/abstract-prints-video-poster-030b35c2.webp"
-                aria-label="Video showing the Abstract Prints instrument panel"
-              >
-                Your browser does not support embedded video.
-              </video>
-              {!abstractVideoStarted && (
-                <button
-                  type="button"
-                  className="finishing-video-play"
-                  onClick={startAbstractVideo}
-                  aria-label="Play Abstract Prints video"
-                >
-                  <span aria-hidden="true">▶</span> Play video
-                </button>
-              )}
-            </div>
-            <figcaption>Abstract Prints</figcaption>
-          </figure>
-        )}
       </div>
 
       <dialog
