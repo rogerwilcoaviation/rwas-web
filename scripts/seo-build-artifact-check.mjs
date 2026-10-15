@@ -58,6 +58,38 @@ const urlBlocks = Array.from(
 );
 if (!urlBlocks.length) fail('sitemap contains no URL entries');
 
+const sitemapProductRoutes = urlBlocks
+  .map((block) => block.match(/<loc>([^<]+)<\/loc>/)?.[1])
+  .filter(Boolean)
+  .map((loc) => new URL(decodeHtmlEntities(loc)).pathname)
+  .filter((route) => route.startsWith('/products/'))
+  .sort();
+const searchProductRoutes = JSON.parse(
+  await readRequired(
+    path.resolve('lib/site-search-product-routes.generated.json'),
+    'generated public search product routes',
+  ),
+).sort();
+if (new Set(sitemapProductRoutes).size !== sitemapProductRoutes.length) {
+  fail('sitemap contains duplicate product routes');
+}
+if (new Set(searchProductRoutes).size !== searchProductRoutes.length) {
+  fail('search index contains duplicate product routes');
+}
+const sitemapSet = new Set(sitemapProductRoutes);
+const searchSet = new Set(searchProductRoutes);
+const missingFromSearch = sitemapProductRoutes.filter(
+  (route) => !searchSet.has(route),
+);
+const missingFromSitemap = searchProductRoutes.filter(
+  (route) => !sitemapSet.has(route),
+);
+if (missingFromSearch.length || missingFromSitemap.length) {
+  fail(
+    `public product route mismatch: ${missingFromSearch.length} missing from search, ${missingFromSitemap.length} missing from sitemap`,
+  );
+}
+
 const lastmodCount = urlBlocks.filter((block) =>
   /<lastmod>[^<]+<\/lastmod>/.test(block),
 ).length;

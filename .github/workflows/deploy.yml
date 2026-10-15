@@ -72,6 +72,7 @@ jobs:
           node scripts/telemetry-reference-test.mjs
           node scripts/csp-stage-test.mjs
           node scripts/accessibility-remediation-test.mjs
+          node --test scripts/tests/site-search.test.mjs
           node scripts/commerce-audit-regression-test.mjs
 
       - name: Build (next-on-pages)
