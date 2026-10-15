@@ -29,11 +29,11 @@ const photos: PhotoItem[] = [
   },
   {
     kind: 'photo',
-    src: '/media/services/custom-printing-finishing/gray-instrument-panel-6d34a1bc.webp',
+    src: '/media/services/custom-printing-finishing/whole-panels-textured-black-6d34a1bc.webp',
     width: 1600,
     height: 738,
-    caption: 'Gray instrument panel finish',
-    alt: 'Wide gray textured instrument panel with circular and rectangular cutouts',
+    caption: 'Whole panels — textured black finish',
+    alt: 'Wide textured black instrument panels with circular and rectangular cutouts',
     categories: ['coating'],
   },
   {
