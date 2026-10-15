@@ -47,11 +47,11 @@ const photos: PhotoItem[] = [
   },
   {
     kind: 'photo',
-    src: '/media/services/custom-printing-finishing/coated-panel-cutouts-41c11395.webp',
+    src: '/media/services/custom-printing-finishing/gloss-finish-panel-41c11395.webp',
     width: 1440,
     height: 1080,
-    caption: 'Coated panel cutouts',
-    alt: 'Black rectangular panel with multiple instrument cutouts and a fine textured finish',
+    caption: 'Gloss finish',
+    alt: 'Black panel with multiple instrument cutouts and a gloss finish',
     categories: ['coating'],
   },
   {
