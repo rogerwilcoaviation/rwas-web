@@ -79,6 +79,12 @@ export default function Home() {
                 </a>
               </div>
               <div className="bs-toc__row">
+                <a href="/services/custom-printing-finishing">
+                  <span>UV Printing &amp; Powder Coating</span>
+                  <span className="bs-toc__pg">C2 &rarr;</span>
+                </a>
+              </div>
+              <div className="bs-toc__row">
                 <a href="/contact?reason=service&source=home-toc">
                   <span>Scheduling</span>
                   <span className="bs-toc__pg">D1 &rarr;</span>
@@ -339,7 +345,7 @@ export default function Home() {
           </h2>
           <hr className="section-rule" />
 
-          <div className="bs-4col">
+          <div className="bs-services-grid">
             {/* Papa-Alpha Tools */}
             <Specimen variant="flat" as="article">
               <span className="bs-kicker">Papa-Alpha Tools</span>
@@ -488,23 +494,61 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/custom-printing-finishing">
-                      UV Printing &amp; Powder Coating
-                    </a>
-                  </p>
-                  <p className="bs-svc-desc">
-                    Specialized printing and coating inquiries for reviewed
-                    aviation shop and decorative work. Full panel upgrades stay
-                    in the Full Panel Planner.
-                  </p>
-                </li>
-                <li className="bs-svc">
-                  <p className="bs-svc-name">
                     <a href="/services/rotax-repair">Rotax Engine Support</a>
                   </p>
                   <p className="bs-svc-desc">
                     Powerplant diagnostics, mag checks, compression testing, and
                     engine runs.
+                  </p>
+                </li>
+              </ul>
+            </Specimen>
+
+            {/* Printing & Powder Coating */}
+            <Specimen variant="flat" as="article">
+              <span className="bs-kicker">Printing &amp; Powder Coating</span>
+              <hr className="section-rule" />
+              <ul className="bs-svc-list">
+                <li className="bs-svc">
+                  <p className="bs-svc-name">
+                    <a href="/services/custom-printing-finishing">
+                      Printing &amp; Coating Overview
+                    </a>
+                  </p>
+                  <p className="bs-svc-desc">
+                    Review specialized shop services, project requirements, and
+                    the inquiry process before requesting a quote.
+                  </p>
+                </li>
+                <li className="bs-svc">
+                  <p className="bs-svc-name">
+                    <a href="/services/custom-printing-finishing/uv-printing">
+                      UV Printing
+                    </a>
+                  </p>
+                  <p className="bs-svc-desc">
+                    Full-color graphics, labels, personalization, and markings
+                    on primarily flat parts and samples.
+                  </p>
+                </li>
+                <li className="bs-svc">
+                  <p className="bs-svc-name">
+                    <a href="/services/custom-printing-finishing/powder-coating">
+                      Powder Coating
+                    </a>
+                  </p>
+                  <p className="bs-svc-desc">
+                    Coating reviews for fabricated metal parts, shop items,
+                    decorative hardware, and combined coat-and-print work.
+                  </p>
+                </li>
+                <li className="bs-svc">
+                  <p className="bs-svc-name">
+                    <a href="/panel-planner">Full Panel Planner</a>
+                  </p>
+                  <p className="bs-svc-desc">
+                    Full aircraft panel upgrades begin with the dedicated panel
+                    planning workflow.
                   </p>
                 </li>
               </ul>

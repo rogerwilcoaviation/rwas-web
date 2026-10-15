@@ -106,7 +106,6 @@ export default function Page() {
           airworthiness-related uses require applicable data and separate
           review.
         </div>
-        <FinishingGallery />
         <section aria-labelledby="process-title">
           <span className="bs-kicker">How an inquiry starts</span>
           <h2 id="process-title" className="bs-headline bs-headline--section">
@@ -135,6 +134,7 @@ export default function Page() {
           </div>
         </section>
         <FinishingInquiry />
+        <FinishingGallery />
       </main>
       <BroadsheetFooter />
     </BroadsheetLayout>

@@ -1582,23 +1582,44 @@ body {
   }
 }
 
-/* ── 4-column service band ────────────────────────────────────────── */
+/* ── Service category band ────────────────────────────────────────── */
 
-.broadsheet .bs-4col {
+.broadsheet .bs-services-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 18px;
   align-items: start;
   margin-top: 24px;
 }
-@media (max-width: 1024px) {
-  .broadsheet .bs-4col {
+@media (max-width: 1100px) {
+  .broadsheet .bs-services-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .broadsheet .bs-services-grid > * {
+    grid-column: span 2;
+  }
+  .broadsheet .bs-services-grid > :nth-last-child(-n + 2) {
+    grid-column: span 3;
+  }
+}
+@media (max-width: 700px) {
+  .broadsheet .bs-services-grid {
     grid-template-columns: 1fr 1fr;
+  }
+  .broadsheet .bs-services-grid > *,
+  .broadsheet .bs-services-grid > :nth-last-child(-n + 2) {
+    grid-column: auto;
+  }
+  .broadsheet .bs-services-grid > :last-child {
+    grid-column: 1 / -1;
   }
 }
 @media (max-width: 600px) {
-  .broadsheet .bs-4col {
+  .broadsheet .bs-services-grid {
     grid-template-columns: 1fr;
+  }
+  .broadsheet .bs-services-grid > :last-child {
+    grid-column: auto;
   }
 }
 
