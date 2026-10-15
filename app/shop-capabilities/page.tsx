@@ -504,6 +504,10 @@ export default function ShopCapabilitiesPage() {
                     &middot;{' '}
                     <a href="/services/papa-alpha-tools">
                       Read the Papa-Alpha tools story
+                    </a>{' '}
+                    &middot;{' '}
+                    <a href="/services/custom-printing-finishing">
+                      Ask about UV printing &amp; powder coating
                     </a>
                   </p>
                 </div>
@@ -525,10 +529,18 @@ export default function ShopCapabilitiesPage() {
                     </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name">Multi-Color Powder Coating</p>
+                    <p className="bs-svc-name">
+                      <a href="/services/custom-printing-finishing/powder-coating">
+                        Powder Coating
+                      </a>
+                    </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name">UV Printing</p>
+                    <p className="bs-svc-name">
+                      <a href="/services/custom-printing-finishing/uv-printing">
+                        UV Printing
+                      </a>
+                    </p>
                   </li>
                   <li className="bs-svc">
                     <p className="bs-svc-name">CO2 Laser Engraving</p>
