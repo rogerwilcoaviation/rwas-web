@@ -139,10 +139,21 @@ export default function FinishingGallery() {
   const startVideo = () => {
     const video = videoRef.current;
     if (!video) return;
-    setVideoStarted(true);
     video.src = VIDEO_SRC;
     video.load();
-    void video.play();
+    setVideoStarted(true);
+    void video.play().catch(() => setVideoStarted(false));
+  };
+
+  const changeFilter = (nextFilter: GalleryFilter) => {
+    const video = videoRef.current;
+    if (video) {
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+    }
+    setVideoStarted(false);
+    setFilter(nextFilter);
   };
 
   const visiblePhotos = photos.filter(
@@ -170,7 +181,7 @@ export default function FinishingGallery() {
             type="button"
             key={option.value}
             aria-pressed={filter === option.value}
-            onClick={() => setFilter(option.value)}
+            onClick={() => changeFilter(option.value)}
           >
             {option.label}
           </button>
@@ -187,7 +198,6 @@ export default function FinishingGallery() {
                 playsInline
                 preload="none"
                 poster="/media/services/custom-printing-finishing/powder-coated-panel-poster-9f07aa85.webp"
-                src={videoStarted ? VIDEO_SRC : undefined}
                 aria-label="Video showing a textured coated panel"
               >
                 Your browser does not support embedded video.
