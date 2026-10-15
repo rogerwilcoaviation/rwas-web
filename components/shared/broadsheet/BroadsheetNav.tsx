@@ -1,4 +1,5 @@
 import React from 'react';
+import SiteSearch from './SiteSearch';
 
 export type NavItem = {
   href: string;
@@ -25,6 +26,10 @@ const DEFAULT_ITEMS: NavItem[] = [
   { href: '/aircraft-for-sale', label: 'Aircraft 4 Sale' },
   { href: '/financing', label: 'Financing' },
   { href: '/services', label: 'Services' },
+  {
+    href: '/services/custom-printing-finishing',
+    label: 'Printing & Coating',
+  },
   { href: '/blog', label: 'Blog Articles' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
@@ -69,6 +74,10 @@ export default function BroadsheetNav({
         </summary>
         <div className="bs-nav__mobile-links">{renderItems()}</div>
       </details>
+      <SiteSearch
+        className="bs-site-search"
+        buttonLabel="Search services, products, articles & part numbers"
+      />
     </nav>
   );
 }

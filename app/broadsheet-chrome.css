@@ -2724,3 +2724,79 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Homepage feature: printing and coating service preview. */
+.broadsheet .home-printing-feature {
+  margin: 32px 0 0;
+  padding: 24px 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: center;
+  border: var(--hairline);
+  border-top: var(--rule-top-accent);
+  background: var(--bone);
+  box-shadow: var(--specimen-shadow);
+}
+.broadsheet .home-printing-feature__copy {
+  max-width: 780px;
+}
+.broadsheet .home-printing-feature h2 {
+  margin: 5px 0 8px;
+}
+.broadsheet .home-printing-feature p {
+  margin: 0;
+  color: var(--ink-700);
+}
+.broadsheet .home-printing-feature__cta {
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .broadsheet .home-printing-feature {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 20px;
+  }
+  .broadsheet .home-printing-feature__cta {
+    width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+/* Shared public-site search bar beneath the primary navigation. */
+.broadsheet .bs-site-search {
+  width: min(760px, calc(100% - 56px));
+  margin: 10px auto 0;
+}
+.broadsheet .bs-site-search > button {
+  width: 100%;
+  justify-content: flex-start;
+  border-color: var(--rule);
+  background: var(--bone);
+  color: var(--ink-700);
+  font-family: var(--font-ui);
+  box-shadow: 2px 2px 0 var(--ink-900);
+}
+.broadsheet .bs-site-search > button:hover,
+.broadsheet .bs-site-search > button:focus-visible {
+  color: var(--ink-900);
+  background: var(--parchment);
+}
+@media (max-width: 700px) {
+  .broadsheet .bs-site-search {
+    width: 100%;
+    margin-top: 6px;
+    padding-bottom: 8px;
+  }
+  .broadsheet .bs-site-search > button {
+    min-height: 44px;
+    font-size: 10px;
+    line-height: 1.25;
+  }
+}
+
+/* Keep the search dialog above later header bands and floating controls. */
+.broadsheet .bs-nav:has(.bs-site-search button[aria-expanded='true']) {
+  z-index: 10000;
+}

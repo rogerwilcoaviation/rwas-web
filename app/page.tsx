@@ -325,6 +325,33 @@ export default function Home() {
           </div>
         </section>
 
+        <section
+          className="home-printing-feature"
+          aria-labelledby="home-printing-feature-title"
+        >
+          <div className="home-printing-feature__copy">
+            <span className="bs-kicker">New shop capability</span>
+            <h2
+              id="home-printing-feature-title"
+              className="bs-headline bs-headline--section"
+            >
+              UV Printing &amp; Powder Coating
+            </h2>
+            <p>
+              Explore reviewed printing and coating work for primarily flat
+              aviation shop pieces, branded items, and decorative projects.
+              Material fit, preparation, capacity, finish, and any aviation
+              requirements are confirmed before quoting.
+            </p>
+          </div>
+          <a
+            className="bs-cta-primary home-printing-feature__cta"
+            href="/services/custom-printing-finishing"
+          >
+            Explore Printing &amp; Coating
+          </a>
+        </section>
+
         {/* ── 4-COL SERVICES BAND ───────────────────────────────────── */}
         <section
           aria-labelledby="services-heading"
