@@ -488,6 +488,18 @@ export default function Home() {
                 </li>
                 <li className="bs-svc">
                   <p className="bs-svc-name">
+                    <a href="/services/custom-printing-finishing">
+                      UV Printing &amp; Powder Coating
+                    </a>
+                  </p>
+                  <p className="bs-svc-desc">
+                    Specialized printing and coating inquiries for reviewed
+                    aviation shop and decorative work. Full panel upgrades stay
+                    in the Full Panel Planner.
+                  </p>
+                </li>
+                <li className="bs-svc">
+                  <p className="bs-svc-name">
                     <a href="/services/rotax-repair">Rotax Engine Support</a>
                   </p>
                   <p className="bs-svc-desc">

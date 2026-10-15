@@ -88,6 +88,12 @@ const serviceGroups = [
           'Aircraft panel cutting, laser welding, powder coating, UV printing, bracket work, and precision shop fabrication.',
       },
       {
+        name: 'UV printing & powder coating',
+        href: '/services/custom-printing-finishing',
+        description:
+          'Reviewed printing and coating inquiries for primarily flat aviation shop pieces, branded items, and decorative work.',
+      },
+      {
         name: 'Papa-Alpha Piper rigging tools',
         href: '/services/papa-alpha-tools',
         description:
