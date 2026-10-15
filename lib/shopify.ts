@@ -1,4 +1,5 @@
 import { formatCatalogCopy } from '@/lib/seo';
+import { isPublicProductHandle } from '@/lib/public-product-route.mjs';
 
 type Money = {
   amount: string;
@@ -178,7 +179,7 @@ export const FALLBACK_PRODUCT_HANDLES = [
 ] as const;
 
 export function isSeoSafeProductHandle(handle: string): boolean {
-  return /^[a-z0-9][a-z0-9-]*$/.test(handle);
+  return isPublicProductHandle(handle);
 }
 
 const PAPA_ALPHA_SYNTHETIC: ShopifyCollectionSummary = {

@@ -21,6 +21,21 @@ export type SiteSearchEntry = {
 
 export type SiteSearchMatch = SiteSearchEntry & { score: number };
 
+const SEARCH_TERM_ALIASES: ReadonlyArray<readonly [RegExp, string]> = [
+  [/\bultraviolet\b/g, 'uv'],
+  [/\bpowdercoat(?:ing)?\b/g, 'powder coating'],
+  [/\bpoweder\b/g, 'powder'],
+  [/\bpritning\b/g, 'printing'],
+];
+
+export function normalizeSiteSearchQuery(value: string) {
+  return SEARCH_TERM_ALIASES.reduce(
+    (normalized, [pattern, replacement]) =>
+      normalized.replace(pattern, replacement),
+    normalizePartText(value),
+  );
+}
+
 function searchableText(entry: SiteSearchEntry) {
   return normalizePartText(
     [
@@ -32,20 +47,15 @@ function searchableText(entry: SiteSearchEntry) {
   );
 }
 
-/**
- * Matches every text term. A formatting-only SKU difference (for example,
- * 2332000300 vs 233-20003-00) is treated as an exact part-number match.
- */
+/** Matches every text term; formatting-only SKU differences are exact matches. */
 export function searchSiteIndex(
   entries: readonly SiteSearchEntry[],
   query: string,
 ): SiteSearchMatch[] {
-  const normalizedQuery = normalizePartText(query);
+  const normalizedQuery = normalizeSiteSearchQuery(query);
   if (!normalizedQuery) return [];
-
   const terms = normalizedQuery.split(/\s+/).filter(Boolean);
   const compactQuery = compactPartNumber(query);
-
   return entries
     .flatMap((entry, sourceIndex) => {
       const text = searchableText(entry);
@@ -55,9 +65,7 @@ export function searchSiteIndex(
         (entry.skus || []).some(
           (sku) => compactPartNumber(sku) === compactQuery,
         );
-
       if (!exactSku && !terms.every((term) => text.includes(term))) return [];
-
       let score = exactSku ? 10_000 : 0;
       if (normalizedTitle === normalizedQuery) score += 1_000;
       if (normalizedTitle.startsWith(normalizedQuery)) score += 400;
@@ -65,7 +73,6 @@ export function searchSiteIndex(
       score +=
         terms.filter((term) => normalizedTitle.includes(term)).length * 25;
       score -= sourceIndex / 100_000;
-
       return [{ ...entry, score }];
     })
     .sort((a, b) => b.score - a.score);

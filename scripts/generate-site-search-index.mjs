@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isPublicProductHandle } from '../lib/public-product-route.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -130,33 +131,6 @@ function cleanText(value, maxLength = 280) {
   return clean.slice(0, maxLength - 1).replace(/\s+\S*$/, '') + '…';
 }
 
-function normalizedProductText(product) {
-  return [
-    product.title,
-    product.handle,
-    product.description,
-    product.productType,
-    ...(product.tags || []),
-    ...(product.variants?.edges || []).map(({ node }) => node.sku || ''),
-  ]
-    .join(' ')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim();
-}
-
-function isPublicProduct(product) {
-  if (!/^[a-z0-9][a-z0-9-]*$/.test(product.handle)) return false;
-  const text = normalizedProductText(product);
-  return (
-    !/\bgmc\s*605[a-z]?\b/.test(text) &&
-    !/\b010\s*01075\b/.test(text) &&
-    !/\bdealer only\b|\bgarmin dealer install\b|\botc disabled\b|\bprivate price\b/.test(
-      text,
-    )
-  );
-}
-
 function removePriceSentences(value) {
   return cleanText(value, 1200)
     .split(/(?<=[.!?])\s*/)
@@ -184,7 +158,7 @@ async function fetchProducts() {
   const version = process.env.SHOPIFY_STOREFRONT_API_VERSION || '2026-01';
   if (!token) throw new Error('A Shopify Storefront token is required.');
   const query =
-    'query SiteSearchProducts($after: String) { products(first: 250, after: $after, sortKey: TITLE) { pageInfo { hasNextPage endCursor } edges { node { title handle description productType tags variants(first: 20) { edges { node { sku } } } } } } }';
+    'query SiteSearchProducts($after: String) { products(first: 250, after: $after, sortKey: TITLE) { pageInfo { hasNextPage endCursor } edges { node { title handle description variants(first: 250) { edges { node { sku } } } } } } }';
   const products = [];
   let after = null;
   do {
@@ -212,7 +186,7 @@ async function fetchProducts() {
       ? connection.pageInfo.endCursor
       : null;
   } while (after);
-  return products.filter(isPublicProduct);
+  return products.filter((product) => isPublicProductHandle(product.handle));
 }
 
 await loadLocalEnv();
@@ -222,6 +196,19 @@ const [products, blogData] = await Promise.all([
     .readFile(path.join(root, 'public', 'blog-articles.json'), 'utf8')
     .then(JSON.parse),
 ]);
+
+const productRoutes = products.map(
+  (product) => '/products/' + encodeURIComponent(product.handle),
+);
+const duplicateProductRoutes = productRoutes.filter(
+  (route, index) => productRoutes.indexOf(route) !== index,
+);
+if (duplicateProductRoutes.length) {
+  throw new Error(
+    'Duplicate public product routes: ' +
+      [...new Set(duplicateProductRoutes)].join(', '),
+  );
+}
 
 const entries = [
   ...SERVICES.map(([title, href, description]) => ({
@@ -284,6 +271,10 @@ const output =
 await fs.writeFile(
   path.join(root, 'lib', 'site-search-index.generated.ts'),
   output,
+);
+await fs.writeFile(
+  path.join(root, 'lib', 'site-search-product-routes.generated.json'),
+  JSON.stringify(productRoutes.slice().sort(), null, 2) + '\n',
 );
 console.log(
   JSON.stringify({

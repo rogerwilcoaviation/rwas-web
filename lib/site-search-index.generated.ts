@@ -134,12 +134,39 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: '90 Deg Adapter,Backshell,Jackscrew,37/62 Pin',
+    href: '/products/90-deg-adapter-backshell-jackscrew-37-62-pin',
+    handle: '90-deg-adapter-backshell-jackscrew-37-62-pin',
+    description:
+      '90 Deg Adapter,Backshell,Jackscrew,37/62 PinGarmin part number 135-00028-03. Catalog description: 90 Deg Adapter,Backshell,Jackscrew,37/62 Pin. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit…',
+    skus: ['135-00028-03'],
+  },
+  {
+    group: 'Products',
     title: 'A-33 GPS antenna',
     href: '/products/a-33-gps-antenna',
     handle: 'a-33-gps-antenna',
     description:
       'A-33 GPS antennaGarmin part number 013-00118-00. Catalog description: A-33 GPS antenna. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
     skus: ['013-00118-00'],
+  },
+  {
+    group: 'Products',
+    title: 'AC Adapter',
+    href: '/products/garmin-ac-adapter-010-11385-04',
+    handle: 'garmin-ac-adapter-010-11385-04',
+    description:
+      'AC AdapterGarmin part number 010-11385-04. Confirm compatibility and availability before ordering.',
+    skus: ['010-11385-04'],
+  },
+  {
+    group: 'Products',
+    title: 'AC Adapter',
+    href: '/products/garmin-ac-adapter-010-12180-01',
+    handle: 'garmin-ac-adapter-010-12180-01',
+    description:
+      'AC AdapterGarmin part number 010-12180-01. Confirm compatibility and availability before ordering.',
+    skus: ['010-12180-01'],
   },
   {
     group: 'Products',
@@ -158,6 +185,60 @@ export const SITE_SEARCH_INDEX = [
     description:
       'AC Adapter Cable, U. S. Garmin part number 010-11478-02. Catalog description: AC Adapter Cable, U. S. . Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
     skus: ['010-11478-02'],
+  },
+  {
+    group: 'Products',
+    title: 'AC Adapter with International Adapter',
+    href: '/products/ac-adapter-with-international-adapter',
+    handle: 'ac-adapter-with-international-adapter',
+    description:
+      'AC Adapter with International AdapterGarmin part number 010-11385-05. Catalog description: AC Adapter with International Adapter. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['010-11385-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Acc, Connector Kit, GDL 50R/52R',
+    href: '/products/acc-connector-kit-gdl-50r-52r',
+    handle: 'acc-connector-kit-gdl-50r-52r',
+    description:
+      'Acc, Connector Kit, GDL 50R/52RGarmin part number 010-12498-60. Catalog description: Acc, Connector Kit, GDL 50R/52R. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-12498-60'],
+  },
+  {
+    group: 'Products',
+    title: 'Acc, Install Rack, GMC 507',
+    href: '/products/acc-install-rack-gmc-507',
+    handle: 'acc-install-rack-gmc-507',
+    description:
+      'Acc, Install Rack, GMC 507Garmin part number 010-12700-10. Catalog description: Acc, Install Rack, GMC 507. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-12700-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Acc,Connector Kit, GDL 39R',
+    href: '/products/acc-connector-kit-gdl-39r',
+    handle: 'acc-connector-kit-gdl-39r',
+    description:
+      'Acc,Connector Kit, GDL 39RGarmin part number 010-11825-20. Catalog description: Acc,Connector Kit, GDL 39R. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-11825-20'],
+  },
+  {
+    group: 'Products',
+    title: 'Adapter Plate,GCU 477',
+    href: '/products/adapter-plate-gcu-477',
+    handle: 'adapter-plate-gcu-477',
+    description:
+      'Adapter Plate,GCU 477Garmin part number 117-00296-00. Catalog description: Adapter Plate,GCU 477. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['117-00296-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Adapter, Servo Mount',
+    href: '/products/adapter-servo-mount',
+    handle: 'adapter-servo-mount',
+    description:
+      'Adapter, Servo MountGarmin part number 117-00216-00. Catalog description: Adapter, Servo Mount. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['117-00216-00'],
   },
   {
     group: 'Products',
@@ -215,6 +296,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'aera® 660',
+    href: '/products/aera-660',
+    handle: 'aera-660',
+    description:
+      'aera® 660 is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: aera® 660, Americas. 00 Fulfillment: Garmin items are…',
+    skus: ['010-01518-00'],
+  },
+  {
+    group: 'Products',
     title: 'aera® 660, South America',
     href: '/products/aera-660-south-america',
     handle: 'aera-660-south-america',
@@ -242,6 +332,60 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Alignment Pin,#4-40,Shoulder',
+    href: '/products/alignment-pin-4-40-shoulder',
+    handle: 'alignment-pin-4-40-shoulder',
+    description:
+      'Alignment Pin,#4-40,ShoulderGarmin part number 233-00087-00. Catalog description: Alignment Pin,#4-40,Shoulder. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['233-00087-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Ammeter, Shunt, +/-50 mV, 100 amps',
+    href: '/products/ammeter-shunt-50-mv-100-amps',
+    handle: 'ammeter-shunt-50-mv-100-amps',
+    description:
+      'Ammeter, Shunt, +/-50 mV, 100 ampsGarmin part number 909-D0000-00. Catalog description: Ammeter, Shunt, +/-50 mV, 100 amps. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['909-D0000-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Antenna Array, GWX/GSX, 10"',
+    href: '/products/antenna-array-gwx-gsx-10',
+    handle: 'antenna-array-gwx-gsx-10',
+    description:
+      'Antenna Array, GWX/GSX, 10"Garmin part number 117-00254-00. Catalog description: GWX/GSX 10" Antenna Array. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['117-00254-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Antenna Array, GWX/GSX, 12"',
+    href: '/products/antenna-array-gwx-gsx-12',
+    handle: 'antenna-array-gwx-gsx-12',
+    description:
+      'Antenna Array, GWX/GSX, 12"Garmin part number 117-00254-01. Catalog description: GWX/GSX 12" Antenna Array. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['117-00254-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Antenna Array, GWX/GSX, 14"',
+    href: '/products/antenna-array-gwx-gsx-14',
+    handle: 'antenna-array-gwx-gsx-14',
+    description:
+      'Antenna Array, GWX/GSX, 14"Garmin part number 117-00254-03. Catalog description: Antenna Array, GWX/GSX, 14". Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['117-00254-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Antenna Array, GWX/GSX, 18"',
+    href: '/products/antenna-array-gwx-gsx-18',
+    handle: 'antenna-array-gwx-gsx-18',
+    description:
+      'Antenna Array, GWX/GSX, 18"Garmin part number 117-00254-02. Catalog description: Antenna Array, GWX/GSX, 18". Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['117-00254-02'],
+  },
+  {
+    group: 'Products',
     title: 'Antenna Doubler, ARINC 743 Style, GA 36/37',
     href: '/products/antenna-doubler-arinc-743-style-ga-36-37',
     handle: 'antenna-doubler-arinc-743-style-ga-36-37',
@@ -257,6 +401,51 @@ export const SITE_SEARCH_INDEX = [
     description:
       'Antenna Doubler, GA 36/37Garmin part number 115-00873-00. Catalog description: Antenna Doubler, GA 36/37. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
     skus: ['115-00873-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Antenna Doubler, Stud Mount, GA 35',
+    href: '/products/antenna-doubler-stud-mount-ga-35',
+    handle: 'antenna-doubler-stud-mount-ga-35',
+    description:
+      'Antenna Doubler, Stud Mount, GA 35Garmin part number 115-00846-10. Catalog description: Antenna Doubler, Stud Mount, GA 35. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['115-00846-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Antenna, GPS, BNC',
+    href: '/products/antenna-gps-bnc',
+    handle: 'antenna-gps-bnc',
+    description:
+      'Antenna, GPS, BNCGarmin part number 010-12444-10. Catalog description: Antenna, GPS, BNC. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-12444-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Antenna, GPS, TNC',
+    href: '/products/antenna-gps-tnc',
+    handle: 'antenna-gps-tnc',
+    description:
+      'Antenna, GPS, TNCGarmin part number 010-12444-00. Catalog description: Antenna, GPS, TNC. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-12444-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Antenna,2.4GHz,LCOM,HG2400RDR90-RSP,RP-SMA',
+    href: '/products/antenna-2-4ghz-lcom-hg2400rdr90-rsp-rp-sma',
+    handle: 'antenna-2-4ghz-lcom-hg2400rdr90-rsp-rp-sma',
+    description:
+      'Antenna,2. 4GHz,LCOM,HG2400RDR90-RSP,RP-SMAGarmin part number 700-00076-00. Catalog description: Antenna,2. 4GHz,LCOM,HG2400RDR90-RSP,RP-SMA. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['700-00076-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Audio Cables,2.5mm RA',
+    href: '/products/audio-cables-2-5mm-ra-011-02079-00',
+    handle: 'audio-cables-2-5mm-ra-011-02079-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 011-02079-00.',
+    skus: ['011-02079-00'],
   },
   {
     group: 'Products',
@@ -296,6 +485,24 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Aviation Mount with Power Cable',
+    href: '/products/aviation-mount-with-power-cable',
+    handle: 'aviation-mount-with-power-cable',
+    description:
+      'Aviation Mount with Power CableGarmin part number 010-11756-00. Catalog description: Aviation Mount with Power Cable. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['010-11756-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Aviation Mount with Power Cable and Audio Jack',
+    href: '/products/aviation-mount-with-power-cable-and-audio-jack',
+    handle: 'aviation-mount-with-power-cable-and-audio-jack',
+    description:
+      'Aviation Mount with Power Cable and Audio JackGarmin part number 010-11385-01. Catalog description: Aviation Mount with Power Cable and Audio Jack. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin…',
+    skus: ['010-11385-01'],
+  },
+  {
+    group: 'Products',
     title: 'Aviation Mount with Power Cable and Audio Jack (aera® 660)',
     href: '/products/aviation-mount-with-power-cable-and-audio-jack-aera-660',
     handle: 'aviation-mount-with-power-cable-and-audio-jack-aera-660',
@@ -316,12 +523,138 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Avn bracket w/ Cig lighter, Audio & mini-USB (for XM)',
+    href: '/products/avn-bracket-w-cig-lighter-audio-mini-usb-for-xm',
+    handle: 'avn-bracket-w-cig-lighter-audio-mini-usb-for-xm',
+    description:
+      'Avn bracket w/ Cig lighter, Audio & mini-USB (for XM)Garmin part number 010-11385-02. Catalog description: Avn bracket w/ Cig lighter, Audio & mini-USB (for XM). Garmin avionics accessory or service part. Confirm compatibility with the…',
+    skus: ['010-11385-02'],
+  },
+  {
+    group: 'Products',
+    title: 'AXIS Pilots Guide for Certified Aircraft',
+    href: '/products/axis-pilots-guide-for-certified-aircraft-190-03123-01',
+    handle: 'axis-pilots-guide-for-certified-aircraft-190-03123-01',
+    description:
+      'Genuine Garmin product. Manufacturer part number 190-03123-01.',
+    skus: ['190-03123-01'],
+  },
+  {
+    group: 'Products',
     title: 'AXIS Pilots Guide for Experimental Aircraft',
     href: '/products/axis-pilots-guide-for-experimental-aircraft-190-03123-21',
     handle: 'axis-pilots-guide-for-experimental-aircraft-190-03123-21',
     description:
       'Genuine Garmin product. Manufacturer part number 190-03123-21.',
     skus: ['190-03123-21'],
+  },
+  {
+    group: 'Products',
+    title: 'Back plate, GDL 69/69A',
+    href: '/products/back-plate-gdl-69-69a',
+    handle: 'back-plate-gdl-69-69a',
+    description:
+      'Back plate, GDL 69/69AGarmin part number 011-00796-35. Catalog description: Back plate, GDL 69/69A. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-00796-35'],
+  },
+  {
+    group: 'Products',
+    title: 'Back plate, GMA 340 mounting rack',
+    href: '/products/back-plate-gma-340-mounting-rack',
+    handle: 'back-plate-gma-340-mounting-rack',
+    description:
+      'Back plate, GMA 340 mounting rackGarmin part number 011-00678-00. Catalog description: Back plate, GMA 340 mounting rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-00678-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Back plate, GTX 320A/327 mounting rack',
+    href: '/products/back-plate-gtx-320a-327-mounting-rack',
+    handle: 'back-plate-gtx-320a-327-mounting-rack',
+    description:
+      'Back plate, GTX 320A/327 mounting rackGarmin part number 011-00677-01. Catalog description: Back plate, GTX 320A/327 mounting rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['011-00677-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Back plate, GTX 330D mounting rack',
+    href: '/products/back-plate-gtx-330d-mounting-rack',
+    handle: 'back-plate-gtx-330d-mounting-rack',
+    description:
+      'Back plate, GTX 330D mounting rackGarmin part number 011-00582-01. Catalog description: Back plate, GTX 330D mounting rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-00582-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Backplate Assembly, GTX 33H',
+    href: '/products/backplate-assembly-gtx-33h',
+    handle: 'backplate-assembly-gtx-33h',
+    description:
+      'Backplate Assembly, GTX 33HGarmin part number 011-00582-02. Catalog description: Backplate Assembly, GTX 33H. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-00582-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Backshell,Circular,Kit,SS',
+    href: '/products/backshell-circular-kit-ss',
+    handle: 'backshell-circular-kit-ss',
+    description:
+      'Backshell,Circular,Kit,SSGarmin part number 330-90005-01. Catalog description: Backshell,Circular,Kit,SS. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['330-90005-01'],
+  },
+  {
+    group: 'Products',
+    title: 'BACKSHELL,CIRCULAR,STRN RLF,D38999,SIZE 17,RA',
+    href: '/products/backshell-circular-strn-rlf-d38999-size-17-ra',
+    handle: 'backshell-circular-strn-rlf-d38999-size-17-ra',
+    description:
+      'BACKSHELL,CIRCULAR,STRN RLF,D38999,SIZE 17,RAGarmin part number 330-90027-01. Catalog description: BACKSHELL,CIRCULAR,STRN RLF,D38999,SIZE 17,RA. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-90027-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Backshell,Jackscrew,9/15 Pin',
+    href: '/products/backshell-jackscrew-9-15-pin',
+    handle: 'backshell-jackscrew-9-15-pin',
+    description:
+      'Backshell,Jackscrew,9/15 PinGarmin part number 125-00171-00. Catalog description: Backshell,Jackscrew,9/15 Pin. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['125-00171-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Backshell,Jackscrew,Config Module, 25/44 Pin',
+    href: '/products/backshell-jackscrew-config-module-25-44-pin',
+    handle: 'backshell-jackscrew-config-module-25-44-pin',
+    description:
+      'Backshell,Jackscrew,Config Module, 25/44 PinGarmin part number 125-00173-00. Catalog description: Backshell,Jackscrew,Config Module, 25/44 Pin. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit…',
+    skus: ['125-00173-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Backshell,Jackscrew,Config Module, 50/78 Pin',
+    href: '/products/backshell-jackscrew-config-module-50-78-pin',
+    handle: 'backshell-jackscrew-config-module-50-78-pin',
+    description:
+      'Backshell,Jackscrew,Config Module, 50/78 PinGarmin part number 125-00175-00. Catalog description: Backshell,Jackscrew,Config Module, 50/78 Pin. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit…',
+    skus: ['125-00175-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Bag,ESD Shielding,24x30',
+    href: '/products/bag-esd-shielding-24x30',
+    handle: 'bag-esd-shielding-24x30',
+    description:
+      'Bag,ESD Shielding,24x30Garmin part number 172-10003-18. Catalog description: Bag,ESD Shielding,24x30. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['172-10003-18'],
+  },
+  {
+    group: 'Products',
+    title: 'Base Mount (GDL® 52 series)',
+    href: '/products/base-mount-gdl-52-series',
+    handle: 'base-mount-gdl-52-series',
+    description:
+      'Base Mount (GDL® 52 series)Garmin part number 010-12498-20. Catalog description: Base Mount (GDL® 52 series). Garmin portable traffic/weather receiver product or accessory. Confirm compatible display/app and subscription requirements…',
+    skus: ['010-12498-20'],
   },
   {
     group: 'Products',
@@ -334,12 +667,66 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Battery Door (replacement)',
+    href: '/products/battery-door-replacement',
+    handle: 'battery-door-replacement',
+    description:
+      'Battery Door (replacement)Garmin part number 010-11384-00. Catalog description: Battery Door (replacement). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['010-11384-00'],
+  },
+  {
+    group: 'Products',
     title: 'BATTERY HOLDER GNS 480',
     href: '/products/battery-holder-gns-480',
     handle: 'battery-holder-gns-480',
     description:
       'BATTERY HOLDER GNS 480Garmin part number 310-0377-00. Catalog description: BATTERY HOLDER GNS 480. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
     skus: ['310-0377-00'],
+  },
+  {
+    group: 'Products',
+    title: 'BNC Connector GPS Notch Filter',
+    href: '/products/bnc-connector-gps-notch-filter',
+    handle: 'bnc-connector-gps-notch-filter',
+    description:
+      'BNC Connector GPS Notch FilterGarmin part number 330-00067-00. Catalog description: BNC Connector GPS Notch Filter. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['330-00067-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Bolt,AN3-10A',
+    href: '/products/bolt-an3-10a',
+    handle: 'bolt-an3-10a',
+    description:
+      'Bolt,AN3-10AGarmin part number 211-00090-03. Catalog description: Bolt,AN3-10A. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['211-00090-03'],
+  },
+  {
+    group: 'Products',
+    title: 'BRACE, LRU INSTALL RACK, AIRBUS EC130, PMA',
+    href: '/products/brace-lru-install-rack-airbus-ec130-pma',
+    handle: 'brace-lru-install-rack-airbus-ec130-pma',
+    description:
+      'BRACE, LRU INSTALL RACK, AIRBUS EC130, PMAGarmin part number 115-04430-01. Catalog description: BRACE, LRU INSTALL RACK, AIRBUS EC130, PMA. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['115-04430-01'],
+  },
+  {
+    group: 'Products',
+    title: 'BRACE, LRU RACK, STEP 3, AIRBUS EC130, PMA',
+    href: '/products/brace-lru-rack-step-3-airbus-ec130-pma',
+    handle: 'brace-lru-rack-step-3-airbus-ec130-pma',
+    description:
+      'BRACE, LRU RACK, STEP 3, AIRBUS EC130, PMAGarmin part number 115-04430-02. Catalog description: BRACE, LRU RACK, STEP 3, AIRBUS EC130, PMA. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['115-04430-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Bracket Mount',
+    href: '/products/bracket-mount',
+    handle: 'bracket-mount',
+    description:
+      'Bracket MountGarmin part number 010-11455-00. Catalog description: Bracket Mount. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-11455-00'],
   },
   {
     group: 'Products',
@@ -352,6 +739,60 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'BRIDLE CABLE 100',
+    href: '/products/bridle-cable-100',
+    handle: 'bridle-cable-100',
+    description:
+      'BRIDLE CABLE 100Garmin part number 233-20068-00. Catalog description: BRIDLE CABLE 100. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['233-20068-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Bridle Cable 102',
+    href: '/products/bridle-cable-102',
+    handle: 'bridle-cable-102',
+    description:
+      'Bridle Cable 102Garmin part number 233-20073-00. Catalog description: Bridle Cable 102. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['233-20073-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Bridle Cable 103',
+    href: '/products/bridle-cable-103',
+    handle: 'bridle-cable-103',
+    description:
+      'Bridle Cable 103Garmin part number 233-20074-00. Catalog description: Bridle Cable 103. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['233-20074-00'],
+  },
+  {
+    group: 'Products',
+    title: 'BRIDLE CABLE 115, PMA',
+    href: '/products/bridle-cable-115-pma',
+    handle: 'bridle-cable-115-pma',
+    description:
+      'BRIDLE CABLE 115, PMAGarmin part number 233-20089-00. Catalog description: BRIDLE CABLE 115, PMA. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['233-20089-00'],
+  },
+  {
+    group: 'Products',
+    title: 'BRIDLE CABLE CLAMP, .063, WITH LABEL',
+    href: '/products/bridle-cable-clamp-063-with-label',
+    handle: 'bridle-cable-clamp-063-with-label',
+    description:
+      'BRIDLE CABLE CLAMP, . 063, WITH LABELGarmin part number 117-00929-00. Catalog description: BRIDLE CABLE CLAMP, . 063, WITH LABEL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['117-00929-00'],
+  },
+  {
+    group: 'Products',
+    title: 'BRIDLE CABLE CLAMP, .125, WITH LABEL',
+    href: '/products/bridle-cable-clamp-125-with-label',
+    handle: 'bridle-cable-clamp-125-with-label',
+    description:
+      'BRIDLE CABLE CLAMP, . 125, WITH LABELGarmin part number 117-00930-00. Catalog description: BRIDLE CABLE CLAMP, . 125, WITH LABEL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['117-00930-00'],
+  },
+  {
+    group: 'Products',
     title: 'BRIDLE CABLE CLAMP, .156, WITH LABEL',
     href: '/products/bridle-cable-clamp-156-with-label',
     handle: 'bridle-cable-clamp-156-with-label',
@@ -361,12 +802,315 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'BUSHING,SHOULDER',
+    href: '/products/bushing-shoulder',
+    handle: 'bushing-shoulder',
+    description:
+      'BUSHING,SHOULDERGarmin part number 204-2100. Catalog description: BUSHING,SHOULDER. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['204-2100'],
+  },
+  {
+    group: 'Products',
+    title: 'C Ring,Standard,English,.156"',
+    href: '/products/c-ring-standard-english-156',
+    handle: 'c-ring-standard-english-156',
+    description:
+      'C Ring,Standard,English,. 156"Garmin part number 232-00018-01. Catalog description: C Ring,Standard,English,. 156". Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['232-00018-01'],
+  },
+  {
+    group: 'Products',
+    title: 'C Ring,Standard,English,.219"',
+    href: '/products/c-ring-standard-english-219',
+    handle: 'c-ring-standard-english-219',
+    description:
+      'C Ring,Standard,English,. 219"Garmin part number 232-00018-03. Catalog description: C Ring,Standard,English,. 219". Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['232-00018-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Ca Assy, USB-A to 3.5mm 4-pole audio',
+    href: '/products/ca-assy-usb-a-to-3-5mm-4-pole-audio',
+    handle: 'ca-assy-usb-a-to-3-5mm-4-pole-audio',
+    description:
+      'Ca Assy, USB-A to 3. 5mm 4-pole audioGarmin part number 320-00672-00. Catalog description: Ca Assy, USB-A to 3. 5mm 4-pole audio. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['320-00672-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Ca Assy,USB-B Recpt to Pigtail,24"',
+    href: '/products/ca-assy-usb-b-recpt-to-pigtail-24',
+    handle: 'ca-assy-usb-b-recpt-to-pigtail-24',
+    description:
+      'Ca Assy,USB-B Recpt to Pigtail,24"Garmin part number 325-00238-01. Catalog description: Ca Assy,USB-B Recpt to Pigtail,24". Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['325-00238-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Ca Assy,USB-B Recpt to Pigtail,6"',
+    href: '/products/ca-assy-usb-b-recpt-to-pigtail-6',
+    handle: 'ca-assy-usb-b-recpt-to-pigtail-6',
+    description:
+      'Ca Assy,USB-B Recpt to Pigtail,6"Garmin part number 325-00238-00. Catalog description: Ca Assy,USB-B Recpt to Pigtail,6". Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['325-00238-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cabale Assy,GFC 700,C90,Yaw w/Label',
+    href: '/products/cabale-assy-gfc-700-c90-yaw-w-label',
+    handle: 'cabale-assy-gfc-700-c90-yaw-w-label',
+    description:
+      'Cabale Assy,GFC 700,C90,Yaw w/LabelGarmin part number 233-20006-04. Catalog description: Cabale Assy,GFC 700,C90,Yaw w/Label. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['233-20006-04'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assembly 134',
+    href: '/products/cable-assembly-134',
+    handle: 'cable-assembly-134',
+    description:
+      'Cable Assembly 134Garmin part number 233-20110-00. Catalog description: Cable Assembly 134. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['233-20110-00'],
+  },
+  {
+    group: 'Products',
+    title: 'CABLE ASSEMBLY, PITCH & ROLL, PIPER PA-28, WITH LABEL',
+    href: '/products/cable-assembly-pitch-roll-piper-pa-28-with-label',
+    handle: 'cable-assembly-pitch-roll-piper-pa-28-with-label',
+    description:
+      'CABLE ASSEMBLY, PITCH & ROLL, PIPER PA-28, WITH LABELGarmin part number 233-20069-00. Catalog description: CABLE ASSEMBLY, PITCH & ROLL, PIPER PA-28, WITH LABEL. Garmin avionics accessory or service part. Confirm compatibility with the…',
+    skus: ['233-20069-00'],
+  },
+  {
+    group: 'Products',
+    title: 'CABLE ASSEMBLY, PITCH AND PT, WITH LABEL',
+    href: '/products/cable-assembly-pitch-and-pt-with-label',
+    handle: 'cable-assembly-pitch-and-pt-with-label',
+    description:
+      'CABLE ASSEMBLY, PITCH AND PT, WITH LABELGarmin part number 233-20034-00. Catalog description: CABLE ASSEMBLY, PITCH AND PT, WITH LABEL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['233-20034-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assembly, Pitch Trim, CJ 525',
+    href: '/products/cable-assembly-pitch-trim-cj-525',
+    handle: 'cable-assembly-pitch-trim-cj-525',
+    description:
+      'Cable Assembly, Pitch Trim, CJ 525Garmin part number 233-20018-00. Catalog description: Cable Assembly, Pitch Trim, CJ 525. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['233-20018-00'],
+  },
+  {
+    group: 'Products',
+    title: 'CABLE ASSEMBLY, PITCH TRIM, PIPER PA-28, WITH LABEL',
+    href: '/products/cable-assembly-pitch-trim-piper-pa-28-with-label',
+    handle: 'cable-assembly-pitch-trim-piper-pa-28-with-label',
+    description:
+      'CABLE ASSEMBLY, PITCH TRIM, PIPER PA-28, WITH LABELGarmin part number 233-20070-01. Catalog description: CABLE ASSEMBLY, PITCH TRIM, PIPER PA-28, WITH LABEL. Garmin avionics accessory or service part. Confirm compatibility with the target…',
+    skus: ['233-20070-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assembly, Pitch, CJ 525',
+    href: '/products/cable-assembly-pitch-cj-525',
+    handle: 'cable-assembly-pitch-cj-525',
+    description:
+      'Cable Assembly, Pitch, CJ 525Garmin part number 233-20019-00. Catalog description: Cable Assembly, Pitch, CJ 525. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['233-20019-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assembly, Roll Right, CJ 525',
+    href: '/products/cable-assembly-roll-right-cj-525',
+    handle: 'cable-assembly-roll-right-cj-525',
+    description:
+      'Cable Assembly, Roll Right, CJ 525Garmin part number 233-20021-00. Catalog description: Cable Assembly, Roll Right, CJ 525. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['233-20021-00'],
+  },
+  {
+    group: 'Products',
+    title: 'CABLE ASSEMBLY, ROLL, WITH LABEL',
+    href: '/products/cable-assembly-roll-with-label',
+    handle: 'cable-assembly-roll-with-label',
+    description:
+      'CABLE ASSEMBLY, ROLL, WITH LABELGarmin part number 233-20035-00. Catalog description: CABLE ASSEMBLY, ROLL, WITH LABEL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['233-20035-00'],
+  },
+  {
+    group: 'Products',
+    title: 'CABLE ASSEMBLY, YAW, WITH LABEL',
+    href: '/products/cable-assembly-yaw-with-label',
+    handle: 'cable-assembly-yaw-with-label',
+    description:
+      'CABLE ASSEMBLY, YAW, WITH LABELGarmin part number 233-20036-00. Catalog description: CABLE ASSEMBLY, YAW, WITH LABEL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['233-20036-00'],
+  },
+  {
+    group: 'Products',
+    title: 'CABLE ASSY, FAN - MAIN D-SUB, GTN6XX/7XX',
+    href: '/products/cable-assy-fan-main-d-sub-gtn6xx-7xx',
+    handle: 'cable-assy-fan-main-d-sub-gtn6xx-7xx',
+    description:
+      'CABLE ASSY, FAN - MAIN D-SUB, GTN6XX/7XXGarmin part number 320-00600-00. Catalog description: CABLE ASSY, FAN - MAIN D-SUB, GTN6XX/7XX. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['320-00600-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy, Pitch S1, GFC 700, Beechjet',
+    href: '/products/cable-assy-pitch-s1-gfc-700-beechjet',
+    handle: 'cable-assy-pitch-s1-gfc-700-beechjet',
+    description:
+      'Cable Assy, Pitch S1, GFC 700, BeechjetGarmin part number 233-20028-00. Catalog description: Cable Assy, Pitch S1, GFC 700, Beechjet. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['233-20028-00'],
+  },
+  {
+    group: 'Products',
+    title: 'CABLE ASSY, ROLL AFT, GFC 700, KING AIR',
+    href: '/products/cable-assy-roll-aft-gfc-700-king-air',
+    handle: 'cable-assy-roll-aft-gfc-700-king-air',
+    description:
+      'CABLE ASSY, ROLL AFT, GFC 700, KING AIRGarmin part number 233-20024-00. Catalog description: CABLE ASSY, ROLL AFT, GFC 700, KING AIR. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['233-20024-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy, Roll, GFC700, B200',
+    href: '/products/cable-assy-roll-gfc700-b200',
+    handle: 'cable-assy-roll-gfc700-b200',
+    description:
+      'Cable Assy, Roll, GFC700, B200Garmin part number 233-20017-00. Catalog description: Cable Assy, Roll, GFC700, B200. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['233-20017-00'],
+  },
+  {
+    group: 'Products',
     title: 'Cable Assy,Ball Ends,25"',
     href: '/products/cable-assy-ball-ends-25',
     handle: 'cable-assy-ball-ends-25',
     description:
       'Cable Assy,Ball Ends,25"Garmin part number 233-20003-00. Catalog description: Cable Assy,Ball Ends,25". Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
     skus: ['233-20003-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,Ball/Shank Ends,46"',
+    href: '/products/cable-assy-ball-shank-ends-46',
+    handle: 'cable-assy-ball-shank-ends-46',
+    description:
+      'Cable Assy,Ball/Shank Ends,46"Garmin part number 233-20002-00. Catalog description: Cable Assy,Ball/Shank Ends,46". Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['233-20002-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,GFC 700,C90,Pitch Trim w/Label',
+    href: '/products/cable-assy-gfc-700-c90-pitch-trim-w-label',
+    handle: 'cable-assy-gfc-700-c90-pitch-trim-w-label',
+    description:
+      'Cable Assy,GFC 700,C90,Pitch Trim w/LabelGarmin part number 233-20006-00. Catalog description: Cable Assy,GFC 700,C90,Pitch Trim w/Label. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['233-20006-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,GFC 700,C90,Roll w/Label',
+    href: '/products/cable-assy-gfc-700-c90-roll-w-label',
+    handle: 'cable-assy-gfc-700-c90-roll-w-label',
+    description:
+      'Cable Assy,GFC 700,C90,Roll w/LabelGarmin part number 233-20006-02. Catalog description: Cable Assy,GFC 700,C90,Roll w/Label. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['233-20006-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,GFC 700,C90,Yaw w/Label',
+    href: '/products/cable-assy-gfc-700-c90-yaw-w-label',
+    handle: 'cable-assy-gfc-700-c90-yaw-w-label',
+    description:
+      'Cable Assy,GFC 700,C90,Yaw w/LabelGarmin part number 233-20006-03. Catalog description: Cable Assy,GFC 700,C90,Yaw w/Label. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['233-20006-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,GFC700,C90,Pitch w/Label',
+    href: '/products/garmin-cable-assy-gfc700-c90-pitch-w-label-233-20006-05',
+    handle: 'garmin-cable-assy-gfc700-c90-pitch-w-label-233-20006-05',
+    description:
+      'Cable Assy,GFC700,C90,Pitch w/LabelGarmin part number 233-20006-05.',
+    skus: ['233-20006-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,GFC700,C90,Pitch w/Label',
+    href: '/products/garmin-cable-assy-gfc700-c90-pitch-w-label-233-20006-06',
+    handle: 'garmin-cable-assy-gfc700-c90-pitch-w-label-233-20006-06',
+    description:
+      'Cable Assy,GFC700,C90,Pitch w/LabelGarmin part number 233-20006-06.',
+    skus: ['233-20006-06'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,Pitch S2,GFC 700,Beechjet',
+    href: '/products/cable-assy-pitch-s2-gfc-700-beechjet',
+    handle: 'cable-assy-pitch-s2-gfc-700-beechjet',
+    description:
+      'Cable Assy,Pitch S2,GFC 700,BeechjetGarmin part number 233-20031-00. Catalog description: Cable Assy,Pitch S2,GFC 700,Beechjet. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['233-20031-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,Pitch Trim,GFC700,B200',
+    href: '/products/cable-assy-pitch-trim-gfc700-b200',
+    handle: 'cable-assy-pitch-trim-gfc700-b200',
+    description:
+      'Cable Assy,Pitch Trim,GFC700,B200Garmin part number 233-20014-00. Catalog description: Cable Assy,Pitch Trim,GFC700,B200. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['233-20014-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,Pitch,GFC700,B200',
+    href: '/products/cable-assy-pitch-gfc700-b200',
+    handle: 'cable-assy-pitch-gfc700-b200',
+    description:
+      'Cable Assy,Pitch,GFC700,B200Garmin part number 233-20012-00. Catalog description: Cable Assy,Pitch,GFC700,B200. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['233-20012-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,Roll,GFC700,B200',
+    href: '/products/garmin-cable-assy-roll-gfc700-b200-233-20015-00',
+    handle: 'garmin-cable-assy-roll-gfc700-b200-233-20015-00',
+    description: 'Cable Assy,Roll,GFC700,B200Garmin part number 233-20015-00.',
+    skus: ['233-20015-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,Servo testing,burn-in',
+    href: '/products/cable-assy-servo-testing-burn-in',
+    handle: 'cable-assy-servo-testing-burn-in',
+    description:
+      'Cable Assy,Servo testing,burn-inGarmin part number 233-20016-00. Catalog description: Cable Assy,Servo testing,burn-in. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['233-20016-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,YAW,GFC700,B200',
+    href: '/products/garmin-cable-assy-yaw-gfc700-b200-233-20010-00',
+    handle: 'garmin-cable-assy-yaw-gfc700-b200-233-20010-00',
+    description: 'Cable Assy,YAW,GFC700,B200Garmin part number 233-20010-00.',
+    skus: ['233-20010-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Assy,YAW,GFC700,B200',
+    href: '/products/garmin-cable-assy-yaw-gfc700-b200-233-20011-00',
+    handle: 'garmin-cable-assy-yaw-gfc700-b200-233-20011-00',
+    description: 'Cable Assy,YAW,GFC700,B200Garmin part number 233-20011-00.',
+    skus: ['233-20011-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable Ext 104',
+    href: '/products/cable-ext-104',
+    handle: 'cable-ext-104',
+    description:
+      'Cable Ext 104Garmin part number 233-20075-00. Catalog description: Cable Ext 104. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['233-20075-00'],
   },
   {
     group: 'Products',
@@ -388,12 +1132,1047 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Cable, Coil Cord, 24 Conductor, FAA-PMA',
+    href: '/products/cable-coil-cord-24-conductor-faa-pma-310-00196-01',
+    handle: 'cable-coil-cord-24-conductor-faa-pma-310-00196-01',
+    description:
+      'Genuine Garmin product. Manufacturer part number 310-00196-01.',
+    skus: ['310-00196-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable, Coil Cord, Cygnet, CA3934-12',
+    href: '/products/cable-coil-cord-cygnet-ca3934-12',
+    handle: 'cable-coil-cord-cygnet-ca3934-12',
+    description:
+      'Cable, Coil Cord, Cygnet, CA3934-12Garmin part number 310-00149-00. Catalog description: Cable, Coil Cord, Cygnet, CA3934-12. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['310-00149-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable, Coil Cord, Cygnet, CA3934-24',
+    href: '/products/cable-coil-cord-cygnet-ca3934-24',
+    handle: 'cable-coil-cord-cygnet-ca3934-24',
+    description:
+      'Cable, Coil Cord, Cygnet, CA3934-24Garmin part number 310-00149-01. Catalog description: Cable, Coil Cord, Cygnet, CA3934-24. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['310-00149-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Cable,USB,A Female to A Micro Male,75mm,Hirose',
+    href: '/products/cable-usb-a-female-to-a-micro-male-75mm-hirose',
+    handle: 'cable-usb-a-female-to-a-micro-male-75mm-hirose',
+    description:
+      'Cable,USB,A Female to A Micro Male,75mm,HiroseGarmin part number 320-00726-01. Catalog description: Cable,USB,A Female to A Micro Male,75mm,Hirose. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin…',
+    skus: ['320-00726-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Carb Temp Sensor, RTD, 1/4-28',
+    href: '/products/carb-temp-sensor-rtd-1-4-28',
+    handle: 'carb-temp-sensor-rtd-1-4-28',
+    description:
+      'Carb Temp Sensor, RTD, 1/4-28Garmin part number 494-70005-00. Catalog description: Carb Temp Sensor, RTD, 1/4-28. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['494-70005-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Carburetor Air Temperature Probe',
+    href: '/products/carburetor-air-temperature-probe',
+    handle: 'carburetor-air-temperature-probe',
+    description:
+      'Carburetor Air Temperature ProbeGarmin part number 494-70010-00. Catalog description: Type K Thermocouple Temp Probe,UMA,T3B10-SG. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['494-70010-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Cart Mount',
+    href: '/products/cart-mount',
+    handle: 'cart-mount',
+    description:
+      'Cart MountGarmin part number 010-12941-01. Catalog description: Cart Mount. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-12941-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — AXIS 11.6-inch Display - GDU 116B',
+    href: '/products/garmin-axis-certified-010-03000-00',
+    handle: 'garmin-axis-certified-010-03000-00',
+    description:
+      "Certified AXIS System — AXIS 11. 6-inch Display - GDU 116BGarmin part number: 010-03000-00This component appears in Step 1, Select Displays, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and…",
+    skus: ['010-03000-00'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Certified AXIS System — AXIS 11.6-inch Display with IFR GPS/COMM and Audio - GDU 116C (TSO)',
+    href: '/products/garmin-axis-certified-010-03001-00',
+    handle: 'garmin-axis-certified-010-03001-00',
+    description:
+      "Certified AXIS System — AXIS 11. 6-inch Display with IFR GPS/COMM and Audio - GDU 116C (TSO)Garmin part number: 010-03001-00This component appears in Step 1, Select Displays, of Garmin's AXIS Build-A-System Guide for certified aircraft.…",
+    skus: ['010-03001-00'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Certified AXIS System — AXIS 11.6-inch Display with IFR GPS/NAV/COMM and Audio - GDU 116NC (TSO)',
+    href: '/products/garmin-axis-certified-010-03002-00',
+    handle: 'garmin-axis-certified-010-03002-00',
+    description:
+      "Certified AXIS System — AXIS 11. 6-inch Display with IFR GPS/NAV/COMM and Audio - GDU 116NC (TSO)Garmin part number: 010-03002-00This component appears in Step 1, Select Displays, of Garmin's AXIS Build-A-System Guide for certified…",
+    skus: ['010-03002-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — AXIS 8-inch Landscape Display - GDU 80L',
+    href: '/products/garmin-axis-certified-010-04145-00',
+    handle: 'garmin-axis-certified-010-04145-00',
+    description:
+      "Certified AXIS System — AXIS 8-inch Landscape Display - GDU 80LGarmin part number: 010-04145-00This component appears in Step 1, Select Displays, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD…",
+    skus: ['010-04145-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — AXIS 8-inch Portrait Display - GDU 80P',
+    href: '/products/garmin-axis-certified-010-04143-00',
+    handle: 'garmin-axis-certified-010-04143-00',
+    description:
+      "Certified AXIS System — AXIS 8-inch Portrait Display - GDU 80PGarmin part number: 010-04143-00This component appears in Step 1, Select Displays, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD…",
+    skus: ['010-04143-00'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Certified AXIS System — AXIS Certified LRU Kit with GSU 25D, GMU 11 and GTP 59',
+    href: '/products/garmin-axis-certified-010-04557-00',
+    handle: 'garmin-axis-certified-010-04557-00',
+    description:
+      "Certified AXIS System — AXIS Certified LRU Kit with GSU 25D, GMU 11 and GTP 59Garmin part number: 010-04557-00This component appears in Step 2, System Sensors, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings…",
+    skus: ['010-04557-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — AXIS ChartView Enablement',
+    href: '/products/garmin-axis-certified-006-b5211-00',
+    handle: 'garmin-axis-certified-006-b5211-00',
+    description:
+      "Certified AXIS System — AXIS ChartView EnablementGarmin part number: 006-B5211-00This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['006-B5211-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — AXIS SurfaceWatch Enablement',
+    href: '/products/garmin-axis-certified-006-b5211-01',
+    handle: 'garmin-axis-certified-006-b5211-01',
+    description:
+      "Certified AXIS System — AXIS SurfaceWatch EnablementGarmin part number: 006-B5211-01This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['006-B5211-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — AXIS TAWS-B Enablement',
+    href: '/products/garmin-axis-certified-006-b5211-02',
+    handle: 'garmin-axis-certified-006-b5211-02',
+    description:
+      "Certified AXIS System — AXIS TAWS-B EnablementGarmin part number: 006-B5211-02This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['006-B5211-02'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Certified AXIS System — Engine Sensor Kit, 4-cylinder Lycoming/Continental',
+    href: '/products/garmin-axis-certified-k00-01010-11',
+    handle: 'garmin-axis-certified-k00-01010-11',
+    description:
+      "Certified AXIS System — Engine Sensor Kit, 4-cylinder Lycoming/ContinentalGarmin part number: K00-01010-11This component appears in Step 4A, Engine Sensors, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings…",
+    skus: ['K00-01010-11'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Certified AXIS System — Engine Sensor Kit, 6-cylinder Lycoming/Continental',
+    href: '/products/garmin-axis-certified-k00-01011-11',
+    handle: 'garmin-axis-certified-k00-01011-11',
+    description:
+      "Certified AXIS System — Engine Sensor Kit, 6-cylinder Lycoming/ContinentalGarmin part number: K00-01011-11This component appears in Step 4A, Engine Sensors, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings…",
+    skus: ['K00-01011-11'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — G5 for Certificated Aircraft',
+    href: '/products/garmin-axis-certified-k10-00280-01',
+    handle: 'garmin-axis-certified-k10-00280-01',
+    description:
+      "Certified AXIS System — G5 for Certificated AircraftGarmin part number: K10-00280-01This component appears in Step 3, Standby Flight Instrument, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD…",
+    skus: ['K10-00280-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GA 24 TNC SiriusXM Antenna',
+    href: '/products/garmin-axis-certified-010-12498-50',
+    handle: 'garmin-axis-certified-010-12498-50',
+    description:
+      "Certified AXIS System — GA 24 TNC SiriusXM AntennaGarmin part number: 010-12498-50This component appears in Step 7, Transponder and Datalinks, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and…",
+    skus: ['010-12498-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GA 35S GPS/WAAS Antenna',
+    href: '/products/garmin-axis-certified-010-02639-00',
+    handle: 'garmin-axis-certified-010-02639-00',
+    description:
+      "Certified AXIS System — GA 35S GPS/WAAS AntennaGarmin part number: 010-02639-00This component appears in Step 1A, Display Install Kits, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['010-02639-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GAD 27 Connector Kit',
+    href: '/products/garmin-axis-certified-011-03877-01',
+    handle: 'garmin-axis-certified-011-03877-01',
+    description:
+      "Certified AXIS System — GAD 27 Connector KitGarmin part number: 011-03877-01This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['011-03877-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GAD 27 PMA Electrical Interface Adapter',
+    href: '/products/garmin-axis-certified-010-01525-11',
+    handle: 'garmin-axis-certified-010-01525-11',
+    description:
+      "Certified AXIS System — GAD 27 PMA Electrical Interface AdapterGarmin part number: 010-01525-11This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD,…",
+    skus: ['010-01525-11'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GAD 29 Connector Kit',
+    href: '/products/garmin-axis-certified-011-03271-00',
+    handle: 'garmin-axis-certified-011-03271-00',
+    description:
+      "Certified AXIS System — GAD 29 Connector KitGarmin part number: 011-03271-00This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['011-03271-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GAD 29D PMA ARINC 429 Interface Adapter',
+    href: '/products/garmin-axis-certified-010-01172-21',
+    handle: 'garmin-axis-certified-010-01172-21',
+    description:
+      "Certified AXIS System — GAD 29D PMA ARINC 429 Interface AdapterGarmin part number: 010-01172-21This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD,…",
+    skus: ['010-01172-21'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GAP 26 PMA Self-Regulating Pitot Tube',
+    href: '/products/garmin-axis-certified-010-01074-71',
+    handle: 'garmin-axis-certified-010-01074-71',
+    description:
+      "Certified AXIS System — GAP 26 PMA Self-Regulating Pitot TubeGarmin part number: 010-01074-71This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD…",
+    skus: ['010-01074-71'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GCO 14 Carbon Monoxide Detector',
+    href: '/products/garmin-axis-certified-010-02975-01',
+    handle: 'garmin-axis-certified-010-02975-01',
+    description:
+      "Certified AXIS System — GCO 14 Carbon Monoxide DetectorGarmin part number: 010-02975-01This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and…",
+    skus: ['010-02975-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GDL 50R PMA Remote ADS-B Receiver',
+    href: '/products/garmin-axis-certified-010-01561-15',
+    handle: 'garmin-axis-certified-010-01561-15',
+    description:
+      "Certified AXIS System — GDL 50R PMA Remote ADS-B ReceiverGarmin part number: 010-01561-15This component appears in Step 7, Transponder and Datalinks, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD,…",
+    skus: ['010-01561-15'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GDL 51R PMA Remote SiriusXM Receiver',
+    href: '/products/garmin-axis-certified-010-01561-55',
+    handle: 'garmin-axis-certified-010-01561-55',
+    description:
+      "Certified AXIS System — GDL 51R PMA Remote SiriusXM ReceiverGarmin part number: 010-01561-55This component appears in Step 7, Transponder and Datalinks, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced…",
+    skus: ['010-01561-55'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Certified AXIS System — GDL 52R PMA Remote SiriusXM and ADS-B Receiver',
+    href: '/products/garmin-axis-certified-010-01561-35',
+    handle: 'garmin-axis-certified-010-01561-35',
+    description:
+      "Certified AXIS System — GDL 52R PMA Remote SiriusXM and ADS-B ReceiverGarmin part number: 010-01561-35This component appears in Step 7, Transponder and Datalinks, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings…",
+    skus: ['010-01561-35'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GDL Remote Mount Connector Kit, PMA',
+    href: '/products/garmin-axis-certified-011-04170-00',
+    handle: 'garmin-axis-certified-011-04170-00',
+    description:
+      "Certified AXIS System — GDL Remote Mount Connector Kit, PMAGarmin part number: 011-04170-00This component appears in Step 7, Transponder and Datalinks, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced…",
+    skus: ['011-04170-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GEA 110 Connector Kit',
+    href: '/products/garmin-axis-certified-011-03527-50',
+    handle: 'garmin-axis-certified-011-03527-50',
+    description:
+      "Certified AXIS System — GEA 110 Connector KitGarmin part number: 011-03527-50This component appears in Step 4, Engine/Airframe Interface, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['011-03527-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GEA 110 Install Tray',
+    href: '/products/garmin-axis-certified-011-03941-00',
+    handle: 'garmin-axis-certified-011-03941-00',
+    description:
+      "Certified AXIS System — GEA 110 Install TrayGarmin part number: 011-03941-00This component appears in Step 4, Engine/Airframe Interface, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['011-03941-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GEA 110 Sealed Connector Kit',
+    href: '/products/garmin-axis-certified-011-03527-51',
+    handle: 'garmin-axis-certified-011-03527-51',
+    description:
+      "Certified AXIS System — GEA 110 Sealed Connector KitGarmin part number: 011-03527-51This component appears in Step 4, Engine/Airframe Interface, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD…",
+    skus: ['011-03527-51'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GEA 110, Unit Only',
+    href: '/products/garmin-axis-certified-010-01329-01',
+    handle: 'garmin-axis-certified-010-01329-01',
+    description:
+      "Certified AXIS System — GEA 110, Unit OnlyGarmin part number: 010-01329-01This component appears in Step 4, Engine/Airframe Interface, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['010-01329-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GEA 24 Connector Kit, PMA',
+    href: '/products/garmin-axis-certified-011-02886-01',
+    handle: 'garmin-axis-certified-011-02886-01',
+    description:
+      "Certified AXIS System — GEA 24 Connector Kit, PMAGarmin part number: 011-02886-01This component appears in Step 4, Engine/Airframe Interface, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and…",
+    skus: ['011-02886-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GEA 24B, Unit Only, PMA',
+    href: '/products/garmin-axis-certified-010-02770-11',
+    handle: 'garmin-axis-certified-010-02770-11',
+    description:
+      "Certified AXIS System — GEA 24B, Unit Only, PMAGarmin part number: 010-02770-11This component appears in Step 4, Engine/Airframe Interface, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and…",
+    skus: ['010-02770-11'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GHA 15 Connector Kit',
+    href: '/products/garmin-axis-certified-011-05278-00',
+    handle: 'garmin-axis-certified-011-05278-00',
+    description:
+      "Certified AXIS System — GHA 15 Connector KitGarmin part number: 011-05278-00This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['011-05278-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GHA 15 Install Kit',
+    href: '/products/garmin-axis-certified-011-06097-00',
+    handle: 'garmin-axis-certified-011-06097-00',
+    description:
+      "Certified AXIS System — GHA 15 Install KitGarmin part number: 011-06097-00This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS capability…",
+    skus: ['011-06097-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GHA 15 Levelling Install Kit',
+    href: '/products/garmin-axis-certified-011-06677-00',
+    handle: 'garmin-axis-certified-011-06677-00',
+    description:
+      "Certified AXIS System — GHA 15 Levelling Install KitGarmin part number: 011-06677-00This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['011-06677-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GHA 15 PMA Height Advisor',
+    href: '/products/garmin-axis-certified-010-02895-00',
+    handle: 'garmin-axis-certified-010-02895-00',
+    description:
+      "Certified AXIS System — GHA 15 PMA Height AdvisorGarmin part number: 010-02895-00This component appears in Step 8, Additional Options, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['010-02895-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GI 275 ADAHRS +AP Kit, Class I/II',
+    href: '/products/garmin-axis-certified-010-02326-20',
+    handle: 'garmin-axis-certified-010-02326-20',
+    description:
+      "Certified AXIS System — GI 275 ADAHRS +AP Kit, Class I/IIGarmin part number: 010-02326-20This component appears in Step 3, Standby Flight Instrument, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD,…",
+    skus: ['010-02326-20'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GI 275 ADAHRS Kit, Class I/II',
+    href: '/products/garmin-axis-certified-010-02326-10',
+    handle: 'garmin-axis-certified-010-02326-10',
+    description:
+      "Certified AXIS System — GI 275 ADAHRS Kit, Class I/IIGarmin part number: 010-02326-10This component appears in Step 3, Standby Flight Instrument, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD…",
+    skus: ['010-02326-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GMA 245R PMA Remote Audio Panel',
+    href: '/products/garmin-axis-certified-010-01471-11',
+    handle: 'garmin-axis-certified-010-01471-11',
+    description:
+      "Certified AXIS System — GMA 245R PMA Remote Audio PanelGarmin part number: 010-01471-11This component appears in Step 6, IFR GPS, Radios and Audio Panel, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced…",
+    skus: ['010-01471-11'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GMA 345 Audio Panel',
+    href: '/products/garmin-axis-certified-010-01319-03',
+    handle: 'garmin-axis-certified-010-01319-03',
+    description:
+      "Certified AXIS System — GMA 345 Audio PanelGarmin part number: 010-01319-03This component appears in Step 6, IFR GPS, Radios and Audio Panel, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and…",
+    skus: ['010-01319-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GNC 215 NAV/COMM Radio',
+    href: '/products/garmin-axis-certified-010-02481-01',
+    handle: 'garmin-axis-certified-010-02481-01',
+    description:
+      "Certified AXIS System — GNC 215 NAV/COMM RadioGarmin part number: 010-02481-01This component appears in Step 6, IFR GPS, Radios and Audio Panel, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD…",
+    skus: ['010-02481-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GNC 355 IFR GPS and COMM Radio',
+    href: '/products/garmin-axis-certified-010-02232-51',
+    handle: 'garmin-axis-certified-010-02232-51',
+    description:
+      "Certified AXIS System — GNC 355 IFR GPS and COMM RadioGarmin part number: 010-02232-51This component appears in Step 6, IFR GPS, Radios and Audio Panel, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced…",
+    skus: ['010-02232-51'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Certified AXIS System — GNX 375 IFR GPS and ADS-B In/Out Transponder',
+    href: '/products/garmin-axis-certified-010-01823-50',
+    handle: 'garmin-axis-certified-010-01823-50',
+    description:
+      "Certified AXIS System — GNX 375 IFR GPS and ADS-B In/Out TransponderGarmin part number: 010-01823-50This component appears in Step 6, IFR GPS, Radios and Audio Panel, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS…",
+    skus: ['010-01823-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GPS 175 IFR GPS Navigator',
+    href: '/products/garmin-axis-certified-010-01822-50',
+    handle: 'garmin-axis-certified-010-01822-50',
+    description:
+      "Certified AXIS System — GPS 175 IFR GPS NavigatorGarmin part number: 010-01822-50This component appears in Step 6, IFR GPS, Radios and Audio Panel, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD,…",
+    skus: ['010-01822-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GTN 650Xi IFR GPS/NAV/COMM/MFD',
+    href: '/products/garmin-axis-certified-010-01999-05',
+    handle: 'garmin-axis-certified-010-01999-05',
+    description:
+      "Certified AXIS System — GTN 650Xi IFR GPS/NAV/COMM/MFDGarmin part number: 010-01999-05This component appears in Step 6, IFR GPS, Radios and Audio Panel, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced…",
+    skus: ['010-01999-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GTN 750Xi IFR GPS/NAV/COMM/MFD',
+    href: '/products/garmin-axis-certified-010-02002-05',
+    handle: 'garmin-axis-certified-010-02002-05',
+    description:
+      "Certified AXIS System — GTN 750Xi IFR GPS/NAV/COMM/MFDGarmin part number: 010-02002-05This component appears in Step 6, IFR GPS, Radios and Audio Panel, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced…",
+    skus: ['010-02002-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GTR 205 COMM Radio',
+    href: '/products/garmin-axis-certified-010-02480-01',
+    handle: 'garmin-axis-certified-010-02480-01',
+    description:
+      "Certified AXIS System — GTR 205 COMM RadioGarmin part number: 010-02480-01This component appears in Step 6, IFR GPS, Radios and Audio Panel, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and…",
+    skus: ['010-02480-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GTR 205R Remote COMM Radio',
+    href: '/products/garmin-axis-certified-010-02479-00',
+    handle: 'garmin-axis-certified-010-02479-00',
+    description:
+      "Certified AXIS System — GTR 205R Remote COMM RadioGarmin part number: 010-02479-00This component appears in Step 6, IFR GPS, Radios and Audio Panel, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD,…",
+    skus: ['010-02479-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GTX 335 ADS-B Out Transponder',
+    href: '/products/garmin-axis-certified-010-01214-01',
+    handle: 'garmin-axis-certified-010-01214-01',
+    description:
+      "Certified AXIS System — GTX 335 ADS-B Out TransponderGarmin part number: 010-01214-01This component appears in Step 7, Transponder and Datalinks, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD…",
+    skus: ['010-01214-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GTX 335R Remote ADS-B Out Transponder',
+    href: '/products/garmin-axis-certified-010-01215-01',
+    handle: 'garmin-axis-certified-010-01215-01',
+    description:
+      "Certified AXIS System — GTX 335R Remote ADS-B Out TransponderGarmin part number: 010-01215-01This component appears in Step 7, Transponder and Datalinks, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced…",
+    skus: ['010-01215-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GTX 345 ADS-B In/Out Transponder',
+    href: '/products/garmin-axis-certified-010-01216-06',
+    handle: 'garmin-axis-certified-010-01216-06',
+    description:
+      "Certified AXIS System — GTX 345 ADS-B In/Out TransponderGarmin part number: 010-01216-06This component appears in Step 7, Transponder and Datalinks, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD,…",
+    skus: ['010-01216-06'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — GTX 345R Remote ADS-B In/Out Transponder',
+    href: '/products/garmin-axis-certified-010-01217-06',
+    handle: 'garmin-axis-certified-010-01217-06',
+    description:
+      "Certified AXIS System — GTX 345R Remote ADS-B In/Out TransponderGarmin part number: 010-01217-06This component appears in Step 7, Transponder and Datalinks, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings…",
+    skus: ['010-01217-06'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — Install Kit, AXIS Certified',
+    href: '/products/garmin-axis-certified-k11-00066-00',
+    handle: 'garmin-axis-certified-k11-00066-00',
+    description:
+      "Certified AXIS System — Install Kit, AXIS CertifiedGarmin part number: K11-00066-00This component appears in Step 2, System Sensors, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['K11-00066-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — Install Kit, GDU 116B, New Install',
+    href: '/products/garmin-axis-certified-010-14469-01',
+    handle: 'garmin-axis-certified-010-14469-01',
+    description:
+      "Certified AXIS System — Install Kit, GDU 116B, New InstallGarmin part number: 010-14469-01This component appears in Step 1A, Display Install Kits, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD…",
+    skus: ['010-14469-01'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Certified AXIS System — Install Kit, GDU 116C/116NC, G3X Touch Upgrade',
+    href: '/products/garmin-axis-certified-010-14469-12',
+    handle: 'garmin-axis-certified-010-14469-12',
+    description:
+      "Certified AXIS System — Install Kit, GDU 116C/116NC, G3X Touch UpgradeGarmin part number: 010-14469-12This component appears in Step 1A, Display Install Kits, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings…",
+    skus: ['010-14469-12'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — Install Kit, GDU 116C/116NC, New Install',
+    href: '/products/garmin-axis-certified-010-14469-02',
+    handle: 'garmin-axis-certified-010-14469-02',
+    description:
+      "Certified AXIS System — Install Kit, GDU 116C/116NC, New InstallGarmin part number: 010-14469-02This component appears in Step 1A, Display Install Kits, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced…",
+    skus: ['010-14469-02'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Certified AXIS System — Install Kit, GDU 80/116B, G3X Touch Upgrade',
+    href: '/products/garmin-axis-certified-010-14469-10',
+    handle: 'garmin-axis-certified-010-14469-10',
+    description:
+      "Certified AXIS System — Install Kit, GDU 80/116B, G3X Touch UpgradeGarmin part number: 010-14469-10This component appears in Step 1A, Display Install Kits, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced…",
+    skus: ['010-14469-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — Install Kit, GDU 80P/80L, New Install',
+    href: '/products/garmin-axis-certified-010-14469-00',
+    handle: 'garmin-axis-certified-010-14469-00',
+    description:
+      "Certified AXIS System — Install Kit, GDU 80P/80L, New InstallGarmin part number: 010-14469-00This component appears in Step 1A, Display Install Kits, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD,…",
+    skus: ['010-14469-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — Install Kit, GMU 44B and GSU 75',
+    href: '/products/garmin-axis-certified-k11-00019-50',
+    handle: 'garmin-axis-certified-k11-00019-50',
+    description:
+      "Certified AXIS System — Install Kit, GMU 44B and GSU 75Garmin part number: K11-00019-50This component appears in Step 2, System Sensors, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD and EIS…",
+    skus: ['K11-00019-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — LRU Kit with GMU 44B, GSU 75 and GTP 59',
+    href: '/products/garmin-axis-certified-010-02003-05',
+    handle: 'garmin-axis-certified-010-02003-05',
+    description:
+      "Certified AXIS System — LRU Kit with GMU 44B, GSU 75 and GTP 59Garmin part number: 010-02003-05This component appears in Step 2, System Sensors, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced PFD, MFD…",
+    skus: ['010-02003-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Certified AXIS System — Printed Material Kit, GDU 80/116 Series',
+    href: '/products/garmin-axis-certified-k00-01479-00',
+    handle: 'garmin-axis-certified-k00-01479-00',
+    description:
+      "Certified AXIS System — Printed Material Kit, GDU 80/116 SeriesGarmin part number: K00-01479-00This component appears in Step 1A, Display Install Kits, of Garmin's AXIS Build-A-System Guide for certified aircraft. AXIS brings advanced…",
+    skus: ['K00-01479-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Chain,.25 Pitch,68 Link,Steel',
+    href: '/products/chain-25-pitch-68-link-steel',
+    handle: 'chain-25-pitch-68-link-steel',
+    description:
+      'Chain,. 25 Pitch,68 Link,SteelGarmin part number 233-30001-01. Catalog description: Chain,. 25 Pitch,68 Link,Steel. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['233-30001-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Charging/Data Cable',
+    href: '/products/charging-data-cable',
+    handle: 'charging-data-cable',
+    description:
+      'Charging/Data CableGarmin part number 010-12820-10. Catalog description: Charging/Data Cable. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-12820-10'],
+  },
+  {
+    group: 'Products',
+    title: 'CHT Probe',
+    href: '/products/cht-probe',
+    handle: 'cht-probe',
+    description:
+      'CHT ProbeGarmin part number 494-70008-00. Catalog description: Type K thermocouple, Bayonet, CHT, Alcor 86252. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['494-70008-00'],
+  },
+  {
+    group: 'Products',
+    title: 'CHT Probe Adapter',
+    href: '/products/cht-probe-adapter',
+    handle: 'cht-probe-adapter',
+    description:
+      'CHT Probe AdapterGarmin part number 494-70008-01. Catalog description: Type K thermocouple, Adapter, Bayonet, CHT, Alcor 28202. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['494-70008-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Cirrus Perspective+ PC Trainer for Cirrus SR2x, v20.81',
+    href: '/products/cirrus-perspective-pc-trainer-for-cirrus-sr2x-v20-81',
+    handle: 'cirrus-perspective-pc-trainer-for-cirrus-sr2x-v20-81',
+    description:
+      'Cirrus Perspective+ PC Trainer for Cirrus SR2x, v20. 81Garmin part number 010-12675-01. Catalog description: Cirrus Perspective+ PC Trainer for Cirrus SR2x, v20. 81. Certified Garmin avionics may require approved installation,…',
+    skus: ['010-12675-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Clutch Cartridge,72 in-lbs',
+    href: '/products/clutch-cartridge-72-in-lbs',
+    handle: 'clutch-cartridge-72-in-lbs',
+    description:
+      'Clutch Cartridge,72 in-lbsGarmin part number 383-00000-72. Catalog description: Clutch Cartridge,72 in-lbs. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['383-00000-72'],
+  },
+  {
+    group: 'Products',
+    title: 'Configuration Module',
+    href: '/products/configuration-module',
+    handle: 'configuration-module',
+    description:
+      'Configuration ModuleGarmin part number 011-00979-03. Catalog description: Configuration Module. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['011-00979-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Configuration module',
+    href: '/products/garmin-configuration-module-011-00979-00',
+    handle: 'garmin-configuration-module-011-00979-00',
+    description:
+      'Configuration moduleGarmin part number 011-00979-00. Confirm compatibility and availability before ordering.',
+    skus: ['011-00979-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn Kit, GEA 110',
+    href: '/products/conn-kit-gea-110',
+    handle: 'conn-kit-gea-110',
+    description:
+      'Conn Kit, GEA 110Garmin part number 011-03527-50. Catalog description: Sub-Assy,Conn Kit, GEA 110. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-03527-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn Kit, GEA 110, Sealed',
+    href: '/products/conn-kit-gea-110-sealed',
+    handle: 'conn-kit-gea-110-sealed',
+    description:
+      'Conn Kit, GEA 110, SealedGarmin part number 011-03527-51. Catalog description: Sub-Assy,Conn Kit, GEA 110, Sealed. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['011-03527-51'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn Kit, GTR20, PMA',
+    href: '/products/conn-kit-gtr20-pma',
+    handle: 'conn-kit-gtr20-pma',
+    description:
+      'Conn Kit, GTR20, PMAGarmin part number 011-03241-01. Catalog description: Conn Kit, GTR20, PMA. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-03241-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn Kit,GMA35',
+    href: '/products/conn-kit-gma35',
+    handle: 'conn-kit-gma35',
+    description:
+      'Conn Kit,GMA35Garmin part number 011-02302-00. Catalog description: Connector Kit - GMA35X. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation. Conn…',
+    skus: ['011-02302-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn Seal Plug,MS27488-20',
+    href: '/products/conn-seal-plug-ms27488-20',
+    handle: 'conn-seal-plug-ms27488-20',
+    description:
+      'Conn Seal Plug,MS27488-20Garmin part number 330-90013-00. Catalog description: Conn Seal Plug,MS27488-20. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-90013-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn Seal Plug,MS27488-22',
+    href: '/products/conn-seal-plug-ms27488-22',
+    handle: 'conn-seal-plug-ms27488-22',
+    description:
+      'Conn Seal Plug,MS27488-22Garmin part number 330-90013-01. Catalog description: Conn Seal Plug,MS27488-22. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-90013-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn, HD D-Sub, Male, Str, Mil Crmp Pins, 26 Ckt',
+    href: '/products/conn-hd-d-sub-male-str-mil-crmp-pins-26-ckt',
+    handle: 'conn-hd-d-sub-male-str-mil-crmp-pins-26-ckt',
+    description:
+      'Conn, HD D-Sub, Male, Str, Mil Crmp Pins, 26 CktGarmin part number 330-00626-26. Catalog description: Conn, HD D-Sub, Male, Str, Mil Crmp Pins, 26 Ckt. Garmin product or accessory. Confirm compatibility and intended application before…',
+    skus: ['330-00626-26'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn, HD D-Sub, Male, Str, Mil Crmp Pins, 44 Ckt',
+    href: '/products/conn-hd-d-sub-male-str-mil-crmp-pins-44-ckt',
+    handle: 'conn-hd-d-sub-male-str-mil-crmp-pins-44-ckt',
+    description:
+      'Conn, HD D-Sub, Male, Str, Mil Crmp Pins, 44 CktGarmin part number 330-00626-44. Catalog description: Conn, HD D-Sub, Male, Str, Mil Crmp Pins, 44 Ckt. Garmin product or accessory. Confirm compatibility and intended application before…',
+    skus: ['330-00626-44'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn, HD D-Sub, Male, Str, Mil Crmp Pins, 78 Ckt',
+    href: '/products/conn-hd-d-sub-male-str-mil-crmp-pins-78-ckt',
+    handle: 'conn-hd-d-sub-male-str-mil-crmp-pins-78-ckt',
+    description:
+      'Conn, HD D-Sub, Male, Str, Mil Crmp Pins, 78 CktGarmin part number 330-00626-78. Catalog description: Conn, HD D-Sub, Male, Str, Mil Crmp Pins, 78 Ckt. Garmin product or accessory. Confirm compatibility and intended application before…',
+    skus: ['330-00626-78'],
+  },
+  {
+    group: 'Products',
     title: 'Conn, HiDens, D-Sub, Mil Crp, 26ckt',
     href: '/products/conn-hidens-d-sub-mil-crp-26ckt',
     handle: 'conn-hidens-d-sub-mil-crp-26ckt',
     description:
       'Conn, HiDens, D-Sub, Mil Crp, 26cktGarmin part number 330-00185-26. Catalog description: Conn, HiDens, D-Sub, Mil Crp, 26ckt. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
     skus: ['330-00185-26'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn, HiDens, D-Sub, Mil Crp, 44ckt',
+    href: '/products/conn-hidens-d-sub-mil-crp-44ckt',
+    handle: 'conn-hidens-d-sub-mil-crp-44ckt',
+    description:
+      'Conn, HiDens, D-Sub, Mil Crp, 44cktGarmin part number 330-00185-44. Catalog description: Conn, HiDens, D-Sub, Mil Crp, 44ckt. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00185-44'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,Circ,Plug,D38999/26,Ins 17-35,Composite,Crimp, Key A',
+    href: '/products/conn-circ-plug-d38999-26-ins-17-35-composite-crimp-key-a',
+    handle: 'conn-circ-plug-d38999-26-ins-17-35-composite-crimp-key-a',
+    description:
+      'Conn,Circ,Plug,D38999/26,Ins 17-35,Composite,Crimp, Key AGarmin part number 330-00727-01. Catalog description: Conn,Circ,Plug,D38999/26,Ins 17-35,Composite,Crimp, Key A. Garmin product or accessory. Confirm compatibility and intended…',
+    skus: ['330-00727-01'],
+  },
+  {
+    group: 'Products',
+    title: 'CONN,CIRC,PLUG,D38999/26,INS 17-99,COMPOSITE,CRIMP',
+    href: '/products/conn-circ-plug-d38999-26-ins-17-99-composite-crimp',
+    handle: 'conn-circ-plug-d38999-26-ins-17-99-composite-crimp',
+    description:
+      'CONN,CIRC,PLUG,D38999/26,INS 17-99,COMPOSITE,CRIMPGarmin part number 330-00663-00. Catalog description: CONN,CIRC,PLUG,D38999/26,INS 17-99,COMPOSITE,CRIMP. Garmin product or accessory. Confirm compatibility and intended application before…',
+    skus: ['330-00663-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,Circ,Plug,D38999/26,Ins 19-35,Composite,Crimp,Key N',
+    href: '/products/conn-circ-plug-d38999-26-ins-19-35-composite-crimp-key-n',
+    handle: 'conn-circ-plug-d38999-26-ins-19-35-composite-crimp-key-n',
+    description:
+      'Conn,Circ,Plug,D38999/26,Ins 19-35,Composite,Crimp,Key NGarmin part number 330-00701-00. Catalog description: Conn,Circ,Plug,D38999/26,Ins 19-35,Composite,Crimp,Key N. Garmin product or accessory. Confirm compatibility and intended…',
+    skus: ['330-00701-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,Circ,Plug,D38999/26,Ins 25-35,Composite,Crimp, Key D',
+    href: '/products/conn-circ-plug-d38999-26-ins-25-35-composite-crimp-key-d',
+    handle: 'conn-circ-plug-d38999-26-ins-25-35-composite-crimp-key-d',
+    description:
+      'Conn,Circ,Plug,D38999/26,Ins 25-35,Composite,Crimp, Key DGarmin part number 330-00822-02. Catalog description: Conn,Circ,Plug,D38999/26,Ins 25-35,Composite,Crimp, Key D. Garmin product or accessory. Confirm compatibility and intended…',
+    skus: ['330-00822-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,Circ,Plug,D38999/26,Ins 25-35,Composite,Crimp, Key N',
+    href: '/products/conn-circ-plug-d38999-26-ins-25-35-composite-crimp-key-n',
+    handle: 'conn-circ-plug-d38999-26-ins-25-35-composite-crimp-key-n',
+    description:
+      'Conn,Circ,Plug,D38999/26,Ins 25-35,Composite,Crimp, Key NGarmin part number 330-00822-00. Catalog description: Conn,Circ,Plug,D38999/26,Ins 25-35,Composite,Crimp, Key N. Garmin product or accessory. Confirm compatibility and intended…',
+    skus: ['330-00822-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,Circ,PLUG,D38999/26,INS17-35,Composite,Crimp',
+    href: '/products/conn-circ-plug-d38999-26-ins17-35-composite-crimp',
+    handle: 'conn-circ-plug-d38999-26-ins17-35-composite-crimp',
+    description:
+      'Conn,Circ,PLUG,D38999/26,INS17-35,Composite,CrimpGarmin part number 330-00727-00. Catalog description: Conn,Circ,PLUG,D38999/26,INS17-35,Composite,Crimp. Garmin product or accessory. Confirm compatibility and intended application before…',
+    skus: ['330-00727-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,Circular,Female,9 Ckt',
+    href: '/products/conn-circular-female-9-ckt',
+    handle: 'conn-circular-female-9-ckt',
+    description:
+      'Conn,Circular,Female,9 CktGarmin part number 330-00360-00. Catalog description: Conn,Circular,Female,9 Ckt. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00360-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,Coax,Blind Thd w/Groove',
+    href: '/products/conn-coax-blind-thd-w-groove',
+    handle: 'conn-coax-blind-thd-w-groove',
+    description:
+      'Conn,Coax,Blind Thd w/GrooveGarmin part number 330-00070-03. Catalog description: Conn,Coax,Blind Thd w/Groove. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00070-03'],
+  },
+  {
+    group: 'Products',
+    title: 'CONN,D-SUB,FEMALE,STR, MIL CRP,SEALED,37 PIN',
+    href: '/products/conn-d-sub-female-str-mil-crp-sealed-37-pin',
+    handle: 'conn-d-sub-female-str-mil-crp-sealed-37-pin',
+    description:
+      'CONN,D-SUB,FEMALE,STR, MIL CRP,SEALED,37 PINGarmin part number 330-00853-37. Catalog description: CONN,D-SUB,FEMALE,STR, MIL CRP,SEALED,37 PIN. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00853-37'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,D-Sub,Mil Crp,Sckt,9 ckt',
+    href: '/products/conn-d-sub-mil-crp-sckt-9-ckt',
+    handle: 'conn-d-sub-mil-crp-sckt-9-ckt',
+    description:
+      'Conn,D-Sub,Mil Crp,Sckt,9 cktGarmin part number 330-00184-09. Catalog description: Conn,D-Sub,Mil Crp,Sckt,9 ckt. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00184-09'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,HD D-Sub,Male,Str,Mil Crp,Sealed,W/ GND Indents,44 Pin',
+    href: '/products/conn-hd-d-sub-male-str-mil-crp-sealed-w-gnd-indents-44-pin',
+    handle: 'conn-hd-d-sub-male-str-mil-crp-sealed-w-gnd-indents-44-pin',
+    description:
+      'Conn,HD D-Sub,Male,Str,Mil Crp,Sealed,W/ GND Indents,44 PinGarmin part number 330-00776-44. Catalog description: Conn,HD D-Sub,Male,Str,Mil Crp,Sealed,W/ GND Indents,44 Pin. Garmin product or accessory. Confirm compatibility and intended…',
+    skus: ['330-00776-44'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,HD D-Sub,Male,Str,Mil Crp,Sealed,W/ GND Indents,62 Pin',
+    href: '/products/conn-hd-d-sub-male-str-mil-crp-sealed-w-gnd-indents-62-pin',
+    handle: 'conn-hd-d-sub-male-str-mil-crp-sealed-w-gnd-indents-62-pin',
+    description:
+      'Conn,HD D-Sub,Male,Str,Mil Crp,Sealed,W/ GND Indents,62 PinGarmin part number 330-00776-62. Catalog description: Conn,HD D-Sub,Male,Str,Mil Crp,Sealed,W/ GND Indents,62 Pin. Garmin product or accessory. Confirm compatibility and intended…',
+    skus: ['330-00776-62'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,HD D-Sub,Male,Str,Mil Crp,Sealed,W/ GND Indents,78 Pin',
+    href: '/products/conn-hd-d-sub-male-str-mil-crp-sealed-w-gnd-indents-78-pin',
+    handle: 'conn-hd-d-sub-male-str-mil-crp-sealed-w-gnd-indents-78-pin',
+    description:
+      'Conn,HD D-Sub,Male,Str,Mil Crp,Sealed,W/ GND Indents,78 PinGarmin part number 330-00776-78. Catalog description: Conn,HD D-Sub,Male,Str,Mil Crp,Sealed,W/ GND Indents,78 Pin. Garmin product or accessory. Confirm compatibility and intended…',
+    skus: ['330-00776-78'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,HiDens,D-Sub,Mil Crp 62ckt',
+    href: '/products/conn-hidens-d-sub-mil-crp-62ckt',
+    handle: 'conn-hidens-d-sub-mil-crp-62ckt',
+    description:
+      'Conn,HiDens,D-Sub,Mil Crp 62cktGarmin part number 330-00185-62. Catalog description: Conn,HiDens,D-Sub,Mil Crp 62ckt. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00185-62'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,HiDens,D-Sub,Mil Crp,15ckt',
+    href: '/products/conn-hidens-d-sub-mil-crp-15ckt',
+    handle: 'conn-hidens-d-sub-mil-crp-15ckt',
+    description:
+      'Conn,HiDens,D-Sub,Mil Crp,15cktGarmin part number 330-00185-15. Catalog description: Conn,HiDens,D-Sub,Mil Crp,15ckt. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00185-15'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,HiDens,D-Sub,Mil Crp,78ckt',
+    href: '/products/conn-hidens-d-sub-mil-crp-78ckt',
+    handle: 'conn-hidens-d-sub-mil-crp-78ckt',
+    description:
+      'Conn,HiDens,D-Sub,Mil Crp,78cktGarmin part number 330-00185-78. Catalog description: Conn,HiDens,D-Sub,Mil Crp,78ckt. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00185-78'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,M/F,Spec,BNC/TNC',
+    href: '/products/conn-m-f-spec-bnc-tnc',
+    handle: 'conn-m-f-spec-bnc-tnc',
+    description:
+      'Conn,M/F,Spec,BNC/TNCGarmin part number 330-00053-02. Catalog description: Conn,M/F,Spec,BNC/TNC. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00053-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,Male,HD Dsub,62 CKT',
+    href: '/products/conn-male-hd-dsub-62-ckt',
+    handle: 'conn-male-hd-dsub-62-ckt',
+    description:
+      'Conn,Male,HD Dsub,62 CKTGarmin part number 330-00366-62. Catalog description: Conn,Male,HD Dsub,62 CKT. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00366-62'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,Male,HD Dsub,78 CKT',
+    href: '/products/conn-male-hd-dsub-78-ckt',
+    handle: 'conn-male-hd-dsub-78-ckt',
+    description:
+      'Conn,Male,HD Dsub,78 CKTGarmin part number 330-00366-78. Catalog description: Conn,Male,HD Dsub,78 CKT. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00366-78'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,RA,Hi Dens D,62 contacts',
+    href: '/products/conn-ra-hi-dens-d-62-contacts',
+    handle: 'conn-ra-hi-dens-d-62-contacts',
+    description:
+      'Conn,RA,Hi Dens D,62 contactsGarmin part number 330-00063-62. Catalog description: Conn,RA,Hi Dens D,62 contacts. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00063-62'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,Sckt,HD D,Tabless,26 pin',
+    href: '/products/conn-sckt-hd-d-tabless-26-pin',
+    handle: 'conn-sckt-hd-d-tabless-26-pin',
+    description:
+      'Conn,Sckt,HD D,Tabless,26 pinGarmin part number 330-00408-26. Catalog description: Conn,Sckt,HD D,Tabless,26 pin. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00408-26'],
+  },
+  {
+    group: 'Products',
+    title: 'Conn,Sckt,HD D,Tabless,78 pin',
+    href: '/products/conn-sckt-hd-d-tabless-78-pin',
+    handle: 'conn-sckt-hd-d-tabless-78-pin',
+    description:
+      'Conn,Sckt,HD D,Tabless,78 pinGarmin part number 330-00408-78. Catalog description: Conn,Sckt,HD D,Tabless,78 pin. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-00408-78'],
+  },
+  {
+    group: 'Products',
+    title: 'Connector kit',
+    href: '/products/connector-kit',
+    handle: 'connector-kit',
+    description:
+      'Connector kitGarmin part number 011-00651-01. Catalog description: Connector kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering. Connector kit — kit…',
+    skus: ['011-00651-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Connector Kit',
+    href: '/products/garmin-connector-kit-011-00351-01',
+    handle: 'garmin-connector-kit-011-00351-01',
+    description:
+      'Connector KitGarmin part number 011-00351-01. Confirm compatibility and availability before ordering.',
+    skus: ['011-00351-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Connector Kit',
+    href: '/products/garmin-connector-kit-011-00351-03',
+    handle: 'garmin-connector-kit-011-00351-03',
+    description:
+      'Connector KitGarmin part number 011-00351-03. Confirm compatibility and availability before ordering.',
+    skus: ['011-00351-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Connector Kit',
+    href: '/products/garmin-connector-kit-011-00558-00',
+    handle: 'garmin-connector-kit-011-00558-00',
+    description:
+      'Connector KitGarmin part number 011-00558-00. Confirm compatibility and availability before ordering.',
+    skus: ['011-00558-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Connector Kit',
+    href: '/products/garmin-connector-kit-011-00583-00',
+    handle: 'garmin-connector-kit-011-00583-00',
+    description:
+      'Connector KitGarmin part number 011-00583-00. Confirm compatibility and availability before ordering. Connector Kit — kit contentsGarmin kit P/N 011-00583-00 includes these documented components: 37 Pos D-Sub for Nut Plate — Garmin P/N…',
+    skus: ['011-00583-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Connector Kit - GHA 15',
+    href: '/products/connector-kit-gha-15-011-05278-00',
+    handle: 'connector-kit-gha-15-011-05278-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 011-05278-00. Connector Kit - GHA 15 — kit contentsGarmin kit P/N 011-05278-00 includes these documented components: Conn,Circ, Plug, D38999/26, Ins 13- 35, Alum,Crimp, Key A — Garmin P/N…',
+    skus: ['011-05278-00'],
+  },
+  {
+    group: 'Products',
+    title: 'CONNECTOR KIT GSU25, 9 PIN W/HDWR, AOA SYSTEM',
+    href: '/products/connector-kit-gsu25-9-pin-w-hdwr-aoa-system',
+    handle: 'connector-kit-gsu25-9-pin-w-hdwr-aoa-system',
+    description:
+      'CONNECTOR KIT GSU25, 9 PIN W/HDWR, AOA SYSTEMGarmin part number 011-03002-03. Catalog description: GSU 25 Connector Kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-03002-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Connector Kit, 9 Pin, w/CAN Term, PMA',
+    href: '/products/connector-kit-9-pin-w-can-term-pma',
+    handle: 'connector-kit-9-pin-w-can-term-pma',
+    description:
+      'Connector Kit, 9 Pin, w/CAN Term, PMAGarmin part number 011-03002-10. Catalog description: Connector Kit, 9 Pin, w/CAN Term, PMA. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-03002-10'],
   },
   {
     group: 'Products',
@@ -406,6 +2185,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Cont,Pin,Mil Crimp,Size 20',
+    href: '/products/cont-pin-mil-crimp-size-20',
+    handle: 'cont-pin-mil-crimp-size-20',
+    description:
+      'Cont,Pin,Mil Crimp,Size 20Garmin part number 336-00024-00. Catalog description: Cont,Pin,Mil Crimp,Size 20. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['336-00024-00'],
+  },
+  {
+    group: 'Products',
     title: 'Cont,Sckt,Mil Crp,Size 20',
     href: '/products/cont-sckt-mil-crp-size-20',
     handle: 'cont-sckt-mil-crp-size-20',
@@ -415,12 +2203,66 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Cont,Sckt,Mil Crp,Sz 20,18 AWG',
+    href: '/products/cont-sckt-mil-crp-sz-20-18-awg',
+    handle: 'cont-sckt-mil-crp-sz-20-18-awg',
+    description:
+      'Cont,Sckt,Mil Crp,Sz 20,18 AWGGarmin part number 336-00023-00. Catalog description: Cont,Sckt,Mil Crp,Sz 20,18 AWG. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['336-00023-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Contact,Crimp,Size 22D,16AWG',
+    href: '/products/contact-crimp-size-22d-16awg',
+    handle: 'contact-crimp-size-22d-16awg',
+    description:
+      'Contact,Crimp,Size 22D,16AWGGarmin part number 336-00044-01. Catalog description: Contact,Crimp,Size 22D,16AWG. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['336-00044-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Contact,Crimp,size 22D,18&20 AWG',
+    href: '/products/contact-crimp-size-22d-18-20-awg',
+    handle: 'contact-crimp-size-22d-18-20-awg',
+    description:
+      'Contact,Crimp,size 22D,18&20 AWGGarmin part number 336-00044-00. Catalog description: Contact,Crimp,size 22D,18&20 AWG. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['336-00044-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Contact,Sckt,Mil Crimp,D-Sub-20 AWG',
+    href: '/products/contact-sckt-mil-crimp-d-sub-20-awg',
+    handle: 'contact-sckt-mil-crimp-d-sub-20-awg',
+    description:
+      'Contact,Sckt,Mil Crimp,D-Sub-20 AWGGarmin part number 336-00086-00. Catalog description: Contact,Sckt,Mil Crimp,D-Sub-20 AWG. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['336-00086-00'],
+  },
+  {
+    group: 'Products',
     title: 'Contact,Sckt,Mil Crimp,Size 22',
     href: '/products/contact-sckt-mil-crimp-size-22',
     handle: 'contact-sckt-mil-crimp-size-22',
     description:
       'Garmin Size 22 Mil-Crimp Socket ContactGarmin part number 336-00055-00. Sold individually: quantity 1 adds one contact to the order. This is not a pack or connector kit. Confirm wire size, tooling, and connector compatibility before…',
     skus: ['336-00055-00'],
+  },
+  {
+    group: 'Products',
+    title: 'CONTROL WHEEL SWITCH PLATE, W/ LABEL',
+    href: '/products/control-wheel-switch-plate-w-label',
+    handle: 'control-wheel-switch-plate-w-label',
+    description:
+      'CONTROL WHEEL SWITCH PLATE, W/ LABELGarmin part number 115-02337-00. Catalog description: CONTROL WHEEL SWITCH PLATE, W/ LABEL. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['115-02337-00'],
+  },
+  {
+    group: 'Products',
+    title: 'CT CABLE EXTENSION',
+    href: '/products/ct-cable-extension',
+    handle: 'ct-cable-extension',
+    description:
+      'CT CABLE EXTENSIONGarmin part number 233-00241-00. Catalog description: CT CABLE EXTENSION. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['233-00241-00'],
   },
   {
     group: 'Products',
@@ -449,6 +2291,33 @@ export const SITE_SEARCH_INDEX = [
     description:
       'D2™ Mach 1 Pro, Aviator Smartwatch with Vented Titanium BraceletGarmin part number 010-02804-80. Confirm compatibility and availability before ordering.',
     skus: ['010-02804-80'],
+  },
+  {
+    group: 'Products',
+    title: 'Dash mount',
+    href: '/products/dash-mount',
+    handle: 'dash-mount',
+    description:
+      'Dash mountGarmin part number 010-10305-00. Catalog description: Dash mount. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-10305-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Dashboard Discs (Large and Small)',
+    href: '/products/dashboard-discs-large-and-small',
+    handle: 'dashboard-discs-large-and-small',
+    description:
+      'Dashboard Discs (Large and Small)Garmin part number 010-10646-02. Catalog description: Dashboard Discs (Large and Small). Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-10646-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Dashboard Mount',
+    href: '/products/dashboard-mount',
+    handle: 'dashboard-mount',
+    description:
+      'Dashboard MountGarmin part number 010-10747-02. Catalog description: Dashboard Mount. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-10747-02'],
   },
   {
     group: 'Products',
@@ -485,6 +2354,16 @@ export const SITE_SEARCH_INDEX = [
     description:
       'Data Card, GTN 6XX/7XX Bravo Database, Helo, Americas SouthGarmin part number 010-02045-42. Catalog description: Data Card, GTN Xi Series Database, Helo, Americas South. Garmin data card or database media item. Confirm region, database…',
     skus: ['010-02045-42'],
+  },
+  {
+    group: 'Products',
+    title: 'Data Card, GTN 6XX/7XX Bravo Database, Helo, Pacific North',
+    href: '/products/data-card-gtn-6xx-7xx-bravo-database-helo-pacific-north-010-02045-45',
+    handle:
+      'data-card-gtn-6xx-7xx-bravo-database-helo-pacific-north-010-02045-45',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-02045-45.',
+    skus: ['010-02045-45'],
   },
   {
     group: 'Products',
@@ -642,12 +2521,84 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Data/power Cable',
+    href: '/products/data-power-cable',
+    handle: 'data-power-cable',
+    description:
+      'Data/power CableGarmin part number 010-11686-40. Catalog description: Data/power Cable. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-11686-40'],
+  },
+  {
+    group: 'Products',
     title: 'Data/Power Cable (aera® 795/796)',
     href: '/products/data-power-cable-aera-795-796',
     handle: 'data-power-cable-aera-795-796',
     description:
       'Data/Power Cable (aera® 795/796)Garmin part number 010-11686-50. Catalog description: Data/Power Cable (aera® 795/796). Garmin portable navigation product or accessory. Confirm region, mount, and power/data requirements before ordering.',
     skus: ['010-11686-50'],
+  },
+  {
+    group: 'Products',
+    title: 'DB 30 DME Interface unit only',
+    href: '/products/db-30-dme-interface-unit-only',
+    handle: 'db-30-dme-interface-unit-only',
+    description:
+      'DB 30 DME Interface unit onlyGarmin part number 013-00108-00. Catalog description: DB 30 DME Interface unit only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['013-00108-00'],
+  },
+  {
+    group: 'Products',
+    title: 'DB, GI 275, Advisory Airspeed Unlock',
+    href: '/products/db-gi-275-advisory-airspeed-unlock',
+    handle: 'db-gi-275-advisory-airspeed-unlock',
+    description:
+      'DB, GI 275, Advisory Airspeed UnlockGarmin part number 006-D7986-04. Catalog description: GI 275 Advisory Airspeed Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['006-D7986-04'],
+  },
+  {
+    group: 'Products',
+    title: 'DCP, GMU 44B Install Rack',
+    href: '/products/dcp-gmu-44b-install-rack',
+    handle: 'dcp-gmu-44b-install-rack',
+    description:
+      'DCP, GMU 44B Install RackGarmin part number 125-00437-00. Catalog description: DCP, GMU 44B Install Rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['125-00437-00'],
+  },
+  {
+    group: 'Products',
+    title: 'DCP,Chassis,GMA350',
+    href: '/products/dcp-chassis-gma350',
+    handle: 'dcp-chassis-gma350',
+    description:
+      'DCP,Chassis,GMA350Garmin part number 125-00079-50. Catalog description: DCP,Chassis,GMA350. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['125-00079-50'],
+  },
+  {
+    group: 'Products',
+    title: 'DCP,Rear Conn Plate,GMA36',
+    href: '/products/dcp-rear-conn-plate-gma36',
+    handle: 'dcp-rear-conn-plate-gma36',
+    description:
+      'DCP,Rear Conn Plate,GMA36Garmin part number 125-00080-01. Catalog description: DCP,Rear Conn Plate,GMA36. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['125-00080-01'],
+  },
+  {
+    group: 'Products',
+    title: 'DCP,Socket,1/4 Turn,0.125"Pnl',
+    href: '/products/dcp-socket-1-4-turn-0-125pnl',
+    handle: 'dcp-socket-1-4-turn-0-125pnl',
+    description:
+      'DCP,Socket,1/4 Turn,0. 125"PnlGarmin part number 125-00062-01. Catalog description: DCP,Socket,1/4 Turn,0. 125"Pnl. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['125-00062-01'],
+  },
+  {
+    group: 'Products',
+    title: 'DCP,Socket,1/4 Turn,Rear Mount',
+    href: '/products/dcp-socket-1-4-turn-rear-mount',
+    handle: 'dcp-socket-1-4-turn-rear-mount',
+    description:
+      'DCP,Socket,1/4 Turn,Rear MountGarmin part number 125-00062-00. Catalog description: DCP,Socket,1/4 Turn,Rear Mount. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['125-00062-00'],
   },
   {
     group: 'Products',
@@ -857,12 +2808,57 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Diode Isolator',
+    href: '/products/diode-isolator',
+    handle: 'diode-isolator',
+    description:
+      'Diode IsolatorGarmin part number 147-00077-00. Catalog description: Diode Isolator. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['147-00077-00'],
+  },
+  {
+    group: 'Products',
     title: 'DSub Slide Lock Kit,15/26 Pin',
     href: '/products/dsub-slide-lock-kit-15-26-pin',
     handle: 'dsub-slide-lock-kit-15-26-pin',
     description:
       'Garmin D-Sub Slide Lock Kit, 15/26 PinGarmin part number 330-90006-01. Order unit: quantity 1 adds one slide lock kit to the order. Confirm connector size and compatibility with the intended Garmin installation before ordering.',
     skus: ['330-90006-01'],
+  },
+  {
+    group: 'Products',
+    title: 'DSub Slide Lock Kit,37/62 Pin',
+    href: '/products/dsub-slide-lock-kit-37-62-pin',
+    handle: 'dsub-slide-lock-kit-37-62-pin',
+    description:
+      'DSub Slide Lock Kit,37/62 PinGarmin part number 330-90006-03. Catalog description: DSub Slide Lock Kit,37/62 Pin. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['330-90006-03'],
+  },
+  {
+    group: 'Products',
+    title: 'DSub Slide Lock Kit,50/78 Pin',
+    href: '/products/dsub-slide-lock-kit-50-78-pin',
+    handle: 'dsub-slide-lock-kit-50-78-pin',
+    description:
+      'DSub Slide Lock Kit,50/78 PinGarmin part number 330-90006-04. Catalog description: DSub Slide Lock Kit,50/78 Pin. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['330-90006-04'],
+  },
+  {
+    group: 'Products',
+    title: 'Dual Port USB Power Adapter (USB-A)',
+    href: '/products/dual-port-usb-power-adapter-usb-a',
+    handle: 'dual-port-usb-power-adapter-usb-a',
+    description:
+      'Dual Port USB Power Adapter (USB-A)Garmin part number 010-13023-01. Catalog description: Dual Port USB Power Adapter (USB-A). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['010-13023-01'],
+  },
+  {
+    group: 'Products',
+    title: 'EGT/Primary EGT Probe',
+    href: '/products/egt-primary-egt-probe',
+    handle: 'egt-primary-egt-probe',
+    description:
+      'EGT/Primary EGT ProbeGarmin part number 494-70001-00. Catalog description: Type K thermocouple, 3/8-24 bayonet, EGT. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['494-70001-00'],
   },
   {
     group: 'Products',
@@ -885,6 +2881,15 @@ export const SITE_SEARCH_INDEX = [
     description:
       'Enduro™ 3, Carbon Gray DLC Titanium with Black Ultrafit Nylon StrapGarmin part number 010-02751-01. Confirm compatibility and availability before ordering.',
     skus: ['010-02751-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Engagement screw, H mounting rack',
+    href: '/products/engagement-screw-h-mounting-rack',
+    handle: 'engagement-screw-h-mounting-rack',
+    description:
+      'Engagement screw, H mounting rackGarmin part number 233-00142-00. Catalog description: Engagement screw, H mounting rack. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['233-00142-00'],
   },
   {
     group: 'Products',
@@ -1880,6 +3885,33 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Fairlead Bracket, CJ 525',
+    href: '/products/fairlead-bracket-cj-525',
+    handle: 'fairlead-bracket-cj-525',
+    description:
+      'Fairlead Bracket, CJ 525Garmin part number 147-00085-00. Catalog description: Fairlead Bracket, CJ 525. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['147-00085-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Fairlead, CJ 525',
+    href: '/products/fairlead-cj-525',
+    handle: 'fairlead-cj-525',
+    description:
+      'Fairlead, CJ 525Garmin part number 147-00084-00. Catalog description: Fairlead, CJ 525. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['147-00084-00'],
+  },
+  {
+    group: 'Products',
+    title: 'FAN, 40X40X10.3MM, 5VDC, W/ CONNECTOR',
+    href: '/products/fan-40x40x10-3mm-5vdc-w-connector',
+    handle: 'fan-40x40x10-3mm-5vdc-w-connector',
+    description:
+      'FAN, 40X40X10. 3MM, 5VDC, W/ CONNECTORGarmin part number 371-00026-01. Catalog description: FAN, 40X40X10. 3MM, 5VDC, W/ CONNECTOR. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['371-00026-01'],
+  },
+  {
+    group: 'Products',
     title:
       'fēnix® 8 Pro – 47 mm, AMOLED, Sapphire, Carbon Gray DLC Titanium with Black/Pebble Gray Silicone Band',
     href: '/products/garmin-f-nix-8-pro-47-mm-amoled-sapphire-carbon-gray-dlc-titanium-with-black-pebble-gray-silicone-band-010-03198-00',
@@ -2191,6 +4223,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Flotation Lanyard',
+    href: '/products/flotation-lanyard',
+    handle: 'flotation-lanyard',
+    description:
+      'Flotation LanyardGarmin part number 010-12525-01. Catalog description: Flotation Lanyard. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-12525-01'],
+  },
+  {
+    group: 'Products',
     title:
       'Forerunner® 570 - 42mm, Cloud Blue Aluminum with Translucent Whitestone/Cloud Blue Band',
     href: '/products/forerunner-570-42mm-cloud-blue-aluminum-with-translucent-whitestone-cloud-blue-band',
@@ -2289,6 +4330,17 @@ export const SITE_SEARCH_INDEX = [
   {
     group: 'Products',
     title:
+      'Forerunner® 965, Titanium Bezel with Whitestone Case and Whitestone/Powder Gray Silicone Band',
+    href: '/products/forerunner-965-titanium-bezel-with-whitestone-case-and-whitestone-powder-gray-silicone-band',
+    handle:
+      'forerunner-965-titanium-bezel-with-whitestone-case-and-whitestone-powder-gray-silicone-band',
+    description:
+      'Forerunner® 965, Titanium Bezel with Whitestone Case and Whitestone/Powder Gray Silicone Band is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin…',
+    skus: ['010-02809-01'],
+  },
+  {
+    group: 'Products',
+    title:
       'Forerunner® 970, Carbon Gray DLC Titanium with Black Case and Black/Translucent Whitestone Band',
     href: '/products/forerunner-970-carbon-gray-dlc-titanium-with-black-case-and-black-translucent-whitestone-band',
     handle:
@@ -2327,6 +4379,69 @@ export const SITE_SEARCH_INDEX = [
     description:
       'Friction MountGarmin part number 010-11602-00. Catalog description: Friction Mount. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
     skus: ['010-11602-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Fuel Flow Transducer (350+ HP or Gravity Feed)',
+    href: '/products/fuel-flow-transducer-350-hp-or-gravity-feed',
+    handle: 'fuel-flow-transducer-350-hp-or-gravity-feed',
+    description:
+      'Fuel Flow Transducer (350+ HP or Gravity Feed)Garmin part number 494-10001-01. Catalog description: Fuel Flow Transducer FT-90 (Gold - 350+HP or Gravity Feed). Garmin marine product or accessory. Confirm vessel/application compatibility…',
+    skus: ['494-10001-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Fuel Flow Transducer (Up to 350 HP)',
+    href: '/products/fuel-flow-transducer-up-to-350-hp',
+    handle: 'fuel-flow-transducer-up-to-350-hp',
+    description:
+      'Fuel Flow Transducer (Up to 350 HP)Garmin part number 494-10001-00. Catalog description: Fuel Flow Transducer FT-60 (Red - Up to 350HP). Garmin marine product or accessory. Confirm vessel/application compatibility before ordering.',
+    skus: ['494-10001-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Fuel Pressure Sensor, 15PSIG (Stainless Steel)',
+    href: '/products/fuel-pressure-sensor-15psig-stainless-steel',
+    handle: 'fuel-pressure-sensor-15psig-stainless-steel',
+    description:
+      'Fuel Pressure Sensor, 15PSIG (Stainless Steel)Garmin part number 494-30029-00. Catalog description: Fuel Pressure Sensor, 15PSIG (Stainless Steel). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin…',
+    skus: ['494-30029-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Fuel Pressure Sensor, 50PSIG (Stainless Steel)',
+    href: '/products/fuel-pressure-sensor-50psig-stainless-steel',
+    handle: 'fuel-pressure-sensor-50psig-stainless-steel',
+    description:
+      'Fuel Pressure Sensor, 50PSIG (Stainless Steel)Garmin part number 494-30031-00. Catalog description: Fuel Pressure Sensor, 50PSIG (Stainless Steel). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin…',
+    skus: ['494-30031-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Fuse,Fast Acting,SMD,2410,10A',
+    href: '/products/fuse-fast-acting-smd-2410-10a',
+    handle: 'fuse-fast-acting-smd-2410-10a',
+    description:
+      'Fuse,Fast Acting,SMD,2410,10AGarmin part number 350-11002-00. Catalog description: Fuse,Fast Acting,SMD,2410,10A. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['350-11002-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Fuse,Fast Acting,SMD,2410,5A',
+    href: '/products/fuse-fast-acting-smd-2410-5a',
+    handle: 'fuse-fast-acting-smd-2410-5a',
+    description:
+      'Fuse,Fast Acting,SMD,2410,5AGarmin part number 350-15001-00. Catalog description: Fuse,Fast Acting,SMD,2410,5A. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['350-15001-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Fuse,Slo-Blo,3.2A,250V,3AG',
+    href: '/products/fuse-slo-blo-3-2a-250v-3ag',
+    handle: 'fuse-slo-blo-3-2a-250v-3ag',
+    description:
+      'Fuse,Slo-Blo,3. 2A,250V,3AGGarmin part number 350-A3201-01. Catalog description: Fuse,Slo-Blo,3. 2A,250V,3AG. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['350-A3201-01'],
   },
   {
     group: 'Products',
@@ -2474,6 +4589,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: "G3X Touch Pilot's Guide for Certified Aircraft",
+    href: '/products/g3x-touch-pilots-guide-for-certified-aircraft',
+    handle: 'g3x-touch-pilots-guide-for-certified-aircraft',
+    description:
+      "G3X Touch Pilot's Guide for Certified AircraftGarmin part number 190-02472-00. Catalog description: G3X Touch Pilot's Guide for Certified Aircraft. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration…",
+    skus: ['190-02472-00'],
+  },
+  {
+    group: 'Products',
     title: 'G3X Touch™ Display - GDU 450',
     href: '/products/g3x-touch-display-gdu-450',
     handle: 'g3x-touch-display-gdu-450',
@@ -2510,12 +4634,210 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'G5 Battery Pack',
+    href: '/products/g5-battery-pack',
+    handle: 'g5-battery-pack',
+    description:
+      'G5 Battery PackGarmin part number 010-12493-02. Catalog description: G5 Battery Pack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-12493-02'],
+  },
+  {
+    group: 'Products',
     title: 'G5 for Certificated Aircraft, DG/HSI Kit',
     href: '/products/garmin-g5-for-certificated-aircraft-dg-hsi-kit-k10-00280-21',
     handle: 'garmin-g5-for-certificated-aircraft-dg-hsi-kit-k10-00280-21',
     description:
       'G5 for Certificated Aircraft, DG/HSI KitGarmin part number K10-00280-21. Equipment purchase is available separately from installation. Contact RWAS to confirm aircraft eligibility and installation requirements. Installation and return to…',
     skus: ['K10-00280-21'],
+  },
+  {
+    group: 'Products',
+    title: 'G5 Mounting Ring',
+    href: '/products/g5-mounting-ring',
+    handle: 'g5-mounting-ring',
+    description:
+      'G5 Mounting RingGarmin part number 115-02251-03. Catalog description: G5 Mounting Ring. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['115-02251-03'],
+  },
+  {
+    group: 'Products',
+    title: 'G5 Recessed Adapter Plate',
+    href: '/products/g5-recessed-adapter-plate',
+    handle: 'g5-recessed-adapter-plate',
+    description:
+      'G5 Recessed Adapter PlateGarmin part number 115-02733-00. Catalog description: G5 Recessed Adapter Plate. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-02733-00'],
+  },
+  {
+    group: 'Products',
+    title: 'G5 STC Permission Letter Redemption Code',
+    href: '/products/g5-stc-permission-letter-redemption-code',
+    handle: 'g5-stc-permission-letter-redemption-code',
+    description:
+      'G5 STC Permission Letter Redemption CodeGarmin part number 010-12493-20. Catalog description: G5 STC Permission Letter Redemption Code. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-12493-20'],
+  },
+  {
+    group: 'Products',
+    title: 'G500 TXi Alt. Preselect (For S-TEC 55X) Enablement Download',
+    href: '/products/g500-txi-alt-preselect-for-s-tec-55x-enablement-download',
+    handle: 'g500-txi-alt-preselect-for-s-tec-55x-enablement-download',
+    description:
+      'G500 TXi Alt. Preselect (For S-TEC 55X) Enablement DownloadGarmin part number 006-D7009-60. Catalog description: G500 TXi Alt. Preselect (For S-TEC 55X) Enablement Download. Certified Garmin avionics may require approved installation,…',
+    skus: ['006-D7009-60'],
+  },
+  {
+    group: 'Products',
+    title: 'G500 TXi/G600 TXi DFC90 Enablement Download',
+    href: '/products/g500-txi-g600-txi-dfc90-enablement-download',
+    handle: 'g500-txi-g600-txi-dfc90-enablement-download',
+    description:
+      'G500 TXi/G600 TXi DFC90 Enablement DownloadGarmin part number 006-D7010-D0. Catalog description: G500 TXi/G600 TXi DFC90 Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['006-D7010-D0'],
+  },
+  {
+    group: 'Products',
+    title: 'G500 TXi/G600 TXi NV 3 Display Enablement Download',
+    href: '/products/g500-txi-g600-txi-nv-3-display-enablement-download',
+    handle: 'g500-txi-g600-txi-nv-3-display-enablement-download',
+    description:
+      'G500 TXi/G600 TXi NV 3 Display Enablement DownloadGarmin part number 006-D7010-F3. Catalog description: G500 TXi/G600 TXi NV 3 Display Enablement Download. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['006-D7010-F3'],
+  },
+  {
+    group: 'Products',
+    title: 'G500 TXi/G600 TXi NV 4 Display Enablement Download',
+    href: '/products/g500-txi-g600-txi-nv-4-display-enablement-download',
+    handle: 'g500-txi-g600-txi-nv-4-display-enablement-download',
+    description:
+      'G500 TXi/G600 TXi NV 4 Display Enablement DownloadGarmin part number 006-D7010-F4. Catalog description: G500 TXi/G600 TXi NV 4 Display Enablement Download. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['006-D7010-F4'],
+  },
+  {
+    group: 'Products',
+    title: 'G500 TXi/G600 TXi S-TEC DCFS 2100/1500 Enablement Download',
+    href: '/products/g500-txi-g600-txi-s-tec-dcfs-2100-1500-enablement-download',
+    handle: 'g500-txi-g600-txi-s-tec-dcfs-2100-1500-enablement-download',
+    description:
+      'G500 TXi/G600 TXi S-TEC DCFS 2100/1500 Enablement DownloadGarmin part number 006-D7010-G0. Catalog description: G500 TXi/G600 TXi S-TEC DCFS 2100/1500 Enablement Download. Certified Garmin avionics may require approved installation,…',
+    skus: ['006-D7010-G0'],
+  },
+  {
+    group: 'Products',
+    title: 'G500 TXi/G600 TXi TAWS-B Enablement Download',
+    href: '/products/g500-txi-g600-txi-taws-b-enablement-download',
+    handle: 'g500-txi-g600-txi-taws-b-enablement-download',
+    description:
+      'G500 TXi/G600 TXi TAWS-B Enablement DownloadGarmin part number 006-D7010-30. Catalog description: G500 TXi/G600 TXi TAWS-B Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['006-D7010-30'],
+  },
+  {
+    group: 'Products',
+    title: 'G500(H) TXi Metric PFD Enablement Download',
+    href: '/products/g500h-txi-metric-pfd-enablement-download',
+    handle: 'g500h-txi-metric-pfd-enablement-download',
+    description:
+      'G500(H) TXi Metric PFD Enablement DownloadGarmin part number 006-D7009-M0. Catalog description: G500(H) TXi Metric PFD Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['006-D7009-M0'],
+  },
+  {
+    group: 'Products',
+    title: 'G500(H) TXi/G600 TXi ChartView Enablement Download',
+    href: '/products/g500h-txi-g600-txi-chartview-enablement-download',
+    handle: 'g500h-txi-g600-txi-chartview-enablement-download',
+    description:
+      'G500(H) TXi/G600 TXi ChartView Enablement DownloadGarmin part number 006-D7010-10. Catalog description: G500(H) TXi/G600 TXi ChartView Enablement Download. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['006-D7010-10'],
+  },
+  {
+    group: 'Products',
+    title: 'G500(H) TXi/G600 TXi NV 1 Display Enablement Download',
+    href: '/products/g500h-txi-g600-txi-nv-1-display-enablement-download',
+    handle: 'g500h-txi-g600-txi-nv-1-display-enablement-download',
+    description:
+      'G500(H) TXi/G600 TXi NV 1 Display Enablement DownloadGarmin part number 006-D7010-F1. Catalog description: G500(H) TXi/G600 TXi NV 1 Display Enablement Download. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['006-D7010-F1'],
+  },
+  {
+    group: 'Products',
+    title: 'G500(H) TXi/G600 TXi NV 2 Display Enablement Download',
+    href: '/products/g500h-txi-g600-txi-nv-2-display-enablement-download',
+    handle: 'g500h-txi-g600-txi-nv-2-display-enablement-download',
+    description:
+      'G500(H) TXi/G600 TXi NV 2 Display Enablement DownloadGarmin part number 006-D7010-F2. Catalog description: G500(H) TXi/G600 TXi NV 2 Display Enablement Download. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['006-D7010-F2'],
+  },
+  {
+    group: 'Products',
+    title: 'G500(H) TXi/G600 TXi Radar Altimeter Enablement Download',
+    href: '/products/g500h-txi-g600-txi-radar-altimeter-enablement-download',
+    handle: 'g500h-txi-g600-txi-radar-altimeter-enablement-download',
+    description:
+      'G500(H) TXi/G600 TXi Radar Altimeter Enablement DownloadGarmin part number 006-D7010-A0. Catalog description: G500(H) TXi/G600 TXi Radar Altimeter Enablement Download. Certified Garmin avionics may require approved installation,…',
+    skus: ['006-D7010-A0'],
+  },
+  {
+    group: 'Products',
+    title: 'G500(H) TXi/G600 TXi Third Party Radar (A708) Enablement Download',
+    href: '/products/g500h-txi-g600-txi-third-party-radar-a708-enablement-download',
+    handle: 'g500h-txi-g600-txi-third-party-radar-a708-enablement-download',
+    description:
+      'G500(H) TXi/G600 TXi Third Party Radar (A708) Enablement DownloadGarmin part number 006-D7010-E0. Catalog description: G500(H) TXi/G600 TXi Third Party Radar (A708) Enablement Download. Certified Garmin avionics may require approved…',
+    skus: ['006-D7010-E0'],
+  },
+  {
+    group: 'Products',
+    title: 'G500(H) TXi/G600 TXi Video Enablement Download',
+    href: '/products/g500h-txi-g600-txi-video-enablement-download',
+    handle: 'g500h-txi-g600-txi-video-enablement-download',
+    description:
+      'G500(H) TXi/G600 TXi Video Enablement DownloadGarmin part number 006-D7010-H0. Catalog description: G500(H) TXi/G600 TXi Video Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['006-D7010-H0'],
+  },
+  {
+    group: 'Products',
+    title: 'G500(H)/G600 TXi/GTN Xi, GWX 8000 Enablement Download',
+    href: '/products/g500h-g600-txi-gtn-xi-gwx-8000-enablement-download',
+    handle: 'g500h-g600-txi-gtn-xi-gwx-8000-enablement-download',
+    description:
+      'G500(H)/G600 TXi/GTN Xi, GWX 8000 Enablement DownloadGarmin part number 006-D7010-Q0. Catalog description: G500(H)/G600 TXi/GTN Xi, GWX 8000 Enablement Download. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['006-D7010-Q0'],
+  },
+  {
+    group: 'Products',
+    title: 'G500(H)/G600 TXi/GTN Xi, Radar AGCS and TD Enablement',
+    href: '/products/g500h-g600-txi-gtn-xi-radar-agcs-and-td-enablement',
+    handle: 'g500h-g600-txi-gtn-xi-radar-agcs-and-td-enablement',
+    description:
+      'G500(H)/G600 TXi/GTN Xi, Radar AGCS and TD EnablementGarmin part number 010-D1696-30. Catalog description: G500(H)/G600 TXi/GTN Xi, Radar AGCS and TD Enablement Download. Certified Garmin avionics may require approved installation,…',
+    skus: ['010-D1696-30'],
+  },
+  {
+    group: 'Products',
+    title: 'G500/G600 TXi Turbine EIS Enablement Download',
+    href: '/products/g500-g600-txi-turbine-eis-enablement-download',
+    handle: 'g500-g600-txi-turbine-eis-enablement-download',
+    description:
+      'G500/G600 TXi Turbine EIS Enablement DownloadGarmin part number 006-D7011-C0. Catalog description: G500/G600 TXi Turbine EIS Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['006-D7011-C0'],
+  },
+  {
+    group: 'Products',
+    title: 'G500H TXi Helicopter Enablement Download',
+    href: '/products/g500h-txi-helicopter-enablement-download',
+    handle: 'g500h-txi-helicopter-enablement-download',
+    description:
+      'G500H TXi Helicopter Enablement DownloadGarmin part number 006-D7006-00. Catalog description: G500H TXi Helicopter Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['006-D7006-00'],
+  },
+  {
+    group: 'Products',
+    title: 'G500H TXi HSVT Enablement Download',
+    href: '/products/g500h-txi-hsvt-enablement-download',
+    handle: 'g500h-txi-hsvt-enablement-download',
+    description:
+      'G500H TXi HSVT Enablement DownloadGarmin part number 006-D7006-80. Catalog description: G500H TXi HSVT Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['006-D7006-80'],
   },
   {
     group: 'Products',
@@ -2570,6 +4892,24 @@ export const SITE_SEARCH_INDEX = [
     description:
       'G700 TXi ChartView Enablement DownloadGarmin part number 006-D7011-10. Catalog description: G700 TXi ChartView Enablement Download. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
     skus: ['006-D7011-10'],
+  },
+  {
+    group: 'Products',
+    title: 'G700 TXi GWX AGCS Enablement Download',
+    href: '/products/g700-txi-gwx-agcs-enablement-download',
+    handle: 'g700-txi-gwx-agcs-enablement-download',
+    description:
+      'G700 TXi GWX AGCS Enablement DownloadGarmin part number 006-D7011-K0. Catalog description: G700 TXi GWX AGCS Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['006-D7011-K0'],
+  },
+  {
+    group: 'Products',
+    title: 'G700 TXi GWX Turb. Detect Enablement Download',
+    href: '/products/g700-txi-gwx-turb-detect-enablement-download',
+    handle: 'g700-txi-gwx-turb-detect-enablement-download',
+    description:
+      'G700 TXi GWX Turb. Detect Enablement DownloadGarmin part number 006-D7011-L0. Catalog description: G700 TXi GWX Turb. Detect Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['006-D7011-L0'],
   },
   {
     group: 'Products',
@@ -2645,6 +4985,42 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'G700 TXi/GTN Xi, GWX 8000 Enablement Download',
+    href: '/products/g700-txi-gtn-xi-gwx-8000-enablement-download',
+    handle: 'g700-txi-gtn-xi-gwx-8000-enablement-download',
+    description:
+      'G700 TXi/GTN Xi, GWX 8000 Enablement DownloadGarmin part number 006-D7011-Q0. Catalog description: G700 TXi/GTN Xi, GWX 8000 Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['006-D7011-Q0'],
+  },
+  {
+    group: 'Products',
+    title: 'GA 24 MCX SiriusXM® Antenna',
+    href: '/products/ga-24-mcx-siriusxm-antenna',
+    handle: 'ga-24-mcx-siriusxm-antenna',
+    description:
+      'GA 24 MCX SiriusXM® AntennaGarmin part number 010-12498-40. Catalog description: GA 24 MCX SiriusXM® Antenna. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['010-12498-40'],
+  },
+  {
+    group: 'Products',
+    title: 'GA 25MCX Remote GPS Antenna (Low Profile)',
+    href: '/products/ga-25mcx-remote-gps-antenna-low-profile',
+    handle: 'ga-25mcx-remote-gps-antenna-low-profile',
+    description:
+      'GA 25MCX Remote GPS Antenna (Low Profile)Garmin part number 010-10702-00. Catalog description: GA 25MCX Remote GPS Antenna (Low Profile). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['010-10702-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GA 55 XM',
+    href: '/products/ga-55-xm',
+    handle: 'ga-55-xm',
+    description:
+      'GA 55 XMGarmin part number 010-10600-01. Catalog description: GA 55 XM. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-10600-01'],
+  },
+  {
+    group: 'Products',
     title: 'GA 55A',
     href: '/products/ga-55a',
     handle: 'ga-55a',
@@ -2660,6 +5036,15 @@ export const SITE_SEARCH_INDEX = [
     description:
       'GA 56 Low-Profile AntennaGarmin part number 010-10040-01. Catalog description: GA 56 Low-Profile Antenna. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
     skus: ['010-10040-01'],
+  },
+  {
+    group: 'Products',
+    title: "GA 56 low-profile antenna TSO'd to C129 Class A-1 (flange mount)",
+    href: '/products/ga-56-low-profile-antenna-tsod-to-c129-class-a-1-flange-mount',
+    handle: 'ga-56-low-profile-antenna-tsod-to-c129-class-a-1-flange-mount',
+    description:
+      "GA 56 low-profile antenna TSO'd to C129 Class A-1 (flange mount)Garmin part number 010-10040-02. Catalog description: GA 56 low-profile antenna TSO'd to C129 Class A-1 (flange mount). Garmin avionics accessory or service part. Confirm…",
+    skus: ['010-10040-02'],
   },
   {
     group: 'Products',
@@ -2705,6 +5090,113 @@ export const SITE_SEARCH_INDEX = [
     description:
       'GAD 13, FAA-PMA, Unit Only is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GAD 13, FAA-PMA, Unit Only. 00 Fulfillment:…',
     skus: ['010-02203-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GAD 27 Electronic Adapter Unit, Unit Only',
+    href: '/products/gad-27-electronic-adapter-unit-unit-only',
+    handle: 'gad-27-electronic-adapter-unit-unit-only',
+    description:
+      'GAD 27 Electronic Adapter Unit, Unit OnlyGarmin part number 010-01525-10. Catalog description: GAD 27 Electronic Adapter Unit, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-01525-10'],
+  },
+  {
+    group: 'Products',
+    title: 'GAD 27, Unit Only, FAA-PMA',
+    href: '/products/gad-27-unit-only-faa-pma',
+    handle: 'gad-27-unit-only-faa-pma',
+    description:
+      'GAD 27, Unit Only, FAA-PMAGarmin part number 010-01525-11. Catalog description: GAD 27, Unit Only, FAA-PMA. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-01525-11'],
+  },
+  {
+    group: 'Products',
+    title: 'GAD 29C, Unit Only',
+    href: '/products/gad-29c-unit-only',
+    handle: 'gad-29c-unit-only',
+    description:
+      'GAD 29C, Unit OnlyGarmin part number 010-01172-20. Catalog description: GAD 29C, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01172-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GAD 42 installation kit',
+    href: '/products/gad-42-installation-kit',
+    handle: 'gad-42-installation-kit',
+    description:
+      'GAD 42 installation kitGarmin part number 011-00463-00. Catalog description: GAD 42 installation kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-00463-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GAD 43e',
+    href: '/products/gad-43e',
+    handle: 'gad-43e',
+    description:
+      'GAD 43eGarmin part number 010-00852-00. Catalog description: GAD 43e. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-00852-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GAD 43E, No Enablement Card ( For Use With G600)',
+    href: '/products/gad-43e-no-enablement-card-for-use-with-g600',
+    handle: 'gad-43e-no-enablement-card-for-use-with-g600',
+    description:
+      'GAD 43E, No Enablement Card ( For Use With G600)Garmin part number 010-00852-01. Catalog description: GAD43e, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-00852-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GAD 43e, With G500 Enablement, Standard',
+    href: '/products/gad-43e-with-g500-enablement-standard',
+    handle: 'gad-43e-with-g500-enablement-standard',
+    description:
+      'GAD 43e, With G500 Enablement, StandardGarmin part number 010-00852-02. Catalog description: GAD 43e, With G500 Enablement, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-00852-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GAD42 Standard',
+    href: '/products/gad42-standard',
+    handle: 'gad42-standard',
+    description:
+      'GAD42 StandardGarmin part number 010-00154-11. Catalog description: GAD42 Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-00154-11'],
+  },
+  {
+    group: 'Products',
+    title: 'GAD43 Adapter,G500,Standard,Century',
+    href: '/products/gad43-adapter-g500-standard-century',
+    handle: 'gad43-adapter-g500-standard-century',
+    description:
+      'GAD43 Adapter,G500,Standard,CenturyGarmin part number 010-00724-05. Catalog description: GAD43 Adapter,G500,Standard,Century. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-00724-05'],
+  },
+  {
+    group: 'Products',
+    title: 'GAD43 Gyro Adapter, Upgraded',
+    href: '/products/garmin-gad43-gyro-adapter-upgraded-010-00724-03',
+    handle: 'garmin-gad43-gyro-adapter-upgraded-010-00724-03',
+    description: 'GAD43 Gyro Adapter, UpgradedGarmin part number 010-00724-03.',
+    skus: ['010-00724-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GAD43, Upgraded, Standard',
+    href: '/products/gad43-upgraded-standard',
+    handle: 'gad43-upgraded-standard',
+    description:
+      'GAD43, Upgraded, StandardGarmin part number 010-00724-04. Catalog description: GAD43 Gyro Adapter, Standard,Upgraded. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-00724-04'],
+  },
+  {
+    group: 'Products',
+    title: 'GAE 43 System with installation kit',
+    href: '/products/gae-43-system-with-installation-kit',
+    handle: 'gae-43-system-with-installation-kit',
+    description:
+      'GAE 43 System with installation kitGarmin part number 013-00066-00. Catalog description: GAE 43 System with installation kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['013-00066-00'],
   },
   {
     group: 'Products',
@@ -2772,6 +5264,67 @@ export const SITE_SEARCH_INDEX = [
   {
     group: 'Products',
     title:
+      'Garmin Approach® S72 – 43 mm, Carbon Gray/Heritage Bronze Titanium Bezel with Pebble Gray ComfortFit Band',
+    href: '/products/garmin-approach-s72-43-mm-carbon-gray-bronze-pebble-gray-010-04147-00',
+    handle:
+      'garmin-approach-s72-43-mm-carbon-gray-bronze-pebble-gray-010-04147-00',
+    description:
+      'Garmin Approach® S72 – 43 mm, Carbon Gray/Heritage Bronze Titanium Bezel with Pebble Gray ComfortFit BandGarmin part number: 010-04147-00Premium smaller-size golf smartwatch with an AMOLED display, 43,000+ preloaded courses, golf…',
+    skus: ['010-04147-00'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Garmin Approach® S72 – 43 mm, Soft Gold/Blush Pink Titanium Bezel with French Gray/Blush Pink ComfortFit Band',
+    href: '/products/garmin-approach-s72-43-mm-soft-gold-blush-pink-010-04147-01',
+    handle: 'garmin-approach-s72-43-mm-soft-gold-blush-pink-010-04147-01',
+    description:
+      'Garmin Approach® S72 – 43 mm, Soft Gold/Blush Pink Titanium Bezel with French Gray/Blush Pink ComfortFit BandGarmin part number: 010-04147-01Premium smaller-size golf smartwatch with an AMOLED display, 43,000+ preloaded courses, golf…',
+    skus: ['010-04147-01'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Garmin Approach® S72 – 47 mm, Carbon Gray/Red DLC Titanium Bezel with Black ComfortFit Band',
+    href: '/products/garmin-approach-s72-47-mm-carbon-gray-red-black-010-04148-00',
+    handle: 'garmin-approach-s72-47-mm-carbon-gray-red-black-010-04148-00',
+    description:
+      'Garmin Approach® S72 – 47 mm, Carbon Gray/Red DLC Titanium Bezel with Black ComfortFit BandGarmin part number: 010-04148-00Premium 47 mm golf smartwatch with an AMOLED display, 43,000+ preloaded courses, golf biometric data, aerial…',
+    skus: ['010-04148-00'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Garmin Approach® S72 – 47 mm, Silver/Citron Titanium Bezel with Fog Gray/Citron ComfortFit Band',
+    href: '/products/garmin-approach-s72-47-mm-silver-citron-fog-gray-010-04148-01',
+    handle: 'garmin-approach-s72-47-mm-silver-citron-fog-gray-010-04148-01',
+    description:
+      'Garmin Approach® S72 – 47 mm, Silver/Citron Titanium Bezel with Fog Gray/Citron ComfortFit BandGarmin part number: 010-04148-01Premium 47 mm golf smartwatch with an AMOLED display, 43,000+ preloaded courses, golf biometric data, aerial…',
+    skus: ['010-04148-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Garmin Cleaning Cloth',
+    href: '/products/garmin-cleaning-cloth',
+    handle: 'garmin-cleaning-cloth',
+    description:
+      'Garmin Cleaning Cloth is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: Garmin Cleaning Cloth. 00 Fulfillment: Garmin items…',
+    skus: ['013-00380-00'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Garmin D2™ Mach 2 Pro – 51 mm, Carbon Gray DLC Titanium with Chestnut Leather Band',
+    href: '/products/d2-mach-2-pro-51-mm-carbon-gray-dlc-titanium-chestnut-leather-band',
+    handle:
+      'd2-mach-2-pro-51-mm-carbon-gray-dlc-titanium-chestnut-leather-band',
+    description:
+      'Garmin D2™ Mach 2 Pro – 51 mm, Carbon Gray DLC Titanium with Chestnut Leather Band is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source…',
+    skus: ['010-03199-50'],
+  },
+  {
+    group: 'Products',
+    title:
       'Garmin D2™ Mach 2 – 47 mm, Titanium with Oxford Brown Leather Band',
     href: '/products/d2-mach-2-47-mm-titanium-oxford-brown-leather-band',
     handle: 'd2-mach-2-47-mm-titanium-oxford-brown-leather-band',
@@ -2781,12 +5334,31 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title:
+      'Garmin D2™ Mach 2 – 51 mm, Carbon Gray DLC Titanium with Vented Titanium Bracelet',
+    href: '/products/d2-mach-2-51-mm-carbon-gray-dlc-titanium-vented-titanium-bracelet',
+    handle: 'd2-mach-2-51-mm-carbon-gray-dlc-titanium-vented-titanium-bracelet',
+    description:
+      'Garmin D2™ Mach 2 – 51 mm, Carbon Gray DLC Titanium with Vented Titanium Bracelet is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source…',
+    skus: ['010-02905-30'],
+  },
+  {
+    group: 'Products',
     title: 'Garmin Dual G5 AI/HSI Kit for Certificated Aircraft',
     href: '/products/garmin-dual-g5-ai-hsi-kit-k10-00280-51',
     handle: 'garmin-dual-g5-ai-hsi-kit-k10-00280-51',
     description:
       'Garmin Dual G5 AI/HSI Kit for certificated aircraft is a complete certified dual-display package for an electronic attitude indicator and HSI configuration. Garmin kit part number: K10-00280-51 Flight displays 2 × certified G5…',
     skus: ['K10-00280-51'],
+  },
+  {
+    group: 'Products',
+    title: 'Garmin Enduro™ 4 – 51 mm, Titanium with Black ComfortFit Band',
+    href: '/products/garmin-enduro-4-51-mm-titanium-black-comfortfit-band-010-04799-00',
+    handle: 'garmin-enduro-4-51-mm-titanium-black-comfortfit-band-010-04799-00',
+    description:
+      'Garmin Enduro™ 4 – 51 mm, Titanium with Black ComfortFit BandGarmin part number: 010-04799-00Ultraperformance GPS smartwatch with solar charging, advanced training and performance tools, built-in mapping and an LED flashlight. Key…',
+    skus: ['010-04799-00'],
   },
   {
     group: 'Products',
@@ -2847,6 +5419,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Garmin GA 35S Antenna Kit, White',
+    href: '/products/ga-35s-antenna-kit-white',
+    handle: 'ga-35s-antenna-kit-white',
+    description:
+      'Garmin GA 35S Antenna Kit, White is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GA 35S Antenna Kit, White. 00…',
+    skus: ['010-02639-00'],
+  },
+  {
+    group: 'Products',
     title: 'Garmin GAD 13, GTP 59, Conn Kit',
     href: '/products/kit-gad-13-gtp-59-conn-kit',
     handle: 'kit-gad-13-gtp-59-conn-kit',
@@ -2862,6 +5443,15 @@ export const SITE_SEARCH_INDEX = [
     description:
       'Garmin GDL 82 ADS-B Out Datalink provides a compact, remote-mounted path to rule-compliant 978 MHz ADS-B Out for compatible U. S. aircraft operating below 18,000 feet. Garmin part number: 010-01560-31 Standard kit GDL 82 with built-in…',
     skus: ['010-01560-31'],
+  },
+  {
+    group: 'Products',
+    title: 'Garmin GEA 110',
+    href: '/products/garmin-gea-110',
+    handle: 'garmin-gea-110',
+    description:
+      'Garmin GEA 110 is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GEA 110, Unit Only. 00 Fulfillment: Garmin items are…',
+    skus: ['010-01329-01'],
   },
   {
     group: 'Products',
@@ -2985,12 +5575,75 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Garmin GTN750Xi GPS/NAV/COMM/MFD',
+    href: '/products/gtn750xi',
+    handle: 'gtn750xi',
+    description:
+      'Garmin GTN750Xi GPS/NAV/COMM/MFD is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GTN750Xi,Black,Standard. 00 Fulfillment:…',
+    skus: ['010-02002-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Garmin GTN™ 625Xi, GPS/MFD',
+    href: '/products/gtn-625xi-gps-mfd',
+    handle: 'gtn-625xi-gps-mfd',
+    description:
+      'Garmin GTN™ 625Xi, GPS/MFD is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GTN625Xi,Black,Standard. 00 Fulfillment: Garmin…',
+    skus: ['010-01997-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Garmin GTN™ 635Xi, GPS/COMM/MFD',
+    href: '/products/gtn-635xi-gps-comm-mfd',
+    handle: 'gtn-635xi-gps-comm-mfd',
+    description:
+      'Garmin GTN™ 635Xi, GPS/COMM/MFD is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GTN635Xi,Black,Standard. 00 Fulfillment:…',
+    skus: ['010-01998-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Garmin GTN™ 650Xi, GPS/NAV/COMM/MFD',
+    href: '/products/gtn-650xi-gps-nav-comm-mfd',
+    handle: 'gtn-650xi-gps-nav-comm-mfd',
+    description:
+      'Garmin GTN™ 650Xi, GPS/NAV/COMM/MFD is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GTN650Xi,Black,Standard. 00…',
+    skus: ['010-01999-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Garmin GTN™ 725Xi, GPS/MFD',
+    href: '/products/gtn-725xi-gps-mfd',
+    handle: 'gtn-725xi-gps-mfd',
+    description:
+      'Garmin GTN™ 725Xi, GPS/MFD is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GTN725Xi,Black,Standard. 00 Fulfillment: Garmin…',
+    skus: ['010-02000-01'],
+  },
+  {
+    group: 'Products',
     title: 'Garmin GTR 200B COMM Radio',
     href: '/products/garmin-gtr-200b',
     handle: 'garmin-gtr-200b',
     description:
       'Panel-mount COMM radio with Bluetooth connectivity for experimental and light sport aircraft. Garmin part number 010-01087-21. This experimental-avionics product may be purchased over the counter. Confirm aircraft compatibility and any…',
     skus: ['010-01087-21'],
+  },
+  {
+    group: 'Products',
+    title: 'Garmin GTX 345',
+    href: '/products/garmin-gtx-345',
+    handle: 'garmin-gtx-345',
+    description:
+      'Garmin GTX 345 is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GTX345,Standard Kit,nAB. 00 Fulfillment: Garmin items are…',
+    skus: ['010-01216-06'],
+  },
+  {
+    group: 'Products',
+    title: 'Garmin GWX 75 Weather Radar 12 inch',
+    href: '/products/garmin-gwx-75-weather-radar',
+    handle: 'garmin-gwx-75-weather-radar',
+    description:
+      'Garmin GWX 75 Weather Radar 12 inch is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GWX Processor with 12" Antenna &…',
+    skus: ['010-01589-01'],
   },
   {
     group: 'Products',
@@ -3021,12 +5674,306 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'GASKET, CHASSIS - BACK PLATE, GTN6XX/7XX',
+    href: '/products/gasket-chassis-back-plate-gtn6xx-7xx',
+    handle: 'gasket-chassis-back-plate-gtn6xx-7xx',
+    description:
+      'GASKET, CHASSIS - BACK PLATE, GTN6XX/7XXGarmin part number 253-00421-00. Catalog description: GASKET, CHASSIS - BACK PLATE, GTN6XX/7XX. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['253-00421-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Gasket,Aviation Antenna',
+    href: '/products/gasket-aviation-antenna',
+    handle: 'gasket-aviation-antenna',
+    description:
+      'Gasket,Aviation AntennaGarmin part number 253-00002-00. Catalog description: Gasket,Aviation Antenna. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['253-00002-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Gasket,Thru Mount Antenna',
+    href: '/products/gasket-thru-mount-antenna',
+    handle: 'gasket-thru-mount-antenna',
+    description:
+      'Gasket,Thru Mount AntennaGarmin part number 253-00138-00. Catalog description: Gasket,Thru Mount Antenna. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['253-00138-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GA™ 24 TNC SiriusXM® Antenna',
+    href: '/products/ga-24-tnc-siriusxm-antenna',
+    handle: 'ga-24-tnc-siriusxm-antenna',
+    description:
+      'GA™ 24 TNC SiriusXM® AntennaGarmin part number 010-12498-50. Catalog description: GA™ 24 TNC SiriusXM® Antenna. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['010-12498-50'],
+  },
+  {
+    group: 'Products',
+    title: 'GA™ 35 GPS Antenna, Black',
+    href: '/products/ga-35-gps-antenna-black',
+    handle: 'ga-35-gps-antenna-black',
+    description:
+      'GA™ 35 GPS Antenna, BlackGarmin part number 013-00235-01. Catalog description: GA™ 35 GPS Antenna, Black. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['013-00235-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GA™ 35 GPS Antenna, White',
+    href: '/products/ga-35-gps-antenna-white',
+    handle: 'ga-35-gps-antenna-white',
+    description:
+      'GA™ 35 GPS Antenna, WhiteGarmin part number 013-00235-00. Catalog description: GA™ 35 GPS Antenna, White. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['013-00235-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GA™ 36 GPS Antenna',
+    href: '/products/ga-36-gps-antenna',
+    handle: 'ga-36-gps-antenna',
+    description:
+      'GA™ 36 GPS AntennaGarmin part number 013-00244-00. Catalog description: GA™ 36 GPS Antenna. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['013-00244-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GA™ 37 GPS/SiriusXM® Antenna',
+    href: '/products/ga-37-gps-siriusxm-antenna',
+    handle: 'ga-37-gps-siriusxm-antenna',
+    description:
+      'GA™ 37 GPS/SiriusXM® AntennaGarmin part number 013-00245-00. Catalog description: GA™ 37 GPS/SiriusXM® Antenna. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['013-00245-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GCF 314 (14 volt) System with installation kit',
+    href: '/products/gcf-314-14-volt-system-with-installation-kit',
+    handle: 'gcf-314-14-volt-system-with-installation-kit',
+    description:
+      'GCF 314 (14 volt) System with installation kitGarmin part number 013-00067-00. Catalog description: GCF 314 (14 volt) System with installation kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin…',
+    skus: ['013-00067-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GCF 328 (28 volt) System with installation kit',
+    href: '/products/gcf-328-28-volt-system-with-installation-kit',
+    handle: 'gcf-328-28-volt-system-with-installation-kit',
+    description:
+      'GCF 328 (28 volt) System with installation kitGarmin part number 013-00067-01. Catalog description: GCF 328 (28 volt) System with installation kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin…',
+    skus: ['013-00067-01'],
+  },
+  {
+    group: 'Products',
     title: 'GCO 14',
     href: '/products/gco-14',
     handle: 'gco-14',
     description:
       'GCO 14Garmin part number 010-02975-01. Catalog description: GCO 14. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
     skus: ['010-02975-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GCU 485 Conn. Kit',
+    href: '/products/gcu-485-conn-kit',
+    handle: 'gcu-485-conn-kit',
+    description:
+      'GCU 485 Conn. KitGarmin part number 011-01824-00. Catalog description: GCU 485 Conn. Kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering. GCU 485…',
+    skus: ['011-01824-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GCU 485 Gray, 1 Button, Unit Only',
+    href: '/products/gcu-485-gray-1-button-unit-only',
+    handle: 'gcu-485-gray-1-button-unit-only',
+    description:
+      'GCU 485 Gray, 1 Button, Unit OnlyGarmin part number 010-01350-14. Catalog description: GCU 485 Gray, 1 Button, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01350-14'],
+  },
+  {
+    group: 'Products',
+    title: 'GCU 485, 1 Button, Unit Only - CDI',
+    href: '/products/gcu-485-1-button-unit-only-cdi',
+    handle: 'gcu-485-1-button-unit-only-cdi',
+    description:
+      'GCU 485, 1 Button, Unit Only - CDIGarmin part number 010-01350-04. Catalog description: GCU 485, 1 Button, Unit Only - CDI. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01350-04'],
+  },
+  {
+    group: 'Products',
+    title: 'GCU 485, 2 Buttons, Unit Only - CDI/GPSS',
+    href: '/products/gcu-485-2-buttons-unit-only-cdi-gpss',
+    handle: 'gcu-485-2-buttons-unit-only-cdi-gpss',
+    description:
+      'GCU 485, 2 Buttons, Unit Only - CDI/GPSSGarmin part number 010-01350-03. Catalog description: GCU 485, 2 Buttons, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01350-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GCU 485, 3 Buttons, Unit Only - ARM/ENG/CDI',
+    href: '/products/gcu-485-3-buttons-unit-only-arm-eng-cdi',
+    handle: 'gcu-485-3-buttons-unit-only-arm-eng-cdi',
+    description:
+      'GCU 485, 3 Buttons, Unit Only - ARM/ENG/CDIGarmin part number 010-01350-05. Catalog description: GCU 485, ARM/ENG/CDI, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01350-05'],
+  },
+  {
+    group: 'Products',
+    title: 'GCU 485, 3 Buttons, Unit Only - CDI/GPSS/ARM',
+    href: '/products/gcu-485-3-buttons-unit-only-cdi-gpss-arm',
+    handle: 'gcu-485-3-buttons-unit-only-cdi-gpss-arm',
+    description:
+      'GCU 485, 3 Buttons, Unit Only - CDI/GPSS/ARMGarmin part number 010-01350-02. Catalog description: GCU 485, 3 Buttons, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01350-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GCU 485, 4 Buttons, Unit Only - CDI/GPSS/ARM/ENG',
+    href: '/products/gcu-485-4-buttons-unit-only-cdi-gpss-arm-eng',
+    handle: 'gcu-485-4-buttons-unit-only-cdi-gpss-arm-eng',
+    description:
+      'GCU 485, 4 Buttons, Unit Only - CDI/GPSS/ARM/ENGGarmin part number 010-01350-01. Catalog description: GCU 485, 4 Buttons, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01350-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GDC 74B',
+    href: '/products/gdc-74b',
+    handle: 'gdc-74b',
+    description:
+      'GDC 74BGarmin part number 010-00390-01. Catalog description: GDC 74B. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-00390-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GDC72, Unit Only',
+    href: '/products/garmin-gdc72-unit-only-010-01424-01',
+    handle: 'garmin-gdc72-unit-only-010-01424-01',
+    description: 'GDC72, Unit OnlyGarmin part number 010-01424-01.',
+    skus: ['010-01424-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GDC72B, Unit Only',
+    href: '/products/garmin-gdc72b-unit-only-010-01424-41',
+    handle: 'garmin-gdc72b-unit-only-010-01424-41',
+    description: 'GDC72B, Unit OnlyGarmin part number 010-01424-41.',
+    skus: ['010-01424-41'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL 39R',
+    href: '/products/gdl-39r',
+    handle: 'gdl-39r',
+    description:
+      'GDL 39RGarmin part number 010-11689-08. Catalog description: GDL 39R. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-11689-08'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL 50/52 Replacement ADS-B Antenna',
+    href: '/products/gdl-50-52-replacement-ads-b-antenna',
+    handle: 'gdl-50-52-replacement-ads-b-antenna',
+    description:
+      'GDL 50/52 Replacement ADS-B AntennaGarmin part number 010-12498-70. Catalog description: GDL 50/52 Replacement ADS-B Antenna. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-12498-70'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL 50R, FAA-PMA',
+    href: '/products/gdl-50r-faa-pma',
+    handle: 'gdl-50r-faa-pma',
+    description:
+      'GDL 50R, FAA-PMAGarmin part number 010-01561-15. Catalog description: GDL 50R, FAA-PMA. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01561-15'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL 69/69A Installation Rack',
+    href: '/products/gdl-69-69a-installation-rack',
+    handle: 'gdl-69-69a-installation-rack',
+    description:
+      'GDL 69/69A Installation RackGarmin part number 115-00658-00. Catalog description: Install Rack - GDL 69/69A, GEA 71. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['115-00658-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL 69A SXM Datalink',
+    href: '/products/gdl-69a-sxm-datalink',
+    handle: 'gdl-69a-sxm-datalink',
+    description:
+      'GDL 69A SXM DatalinkGarmin part number 010-01294-15. Catalog description: GDL 69A SXM Datalink. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01294-15'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL 69A SXM, unit only',
+    href: '/products/gdl-69a-sxm-unit-only',
+    handle: 'gdl-69a-sxm-unit-only',
+    description:
+      'GDL 69A SXM, unit onlyGarmin part number 010-01294-10. Catalog description: GDL 69A SXM, unit only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01294-10'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL69AH SXM,Standard Remote',
+    href: '/products/gdl69ah-sxm-standard-remote',
+    handle: 'gdl69ah-sxm-standard-remote',
+    description:
+      'GDL69AH SXM,Standard RemoteGarmin part number 010-01294-36. Catalog description: GDL69AH SXM,Standard Remote. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-01294-36'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL® 39 battery',
+    href: '/products/garmin-gdl-39-battery-010-11688-00',
+    handle: 'garmin-gdl-39-battery-010-11688-00',
+    description: 'GDL® 39 batteryGarmin part number 010-11688-00.',
+    skus: ['010-11688-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL® 50',
+    href: '/products/gdl-50',
+    handle: 'gdl-50',
+    description:
+      'GDL® 50 is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GDL® 50. 00 Fulfillment: Garmin items are…',
+    skus: ['010-01561-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL® 50',
+    href: '/products/garmin-gdl-50-010-01561-01',
+    handle: 'garmin-gdl-50-010-01561-01',
+    description:
+      'GDL® 50Garmin part number 010-01561-01. Confirm compatibility and availability before ordering.',
+    skus: ['010-01561-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL® 50R',
+    href: '/products/garmin-gdl-50r-010-01561-10',
+    handle: 'garmin-gdl-50r-010-01561-10',
+    description:
+      'GDL® 50RGarmin part number 010-01561-10. Confirm compatibility and availability before ordering.',
+    skus: ['010-01561-10'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL® 50R',
+    href: '/products/garmin-gdl-50r-010-01561-11',
+    handle: 'garmin-gdl-50r-010-01561-11',
+    description:
+      'GDL® 50RGarmin part number 010-01561-11. Confirm compatibility and availability before ordering.',
+    skus: ['010-01561-11'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL® 51',
+    href: '/products/gdl-51',
+    handle: 'gdl-51',
+    description:
+      'GDL® 51 is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GDL® 51. 00 Fulfillment: Garmin items are…',
+    skus: ['010-01561-40'],
   },
   {
     group: 'Products',
@@ -3039,12 +5986,1060 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'GDL® 60 Datalink with PlaneSync™ Technology',
+    href: '/products/gdl-60-datalink-with-planesync-technology-1',
+    handle: 'gdl-60-datalink-with-planesync-technology-1',
+    description:
+      'GDL® 60 Datalink with PlaneSync™ Technology is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GDL® 60 Datalink with…',
+    skus: ['010-02245-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDL® 69A SXM',
+    href: '/products/gdl-69a-sxm',
+    handle: 'gdl-69a-sxm',
+    description:
+      'GDL® 69A SXMGarmin part number 010-01294-16. Catalog description: GDL® 69A SXM. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01294-16'],
+  },
+  {
+    group: 'Products',
+    title: 'GDM 4500, Unit only',
+    href: '/products/garmin-gdm-4500-unit-only-010-02621-00',
+    handle: 'garmin-gdm-4500-unit-only-010-02621-00',
+    description: 'GDM 4500, Unit onlyGarmin part number 010-02621-00.',
+    skus: ['010-02621-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDM 450R, Standard Kit',
+    href: '/products/garmin-gdm-450r-standard-kit-010-02620-31',
+    handle: 'garmin-gdm-450r-standard-kit-010-02620-31',
+    description:
+      'GDM 450R, Standard KitGarmin part number 010-02620-31. Confirm compatibility and availability before ordering.',
+    skus: ['010-02620-31'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1050',
+    href: '/products/gdu-1050',
+    handle: 'gdu-1050',
+    description:
+      'GDU 1050Garmin part number 010-01308-00. Catalog description: GDU 1050. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01308-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1060, G600 TXi, BLACK, AHRS, Standard',
+    href: '/products/gdu-1060-g600-txi-black-ahrs-standard',
+    handle: 'gdu-1060-g600-txi-black-ahrs-standard',
+    description:
+      'GDU 1060, G600 TXi, BLACK, AHRS, StandardGarmin part number 010-01220-73. Catalog description: GDU 1060, G600 TXi, BLACK, AHRS, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-01220-73'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1060,G500 TXi,BLACK,AHRS,Standard',
+    href: '/products/gdu-1060-g500-txi-black-ahrs-standard',
+    handle: 'gdu-1060-g500-txi-black-ahrs-standard',
+    description:
+      'GDU 1060,G500 TXi,BLACK,AHRS,StandardGarmin part number 010-01220-33. Catalog description: GDU 1060,G500 TXi,BLACK,AHRS,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01220-33'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1060,G500 TXi,BLACK,Standard',
+    href: '/products/gdu-1060-g500-txi-black-standard',
+    handle: 'gdu-1060-g500-txi-black-standard',
+    description:
+      'GDU 1060,G500 TXi,BLACK,StandardGarmin part number 010-01220-23. Catalog description: GDU 1060,G500 TXi,BLACK,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01220-23'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1060,G600 TXi,BLACK,Standard',
+    href: '/products/gdu-1060-g600-txi-black-standard',
+    handle: 'gdu-1060-g600-txi-black-standard',
+    description:
+      'GDU 1060,G600 TXi,BLACK,StandardGarmin part number 010-01220-63. Catalog description: GDU 1060,G600 TXi,BLACK,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01220-63'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1060,G600 TXi,GRAY,AHRS,Standard',
+    href: '/products/gdu-1060-g600-txi-gray-ahrs-standard',
+    handle: 'gdu-1060-g600-txi-gray-ahrs-standard',
+    description:
+      'GDU 1060,G600 TXi,GRAY,AHRS,StandardGarmin part number 010-01220-A3. Catalog description: GDU 1060,G600 TXi,GRAY,AHRS,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01220-A3'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1060,G600 TXi,GRAY,Standard',
+    href: '/products/gdu-1060-g600-txi-gray-standard',
+    handle: 'gdu-1060-g600-txi-gray-standard',
+    description:
+      'GDU 1060,G600 TXi,GRAY,StandardGarmin part number 010-01220-83. Catalog description: GDU 1060,G600 TXi,GRAY,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01220-83'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1060,G700 TXi,BLACK,Standard',
+    href: '/products/gdu-1060-g700-txi-black-standard',
+    handle: 'gdu-1060-g700-txi-black-standard',
+    description:
+      'GDU 1060,G700 TXi,BLACK,StandardGarmin part number 010-01220-B3. Catalog description: GDU 1060,G700 TXi,BLACK,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01220-B3'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1060,G700 TXi,GRAY,Standard',
+    href: '/products/gdu-1060-g700-txi-gray-standard',
+    handle: 'gdu-1060-g700-txi-gray-standard',
+    description:
+      'GDU 1060,G700 TXi,GRAY,StandardGarmin part number 010-01220-C3. Catalog description: GDU 1060,G700 TXi,GRAY,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01220-C3'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 116B, Unit Only',
+    href: '/products/gdu-116b-unit-only-010-03000-00',
+    handle: 'gdu-116b-unit-only-010-03000-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-03000-00.',
+    skus: ['010-03000-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 116Bx, Unit Only',
+    href: '/products/gdu-116bx-unit-only-010-03004-00',
+    handle: 'gdu-116bx-unit-only-010-03004-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-03004-00.',
+    skus: ['010-03004-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 116C, Unit Only',
+    href: '/products/gdu-116c-unit-only-010-03001-00',
+    handle: 'gdu-116c-unit-only-010-03001-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-03001-00.',
+    skus: ['010-03001-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 116NC, Unit Only',
+    href: '/products/gdu-116nc-unit-only-010-03002-00',
+    handle: 'gdu-116nc-unit-only-010-03002-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-03002-00.',
+    skus: ['010-03002-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1210,G500 TXi,BLACK,Standard',
+    href: '/products/gdu-1210-g500-txi-black-standard',
+    handle: 'gdu-1210-g500-txi-black-standard',
+    description:
+      'GDU 1210,G500 TXi,BLACK,StandardGarmin part number 010-02837-21. Catalog description: GDU 1210,G500 TXi,BLACK,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-02837-21'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1210,G600 TXi,BLACK,Standard',
+    href: '/products/gdu-1210-g600-txi-black-standard',
+    handle: 'gdu-1210-g600-txi-black-standard',
+    description:
+      'GDU 1210,G600 TXi,BLACK,StandardGarmin part number 010-02837-61. Catalog description: GDU 1210,G600 TXi,BLACK,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-02837-61'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1210,G600 TXi,GRAY,Standard',
+    href: '/products/gdu-1210-g600-txi-gray-standard',
+    handle: 'gdu-1210-g600-txi-gray-standard',
+    description:
+      'GDU 1210,G600 TXi,GRAY,StandardGarmin part number 010-02837-81. Catalog description: GDU 1210,G600 TXi,GRAY,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-02837-81'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1250A, Unit Only',
+    href: '/products/gdu-1250a-unit-only',
+    handle: 'gdu-1250a-unit-only',
+    description:
+      'GDU 1250A, Unit OnlyGarmin part number 010-01309-00. Catalog description: GDU 1250A, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01309-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1250W Harsh Env, Unit Only',
+    href: '/products/gdu-1250w-harsh-env-unit-only',
+    handle: 'gdu-1250w-harsh-env-unit-only',
+    description:
+      'GDU 1250W Harsh Env, Unit OnlyGarmin part number 010-01720-00. Catalog description: GDU 1250W Harsh Env, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01720-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1250W, Unit Only',
+    href: '/products/gdu-1250w-unit-only',
+    handle: 'gdu-1250w-unit-only',
+    description:
+      'GDU 1250W, Unit OnlyGarmin part number 010-01632-00. Catalog description: GDU 1250W, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01632-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1450W',
+    href: '/products/gdu-1450w',
+    handle: 'gdu-1450w',
+    description:
+      'GDU 1450WGarmin part number 010-01715-00. Catalog description: GDU 1450W. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01715-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 1550',
+    href: '/products/gdu-1550',
+    handle: 'gdu-1550',
+    description:
+      'GDU 1550Garmin part number 010-01310-00. Catalog description: GDU 1550. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01310-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 460, GPS Display, AM, PMA, Standard',
+    href: '/products/gdu-460-gps-display-am-pma-standard',
+    handle: 'gdu-460-gps-display-am-pma-standard',
+    description:
+      'GDU 460, GPS Display, AM, PMA, StandardGarmin part number 010-02319-00. Catalog description: G3X Touch™ Display - GDU 460, PMA, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-02319-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 470, GPS Display, AM, PMA, Standard',
+    href: '/products/gdu-470-gps-display-am-pma-standard',
+    handle: 'gdu-470-gps-display-am-pma-standard',
+    description:
+      'GDU 470, GPS Display, AM, PMA, StandardGarmin part number 010-02318-00. Catalog description: G3X Touch™ Display - GDU 470, PMA, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-02318-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700/1060 ADC,G500 TXi,Unit Only',
+    href: '/products/gdu-700-1060-adc-g500-txi-unit-only',
+    handle: 'gdu-700-1060-adc-g500-txi-unit-only',
+    description:
+      'GDU 700/1060 ADC,G500 TXi,Unit OnlyGarmin part number 010-01326-01. Catalog description: GDU 700/1060 ADC,G500 TXi,Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01326-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700L, G500 TXi, BLACK, AHRS, Standard',
+    href: '/products/gdu-700l-g500-txi-black-ahrs-standard',
+    handle: 'gdu-700l-g500-txi-black-ahrs-standard',
+    description:
+      'GDU 700L, G500 TXi, BLACK, AHRS, StandardGarmin part number 010-01219-33. Catalog description: GDU 700L, G500 TXi, BLACK, AHRS, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-01219-33'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700L, G500 TXi, BLACK, Standard',
+    href: '/products/gdu-700l-g500-txi-black-standard',
+    handle: 'gdu-700l-g500-txi-black-standard',
+    description:
+      'GDU 700L, G500 TXi, BLACK, StandardGarmin part number 010-01219-23. Catalog description: GDU 700L, G500 TXi, BLACK, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01219-23'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700L,EIS TXi,BLACK,Standard',
+    href: '/products/gdu-700l-eis-txi-black-standard',
+    handle: 'gdu-700l-eis-txi-black-standard',
+    description:
+      'GDU 700L,EIS TXi,BLACK,StandardGarmin part number 010-01219-03. Catalog description: GDU 700L,EIS TXi,BLACK,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01219-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700L,G600 TXi,BLACK,AHRS,Standard',
+    href: '/products/gdu-700l-g600-txi-black-ahrs-standard',
+    handle: 'gdu-700l-g600-txi-black-ahrs-standard',
+    description:
+      'GDU 700L,G600 TXi,BLACK,AHRS,StandardGarmin part number 010-01219-73. Catalog description: GDU 700L,G600 TXi,BLACK,AHRS,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01219-73'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700L,G600 TXi,BLACK,Standard',
+    href: '/products/gdu-700l-g600-txi-black-standard',
+    handle: 'gdu-700l-g600-txi-black-standard',
+    description:
+      'GDU 700L,G600 TXi,BLACK,StandardGarmin part number 010-01219-63. Catalog description: GDU 700L,G600 TXi,BLACK,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01219-63'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700L,G600 TXi,GRAY,AHRS,Standard',
+    href: '/products/garmin-gdu-700l-g600-txi-gray-ahrs-standard-010-01219-a3',
+    handle: 'garmin-gdu-700l-g600-txi-gray-ahrs-standard-010-01219-a3',
+    description:
+      'GDU 700L,G600 TXi,GRAY,AHRS,StandardGarmin part number 010-01219-A3.',
+    skus: ['010-01219-A3'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700L,G600 TXi,GRAY,Standard',
+    href: '/products/gdu-700l-g600-txi-gray-standard',
+    handle: 'gdu-700l-g600-txi-gray-standard',
+    description:
+      'GDU 700L,G600 TXi,GRAY,StandardGarmin part number 010-01219-83. Catalog description: GDU 700L,G600 TXi,GRAY,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01219-83'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700L,G700 TXi,BLACK,Standard',
+    href: '/products/gdu-700l-g700-txi-black-standard',
+    handle: 'gdu-700l-g700-txi-black-standard',
+    description:
+      'GDU 700L,G700 TXi,BLACK,StandardGarmin part number 010-01219-B3. Catalog description: GDU 700L,G700 TXi,BLACK,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01219-B3'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700L,G700 TXi,GRAY,Standard',
+    href: '/products/gdu-700l-g700-txi-gray-standard',
+    handle: 'gdu-700l-g700-txi-gray-standard',
+    description:
+      'GDU 700L,G700 TXi,GRAY,StandardGarmin part number 010-01219-C3. Catalog description: GDU 700L,G700 TXi,GRAY,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01219-C3'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700P, G500 TXi, BLACK, Standard',
+    href: '/products/gdu-700p-g500-txi-black-standard',
+    handle: 'gdu-700p-g500-txi-black-standard',
+    description:
+      'GDU 700P, G500 TXi, BLACK, StandardGarmin part number 010-01218-23. Catalog description: GDU 700P, G500 TXi, BLACK, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01218-23'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700P, G600 TXi, BLACK, AHRS, Standard',
+    href: '/products/gdu-700p-g600-txi-black-ahrs-standard',
+    handle: 'gdu-700p-g600-txi-black-ahrs-standard',
+    description:
+      'GDU 700P, G600 TXi, BLACK, AHRS, StandardGarmin part number 010-01218-73. Catalog description: GDU 700P, G600 TXi, BLACK, AHRS, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-01218-73'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700P,EIS TXi,BLACK,Standard',
+    href: '/products/gdu-700p-eis-txi-black-standard',
+    handle: 'gdu-700p-eis-txi-black-standard',
+    description:
+      'GDU 700P,EIS TXi,BLACK,StandardGarmin part number 010-01218-03. Catalog description: GDU 700P,EIS TXi,BLACK,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01218-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700P,G500 TXi,BLACK,AHRS,Standard',
+    href: '/products/gdu-700p-g500-txi-black-ahrs-standard',
+    handle: 'gdu-700p-g500-txi-black-ahrs-standard',
+    description:
+      'GDU 700P,G500 TXi,BLACK,AHRS,StandardGarmin part number 010-01218-33. Catalog description: GDU 700P,G500 TXi,BLACK,AHRS,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01218-33'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700P,G600 TXi,BLACK,Standard',
+    href: '/products/gdu-700p-g600-txi-black-standard',
+    handle: 'gdu-700p-g600-txi-black-standard',
+    description:
+      'GDU 700P,G600 TXi,BLACK,StandardGarmin part number 010-01218-63. Catalog description: GDU 700P,G600 TXi,BLACK,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01218-63'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700P,G600 TXi,GRAY,AHRS,Standard',
+    href: '/products/gdu-700p-g600-txi-gray-ahrs-standard',
+    handle: 'gdu-700p-g600-txi-gray-ahrs-standard',
+    description:
+      'GDU 700P,G600 TXi,GRAY,AHRS,StandardGarmin part number 010-01218-A3. Catalog description: GDU 700P,G600 TXi,GRAY,AHRS,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01218-A3'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700P,G600 TXi,GRAY,Standard',
+    href: '/products/gdu-700p-g600-txi-gray-standard',
+    handle: 'gdu-700p-g600-txi-gray-standard',
+    description:
+      'GDU 700P,G600 TXi,GRAY,StandardGarmin part number 010-01218-83. Catalog description: GDU 700P,G600 TXi,GRAY,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01218-83'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700P,G700 TXi,BLACK,Standard',
+    href: '/products/gdu-700p-g700-txi-black-standard',
+    handle: 'gdu-700p-g700-txi-black-standard',
+    description:
+      'GDU 700P,G700 TXi,BLACK,StandardGarmin part number 010-01218-B3. Catalog description: GDU 700P,G700 TXi,BLACK,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01218-B3'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 700P,G700 TXi,GRAY,Standard',
+    href: '/products/gdu-700p-g700-txi-gray-standard',
+    handle: 'gdu-700p-g700-txi-gray-standard',
+    description:
+      'GDU 700P,G700 TXi,GRAY,StandardGarmin part number 010-01218-C3. Catalog description: GDU 700P,G700 TXi,GRAY,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01218-C3'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 80L, Unit Only',
+    href: '/products/gdu-80l-unit-only-010-04145-00',
+    handle: 'gdu-80l-unit-only-010-04145-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-04145-00.',
+    skus: ['010-04145-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 80Lx, Unit Only',
+    href: '/products/gdu-80lx-unit-only-010-04144-00',
+    handle: 'gdu-80lx-unit-only-010-04144-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-04144-00.',
+    skus: ['010-04144-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 80P, Unit Only',
+    href: '/products/gdu-80p-unit-only-010-04143-00',
+    handle: 'gdu-80p-unit-only-010-04143-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-04143-00.',
+    skus: ['010-04143-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU 80Px, Unit Only',
+    href: '/products/gdu-80px-unit-only-010-04142-00',
+    handle: 'gdu-80px-unit-only-010-04142-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-04142-00.',
+    skus: ['010-04142-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GDU Connector Kit',
+    href: '/products/gdu-connector-kit',
+    handle: 'gdu-connector-kit',
+    description:
+      'GDU Connector KitGarmin part number 011-01921-00. Catalog description: GDU Connector Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation. GDU…',
+    skus: ['011-01921-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GEA 24, Unit Only, FAA-PMA',
+    href: '/products/gea-24-unit-only-faa-pma',
+    handle: 'gea-24-unit-only-faa-pma',
+    description:
+      'GEA 24, Unit Only, FAA-PMAGarmin part number 010-01042-01. Catalog description: GEA 24, Unit Only, FAA-PMA. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-01042-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GEA 24B, Unit Only',
+    href: '/products/gea-24b-unit-only',
+    handle: 'gea-24b-unit-only',
+    description:
+      'GEA 24B, Unit OnlyGarmin part number 010-02770-00. Catalog description: GEA 24B, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-02770-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GEA 7100',
+    href: '/products/gea-7100',
+    handle: 'gea-7100',
+    description:
+      'GEA 7100Garmin part number 010-00993-00. Catalog description: GEA 7100. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-00993-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GEA 71B Enhanced, Unit Only',
+    href: '/products/gea-71b-enhanced-unit-only',
+    handle: 'gea-71b-enhanced-unit-only',
+    description:
+      'GEA 71B Enhanced, Unit OnlyGarmin part number 010-01405-02. Catalog description: GEA 71B Enhanced, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-01405-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GEA™ 24 Engine Indication System (EIS)',
+    href: '/products/gea-24-engine-indication-system-eis',
+    handle: 'gea-24-engine-indication-system-eis',
+    description:
+      'GEA™ 24 Engine Indication System (EIS) is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GEA 24B, PMA, Standard. 00…',
+    skus: ['010-02770-11'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - 206, 2 Servo',
+    href: '/products/gfc-500-install-kit-206-2-servo',
+    handle: 'gfc-500-install-kit-206-2-servo',
+    description:
+      'GFC 500 Install Kit - 206, 2 ServoGarmin part number K11-00024-59. Catalog description: GFC 500 Install Kit - 206, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-59'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - 206, Pitch Trim Servo',
+    href: '/products/gfc-500-install-kit-206-pitch-trim-servo',
+    handle: 'gfc-500-install-kit-206-pitch-trim-servo',
+    description:
+      'GFC 500 Install Kit - 206, Pitch Trim ServoGarmin part number K11-00024-61. Catalog description: GFC 500 Install Kit - 206, Pitch Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-61'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Beech 33 Series, 2 Axis',
+    href: '/products/gfc-500-install-kit-beech-33-series-2-axis',
+    handle: 'gfc-500-install-kit-beech-33-series-2-axis',
+    description:
+      'GFC 500 Install Kit - Beech 33 Series, 2 AxisGarmin part number K11-00024-20. Catalog description: GFC 500 Install Kit - Beech 33 Series, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Beech 33 Series, 36/A36 E1-E571, Yaw Damp',
+    href: '/products/gfc-500-install-kit-beech-33-series-36-a36-e1-e571-yaw-damp',
+    handle: 'gfc-500-install-kit-beech-33-series-36-a36-e1-e571-yaw-damp',
+    description:
+      'GFC 500 Install Kit - Beech 33 Series, 36/A36 E1-E571, Yaw DampGarmin part number K11-00024-22. Catalog description: GFC 500 Install Kit - Beech 33 Series, 36/A36 E1-E571, Yaw Damp. Certified Garmin avionics may require approved…',
+    skus: ['K11-00024-22'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Beech 33 Series, Pitch Trim',
+    href: '/products/gfc-500-install-kit-beech-33-series-pitch-trim',
+    handle: 'gfc-500-install-kit-beech-33-series-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Beech 33 Series, Pitch TrimGarmin part number K11-00024-21. Catalog description: GFC 500 Install Kit - Beech 33 Series, Pitch Trim. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-21'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Beech 35, Yaw Damp',
+    href: '/products/gfc-500-install-kit-beech-35-yaw-damp',
+    handle: 'gfc-500-install-kit-beech-35-yaw-damp',
+    description:
+      'GFC 500 Install Kit - Beech 35, Yaw DampGarmin part number K11-00024-14. Catalog description: GFC 500 Install Kit - Beech 35, Yaw Damp. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-14'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Beech 36 Series, 2 Axis',
+    href: '/products/gfc-500-install-kit-beech-36-series-2-axis',
+    handle: 'gfc-500-install-kit-beech-36-series-2-axis',
+    description:
+      'GFC 500 Install Kit - Beech 36 Series, 2 AxisGarmin part number K11-00024-35. Catalog description: GFC 500 Install Kit - Beech 36 Series, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-35'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Beech A36 E572 & On, Pitch Trim',
+    href: '/products/gfc-500-install-kit-beech-a36-e572-on-pitch-trim',
+    handle: 'gfc-500-install-kit-beech-a36-e572-on-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Beech A36 E572 & On, Pitch TrimGarmin part number K11-00024-36. Catalog description: GFC 500 Install Kit - Beech A36 E572 & On, Pitch Trim. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['K11-00024-36'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Beech F33A CE316-CE1791, 2 Axis',
+    href: '/products/gfc-500-install-kit-beech-f33a-ce316-ce1791-2-axis',
+    handle: 'gfc-500-install-kit-beech-f33a-ce316-ce1791-2-axis',
+    description:
+      'GFC 500 Install Kit - Beech F33A CE316-CE1791, 2 AxisGarmin part number K11-00024-29. Catalog description: GFC 500 Install Kit - Beech F33A CE316-CE1791, 2 Axis. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['K11-00024-29'],
+  },
+  {
+    group: 'Products',
+    title:
+      'GFC 500 Install Kit - Beech F33A CE316-CE510, 36/A36 E1-E571, Pitch Trim',
+    href: '/products/gfc-500-install-kit-beech-f33a-ce316-ce510-36-a36-e1-e571-pitch-trim',
+    handle:
+      'gfc-500-install-kit-beech-f33a-ce316-ce510-36-a36-e1-e571-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Beech F33A CE316-CE510, 36/A36 E1-E571, Pitch TrimGarmin part number K11-00024-32. Catalog description: GFC 500 Install Kit - Beech F33A CE316-CE510, 36/A36 E1-E571, Pitch Trim. Certified Garmin avionics may require…',
+    skus: ['K11-00024-32'],
+  },
+  {
+    group: 'Products',
+    title:
+      'GFC 500 Install Kit - Beech F33A CE511-CE1791, A36/A36TC E572 & On, Yaw Damp',
+    href: '/products/gfc-500-install-kit-beech-f33a-ce511-ce1791-a36-a36tc-e572-on-yaw-damp',
+    handle:
+      'gfc-500-install-kit-beech-f33a-ce511-ce1791-a36-a36tc-e572-on-yaw-damp',
+    description:
+      'GFC 500 Install Kit - Beech F33A CE511-CE1791, A36/A36TC E572 & On, Yaw DampGarmin part number K11-00024-30. Catalog description: GFC 500 Install Kit - Beech F33A CE511-CE1791, A36/A36TC E572 & On, Yaw Damp. Certified Garmin avionics may…',
+    skus: ['K11-00024-30'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Beech F33A CE511-CE1791, Pitch Trim',
+    href: '/products/gfc-500-install-kit-beech-f33a-ce511-ce1791-pitch-trim',
+    handle: 'gfc-500-install-kit-beech-f33a-ce511-ce1791-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Beech F33A CE511-CE1791, Pitch TrimGarmin part number K11-00024-31. Catalog description: GFC 500 Install Kit - Beech F33A CE511-CE1791, Pitch Trim. Certified Garmin avionics may require approved installation,…',
+    skus: ['K11-00024-31'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Bonanza N35/P35, Pitch Trim',
+    href: '/products/gfc-500-install-kit-bonanza-n35-p35-pitch-trim',
+    handle: 'gfc-500-install-kit-bonanza-n35-p35-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Bonanza N35/P35, Pitch TrimGarmin part number K11-00024-69. Catalog description: GFC 500 Install Kit - Bonanza N35/P35, Pitch Trim. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-69'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Bonanza S35/V35/A/B, 2 Axis',
+    href: '/products/gfc-500-install-kit-bonanza-s35-v35-a-b-2-axis',
+    handle: 'gfc-500-install-kit-bonanza-s35-v35-a-b-2-axis',
+    description:
+      'GFC 500 Install Kit - Bonanza S35/V35/A/B, 2 AxisGarmin part number K11-00024-12. Catalog description: GFC 500 Install Kit - Bonanza S35/V35/A/B, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-12'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Bonanza S35/V35/A/B, Pitch Trim',
+    href: '/products/gfc-500-install-kit-bonanza-s35-v35-a-b-pitch-trim',
+    handle: 'gfc-500-install-kit-bonanza-s35-v35-a-b-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Bonanza S35/V35/A/B, Pitch TrimGarmin part number K11-00024-13. Catalog description: GFC 500 Install Kit - Bonanza S35/V35/A/B, Pitch Trim. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['K11-00024-13'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 172, 2 Axis',
+    href: '/products/gfc-500-install-kit-cessna-172-2-axis',
+    handle: 'gfc-500-install-kit-cessna-172-2-axis',
+    description:
+      'GFC 500 Install Kit - Cessna 172, 2 AxisGarmin part number K11-00024-01. Catalog description: GFC 500 Install Kit - Cessna 172, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 172, Pitch Trim',
+    href: '/products/gfc-500-install-kit-cessna-172-pitch-trim',
+    handle: 'gfc-500-install-kit-cessna-172-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Cessna 172, Pitch TrimGarmin part number K11-00024-03. Catalog description: GFC 500 Install Kit - Cessna 172, Pitch Trim. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 180/185, 2 Axis',
+    href: '/products/gfc-500-install-kit-cessna-180-185-2-axis',
+    handle: 'gfc-500-install-kit-cessna-180-185-2-axis',
+    description:
+      'GFC 500 Install Kit - Cessna 180/185, 2 AxisGarmin part number K11-00024-33. Catalog description: GFC 500 Install Kit - Cessna 180/185, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-33'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 180/185, Yaw Option',
+    href: '/products/gfc-500-install-kit-cessna-180-185-yaw-option',
+    handle: 'gfc-500-install-kit-cessna-180-185-yaw-option',
+    description:
+      'GFC 500 Install Kit - Cessna 180/185, Yaw OptionGarmin part number K11-00024-34. Catalog description: GFC 500 Install Kit - Cessna 180/185, Yaw Option. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-34'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 182, 2 Axis',
+    href: '/products/gfc-500-install-kit-cessna-182-2-axis',
+    handle: 'gfc-500-install-kit-cessna-182-2-axis',
+    description:
+      'GFC 500 Install Kit - Cessna 182, 2 AxisGarmin part number K11-00024-04. Catalog description: GFC 500 Install Kit - Cessna 182, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-04'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 182, Pitch Trim',
+    href: '/products/gfc-500-install-kit-cessna-182-pitch-trim',
+    handle: 'gfc-500-install-kit-cessna-182-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Cessna 182, Pitch TrimGarmin part number K11-00024-06. Catalog description: GFC 500 Install Kit - Cessna 182, Pitch Trim. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-06'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 182RG, 2 Servo',
+    href: '/products/gfc-500-install-kit-cessna-182rg-2-servo',
+    handle: 'gfc-500-install-kit-cessna-182rg-2-servo',
+    description:
+      'GFC 500 Install Kit - Cessna 182RG, 2 ServoGarmin part number K11-00024-44. Catalog description: GFC 500 Install Kit - Cessna 182RG, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-44'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 182RG, Pitch Trim Servo',
+    href: '/products/gfc-500-install-kit-cessna-182rg-pitch-trim-servo',
+    handle: 'gfc-500-install-kit-cessna-182rg-pitch-trim-servo',
+    description:
+      'GFC 500 Install Kit - Cessna 182RG, Pitch Trim ServoGarmin part number K11-00024-45. Catalog description: GFC 500 Install Kit - Cessna 182RG, Pitch Trim Servo. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['K11-00024-45'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 182RG, Yaw Servo',
+    href: '/products/gfc-500-install-kit-cessna-182rg-yaw-servo',
+    handle: 'gfc-500-install-kit-cessna-182rg-yaw-servo',
+    description:
+      'GFC 500 Install Kit - Cessna 182RG, Yaw ServoGarmin part number K11-00024-46. Catalog description: GFC 500 Install Kit - Cessna 182RG, Yaw Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-46'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 210, 2 Axis',
+    href: '/products/gfc-500-install-kit-cessna-210-2-axis',
+    handle: 'gfc-500-install-kit-cessna-210-2-axis',
+    description:
+      'GFC 500 Install Kit - Cessna 210, 2 AxisGarmin part number K11-00024-17. Catalog description: GFC 500 Install Kit - Cessna 210, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-17'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 210, Pitch Trim',
+    href: '/products/gfc-500-install-kit-cessna-210-pitch-trim',
+    handle: 'gfc-500-install-kit-cessna-210-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Cessna 210, Pitch TrimGarmin part number K11-00024-18. Catalog description: GFC 500 Install Kit - Cessna 210, Pitch Trim. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-18'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 210, Yaw Damp',
+    href: '/products/gfc-500-install-kit-cessna-210-yaw-damp',
+    handle: 'gfc-500-install-kit-cessna-210-yaw-damp',
+    description:
+      'GFC 500 Install Kit - Cessna 210, Yaw DampGarmin part number K11-00024-19. Catalog description: GFC 500 Install Kit - Cessna 210, Yaw Damp. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-19'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 210GHJ, 2 Axis',
+    href: '/products/gfc-500-install-kit-cessna-210ghj-2-axis',
+    handle: 'gfc-500-install-kit-cessna-210ghj-2-axis',
+    description:
+      'GFC 500 Install Kit - Cessna 210GHJ, 2 AxisGarmin part number K11-00024-70. Catalog description: GFC 500 Install Kit - Cessna 210GHJ, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-70'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 210GHJ, Pitch Trim Option 1',
+    href: '/products/gfc-500-install-kit-cessna-210ghj-pitch-trim-option-1',
+    handle: 'gfc-500-install-kit-cessna-210ghj-pitch-trim-option-1',
+    description:
+      'GFC 500 Install Kit - Cessna 210GHJ, Pitch Trim Option 1Garmin part number K11-00024-71. Catalog description: GFC 500 Install Kit - Cessna 210GHJ, Pitch Trim Option 1. Certified Garmin avionics may require approved installation,…',
+    skus: ['K11-00024-71'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Cessna 210GHJ, Pitch Trim Option 2',
+    href: '/products/gfc-500-install-kit-cessna-210ghj-pitch-trim-option-2',
+    handle: 'gfc-500-install-kit-cessna-210ghj-pitch-trim-option-2',
+    description:
+      'GFC 500 Install Kit - Cessna 210GHJ, Pitch Trim Option 2Garmin part number K11-00024-72. Catalog description: GFC 500 Install Kit - Cessna 210GHJ, Pitch Trim Option 2. Certified Garmin avionics may require approved installation,…',
+    skus: ['K11-00024-72'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Mooney M20 Series, 2 Axis',
+    href: '/products/gfc-500-install-kit-mooney-m20-series-2-axis',
+    handle: 'gfc-500-install-kit-mooney-m20-series-2-axis',
+    description:
+      'GFC 500 Install Kit - Mooney M20 Series, 2 AxisGarmin part number K11-00024-25. Catalog description: GFC 500 Install Kit - Mooney M20 Series, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-25'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Mooney M20 Series, Long Body, Pitch Trim',
+    href: '/products/gfc-500-install-kit-mooney-m20-series-long-body-pitch-trim',
+    handle: 'gfc-500-install-kit-mooney-m20-series-long-body-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Mooney M20 Series, Long Body, Pitch TrimGarmin part number K11-00024-28. Catalog description: GFC 500 Install Kit - Mooney M20 Series, Long Body, Pitch Trim. Certified Garmin avionics may require approved…',
+    skus: ['K11-00024-28'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Mooney M20 Series, Medium Body, Pitch Trim',
+    href: '/products/gfc-500-install-kit-mooney-m20-series-medium-body-pitch-trim',
+    handle: 'gfc-500-install-kit-mooney-m20-series-medium-body-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Mooney M20 Series, Medium Body, Pitch TrimGarmin part number K11-00024-26. Catalog description: GFC 500 Install Kit - Mooney M20 Series, Medium Body, Pitch Trim. Certified Garmin avionics may require approved…',
+    skus: ['K11-00024-26'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Mooney M20 Series, Yaw Option',
+    href: '/products/gfc-500-install-kit-mooney-m20-series-yaw-option',
+    handle: 'gfc-500-install-kit-mooney-m20-series-yaw-option',
+    description:
+      'GFC 500 Install Kit - Mooney M20 Series, Yaw OptionGarmin part number K11-00024-27. Catalog description: GFC 500 Install Kit - Mooney M20 Series, Yaw Option. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-27'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Piper PA-28, 2 Axis',
+    href: '/products/gfc-500-install-kit-piper-pa-28-2-axis',
+    handle: 'gfc-500-install-kit-piper-pa-28-2-axis',
+    description:
+      'GFC 500 Install Kit - Piper PA-28, 2 AxisGarmin part number K11-00024-23. Catalog description: GFC 500 Install Kit - Piper PA-28, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-23'],
+  },
+  {
+    group: 'Products',
+    title:
+      'GFC 500 Install Kit - Piper PA-28, 2 Axis, Battery Located Under Seat',
+    href: '/products/gfc-500-install-kit-piper-pa-28-2-axis-battery-located-under-seat',
+    handle: 'gfc-500-install-kit-piper-pa-28-2-axis-battery-located-under-seat',
+    description:
+      'GFC 500 Install Kit - Piper PA-28, 2 Axis, Battery Located Under SeatGarmin part number K11-00024-24. Catalog description: GFC 500 Install Kit - Piper PA-28, 2 Axis, Battery Located Under Seat. Certified Garmin avionics may require…',
+    skus: ['K11-00024-24'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Piper PA28-180, Pitch Trim',
+    href: '/products/gfc-500-install-kit-piper-pa28-180-pitch-trim',
+    handle: 'gfc-500-install-kit-piper-pa28-180-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Piper PA28-180, Pitch TrimGarmin part number K11-00024-09. Catalog description: GFC 500 Install Kit - Piper PA28-180, Pitch Trim. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-09'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - Piper PA28-181, Pitch Trim',
+    href: '/products/gfc-500-install-kit-piper-pa28-181-pitch-trim',
+    handle: 'gfc-500-install-kit-piper-pa28-181-pitch-trim',
+    description:
+      'GFC 500 Install Kit - Piper PA28-181, Pitch TrimGarmin part number K11-00024-11. Catalog description: GFC 500 Install Kit - Piper PA28-181, Pitch Trim. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-11'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 500 Install Kit - True Flight Holdings AA-5/A/B, AG-5B, 2 Axis',
+    href: '/products/gfc-500-install-kit-true-flight-holdings-aa-5-a-b-ag-5b-2-axis',
+    handle: 'gfc-500-install-kit-true-flight-holdings-aa-5-a-b-ag-5b-2-axis',
+    description:
+      'GFC 500 Install Kit - True Flight Holdings AA-5/A/B, AG-5B, 2 AxisGarmin part number K11-00024-15. Catalog description: GFC 500 Install Kit - Kit 15 (IMA -11), 2 Servo. Certified Garmin avionics may require approved installation,…',
+    skus: ['K11-00024-15'],
+  },
+  {
+    group: 'Products',
     title: 'GFC 500 Product Info Kit',
     href: '/products/gfc-500-product-info-kit',
     handle: 'gfc-500-product-info-kit',
     description:
       'GFC 500 Product Info KitGarmin part number K00-01087-00. Catalog description: GFC 500 Product Info Kit. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration and supporting installation parts before…',
     skus: ['K00-01087-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 600 Install Kit - 421C, 3 Servo',
+    href: '/products/gfc-600-install-kit-421c-3-servo',
+    handle: 'gfc-600-install-kit-421c-3-servo',
+    description:
+      'GFC 600 Install Kit - 421C, 3 ServoGarmin part number K11-00018-34. Catalog description: GFC 600 Install Kit - 421C, 3 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00018-34'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 600 Install Kit - 421C, Yaw Servo',
+    href: '/products/gfc-600-install-kit-421c-yaw-servo',
+    handle: 'gfc-600-install-kit-421c-yaw-servo',
+    description:
+      'GFC 600 Install Kit - 421C, Yaw ServoGarmin part number K11-00018-35. Catalog description: GFC 600 Install Kit - 421C, Yaw Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00018-35'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 600 Install Kit - Cessna 208B, 2 Axis with Pitch Trim',
+    href: '/products/gfc-600-install-kit-cessna-208b-2-axis-with-pitch-trim',
+    handle: 'gfc-600-install-kit-cessna-208b-2-axis-with-pitch-trim',
+    description:
+      'GFC 600 Install Kit - Cessna 208B, 2 Axis with Pitch TrimGarmin part number K11-00018-19. Catalog description: GFC 600 Install Kit - Cessna 208B, 2 Axis with Pitch Trim. Certified Garmin avionics may require approved installation,…',
+    skus: ['K11-00018-19'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 600 Install Kit - Cessna 208B, Yaw Damp',
+    href: '/products/gfc-600-install-kit-cessna-208b-yaw-damp',
+    handle: 'gfc-600-install-kit-cessna-208b-yaw-damp',
+    description:
+      'GFC 600 Install Kit - Cessna 208B, Yaw DampGarmin part number K11-00018-21. Catalog description: GFC 600 Install Kit - Cessna 208B, Yaw Damp. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00018-21'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 600 Install Kit - Cessna 414A, 2 Axis with Pitch Trim',
+    href: '/products/gfc-600-install-kit-cessna-414a-2-axis-with-pitch-trim',
+    handle: 'gfc-600-install-kit-cessna-414a-2-axis-with-pitch-trim',
+    description:
+      'GFC 600 Install Kit - Cessna 414A, 2 Axis with Pitch TrimGarmin part number K11-00018-22. Catalog description: GFC 600 Install Kit - Cessna 414A, 2 Axis with Pitch Trim. Certified Garmin avionics may require approved installation,…',
+    skus: ['K11-00018-22'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 600 Install Kit - Cessna 414A, Yaw Damp',
+    href: '/products/gfc-600-install-kit-cessna-414a-yaw-damp',
+    handle: 'gfc-600-install-kit-cessna-414a-yaw-damp',
+    description:
+      'GFC 600 Install Kit - Cessna 414A, Yaw DampGarmin part number K11-00018-24. Catalog description: GFC 600 Install Kit - Cessna 414A, Yaw Damp. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00018-24'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 600 Install Kit - PA-46, 3 Servo',
+    href: '/products/gfc-600-install-kit-pa-46-3-servo',
+    handle: 'gfc-600-install-kit-pa-46-3-servo',
+    description:
+      'GFC 600 Install Kit - PA-46, 3 ServoGarmin part number K11-00018-26. Catalog description: GFC 600 Install Kit - PA-46, 3 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00018-26'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 600 Install Kit - PA-46, Yaw Servo',
+    href: '/products/gfc-600-install-kit-pa-46-yaw-servo',
+    handle: 'gfc-600-install-kit-pa-46-yaw-servo',
+    description:
+      'GFC 600 Install Kit - PA-46, Yaw ServoGarmin part number K11-00018-27. Catalog description: GFC 600 Install Kit - PA-46, Yaw Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00018-27'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC 600 Install Kit - TBM 700/850',
+    href: '/products/gfc-600-install-kit-tbm-700-850',
+    handle: 'gfc-600-install-kit-tbm-700-850',
+    description:
+      'GFC 600 Install Kit - TBM 700/850Garmin part number K11-00018-25. Catalog description: GFC 600 Install Kit - TBM 700/850. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-25'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC500 Install Kit - Bonanza N35/P35, 2 Axis',
+    href: '/products/gfc500-install-kit-bonanza-n35-p35-2-axis',
+    handle: 'gfc500-install-kit-bonanza-n35-p35-2-axis',
+    description:
+      'GFC500 Install Kit - Bonanza N35/P35, 2 AxisGarmin part number K11-00024-68. Catalog description: GFC500 Install Kit - Bonanza N35/P35, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-68'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC500 Install Kit, 2 Servo, M20 C/D/E (Early)',
+    href: '/products/gfc500-install-kit-2-servo-m20-c-d-e-early',
+    handle: 'gfc500-install-kit-2-servo-m20-c-d-e-early',
+    description:
+      'GFC500 Install Kit, 2 Servo, M20 C/D/E (Early)Garmin part number K11-00024-92. Catalog description: GFC500 Install Kit, 2 Servo, M20 C/D/E (Early). Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-92'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC500 Install Kit, Bonanza H/J/K/M 35, 2 Axis',
+    href: '/products/gfc500-install-kit-bonanza-h-j-k-m-35-2-axis',
+    handle: 'gfc500-install-kit-bonanza-h-j-k-m-35-2-axis',
+    description:
+      'GFC500 Install Kit, Bonanza H/J/K/M 35, 2 AxisGarmin part number K11-00024-90. Catalog description: GFC500 Install Kit, Bonanza H/J/K/M 35, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-90'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC500 Install Kit, Cessna 210D/E/F, 2 Axis',
+    href: '/products/gfc500-install-kit-cessna-210d-e-f-2-axis',
+    handle: 'gfc500-install-kit-cessna-210d-e-f-2-axis',
+    description:
+      'GFC500 Install Kit, Cessna 210D/E/F, 2 AxisGarmin part number K11-00024-91. Catalog description: GFC500 Install Kit, Cessna 210D/E/F, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-91'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC500 Install Kit, M20 C/D/E (Early), Yaw',
+    href: '/products/gfc500-install-kit-m20-c-d-e-early-yaw',
+    handle: 'gfc500-install-kit-m20-c-d-e-early-yaw',
+    description:
+      'GFC500 Install Kit, M20 C/D/E (Early), YawGarmin part number K11-00024-93. Catalog description: GFC500 Install Kit, M20 C/D/E (Early), Yaw. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-93'],
+  },
+  {
+    group: 'Products',
+    title: 'GFC700,Bridle Cable Clmp,3/16 to 1/16',
+    href: '/products/gfc700-bridle-cable-clmp-3-16-to-1-16',
+    handle: 'gfc700-bridle-cable-clmp-3-16-to-1-16',
+    description:
+      'GFC700,Bridle Cable Clmp,3/16 to 1/16Garmin part number 117-00164-04. Catalog description: GFC700,Bridle Cable Clmp,3/16 to 1/16. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['117-00164-04'],
+  },
+  {
+    group: 'Products',
+    title: 'GFS 83, Clutchless High Torque, Unit Only',
+    href: '/products/garmin-gfs-83-clutchless-high-torque-unit-only-010-01243-14',
+    handle: 'garmin-gfs-83-clutchless-high-torque-unit-only-010-01243-14',
+    description:
+      'GFS 83, Clutchless High Torque, Unit OnlyGarmin part number 010-01243-14.',
+    skus: ['010-01243-14'],
+  },
+  {
+    group: 'Products',
+    title: 'GFS 83, Clutchless, Unit Only',
+    href: '/products/garmin-gfs-83-clutchless-unit-only-010-01243-11',
+    handle: 'garmin-gfs-83-clutchless-unit-only-010-01243-11',
+    description:
+      'GFS 83, Clutchless, Unit OnlyGarmin part number 010-01243-11.',
+    skus: ['010-01243-11'],
+  },
+  {
+    group: 'Products',
+    title: 'GFS 83, Clutchless, Unit Only',
+    href: '/products/garmin-gfs-83-clutchless-unit-only-010-01243-12',
+    handle: 'garmin-gfs-83-clutchless-unit-only-010-01243-12',
+    description:
+      'GFS 83, Clutchless, Unit OnlyGarmin part number 010-01243-12.',
+    skus: ['010-01243-12'],
+  },
+  {
+    group: 'Products',
+    title: 'GFS 83, Unit Only',
+    href: '/products/gfs-83-unit-only',
+    handle: 'gfs-83-unit-only',
+    description:
+      'GFS 83, Unit OnlyGarmin part number 010-01243-00. Catalog description: GFS 83, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01243-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GHA™ 15',
+    href: '/products/gha-15',
+    handle: 'gha-15',
+    description:
+      'GHA™ 15Garmin part number 010-02942-00. Catalog description: GHA™ 15. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-02942-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GHC 1450, Unit Only',
+    href: '/products/ghc-1450-unit-only',
+    handle: 'ghc-1450-unit-only',
+    description:
+      'GHC 1450, Unit OnlyGarmin part number 010-01861-00. Catalog description: GHC 1450, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01861-00'],
   },
   {
     group: 'Products',
@@ -3063,6 +7058,33 @@ export const SITE_SEARCH_INDEX = [
     description:
       'GI 285, Unit OnlyGarmin part number 010-01598-00. Catalog description: GI 285, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
     skus: ['010-01598-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GI-102A',
+    href: '/products/gi-102a',
+    handle: 'gi-102a',
+    description:
+      'GI-102AGarmin part number 013-00048-00. Catalog description: GI-102A. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['013-00048-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GI-102A & GI-106A installation kit',
+    href: '/products/gi-102a-gi-106a-installation-kit',
+    handle: 'gi-102a-gi-106a-installation-kit',
+    description:
+      'GI-102A & GI-106A installation kitGarmin part number 013-00050-00. Catalog description: GI-102A & GI-106A installation kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['013-00050-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GI-106A installation kit for CDI with course datum',
+    href: '/products/gi-106a-installation-kit-for-cdi-with-course-datum',
+    handle: 'gi-106a-installation-kit-for-cdi-with-course-datum',
+    description:
+      'GI-106A installation kit for CDI with course datumGarmin part number 013-00050-10. Catalog description: GI-106A installation kit for CDI with course datum. Garmin avionics accessory or service part. Confirm compatibility with the target…',
+    skus: ['013-00050-10'],
   },
   {
     group: 'Products',
@@ -3111,6 +7133,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'GI275 Class III, ADAHRS + AP, Unit Only',
+    href: '/products/garmin-gi275-class-iii-adahrs-ap-unit-only-010-01912-50',
+    handle: 'garmin-gi275-class-iii-adahrs-ap-unit-only-010-01912-50',
+    description:
+      'GI275 Class III, ADAHRS + AP, Unit OnlyGarmin part number 010-01912-50.',
+    skus: ['010-01912-50'],
+  },
+  {
+    group: 'Products',
     title: 'GI275 Pilots Guide',
     href: '/products/gi275-pilots-guide',
     handle: 'gi275-pilots-guide',
@@ -3138,12 +7169,62 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'GLA 85, Unit Only',
+    href: '/products/garmin-gla-85-unit-only-010-01242-00',
+    handle: 'garmin-gla-85-unit-only-010-01242-00',
+    description: 'GLA 85, Unit OnlyGarmin part number 010-01242-00.',
+    skus: ['010-01242-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GLA 85, Unit Only, 10 mm',
+    href: '/products/garmin-gla-85-unit-only-10-mm-010-01242-01',
+    handle: 'garmin-gla-85-unit-only-10-mm-010-01242-01',
+    description: 'GLA 85, Unit Only, 10 mmGarmin part number 010-01242-01.',
+    skus: ['010-01242-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GLA 85, Unit Only, 12 mm',
+    href: '/products/garmin-gla-85-unit-only-12-mm-010-01242-02',
+    handle: 'garmin-gla-85-unit-only-12-mm-010-01242-02',
+    description: 'GLA 85, Unit Only, 12 mmGarmin part number 010-01242-02.',
+    skus: ['010-01242-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GLA 85, Unit Only, 20 mm',
+    href: '/products/garmin-gla-85-unit-only-20-mm-010-01242-03',
+    handle: 'garmin-gla-85-unit-only-20-mm-010-01242-03',
+    description: 'GLA 85, Unit Only, 20 mmGarmin part number 010-01242-03.',
+    skus: ['010-01242-03'],
+  },
+  {
+    group: 'Products',
     title: 'GLO Portable Friction Mount',
     href: '/products/glo-portable-friction-mount',
     handle: 'glo-portable-friction-mount',
     description:
       'GLO Portable Friction MountGarmin part number 010-11832-00. Catalog description: GLO Portable Friction Mount. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
     skus: ['010-11832-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMA 1360D Audio Panel, Unit Only',
+    href: '/products/gma-1360d-audio-panel-unit-only',
+    handle: 'gma-1360d-audio-panel-unit-only',
+    description:
+      'GMA 1360D Audio Panel, Unit OnlyGarmin part number 010-01340-20. Catalog description: GMA 1360D Audio Panel, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01340-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GMA 245, Standard',
+    href: '/products/gma-245-standard',
+    handle: 'gma-245-standard',
+    description:
+      'GMA 245, StandardGarmin part number 010-01318-03. Catalog description: GMA 245, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01318-03'],
   },
   {
     group: 'Products',
@@ -3165,6 +7246,69 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: "GMA 347 pilot's guide",
+    href: '/products/gma-347-pilots-guide',
+    handle: 'gma-347-pilots-guide',
+    description:
+      "GMA 347 pilot's guideGarmin part number 190-00325-00. Catalog description: GMA 347 pilot's guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.",
+    skus: ['190-00325-00'],
+  },
+  {
+    group: 'Products',
+    title: "GMA 350H Pilot's Guide",
+    href: '/products/gma-350h-pilots-guide',
+    handle: 'gma-350h-pilots-guide',
+    description:
+      "GMA 350H Pilot's GuideGarmin part number 190-01134-14. Catalog description: GMA 350H Pilot's Guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.",
+    skus: ['190-01134-14'],
+  },
+  {
+    group: 'Products',
+    title: 'GMA 36B, Unit Only',
+    href: '/products/gma-36b-unit-only',
+    handle: 'gma-36b-unit-only',
+    description:
+      'GMA 36B, Unit OnlyGarmin part number 010-01627-00. Catalog description: GMA 36B, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01627-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMA1347C,Unit Only',
+    href: '/products/gma1347c-unit-only',
+    handle: 'gma1347c-unit-only',
+    description:
+      'GMA1347C,Unit OnlyGarmin part number 010-00465-20. Catalog description: GMA1347C,Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-00465-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GMA245R MKR, Standard',
+    href: '/products/gma245r-mkr-standard',
+    handle: 'gma245r-mkr-standard',
+    description:
+      'GMA245R MKR, StandardGarmin part number 010-01471-13. Catalog description: GMA245R MKR, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01471-13'],
+  },
+  {
+    group: 'Products',
+    title: 'GMA245R, Standard',
+    href: '/products/gma245r-standard',
+    handle: 'gma245r-standard',
+    description:
+      'GMA245R, StandardGarmin part number 010-01471-03. Catalog description: GMA245R, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01471-03'],
+  },
+  {
+    group: 'Products',
+    title: "GMA342 Pilot's Guide",
+    href: '/products/gma342-pilots-guide',
+    handle: 'gma342-pilots-guide',
+    description:
+      "GMA342 Pilot's GuideGarmin part number 190-01878-00. Catalog description: GMA342 Pilot's Guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.",
+    skus: ['190-01878-00'],
+  },
+  {
+    group: 'Products',
     title: 'GMA342, Unit Only',
     href: '/products/gma342-unit-only',
     handle: 'gma342-unit-only',
@@ -3174,12 +7318,322 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: "GMA345 Pilot's Guide",
+    href: '/products/gma345-pilots-guide',
+    handle: 'gma345-pilots-guide',
+    description:
+      "GMA345 Pilot's GuideGarmin part number 190-01878-01. Catalog description: GMA345 Pilot's Guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.",
+    skus: ['190-01878-01'],
+  },
+  {
+    group: 'Products',
+    title: "GMA350 Pilot's Guide",
+    href: '/products/gma350-pilots-guide',
+    handle: 'gma350-pilots-guide',
+    description:
+      'Garmin pilot-guide reference for the GMA 350 and GMA 350c audio panels, part number 190-01134-12. It explains audio selection, intercom controls and 3D audio, with Bluetooth operating instructions specific to the GMA 350c. This listing is…',
+    skus: ['190-01134-12'],
+  },
+  {
+    group: 'Products',
+    title: 'GMA350Hc,Standard',
+    href: '/products/gma350hc-standard',
+    handle: 'gma350hc-standard',
+    description:
+      'GMA350Hc,StandardGarmin part number 010-00871-91. Catalog description: GMA350Hc,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-00871-91'],
+  },
+  {
+    group: 'Products',
+    title: 'GMA™ 345',
+    href: '/products/garmin-gma-345-010-01319-03',
+    handle: 'garmin-gma-345-010-01319-03',
+    description:
+      'GMA™ 345Garmin part number 010-01319-03. Confirm compatibility and availability before ordering.',
+    skus: ['010-01319-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GMA™ 345',
+    href: '/products/garmin-gma-345-010-01319-23',
+    handle: 'garmin-gma-345-010-01319-23',
+    description:
+      'GMA™ 345Garmin part number 010-01319-23. Confirm compatibility and availability before ordering.',
+    skus: ['010-01319-23'],
+  },
+  {
+    group: 'Products',
+    title: 'GMA™ 350c',
+    href: '/products/gma-350c-010-00871-41',
+    handle: 'gma-350c-010-00871-41',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-00871-41.',
+    skus: ['010-00871-41'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 305 Control Panel',
+    href: '/products/gmc-305-control-panel',
+    handle: 'gmc-305-control-panel',
+    description:
+      'GMC 305 Control PanelGarmin part number 010-01169-00. Catalog description: GMC 305 Control Panel. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01169-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 307, No YD, Unit Only',
+    href: '/products/garmin-gmc-307-no-yd-unit-only-010-01595-20',
+    handle: 'garmin-gmc-307-no-yd-unit-only-010-01595-20',
+    description: 'GMC 307, No YD, Unit OnlyGarmin part number 010-01595-20.',
+    skus: ['010-01595-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 307, Unit Only',
+    href: '/products/garmin-gmc-307-unit-only-010-01595-00',
+    handle: 'garmin-gmc-307-unit-only-010-01595-00',
+    description: 'GMC 307, Unit OnlyGarmin part number 010-01595-00.',
+    skus: ['010-01595-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 507, No PMA',
+    href: '/products/gmc-507-no-pma',
+    handle: 'gmc-507-no-pma',
+    description:
+      'GMC 507, No PMAGarmin part number 010-01946-00. Catalog description: GMC 507, No PMA. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01946-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 507, No VNAV No YD, FAA-PMA',
+    href: '/products/gmc-507-no-vnav-no-yd-faa-pma-010-01946-04',
+    handle: 'gmc-507-no-vnav-no-yd-faa-pma-010-01946-04',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-01946-04.',
+    skus: ['010-01946-04'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 507, PMA (Certificated Aircraft)',
+    href: '/products/gmc-507-pma-certificated-aircraft',
+    handle: 'gmc-507-pma-certificated-aircraft',
+    description:
+      'GMC 507, PMA (Certificated Aircraft)Garmin part number 010-01946-01. Catalog description: GMC 507, PMA (Certificated Aircraft). Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01946-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 605 Product Info Kit',
+    href: '/products/gmc-605-product-info-kit',
+    handle: 'gmc-605-product-info-kit',
+    description:
+      'GMC 605 Product Info KitGarmin part number K00-00662-00. Catalog description: GMC 605 Product Info Kit. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration and supporting installation parts before…',
+    skus: ['K00-00662-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 605, Unit Only',
+    href: '/products/gmc-605-unit-only',
+    handle: 'gmc-605-unit-only',
+    description:
+      'GMC 605, Unit OnlyGarmin part number 010-01075-02. Catalog description: GMC 605, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01075-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 707, no BC/YD Buttons, Unit Only',
+    href: '/products/gmc-707-no-bc-yd-buttons-unit-only',
+    handle: 'gmc-707-no-bc-yd-buttons-unit-only',
+    description:
+      'GMC 707, no BC/YD Buttons, Unit OnlyGarmin part number 010-01320-20. Catalog description: GMC 707, no BC/YD Buttons, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01320-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 708, Unit Only',
+    href: '/products/gmc-708-unit-only',
+    handle: 'gmc-708-unit-only',
+    description:
+      'GMC 708, Unit OnlyGarmin part number 010-01321-00. Catalog description: GMC 708, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01321-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 711, Unit Only',
+    href: '/products/gmc-711-unit-only',
+    handle: 'gmc-711-unit-only',
+    description:
+      'GMC 711, Unit OnlyGarmin part number 010-01777-00. Catalog description: GMC 711, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01777-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 7200',
+    href: '/products/gmc-7200',
+    handle: 'gmc-7200',
+    description:
+      'GMC 7200Garmin part number 010-00971-00. Catalog description: GMC 7200. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-00971-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 725',
+    href: '/products/gmc-725',
+    handle: 'gmc-725',
+    description:
+      'GMC 725Garmin part number 010-01721-00. Catalog description: GMC 725. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01721-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 7250',
+    href: '/products/gmc-7250',
+    handle: 'gmc-7250',
+    description:
+      'GMC 7250Garmin part number 010-00949-01. Catalog description: GMC 7250. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-00949-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC 7300, Unit Only',
+    href: '/products/gmc-7300-unit-only',
+    handle: 'gmc-7300-unit-only',
+    description:
+      'GMC 7300, Unit OnlyGarmin part number 010-01151-00. Catalog description: GMC 7300, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01151-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC305 w/YD',
+    href: '/products/gmc305-w-yd',
+    handle: 'gmc305-w-yd',
+    description:
+      'GMC305 w/YDGarmin part number 010-01169-20. Catalog description: GMC305 w/YD. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01169-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC507, FAA-PMA, No YD',
+    href: '/products/gmc507-faa-pma-no-yd-010-01946-03',
+    handle: 'gmc507-faa-pma-no-yd-010-01946-03',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-01946-03.',
+    skus: ['010-01946-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC605 Color, Black, FLC, Standard',
+    href: '/products/garmin-gmc605-color-black-flc-standard-010-01075-17',
+    handle: 'garmin-gmc605-color-black-flc-standard-010-01075-17',
+    description:
+      'GMC605 Color, Black, FLC, StandardGarmin part number 010-01075-17.',
+    skus: ['010-01075-17'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC605 Color, Black, FLC, Unit Only',
+    href: '/products/garmin-gmc605-color-black-flc-unit-only-010-01075-16',
+    handle: 'garmin-gmc605-color-black-flc-unit-only-010-01075-16',
+    description:
+      'GMC605 Color, Black, FLC, Unit OnlyGarmin part number 010-01075-16.',
+    skus: ['010-01075-16'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC605 Color, Gray, Standard',
+    href: '/products/garmin-gmc605-color-gray-standard-010-01075-15',
+    handle: 'garmin-gmc605-color-gray-standard-010-01075-15',
+    description: 'GMC605 Color, Gray, StandardGarmin part number 010-01075-15.',
+    skus: ['010-01075-15'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC605 Color, Gray, Unit only',
+    href: '/products/garmin-gmc605-color-gray-unit-only-010-01075-14',
+    handle: 'garmin-gmc605-color-gray-unit-only-010-01075-14',
+    description:
+      'GMC605 Color, Gray, Unit onlyGarmin part number 010-01075-14.',
+    skus: ['010-01075-14'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC605 Color, IAS, Standard',
+    href: '/products/garmin-gmc605-color-ias-standard-010-01075-13',
+    handle: 'garmin-gmc605-color-ias-standard-010-01075-13',
+    description: 'GMC605 Color, IAS, StandardGarmin part number 010-01075-13.',
+    skus: ['010-01075-13'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC605 Color, IAS, Unit Only',
+    href: '/products/garmin-gmc605-color-ias-unit-only-010-01075-12',
+    handle: 'garmin-gmc605-color-ias-unit-only-010-01075-12',
+    description: 'GMC605 Color, IAS, Unit OnlyGarmin part number 010-01075-12.',
+    skus: ['010-01075-12'],
+  },
+  {
+    group: 'Products',
+    title: 'GMC605H, w/o FD, NV, Unit Only',
+    href: '/products/garmin-gmc605h-w-o-fd-nv-unit-only-010-01075-22',
+    handle: 'garmin-gmc605h-w-o-fd-nv-unit-only-010-01075-22',
+    description:
+      'GMC605H, w/o FD, NV, Unit OnlyGarmin part number 010-01075-22.',
+    skus: ['010-01075-22'],
+  },
+  {
+    group: 'Products',
+    title: 'GMS85 Spiral Medium Torque',
+    href: '/products/gms85-spiral-medium-torque',
+    handle: 'gms85-spiral-medium-torque',
+    description:
+      'GMS85 Spiral Medium TorqueGarmin part number 010-00304-08. Catalog description: GMS85 Spiral Medium Torque. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-00304-08'],
+  },
+  {
+    group: 'Products',
     title: 'GMU 11, Unit Only',
     href: '/products/gmu-11-unit-only',
     handle: 'gmu-11-unit-only',
     description:
       'GMU 11, Unit OnlyGarmin part number 010-01788-00. Catalog description: GMU 11, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
     skus: ['010-01788-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMU 22 Install Kit',
+    href: '/products/gmu-22-install-kit',
+    handle: 'gmu-22-install-kit',
+    description:
+      'GMU 22 Install KitGarmin part number 011-00871-10. Catalog description: GMU 22 Install Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation. GMU…',
+    skus: ['011-00871-10'],
+  },
+  {
+    group: 'Products',
+    title: 'GMU 22 Magnetometer',
+    href: '/products/gmu-22-magnetometer',
+    handle: 'gmu-22-magnetometer',
+    description:
+      'GMU 22 MagnetometerGarmin part number 010-01196-00. Catalog description: GMU 22 Magnetometer. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01196-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GMU 44 Universal Mount',
+    href: '/products/gmu-44-universal-mount',
+    handle: 'gmu-44-universal-mount',
+    description:
+      'GMU 44 Universal MountGarmin part number 011-01779-01. Catalog description: GMU 44 Universal Mount. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-01779-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GMU 44B, Unit Only',
+    href: '/products/gmu-44b-unit-only',
+    handle: 'gmu-44b-unit-only',
+    description:
+      'GMU 44B, Unit OnlyGarmin part number 010-01708-00. Catalog description: GMU 44B, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01708-00'],
   },
   {
     group: 'Products',
@@ -3216,6 +7670,32 @@ export const SITE_SEARCH_INDEX = [
     description:
       'GMX 200 SafeTaxi, FliteChart Data Card KitGarmin part number 010-00489-52. Catalog description: GMX 200, SafeTaxi, FliteChart Datacard Kit. Garmin data card or database media item. Confirm region, database type, and compatible navigator…',
     skus: ['010-00489-52'],
+  },
+  {
+    group: 'Products',
+    title: 'GNC 255B, NVG Compatible',
+    href: '/products/gnc-255b-nvg-compatible',
+    handle: 'gnc-255b-nvg-compatible',
+    description:
+      'GNC 255B, NVG CompatibleGarmin part number 010-00999-70. Catalog description: GNC 255B, NVG Compatible. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-00999-70'],
+  },
+  {
+    group: 'Products',
+    title: 'GNC 355, Unit Only',
+    href: '/products/garmin-gnc-355-unit-only-010-02232-00',
+    handle: 'garmin-gnc-355-unit-only-010-02232-00',
+    description: 'GNC 355, Unit OnlyGarmin part number 010-02232-00.',
+    skus: ['010-02232-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GNC255B,NV,Standard',
+    href: '/products/gnc255b-nv-standard',
+    handle: 'gnc255b-nv-standard',
+    description:
+      'GNC255B,NV,StandardGarmin part number 010-02487-70. Catalog description: GNC255B,NV,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-02487-70'],
   },
   {
     group: 'Products',
@@ -3261,6 +7741,50 @@ export const SITE_SEARCH_INDEX = [
     description:
       'GNS WAAS Navdata Card - InternationalGarmin part number 010-10546-02. Confirm compatibility and availability before ordering.',
     skus: ['010-10546-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GNX375, Standard Kit, Americas',
+    href: '/products/garmin-gnx375-standard-kit-americas-010-01823-01',
+    handle: 'garmin-gnx375-standard-kit-americas-010-01823-01',
+    description:
+      'GNX375, Standard Kit, AmericasGarmin part number 010-01823-01. GNX375, Standard Kit, Americas — kit contentsGarmin kit P/N 010-01823-01 includes these documented components: GNX 375 unit — Garmin P/N 010-01823-00 (qty 1) Install rack —…',
+    skus: ['010-01823-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GNX375, Unit Only',
+    href: '/products/garmin-gnx375-unit-only-010-01823-00',
+    handle: 'garmin-gnx375-unit-only-010-01823-00',
+    description: 'GNX375, Unit OnlyGarmin part number 010-01823-00.',
+    skus: ['010-01823-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GPA 65',
+    href: '/products/gpa-65',
+    handle: 'gpa-65',
+    description:
+      'GPA 65Garmin part number 010-10721-00. Catalog description: GPA 65. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-10721-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GPS 20A Connector Kit',
+    href: '/products/gps-20a-connector-kit',
+    handle: 'gps-20a-connector-kit',
+    description:
+      'GPS 20A Connector KitGarmin part number 011-03914-00. Catalog description: GPS 20A Connector Kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering. GPS…',
+    skus: ['011-03914-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GPS 3000, Unit Only',
+    href: '/products/gps-3000-unit-only',
+    handle: 'gps-3000-unit-only',
+    description:
+      'GPS 3000, Unit OnlyGarmin part number 010-01852-00. Catalog description: GPS 3000, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01852-00'],
   },
   {
     group: 'Products',
@@ -3363,6 +7887,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'GRA 5500/55 External 5G Filter, 1.7"x1.2"',
+    href: '/products/gra-5500-55-external-5g-filter-1-7x1-2',
+    handle: 'gra-5500-55-external-5g-filter-1-7x1-2',
+    description:
+      'GRA 5500/55 External 5G Filter, 1. 7"x1. 2"Garmin part number 010-02886-00. Catalog description: GRA 5500/55 External 5G Filter, 1. 7"x1. 2". Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-02886-00'],
+  },
+  {
+    group: 'Products',
     title: 'GRS 7800',
     href: '/products/grs-7800',
     handle: 'grs-7800',
@@ -3381,12 +7914,37 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'GRS7800, Unit Only',
+    href: '/products/garmin-grs7800-unit-only-010-00816-01',
+    handle: 'garmin-grs7800-unit-only-010-00816-01',
+    description: 'GRS7800, Unit OnlyGarmin part number 010-00816-01.',
+    skus: ['010-00816-01'],
+  },
+  {
+    group: 'Products',
     title: 'GSA 87 Servo, Unit Only',
     href: '/products/gsa-87-servo-unit-only',
     handle: 'gsa-87-servo-unit-only',
     description:
       'GSA 87 Servo, Unit OnlyGarmin part number 010-01469-00. Catalog description: GSA 87 Servo, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
     skus: ['010-01469-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GSA 87 Servo,Idler Pulley,Unit Only',
+    href: '/products/gsa-87-servo-idler-pulley-unit-only',
+    handle: 'gsa-87-servo-idler-pulley-unit-only',
+    description:
+      'GSA 87 Servo,Idler Pulley,Unit OnlyGarmin part number 010-01469-01. Catalog description: GSA 87 Servo,Idler Pulley,Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01469-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GSA 87, Unit Only',
+    href: '/products/garmin-gsa-87-unit-only-010-01469-02',
+    handle: 'garmin-gsa-87-unit-only-010-01469-02',
+    description: 'GSA 87, Unit OnlyGarmin part number 010-01469-02.',
+    skus: ['010-01469-02'],
   },
   {
     group: 'Products',
@@ -3399,12 +7957,365 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'GSA80 Unit Only',
+    href: '/products/garmin-gsa80-unit-only-010-00302-20',
+    handle: 'garmin-gsa80-unit-only-010-00302-20',
+    description: 'GSA80 Unit OnlyGarmin part number 010-00302-20.',
+    skus: ['010-00302-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GSA80 Unit Only',
+    href: '/products/garmin-gsa80-unit-only-010-00302-21',
+    handle: 'garmin-gsa80-unit-only-010-00302-21',
+    description: 'GSA80 Unit OnlyGarmin part number 010-00302-21.',
+    skus: ['010-00302-21'],
+  },
+  {
+    group: 'Products',
+    title: 'GSA81,Unit Only',
+    href: '/products/garmin-gsa81-unit-only-010-00303-20',
+    handle: 'garmin-gsa81-unit-only-010-00303-20',
+    description: 'GSA81,Unit OnlyGarmin part number 010-00303-20.',
+    skus: ['010-00303-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GSB 15 Mounting Kit, 3.125"',
+    href: '/products/gsb-15-mounting-kit-3-125',
+    handle: 'gsb-15-mounting-kit-3-125',
+    description:
+      'GSB 15 Mounting Kit, 3. 125"Garmin part number 011-05043-01. Catalog description: GSB 15 Mounting Kit, 3. 125". Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['011-05043-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GSB™ 15 Decorative Cover, Black Powder Coat',
+    href: '/products/gsb-15-decorative-cover-black-powder-coat',
+    handle: 'gsb-15-decorative-cover-black-powder-coat',
+    description:
+      'GSB™ 15 Decorative Cover, Black Powder CoatGarmin part number 011-05291-01. Catalog description: GSB™ 15 Decorative Cover, Black Powder Coat. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['011-05291-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GSB™ 15 Decorative Cover, Unfinished',
+    href: '/products/gsb-15-decorative-cover-unfinished',
+    handle: 'gsb-15-decorative-cover-unfinished',
+    description:
+      'GSB™ 15 Decorative Cover, UnfinishedGarmin part number 011-05291-00. Catalog description: GSB™ 15 Decorative Cover, Unfinished. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['011-05291-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GSB™ 15 Mounting Kit, 2.25"',
+    href: '/products/gsb-15-mounting-kit-2-25',
+    handle: 'gsb-15-mounting-kit-2-25',
+    description:
+      'GSB™ 15 Mounting Kit, 2. 25"Garmin part number 011-05043-00. Catalog description: GSB™ 15 Mounting Kit, 2. 25". Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['011-05043-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GSB™ 15, Dual Type-C, Rear Power Input, Standard',
+    href: '/products/gsb-15-dual-type-c-rear-power-input-standard',
+    handle: 'gsb-15-dual-type-c-rear-power-input-standard',
+    description:
+      'GSB™ 15, Dual Type-C, Rear Power Input, StandardGarmin part number 010-02544-41. Catalog description: GSB™ 15, Dual Type-C, Rear Power Input, Standard. Garmin product or accessory. Confirm compatibility and intended application before…',
+    skus: ['010-02544-41'],
+  },
+  {
+    group: 'Products',
+    title: 'GSB™ 15, Dual Type-C, Side Power Input, Standard',
+    href: '/products/gsb-15-dual-type-c-side-power-input-standard',
+    handle: 'gsb-15-dual-type-c-side-power-input-standard',
+    description:
+      'GSB™ 15, Dual Type-C, Side Power Input, StandardGarmin part number 010-02544-51. Catalog description: GSB™ 15, Dual Type-C, Side Power Input, Standard. Garmin product or accessory. Confirm compatibility and intended application before…',
+    skus: ['010-02544-51'],
+  },
+  {
+    group: 'Products',
+    title: 'GSB™ 15, Dual USB Type-A, Rear Power Input, Standard',
+    href: '/products/gsb-15-dual-usb-type-a-rear-power-input-standard',
+    handle: 'gsb-15-dual-usb-type-a-rear-power-input-standard',
+    description:
+      'GSB™ 15, Dual USB Type-A, Rear Power Input, StandardGarmin part number 010-02201-10. Catalog description: GSB™ 15, Dual USB Type-A, Rear Power Input, Standard. Garmin product or accessory. Confirm compatibility and intended application…',
+    skus: ['010-02201-10'],
+  },
+  {
+    group: 'Products',
+    title: 'GSB™ 15, Dual USB Type-A, Side Power Input, Standard',
+    href: '/products/gsb-15-dual-usb-type-a-side-power-input-standard',
+    handle: 'gsb-15-dual-usb-type-a-side-power-input-standard',
+    description:
+      'GSB™ 15, Dual USB Type-A, Side Power Input, StandardGarmin part number 010-02201-11. Catalog description: GSB™ 15, Dual USB Type-A, Side Power Input, Standard. Garmin product or accessory. Confirm compatibility and intended application…',
+    skus: ['010-02201-11'],
+  },
+  {
+    group: 'Products',
+    title: 'GSB™ 15, Rear Power Input, Unit Only',
+    href: '/products/gsb-15-rear-power-input-unit-only',
+    handle: 'gsb-15-rear-power-input-unit-only',
+    description:
+      'GSB™ 15, Rear Power Input, Unit OnlyGarmin part number 010-02201-00. Catalog description: GSB™ 15, Rear Power Input, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-02201-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GSB™ 15, Type-A and Type-C, Rear Power Input, Standard',
+    href: '/products/gsb-15-type-a-and-type-c-rear-power-input-standard',
+    handle: 'gsb-15-type-a-and-type-c-rear-power-input-standard',
+    description:
+      'GSB™ 15, Type-A and Type-C, Rear Power Input, StandardGarmin part number 010-02544-21. Catalog description: GSB™ 15, Type-A and Type-C, Rear Power Input, Standard. Garmin product or accessory. Confirm compatibility and intended…',
+    skus: ['010-02544-21'],
+  },
+  {
+    group: 'Products',
+    title: 'GSB™ 15, Type-A and Type-C, Side Power Input, Standard',
+    href: '/products/gsb-15-type-a-and-type-c-side-power-input-standard',
+    handle: 'gsb-15-type-a-and-type-c-side-power-input-standard',
+    description:
+      'GSB™ 15, Type-A and Type-C, Side Power Input, StandardGarmin part number 010-02544-31. Catalog description: GSB™ 15, Type-A and Type-C, Side Power Input, Standard. Garmin product or accessory. Confirm compatibility and intended…',
+    skus: ['010-02544-31'],
+  },
+  {
+    group: 'Products',
+    title: 'GSD 41',
+    href: '/products/gsd-41-010-00565-00',
+    handle: 'gsd-41-010-00565-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-00565-00.',
+    skus: ['010-00565-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GSD 41B, Harsh Environment, Unit Only',
+    href: '/products/gsd-41b-harsh-environment-unit-only',
+    handle: 'gsd-41b-harsh-environment-unit-only',
+    description:
+      'GSD 41B, Harsh Environment, Unit OnlyGarmin part number 010-01742-02. Catalog description: GSD 41B, Harsh Environment, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01742-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GSD 41B, Unit Only',
+    href: '/products/gsd-41b-unit-only',
+    handle: 'gsd-41b-unit-only',
+    description:
+      'GSD 41B, Unit OnlyGarmin part number 010-01742-00. Catalog description: GSD 41B, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01742-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GSD41M , Unit Only',
+    href: '/products/gsd41m-unit-only',
+    handle: 'gsd41m-unit-only',
+    description:
+      'GSD41M , Unit OnlyGarmin part number 010-01742-03. Catalog description: GSD41M , Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01742-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 85A',
+    href: '/products/gsm-85a',
+    handle: 'gsm-85a',
+    description:
+      'GSM 85AGarmin part number 010-00556-00. Catalog description: GSM 85A. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-00556-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86, 103 in-lb clutch, 3/32" spiral capstan, Unit Only',
+    href: '/products/garmin-gsm-86-103-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-19',
+    handle:
+      'garmin-gsm-86-103-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-19',
+    description:
+      'GSM 86, 103 in-lb clutch, 3/32" spiral capstan, Unit OnlyGarmin part number 010-00714-19.',
+    skus: ['010-00714-19'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86, 32 in-lb clutch, 1/16" Straight Grooves, Unit Only',
+    href: '/products/garmin-gsm-86-32-in-lb-clutch-1-16-straight-grooves-unit-only-010-00714-25',
+    handle:
+      'garmin-gsm-86-32-in-lb-clutch-1-16-straight-grooves-unit-only-010-00714-25',
+    description:
+      'GSM 86, 32 in-lb clutch, 1/16" Straight Grooves, Unit OnlyGarmin part number 010-00714-25.',
+    skus: ['010-00714-25'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86, 32 in-lb, 1/16" Spiral, Clutch Capstan, Unit Only',
+    href: '/products/garmin-gsm-86-32-in-lb-1-16-spiral-clutch-capstan-unit-only-010-00714-26',
+    handle:
+      'garmin-gsm-86-32-in-lb-1-16-spiral-clutch-capstan-unit-only-010-00714-26',
+    description:
+      'GSM 86, 32 in-lb, 1/16" Spiral, Clutch Capstan, Unit OnlyGarmin part number 010-00714-26.',
+    skus: ['010-00714-26'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86, 52 in-lb clutch, .25" pitch sprocket, Unit Only',
+    href: '/products/garmin-gsm-86-52-in-lb-clutch-25-pitch-sprocket-unit-only-010-00714-32',
+    handle:
+      'garmin-gsm-86-52-in-lb-clutch-25-pitch-sprocket-unit-only-010-00714-32',
+    description:
+      'GSM 86, 52 in-lb clutch, . 25" pitch sprocket, Unit OnlyGarmin part number 010-00714-32.',
+    skus: ['010-00714-32'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86, 52 in-lb clutch, 1/16" Straight Grooves, Unit Only',
+    href: '/products/garmin-gsm-86-52-in-lb-clutch-1-16-straight-grooves-unit-only-010-00714-22',
+    handle:
+      'garmin-gsm-86-52-in-lb-clutch-1-16-straight-grooves-unit-only-010-00714-22',
+    description:
+      'GSM 86, 52 in-lb clutch, 1/16" Straight Grooves, Unit OnlyGarmin part number 010-00714-22.',
+    skus: ['010-00714-22'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86, 52 in-lb clutch, 3/32" spiral capstan, Unit Only',
+    href: '/products/garmin-gsm-86-52-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-21',
+    handle:
+      'garmin-gsm-86-52-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-21',
+    description:
+      'GSM 86, 52 in-lb clutch, 3/32" spiral capstan, Unit OnlyGarmin part number 010-00714-21.',
+    skus: ['010-00714-21'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86, 52 in-lb, 1/16" Spiral, Clutch Capstan, Unit Only',
+    href: '/products/garmin-gsm-86-52-in-lb-1-16-spiral-clutch-capstan-unit-only-010-00714-27',
+    handle:
+      'garmin-gsm-86-52-in-lb-1-16-spiral-clutch-capstan-unit-only-010-00714-27',
+    description:
+      'GSM 86, 52 in-lb, 1/16" Spiral, Clutch Capstan, Unit OnlyGarmin part number 010-00714-27.',
+    skus: ['010-00714-27'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86, 72 in-lb clutch, 3/32" spiral capstan, Unit Only',
+    href: '/products/garmin-gsm-86-72-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-05',
+    handle:
+      'garmin-gsm-86-72-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-05',
+    description:
+      'GSM 86, 72 in-lb clutch, 3/32" spiral capstan, Unit OnlyGarmin part number 010-00714-05.',
+    skus: ['010-00714-05'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86, 72 in-lb clutch, 3/32" spiral capstan, Unit Only',
+    href: '/products/garmin-gsm-86-72-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-20',
+    handle:
+      'garmin-gsm-86-72-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-20',
+    description:
+      'GSM 86, 72 in-lb clutch, 3/32" spiral capstan, Unit OnlyGarmin part number 010-00714-20.',
+    skus: ['010-00714-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86, 81 in-lb clutch, 3/32" spiral capstan, Unit Only',
+    href: '/products/garmin-gsm-86-81-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-24',
+    handle:
+      'garmin-gsm-86-81-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-24',
+    description:
+      'GSM 86, 81 in-lb clutch, 3/32" spiral capstan, Unit OnlyGarmin part number 010-00714-24.',
+    skus: ['010-00714-24'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86, 90 in-lb clutch, 3/32, Spiral Capstan, Unit Only',
+    href: '/products/garmin-gsm-86-90-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-23',
+    handle:
+      'garmin-gsm-86-90-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-23',
+    description:
+      'GSM 86, 90 in-lb clutch, 3/32, Spiral Capstan, Unit OnlyGarmin part number 010-00714-23.',
+    skus: ['010-00714-23'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86,135 in-lb clutch, 3/32" spiral capstan, Unit Only',
+    href: '/products/garmin-gsm-86-135-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-33',
+    handle:
+      'garmin-gsm-86-135-in-lb-clutch-3-32-spiral-capstan-unit-only-010-00714-33',
+    description:
+      'GSM 86,135 in-lb clutch, 3/32" spiral capstan, Unit OnlyGarmin part number 010-00714-33.',
+    skus: ['010-00714-33'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM 86,No Back Seals,Unit Only',
+    href: '/products/garmin-gsm-86-no-back-seals-unit-only-010-00714-15',
+    handle: 'garmin-gsm-86-no-back-seals-unit-only-010-00714-15',
+    description:
+      'GSM 86,No Back Seals,Unit OnlyGarmin part number 010-00714-15.',
+    skus: ['010-00714-15'],
+  },
+  {
+    group: 'Products',
     title: 'GSM 86,Standard',
     href: '/products/gsm-86-standard',
     handle: 'gsm-86-standard',
     description:
       'GSM 86,StandardGarmin part number 010-00714-00. Catalog description: GSM 86,Standard. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
     skus: ['010-00714-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM85A,3/32 Spiral,MT,preset',
+    href: '/products/garmin-gsm85a-3-32-spiral-mt-preset-010-00556-a2',
+    handle: 'garmin-gsm85a-3-32-spiral-mt-preset-010-00556-a2',
+    description: 'GSM85A,3/32 Spiral,MT,presetGarmin part number 010-00556-A2.',
+    skus: ['010-00556-A2'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM85A,High Torque,Universal',
+    href: '/products/garmin-gsm85a-high-torque-universal-010-00556-04',
+    handle: 'garmin-gsm85a-high-torque-universal-010-00556-04',
+    description: 'GSM85A,High Torque,UniversalGarmin part number 010-00556-04.',
+    skus: ['010-00556-04'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM85A,Low Torque,Universal',
+    href: '/products/garmin-gsm85a-low-torque-universal-010-00556-06',
+    handle: 'garmin-gsm85a-low-torque-universal-010-00556-06',
+    description: 'GSM85A,Low Torque,UniversalGarmin part number 010-00556-06.',
+    skus: ['010-00556-06'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM85A,Med Torque,Spir 1/16',
+    href: '/products/garmin-gsm85a-med-torque-spir-1-16-010-00556-02',
+    handle: 'garmin-gsm85a-med-torque-spir-1-16-010-00556-02',
+    description: 'GSM85A,Med Torque,Spir 1/16Garmin part number 010-00556-02.',
+    skus: ['010-00556-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM85A,Med Torque,Universal',
+    href: '/products/garmin-gsm85a-med-torque-universal-010-00556-05',
+    handle: 'garmin-gsm85a-med-torque-universal-010-00556-05',
+    description: 'GSM85A,Med Torque,UniversalGarmin part number 010-00556-05.',
+    skus: ['010-00556-05'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM85A,Spiral,Med Torque',
+    href: '/products/garmin-gsm85a-spiral-med-torque-010-00556-01',
+    handle: 'garmin-gsm85a-spiral-med-torque-010-00556-01',
+    description: 'GSM85A,Spiral,Med TorqueGarmin part number 010-00556-01.',
+    skus: ['010-00556-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GSM86,Idler Pulley,Unit Only',
+    href: '/products/garmin-gsm86-idler-pulley-unit-only-010-00714-01',
+    handle: 'garmin-gsm86-idler-pulley-unit-only-010-00714-01',
+    description: 'GSM86,Idler Pulley,Unit OnlyGarmin part number 010-00714-01.',
+    skus: ['010-00714-01'],
   },
   {
     group: 'Products',
@@ -3417,12 +8328,39 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'GSR 56 Back Plate',
+    href: '/products/gsr-56-back-plate',
+    handle: 'gsr-56-back-plate',
+    description:
+      'GSR 56 Back PlateGarmin part number 011-01800-00. Catalog description: GSR 56 Back Plate. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['011-01800-00'],
+  },
+  {
+    group: 'Products',
     title: 'GSR 56 Harsh Env',
     href: '/products/gsr-56-harsh-env',
     handle: 'gsr-56-harsh-env',
     description:
       'GSR 56 Harsh EnvGarmin part number 010-00815-50. Catalog description: GSR 56 Harsh Env. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
     skus: ['010-00815-50'],
+  },
+  {
+    group: 'Products',
+    title: 'GSR 56H',
+    href: '/products/gsr-56h',
+    handle: 'gsr-56h',
+    description:
+      'GSR 56HGarmin part number 010-00815-10. Catalog description: GSR 56H. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-00815-10'],
+  },
+  {
+    group: 'Products',
+    title: 'GSR Connector Kit',
+    href: '/products/gsr-connector-kit',
+    handle: 'gsr-connector-kit',
+    description:
+      'GSR Connector KitGarmin part number 011-01732-00. Catalog description: GSR Connector Kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['011-01732-00'],
   },
   {
     group: 'Products',
@@ -3435,12 +8373,397 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'GSU 25 Connector Kit',
+    href: '/products/gsu-25-connector-kit',
+    handle: 'gsu-25-connector-kit',
+    description:
+      'GSU 25 Connector KitGarmin part number K10-00181-00. Catalog description: GSU 25 Connector Kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['K10-00181-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GSU 25C, Unit Only',
+    href: '/products/garmin-gsu-25c-unit-only-010-01071-50',
+    handle: 'garmin-gsu-25c-unit-only-010-01071-50',
+    description: 'GSU 25C, Unit OnlyGarmin part number 010-01071-50.',
+    skus: ['010-01071-50'],
+  },
+  {
+    group: 'Products',
     title: 'GSU 25C, Unit Only',
     href: '/products/garmin-gsu-25c-unit-only-010-01071-55',
     handle: 'garmin-gsu-25c-unit-only-010-01071-55',
     description:
       'GSU 25C, Unit OnlyGarmin part number 010-01071-55. Equipment purchase is available separately from installation. Contact RWAS to confirm aircraft eligibility and installation requirements. Installation and return to service require…',
     skus: ['010-01071-55'],
+  },
+  {
+    group: 'Products',
+    title: 'GSU 25D, Unit Only, FAA-PMA',
+    href: '/products/gsu-25d-unit-only-faa-pma',
+    handle: 'gsu-25d-unit-only-faa-pma',
+    description:
+      'GSU 25D, Unit Only, FAA-PMAGarmin part number 010-01071-56. Catalog description: GSU 25D, Unit Only, FAA-PMA. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01071-56'],
+  },
+  {
+    group: 'Products',
+    title: 'GSU 25D, Unit Only, FAA-PMA',
+    href: '/products/garmin-gsu-25d-unit-only-faa-pma-010-01071-51',
+    handle: 'garmin-gsu-25d-unit-only-faa-pma-010-01071-51',
+    description: 'GSU 25D, Unit Only, FAA-PMAGarmin part number 010-01071-51.',
+    skus: ['010-01071-51'],
+  },
+  {
+    group: 'Products',
+    title: 'GSU 75 REMOTE RACK',
+    href: '/products/gsu-75-remote-rack',
+    handle: 'gsu-75-remote-rack',
+    description:
+      'GSU 75 REMOTE RACKGarmin part number 117-00608-00. Catalog description: GSU 75 REMOTE RACK. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['117-00608-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GSU75, Unit Only',
+    href: '/products/gsu75-unit-only',
+    handle: 'gsu75-unit-only',
+    description:
+      'GSU75, Unit OnlyGarmin part number 010-01127-01. Catalog description: GSU75, Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01127-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTA82',
+    href: '/products/garmin-gta82-010-00334-20',
+    handle: 'garmin-gta82-010-00334-20',
+    description:
+      'GTA82Garmin part number 010-00334-20. Confirm compatibility and availability before ordering.',
+    skus: ['010-00334-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GTC 570 w/bezel grips,Unit Only',
+    href: '/products/gtc-570-w-bezel-grips-unit-only',
+    handle: 'gtc-570-w-bezel-grips-unit-only',
+    description:
+      'GTC 570 w/bezel grips,Unit OnlyGarmin part number 010-00721-10. Catalog description: GTC 570 w/bezel grips,Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-00721-10'],
+  },
+  {
+    group: 'Products',
+    title: 'GTC 575,Unit Only',
+    href: '/products/gtc-575-unit-only',
+    handle: 'gtc-575-unit-only',
+    description:
+      'GTC 575,Unit OnlyGarmin part number 010-01530-01. Catalog description: GTC 575,Unit Only. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-01530-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 16 Watt Comm Enablement Download',
+    href: '/products/gtn-16-watt-comm-enablement-download',
+    handle: 'gtn-16-watt-comm-enablement-download',
+    description:
+      'GTN 16 Watt Comm Enablement DownloadGarmin part number 006-D2990-04. Catalog description: GTN 16 Watt Comm Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['006-D2990-04'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 625 Backplate',
+    href: '/products/gtn-625-backplate',
+    handle: 'gtn-625-backplate',
+    description:
+      'GTN 625 BackplateGarmin part number 011-02245-00. Catalog description: GTN 625 Backplate. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02245-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 625 Connector Kit',
+    href: '/products/gtn-625-connector-kit',
+    handle: 'gtn-625-connector-kit',
+    description:
+      'GTN 625 Connector KitGarmin part number 011-02325-00. Catalog description: GTN 625 Connector Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02325-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 625 Simulator, Complete System',
+    href: '/products/garmin-gtn-625-simulator-complete-system-k10-00245-00',
+    handle: 'garmin-gtn-625-simulator-complete-system-k10-00245-00',
+    description:
+      'GTN 625 Simulator, Complete SystemGarmin part number K10-00245-00.',
+    skus: ['K10-00245-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 625/635/650 Cockpit Reference Guide',
+    href: '/products/gtn-625-635-650-cockpit-reference-guide',
+    handle: 'gtn-625-635-650-cockpit-reference-guide',
+    description:
+      'GTN 625/635/650 Cockpit Reference GuideGarmin part number 190-01004-04. Catalog description: GTN 625/635/650 Cockpit Reference Guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['190-01004-04'],
+  },
+  {
+    group: 'Products',
+    title: "GTN 625/635/650 Pilot's Guide",
+    href: '/products/gtn-625-635-650-pilots-guide',
+    handle: 'gtn-625-635-650-pilots-guide',
+    description:
+      "GTN 625/635/650 Pilot's GuideGarmin part number 190-01004-03. Catalog description: GTN 625/635/650 Pilot's Guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…",
+    skus: ['190-01004-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 625Xi Simulator, Complete System',
+    href: '/products/garmin-gtn-625xi-simulator-complete-system-k10-00245-50',
+    handle: 'garmin-gtn-625xi-simulator-complete-system-k10-00245-50',
+    description:
+      'GTN 625Xi Simulator, Complete SystemGarmin part number K10-00245-50.',
+    skus: ['K10-00245-50'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 625Xi, Black, Unit Only w/Info Kit',
+    href: '/products/gtn-625xi-black-unit-only-w-info-kit',
+    handle: 'gtn-625xi-black-unit-only-w-info-kit',
+    description:
+      'GTN 625Xi, Black, Unit Only w/Info KitGarmin part number 010-01997-03. Catalog description: GTN 625Xi, Black, Unit Only w/Info Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-01997-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 635 Backplate',
+    href: '/products/gtn-635-backplate',
+    handle: 'gtn-635-backplate',
+    description:
+      'GTN 635 BackplateGarmin part number 011-02245-01. Catalog description: GTN 635 Backplate. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02245-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 635 Connector Kit',
+    href: '/products/gtn-635-connector-kit',
+    handle: 'gtn-635-connector-kit',
+    description:
+      'GTN 635 Connector KitGarmin part number 011-02325-01. Catalog description: GTN 635 Connector Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02325-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 635 Simulator, Complete System',
+    href: '/products/garmin-gtn-635-simulator-complete-system-k10-00244-00',
+    handle: 'garmin-gtn-635-simulator-complete-system-k10-00244-00',
+    description:
+      'GTN 635 Simulator, Complete SystemGarmin part number K10-00244-00.',
+    skus: ['K10-00244-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 635Xi Simulator, Complete System',
+    href: '/products/garmin-gtn-635xi-simulator-complete-system-k10-00244-50',
+    handle: 'garmin-gtn-635xi-simulator-complete-system-k10-00244-50',
+    description:
+      'GTN 635Xi Simulator, Complete SystemGarmin part number K10-00244-50.',
+    skus: ['K10-00244-50'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 650 Backplate',
+    href: '/products/gtn-650-backplate',
+    handle: 'gtn-650-backplate',
+    description:
+      'GTN 650 BackplateGarmin part number 011-02245-02. Catalog description: GTN 650 Backplate. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02245-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 650 Connector Kit',
+    href: '/products/gtn-650-connector-kit',
+    handle: 'gtn-650-connector-kit',
+    description:
+      'GTN 650 Connector KitGarmin part number 011-02325-02. Catalog description: GTN 650 Connector Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02325-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 650 Series Heli Mounting Rack',
+    href: '/products/gtn-650-series-heli-mounting-rack',
+    handle: 'gtn-650-series-heli-mounting-rack',
+    description:
+      'GTN 650 Series Heli Mounting RackGarmin part number 115-01293-A0. Catalog description: GTN 650H Helicopter Rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['115-01293-A0'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 650 Series Mounting Rack',
+    href: '/products/gtn-650-series-mounting-rack',
+    handle: 'gtn-650-series-mounting-rack',
+    description:
+      'GTN 650 Series Mounting RackGarmin part number 115-01293-00. Catalog description: GTN 650 Series Mounting Rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-01293-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 650 Simulator, Complete System',
+    href: '/products/garmin-gtn-650-simulator-complete-system-k10-00243-00',
+    handle: 'garmin-gtn-650-simulator-complete-system-k10-00243-00',
+    description:
+      'GTN 650 Simulator, Complete SystemGarmin part number K10-00243-00.',
+    skus: ['K10-00243-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 650Xi Simulator, Complete System',
+    href: '/products/garmin-gtn-650xi-simulator-complete-system-k10-00243-50',
+    handle: 'garmin-gtn-650xi-simulator-complete-system-k10-00243-50',
+    description:
+      'GTN 650Xi Simulator, Complete SystemGarmin part number K10-00243-50.',
+    skus: ['K10-00243-50'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 725 Backplate',
+    href: '/products/gtn-725-backplate',
+    handle: 'gtn-725-backplate',
+    description:
+      'GTN 725 BackplateGarmin part number 011-02246-00. Catalog description: GTN 725 Backplate. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02246-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 725 Connector Kit',
+    href: '/products/gtn-725-connector-kit',
+    handle: 'gtn-725-connector-kit',
+    description:
+      'GTN 725 Connector KitGarmin part number 011-02326-00. Catalog description: GTN 725 Connector Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02326-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 725 Simulator, Complete System',
+    href: '/products/garmin-gtn-725-simulator-complete-system-k10-00242-00',
+    handle: 'garmin-gtn-725-simulator-complete-system-k10-00242-00',
+    description:
+      'GTN 725 Simulator, Complete SystemGarmin part number K10-00242-00.',
+    skus: ['K10-00242-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 725/750 Cockpit Reference Guide',
+    href: '/products/gtn-725-750-cockpit-reference-guide',
+    handle: 'gtn-725-750-cockpit-reference-guide',
+    description:
+      'GTN 725/750 Cockpit Reference GuideGarmin part number 190-01007-04. Catalog description: GTN 725/750 Cockpit Reference Guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['190-01007-04'],
+  },
+  {
+    group: 'Products',
+    title: "GTN 725/750 Pilot's Guide",
+    href: '/products/gtn-725-750-pilots-guide',
+    handle: 'gtn-725-750-pilots-guide',
+    description:
+      "GTN 725/750 Pilot's GuideGarmin part number 190-01007-03. Catalog description: GTN 725/750 Pilot's Guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…",
+    skus: ['190-01007-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 725Xi Simulator, Complete System',
+    href: '/products/garmin-gtn-725xi-simulator-complete-system-k10-00242-50',
+    handle: 'garmin-gtn-725xi-simulator-complete-system-k10-00242-50',
+    description:
+      'GTN 725Xi Simulator, Complete SystemGarmin part number K10-00242-50.',
+    skus: ['K10-00242-50'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 725Xi, Black, Unit Only w/Info Kit',
+    href: '/products/gtn-725xi-black-unit-only-w-info-kit',
+    handle: 'gtn-725xi-black-unit-only-w-info-kit',
+    description:
+      'GTN 725Xi, Black, Unit Only w/Info KitGarmin part number 010-02000-03. Catalog description: GTN 725Xi, Black, Unit Only w/Info Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-02000-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 750 Backplate',
+    href: '/products/gtn-750-backplate',
+    handle: 'gtn-750-backplate',
+    description:
+      'GTN 750 BackplateGarmin part number 011-02246-02. Catalog description: GTN 750 Backplate. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02246-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 750 Connector Kit',
+    href: '/products/gtn-750-connector-kit',
+    handle: 'gtn-750-connector-kit',
+    description:
+      'GTN 750 Connector KitGarmin part number 011-02326-02. Catalog description: GTN 750 Connector Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02326-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 750 Series Heli Mounting Rack',
+    href: '/products/gtn-750-series-heli-mounting-rack',
+    handle: 'gtn-750-series-heli-mounting-rack',
+    description:
+      'GTN 750 Series Heli Mounting RackGarmin part number 115-01294-A0. Catalog description: GTN 750H Helicopter Rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['115-01294-A0'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 750 Series Mounting Rack',
+    href: '/products/gtn-750-series-mounting-rack',
+    handle: 'gtn-750-series-mounting-rack',
+    description:
+      'GTN 750 Series Mounting RackGarmin part number 115-01294-00. Catalog description: GTN 750 Series Mounting Rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-01294-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 750 Simulator, Complete System',
+    href: '/products/garmin-gtn-750-simulator-complete-system-k10-00241-00',
+    handle: 'garmin-gtn-750-simulator-complete-system-k10-00241-00',
+    description:
+      'GTN 750 Simulator, Complete SystemGarmin part number K10-00241-00.',
+    skus: ['K10-00241-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 750Xi Simulator, Complete System',
+    href: '/products/garmin-gtn-750xi-simulator-complete-system-k10-00241-50',
+    handle: 'garmin-gtn-750xi-simulator-complete-system-k10-00241-50',
+    description:
+      'GTN 750Xi Simulator, Complete SystemGarmin part number K10-00241-50.',
+    skus: ['K10-00241-50'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 7xx ChartView Enablement Download',
+    href: '/products/gtn-7xx-chartview-enablement-download',
+    handle: 'gtn-7xx-chartview-enablement-download',
+    description:
+      'GTN 7xx ChartView Enablement DownloadGarmin part number 006-D2990-40. Catalog description: GTN 7xx ChartView Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['006-D2990-40'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 7xx Third Party Radar (A708) Enablement Download',
+    href: '/products/gtn-7xx-third-party-radar-a708-enablement-download',
+    handle: 'gtn-7xx-third-party-radar-a708-enablement-download',
+    description:
+      'GTN 7xx Third Party Radar (A708) Enablement DownloadGarmin part number 006-D2990-42. Catalog description: GTN 7xx Third Party Radar (A708) Enablement Download. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['006-D2990-42'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN 7XX Xi FAA Data Comm Enablement Download',
+    href: '/products/gtn-7xx-xi-faa-data-comm-enablement-download',
+    handle: 'gtn-7xx-xi-faa-data-comm-enablement-download',
+    description:
+      'GTN 7XX Xi FAA Data Comm Enablement DownloadGarmin part number 006-D2990-48. Catalog description: GTN 7XX Xi FAA Data Comm Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['006-D2990-48'],
   },
   {
     group: 'Products',
@@ -3453,12 +8776,344 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'GTN HTAWS Enablement Download',
+    href: '/products/gtn-htaws-enablement-download',
+    handle: 'gtn-htaws-enablement-download',
+    description:
+      'GTN HTAWS Enablement DownloadGarmin part number 006-D2990-02. Catalog description: GTN HTAWS Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['006-D2990-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN NVG 650H Simulator, Complete System',
+    href: '/products/garmin-gtn-nvg-650h-simulator-complete-system-k10-00254-00',
+    handle: 'garmin-gtn-nvg-650h-simulator-complete-system-k10-00254-00',
+    description:
+      'GTN NVG 650H Simulator, Complete SystemGarmin part number K10-00254-00.',
+    skus: ['K10-00254-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN NVG 650H Xi Simulator, Complete System',
+    href: '/products/garmin-gtn-nvg-650h-xi-simulator-complete-system-k10-00254-50',
+    handle: 'garmin-gtn-nvg-650h-xi-simulator-complete-system-k10-00254-50',
+    description:
+      'GTN NVG 650H Xi Simulator, Complete SystemGarmin part number K10-00254-50.',
+    skus: ['K10-00254-50'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN NVG 750H Simulator, Complete System',
+    href: '/products/garmin-gtn-nvg-750h-simulator-complete-system-k10-00253-00',
+    handle: 'garmin-gtn-nvg-750h-simulator-complete-system-k10-00253-00',
+    description:
+      'GTN NVG 750H Simulator, Complete SystemGarmin part number K10-00253-00.',
+    skus: ['K10-00253-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN NVG 750H Xi Simulator, Complete System',
+    href: '/products/garmin-gtn-nvg-750h-xi-simulator-complete-system-k10-00253-50',
+    handle: 'garmin-gtn-nvg-750h-xi-simulator-complete-system-k10-00253-50',
+    description:
+      'GTN NVG 750H Xi Simulator, Complete SystemGarmin part number K10-00253-50.',
+    skus: ['K10-00253-50'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN Search & Rescue Enablement Download',
+    href: '/products/gtn-search-rescue-enablement-download',
+    handle: 'gtn-search-rescue-enablement-download',
+    description:
+      'GTN Search & Rescue Enablement DownloadGarmin part number 006-D2990-03. Catalog description: GTN Search & Rescue Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['006-D2990-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN TAWS-A Enablement Download',
+    href: '/products/gtn-taws-a-enablement-download',
+    handle: 'gtn-taws-a-enablement-download',
+    description:
+      'GTN TAWS-A Enablement DownloadGarmin part number 006-D2990-05. Catalog description: GTN TAWS-A Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['006-D2990-05'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN TAWS-B Enablement Download',
+    href: '/products/gtn-taws-b-enablement-download',
+    handle: 'gtn-taws-b-enablement-download',
+    description:
+      'GTN TAWS-B Enablement DownloadGarmin part number 006-D2990-01. Catalog description: GTN TAWS-B Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['006-D2990-01'],
+  },
+  {
+    group: 'Products',
+    title: "GTN Xi Series Pilot's Guide",
+    href: '/products/gtn-xi-series-pilots-guide',
+    handle: 'gtn-xi-series-pilots-guide',
+    description:
+      "GTN Xi Series Pilot's GuideGarmin part number 190-02327-03. Catalog description: GTN Xi Series Pilot's Guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…",
+    skus: ['190-02327-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN635Xi, Black, Unit Only w/Info Kit',
+    href: '/products/gtn635xi-black-unit-only-w-info-kit',
+    handle: 'gtn635xi-black-unit-only-w-info-kit',
+    description:
+      'GTN635Xi, Black, Unit Only w/Info KitGarmin part number 010-01998-07. Catalog description: GTN635Xi, Black, Unit Only w/Info Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01998-07'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN635Xi, Helicopter, Black, Standard',
+    href: '/products/gtn635xi-helicopter-black-standard',
+    handle: 'gtn635xi-helicopter-black-standard',
+    description:
+      'GTN635Xi, Helicopter, Black, StandardGarmin part number 010-01998-06. Catalog description: GTN635Xi, Helicopter, Black, Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01998-06'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN635Xi,Black,Standard',
+    href: '/products/garmin-gtn635xi-black-standard-010-01998-01',
+    handle: 'garmin-gtn635xi-black-standard-010-01998-01',
+    description: 'GTN635Xi,Black,StandardGarmin part number 010-01998-01.',
+    skus: ['010-01998-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN635Xi,Black,Unit Only',
+    href: '/products/garmin-gtn635xi-black-unit-only-010-01998-00',
+    handle: 'garmin-gtn635xi-black-unit-only-010-01998-00',
+    description: 'GTN635Xi,Black,Unit OnlyGarmin part number 010-01998-00.',
+    skus: ['010-01998-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN635Xi,Black,Unit Only',
+    href: '/products/garmin-gtn635xi-black-unit-only-010-01998-04',
+    handle: 'garmin-gtn635xi-black-unit-only-010-01998-04',
+    description: 'GTN635Xi,Black,Unit OnlyGarmin part number 010-01998-04.',
+    skus: ['010-01998-04'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Black,Standard',
+    href: '/products/garmin-gtn650xi-black-standard-010-01999-01',
+    handle: 'garmin-gtn650xi-black-standard-010-01999-01',
+    description: 'GTN650Xi,Black,StandardGarmin part number 010-01999-01.',
+    skus: ['010-01999-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Black,Unit Only',
+    href: '/products/garmin-gtn650xi-black-unit-only-010-01999-00',
+    handle: 'garmin-gtn650xi-black-unit-only-010-01999-00',
+    description: 'GTN650Xi,Black,Unit OnlyGarmin part number 010-01999-00.',
+    skus: ['010-01999-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Black,Unit Only',
+    href: '/products/garmin-gtn650xi-black-unit-only-010-01999-04',
+    handle: 'garmin-gtn650xi-black-unit-only-010-01999-04',
+    description: 'GTN650Xi,Black,Unit OnlyGarmin part number 010-01999-04.',
+    skus: ['010-01999-04'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Black,Unit Only w/Info Kit',
+    href: '/products/gtn650xi-black-unit-only-w-info-kit',
+    handle: 'gtn650xi-black-unit-only-w-info-kit',
+    description:
+      'GTN650Xi,Black,Unit Only w/Info KitGarmin part number 010-01999-07. Catalog description: GTN650Xi,Black,Unit Only w/Info Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01999-07'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Black,Unit Only w/Info Kit',
+    href: '/products/garmin-gtn650xi-black-unit-only-w-info-kit-010-01999-03',
+    handle: 'garmin-gtn650xi-black-unit-only-w-info-kit-010-01999-03',
+    description:
+      'GTN650Xi,Black,Unit Only w/Info KitGarmin part number 010-01999-03.',
+    skus: ['010-01999-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Gray,Standard',
+    href: '/products/gtn650xi-gray-standard',
+    handle: 'gtn650xi-gray-standard',
+    description:
+      'GTN650Xi,Gray,StandardGarmin part number 010-01999-35. Catalog description: GTN650Xi,Gray,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01999-35'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Gray,Standard',
+    href: '/products/garmin-gtn650xi-gray-standard-010-01999-31',
+    handle: 'garmin-gtn650xi-gray-standard-010-01999-31',
+    description: 'GTN650Xi,Gray,StandardGarmin part number 010-01999-31.',
+    skus: ['010-01999-31'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Gray,Unit Only',
+    href: '/products/garmin-gtn650xi-gray-unit-only-010-01999-34',
+    handle: 'garmin-gtn650xi-gray-unit-only-010-01999-34',
+    description: 'GTN650Xi,Gray,Unit OnlyGarmin part number 010-01999-34.',
+    skus: ['010-01999-34'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Gray,Unit Only w/Info Kit',
+    href: '/products/gtn650xi-gray-unit-only-w-info-kit',
+    handle: 'gtn650xi-gray-unit-only-w-info-kit',
+    description:
+      'GTN650Xi,Gray,Unit Only w/Info KitGarmin part number 010-01999-37. Catalog description: GTN650Xi,Gray,Unit Only w/Info Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01999-37'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Gray,Unit Only w/Info Kit',
+    href: '/products/garmin-gtn650xi-gray-unit-only-w-info-kit-010-01999-33',
+    handle: 'garmin-gtn650xi-gray-unit-only-w-info-kit-010-01999-33',
+    description:
+      'GTN650Xi,Gray,Unit Only w/Info KitGarmin part number 010-01999-33.',
+    skus: ['010-01999-33'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Helicopter,Black,Standard',
+    href: '/products/gtn650xi-helicopter-black-standard',
+    handle: 'gtn650xi-helicopter-black-standard',
+    description:
+      'GTN650Xi,Helicopter,Black,StandardGarmin part number 010-01999-06. Catalog description: GTN650Xi,Helicopter,Black,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01999-06'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,Helicopter,Black,Standard',
+    href: '/products/garmin-gtn650xi-helicopter-black-standard-010-01999-02',
+    handle: 'garmin-gtn650xi-helicopter-black-standard-010-01999-02',
+    description:
+      'GTN650Xi,Helicopter,Black,StandardGarmin part number 010-01999-02.',
+    skus: ['010-01999-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,NV,Black,Unit Only',
+    href: '/products/garmin-gtn650xi-nv-black-unit-only-010-01999-60',
+    handle: 'garmin-gtn650xi-nv-black-unit-only-010-01999-60',
+    description: 'GTN650Xi,NV,Black,Unit OnlyGarmin part number 010-01999-60.',
+    skus: ['010-01999-60'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,NV,Black,Unit Only',
+    href: '/products/garmin-gtn650xi-nv-black-unit-only-010-01999-64',
+    handle: 'garmin-gtn650xi-nv-black-unit-only-010-01999-64',
+    description: 'GTN650Xi,NV,Black,Unit OnlyGarmin part number 010-01999-64.',
+    skus: ['010-01999-64'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,NV,Black,Unit Only w/Info Kit',
+    href: '/products/gtn650xi-nv-black-unit-only-w-info-kit',
+    handle: 'gtn650xi-nv-black-unit-only-w-info-kit',
+    description:
+      'GTN650Xi,NV,Black,Unit Only w/Info KitGarmin part number 010-01999-67. Catalog description: GTN650Xi,NV,Black,Unit Only w/Info Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-01999-67'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,NV,Helicopter,Black,Standard',
+    href: '/products/gtn650xi-nv-helicopter-black-standard',
+    handle: 'gtn650xi-nv-helicopter-black-standard',
+    description:
+      'GTN650Xi,NV,Helicopter,Black,StandardGarmin part number 010-01999-66. Catalog description: GTN650Xi,NV,Helicopter,Black,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01999-66'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN650Xi,NV,Helicopter,Black,Standard',
+    href: '/products/garmin-gtn650xi-nv-helicopter-black-standard-010-01999-62',
+    handle: 'garmin-gtn650xi-nv-helicopter-black-standard-010-01999-62',
+    description:
+      'GTN650Xi,NV,Helicopter,Black,StandardGarmin part number 010-01999-62.',
+    skus: ['010-01999-62'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN750Xi,Black,Unit Only w/Info Kit',
+    href: '/products/gtn750xi-black-unit-only-w-info-kit',
+    handle: 'gtn750xi-black-unit-only-w-info-kit',
+    description:
+      'GTN750Xi,Black,Unit Only w/Info KitGarmin part number 010-02002-07. Catalog description: GTN750Xi,Black,Unit Only w/Info Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-02002-07'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN750Xi,Gray,Standard',
+    href: '/products/gtn750xi-gray-standard',
+    handle: 'gtn750xi-gray-standard',
+    description:
+      'GTN750Xi,Gray,StandardGarmin part number 010-02002-35. Catalog description: GTN750Xi,Gray,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-02002-35'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN750Xi,Gray,Unit Only w/Info Kit',
+    href: '/products/gtn750xi-gray-unit-only-w-info-kit',
+    handle: 'gtn750xi-gray-unit-only-w-info-kit',
+    description:
+      'GTN750Xi,Gray,Unit Only w/Info KitGarmin part number 010-02002-37. Catalog description: GTN750Xi,Gray,Unit Only w/Info Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-02002-37'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN750Xi,Helicopter,Black,Standard',
+    href: '/products/gtn750xi-helicopter-black-standard',
+    handle: 'gtn750xi-helicopter-black-standard',
+    description:
+      'GTN750Xi,Helicopter,Black,StandardGarmin part number 010-02002-06. Catalog description: GTN750Xi,Helicopter,Black,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-02002-06'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN750Xi,NV,Black,Unit Only w/Info Kit',
+    href: '/products/gtn750xi-nv-black-unit-only-w-info-kit',
+    handle: 'gtn750xi-nv-black-unit-only-w-info-kit',
+    description:
+      'GTN750Xi,NV,Black,Unit Only w/Info KitGarmin part number 010-02002-67. Catalog description: GTN750Xi,NV,Black,Unit Only w/Info Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-02002-67'],
+  },
+  {
+    group: 'Products',
+    title: 'GTN750Xi,NV,Helicopter,Black,Standard',
+    href: '/products/gtn750xi-nv-helicopter-black-standard',
+    handle: 'gtn750xi-nv-helicopter-black-standard',
+    description:
+      'GTN750Xi,NV,Helicopter,Black,StandardGarmin part number 010-02002-66. Catalog description: GTN750Xi,NV,Helicopter,Black,Standard. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-02002-66'],
+  },
+  {
+    group: 'Products',
     title: 'GTP 59',
     href: '/products/gtp-59',
     handle: 'gtp-59',
     description:
       'GTP 59Garmin part number 011-00978-00. Catalog description: GTP 59. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
     skus: ['011-00978-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTR 20, Standard, PMA',
+    href: '/products/gtr-20-standard-pma',
+    handle: 'gtr-20-standard-pma',
+    description:
+      'GTR 20, Standard, PMAGarmin part number 010-01076-31. Catalog description: GTR 20, Standard, PMA. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01076-31'],
   },
   {
     group: 'Products',
@@ -3507,12 +9162,634 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'GTR 225B, NV, Standard',
+    href: '/products/garmin-gtr-225b-nv-standard-010-01027-70',
+    handle: 'garmin-gtr-225b-nv-standard-010-01027-70',
+    description: 'GTR 225B, NV, StandardGarmin part number 010-01027-70.',
+    skus: ['010-01027-70'],
+  },
+  {
+    group: 'Products',
+    title: 'GTR 225B, NV, Standard',
+    href: '/products/garmin-gtr-225b-nv-standard-010-02485-70',
+    handle: 'garmin-gtr-225b-nv-standard-010-02485-70',
+    description: 'GTR 225B, NV, StandardGarmin part number 010-02485-70.',
+    skus: ['010-02485-70'],
+  },
+  {
+    group: 'Products',
+    title: 'GTR205/GNC215 16W Comm Enablement Download',
+    href: '/products/gtr205-gnc215-16w-comm-enablement-download',
+    handle: 'gtr205-gnc215-16w-comm-enablement-download',
+    description:
+      'GTR205/GNC215 16W Comm Enablement DownloadGarmin part number 006-DA566-00. Catalog description: GTR205/GNC215 16W Comm Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['006-DA566-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTR205/GNC215 NVIS Enablement Download',
+    href: '/products/gtr205-gnc215-nvis-enablement-download',
+    handle: 'gtr205-gnc215-nvis-enablement-download',
+    description:
+      'GTR205/GNC215 NVIS Enablement DownloadGarmin part number 006-DA566-01. Catalog description: GTR205/GNC215 NVIS Enablement Download. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['006-DA566-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTS 820',
+    href: '/products/gts-820',
+    handle: 'gts-820',
+    description:
+      'GTS 820Garmin part number 010-00562-00. Catalog description: GTS 820. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-00562-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTS Processor',
+    href: '/products/gts-processor',
+    handle: 'gts-processor',
+    description:
+      'GTS ProcessorGarmin part number 010-00962-00. Catalog description: GTS Processor, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-00962-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTS Processor, w/ TCAS I Enablement Coupon',
+    href: '/products/gts-processor-w-tcas-i-enablement-coupon',
+    handle: 'gts-processor-w-tcas-i-enablement-coupon',
+    description:
+      'GTS Processor, w/ TCAS I Enablement CouponGarmin part number 010-00962-10. Catalog description: GTS Processor, w/ TCAS I Enablement Coupon. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-00962-10'],
+  },
+  {
+    group: 'Products',
+    title: 'GTS™ 800 TAS',
+    href: '/products/gts-800-tas-1',
+    handle: 'gts-800-tas-1',
+    description:
+      'GTS™ 800 TAS is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: GTS800,Unit Only. 00 Fulfillment: Garmin items are…',
+    skus: ['010-00519-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 3000',
+    href: '/products/gtx-3000',
+    handle: 'gtx-3000',
+    description:
+      'GTX 3000Garmin part number 010-00736-00. Catalog description: GTX 3000. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-00736-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 320/320A Adapter Kit, King KT 76A, KT 78A',
+    href: '/products/gtx-320-320a-adapter-kit-king-kt-76a-kt-78a',
+    handle: 'gtx-320-320a-adapter-kit-king-kt-76a-kt-78a',
+    description:
+      'GTX 320/320A Adapter Kit, King KT 76A, KT 78AGarmin part number 010-10159-00. Catalog description: GTX 320/320A Adapter Kit, King KT 76A, KT 78A. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-10159-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 320A/327 installation kit',
+    href: '/products/gtx-320a-327-installation-kit',
+    handle: 'gtx-320a-327-installation-kit',
+    description:
+      'GTX 320A/327 installation kitGarmin part number 010-10161-01. Catalog description: GTX 320A/327 installation kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['010-10161-01'],
+  },
+  {
+    group: 'Products',
     title: 'GTX 325',
     href: '/products/gtx-325',
     handle: 'gtx-325',
     description:
       'GTX 325Garmin part number 010-01083-01. Catalog description: GTX 325. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
     skus: ['010-01083-01'],
+  },
+  {
+    group: 'Products',
+    title: "GTX 327 pilot's guide",
+    href: '/products/gtx-327-pilots-guide',
+    handle: 'gtx-327-pilots-guide',
+    description:
+      "GTX 327 pilot's guideGarmin part number 190-00187-00. Catalog description: GTX 327 pilot's guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.",
+    skus: ['190-00187-00'],
+  },
+  {
+    group: 'Products',
+    title: "GTX 330 pilot's guide",
+    href: '/products/gtx-330-pilots-guide',
+    handle: 'gtx-330-pilots-guide',
+    description:
+      "GTX 330 pilot's guideGarmin part number 190-00207-00. Catalog description: GTX 330 pilot's guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.",
+    skus: ['190-00207-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 330D Transponder',
+    href: '/products/gtx-330d-transponder',
+    handle: 'gtx-330d-transponder',
+    description:
+      'GTX 330D TransponderGarmin part number 010-00293-00. Catalog description: GTX 330D Transponder. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-00293-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335, NVG Compatible',
+    href: '/products/gtx-335-nvg-compatible',
+    handle: 'gtx-335-nvg-compatible',
+    description:
+      'GTX 335, NVG CompatibleGarmin part number 010-01214-21. Catalog description: GTX 335, NV, Standard Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-01214-21'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335, Unit Only',
+    href: '/products/gtx-335-unit-only',
+    handle: 'gtx-335-unit-only',
+    description:
+      'GTX 335, Unit OnlyGarmin part number 010-01214-00. Catalog description: GTX 335, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01214-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335D',
+    href: '/products/gtx-335d',
+    handle: 'gtx-335d',
+    description:
+      'GTX 335DGarmin part number 010-01773-01. Catalog description: GTX 335D, ADS-B "Out" Transponder with Diversity. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-01773-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335DR',
+    href: '/products/gtx-335dr',
+    handle: 'gtx-335dr',
+    description:
+      'GTX 335DRGarmin part number 010-01774-01. Catalog description: GTX 335DR, Standard Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01774-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335DR, Standard Kit, Vertical Mount',
+    href: '/products/gtx-335dr-standard-kit-vertical-mount',
+    handle: 'gtx-335dr-standard-kit-vertical-mount',
+    description:
+      'GTX 335DR, Standard Kit, Vertical MountGarmin part number 010-01774-02. Catalog description: GTX 335DR, Standard Kit, Vertical Mount. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-01774-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335R',
+    href: '/products/garmin-gtx-335r-010-01215-41',
+    handle: 'garmin-gtx-335r-010-01215-41',
+    description: 'GTX 335RGarmin part number 010-01215-41.',
+    skus: ['010-01215-41'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335R, GPS, Standard Kit, G1000',
+    href: '/products/gtx-335r-gps-standard-kit-g1000',
+    handle: 'gtx-335r-gps-standard-kit-g1000',
+    description:
+      'GTX 335R, GPS, Standard Kit, G1000Garmin part number 010-01215-43. Catalog description: GTX 335R, GPS, Standard Kit, G1000. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01215-43'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335R, GPS, Standard Kit, Vertical Mount',
+    href: '/products/gtx-335r-gps-standard-kit-vertical-mount',
+    handle: 'gtx-335r-gps-standard-kit-vertical-mount',
+    description:
+      'GTX 335R, GPS, Standard Kit, Vertical MountGarmin part number 010-01215-42. Catalog description: GTX 335R, GPS, Standard Kit, Vertical Mount. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-01215-42'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335R, Standard Kit',
+    href: '/products/garmin-gtx-335r-standard-kit-010-01215-01',
+    handle: 'garmin-gtx-335r-standard-kit-010-01215-01',
+    description: 'GTX 335R, Standard KitGarmin part number 010-01215-01.',
+    skus: ['010-01215-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335R, Standard Kit, G1000',
+    href: '/products/gtx-335r-standard-kit-g1000',
+    handle: 'gtx-335r-standard-kit-g1000',
+    description:
+      'GTX 335R, Standard Kit, G1000Garmin part number 010-01215-03. Catalog description: GTX 335R, Standard Kit, G1000. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['010-01215-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335R, Standard Kit, Vertical Mount',
+    href: '/products/gtx-335r-standard-kit-vertical-mount',
+    handle: 'gtx-335r-standard-kit-vertical-mount',
+    description:
+      'GTX 335R, Standard Kit, Vertical MountGarmin part number 010-01215-02. Catalog description: GTX 335R, Standard Kit, Vertical Mount. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-01215-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 335R, Unit Only',
+    href: '/products/gtx-335r-unit-only',
+    handle: 'gtx-335r-unit-only',
+    description:
+      'GTX 335R, Unit OnlyGarmin part number 010-01215-00. Catalog description: GTX 335R, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01215-00'],
+  },
+  {
+    group: 'Products',
+    title: "GTX 33D Diversity ES, with Installation Kit and Pilot's Guide",
+    href: '/products/gtx-33d-diversity-es-with-installation-kit-and-pilots-guide',
+    handle: 'gtx-33d-diversity-es-with-installation-kit-and-pilots-guide',
+    description:
+      "GTX 33D Diversity ES, with Installation Kit and Pilot's GuideGarmin part number 010-00294-21. Catalog description: GTX 33D Diversity ES, with Installation Kit and Pilot's Guide. Certified Garmin avionics may require approved installation,…",
+    skus: ['010-00294-21'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 33D Remote Transponder',
+    href: '/products/gtx-33d-remote-transponder',
+    handle: 'gtx-33d-remote-transponder',
+    description:
+      'GTX 33D Remote TransponderGarmin part number 010-00294-00. Catalog description: GTX 33D Remote Transponder. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-00294-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 345',
+    href: '/products/gtx-345',
+    handle: 'gtx-345',
+    description:
+      'GTX 345Garmin part number 010-01216-41. Catalog description: GTX 345. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01216-41'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 345 w/ WAAS',
+    href: '/products/gtx-345-w-waas',
+    handle: 'gtx-345-w-waas',
+    description:
+      'GTX 345 w/ WAASGarmin part number 010-01216-46. Catalog description: GTX 345 w/ WAAS. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01216-46'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 345D',
+    href: '/products/gtx-345d',
+    handle: 'gtx-345d',
+    description:
+      'GTX 345DGarmin part number 010-01775-01. Catalog description: GTX 345D, Standard Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01775-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 345DR',
+    href: '/products/gtx-345dr',
+    handle: 'gtx-345dr',
+    description:
+      'GTX 345DRGarmin part number 010-01776-01. Catalog description: GTX 345DR, Standard Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01776-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 345DR, Standard Kit, Vertical Mount',
+    href: '/products/gtx-345dr-standard-kit-vertical-mount',
+    handle: 'gtx-345dr-standard-kit-vertical-mount',
+    description:
+      'GTX 345DR, Standard Kit, Vertical MountGarmin part number 010-01776-02. Catalog description: GTX 345DR, Standard Kit, Vertical Mount. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-01776-02'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 345R',
+    href: '/products/garmin-gtx-345r-010-01217-06',
+    handle: 'garmin-gtx-345r-010-01217-06',
+    description: 'GTX 345RGarmin part number 010-01217-06.',
+    skus: ['010-01217-06'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 345R',
+    href: '/products/garmin-gtx-345r-010-01217-46',
+    handle: 'garmin-gtx-345r-010-01217-46',
+    description: 'GTX 345RGarmin part number 010-01217-46.',
+    skus: ['010-01217-46'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 345R, Standard Kit, G1000',
+    href: '/products/gtx-345r-standard-kit-g1000',
+    handle: 'gtx-345r-standard-kit-g1000',
+    description:
+      'GTX 345R, Standard Kit, G1000Garmin part number 010-01217-03. Catalog description: GTX 345R for G1000, w/ Install Kit (for GTX Main SW v2. 12 or Earlier). Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['010-01217-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 345R, Unit Only',
+    href: '/products/gtx-345r-unit-only',
+    handle: 'gtx-345r-unit-only',
+    description:
+      'GTX 345R, Unit OnlyGarmin part number 010-01217-00. Catalog description: GTX 345R, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01217-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 345R,Unit Only,nF',
+    href: '/products/garmin-gtx-345r-unit-only-nf-010-01217-0a',
+    handle: 'garmin-gtx-345r-unit-only-nf-010-01217-0a',
+    description: 'GTX 345R,Unit Only,nFGarmin part number 010-01217-0A.',
+    skus: ['010-01217-0A'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX 3x5D, Backplate',
+    href: '/products/gtx-3x5d-backplate-011-04340-00',
+    handle: 'gtx-3x5d-backplate-011-04340-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 011-04340-00.',
+    skus: ['011-04340-00'],
+  },
+  {
+    group: 'Products',
+    title: "GTX325,Pilot's Guide",
+    href: '/products/gtx325-pilots-guide',
+    handle: 'gtx325-pilots-guide',
+    description:
+      "GTX325,Pilot's GuideGarmin part number 190-01499-00. Catalog description: GTX 345/335 Pilot's Guide. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…",
+    skus: ['190-01499-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX335,GPS,Unit Only',
+    href: '/products/garmin-gtx335-gps-unit-only-010-01214-40',
+    handle: 'garmin-gtx335-gps-unit-only-010-01214-40',
+    description: 'GTX335,GPS,Unit OnlyGarmin part number 010-01214-40.',
+    skus: ['010-01214-40'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX335,NV,Unit Only',
+    href: '/products/garmin-gtx335-nv-unit-only-010-01214-20',
+    handle: 'garmin-gtx335-nv-unit-only-010-01214-20',
+    description: 'GTX335,NV,Unit OnlyGarmin part number 010-01214-20.',
+    skus: ['010-01214-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX335R,GPS,Unit Only',
+    href: '/products/garmin-gtx335r-gps-unit-only-010-01215-40',
+    handle: 'garmin-gtx335r-gps-unit-only-010-01215-40',
+    description: 'GTX335R,GPS,Unit OnlyGarmin part number 010-01215-40.',
+    skus: ['010-01215-40'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345,GPS,Unit Only',
+    href: '/products/garmin-gtx345-gps-unit-only-010-01216-40',
+    handle: 'garmin-gtx345-gps-unit-only-010-01216-40',
+    description: 'GTX345,GPS,Unit OnlyGarmin part number 010-01216-40.',
+    skus: ['010-01216-40'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345,GPS,Unit Only,nAB',
+    href: '/products/garmin-gtx345-gps-unit-only-nab-010-01216-45',
+    handle: 'garmin-gtx345-gps-unit-only-nab-010-01216-45',
+    description: 'GTX345,GPS,Unit Only,nABGarmin part number 010-01216-45.',
+    skus: ['010-01216-45'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345,NV,GPS,Standard Kit,nAB',
+    href: '/products/gtx345-nv-gps-standard-kit-nab',
+    handle: 'gtx345-nv-gps-standard-kit-nab',
+    description:
+      'GTX345,NV,GPS,Standard Kit,nABGarmin part number 010-01216-66. Catalog description: GTX345,NV,GPS,Standard Kit,nAB. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01216-66'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345,NV,Standard Kit,nAB',
+    href: '/products/gtx345-nv-standard-kit-nab',
+    handle: 'gtx345-nv-standard-kit-nab',
+    description:
+      'GTX345,NV,Standard Kit,nABGarmin part number 010-01216-26. Catalog description: GTX 345, NV, Standard Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-01216-26'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345,NV,Unit Only,nAB',
+    href: '/products/garmin-gtx345-nv-unit-only-nab-010-01216-25',
+    handle: 'garmin-gtx345-nv-unit-only-nab-010-01216-25',
+    description: 'GTX345,NV,Unit Only,nABGarmin part number 010-01216-25.',
+    skus: ['010-01216-25'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345,Standard Kit',
+    href: '/products/garmin-gtx345-standard-kit-010-01216-01',
+    handle: 'garmin-gtx345-standard-kit-010-01216-01',
+    description: 'GTX345,Standard KitGarmin part number 010-01216-01.',
+    skus: ['010-01216-01'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345,Unit Only,nAB',
+    href: '/products/gtx345-unit-only-nab',
+    handle: 'gtx345-unit-only-nab',
+    description:
+      'GTX345,Unit Only,nABGarmin part number 010-01216-05. Catalog description: GTX345,Unit Only,nAB. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01216-05'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345DR,Standard Kit,Gx000 Mount',
+    href: '/products/gtx345dr-standard-kit-gx000-mount',
+    handle: 'gtx345dr-standard-kit-gx000-mount',
+    description:
+      'GTX345DR,Standard Kit,Gx000 MountGarmin part number 010-01776-03. Catalog description: GTX 345DR, Standard Kit, Gx000 Mount. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01776-03'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345DR,Unit Only',
+    href: '/products/gtx345dr-unit-only',
+    handle: 'gtx345dr-unit-only',
+    description:
+      'GTX345DR,Unit OnlyGarmin part number 010-01776-00. Catalog description: GTX345DR,Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01776-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345R,GPS,Standard Kit,G1000,nAB',
+    href: '/products/gtx345r-gps-standard-kit-g1000-nab',
+    handle: 'gtx345r-gps-standard-kit-g1000-nab',
+    description:
+      'GTX345R,GPS,Standard Kit,G1000,nABGarmin part number 010-01217-48. Catalog description: GTX 345R w/ WAAS for G1000 with installation kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-01217-48'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345R,GPS,Standard Kit,Vert Mount,nAB',
+    href: '/products/gtx345r-gps-standard-kit-vert-mount-nab',
+    handle: 'gtx345r-gps-standard-kit-vert-mount-nab',
+    description:
+      'GTX345R,GPS,Standard Kit,Vert Mount,nABGarmin part number 010-01217-47. Catalog description: GTX 345R, GPS for G1000 with installation kit. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-01217-47'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345R,GPS,Unit Only',
+    href: '/products/garmin-gtx345r-gps-unit-only-010-01217-40',
+    handle: 'garmin-gtx345r-gps-unit-only-010-01217-40',
+    description: 'GTX345R,GPS,Unit OnlyGarmin part number 010-01217-40.',
+    skus: ['010-01217-40'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345R,GPS,Unit Only,nAB',
+    href: '/products/garmin-gtx345r-gps-unit-only-nab-010-01217-45',
+    handle: 'garmin-gtx345r-gps-unit-only-nab-010-01217-45',
+    description: 'GTX345R,GPS,Unit Only,nABGarmin part number 010-01217-45.',
+    skus: ['010-01217-45'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345R,Standard Kit,G1000,nAB',
+    href: '/products/gtx345r-standard-kit-g1000-nab',
+    handle: 'gtx345r-standard-kit-g1000-nab',
+    description:
+      'GTX345R,Standard Kit,G1000,nABGarmin part number 010-01217-08. Catalog description: GTX 345R for G1000, w/ Install Kit (for GTX Main SW v2. 50 or Later). Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['010-01217-08'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345R,Standard Kit,Vert Mount,nAB',
+    href: '/products/gtx345r-standard-kit-vert-mount-nab',
+    handle: 'gtx345r-standard-kit-vert-mount-nab',
+    description:
+      'GTX345R,Standard Kit,Vert Mount,nABGarmin part number 010-01217-07. Catalog description: GTX 345R, Standard Kit, Vert Mount. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01217-07'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX345R,Unit Only,nAB',
+    href: '/products/gtx345r-unit-only-nab',
+    handle: 'gtx345r-unit-only-nab',
+    description:
+      'GTX345R,Unit Only,nABGarmin part number 010-01217-05. Catalog description: GTX 345R, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01217-05'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX45R, GPS, Standard Kit, nAB',
+    href: '/products/gtx45r-gps-standard-kit-nab',
+    handle: 'gtx45r-gps-standard-kit-nab',
+    description:
+      'GTX45R, GPS, Standard Kit, nABGarmin part number 010-01757-46. Catalog description: GTX45R, GPS, Standard Kit, nAB. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01757-46'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX45R,Standard Kit,nAB',
+    href: '/products/gtx45r-standard-kit-nab',
+    handle: 'gtx45r-standard-kit-nab',
+    description:
+      'GTX45R,Standard Kit,nABGarmin part number 010-01757-06. Catalog description: GTX45R,Standard Kit,nAB. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-01757-06'],
+  },
+  {
+    group: 'Products',
+    title: 'GTX45R,Unit Only,nAB',
+    href: '/products/gtx45r-unit-only-nab',
+    handle: 'gtx45r-unit-only-nab',
+    description:
+      'GTX45R,Unit Only,nABGarmin part number 010-01757-05. Catalog description: GTX45R,Unit Only,nAB. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01757-05'],
+  },
+  {
+    group: 'Products',
+    title: 'GWX Processor H with 14" Antenna & Install Kit',
+    href: '/products/garmin-gwx-processor-h-with-14-antenna-install-kit-010-01589-17',
+    handle: 'garmin-gwx-processor-h-with-14-antenna-install-kit-010-01589-17',
+    description:
+      'GWX Processor H with 14" Antenna & Install KitGarmin part number 010-01589-17.',
+    skus: ['010-01589-17'],
+  },
+  {
+    group: 'Products',
+    title: 'GWX Processor R w/ 10" Antenna w/ Install Kit',
+    href: '/products/gwx-processor-r-w-10-antenna-w-install-kit',
+    handle: 'gwx-processor-r-w-10-antenna-w-install-kit',
+    description:
+      'GWX Processor R w/ 10" Antenna w/ Install KitGarmin part number 010-01589-20. Catalog description: GWX Processor R with 10" Antenna & Install Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-01589-20'],
+  },
+  {
+    group: 'Products',
+    title: 'GWX Processor R with 12" Antenna & Install Kit',
+    href: '/products/garmin-gwx-processor-r-with-12-antenna-install-kit-010-01589-21',
+    handle: 'garmin-gwx-processor-r-with-12-antenna-install-kit-010-01589-21',
+    description:
+      'GWX Processor R with 12" Antenna & Install KitGarmin part number 010-01589-21.',
+    skus: ['010-01589-21'],
+  },
+  {
+    group: 'Products',
+    title: 'GWX Processor R with 14" Antenna & Install Kit',
+    href: '/products/garmin-gwx-processor-r-with-14-antenna-install-kit-010-01589-27',
+    handle: 'garmin-gwx-processor-r-with-14-antenna-install-kit-010-01589-27',
+    description:
+      'GWX Processor R with 14" Antenna & Install KitGarmin part number 010-01589-27.',
+    skus: ['010-01589-27'],
+  },
+  {
+    group: 'Products',
+    title: 'GWX Processor with 14" Antenna & Install Kit',
+    href: '/products/garmin-gwx-processor-with-14-antenna-install-kit-010-01589-07',
+    handle: 'garmin-gwx-processor-with-14-antenna-install-kit-010-01589-07',
+    description:
+      'GWX Processor with 14" Antenna & Install KitGarmin part number 010-01589-07.',
+    skus: ['010-01589-07'],
+  },
+  {
+    group: 'Products',
+    title: 'GWX70 Counterweight',
+    href: '/products/gwx70-counterweight',
+    handle: 'gwx70-counterweight',
+    description:
+      'GWX70 CounterweightGarmin part number 011-02546-00. Catalog description: Counterweight - GWX 70/75. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02546-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GWX70 Mounting Adapter',
+    href: '/products/gwx70-mounting-adapter',
+    handle: 'gwx70-mounting-adapter',
+    description:
+      'GWX70 Mounting AdapterGarmin part number 011-02545-00. Catalog description: Mounting Adapter - GWX 70/75. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02545-00'],
+  },
+  {
+    group: 'Products',
+    title: 'GWX™ Processor H, Unit Only',
+    href: '/products/garmin-gwx-processor-h-unit-only-010-01590-10',
+    handle: 'garmin-gwx-processor-h-unit-only-010-01590-10',
+    description: 'GWX™ Processor H, Unit OnlyGarmin part number 010-01590-10.',
+    skus: ['010-01590-10'],
+  },
+  {
+    group: 'Products',
+    title: 'GX Series Battery',
+    href: '/products/gx-series-battery',
+    handle: 'gx-series-battery',
+    description:
+      'GX Series BatteryGarmin part number 148-1702. Catalog description: GX Series Battery. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['148-1702'],
   },
   {
     group: 'Products',
@@ -3561,12 +9838,75 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Handlebar mount',
+    href: '/products/handlebar-mount',
+    handle: 'handlebar-mount',
+    description:
+      'Handlebar mountGarmin part number 010-10305-01. Catalog description: Handlebar mount. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-10305-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Harness Adapter, GWX70',
+    href: '/products/harness-adapter-gwx70',
+    handle: 'harness-adapter-gwx70',
+    description:
+      'Harness Adapter, GWX70Garmin part number 011-02547-00. Catalog description: Harness Adapter - GWX70/75. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02547-00'],
+  },
+  {
+    group: 'Products',
     title: 'Harness,4 Cond,Config Module',
     href: '/products/harness-4-cond-config-module',
     handle: 'harness-4-cond-config-module',
     description:
       'Harness,4 Cond,Config ModuleGarmin part number 325-00122-00. Catalog description: Harness,4 Cond,Config Module. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
     skus: ['325-00122-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Harness,4 Cond,GAE 12',
+    href: '/products/harness-4-cond-gae-12',
+    handle: 'harness-4-cond-gae-12',
+    description:
+      'Harness,4 Cond,GAE 12Garmin part number 325-00421-00. Catalog description: Harness,4 Cond,GAE 12. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['325-00421-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Headset Audio Cable (VIRB®)',
+    href: '/products/headset-audio-cable-virb',
+    handle: 'headset-audio-cable-virb',
+    description:
+      'Headset Audio Cable (VIRB®)Garmin part number 010-11921-22. Catalog description: Headset Audio Cable (VIRB®). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['010-11921-22'],
+  },
+  {
+    group: 'Products',
+    title: 'Headset/microphone adapter',
+    href: '/products/headset-microphone-adapter',
+    handle: 'headset-microphone-adapter',
+    description:
+      'Headset/microphone adapterGarmin part number 320-00061-00. Catalog description: Headset/microphone adapter. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['320-00061-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Heat Shrink Kit, Color Coded, GTS Processor',
+    href: '/products/heat-shrink-kit-color-coded-gts-processor',
+    handle: 'heat-shrink-kit-color-coded-gts-processor',
+    description:
+      'Heat Shrink Kit, Color Coded, GTS ProcessorGarmin part number 011-02817-00. Catalog description: Heat Shrink Kit, Color Coded, GTS Processor. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['011-02817-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Hook,Rt Angle,Remote Lockdown',
+    href: '/products/hook-rt-angle-remote-lockdown',
+    handle: 'hook-rt-angle-remote-lockdown',
+    description:
+      'Hook,Rt Angle,Remote LockdownGarmin part number 117-00253-01. Catalog description: Hook,Rt Angle,Remote Lockdown. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['117-00253-01'],
   },
   {
     group: 'Products',
@@ -3615,12 +9955,39 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'inReach® Messenger',
+    href: '/products/inreach-messenger-1',
+    handle: 'inreach-messenger-1',
+    description:
+      'inReach® Messenger is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: inReach® Messenger. 99 Fulfillment: Garmin items are…',
+    skus: ['010-02672-00'],
+  },
+  {
+    group: 'Products',
     title: 'inReach® Messenger Plus',
     href: '/products/inreach-messenger-plus',
     handle: 'inreach-messenger-plus',
     description:
       'inReach® Messenger PlusGarmin part number 010-02887-00. Catalog description: inReach® Messenger Plus. Garmin inReach satellite communicator product or accessory. Satellite subscription may be required for communication features.',
     skus: ['010-02887-00'],
+  },
+  {
+    group: 'Products',
+    title: 'inReach® Messenger Plus',
+    href: '/products/inreach-messenger-plus-1',
+    handle: 'inreach-messenger-plus-1',
+    description:
+      'inReach® Messenger Plus is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: inReach® Messenger Plus. Garmin part number / SKU:…',
+    skus: [],
+  },
+  {
+    group: 'Products',
+    title: 'inReach® Mini 2',
+    href: '/products/inreach-mini-2',
+    handle: 'inreach-mini-2',
+    description:
+      'inReach® Mini 2 is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: inReach® Mini 2, Flame Red. 99 Fulfillment: Garmin items…',
+    skus: ['010-02602-00'],
   },
   {
     group: 'Products',
@@ -3657,6 +10024,222 @@ export const SITE_SEARCH_INDEX = [
     description:
       'inReach® Mini Dive CaseGarmin part number 010-12723-01. Catalog description: inReach® Mini Dive Case. Garmin inReach satellite communicator product or accessory. Satellite subscription may be required for communication features.',
     skus: ['010-12723-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit - LRU - AXIS Certified',
+    href: '/products/install-kit-lru-axis-certified-k11-00066-00',
+    handle: 'install-kit-lru-axis-certified-k11-00066-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number K11-00066-00.',
+    skus: ['K11-00066-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, G3X Touch Certified',
+    href: '/products/install-kit-g3x-touch-certified',
+    handle: 'install-kit-g3x-touch-certified',
+    description:
+      'Install Kit, G3X Touch CertifiedGarmin part number K11-00038-00. Catalog description: Install Kit, G3X Touch Certified. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration and supporting installation…',
+    skus: ['K11-00038-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, G500/G600 TXi, GMU44B, GRS 79/GDC 72(B)',
+    href: '/products/install-kit-g500-g600-txi-gmu44b-grs-79-gdc-72b',
+    handle: 'install-kit-g500-g600-txi-gmu44b-grs-79-gdc-72b',
+    description:
+      'Install Kit, G500/G600 TXi, GMU44B, GRS 79/GDC 72(B)Garmin part number K11-00021-50. Catalog description: Install Kit, G500/G600 TXi, GMU44B, GRS 79/GDC 72(B). Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['K11-00021-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, G500/G600 TXi, GMU44B, GSU 75(B)',
+    href: '/products/install-kit-g500-g600-txi-gmu44b-gsu-75b',
+    handle: 'install-kit-g500-g600-txi-gmu44b-gsu-75b',
+    description:
+      'Install Kit, G500/G600 TXi, GMU44B, GSU 75(B)Garmin part number K11-00019-50. Catalog description: Install Kit, G500/G600 TXi, GMU44B, GSU 75(B). Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00019-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, G500/G600 TXi, GMU44B, Integrated AHRS',
+    href: '/products/install-kit-g500-g600-txi-gmu44b-integrated-ahrs',
+    handle: 'install-kit-g500-g600-txi-gmu44b-integrated-ahrs',
+    description:
+      'Install Kit, G500/G600 TXi, GMU44B, Integrated AHRSGarmin part number K11-00020-50. Catalog description: Install Kit, G500/G600 TXi, GMU44B, Integrated AHRS. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00020-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 116b - New Install',
+    href: '/products/install-kit-gdu-116b-new-install-010-14469-01',
+    handle: 'install-kit-gdu-116b-new-install-010-14469-01',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-14469-01. Install Kit, GDU 116b - New Install — kit contentsGarmin kit P/N 010-14469-01 includes these documented components: 2Mbit configuration module kit — Garmin P/N 011-04038-01…',
+    skus: ['010-14469-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 116bx - New Install',
+    href: '/products/install-kit-gdu-116bx-new-install-010-14468-01',
+    handle: 'install-kit-gdu-116bx-new-install-010-14468-01',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-14468-01.',
+    skus: ['010-14468-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 116c/116nc - G3X Upgrade',
+    href: '/products/install-kit-gdu-116c-116nc-g3x-upgrade-010-14469-12',
+    handle: 'install-kit-gdu-116c-116nc-g3x-upgrade-010-14469-12',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-14469-12. Install Kit, GDU 116c/116nc - G3X Upgrade — kit contentsGarmin kit P/N 010-14469-12 includes these documented components: Panel mounting screws — Garmin P/N 211-00169-03 (qty…',
+    skus: ['010-14469-12'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 116c/116nc - New Install',
+    href: '/products/install-kit-gdu-116c-116nc-new-install-010-14469-02',
+    handle: 'install-kit-gdu-116c-116nc-new-install-010-14469-02',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-14469-02. Install Kit, GDU 116c/116nc - New Install — kit contentsGarmin kit P/N 010-14469-02 includes these documented components: 2Mbit configuration module kit — Garmin P/N…',
+    skus: ['010-14469-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 45x',
+    href: '/products/install-kit-gdu-45x',
+    handle: 'install-kit-gdu-45x',
+    description:
+      'Install Kit, GDU 45xGarmin part number 010-12150-01. Catalog description: Install Kit, GDU 45x. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.…',
+    skus: ['010-12150-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 46x',
+    href: '/products/install-kit-gdu-46x',
+    handle: 'install-kit-gdu-46x',
+    description:
+      'Install Kit, GDU 46xGarmin part number 010-12150-00. Catalog description: Install Kit, GDU 46x. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.…',
+    skus: ['010-12150-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 46x, PMA',
+    href: '/products/install-kit-gdu-46x-pma',
+    handle: 'install-kit-gdu-46x-pma',
+    description:
+      'Install Kit, GDU 46x, PMAGarmin part number 010-12150-05. Catalog description: Install Kit, GDU 46x, PMA. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-12150-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 47x',
+    href: '/products/install-kit-gdu-47x',
+    handle: 'install-kit-gdu-47x',
+    description:
+      'Install Kit, GDU 47xGarmin part number 010-12150-02. Catalog description: Install Kit, GDU 47x. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.…',
+    skus: ['010-12150-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 80/116b - G3X Upgrade',
+    href: '/products/install-kit-gdu-80-116b-g3x-upgrade-010-14469-10',
+    handle: 'install-kit-gdu-80-116b-g3x-upgrade-010-14469-10',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-14469-10. Install Kit, GDU 80/116b - G3X Upgrade — kit contentsGarmin kit P/N 010-14469-10 includes these documented components: 2Mbit Configuration Module Kit — Garmin P/N 011-04038-01…',
+    skus: ['010-14469-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 80P/80L - New Install',
+    href: '/products/install-kit-gdu-80p-80l-new-install-010-14469-00',
+    handle: 'install-kit-gdu-80p-80l-new-install-010-14469-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-14469-00.',
+    skus: ['010-14469-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 80Px/Lx - New Install',
+    href: '/products/install-kit-gdu-80px-lx-new-install-010-14468-00',
+    handle: 'install-kit-gdu-80px-lx-new-install-010-14468-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-14468-00.',
+    skus: ['010-14468-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, GDU 80x/116bx - G3X Upgrade',
+    href: '/products/install-kit-gdu-80x-116bx-g3x-upgrade-010-14468-10',
+    handle: 'install-kit-gdu-80x-116bx-g3x-upgrade-010-14468-10',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-14468-10.',
+    skus: ['010-14468-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Install kit, GTX 33/33D',
+    href: '/products/install-kit-gtx-33-33d',
+    handle: 'install-kit-gtx-33-33d',
+    description:
+      'Install kit, GTX 33/33DGarmin part number 115-00629-00. Catalog description: Install kit, GTX 33/33D. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-00629-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, Pilatus PC-12, TXi EIS Harness Connectors',
+    href: '/products/install-kit-pilatus-pc-12-txi-eis-harness-connectors',
+    handle: 'install-kit-pilatus-pc-12-txi-eis-harness-connectors',
+    description:
+      'Install Kit, Pilatus PC-12, TXi EIS Harness ConnectorsGarmin part number K11-00049-00. Catalog description: Install Kit, Pilatus PC-12, TXi EIS Harness Connectors. Garmin avionics accessory or service part. Confirm compatibility with the…',
+    skus: ['K11-00049-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, TXi RVSM, GMU44B, GRS 7800/GDC 7400',
+    href: '/products/garmin-install-kit-txi-rvsm-gmu44b-grs-7800-gdc-7400-k11-00022-50',
+    handle: 'garmin-install-kit-txi-rvsm-gmu44b-grs-7800-gdc-7400-k11-00022-50',
+    description:
+      'Install Kit, TXi RVSM, GMU44B, GRS 7800/GDC 7400Garmin part number K11-00022-50.',
+    skus: ['K11-00022-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Kit, TXi, GMU44B, GRS 79/GDC 7400',
+    href: '/products/install-kit-txi-gmu44b-grs-79-gdc-7400',
+    handle: 'install-kit-txi-gmu44b-grs-79-gdc-7400',
+    description:
+      'Install Kit, TXi, GMU44B, GRS 79/GDC 7400Garmin part number K11-00032-50. Catalog description: Install Kit, TXi, GMU44B, GRS 79/GDC 7400. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00032-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Install Tray, GEA 110',
+    href: '/products/install-tray-gea-110',
+    handle: 'install-tray-gea-110',
+    description:
+      'Install Tray, GEA 110Garmin part number 011-03941-00. Catalog description: ASSY,INSTALL TRAY GEA110. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-03941-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Installation Kit, Complete, GDL 60',
+    href: '/products/installation-kit-complete-gdl-60',
+    handle: 'installation-kit-complete-gdl-60',
+    description:
+      'Installation Kit, Complete, GDL 60Garmin part number 011-06440-00. Catalog description: Installation Kit, Complete, GDL 60. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-06440-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Installation Kit, GMC305',
+    href: '/products/installation-kit-gmc305',
+    handle: 'installation-kit-gmc305',
+    description:
+      'Installation Kit, GMC305Garmin part number 010-12034-00. Catalog description: Installation Kit, GMC305. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-12034-00'],
   },
   {
     group: 'Products',
@@ -4069,12 +10652,597 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Jack Screw Assy,GMA340',
+    href: '/products/jack-screw-assy-gma340',
+    handle: 'jack-screw-assy-gma340',
+    description:
+      'Jack Screw Assy,GMA340Garmin part number 233-00046-00. Catalog description: Jack Screw Assy,GMA340. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['233-00046-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Jack Screw,D-Sub,1.82" Length',
+    href: '/products/jack-screw-d-sub-1-82-length',
+    handle: 'jack-screw-d-sub-1-82-length',
+    description:
+      'Jack Screw,D-Sub,1. 82" LengthGarmin part number 211-00170-01. Catalog description: Jack Screw,D-Sub,1. 82" Length. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['211-00170-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Jack Screw/D-Sub Connector',
+    href: '/products/jack-screw-d-sub-connector',
+    handle: 'jack-screw-d-sub-connector',
+    description:
+      'Jack Screw/D-Sub ConnectorGarmin part number 211-00170-00. Catalog description: Jack Screw/D-Sub Connector. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['211-00170-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 00, GFC600, Auxiliary Install',
+    href: '/products/kit-00-gfc600-auxiliary-install',
+    handle: 'kit-00-gfc600-auxiliary-install',
+    description:
+      'Kit 00, GFC600, Auxiliary InstallGarmin part number K11-00045-00. Catalog description: Kit 00, GFC600, Auxiliary Install. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00045-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 01, GFC600, Auxiliary Install',
+    href: '/products/kit-01-gfc600-auxiliary-install',
+    handle: 'kit-01-gfc600-auxiliary-install',
+    description:
+      'Kit 01, GFC600, Auxiliary InstallGarmin part number K11-00045-01. Catalog description: Kit 01, GFC600, Auxiliary Install. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00045-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 03, GFC500, Auxiliary Install',
+    href: '/products/garmin-kit-03-gfc500-auxiliary-install-k11-00045-03',
+    handle: 'garmin-kit-03-gfc500-auxiliary-install-k11-00045-03',
+    description:
+      'Kit 03, GFC500, Auxiliary InstallGarmin part number K11-00045-03.',
+    skus: ['K11-00045-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0A, GFC500 Install, 2 Servo',
+    href: '/products/kit-0a-gfc500-install-2-servo',
+    handle: 'kit-0a-gfc500-install-2-servo',
+    description:
+      'Kit 0A, GFC500 Install, 2 ServoGarmin part number K11-00024-0A. Catalog description: Kit 0A, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-0A'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0B, GFC500 Install, 2 Servo',
+    href: '/products/kit-0b-gfc500-install-2-servo',
+    handle: 'kit-0b-gfc500-install-2-servo',
+    description:
+      'Kit 0B, GFC500 Install, 2 ServoGarmin part number K11-00024-0B. Catalog description: Kit 0B, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-0B'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0C, GFC500 Install, Pitch Trim Servo',
+    href: '/products/kit-0c-gfc500-install-pitch-trim-servo',
+    handle: 'kit-0c-gfc500-install-pitch-trim-servo',
+    description:
+      'Kit 0C, GFC500 Install, Pitch Trim ServoGarmin part number K11-00024-0C. Catalog description: Kit 0C, GFC500 Install, Pitch Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-0C'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0D, GFC500 Install, 2 Servo',
+    href: '/products/kit-0d-gfc500-install-2-servo',
+    handle: 'kit-0d-gfc500-install-2-servo',
+    description:
+      'Kit 0D, GFC500 Install, 2 ServoGarmin part number K11-00024-0D. Catalog description: Kit 0D, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-0D'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0E, GFC500 Install, 2 Servo',
+    href: '/products/kit-0e-gfc500-install-2-servo',
+    handle: 'kit-0e-gfc500-install-2-servo',
+    description:
+      'Kit 0E, GFC500 Install, 2 ServoGarmin part number K11-00024-0E. Catalog description: Kit 0E, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-0E'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0F, GFC500 Install, Yaw Damp Servo',
+    href: '/products/kit-0f-gfc500-install-yaw-damp-servo',
+    handle: 'kit-0f-gfc500-install-yaw-damp-servo',
+    description:
+      'Kit 0F, GFC500 Install, Yaw Damp ServoGarmin part number K11-00024-0F. Catalog description: Kit 0F, GFC500 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-0F'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0G, GFC500 Install, 2 Servo',
+    href: '/products/kit-0g-gfc500-install-2-servo',
+    handle: 'kit-0g-gfc500-install-2-servo',
+    description:
+      'Kit 0G, GFC500 Install, 2 ServoGarmin part number K11-00024-0G. Catalog description: Kit 0G, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-0G'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0H, GFC500 Install, Pitch Trim Servo',
+    href: '/products/kit-0h-gfc500-install-pitch-trim-servo',
+    handle: 'kit-0h-gfc500-install-pitch-trim-servo',
+    description:
+      'Kit 0H, GFC500 Install, Pitch Trim ServoGarmin part number K11-00024-0H. Catalog description: Kit 0H, GFC500 Install, Pitch Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-0H'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0J, GFC500 Install, Yaw Damp Servo',
+    href: '/products/kit-0j-gfc500-install-yaw-damp-servo',
+    handle: 'kit-0j-gfc500-install-yaw-damp-servo',
+    description:
+      'Kit 0J, GFC500 Install, Yaw Damp ServoGarmin part number K11-00024-0J. Catalog description: Kit 0J, GFC500 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-0J'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0K, GFC500 Install, 2 Servo',
+    href: '/products/kit-0k-gfc500-install-2-servo',
+    handle: 'kit-0k-gfc500-install-2-servo',
+    description:
+      'Kit 0K, GFC500 Install, 2 ServoGarmin part number K11-00024-0K. Catalog description: Kit 0K, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-0K'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0L, GFC500 Install, Pitch Trim Servo',
+    href: '/products/kit-0l-gfc500-install-pitch-trim-servo',
+    handle: 'kit-0l-gfc500-install-pitch-trim-servo',
+    description:
+      'Kit 0L, GFC500 Install, Pitch Trim ServoGarmin part number K11-00024-0L. Catalog description: Kit 0L, GFC500 Install, Pitch Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-0L'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0M, GFC500 Install, Yaw Damp Servo',
+    href: '/products/kit-0m-gfc500-install-yaw-damp-servo',
+    handle: 'kit-0m-gfc500-install-yaw-damp-servo',
+    description:
+      'Kit 0M, GFC500 Install, Yaw Damp ServoGarmin part number K11-00024-0M. Catalog description: Kit 0M, GFC500 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-0M'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0N, GFC500 Install, 2 Servo',
+    href: '/products/kit-0n-gfc500-install-2-servo',
+    handle: 'kit-0n-gfc500-install-2-servo',
+    description:
+      'Kit 0N, GFC500 Install, 2 ServoGarmin part number K11-00024-0N. Catalog description: Kit 0N, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-0N'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0P, GFC500 Install, Pitch Trim Servo',
+    href: '/products/garmin-kit-0p-gfc500-install-pitch-trim-servo-k11-00024-0p',
+    handle: 'garmin-kit-0p-gfc500-install-pitch-trim-servo-k11-00024-0p',
+    description:
+      'Kit 0P, GFC500 Install, Pitch Trim ServoGarmin part number K11-00024-0P.',
+    skus: ['K11-00024-0P'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0Q, GFC500 Install, 2 Servo',
+    href: '/products/kit-0q-gfc500-install-2-servo',
+    handle: 'kit-0q-gfc500-install-2-servo',
+    description:
+      'Kit 0Q, GFC500 Install, 2 ServoGarmin part number K11-00024-0Q. Catalog description: Kit 0Q, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-0Q'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0R, GFC500 Install, Pitch Trim Servo',
+    href: '/products/kit-0r-gfc500-install-pitch-trim-servo',
+    handle: 'kit-0r-gfc500-install-pitch-trim-servo',
+    description:
+      'Kit 0R, GFC500 Install, Pitch Trim ServoGarmin part number K11-00024-0R. Catalog description: Kit 0R, GFC500 Install, Pitch Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-0R'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0S, GFC500 Install, 2 Servo',
+    href: '/products/kit-0s-gfc500-install-2-servo',
+    handle: 'kit-0s-gfc500-install-2-servo',
+    description:
+      'Kit 0S, GFC500 Install, 2 ServoGarmin part number K11-00024-0S. Catalog description: Kit 0S, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-0S'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0T, GFC500 Install, 2 Servo',
+    href: '/products/kit-0t-gfc500-install-2-servo',
+    handle: 'kit-0t-gfc500-install-2-servo',
+    description:
+      'Kit 0T, GFC500 Install, 2 ServoGarmin part number K11-00024-0T. Catalog description: Kit 0T, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-0T'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0U, GFC500 Install, Pitch Trim Servo',
+    href: '/products/kit-0u-gfc500-install-pitch-trim-servo',
+    handle: 'kit-0u-gfc500-install-pitch-trim-servo',
+    description:
+      'Kit 0U, GFC500 Install, Pitch Trim ServoGarmin part number K11-00024-0U. Catalog description: Kit 0U, GFC500 Install, Pitch Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-0U'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 0V, GFC500 Install, Yaw Damp Servo',
+    href: '/products/kit-0v-gfc500-install-yaw-damp-servo',
+    handle: 'kit-0v-gfc500-install-yaw-damp-servo',
+    description:
+      'Kit 0V, GFC500 Install, Yaw Damp ServoGarmin part number K11-00024-0V. Catalog description: Kit 0V, GFC500 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-0V'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 39, GFC600 Install, Yaw Trim Servo',
+    href: '/products/kit-39-gfc600-install-yaw-trim-servo',
+    handle: 'kit-39-gfc600-install-yaw-trim-servo',
+    description:
+      'Kit 39, GFC600 Install, Yaw Trim ServoGarmin part number K11-00018-39. Catalog description: Kit 39, GFC600 Install, Yaw Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00018-39'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 42, GFC600 Install, 4 Servo',
+    href: '/products/kit-42-gfc600-install-4-servo',
+    handle: 'kit-42-gfc600-install-4-servo',
+    description:
+      'Kit 42, GFC600 Install, 4 ServoGarmin part number K11-00018-42. Catalog description: Kit 42, GFC600 Install, 4 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-42'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 43, GFC600 Install, 4 Servo',
+    href: '/products/kit-43-gfc600-install-4-servo',
+    handle: 'kit-43-gfc600-install-4-servo',
+    description:
+      'Kit 43, GFC600 Install, 4 ServoGarmin part number K11-00018-43. Catalog description: Kit 43, GFC600 Install, 4 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-43'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 44, GFC600 Install, Yaw Trim Servo',
+    href: '/products/kit-44-gfc600-install-yaw-trim-servo',
+    handle: 'kit-44-gfc600-install-yaw-trim-servo',
+    description:
+      'Kit 44, GFC600 Install, Yaw Trim ServoGarmin part number K11-00018-44. Catalog description: Kit 44, GFC600 Install, Yaw Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00018-44'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 46, GFC600 Install, 4 Servo',
+    href: '/products/kit-46-gfc600-install-4-servo',
+    handle: 'kit-46-gfc600-install-4-servo',
+    description:
+      'Kit 46, GFC600 Install, 4 ServoGarmin part number K11-00018-46. Catalog description: Kit 46, GFC600 Install, 4 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-46'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 47, GFC600 Install, 3 Servo',
+    href: '/products/kit-47-gfc600-install-3-servo',
+    handle: 'kit-47-gfc600-install-3-servo',
+    description:
+      'Kit 47, GFC600 Install, 3 ServoGarmin part number K11-00018-47. Catalog description: Kit 47, GFC600 Install, 3 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-47'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 48, GFC600 Install, Yaw Damp Servo',
+    href: '/products/kit-48-gfc600-install-yaw-damp-servo',
+    handle: 'kit-48-gfc600-install-yaw-damp-servo',
+    description:
+      'Kit 48, GFC600 Install, Yaw Damp ServoGarmin part number K11-00018-48. Catalog description: Kit 48, GFC600 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00018-48'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 49, GFC600 Install, Yaw Damp Servo',
+    href: '/products/kit-49-gfc600-install-yaw-damp-servo',
+    handle: 'kit-49-gfc600-install-yaw-damp-servo',
+    description:
+      'Kit 49, GFC600 Install, Yaw Damp ServoGarmin part number K11-00018-49. Catalog description: Kit 49, GFC600 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00018-49'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 50, GFC600 Install, Yaw Trim Servo',
+    href: '/products/kit-50-gfc600-install-yaw-trim-servo',
+    handle: 'kit-50-gfc600-install-yaw-trim-servo',
+    description:
+      'Kit 50, GFC600 Install, Yaw Trim ServoGarmin part number K11-00018-50. Catalog description: Kit 50, GFC600 Install, Yaw Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00018-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 52, GFC600 INSTALL, 4 SERVO',
+    href: '/products/garmin-kit-52-gfc600-install-4-servo-k11-00018-52',
+    handle: 'garmin-kit-52-gfc600-install-4-servo-k11-00018-52',
+    description:
+      'Kit 52, GFC600 INSTALL, 4 SERVOGarmin part number K11-00018-52.',
+    skus: ['K11-00018-52'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 54, GFC600 Install (IMA -37), YAW DAMP SERVO',
+    href: '/products/garmin-kit-54-gfc600-install-ima-37-yaw-damp-servo-k11-00018-54',
+    handle: 'garmin-kit-54-gfc600-install-ima-37-yaw-damp-servo-k11-00018-54',
+    description:
+      'Kit 54, GFC600 Install (IMA -37), YAW DAMP SERVOGarmin part number K11-00018-54.',
+    skus: ['K11-00018-54'],
+  },
+  {
+    group: 'Products',
+    title: 'KIT 57, GFC600 INSTALL, YAW TRIM SERVO',
+    href: '/products/garmin-kit-57-gfc600-install-yaw-trim-servo-k11-00018-57',
+    handle: 'garmin-kit-57-gfc600-install-yaw-trim-servo-k11-00018-57',
+    description:
+      'KIT 57, GFC600 INSTALL, YAW TRIM SERVOGarmin part number K11-00018-57.',
+    skus: ['K11-00018-57'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 60, GFC500 Install, Pitch Trim Servo',
+    href: '/products/kit-60-gfc500-install-pitch-trim-servo',
+    handle: 'kit-60-gfc500-install-pitch-trim-servo',
+    description:
+      'Kit 60, GFC500 Install, Pitch Trim ServoGarmin part number K11-00024-60. Catalog description: Kit 60, GFC500 Install, Pitch Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-60'],
+  },
+  {
+    group: 'Products',
+    title: 'KIT 61, GFC600 INSTALL, 4 SERVO (IMA -39)',
+    href: '/products/kit-61-gfc600-install-4-servo-ima-39-k11-00018-61',
+    handle: 'kit-61-gfc600-install-4-servo-ima-39-k11-00018-61',
+    description:
+      'Genuine Garmin product. Manufacturer part number K11-00018-61.',
+    skus: ['K11-00018-61'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 73, GFC 500 Install, 2 Servo',
+    href: '/products/kit-73-gfc-500-install-2-servo',
+    handle: 'kit-73-gfc-500-install-2-servo',
+    description:
+      'Kit 73, GFC 500 Install, 2 ServoGarmin part number K11-00024-73. Catalog description: Kit 73, GFC 500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-73'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 74, GFC500 Install, Yaw Damp Servo',
+    href: '/products/kit-74-gfc500-install-yaw-damp-servo',
+    handle: 'kit-74-gfc500-install-yaw-damp-servo',
+    description:
+      'Kit 74, GFC500 Install, Yaw Damp ServoGarmin part number K11-00024-74. Catalog description: Kit 74, GFC500 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-74'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 77, GFC500 Install, Yaw Damp Servo',
+    href: '/products/kit-77-gfc500-install-yaw-damp-servo',
+    handle: 'kit-77-gfc500-install-yaw-damp-servo',
+    description:
+      'Kit 77, GFC500 Install, Yaw Damp ServoGarmin part number K11-00024-77. Catalog description: Kit 77, GFC500 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-77'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 83, GFC500 Install, Yaw Damp Servo',
+    href: '/products/garmin-kit-83-gfc500-install-yaw-damp-servo-k11-00024-83',
+    handle: 'garmin-kit-83-gfc500-install-yaw-damp-servo-k11-00024-83',
+    description:
+      'Kit 83, GFC500 Install, Yaw Damp ServoGarmin part number K11-00024-83. Kit 83, GFC500 Install, Yaw Damp Servo — kit contentsGarmin kit P/N K11-00024-83 includes these documented components: CAPSTAN KIT, SPIRAL — Garmin P/N 011-02951-10…',
+    skus: ['K11-00024-83'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 87, GFC500 Install, 2 Servo',
+    href: '/products/kit-87-gfc500-install-2-servo',
+    handle: 'kit-87-gfc500-install-2-servo',
+    description:
+      'Kit 87, GFC500 Install, 2 ServoGarmin part number K11-00024-87. Catalog description: Kit 87, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-87'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 88, GFC500 Install, Pitch Trim Servo',
+    href: '/products/kit-88-gfc500-install-pitch-trim-servo',
+    handle: 'kit-88-gfc500-install-pitch-trim-servo',
+    description:
+      'Kit 88, GFC500 Install, Pitch Trim ServoGarmin part number K11-00024-88. Catalog description: Kit 88, GFC500 Install, Pitch Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-88'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 89, GFC500 Install, Yaw Damp Servo',
+    href: '/products/kit-89-gfc500-install-yaw-damp-servo',
+    handle: 'kit-89-gfc500-install-yaw-damp-servo',
+    description:
+      'Kit 89, GFC500 Install, Yaw Damp ServoGarmin part number K11-00024-89. Catalog description: Kit 89, GFC500 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-89'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 94, GFC500 Install, 2 Servo',
+    href: '/products/kit-94-gfc500-install-2-servo',
+    handle: 'kit-94-gfc500-install-2-servo',
+    description:
+      'Kit 94, GFC500 Install, 2 ServoGarmin part number K11-00024-94. Catalog description: Kit 94, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-94'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 95, GFC500 Install, Yaw Damp Servo',
+    href: '/products/kit-95-gfc500-install-yaw-damp-servo',
+    handle: 'kit-95-gfc500-install-yaw-damp-servo',
+    description:
+      'Kit 95, GFC500 Install, Yaw Damp ServoGarmin part number K11-00024-95. Catalog description: Kit 95, GFC500 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-95'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 96, GFC500 Install, Yaw Damp Servo',
+    href: '/products/kit-96-gfc500-install-yaw-damp-servo',
+    handle: 'kit-96-gfc500-install-yaw-damp-servo',
+    description:
+      'Kit 96, GFC500 Install, Yaw Damp ServoGarmin part number K11-00024-96. Catalog description: Kit 96, GFC500 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-96'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 97, GFC500 Install, 2 Servo',
+    href: '/products/kit-97-gfc500-install-2-servo',
+    handle: 'kit-97-gfc500-install-2-servo',
+    description:
+      'Kit 97, GFC500 Install, 2 ServoGarmin part number K11-00024-97. Catalog description: Kit 97, GFC500 Install, 2 Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-97'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 98, GFC500 Install, Pitch Trim Servo',
+    href: '/products/kit-98-gfc500-install-pitch-trim-servo',
+    handle: 'kit-98-gfc500-install-pitch-trim-servo',
+    description:
+      'Kit 98, GFC500 Install, Pitch Trim ServoGarmin part number K11-00024-98. Catalog description: Kit 98, GFC500 Install, Pitch Trim Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-98'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit 99, GFC500 Install, Yaw Damp Servo',
+    href: '/products/kit-99-gfc500-install-yaw-damp-servo',
+    handle: 'kit-99-gfc500-install-yaw-damp-servo',
+    description:
+      'Kit 99, GFC500 Install, Yaw Damp ServoGarmin part number K11-00024-99. Catalog description: Kit 99, GFC500 Install, Yaw Damp Servo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-99'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, 4 Cyl - CHT/EGT, FF, Oil P, Oil T - Gravity Fed,GPT',
+    href: '/products/kit-4-cyl-cht-egt-ff-oil-p-oil-t-gravity-fed-gpt',
+    handle: 'kit-4-cyl-cht-egt-ff-oil-p-oil-t-gravity-fed-gpt',
+    description:
+      'Kit, 4 Cyl - CHT/EGT, FF, Oil P, Oil T - Gravity Fed,GPTGarmin part number K00-01300-10. Garmin engine sensor kit for certified TXi, G3X Touch Certified, and GI 275 EIS installations. Aircraft eligibility, sensor compatibility, and…',
+    skus: ['K00-01300-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, 4 Cyl - CHT/EGT, FF, Oil P, Oil T- Fuel Pump, GPT',
+    href: '/products/kit-4-cyl-cht-egt-ff-oil-p-oil-t-fuel-pump-gpt',
+    handle: 'kit-4-cyl-cht-egt-ff-oil-p-oil-t-fuel-pump-gpt',
+    description:
+      'Kit, 4 Cyl - CHT/EGT, FF, Oil P, Oil T- Fuel Pump, GPTGarmin part number K00-01299-10. Garmin engine sensor kit for certified TXi, G3X Touch Certified, and GI 275 EIS installations. Aircraft eligibility, sensor compatibility, and required…',
+    skus: ['K00-01299-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, 4 Cyl -CHT/EGT, FF, Oil P, Oil T, MP - Fuel Pump, GPT',
+    href: '/products/kit-4-cyl-cht-egt-ff-oil-p-oil-t-mp-fuel-pump-gpt',
+    handle: 'kit-4-cyl-cht-egt-ff-oil-p-oil-t-mp-fuel-pump-gpt',
+    description:
+      'Kit, 4 Cyl -CHT/EGT, FF, Oil P, Oil T, MP - Fuel Pump, GPTGarmin part number K00-01301-10. Garmin engine sensor kit for certified TXi, G3X Touch Certified, and GI 275 EIS installations. Aircraft eligibility, sensor compatibility, and…',
+    skus: ['K00-01301-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, 4 Cyl -CHT/EGT, FF, Oil P, Oil T, MP - Gravity Fed, GPT',
+    href: '/products/kit-4-cyl-cht-egt-ff-oil-p-oil-t-mp-gravity-fed-gpt',
+    handle: 'kit-4-cyl-cht-egt-ff-oil-p-oil-t-mp-gravity-fed-gpt',
+    description:
+      'Kit, 4 Cyl -CHT/EGT, FF, Oil P, Oil T, MP - Gravity Fed, GPTGarmin part number K00-01302-10. Garmin engine sensor kit for certified TXi, G3X Touch Certified, and GI 275 EIS installations. Aircraft eligibility, sensor compatibility, and…',
+    skus: ['K00-01302-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, 6 Cyl - CHT/EGT, FF, Oil P, Oil T - Fuel Pump, GPT',
+    href: '/products/kit-6-cyl-cht-egt-ff-oil-p-oil-t-fuel-pump-gpt',
+    handle: 'kit-6-cyl-cht-egt-ff-oil-p-oil-t-fuel-pump-gpt',
+    description:
+      'Kit, 6 Cyl - CHT/EGT, FF, Oil P, Oil T - Fuel Pump, GPTGarmin part number K00-01305-10. Garmin engine sensor kit for certified TXi, G3X Touch Certified, and GI 275 EIS installations. Aircraft eligibility, sensor compatibility, and…',
+    skus: ['K00-01305-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, 6 Cyl - CHT/EGT, FF, Oil P, Oil T - Gravity Fed, GPT',
+    href: '/products/kit-6-cyl-cht-egt-ff-oil-p-oil-t-gravity-fed-gpt',
+    handle: 'kit-6-cyl-cht-egt-ff-oil-p-oil-t-gravity-fed-gpt',
+    description:
+      'Kit, 6 Cyl - CHT/EGT, FF, Oil P, Oil T - Gravity Fed, GPTGarmin part number K00-01306-10. Garmin engine sensor kit for certified TXi, G3X Touch Certified, and GI 275 EIS installations. Aircraft eligibility, sensor compatibility, and…',
+    skus: ['K00-01306-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, 6 Cyl - CHT/EGT, FF, Oil P, Oil T, MP - Fuel Pump, GPT',
+    href: '/products/kit-6-cyl-cht-egt-ff-oil-p-oil-t-mp-fuel-pump-gpt',
+    handle: 'kit-6-cyl-cht-egt-ff-oil-p-oil-t-mp-fuel-pump-gpt',
+    description:
+      'Kit, 6 Cyl - CHT/EGT, FF, Oil P, Oil T, MP - Fuel Pump, GPTGarmin part number K00-01303-10. Garmin engine sensor kit for certified TXi, G3X Touch Certified, and GI 275 EIS installations. Aircraft eligibility, sensor compatibility, and…',
+    skus: ['K00-01303-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, 6 Cyl - CHT/EGT, FF, Oil P, Oil T, MP - Gravity Fed, GPT',
+    href: '/products/kit-6-cyl-cht-egt-ff-oil-p-oil-t-mp-gravity-fed-gpt',
+    handle: 'kit-6-cyl-cht-egt-ff-oil-p-oil-t-mp-gravity-fed-gpt',
+    description:
+      'Kit, 6 Cyl - CHT/EGT, FF, Oil P, Oil T, MP - Gravity Fed, GPTGarmin part number K00-01304-10. Garmin engine sensor kit for certified TXi, G3X Touch Certified, and GI 275 EIS installations. Aircraft eligibility, sensor compatibility, and…',
+    skus: ['K00-01304-10'],
+  },
+  {
+    group: 'Products',
+    title: 'KIT, ACCESS PANEL, GFC 600H, BELL 505',
+    href: '/products/garmin-kit-access-panel-gfc-600h-bell-505-k11-00039-06',
+    handle: 'garmin-kit-access-panel-gfc-600h-bell-505-k11-00039-06',
+    description:
+      'KIT, ACCESS PANEL, GFC 600H, BELL 505Garmin part number K11-00039-06.',
+    skus: ['K11-00039-06'],
+  },
+  {
+    group: 'Products',
     title: 'Kit, ADS-B, Hawker 800A/XP',
     href: '/products/kit-ads-b-hawker-800a-xp',
     handle: 'kit-ads-b-hawker-800a-xp',
     description:
       'Kit, ADS-B, Hawker 800A/XPGarmin part number K10-00265-00. Catalog description: Kit, ADS-B, Hawker 800A/XP. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
     skus: ['K10-00265-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, Antenna, GPS BNC',
+    href: '/products/kit-antenna-gps-bnc',
+    handle: 'kit-antenna-gps-bnc',
+    description:
+      'Kit, Antenna, GPS BNCGarmin part number 010-13287-00. Catalog description: Kit, Antenna, GPS BNC. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-13287-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, Dual GI 275 w/GMU 11, ADAHRS',
+    href: '/products/kit-dual-gi-275-w-gmu-11-adahrs',
+    handle: 'kit-dual-gi-275-w-gmu-11-adahrs',
+    description:
+      'Kit, Dual GI 275 w/GMU 11, ADAHRSGarmin part number 010-02669-00. Catalog description: Kit, Dual GI 275 w/GMU 11, ADAHRS. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-02669-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, Dual GI 275 w/GMU 11, ADAHRS & ADAHRS + AP',
+    href: '/products/kit-dual-gi-275-w-gmu-11-adahrs-adahrs-ap',
+    handle: 'kit-dual-gi-275-w-gmu-11-adahrs-adahrs-ap',
+    description:
+      'Kit, Dual GI 275 w/GMU 11, ADAHRS & ADAHRS + APGarmin part number 010-02668-00. Catalog description: Kit, Dual GI 275 w/GMU 11, ADAHRS & ADAHRS + AP. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-02668-00'],
   },
   {
     group: 'Products',
@@ -4096,6 +11264,23 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Kit, FAA Datacom, GTN Xi',
+    href: '/products/garmin-kit-faa-datacom-gtn-xi-k00-01497-00',
+    handle: 'garmin-kit-faa-datacom-gtn-xi-k00-01497-00',
+    description: 'Kit, FAA Datacom, GTN XiGarmin part number K00-01497-00.',
+    skus: ['K00-01497-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GCU 275/276/478 Replacement Knob Set',
+    href: '/products/kit-gcu-275-276-478-replacement-knob-set',
+    handle: 'kit-gcu-275-276-478-replacement-knob-set',
+    description:
+      'Kit, GCU 275/276/478 Replacement Knob SetGarmin part number K00-00746-00. Catalog description: Kit, GCU 275/276/478 Replacement Knob Set. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration and…',
+    skus: ['K00-00746-00'],
+  },
+  {
+    group: 'Products',
     title: 'Kit, GCU 475/476/477 Replacement Knob Set',
     href: '/products/kit-gcu-475-476-477-replacement-knob-set',
     handle: 'kit-gcu-475-476-477-replacement-knob-set',
@@ -4114,6 +11299,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Kit, GDU 1250A, Cirrus SR2X G1000 NXi Upgrade',
+    href: '/products/garmin-kit-gdu-1250a-cirrus-sr2x-g1000-nxi-upgrade-k00-01491-02',
+    handle: 'garmin-kit-gdu-1250a-cirrus-sr2x-g1000-nxi-upgrade-k00-01491-02',
+    description:
+      'Garmin K00-01491-02 is the Cirrus SR2X G1000 NXi upgrade kit identified for the GDU 1250A display configuration. This dealer-install kit supports an aircraft-specific Perspective/G1000 NXi upgrade evaluation. Identified kit…',
+    skus: ['K00-01491-02'],
+  },
+  {
+    group: 'Products',
     title: 'Kit, GDU 620 Fan Assembly',
     href: '/products/kit-gdu-620-fan-assembly',
     handle: 'kit-gdu-620-fan-assembly',
@@ -4129,6 +11323,760 @@ export const SITE_SEARCH_INDEX = [
     description:
       'Kit, GDU 620 Replacement Knob SetGarmin part number K00-00683-01. Catalog description: Kit, GDU 620 Replacement Knob Set. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration and supporting…',
     skus: ['K00-00683-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, 172RG, Pitch Trim Option',
+    href: '/products/kit-gfc-500-install-172rg-pitch-trim-option',
+    handle: 'kit-gfc-500-install-172rg-pitch-trim-option',
+    description:
+      'Kit, GFC 500 Install, 172RG, Pitch Trim OptionGarmin part number K11-00024-79. Catalog description: Kit, GFC 500 Install, 172RG, Pitch Trim Option. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-79'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, 2 Axis, Piper PA-28-235',
+    href: '/products/kit-gfc-500-install-2-axis-piper-pa-28-235',
+    handle: 'kit-gfc-500-install-2-axis-piper-pa-28-235',
+    description:
+      'Kit, GFC 500 Install, 2 Axis, Piper PA-28-235Garmin part number K11-00024-48. Catalog description: Kit, GFC 500 Install, 2 Axis, Piper PA-28-235. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-48'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, 2 Servo, 177',
+    href: '/products/kit-gfc-500-install-2-servo-177',
+    handle: 'kit-gfc-500-install-2-servo-177',
+    description:
+      'Kit, GFC 500 Install, 2 Servo, 177Garmin part number K11-00024-52. Catalog description: Kit, GFC 500 Install, 2 Servo, 177. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-52'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, M20 C/D/E/F/G, Pitch Trim',
+    href: '/products/kit-gfc-500-install-m20-c-d-e-f-g-pitch-trim',
+    handle: 'kit-gfc-500-install-m20-c-d-e-f-g-pitch-trim',
+    description:
+      'Kit, GFC 500 Install, M20 C/D/E/F/G, Pitch TrimGarmin part number K11-00024-76. Catalog description: Kit, GFC 500 Install, M20 C/D/E/F/G, Pitch Trim. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-76'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, PA-28R, Two Axis',
+    href: '/products/kit-gfc-500-install-pa-28r-two-axis',
+    handle: 'kit-gfc-500-install-pa-28r-two-axis',
+    description:
+      'Kit, GFC 500 Install, PA-28R, Two AxisGarmin part number K11-00024-47. Catalog description: Kit, GFC 500 Install, PA-28R, Two Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-47'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, PA-28RT, 2 Axis',
+    href: '/products/kit-gfc-500-install-pa-28rt-2-axis',
+    handle: 'kit-gfc-500-install-pa-28rt-2-axis',
+    description:
+      'Kit, GFC 500 Install, PA-28RT, 2 AxisGarmin part number K11-00024-56. Catalog description: Kit, GFC 500 Install, PA-28RT, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00024-56'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, PA-28RT, Pitch Trim Option',
+    href: '/products/kit-gfc-500-install-pa-28rt-pitch-trim-option',
+    handle: 'kit-gfc-500-install-pa-28rt-pitch-trim-option',
+    description:
+      'Kit, GFC 500 Install, PA-28RT, Pitch Trim OptionGarmin part number K11-00024-57. Catalog description: Kit, GFC 500 Install, PA-28RT, Pitch Trim Option. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-57'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, PA-28RT, Yaw Damp Option',
+    href: '/products/kit-gfc-500-install-pa-28rt-yaw-damp-option',
+    handle: 'kit-gfc-500-install-pa-28rt-yaw-damp-option',
+    description:
+      'Kit, GFC 500 Install, PA-28RT, Yaw Damp OptionGarmin part number K11-00024-58. Catalog description: Kit, GFC 500 Install, PA-28RT, Yaw Damp Option. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-58'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, PA-32, NON-RET., 2 Axis',
+    href: '/products/kit-gfc-500-install-pa-32-non-ret-2-axis',
+    handle: 'kit-gfc-500-install-pa-32-non-ret-2-axis',
+    description:
+      'Kit, GFC 500 Install, PA-32, NON-RET. , 2 AxisGarmin part number K11-00024-55. Catalog description: Kit, GFC 500 Install, PA-32, NON-RET. , 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-55'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, Piper Ovrhd Pitch Trim, Option 1',
+    href: '/products/kit-gfc-500-install-piper-ovrhd-pitch-trim-option-1',
+    handle: 'kit-gfc-500-install-piper-ovrhd-pitch-trim-option-1',
+    description:
+      'Kit, GFC 500 Install, Piper Ovrhd Pitch Trim, Option 1Garmin part number K11-00024-49. Catalog description: Kit, GFC 500 Install, Piper Ovrhd Pitch Trim, Option 1. Certified Garmin avionics may require approved installation,…',
+    skus: ['K11-00024-49'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, Piper PA-32, Yaw Damp Option',
+    href: '/products/kit-gfc-500-install-piper-pa-32-yaw-damp-option',
+    handle: 'kit-gfc-500-install-piper-pa-32-yaw-damp-option',
+    description:
+      'Kit, GFC 500 Install, Piper PA-32, Yaw Damp OptionGarmin part number K11-00024-43. Catalog description: Kit, GFC 500 Install, Piper PA-32, Yaw Damp Option. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-43'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, Pitch Trim Servo, 177',
+    href: '/products/kit-gfc-500-install-pitch-trim-servo-177',
+    handle: 'kit-gfc-500-install-pitch-trim-servo-177',
+    description:
+      'Kit, GFC 500 Install, Pitch Trim Servo, 177Garmin part number K11-00024-53. Catalog description: Kit, GFC 500 Install, Pitch Trim Servo, 177. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-53'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, Pitch Trim Servo, 206 (Pre 1974)',
+    href: '/products/kit-gfc-500-install-pitch-trim-servo-206-pre-1974',
+    handle: 'kit-gfc-500-install-pitch-trim-servo-206-pre-1974',
+    description:
+      'Kit, GFC 500 Install, Pitch Trim Servo, 206 (Pre 1974)Garmin part number K11-00024-62. Catalog description: Kit, GFC 500 Install, Pitch Trim Servo, 206 (Pre 1974). Certified Garmin avionics may require approved installation,…',
+    skus: ['K11-00024-62'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, Yaw Servo, 177',
+    href: '/products/kit-gfc-500-install-yaw-servo-177',
+    handle: 'kit-gfc-500-install-yaw-servo-177',
+    description:
+      'Kit, GFC 500 Install, Yaw Servo, 177Garmin part number K11-00024-54. Catalog description: Kit, GFC 500 Install, Yaw Servo, 177. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00024-54'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 500 Install, Yaw Servo, Piper, PA-28-235',
+    href: '/products/kit-gfc-500-install-yaw-servo-piper-pa-28-235',
+    handle: 'kit-gfc-500-install-yaw-servo-piper-pa-28-235',
+    description:
+      'Kit, GFC 500 Install, Yaw Servo, Piper, PA-28-235Garmin part number K11-00024-51. Catalog description: Kit, GFC 500 Install, Yaw Servo, Piper, PA-28-235. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-51'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 600 Harness Prebuild Kit',
+    href: '/products/kit-gfc-600-harness-prebuild-kit',
+    handle: 'kit-gfc-600-harness-prebuild-kit',
+    description:
+      'Kit, GFC 600 Harness Prebuild KitGarmin part number K11-00018-51. Catalog description: Kit, GFC 600 Harness Prebuild Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-51'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 600 INSTALL, 425',
+    href: '/products/kit-gfc-600-install-425',
+    handle: 'kit-gfc-600-install-425',
+    description:
+      'Kit, GFC 600 INSTALL, 425Garmin part number K11-00018-31. Catalog description: Kit, GFC 600 INSTALL, 425. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['K11-00018-31'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 600, 3 Axis w/ P.T., PA-46 Piston',
+    href: '/products/kit-gfc-600-3-axis-w-p-t-pa-46-piston',
+    handle: 'kit-gfc-600-3-axis-w-p-t-pa-46-piston',
+    description:
+      'Kit, GFC 600, 3 Axis w/ P. T. , PA-46 PistonGarmin part number 010-01993-15. Catalog description: Kit, GFC 600, 3 Axis w/ P. T. , PA-46 Piston. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-01993-15'],
+  },
+  {
+    group: 'Products',
+    title: 'KIT, GFC 600H INSTALL, YAW, AIRBUS AS350',
+    href: '/products/kit-gfc-600h-install-yaw-airbus-as350',
+    handle: 'kit-gfc-600h-install-yaw-airbus-as350',
+    description:
+      'KIT, GFC 600H INSTALL, YAW, AIRBUS AS350Garmin part number K11-00039-05. Catalog description: KIT, GFC 600H INSTALL, YAW, AIRBUS AS350. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00039-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 600H INSTALLATION, AIRBUS H130',
+    href: '/products/kit-gfc-600h-installation-airbus-h130',
+    handle: 'kit-gfc-600h-installation-airbus-h130',
+    description:
+      'Kit, GFC 600H INSTALLATION, AIRBUS H130Garmin part number K11-00039-09. Catalog description: Kit, GFC 600H INSTALLATION, AIRBUS H130. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00039-09'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC 600H PEDAL SWITCH, AIRBUS H130',
+    href: '/products/kit-gfc-600h-pedal-switch-airbus-h130',
+    handle: 'kit-gfc-600h-pedal-switch-airbus-h130',
+    description:
+      'Kit, GFC 600H PEDAL SWITCH, AIRBUS H130Garmin part number K11-00039-08. Catalog description: Kit, GFC 600H PEDAL SWITCH, AIRBUS H130. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00039-08'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, 172RG, 2 Axis',
+    href: '/products/kit-gfc500-install-172rg-2-axis',
+    handle: 'kit-gfc500-install-172rg-2-axis',
+    description:
+      'Kit, GFC500 Install, 172RG, 2 AxisGarmin part number K11-00024-78. Catalog description: Kit, GFC500 Install, 172RG, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00024-78'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, 172RG, Yaw Option',
+    href: '/products/kit-gfc500-install-172rg-yaw-option',
+    handle: 'kit-gfc500-install-172rg-yaw-option',
+    description:
+      'Kit, GFC500 Install, 172RG, Yaw OptionGarmin part number K11-00024-80. Catalog description: Kit, GFC500 Install, 172RG, Yaw Option. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-80'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, 2 Servo, Aviat Husky',
+    href: '/products/kit-gfc500-install-2-servo-aviat-husky',
+    handle: 'kit-gfc500-install-2-servo-aviat-husky',
+    description:
+      'Kit, GFC500 Install, 2 Servo, Aviat HuskyGarmin part number K11-00024-63. Catalog description: Kit, GFC500 Install, 2 Servo, Aviat Husky. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-63'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, 2 Servo, M20 C/D/E/F/G',
+    href: '/products/kit-gfc500-install-2-servo-m20-c-d-e-f-g',
+    handle: 'kit-gfc500-install-2-servo-m20-c-d-e-f-g',
+    description:
+      'Kit, GFC500 Install, 2 Servo, M20 C/D/E/F/GGarmin part number K11-00024-75. Catalog description: Kit, GFC500 Install, 2 Servo, M20 C/D/E/F/G. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-75'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, PA-32RT, Pitch Trim Option',
+    href: '/products/kit-gfc500-install-pa-32rt-pitch-trim-option',
+    handle: 'kit-gfc500-install-pa-32rt-pitch-trim-option',
+    description:
+      'Kit, GFC500 Install, PA-32RT, Pitch Trim OptionGarmin part number K11-00024-66. Catalog description: Kit, GFC500 Install, PA-32RT, Pitch Trim Option. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-66'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, PA-32RT, Two Axis',
+    href: '/products/kit-gfc500-install-pa-32rt-two-axis',
+    handle: 'kit-gfc500-install-pa-32rt-two-axis',
+    description:
+      'Kit, GFC500 Install, PA-32RT, Two AxisGarmin part number K11-00024-65. Catalog description: Kit, GFC500 Install, PA-32RT, Two Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-65'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, PA-32RT, Yaw Damp Option',
+    href: '/products/garmin-kit-gfc500-install-pa-32rt-yaw-damp-option-k11-00024-67',
+    handle: 'garmin-kit-gfc500-install-pa-32rt-yaw-damp-option-k11-00024-67',
+    description:
+      'Kit, GFC500 Install, PA-32RT, Yaw Damp OptionGarmin part number K11-00024-67. Kit, GFC500 Install, PA-32RT, Yaw Damp Option — kit contentsGarmin kit P/N K11-00024-67 includes these documented components: CAPSTAN KIT, SPIRAL 28 — Garmin…',
+    skus: ['K11-00024-67'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, Piper O.P.T., Option 2',
+    href: '/products/kit-gfc500-install-piper-o-p-t-option-2',
+    handle: 'kit-gfc500-install-piper-o-p-t-option-2',
+    description:
+      'Kit, GFC500 Install, Piper O. P. T. , Option 2Garmin part number K11-00024-50. Catalog description: Kit, GFC500 Install, Piper O. P. T. , Option 2. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, Piper PA-24, 2 Axis',
+    href: '/products/kit-gfc500-install-piper-pa-24-2-axis',
+    handle: 'kit-gfc500-install-piper-pa-24-2-axis',
+    description:
+      'Kit, GFC500 Install, Piper PA-24, 2 AxisGarmin part number K11-00024-84. Catalog description: Kit, GFC500 Install, Piper PA-24, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-84'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, Piper PA-24, 2 Axis, Yaw Damp Option',
+    href: '/products/kit-gfc500-install-piper-pa-24-2-axis-yaw-damp-option',
+    handle: 'kit-gfc500-install-piper-pa-24-2-axis-yaw-damp-option',
+    description:
+      'Kit, GFC500 Install, Piper PA-24, 2 Axis, Yaw Damp OptionGarmin part number K11-00024-86. Catalog description: Kit, GFC500 Install, Piper PA-24, 2 Axis, Yaw Damp Option. Certified Garmin avionics may require approved installation,…',
+    skus: ['K11-00024-86'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, Piper PA-24, Pitch Trim Option',
+    href: '/products/kit-gfc500-install-piper-pa-24-pitch-trim-option',
+    handle: 'kit-gfc500-install-piper-pa-24-pitch-trim-option',
+    description:
+      'Kit, GFC500 Install, Piper PA-24, Pitch Trim OptionGarmin part number K11-00024-85. Catalog description: Kit, GFC500 Install, Piper PA-24, Pitch Trim Option. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-85'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, Piper PA-32, Cherokee Six, 2 Axis',
+    href: '/products/kit-gfc500-install-piper-pa-32-cherokee-six-2-axis',
+    handle: 'kit-gfc500-install-piper-pa-32-cherokee-six-2-axis',
+    description:
+      'Kit, GFC500 Install, Piper PA-32, Cherokee Six, 2 AxisGarmin part number K11-00024-40. Catalog description: Kit, GFC500 Install, Piper PA-32, Cherokee Six, 2 Axis. Certified Garmin avionics may require approved installation,…',
+    skus: ['K11-00024-40'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, Piper PA-32, Lance & Saratoga, 2 Axis',
+    href: '/products/kit-gfc500-install-piper-pa-32-lance-saratoga-2-axis',
+    handle: 'kit-gfc500-install-piper-pa-32-lance-saratoga-2-axis',
+    description:
+      'Kit, GFC500 Install, Piper PA-32, Lance & Saratoga, 2 AxisGarmin part number K11-00024-41. Catalog description: Kit, GFC500 Install, Piper PA-32, Lance & Saratoga, 2 Axis. Certified Garmin avionics may require approved installation,…',
+    skus: ['K11-00024-41'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, Piper PA-32, Pitch Trim Option',
+    href: '/products/kit-gfc500-install-piper-pa-32-pitch-trim-option',
+    handle: 'kit-gfc500-install-piper-pa-32-pitch-trim-option',
+    description:
+      'Kit, GFC500 Install, Piper PA-32, Pitch Trim OptionGarmin part number K11-00024-42. Catalog description: Kit, GFC500 Install, Piper PA-32, Pitch Trim Option. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-42'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, TB Series, Pitch Trim Option',
+    href: '/products/kit-gfc500-install-tb-series-pitch-trim-option',
+    handle: 'kit-gfc500-install-tb-series-pitch-trim-option',
+    description:
+      'Kit, GFC500 Install, TB Series, Pitch Trim OptionGarmin part number K11-00024-82. Catalog description: Kit, GFC500 Install, TB Series, Pitch Trim Option. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['K11-00024-82'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, TB Series, Two Axis',
+    href: '/products/kit-gfc500-install-tb-series-two-axis',
+    handle: 'kit-gfc500-install-tb-series-two-axis',
+    description:
+      'Kit, GFC500 Install, TB Series, Two AxisGarmin part number K11-00024-81. Catalog description: Kit, GFC500 Install, TB Series, Two Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00024-81'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC500 Install, Yaw Servo, Aviat Husky',
+    href: '/products/kit-gfc500-install-yaw-servo-aviat-husky',
+    handle: 'kit-gfc500-install-yaw-servo-aviat-husky',
+    description:
+      'Kit, GFC500 Install, Yaw Servo, Aviat HuskyGarmin part number K11-00024-64. Catalog description: Kit, GFC500 Install, Yaw Servo, Aviat Husky. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00024-64'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install Yaw Servo, B55',
+    href: '/products/kit-gfc600-install-yaw-servo-b55',
+    handle: 'kit-gfc600-install-yaw-servo-b55',
+    description:
+      'Kit, GFC600 Install Yaw Servo, B55Garmin part number K11-00018-05. Catalog description: Kit, GFC600 Install Yaw Servo, B55. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, 2 Servo, 182',
+    href: '/products/kit-gfc600-install-2-servo-182',
+    handle: 'kit-gfc600-install-2-servo-182',
+    description:
+      'Kit, GFC600 Install, 2 Servo, 182Garmin part number K11-00018-09. Catalog description: Kit, GFC600 Install, 2 Servo, 182. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-09'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, 3 Servo, 182',
+    href: '/products/kit-gfc600-install-3-servo-182',
+    handle: 'kit-gfc600-install-3-servo-182',
+    description:
+      'Kit, GFC600 Install, 3 Servo, 182Garmin part number K11-00018-10. Catalog description: Kit, GFC600 Install, 3 Servo, 182. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, 3 Servo, 58P',
+    href: '/products/kit-gfc600-install-3-servo-58p',
+    handle: 'kit-gfc600-install-3-servo-58p',
+    description:
+      'Kit, GFC600 Install, 3 Servo, 58PGarmin part number K11-00018-15. Catalog description: Kit, GFC600 Install, 3 Servo, 58P. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-15'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, 3 Servo, 58TC',
+    href: '/products/kit-gfc600-install-3-servo-58tc',
+    handle: 'kit-gfc600-install-3-servo-58tc',
+    description:
+      'Kit, GFC600 Install, 3 Servo, 58TCGarmin part number K11-00018-29. Catalog description: Kit, GFC600 Install, 3 Servo, 58TC. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-29'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, 3 Servo, C340/C340A',
+    href: '/products/kit-gfc600-install-3-servo-c340-c340a',
+    handle: 'kit-gfc600-install-3-servo-c340-c340a',
+    description:
+      'Kit, GFC600 Install, 3 Servo, C340/C340AGarmin part number K11-00018-12. Catalog description: Kit, GFC600 Install, 3 Servo, C340/C340A. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00018-12'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, 3 Servo, PA-31',
+    href: '/products/kit-gfc600-install-3-servo-pa-31',
+    handle: 'kit-gfc600-install-3-servo-pa-31',
+    description:
+      'Kit, GFC600 Install, 3 Servo, PA-31Garmin part number K11-00018-37. Catalog description: Kit, GFC600 Install, 3 Servo, PA-31. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00018-37'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, 441',
+    href: '/products/kit-gfc600-install-441',
+    handle: 'kit-gfc600-install-441',
+    description:
+      'Kit, GFC600 Install, 441Garmin part number K11-00018-45. Catalog description: Kit, GFC600 Install, 441. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['K11-00018-45'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 INSTALL, 525',
+    href: '/products/garmin-kit-gfc600-install-525-k11-00018-32',
+    handle: 'garmin-kit-gfc600-install-525-k11-00018-32',
+    description: 'Kit, GFC600 INSTALL, 525Garmin part number K11-00018-32.',
+    skus: ['K11-00018-32'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, Option 1, 90 Series',
+    href: '/products/kit-gfc600-install-option-1-90-series',
+    handle: 'kit-gfc600-install-option-1-90-series',
+    description:
+      'Kit, GFC600 Install, Option 1, 90 SeriesGarmin part number K11-00018-36. Catalog description: Kit, GFC600 Install, Option 1, 90 Series. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00018-36'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, Option 2, 90 Series',
+    href: '/products/kit-gfc600-install-option-2-90-series',
+    handle: 'kit-gfc600-install-option-2-90-series',
+    description:
+      'Kit, GFC600 Install, Option 2, 90 SeriesGarmin part number K11-00018-40. Catalog description: Kit, GFC600 Install, Option 2, 90 Series. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00018-40'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, PC-12/45',
+    href: '/products/kit-gfc600-install-pc-12-45',
+    handle: 'kit-gfc600-install-pc-12-45',
+    description:
+      'Kit, GFC600 Install, PC-12/45Garmin part number K11-00018-41. Catalog description: Kit, GFC600 Install, PC-12/45. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['K11-00018-41'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, Pitch Trim Servo, 182',
+    href: '/products/garmin-kit-gfc600-install-pitch-trim-servo-182-k11-00018-11',
+    handle: 'garmin-kit-gfc600-install-pitch-trim-servo-182-k11-00018-11',
+    description:
+      'Kit, GFC600 Install, Pitch Trim Servo, 182Garmin part number K11-00018-11.',
+    skus: ['K11-00018-11'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, Yaw Servo, 58P',
+    href: '/products/kit-gfc600-install-yaw-servo-58p',
+    handle: 'kit-gfc600-install-yaw-servo-58p',
+    description:
+      'Kit, GFC600 Install, Yaw Servo, 58PGarmin part number K11-00018-17. Catalog description: Kit, GFC600 Install, Yaw Servo, 58P. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00018-17'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, Yaw Servo, A36',
+    href: '/products/kit-gfc600-install-yaw-servo-a36',
+    handle: 'kit-gfc600-install-yaw-servo-a36',
+    description:
+      'Kit, GFC600 Install, Yaw Servo, A36Garmin part number K11-00018-04. Catalog description: Kit, GFC600 Install, Yaw Servo, A36. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00018-04'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, Yaw Servo, C340/C340A',
+    href: '/products/kit-gfc600-install-yaw-servo-c340-c340a',
+    handle: 'kit-gfc600-install-yaw-servo-c340-c340a',
+    description:
+      'Kit, GFC600 Install, Yaw Servo, C340/C340AGarmin part number K11-00018-14. Catalog description: Kit, GFC600 Install, Yaw Servo, C340/C340A. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00018-14'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 Install, Yaw Servo, PA-31',
+    href: '/products/kit-gfc600-install-yaw-servo-pa-31',
+    handle: 'kit-gfc600-install-yaw-servo-pa-31',
+    description:
+      'Kit, GFC600 Install, Yaw Servo, PA-31Garmin part number K11-00018-38. Catalog description: Kit, GFC600 Install, Yaw Servo, PA-31. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00018-38'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 INSTALL,3 SERVO',
+    href: '/products/garmin-kit-gfc600-install-3-servo-k11-00018-53',
+    handle: 'garmin-kit-gfc600-install-3-servo-k11-00018-53',
+    description: 'Kit, GFC600 INSTALL,3 SERVOGarmin part number K11-00018-53.',
+    skus: ['K11-00018-53'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600 TEXTRON 4XX, IFCS DE-MOD',
+    href: '/products/kit-gfc600-textron-4xx-ifcs-de-mod',
+    handle: 'kit-gfc600-textron-4xx-ifcs-de-mod',
+    description:
+      'Kit, GFC600 TEXTRON 4XX, IFCS DE-MODGarmin part number K11-00045-02. Catalog description: Kit, GFC600 TEXTRON 4XX, IFCS DE-MOD. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00045-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600, 2 Axis w/ P.T., PA-46 Piston',
+    href: '/products/garmin-kit-gfc600-2-axis-w-p-t-pa-46-piston-010-01993-13',
+    handle: 'garmin-kit-gfc600-2-axis-w-p-t-pa-46-piston-010-01993-13',
+    description:
+      'Kit, GFC600, 2 Axis w/ P. T. , PA-46 PistonGarmin part number 010-01993-13.',
+    skus: ['010-01993-13'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600, 2 Axis w/ P.T., PA-46 Piston, GMC605C',
+    href: '/products/kit-gfc600-2-axis-w-p-t-pa-46-piston-gmc605c',
+    handle: 'kit-gfc600-2-axis-w-p-t-pa-46-piston-gmc605c',
+    description:
+      'Kit, GFC600, 2 Axis w/ P. T. , PA-46 Piston, GMC605CGarmin part number 010-01993-33. Catalog description: Kit, GFC600, 2 Axis w/ P. T. , PA-46 Piston, GMC605C. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['010-01993-33'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600, 3 Axis w/ P.T., PA-46 Piston, GMC605C',
+    href: '/products/kit-gfc600-3-axis-w-p-t-pa-46-piston-gmc605c',
+    handle: 'kit-gfc600-3-axis-w-p-t-pa-46-piston-gmc605c',
+    description:
+      'Kit, GFC600, 3 Axis w/ P. T. , PA-46 Piston, GMC605CGarmin part number 010-01993-35. Catalog description: Kit, GFC600, 3 Axis w/ P. T. , PA-46 Piston, GMC605C. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['010-01993-35'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600, 3 Servo, PA-46 Meridian',
+    href: '/products/kit-gfc600-3-servo-pa-46-meridian',
+    handle: 'kit-gfc600-3-servo-pa-46-meridian',
+    description:
+      'Kit, GFC600, 3 Servo, PA-46 MeridianGarmin part number 010-01993-16. Catalog description: Kit, GFC600, 3 Servo, PA-46 Meridian. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01993-16'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600, 3 Servo, PA-46 Meridian, GMC605C',
+    href: '/products/kit-gfc600-3-servo-pa-46-meridian-gmc605c',
+    handle: 'kit-gfc600-3-servo-pa-46-meridian-gmc605c',
+    description:
+      'Kit, GFC600, 3 Servo, PA-46 Meridian, GMC605CGarmin part number 010-01993-36. Catalog description: Kit, GFC600, 3 Servo, PA-46 Meridian, GMC605C. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-01993-36'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600, 4 Servo, PA-31T, GMC605C',
+    href: '/products/garmin-kit-gfc600-4-servo-pa-31t-gmc605c-010-01993-52',
+    handle: 'garmin-kit-gfc600-4-servo-pa-31t-gmc605c-010-01993-52',
+    description:
+      'Kit, GFC600, 4 Servo, PA-31T, GMC605CGarmin part number 010-01993-52.',
+    skus: ['010-01993-52'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600, 4 Servo, PA-46 Meridian',
+    href: '/products/kit-gfc600-4-servo-pa-46-meridian',
+    handle: 'kit-gfc600-4-servo-pa-46-meridian',
+    description:
+      'Kit, GFC600, 4 Servo, PA-46 MeridianGarmin part number 010-01993-17. Catalog description: Kit, GFC600, 4 Servo, PA-46 Meridian. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01993-17'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600, 4 Servo, PA-46 Meridian, GMC605C',
+    href: '/products/kit-gfc600-4-servo-pa-46-meridian-gmc605c',
+    handle: 'kit-gfc600-4-servo-pa-46-meridian-gmc605c',
+    description:
+      'Kit, GFC600, 4 Servo, PA-46 Meridian, GMC605CGarmin part number 010-01993-37. Catalog description: Kit, GFC600, 4 Servo, PA-46 Meridian, GMC605C. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-01993-37'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600, 5 Servo, PA-31T, GMC605C',
+    href: '/products/garmin-kit-gfc600-5-servo-pa-31t-gmc605c-010-01993-53',
+    handle: 'garmin-kit-gfc600-5-servo-pa-31t-gmc605c-010-01993-53',
+    description:
+      'Kit, GFC600, 5 Servo, PA-31T, GMC605CGarmin part number 010-01993-53.',
+    skus: ['010-01993-53'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600H INSTALL, 2 SERVO, AS350',
+    href: '/products/kit-gfc600h-install-2-servo-as350',
+    handle: 'kit-gfc600h-install-2-servo-as350',
+    description:
+      'Kit, GFC600H INSTALL, 2 SERVO, AS350Garmin part number K11-00039-02. Catalog description: Kit, GFC600H INSTALL, 2 SERVO, AS350. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00039-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600H INSTALL, 2-AXIS, BELL 505',
+    href: '/products/kit-gfc600h-install-2-axis-bell-505',
+    handle: 'kit-gfc600h-install-2-axis-bell-505',
+    description:
+      'Kit, GFC600H INSTALL, 2-AXIS, BELL 505Garmin part number K11-00039-03. Catalog description: Kit, GFC600H INSTALL, 2-AXIS, BELL 505. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['K11-00039-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600H INSTALL, AHRS, AS350',
+    href: '/products/garmin-kit-gfc600h-install-ahrs-as350-k11-00039-01',
+    handle: 'garmin-kit-gfc600h-install-ahrs-as350-k11-00039-01',
+    description:
+      'Kit, GFC600H INSTALL, AHRS, AS350Garmin part number K11-00039-01. Kit, GFC600H INSTALL, AHRS, AS350 — kit contentsGarmin kit P/N K11-00039-01 includes these documented components: GMU 44 Connector Kit — Garmin P/N 011-00871-00 (qty 1) GSU…',
+    skus: ['K11-00039-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GFC600H INSTALL, YAW OPTION, BELL 505',
+    href: '/products/kit-gfc600h-install-yaw-option-bell-505',
+    handle: 'kit-gfc600h-install-yaw-option-bell-505',
+    description:
+      'Kit, GFC600H INSTALL, YAW OPTION, BELL 505Garmin part number K11-00039-04. Catalog description: Kit, GFC600H INSTALL, YAW OPTION, BELL 505. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K11-00039-04'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 ADAHRS + AP w/GMU 11, Class I/II',
+    href: '/products/kit-gi-275-adahrs-ap-w-gmu-11-class-i-ii',
+    handle: 'kit-gi-275-adahrs-ap-w-gmu-11-class-i-ii',
+    description:
+      'Kit, GI 275 ADAHRS + AP w/GMU 11, Class I/IIGarmin part number 010-02327-20. Catalog description: Kit, GI 275 ADAHRS + AP w/GMU 11, Class I/II. This + AP kit includes a GMU 11. The + AP configuration provides interface capability for…',
+    skus: ['010-02327-20'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 ADAHRS + AP w/GMU 44B, Class III/Part 25',
+    href: '/products/kit-gi-275-adahrs-ap-w-gmu-44b-class-iii-part-25',
+    handle: 'kit-gi-275-adahrs-ap-w-gmu-44b-class-iii-part-25',
+    description:
+      'Kit, GI 275 ADAHRS + AP w/GMU 44B, Class III/Part 25Garmin part number 010-02327-40. Catalog description: Kit, GI 275 ADAHRS + AP w/GMU 44B, Class III/Part 25. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['010-02327-40'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 ADAHRS + AP, Class I/II',
+    href: '/products/kit-gi-275-adahrs-ap-class-i-ii',
+    handle: 'kit-gi-275-adahrs-ap-class-i-ii',
+    description:
+      'Kit, GI 275 ADAHRS + AP, Class I/IIGarmin part number 010-02326-20. Catalog description: Kit, GI 275 ADAHRS + AP, Class I/II. The + AP configuration provides interface capability for certain non-Garmin autopilots. It is not automatically…',
+    skus: ['010-02326-20'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 ADAHRS + AP, Class III/Part 25',
+    href: '/products/kit-gi-275-adahrs-ap-class-iii-part-25',
+    handle: 'kit-gi-275-adahrs-ap-class-iii-part-25',
+    description:
+      'Kit, GI 275 ADAHRS + AP, Class III/Part 25Garmin part number 010-02326-40. Catalog description: Kit, GI 275 ADAHRS + AP, Class III/Part 25. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-02326-40'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 ADAHRS Green Halo',
+    href: '/products/kit-gi-275-adahrs-green-halo',
+    handle: 'kit-gi-275-adahrs-green-halo',
+    description:
+      'Kit, GI 275 ADAHRS Green HaloGarmin part number 010-02326-70. Catalog description: Kit, GI 275 ADAHRS Green Halo. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['010-02326-70'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 ADAHRS Green Halo, w/out Battery',
+    href: '/products/kit-gi-275-adahrs-green-halo-w-out-battery',
+    handle: 'kit-gi-275-adahrs-green-halo-w-out-battery',
+    description:
+      'Kit, GI 275 ADAHRS Green Halo, w/out BatteryGarmin part number 010-02326-71. Catalog description: Kit, GI 275 ADAHRS, NVIS, w/out Battery. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-02326-71'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 ADAHRS w/GMU 11, Class I/II',
+    href: '/products/kit-gi-275-adahrs-w-gmu-11-class-i-ii',
+    handle: 'kit-gi-275-adahrs-w-gmu-11-class-i-ii',
+    description:
+      'Kit, GI 275 ADAHRS w/GMU 11, Class I/IIGarmin part number 010-02327-10. Catalog description: Kit, GI 275 ADAHRS w/GMU 11, Class I/II. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-02327-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 ADAHRS w/GMU 44B, Class III/Part 25',
+    href: '/products/kit-gi-275-adahrs-w-gmu-44b-class-iii-part-25',
+    handle: 'kit-gi-275-adahrs-w-gmu-44b-class-iii-part-25',
+    description:
+      'Kit, GI 275 ADAHRS w/GMU 44B, Class III/Part 25Garmin part number 010-02327-30. Catalog description: Kit, GI 275 ADAHRS w/GMU 44B, Class III/Part 25. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-02327-30'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 ADAHRS, Class I/II',
+    href: '/products/kit-gi-275-adahrs-class-i-ii',
+    handle: 'kit-gi-275-adahrs-class-i-ii',
+    description:
+      'Kit, GI 275 ADAHRS, Class I/IIGarmin part number 010-02326-10. Catalog description: Kit, GI 275 ADAHRS, Class I/II. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-02326-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 ADAHRS, Class III/HELO/Part 25',
+    href: '/products/kit-gi-275-adahrs-class-iii-helo-part-25',
+    handle: 'kit-gi-275-adahrs-class-iii-helo-part-25',
+    description:
+      'Kit, GI 275 ADAHRS, Class III/HELO/Part 25Garmin part number 010-02326-30. Catalog description: Kit, GI 275 ADAHRS, Class III/HELO/Part 25. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-02326-30'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 ADAHRS, Class III/Part 25, w/out Battery',
+    href: '/products/kit-gi-275-adahrs-class-iii-part-25-w-out-battery',
+    handle: 'kit-gi-275-adahrs-class-iii-part-25-w-out-battery',
+    description:
+      'Kit, GI 275 ADAHRS, Class III/Part 25, w/out BatteryGarmin part number 010-02326-31. Catalog description: Kit, GI 275 ADAHRS, Class III/Part 25, w/out Battery. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['010-02326-31'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GI 275 NVIS, w/out Battery',
+    href: '/products/garmin-kit-gi-275-nvis-w-out-battery-010-02326-61',
+    handle: 'garmin-kit-gi-275-nvis-w-out-battery-010-02326-61',
+    description:
+      'Kit, GI 275 NVIS, w/out BatteryGarmin part number 010-02326-61.',
+    skus: ['010-02326-61'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GMC605 Color, Product Info',
+    href: '/products/kit-gmc605-color-product-info',
+    handle: 'kit-gmc605-color-product-info',
+    description:
+      'Kit, GMC605 Color, Product InfoGarmin part number K00-00662-10. Catalog description: Kit, GMC605 Color, Product Info. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration and supporting installation…',
+    skus: ['K00-00662-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GMC710 Replacement Knob Set',
+    href: '/products/kit-gmc710-replacement-knob-set',
+    handle: 'kit-gmc710-replacement-knob-set',
+    description:
+      'Kit, GMC710 Replacement Knob SetGarmin part number K00-00475-00. Catalog description: Kit, GMC710 Replacement Knob Set. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration and supporting installation…',
+    skus: ['K00-00475-00'],
   },
   {
     group: 'Products',
@@ -4178,12 +12126,30 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Kit, GRA 55, Rack, Connector Kit, Antennas',
+    href: '/products/kit-gra-55-rack-connector-kit-antennas',
+    handle: 'kit-gra-55-rack-connector-kit-antennas',
+    description:
+      'Kit, GRA 55, Rack, Connector Kit, AntennasGarmin part number K10-00234-00. Catalog description: Kit, GRA 55, Rack, Connector Kit, Antennas. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K10-00234-00'],
+  },
+  {
+    group: 'Products',
     title: 'Kit, GTN Battery Replacement',
     href: '/products/kit-gtn-battery-replacement',
     handle: 'kit-gtn-battery-replacement',
     description:
       'Kit, GTN Battery ReplacementGarmin part number K00-00696-00. Catalog description: Kit, GTN Battery Replacement. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration and supporting installation parts…',
     skus: ['K00-00696-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, GTN Fan Cable Assembly Replacement',
+    href: '/products/kit-gtn-fan-cable-assembly-replacement',
+    handle: 'kit-gtn-fan-cable-assembly-replacement',
+    description:
+      'Kit, GTN Fan Cable Assembly ReplacementGarmin part number K00-00575-00. Catalog description: Kit, GTN Fan Cable Assembly Replacement. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration and supporting…',
+    skus: ['K00-00575-00'],
   },
   {
     group: 'Products',
@@ -4232,6 +12198,268 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Kit, LRU, GFC 600, 4 Axis, with GTA 82',
+    href: '/products/kit-lru-gfc-600-4-axis-with-gta-82',
+    handle: 'kit-lru-gfc-600-4-axis-with-gta-82',
+    description:
+      'Kit, LRU, GFC 600, 4 Axis, with GTA 82Garmin part number 010-01993-04. Catalog description: Kit, LRU, GFC 600, 4 Axis, with GTA 82. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-01993-04'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC 600, 4 Servo GSA/GSM, Black FLC',
+    href: '/products/garmin-kit-lru-gfc-600-4-servo-gsa-gsm-black-flc-010-01993-19',
+    handle: 'garmin-kit-lru-gfc-600-4-servo-gsa-gsm-black-flc-010-01993-19',
+    description:
+      'Kit, LRU, GFC 600, 4 Servo GSA/GSM, Black FLCGarmin part number 010-01993-19.',
+    skus: ['010-01993-19'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC 600, 4 Servo GSA/GSM, Grey FLC',
+    href: '/products/garmin-kit-lru-gfc-600-4-servo-gsa-gsm-grey-flc-010-01993-18',
+    handle: 'garmin-kit-lru-gfc-600-4-servo-gsa-gsm-grey-flc-010-01993-18',
+    description:
+      'Kit, LRU, GFC 600, 4 Servo GSA/GSM, Grey FLCGarmin part number 010-01993-18.',
+    skus: ['010-01993-18'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC 600H, 2 axis, w/o FD',
+    href: '/products/kit-lru-gfc-600h-2-axis-w-o-fd',
+    handle: 'kit-lru-gfc-600h-2-axis-w-o-fd',
+    description:
+      'Kit, LRU, GFC 600H, 2 axis, w/o FDGarmin part number 010-02323-02. Catalog description: Kit, LRU, GFC 600H, 2 axis, w/o FD. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-02323-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC 600H, 3 Axis, AIRBUS H130',
+    href: '/products/kit-lru-gfc-600h-3-axis-airbus-h130',
+    handle: 'kit-lru-gfc-600h-3-axis-airbus-h130',
+    description:
+      'Kit, LRU, GFC 600H, 3 Axis, AIRBUS H130Garmin part number 010-02323-07. Catalog description: Kit, LRU, GFC 600H, 3 Axis, AIRBUS H130. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-02323-07'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC 600H, GSU75H',
+    href: '/products/garmin-kit-lru-gfc-600h-gsu75h-010-02323-04',
+    handle: 'garmin-kit-lru-gfc-600h-gsu75h-010-02323-04',
+    description: 'Kit, LRU, GFC 600H, GSU75HGarmin part number 010-02323-04.',
+    skus: ['010-02323-04'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 2 Axis',
+    href: '/products/kit-lru-gfc600-2-axis',
+    handle: 'kit-lru-gfc600-2-axis',
+    description:
+      'Kit, LRU, GFC600, 2 AxisGarmin part number 010-01993-02. Catalog description: Kit, LRU, GFC600, 2 Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-01993-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 2 Axis, GMC605C',
+    href: '/products/garmin-kit-lru-gfc600-2-axis-gmc605c-010-01993-22',
+    handle: 'garmin-kit-lru-gfc600-2-axis-gmc605c-010-01993-22',
+    description:
+      'Kit, LRU, GFC600, 2 Axis, GMC605CGarmin part number 010-01993-22.',
+    skus: ['010-01993-22'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 3 Axis Spiral',
+    href: '/products/kit-lru-gfc600-3-axis-spiral',
+    handle: 'kit-lru-gfc600-3-axis-spiral',
+    description:
+      'Kit, LRU, GFC600, 3 Axis SpiralGarmin part number 010-01993-00. Catalog description: Kit, LRU, GFC600, 3 Axis Spiral. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01993-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 3 Axis with 1 Continuous Travel',
+    href: '/products/kit-lru-gfc600-3-axis-with-1-continuous-travel',
+    handle: 'kit-lru-gfc600-3-axis-with-1-continuous-travel',
+    description:
+      'Kit, LRU, GFC600, 3 Axis with 1 Continuous TravelGarmin part number 010-01993-03. Catalog description: Kit, LRU, GFC600, 3 Axis with 1 Continuous Travel. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['010-01993-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 3 Axis with 1 Continuous Travel, GMC605C',
+    href: '/products/kit-lru-gfc600-3-axis-with-1-continuous-travel-gmc605c',
+    handle: 'kit-lru-gfc600-3-axis-with-1-continuous-travel-gmc605c',
+    description:
+      'Kit, LRU, GFC600, 3 Axis with 1 Continuous Travel, GMC605CGarmin part number 010-01993-23. Catalog description: Kit, LRU, GFC600, 3 Axis with 1 Continuous Travel, GMC605C. Certified Garmin avionics may require approved installation,…',
+    skus: ['010-01993-23'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 3 Axis, GMC605C',
+    href: '/products/kit-lru-gfc600-3-axis-gmc605c',
+    handle: 'kit-lru-gfc600-3-axis-gmc605c',
+    description:
+      'Kit, LRU, GFC600, 3 Axis, GMC605CGarmin part number 010-01993-20. Catalog description: Kit, LRU, GFC600, 3 Axis, GMC605C. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01993-20'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 3 Servo with 2 GTA',
+    href: '/products/kit-lru-gfc600-3-servo-with-2-gta',
+    handle: 'kit-lru-gfc600-3-servo-with-2-gta',
+    description:
+      'Kit, LRU, GFC600, 3 Servo with 2 GTAGarmin part number 010-01993-08. Catalog description: Kit, LRU, GFC600, 3 Servo with 2 GTA. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01993-08'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 3 Servo with 2 GTA, GMC605C',
+    href: '/products/garmin-kit-lru-gfc600-3-servo-with-2-gta-gmc605c-010-01993-28',
+    handle: 'garmin-kit-lru-gfc600-3-servo-with-2-gta-gmc605c-010-01993-28',
+    description:
+      'Kit, LRU, GFC600, 3 Servo with 2 GTA, GMC605CGarmin part number 010-01993-28.',
+    skus: ['010-01993-28'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 4 Axis Spiral',
+    href: '/products/kit-lru-gfc600-4-axis-spiral',
+    handle: 'kit-lru-gfc600-4-axis-spiral',
+    description:
+      'Kit, LRU, GFC600, 4 Axis SpiralGarmin part number 010-01993-01. Catalog description: Kit, LRU, GFC600, 4 Axis Spiral. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01993-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 4 Axis with 1 Continuous Travel',
+    href: '/products/kit-lru-gfc600-4-axis-with-1-continuous-travel',
+    handle: 'kit-lru-gfc600-4-axis-with-1-continuous-travel',
+    description:
+      'Kit, LRU, GFC600, 4 Axis with 1 Continuous TravelGarmin part number 010-01993-05. Catalog description: Kit, LRU, GFC600, 4 Axis with 1 Continuous Travel. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['010-01993-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 4 Axis with 1 Continuous Travel, GMC605C',
+    href: '/products/kit-lru-gfc600-4-axis-with-1-continuous-travel-gmc605c',
+    handle: 'kit-lru-gfc600-4-axis-with-1-continuous-travel-gmc605c',
+    description:
+      'Kit, LRU, GFC600, 4 Axis with 1 Continuous Travel, GMC605CGarmin part number 010-01993-25. Catalog description: Kit, LRU, GFC600, 4 Axis with 1 Continuous Travel, GMC605C. Certified Garmin avionics may require approved installation,…',
+    skus: ['010-01993-25'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 4 Axis with 1 Continuous Travel, GMC605C',
+    href: '/products/garmin-kit-lru-gfc600-4-axis-with-1-continuous-travel-gmc605c-010-01993-51',
+    handle:
+      'garmin-kit-lru-gfc600-4-axis-with-1-continuous-travel-gmc605c-010-01993-51',
+    description:
+      'Kit, LRU, GFC600, 4 Axis with 1 Continuous Travel, GMC605CGarmin part number 010-01993-51.',
+    skus: ['010-01993-51'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 4 Axis, GMC605C',
+    href: '/products/kit-lru-gfc600-4-axis-gmc605c',
+    handle: 'kit-lru-gfc600-4-axis-gmc605c',
+    description:
+      'Kit, LRU, GFC600, 4 Axis, GMC605CGarmin part number 010-01993-21. Catalog description: Kit, LRU, GFC600, 4 Axis, GMC605C. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01993-21'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 4 Axis, with GTA 82, GMC605C',
+    href: '/products/garmin-kit-lru-gfc600-4-axis-with-gta-82-gmc605c-010-01993-24',
+    handle: 'garmin-kit-lru-gfc600-4-axis-with-gta-82-gmc605c-010-01993-24',
+    description:
+      'Kit, LRU, GFC600, 4 Axis, with GTA 82, GMC605CGarmin part number 010-01993-24.',
+    skus: ['010-01993-24'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 4 Servo GSA/GSM',
+    href: '/products/kit-lru-gfc600-4-servo-gsa-gsm',
+    handle: 'kit-lru-gfc600-4-servo-gsa-gsm',
+    description:
+      'Kit, LRU, GFC600, 4 Servo GSA/GSMGarmin part number 010-01993-06. Catalog description: Kit, LRU, GFC600, 4 Servo GSA/GSM. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-01993-06'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 4 Servo GSA/GSM, GMC605C',
+    href: '/products/garmin-kit-lru-gfc600-4-servo-gsa-gsm-gmc605c-010-01993-26',
+    handle: 'garmin-kit-lru-gfc600-4-servo-gsa-gsm-gmc605c-010-01993-26',
+    description:
+      'Kit, LRU, GFC600, 4 Servo GSA/GSM, GMC605CGarmin part number 010-01993-26.',
+    skus: ['010-01993-26'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 4 Servo GSA80/GSM',
+    href: '/products/kit-lru-gfc600-4-servo-gsa80-gsm',
+    handle: 'kit-lru-gfc600-4-servo-gsa80-gsm',
+    description:
+      'Kit, LRU, GFC600, 4 Servo GSA80/GSMGarmin part number 010-01993-09. Catalog description: Kit, LRU, GFC600, 4 Servo GSA80/GSM. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-01993-09'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 4 Servo GSA80/GSM, GMC605C',
+    href: '/products/kit-lru-gfc600-4-servo-gsa80-gsm-gmc605c',
+    handle: 'kit-lru-gfc600-4-servo-gsa80-gsm-gmc605c',
+    description:
+      'Kit, LRU, GFC600, 4 Servo GSA80/GSM, GMC605CGarmin part number 010-01993-29. Catalog description: Kit, LRU, GFC600, 4 Servo GSA80/GSM, GMC605C. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-01993-29'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 5 Servos with 2 Continuous Travel',
+    href: '/products/kit-lru-gfc600-5-servos-with-2-continuous-travel',
+    handle: 'kit-lru-gfc600-5-servos-with-2-continuous-travel',
+    description:
+      'Kit, LRU, GFC600, 5 Servos with 2 Continuous TravelGarmin part number 010-01993-07. Catalog description: Kit, LRU, GFC600, 5 Servos with 2 Continuous Travel. Certified Garmin avionics may require approved installation, configuration, and…',
+    skus: ['010-01993-07'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600, 5 Servos with 2 Continuous Travel, GMC605C',
+    href: '/products/garmin-kit-lru-gfc600-5-servos-with-2-continuous-travel-gmc605c-010-01993-27',
+    handle:
+      'garmin-kit-lru-gfc600-5-servos-with-2-continuous-travel-gmc605c-010-01993-27',
+    description:
+      'Kit, LRU, GFC600, 5 Servos with 2 Continuous Travel, GMC605CGarmin part number 010-01993-27.',
+    skus: ['010-01993-27'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600H Bell 505, 2-Axis',
+    href: '/products/kit-lru-gfc600h-bell-505-2-axis',
+    handle: 'kit-lru-gfc600h-bell-505-2-axis',
+    description:
+      'Kit, LRU, GFC600H Bell 505, 2-AxisGarmin part number 010-02323-05. Catalog description: Kit, LRU, GFC600H Bell 505, 2-Axis. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-02323-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, LRU, GFC600H, 3 Axis, w/o FD',
+    href: '/products/garmin-kit-lru-gfc600h-3-axis-w-o-fd-010-02323-00',
+    handle: 'garmin-kit-lru-gfc600h-3-axis-w-o-fd-010-02323-00',
+    description:
+      'Kit, LRU, GFC600H, 3 Axis, w/o FDGarmin part number 010-02323-00. Kit, LRU, GFC600H, 3 Axis, w/o FD — kit contentsGarmin kit P/N 010-02323-00 includes these documented components: GMC 605H flight controller — Garmin P/N 010-01075-22 (qty…',
+    skus: ['010-02323-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, Platinum Edition w/TCASII, King Air',
+    href: '/products/garmin-kit-platinum-edition-w-tcasii-king-air-k10-00002-09',
+    handle: 'garmin-kit-platinum-edition-w-tcasii-king-air-k10-00002-09',
+    description:
+      'Kit, Platinum Edition w/TCASII, King AirGarmin part number K10-00002-09. Confirm compatibility and availability before ordering.',
+    skus: ['K10-00002-09'],
+  },
+  {
+    group: 'Products',
     title: 'Kit, Product Info, GI 275',
     href: '/products/kit-product-info-gi-275',
     handle: 'kit-product-info-gi-275',
@@ -4247,6 +12475,24 @@ export const SITE_SEARCH_INDEX = [
     description:
       'Kit, Product Info, TXiGarmin part number K00-00717-00. Catalog description: Kit,Prod Info,GDU 700/1060. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration and supporting installation parts before…',
     skus: ['K00-00717-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, STC Documentation, Cirrus SR2X G1000 NXi Upgrade',
+    href: '/products/garmin-kit-stc-documentation-cirrus-sr2x-g1000-nxi-upgrade-k00-01491-00',
+    handle:
+      'garmin-kit-stc-documentation-cirrus-sr2x-g1000-nxi-upgrade-k00-01491-00',
+    description:
+      'Kit, STC Documentation, Cirrus SR2X G1000 NXi UpgradeGarmin part number K00-01491-00.',
+    skus: ['K00-01491-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit, TCAS LRU, XLS G5000 STC',
+    href: '/products/garmin-kit-tcas-lru-xls-g5000-stc-k10-00207-08',
+    handle: 'garmin-kit-tcas-lru-xls-g5000-stc-k10-00207-08',
+    description: 'Kit, TCAS LRU, XLS G5000 STCGarmin part number K10-00207-08.',
+    skus: ['K10-00207-08'],
   },
   {
     group: 'Products',
@@ -4286,12 +12532,76 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Kit,GA 26MCX',
+    href: '/products/kit-ga-26mcx',
+    handle: 'kit-ga-26mcx',
+    description:
+      'Kit,GA 26MCXGarmin part number 010-02855-00. Catalog description: Kit,GA 26MCX. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-02855-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit,GDU 1050A, Cirrus SR2X G1000 NXi Upgrade',
+    href: '/products/garmin-kit-gdu-1050a-cirrus-sr2x-g1000-nxi-upgrade-k00-01491-01',
+    handle: 'garmin-kit-gdu-1050a-cirrus-sr2x-g1000-nxi-upgrade-k00-01491-01',
+    description:
+      'Garmin K00-01491-01 is the Cirrus SR2X G1000 NXi upgrade kit identified for the GDU 1050A display configuration. This dealer-install kit supports an aircraft-specific Perspective/G1000 NXi upgrade evaluation. Identified kit…',
+    skus: ['K00-01491-01'],
+  },
+  {
+    group: 'Products',
     title: 'Kit,GDU10xx Replacement Knob Set',
     href: '/products/kit-gdu10xx-replacement-knob-set',
     handle: 'kit-gdu10xx-replacement-knob-set',
     description:
       'Kit,GDU10xx Replacement Knob SetGarmin part number K00-00350-00. Catalog description: Kit,GDU10xx Replacement Knob Set. Garmin experimental/LSA avionics item for compatible installations. Confirm configuration and supporting installation…',
     skus: ['K00-00350-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit,GFC600 Install, 3 Servo, 58/58A',
+    href: '/products/kit-gfc600-install-3-servo-58-58a',
+    handle: 'kit-gfc600-install-3-servo-58-58a',
+    description:
+      'Kit,GFC600 Install, 3 Servo, 58/58AGarmin part number K11-00018-06. Catalog description: Kit,GFC600 Install, 3 Servo, 58/58A. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00018-06'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit,GFC600 Install, 3 Servo, A36',
+    href: '/products/kit-gfc600-install-3-servo-a36',
+    handle: 'kit-gfc600-install-3-servo-a36',
+    description:
+      'Kit,GFC600 Install, 3 Servo, A36Garmin part number K11-00018-00. Catalog description: Kit,GFC600 Install, 3 Servo, A36. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit,GFC600 Install, 3 Servo, B55',
+    href: '/products/kit-gfc600-install-3-servo-b55',
+    handle: 'kit-gfc600-install-3-servo-b55',
+    description:
+      'Kit,GFC600 Install, 3 Servo, B55Garmin part number K11-00018-02. Catalog description: Kit,GFC600 Install, 3 Servo, B55. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['K11-00018-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit,GFC600 Install, Yaw Servo, 58/58A',
+    href: '/products/kit-gfc600-install-yaw-servo-58-58a',
+    handle: 'kit-gfc600-install-yaw-servo-58-58a',
+    description:
+      'Kit,GFC600 Install, Yaw Servo, 58/58AGarmin part number K11-00018-08. Catalog description: Kit,GFC600 Install, Yaw Servo, 58/58A. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['K11-00018-08'],
+  },
+  {
+    group: 'Products',
+    title: 'Kit,GIFD TCAS II System,GTS 8000 w/dual GTX 3000',
+    href: '/products/garmin-kit-gifd-tcas-ii-system-gts-8000-w-dual-gtx-3000-k10-00187-10',
+    handle:
+      'garmin-kit-gifd-tcas-ii-system-gts-8000-w-dual-gtx-3000-k10-00187-10',
+    description:
+      'Kit,GIFD TCAS II System,GTS 8000 w/dual GTX 3000Garmin part number K10-00187-10.',
+    skus: ['K10-00187-10'],
   },
   {
     group: 'Products',
@@ -4313,12 +12623,138 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Kit,TCAS II System,GTS 8000 w/dual GTX 3000',
+    href: '/products/kit-tcas-ii-system-gts-8000-w-dual-gtx-3000',
+    handle: 'kit-tcas-ii-system-gts-8000-w-dual-gtx-3000',
+    description:
+      'Kit,TCAS II System,GTS 8000 w/dual GTX 3000Garmin part number K10-00187-00. Catalog description: Kit, TCAS II System, GTS 8000 w/ dual GTX 3000. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['K10-00187-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob Assy,ALT SEL,v2,GMC710',
+    href: '/products/knob-assy-alt-sel-v2-gmc710',
+    handle: 'knob-assy-alt-sel-v2-gmc710',
+    description:
+      'Knob Assy,ALT SEL,v2,GMC710Garmin part number 430-00037-10. Catalog description: Knob Assy,ALT SEL,v2,GMC710. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['430-00037-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob Assy,CRS,v2,GDU10xx',
+    href: '/products/knob-assy-crs-v2-gdu10xx',
+    handle: 'knob-assy-crs-v2-gdu10xx',
+    description:
+      'Knob Assy,CRS,v2,GDU10xxGarmin part number 430-00033-10. Catalog description: Knob Assy,CRS,v2,GDU10xx. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['430-00033-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob Assy,CRS,v2,GMC710',
+    href: '/products/knob-assy-crs-v2-gmc710',
+    handle: 'knob-assy-crs-v2-gmc710',
+    description:
+      'Knob Assy,CRS,v2,GMC710Garmin part number 430-00034-10. Catalog description: Knob Assy,CRS,v2,GMC710. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['430-00034-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob Assy,Dual,Outer,GTN6XX/7XX',
+    href: '/products/knob-assy-dual-outer-gtn6xx-7xx',
+    handle: 'knob-assy-dual-outer-gtn6xx-7xx',
+    description:
+      'Knob Assy,Dual,Outer,GTN6XX/7XXGarmin part number 430-00055-00. Catalog description: Knob Assy,Dual,Outer,GTN6XX/7XX. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['430-00055-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob Assy,HDG,V2,GDU10XX',
+    href: '/products/knob-assy-hdg-v2-gdu10xx',
+    handle: 'knob-assy-hdg-v2-gdu10xx',
+    description:
+      'Knob Assy,HDG,V2,GDU10XXGarmin part number 430-00032-10. Catalog description: Knob Assy,HDG,V2,GDU10XX. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['430-00032-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob Assy,Inner,v2 GDU10xx',
+    href: '/products/knob-assy-inner-v2-gdu10xx',
+    handle: 'knob-assy-inner-v2-gdu10xx',
+    description:
+      'Knob Assy,Inner,v2 GDU10xxGarmin part number 430-00030-10. Catalog description: Knob Assy,Inner,v2 GDU10xx. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['430-00030-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob Assy,Joystick,v2,GDU10XX',
+    href: '/products/knob-assy-joystick-v2-gdu10xx',
+    handle: 'knob-assy-joystick-v2-gdu10xx',
+    description:
+      'Knob Assy,Joystick,v2,GDU10XXGarmin part number 430-00035-10. Catalog description: Knob Assy,Joystick,v2,GDU10XX. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['430-00035-10'],
+  },
+  {
+    group: 'Products',
     title: 'Knob Assy,Outer,GNC400/500',
     href: '/products/knob-assy-outer-gnc400-500',
     handle: 'knob-assy-outer-gnc400-500',
     description:
       'Knob Assy,Outer,GNC400/500Garmin part number 430-00013-01. Catalog description: Knob Assy,Outer,GNC400/500. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
     skus: ['430-00013-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob Assy,Outer,V2 GDU10xx',
+    href: '/products/knob-assy-outer-v2-gdu10xx',
+    handle: 'knob-assy-outer-v2-gdu10xx',
+    description:
+      'Knob Assy,Outer,V2 GDU10xxGarmin part number 430-00031-10. Catalog description: Knob Assy,Outer,V2 GDU10xx. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['430-00031-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob Assy,Sqlh Knob,GMA340/347',
+    href: '/products/knob-assy-sqlh-knob-gma340-347',
+    handle: 'knob-assy-sqlh-knob-gma340-347',
+    description:
+      'Knob Assy,Sqlh Knob,GMA340/347Garmin part number 430-00017-00. Catalog description: Knob Assy,Sqlh Knob,GMA340/347. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['430-00017-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob Assy,volume,v2,GDU10xx',
+    href: '/products/knob-assy-volume-v2-gdu10xx',
+    handle: 'knob-assy-volume-v2-gdu10xx',
+    description:
+      'Knob Assy,volume,v2,GDU10xxGarmin part number 430-00029-10. Catalog description: Knob Assy,volume,v2,GDU10xx. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['430-00029-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob, Assy,Dual,Inner,GTN6XX/7XX',
+    href: '/products/knob-assy-dual-inner-gtn6xx-7xx',
+    handle: 'knob-assy-dual-inner-gtn6xx-7xx',
+    description:
+      'Knob, Assy,Dual,Inner,GTN6XX/7XXGarmin part number 430-00054-00. Catalog description: Knob, Assy,Dual,Inner,GTN6XX/7XX. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['430-00054-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob, Black, Illuminated, 1/8" Shaft',
+    href: '/products/knob-black-illuminated-1-8-shaft',
+    handle: 'knob-black-illuminated-1-8-shaft',
+    description:
+      'Knob, Black, Illuminated, 1/8" ShaftGarmin part number 430-00062-00. Catalog description: Knob, Black, Illuminated, 1/8" Shaft. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['430-00062-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Knob,Code Select,GTX320',
+    href: '/products/knob-code-select-gtx320',
+    handle: 'knob-code-select-gtx320',
+    description:
+      'Knob,Code Select,GTX320Garmin part number 430-00015-00. Catalog description: Knob,Code Select,GTX320. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['430-00015-00'],
   },
   {
     group: 'Products',
@@ -4340,12 +12776,183 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Lithium Cell,3V,PC Mount',
+    href: '/products/lithium-cell-3v-pc-mount',
+    handle: 'lithium-cell-3v-pc-mount',
+    description:
+      'Lithium Cell,3V,PC MountGarmin part number 360-00009-00. Catalog description: Lithium Cell,3V,PC Mount. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['360-00009-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Lithium-ion Battery Charger',
+    href: '/products/lithium-ion-battery-charger',
+    handle: 'lithium-ion-battery-charger',
+    description:
+      'Lithium-ion Battery ChargerGarmin part number 010-13153-00. Catalog description: Lithium-ion Battery Charger. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['010-13153-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Lithium-ion Battery Pack',
+    href: '/products/lithium-ion-battery-pack',
+    handle: 'lithium-ion-battery-pack',
+    description:
+      'Lithium-ion Battery PackGarmin part number 010-11935-00. Catalog description: Lithium-ion Battery Pack. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-11935-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Locking Tab,.270x.465',
+    href: '/products/locking-tab-270x-465',
+    handle: 'locking-tab-270x-465',
+    description:
+      'Locking Tab,. 270x. 465Garmin part number 117-00004-00. Catalog description: Locking Tab,. 270x. 465. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['117-00004-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Low Profile Directional TCAS Antenna White',
+    href: '/products/low-profile-directional-tcas-antenna-white',
+    handle: 'low-profile-directional-tcas-antenna-white',
+    description:
+      'Low Profile Directional TCAS Antenna WhiteGarmin part number 013-00276-00. Catalog description: Low Profile Directional TCAS Antenna White. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['013-00276-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Low Profile Directional TCAS Antenna, short TNC, White',
+    href: '/products/low-profile-directional-tcas-antenna-short-tnc-white',
+    handle: 'low-profile-directional-tcas-antenna-short-tnc-white',
+    description:
+      'Low Profile Directional TCAS Antenna, short TNC, WhiteGarmin part number 013-00276-50. Catalog description: Low Profile Directional TCAS Antenna, short TNC, White. Garmin avionics accessory or service part. Confirm compatibility with the…',
+    skus: ['013-00276-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Low-profile Remote Antenna',
+    href: '/products/low-profile-remote-antenna',
+    handle: 'low-profile-remote-antenna',
+    description:
+      'Low-profile Remote AntennaGarmin part number 010-10052-05. Catalog description: Low-profile Remote Antenna. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['010-10052-05'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit - Axis X w/GSU 25C,GMU 11,GTP 59,Config Module',
+    href: '/products/lru-kit-axis-x-w-gsu-25c-gmu-11-gtp-59-config-module-010-04556-00',
+    handle: 'lru-kit-axis-x-w-gsu-25c-gmu-11-gtp-59-config-module-010-04556-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-04556-00. LRU Kit - Axis X w/GSU 25C,GMU 11,GTP 59,Config Module — kit contentsGarmin kit P/N 010-04556-00 includes these documented components: GSU 25C, Unit Only — Garmin P/N…',
+    skus: ['010-04556-00'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit - Axis X w/GSU 25D,GMU 22,GTP 59,Config Module',
+    href: '/products/lru-kit-axis-x-w-gsu-25d-gmu-22-gtp-59-config-module-010-04556-01',
+    handle: 'lru-kit-axis-x-w-gsu-25d-gmu-22-gtp-59-config-module-010-04556-01',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-04556-01. LRU Kit - Axis X w/GSU 25D,GMU 22,GTP 59,Config Module — kit contentsGarmin kit P/N 010-04556-01 includes these documented components: GSU 25D, Unit Only — Garmin P/N…',
+    skus: ['010-04556-01'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit – AXIS Cert. w/ GSU 25D, GMU 11, GTP 59',
+    href: '/products/lru-kit-axis-cert-w-gsu-25d-gmu-11-gtp-59-010-04557-00',
+    handle: 'lru-kit-axis-cert-w-gsu-25d-gmu-11-gtp-59-010-04557-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-04557-00.',
+    skus: ['010-04557-00'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit, G3X Touch Certified',
+    href: '/products/lru-kit-g3x-touch-certified',
+    handle: 'lru-kit-g3x-touch-certified',
+    description:
+      'LRU Kit, G3X Touch CertifiedGarmin part number 010-02305-00. Garmin LRU kit for certified G3X Touch installations. Aircraft eligibility, system configuration, approval basis, and required supporting parts must be confirmed by RWAS before…',
+    skus: ['010-02305-00'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit, G500 TXi, GMU44B, Integrated AHRS',
+    href: '/products/lru-kit-g500-txi-gmu44b-integrated-ahrs',
+    handle: 'lru-kit-g500-txi-gmu44b-integrated-ahrs',
+    description:
+      'LRU Kit, G500 TXi, GMU44B, Integrated AHRSGarmin part number 010-02003-16. Catalog description: LRU Kit, G500 TXi, GMU44B, Integrated AHRS. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-02003-16'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit, G500/G600 TXi, GMU44B, GRS 79/GDC 72',
+    href: '/products/lru-kit-g500-g600-txi-gmu44b-grs-79-gdc-72',
+    handle: 'lru-kit-g500-g600-txi-gmu44b-grs-79-gdc-72',
+    description:
+      'LRU Kit, G500/G600 TXi, GMU44B, GRS 79/GDC 72Garmin part number 010-02003-25. Catalog description: LRU Kit, G500/G600 TXi, GMU44B, GRS 79/GDC 72. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-02003-25'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit, G500/G600 TXi, GMU44B, GSU 75',
+    href: '/products/lru-kit-g500-g600-txi-gmu44b-gsu-75',
+    handle: 'lru-kit-g500-g600-txi-gmu44b-gsu-75',
+    description:
+      'LRU Kit, G500/G600 TXi, GMU44B, GSU 75Garmin part number 010-02003-05. Catalog description: LRU Kit, G500/G600 TXi, GMU44B, GSU 75. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-02003-05'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit, G500H TXi, GSU 75H',
+    href: '/products/lru-kit-g500h-txi-gsu-75h',
+    handle: 'lru-kit-g500h-txi-gsu-75h',
+    description:
+      'Garmin 010-02105-00 is the G500H TXi helicopter LRU kit identified for the GSU 75H air-data and attitude configuration. It is a dealer-install avionics package, not a complete flight-display installation by itself. Identified kit…',
+    skus: ['010-02105-00'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit, G500H TXi, GSU 75H/GMU 44B',
+    href: '/products/lru-kit-g500h-txi-gsu-75h-gmu-44b',
+    handle: 'lru-kit-g500h-txi-gsu-75h-gmu-44b',
+    description:
+      'LRU Kit, G500H TXi, GSU 75H/GMU 44BGarmin part number 010-02105-05. Catalog description: LRU Kit, G500H TXi, GSU 75H/GMU 44B. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['010-02105-05'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit, G600 TXi RVSM, GMU44B, GRS 79/GDC 72B',
+    href: '/products/lru-kit-g600-txi-rvsm-gmu44b-grs-79-gdc-72b',
+    handle: 'lru-kit-g600-txi-rvsm-gmu44b-grs-79-gdc-72b',
+    description:
+      'LRU Kit, G600 TXi RVSM, GMU44B, GRS 79/GDC 72BGarmin part number 010-02004-35. Catalog description: LRU Kit, G600 TXi RVSM, GMU44B, GRS 79/GDC 72B. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['010-02004-35'],
+  },
+  {
+    group: 'Products',
     title: 'LRU Kit, G600 TXi RVSM, GRS 7800/GDC 7400',
     href: '/products/lru-kit-g600-txi-rvsm-grs-7800-gdc-7400',
     handle: 'lru-kit-g600-txi-rvsm-grs-7800-gdc-7400',
     description:
       'LRU Kit, G600 TXi RVSM, GRS 7800/GDC 7400Garmin part number 010-02004-20. Catalog description: LRU Kit, G600 TXi RVSM, GRS 7800/GDC 7400. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
     skus: ['010-02004-20'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit, G600 TXi, GMU44B, GSU 75B',
+    href: '/products/lru-kit-g600-txi-gmu44b-gsu-75b',
+    handle: 'lru-kit-g600-txi-gmu44b-gsu-75b',
+    description:
+      'LRU Kit, G600 TXi, GMU44B, GSU 75BGarmin part number 010-02004-05. Catalog description: LRU Kit, G600 TXi, GMU44B, GSU 75B. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-02004-05'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit, G600 TXi, GMU44B, Integrated AHRS',
+    href: '/products/garmin-lru-kit-g600-txi-gmu44b-integrated-ahrs-010-02004-16',
+    handle: 'garmin-lru-kit-g600-txi-gmu44b-integrated-ahrs-010-02004-16',
+    description:
+      'LRU Kit, G600 TXi, GMU44B, Integrated AHRSGarmin part number 010-02004-16.',
+    skus: ['010-02004-16'],
   },
   {
     group: 'Products',
@@ -4358,12 +12965,39 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'LRU Kit, TXi RVSM, GMU44B, GRS 7800/GDC 7400',
+    href: '/products/garmin-lru-kit-txi-rvsm-gmu44b-grs-7800-gdc-7400-010-02004-25',
+    handle: 'garmin-lru-kit-txi-rvsm-gmu44b-grs-7800-gdc-7400-010-02004-25',
+    description:
+      'LRU Kit, TXi RVSM, GMU44B, GRS 7800/GDC 7400Garmin part number 010-02004-25.',
+    skus: ['010-02004-25'],
+  },
+  {
+    group: 'Products',
     title: 'LRU Kit, TXi, GRS 79/GDC 7400',
     href: '/products/lru-kit-txi-grs-79-gdc-7400',
     handle: 'lru-kit-txi-grs-79-gdc-7400',
     description:
       'LRU Kit, TXi, GRS 79/GDC 7400Garmin part number 010-02115-00. Catalog description: LRU Kit, TXi, GRS 79/GDC 7400. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
     skus: ['010-02115-00'],
+  },
+  {
+    group: 'Products',
+    title: 'LRU Kit, TXi, GRS 79/GDC 7400/GMU 44B',
+    href: '/products/garmin-lru-kit-txi-grs-79-gdc-7400-gmu-44b-010-02115-05',
+    handle: 'garmin-lru-kit-txi-grs-79-gdc-7400-gmu-44b-010-02115-05',
+    description:
+      'LRU Kit, TXi, GRS 79/GDC 7400/GMU 44BGarmin part number 010-02115-05.',
+    skus: ['010-02115-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Manifold Pressure Sensor, 50 InHg (Stainless Steel, 25PSIA)',
+    href: '/products/manifold-pressure-sensor-50-inhg-stainless-steel-25psia',
+    handle: 'manifold-pressure-sensor-50-inhg-stainless-steel-25psia',
+    description:
+      'Manifold Pressure Sensor, 50 InHg (Stainless Steel, 25PSIA)Garmin part number 494-30030-00. Catalog description: Manifold Pressure Sensor, 50 InHg (Stainless Steel, 25PSIA). Garmin avionics accessory or service part. Confirm compatibility…',
+    skus: ['494-30030-00'],
   },
   {
     group: 'Products',
@@ -4430,6 +13064,24 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'MCX to BNC Adapter Cable',
+    href: '/products/mcx-to-bnc-adapter-cable',
+    handle: 'mcx-to-bnc-adapter-cable',
+    description:
+      'MCX to BNC Adapter CableGarmin part number 010-10121-00. Catalog description: MCX to BNC Adapter Cable. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-10121-00'],
+  },
+  {
+    group: 'Products',
+    title: 'MicroUSB Cable',
+    href: '/products/microusb-cable',
+    handle: 'microusb-cable',
+    description:
+      'MicroUSB CableGarmin part number 010-11478-01. Catalog description: MicroUSB Cable. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-11478-01'],
+  },
+  {
+    group: 'Products',
     title: 'Montana® 710',
     href: '/products/montana-710-010-02963-00',
     handle: 'montana-710-010-02963-00',
@@ -4454,6 +13106,177 @@ export const SITE_SEARCH_INDEX = [
     description:
       'Fulfillment is pending Garmin availability; RWAS will confirm availability after your order is placed. Genuine Garmin product. Manufacturer part number 010-02964-10.',
     skus: ['010-02964-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Mounting Adapter, GWX 7x to GWX 68',
+    href: '/products/mounting-adapter-gwx-7x-to-gwx-68',
+    handle: 'mounting-adapter-gwx-7x-to-gwx-68',
+    description:
+      'Mounting Adapter, GWX 7x to GWX 68Garmin part number 117-00300-00. Catalog description: Mounting Adapter, GWX 7x to GWX 68. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['117-00300-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Mounting Kit, GAP 26, Adjustable, PMA',
+    href: '/products/garmin-mounting-kit-gap-26-adjustable-pma-011-05187-00',
+    handle: 'garmin-mounting-kit-gap-26-adjustable-pma-011-05187-00',
+    description:
+      'Mounting Kit, GAP 26, Adjustable, PMAGarmin part number 011-05187-00. Confirm compatibility and availability before ordering.',
+    skus: ['011-05187-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Mounting Rack (GMA 350)',
+    href: '/products/mounting-rack-gma-350',
+    handle: 'mounting-rack-gma-350',
+    description:
+      'Mounting Rack (GMA 350)Garmin part number 115-01452-00. Catalog description: Mounting Rack (GMA 350). Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-01452-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Mounting rack, GMA 340',
+    href: '/products/mounting-rack-gma-340',
+    handle: 'mounting-rack-gma-340',
+    description:
+      'Mounting rack, GMA 340Garmin part number 115-00262-00. Catalog description: Mounting rack, GMA 340. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['115-00262-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Mounting rack, GTX 320A/327',
+    href: '/products/mounting-rack-gtx-320a-327',
+    handle: 'mounting-rack-gtx-320a-327',
+    description:
+      'Mounting rack, GTX 320A/327Garmin part number 115-00431-00. Catalog description: Mounting rack, GTX 320A/327. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-00431-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Mounting rack, GTX 330',
+    href: '/products/mounting-rack-gtx-330',
+    handle: 'mounting-rack-gtx-330',
+    description:
+      'Mounting rack, GTX 330Garmin part number 115-00294-00. Catalog description: Mounting rack, GTX 330. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['115-00294-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Mounting Rod,GMX200',
+    href: '/products/mounting-rod-gmx200',
+    handle: 'mounting-rod-gmx200',
+    description:
+      'Mounting Rod,GMX200Garmin part number 211-00117-00. Catalog description: Mounting Rod,GMX200. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['211-00117-00'],
+  },
+  {
+    group: 'Products',
+    title: 'MX20 CHART VIEW APPL CARD AM',
+    href: '/products/mx20-chart-view-appl-card-am',
+    handle: 'mx20-chart-view-appl-card-am',
+    description:
+      'MX20 CHART VIEW APPL CARD AMGarmin part number 138-0552-058. Catalog description: MX20 CHART VIEW APPL CARD AM. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['138-0552-058'],
+  },
+  {
+    group: 'Products',
+    title: 'MX20 CHART VIEW APPL CARD Intl',
+    href: '/products/mx20-chart-view-appl-card-intl',
+    handle: 'mx20-chart-view-appl-card-intl',
+    description:
+      'MX20 CHART VIEW APPL CARD IntlGarmin part number 138-0553-058. Catalog description: MX20 CHART VIEW APPL CARD Intl. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['138-0553-058'],
+  },
+  {
+    group: 'Products',
+    title: 'MX20 MFD APP CARD, Americas',
+    href: '/products/mx20-mfd-app-card-americas',
+    handle: 'mx20-mfd-app-card-americas',
+    description:
+      'MX20 MFD APP CARD, AmericasGarmin part number 138-0550-058. Catalog description: MX20 MFD APP CARD, Americas. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['138-0550-058'],
+  },
+  {
+    group: 'Products',
+    title: 'NiCad battery pack',
+    href: '/products/nicad-battery-pack',
+    handle: 'nicad-battery-pack',
+    description:
+      'NiCad battery packGarmin part number 011-00067-00. Catalog description: NiCad battery pack. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['011-00067-00'],
+  },
+  {
+    group: 'Products',
+    title: 'NiCad rechargeable battery pack',
+    href: '/products/nicad-rechargeable-battery-pack',
+    handle: 'nicad-rechargeable-battery-pack',
+    description:
+      'NiCad rechargeable battery packGarmin part number 011-00044-01. Catalog description: NiCad rechargeable battery pack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-00044-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Nut Plate, G3X Supplemental Parts',
+    href: '/products/garmin-nut-plate-g3x-supplemental-parts-115-01054-00',
+    handle: 'garmin-nut-plate-g3x-supplemental-parts-115-01054-00',
+    description:
+      'Nut Plate, G3X Supplemental PartsGarmin part number 115-01054-00. Confirm compatibility and availability before ordering.',
+    skus: ['115-01054-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Nut,5/16",Hex,Skirt',
+    href: '/products/nut-5-16-hex-skirt',
+    handle: 'nut-5-16-hex-skirt',
+    description:
+      'Nut,5/16",Hex,SkirtGarmin part number 210-00055-00. Catalog description: Nut,5/16",Hex,Skirt. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['210-00055-00'],
+  },
+  {
+    group: 'Products',
+    title: 'OAT,Thin-Film,Pkg Tpe 5',
+    href: '/products/oat-thin-film-pkg-tpe-5',
+    handle: 'oat-thin-film-pkg-tpe-5',
+    description:
+      'OAT,Thin-Film,Pkg Tpe 5Garmin part number 494-00022-08. Catalog description: OAT,Thin-Film,Pkg Tpe 5. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['494-00022-08'],
+  },
+  {
+    group: 'Products',
+    title: 'Oil Temperature Probe',
+    href: '/products/oil-temperature-probe',
+    handle: 'oil-temperature-probe',
+    description:
+      'Oil Temperature ProbeGarmin part number 494-70009-00. Catalog description: Oil Temperature Sensor, UMA Inc, T3B3-2. 5. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['494-70009-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Oil/Fuel Pressure Sensor, 150PSIG (Stainless Steel)',
+    href: '/products/oil-fuel-pressure-sensor-150psig-stainless-steel',
+    handle: 'oil-fuel-pressure-sensor-150psig-stainless-steel',
+    description:
+      'Oil/Fuel Pressure Sensor, 150PSIG (Stainless Steel)Garmin part number 494-30032-00. Catalog description: Oil/Fuel Pressure Sensor, 150PSIG (Stainless Steel). Garmin avionics accessory or service part. Confirm compatibility with the target…',
+    skus: ['494-30032-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Optional Antenna Kit (GTX 320/320A/327/330)',
+    href: '/products/optional-antenna-kit-gtx-320-320a-327-330',
+    handle: 'optional-antenna-kit-gtx-320-320a-327-330',
+    description:
+      'Optional Antenna Kit (GTX 320/320A/327/330)Garmin part number 010-10160-00. Catalog description: Garmin Transponder Monopole Antenna Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['010-10160-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Panel Assy,GCU475,w/Label',
+    href: '/products/panel-assy-gcu475-w-label',
+    handle: 'panel-assy-gcu475-w-label',
+    description:
+      'Panel Assy,GCU475,w/LabelGarmin part number 117-00230-00. Catalog description: Panel Assy,GCU475,w/Label. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['117-00230-00'],
   },
   {
     group: 'Products',
@@ -4557,6 +13380,9 @@ export const SITE_SEARCH_INDEX = [
       'KT-18',
       'KT-19',
       'KT-20',
+      'KT-21',
+      'KT-22',
+      'KT-23',
     ],
   },
   {
@@ -4612,6 +13438,96 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Pin, Cable Retention, 1.57, Black',
+    href: '/products/garmin-pin-cable-retention-1-57-black-233-00075-03',
+    handle: 'garmin-pin-cable-retention-1-57-black-233-00075-03',
+    description:
+      'Pin, Cable Retention, 1. 57, BlackGarmin part number 233-00075-03. Confirm compatibility and availability before ordering.',
+    skus: ['233-00075-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Pin, Cable Retention, 1.69, Black',
+    href: '/products/garmin-pin-cable-retention-1-69-black-233-00075-04',
+    handle: 'garmin-pin-cable-retention-1-69-black-233-00075-04',
+    description:
+      'Pin, Cable Retention, 1. 69, BlackGarmin part number 233-00075-04. Confirm compatibility and availability before ordering.',
+    skus: ['233-00075-04'],
+  },
+  {
+    group: 'Products',
+    title: 'Pin,Cable Retention,1.60',
+    href: '/products/pin-cable-retention-1-60',
+    handle: 'pin-cable-retention-1-60',
+    description:
+      'Pin,Cable Retention,1. 60Garmin part number 233-00075-02. Catalog description: Pin,Cable Retention,1. 60. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['233-00075-02'],
+  },
+  {
+    group: 'Products',
+    title: 'PITCH BRIDLE CABLE',
+    href: '/products/pitch-bridle-cable',
+    handle: 'pitch-bridle-cable',
+    description:
+      'PITCH BRIDLE CABLEGarmin part number 233-20067-00. Catalog description: PITCH BRIDLE CABLE. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['233-20067-00'],
+  },
+  {
+    group: 'Products',
+    title: 'PITCH CABLE, LONG, 182, W/ LABEL',
+    href: '/products/pitch-cable-long-182-w-label',
+    handle: 'pitch-cable-long-182-w-label',
+    description:
+      'PITCH CABLE, LONG, 182, W/ LABELGarmin part number 233-20044-00. Catalog description: PITCH CABLE, LONG, 182, W/ LABEL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['233-20044-00'],
+  },
+  {
+    group: 'Products',
+    title: 'PITCH CABLE, SHORT, 182, W/ LABEL',
+    href: '/products/pitch-cable-short-182-w-label',
+    handle: 'pitch-cable-short-182-w-label',
+    description:
+      'PITCH CABLE, SHORT, 182, W/ LABELGarmin part number 233-20043-00. Catalog description: PITCH CABLE, SHORT, 182, W/ LABEL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['233-20043-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Pitch Trim Cable Cone, CJ 525',
+    href: '/products/pitch-trim-cable-cone-cj-525',
+    handle: 'pitch-trim-cable-cone-cj-525',
+    description:
+      'Pitch Trim Cable Cone, CJ 525Garmin part number 117-00391-00. Catalog description: Pitch Trim Cable Cone, CJ 525. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['117-00391-00'],
+  },
+  {
+    group: 'Products',
+    title: 'PITCH TRIM CABLE, 182, WITH LABEL',
+    href: '/products/pitch-trim-cable-182-with-label',
+    handle: 'pitch-trim-cable-182-with-label',
+    description:
+      'PITCH TRIM CABLE, 182, WITH LABELGarmin part number 233-20045-00. Catalog description: PITCH TRIM CABLE, 182, WITH LABEL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['233-20045-00'],
+  },
+  {
+    group: 'Products',
+    title: 'PMP,Inlay Assy,GTX330,Blk',
+    href: '/products/pmp-inlay-assy-gtx330-blk',
+    handle: 'pmp-inlay-assy-gtx330-blk',
+    description:
+      'PMP,Inlay Assy,GTX330,BlkGarmin part number 145-00345-01. Catalog description: PMP,Inlay Assy,GTX330,Blk. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['145-00345-01'],
+  },
+  {
+    group: 'Products',
+    title: 'PMP,Jack Screw Locator,GMA340',
+    href: '/products/pmp-jack-screw-locator-gma340',
+    handle: 'pmp-jack-screw-locator-gma340',
+    description:
+      'PMP,Jack Screw Locator,GMA340Garmin part number 145-00305-00. Catalog description: PMP,Jack Screw Locator,GMA340. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['145-00305-00'],
+  },
+  {
+    group: 'Products',
     title: 'Portable Friction Mount',
     href: '/products/portable-friction-mount',
     handle: 'portable-friction-mount',
@@ -4630,6 +13546,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Power Cable (MicroUSB)',
+    href: '/products/power-cable-microusb',
+    handle: 'power-cable-microusb',
+    description:
+      'Power Cable (MicroUSB)Garmin part number 010-11131-11. Catalog description: Power Cable (MicroUSB). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-11131-11'],
+  },
+  {
+    group: 'Products',
     title: 'Powered Mount (inReach®)',
     href: '/products/powered-mount-inreach',
     handle: 'powered-mount-inreach',
@@ -4645,6 +13570,87 @@ export const SITE_SEARCH_INDEX = [
     description:
       'Powered Mount with Suction CupGarmin part number 010-12525-02. Catalog description: Powered Mount with Suction Cup. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
     skus: ['010-12525-02'],
+  },
+  {
+    group: 'Products',
+    title: 'PR BRIDLE CABLE',
+    href: '/products/pr-bridle-cable',
+    handle: 'pr-bridle-cable',
+    description:
+      'PR BRIDLE CABLEGarmin part number 233-20062-00. Catalog description: PR BRIDLE CABLE. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['233-20062-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Product Registration,GTX335,GPS',
+    href: '/products/product-registration-gtx335-gps',
+    handle: 'product-registration-gtx335-gps',
+    description:
+      'Product Registration,GTX335,GPSGarmin part number 010-12661-00. Catalog description: Product Registration,GTX335,GPS. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['010-12661-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Prop Filter (VIRB® Ultra)',
+    href: '/products/prop-filter-virb-ultra',
+    handle: 'prop-filter-virb-ultra',
+    description:
+      'Prop Filter (VIRB® Ultra)Garmin part number 010-12389-06. Catalog description: Prop Filter (VIRB® Ultra). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['010-12389-06'],
+  },
+  {
+    group: 'Products',
+    title: 'QMA Plug, Termination Conn Kit, 1 pc, R',
+    href: '/products/qma-plug-termination-conn-kit-1-pc-r',
+    handle: 'qma-plug-termination-conn-kit-1-pc-r',
+    description:
+      'QMA Plug, Termination Conn Kit, 1 pc, RGarmin part number 011-01364-15. Catalog description: QMA Plug, Termination Conn Kit, 1 pc, R. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['011-01364-15'],
+  },
+  {
+    group: 'Products',
+    title: 'QMA Plug, Termination Conn Kit, 4 pcs, R',
+    href: '/products/qma-plug-termination-conn-kit-4-pcs-r',
+    handle: 'qma-plug-termination-conn-kit-4-pcs-r',
+    description:
+      'QMA Plug, Termination Conn Kit, 4 pcs, RGarmin part number 011-01364-14. Catalog description: QMA Plug, Termination Conn Kit, 4 pcs, R. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['011-01364-14'],
+  },
+  {
+    group: 'Products',
+    title: 'QMA Right Angle Connector Kit (1 piece)',
+    href: '/products/qma-right-angle-connector-kit-1-piece',
+    handle: 'qma-right-angle-connector-kit-1-piece',
+    description:
+      'QMA Right Angle Connector Kit (1 piece)Garmin part number 011-01364-12. Catalog description: QMA Right Angle Connector Kit (1 piece). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['011-01364-12'],
+  },
+  {
+    group: 'Products',
+    title: 'QMA Right Angle Connector Kit (4 pieces)',
+    href: '/products/qma-right-angle-connector-kit-4-pieces',
+    handle: 'qma-right-angle-connector-kit-4-pieces',
+    description:
+      'QMA Right Angle Connector Kit (4 pieces)Garmin part number 011-01364-10. Catalog description: QMA Right Angle Connector Kit (4 pieces). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['011-01364-10'],
+  },
+  {
+    group: 'Products',
+    title: 'QMA Straight Connector Kit (1 piece)',
+    href: '/products/qma-straight-connector-kit-1-piece',
+    handle: 'qma-straight-connector-kit-1-piece',
+    description:
+      'QMA Straight Connector Kit (1 piece)Garmin part number 011-01364-13. Catalog description: QMA Straight Connector Kit (1 piece). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-01364-13'],
+  },
+  {
+    group: 'Products',
+    title: 'QMA Straight Connector Kit (4 pieces)',
+    href: '/products/qma-straight-connector-kit-4-pieces',
+    handle: 'qma-straight-connector-kit-4-pieces',
+    description:
+      'QMA Straight Connector Kit (4 pieces)Garmin part number 011-01364-11. Catalog description: QMA Straight Connector Kit (4 pieces). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-01364-11'],
   },
   {
     group: 'Products',
@@ -4684,6 +13690,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Quick Release Lanyard',
+    href: '/products/quick-release-lanyard',
+    handle: 'quick-release-lanyard',
+    description:
+      'Quick Release LanyardGarmin part number 010-11733-00. Catalog description: Quick Release Lanyard. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-11733-00'],
+  },
+  {
+    group: 'Products',
     title: 'QuickFit® 20 Bungee Mount',
     href: '/products/quickfit-20-bungee-mount',
     handle: 'quickfit-20-bungee-mount',
@@ -4711,12 +13726,363 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Radar Altimeter Antenna, S67-2002',
+    href: '/products/radar-altimeter-antenna-s67-2002',
+    handle: 'radar-altimeter-antenna-s67-2002',
+    description:
+      'Radar Altimeter Antenna, S67-2002Garmin part number 013-00378-00. Catalog description: Radar Altimeter Antenna, S67-2002. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['013-00378-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Rail Mount Adapter',
+    href: '/products/rail-mount-adapter',
+    handle: 'rail-mount-adapter',
+    description:
+      'Rail Mount AdapterGarmin part number 010-10496-01. Catalog description: Rail Mount Adapter. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-10496-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Ratchet housing, H mounting rack',
+    href: '/products/ratchet-housing-h-mounting-rack',
+    handle: 'ratchet-housing-h-mounting-rack',
+    description:
+      'Ratchet housing, H mounting rackGarmin part number 125-00257-00. Catalog description: Ratchet housing, H mounting rack. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['125-00257-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Ratchet Socket, Zinc',
+    href: '/products/ratchet-socket-zinc',
+    handle: 'ratchet-socket-zinc',
+    description:
+      'Ratchet Socket, ZincGarmin part number 125-00266-01. Catalog description: Ratchet Socket, Zinc. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['125-00266-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Relay, DPDT, 14V, 10A',
+    href: '/products/relay-dpdt-14v-10a-345-00028-01',
+    handle: 'relay-dpdt-14v-10a-345-00028-01',
+    description:
+      'Genuine Garmin product. Manufacturer part number 345-00028-01.',
+    skus: ['345-00028-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Relay, DPDT, 28V, 10A',
+    href: '/products/relay-dpdt-28v-10a-345-00028-00',
+    handle: 'relay-dpdt-28v-10a-345-00028-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 345-00028-00.',
+    skus: ['345-00028-00'],
+  },
+  {
+    group: 'Products',
+    title: 'RES,Metal Film,Axial,1.2Kohm,0.1%,25ppm,1/2W',
+    href: '/products/res-metal-film-axial-1-2kohm-0-1-25ppm-1-2w',
+    handle: 'res-metal-film-axial-1-2kohm-0-1-25ppm-1-2w',
+    description:
+      'RES,Metal Film,Axial,1. 2Kohm,0. 1%,25ppm,1/2WGarmin part number 909-G0000-01. Catalog description: RES,Metal Film,Axial,1. 2Kohm,0. 1%,25ppm,1/2W. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['909-G0000-01'],
+  },
+  {
+    group: 'Products',
+    title: 'RES,Metal Film,Axial,1.5Kohm,0.1%,25ppm,1/2W',
+    href: '/products/res-metal-film-axial-1-5kohm-0-1-25ppm-1-2w',
+    handle: 'res-metal-film-axial-1-5kohm-0-1-25ppm-1-2w',
+    description:
+      'RES,Metal Film,Axial,1. 5Kohm,0. 1%,25ppm,1/2WGarmin part number 909-G0000-02. Catalog description: RES,Metal Film,Axial,1. 5Kohm,0. 1%,25ppm,1/2W. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['909-G0000-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Res,Metal Film,Axial,681 Ohm,0.1%, 25ppm,1/2W',
+    href: '/products/res-metal-film-axial-681-ohm-0-1-25ppm-1-2w',
+    handle: 'res-metal-film-axial-681-ohm-0-1-25ppm-1-2w',
+    description:
+      'Res,Metal Film,Axial,681 Ohm,0. 1%, 25ppm,1/2WGarmin part number 909-G0000-00. Catalog description: Res,Metal Film,Axial,681 Ohm,0. 1%, 25ppm,1/2W. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['909-G0000-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Res,WW,SC,Pwr,100ohm,.5%,1W',
+    href: '/products/res-ww-sc-pwr-100ohm-5-1w',
+    handle: 'res-ww-sc-pwr-100ohm-5-1w',
+    description:
+      'Res,WW,SC,Pwr,100ohm,. 5%,1WGarmin part number 927-04101-00. Catalog description: Res,WW,SC,Pwr,100ohm,. 5%,1W. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['927-04101-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Retaining Ring,External,1.50",Low Profile',
+    href: '/products/retaining-ring-external-1-50-low-profile',
+    handle: 'retaining-ring-external-1-50-low-profile',
+    description:
+      'Retaining Ring,External,1. 50",Low ProfileGarmin part number 232-00019-00. Catalog description: Retaining Ring,External,1. 50",Low Profile. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['232-00019-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Retractable Lanyard',
+    href: '/products/retractable-lanyard',
+    handle: 'retractable-lanyard',
+    description:
+      'Retractable LanyardGarmin part number 010-10888-00. Catalog description: Retractable Lanyard. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-10888-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Retractable Wiring Conduit,14", 1.46" W',
+    href: '/products/retractable-wiring-conduit-14-1-46-w',
+    handle: 'retractable-wiring-conduit-14-1-46-w',
+    description:
+      'Retractable Wiring Conduit,14", 1. 46" WGarmin part number 231-00060-10. Catalog description: Retractable Wiring Conduit,14", 1. 46" W. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['231-00060-10'],
+  },
+  {
+    group: 'Products',
+    title: 'ROLL BRIDLE CABLE',
+    href: '/products/roll-bridle-cable',
+    handle: 'roll-bridle-cable',
+    description:
+      'ROLL BRIDLE CABLEGarmin part number 233-20064-00. Catalog description: ROLL BRIDLE CABLE. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['233-20064-00'],
+  },
+  {
+    group: 'Products',
+    title: 'ROLL CABLE, 182, W/ LABEL',
+    href: '/products/roll-cable-182-w-label',
+    handle: 'roll-cable-182-w-label',
+    description:
+      'ROLL CABLE, 182, W/ LABELGarmin part number 233-20042-00. Catalog description: ROLL CABLE, 182, W/ LABEL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['233-20042-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Roller 1',
+    href: '/products/roller-1',
+    handle: 'roller-1',
+    description:
+      'Roller 1Garmin part number 147-00138-00. Catalog description: Roller 1. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['147-00138-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Roller 2',
+    href: '/products/roller-2',
+    handle: 'roller-2',
+    description:
+      'Roller 2Garmin part number 147-00139-00. Catalog description: Roller 2. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['147-00139-00'],
+  },
+  {
+    group: 'Products',
+    title: 'RPM Sensor, Hall Effect, Bendix magneto',
+    href: '/products/rpm-sensor-hall-effect-bendix-magneto',
+    handle: 'rpm-sensor-hall-effect-bendix-magneto',
+    description:
+      'RPM Sensor, Hall Effect, Bendix magneto Garmin part number 494-50005-01. Catalog description: RPM Sensor, Hall Effect, Bendix magneto. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['494-50005-01'],
+  },
+  {
+    group: 'Products',
+    title: 'RPM Sensor, Hall Effect, Slick magneto',
+    href: '/products/rpm-sensor-hall-effect-slick-magneto',
+    handle: 'rpm-sensor-hall-effect-slick-magneto',
+    description:
+      'RPM Sensor, Hall Effect, Slick magnetoGarmin part number 494-50005-00. Catalog description: RPM Sensor, Hall Effect, Slick magneto. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['494-50005-00'],
+  },
+  {
+    group: 'Products',
     title: 'SafeNav™ Powered by Garmin',
     href: '/products/safenav-powered-by-garmin',
     handle: 'safenav-powered-by-garmin',
     description:
       'SafeNav™ Powered by Garmin is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: SafeNav™ Powered by Garmin. 00 Fulfillment:…',
     skus: ['010-00836-40'],
+  },
+  {
+    group: 'Products',
+    title: 'Scr,4-40x.437,FLHP100,SS/P,Nyl',
+    href: '/products/scr-4-40x-437-flhp100-ss-p-nyl',
+    handle: 'scr-4-40x-437-flhp100-ss-p-nyl',
+    description:
+      'Scr,4-40x. 437,FLHP100,SS/P,NylGarmin part number 211-63234-11. Catalog description: Scr,4-40x. 437,FLHP100,SS/P,Nyl. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['211-63234-11'],
+  },
+  {
+    group: 'Products',
+    title: 'Scr,4-40x.500,FLHP100,SS/P,Nyl',
+    href: '/products/scr-4-40x-500-flhp100-ss-p-nyl',
+    handle: 'scr-4-40x-500-flhp100-ss-p-nyl',
+    description:
+      'Scr,4-40x. 500,FLHP100,SS/P,NylGarmin part number 211-63234-12. Catalog description: Scr,4-40x. 500,FLHP100,SS/P,Nyl. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['211-63234-12'],
+  },
+  {
+    group: 'Products',
+    title: 'Scr,6-32x.375,FLHP82,SS/P,w/NY',
+    href: '/products/scr-6-32x-375-flhp82-ss-p-w-ny',
+    handle: 'scr-6-32x-375-flhp82-ss-p-w-ny',
+    description:
+      'Scr,6-32x. 375,FLHP82,SS/P,w/NYGarmin part number 211-62237-10. Catalog description: Scr,6-32x. 375,FLHP82,SS/P,w/NY. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['211-62237-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw, Cap, Skt Head, MS16998, 1/4-28x1.0',
+    href: '/products/screw-cap-skt-head-ms16998-1-4-28x1-0',
+    handle: 'screw-cap-skt-head-ms16998-1-4-28x1-0',
+    description:
+      'Screw, Cap, Skt Head, MS16998, 1/4-28x1. 0Garmin part number 211-00602-01. Catalog description: Screw, Cap, Skt Head, MS16998, 1/4-28x1. 0. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['211-00602-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw, Machine, Panel Mounting, 0.550", Black',
+    href: '/products/screw-machine-panel-mounting-0-550-black',
+    handle: 'screw-machine-panel-mounting-0-550-black',
+    description:
+      'Screw, Machine, Panel Mounting, 0. 550", BlackGarmin part number 211-00169-01. Catalog description: Screw, Machine, Panel Mounting, 0. 550", Black. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin…',
+    skus: ['211-00169-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw, Self-Sealing, FLHP82, 4-40x.250, w/NYL',
+    href: '/products/screw-self-sealing-flhp82-4-40x-250-w-nyl',
+    handle: 'screw-self-sealing-flhp82-4-40x-250-w-nyl',
+    description:
+      'Screw, Self-Sealing, FLHP82, 4-40x. 250, w/NYLGarmin part number 211-00237-03. Catalog description: Screw, Self-Sealing, FLHP82, 4-40x. 250, w/NYL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin…',
+    skus: ['211-00237-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,1/4-28x.75,SHC,SS/P,W/Nyl',
+    href: '/products/screw-1-4-28x-75-shc-ss-p-w-nyl',
+    handle: 'screw-1-4-28x-75-shc-ss-p-w-nyl',
+    description:
+      'Screw,1/4-28x. 75,SHC,SS/P,W/NylGarmin part number 211-64244-16. Catalog description: Screw,1/4-28x. 75,SHC,SS/P,W/Nyl. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['211-64244-16'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,1/4-28x1.250,SHC,SS/P',
+    href: '/products/screw-1-4-28x1-250-shc-ss-p',
+    handle: 'screw-1-4-28x1-250-shc-ss-p',
+    description:
+      'Screw,1/4-28x1. 250,SHC,SS/PGarmin part number 211-64214-22. Catalog description: Screw,1/4-28x1. 250,SHC,SS/P. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['211-64214-22'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,4-40x.750,FLHP82,SS/P,w/NYL',
+    href: '/products/screw-4-40x-750-flhp82-ss-p-w-nyl',
+    handle: 'screw-4-40x-750-flhp82-ss-p-w-nyl',
+    description:
+      'Screw,4-40x. 750,FLHP82,SS/P,w/NYLGarmin part number 211-62234-16. Catalog description: Screw,4-40x. 750,FLHP82,SS/P,w/NYL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['211-62234-16'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,4-40x1.375,PHP,SS/P,w/Nylon',
+    href: '/products/screw-4-40x1-375-php-ss-p-w-nylon',
+    handle: 'screw-4-40x1-375-php-ss-p-w-nylon',
+    description:
+      'Screw,4-40x1. 375,PHP,SS/P,w/NylonGarmin part number 211-60234-23. Catalog description: Screw,4-40x1. 375,PHP,SS/P,w/Nylon. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['211-60234-23'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,6-32x.250,PHP,BR,w/Nyl',
+    href: '/products/screw-6-32x-250-php-br-w-nyl',
+    handle: 'screw-6-32x-250-php-br-w-nyl',
+    description:
+      'Screw,6-32x. 250,PHP,BR,w/NylGarmin part number 211-60037-08. Catalog description: Screw,6-32x. 250,PHP,BR,w/Nyl. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['211-60037-08'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,6-32x.250,PHP,SS/P',
+    href: '/products/screw-6-32x-250-php-ss-p',
+    handle: 'screw-6-32x-250-php-ss-p',
+    description:
+      'Screw,6-32x. 250,PHP,SS/PGarmin part number 211-60207-08. Catalog description: Screw,6-32x. 250,PHP,SS/P. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['211-60207-08'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,6-32x.375,SHC,SS/P,W/Nyl',
+    href: '/products/screw-6-32x-375-shc-ss-p-w-nyl',
+    handle: 'screw-6-32x-375-shc-ss-p-w-nyl',
+    description:
+      'Screw,6-32x. 375,SHC,SS/P,W/NylGarmin part number 211-64237-10. Catalog description: Screw,6-32x. 375,SHC,SS/P,W/Nyl. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['211-64237-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,6-32x.500,SCKT HD CAP,SS/P,W/Nyl',
+    href: '/products/garmin-screw-6-32x-500-sckt-hd-cap-ss-p-w-nyl-211-64237-12',
+    handle: 'garmin-screw-6-32x-500-sckt-hd-cap-ss-p-w-nyl-211-64237-12',
+    description:
+      'Screw,6-32x. 500,SCKT HD CAP,SS/P,W/NylGarmin part number 211-64237-12. Confirm compatibility and availability before ordering.',
+    skus: ['211-64237-12'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,6-32x.500,SCKT HD CAP,SS/P,W/Nyl',
+    href: '/products/garmin-screw-6-32x-500-sckt-hd-cap-ss-p-w-nyl-430-00018-00',
+    handle: 'garmin-screw-6-32x-500-sckt-hd-cap-ss-p-w-nyl-430-00018-00',
+    description:
+      'Screw,6-32x. 500,SCKT HD CAP,SS/P,W/NylGarmin part number 430-00018-00. Confirm compatibility and availability before ordering.',
+    skus: ['430-00018-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,8-32x.312,PHP,SS/P',
+    href: '/products/screw-8-32x-312-php-ss-p',
+    handle: 'screw-8-32x-312-php-ss-p',
+    description:
+      'Screw,8-32x. 312,PHP,SS/PGarmin part number 211-60209-09. Catalog description: Screw,8-32x. 312,PHP,SS/P. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['211-60209-09'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,8-32x.312,SHC,SS/P,W/Nyl',
+    href: '/products/screw-8-32x-312-shc-ss-p-w-nyl',
+    handle: 'screw-8-32x-312-shc-ss-p-w-nyl',
+    description:
+      'Screw,8-32x. 312,SHC,SS/P,W/NylGarmin part number 211-64239-09. Catalog description: Screw,8-32x. 312,SHC,SS/P,W/Nyl. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['211-64239-09'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,8-32x.500,SHC,SS/P,W/Nyl',
+    href: '/products/screw-8-32x-500-shc-ss-p-w-nyl',
+    handle: 'screw-8-32x-500-shc-ss-p-w-nyl',
+    description:
+      'Screw,8-32x. 500,SHC,SS/P,W/NylGarmin part number 211-64239-12. Catalog description: Screw,8-32x. 500,SHC,SS/P,W/Nyl. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['211-64239-12'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,8-32x.750,PHP,SS/P',
+    href: '/products/screw-8-32x-750-php-ss-p',
+    handle: 'screw-8-32x-750-php-ss-p',
+    description:
+      'Screw,8-32x. 750,PHP,SS/PGarmin part number 211-60209-16. Catalog description: Screw,8-32x. 750,PHP,SS/P. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['211-60209-16'],
+  },
+  {
+    group: 'Products',
+    title: 'Screw,8-32x.937,SCKT,HD CAP,SS/P,W/Nyl',
+    href: '/products/screw-8-32x-937-sckt-hd-cap-ss-p-w-nyl',
+    handle: 'screw-8-32x-937-sckt-hd-cap-ss-p-w-nyl',
+    description:
+      'Screw,8-32x. 937,SCKT,HD CAP,SS/P,W/NylGarmin part number 211-64239-19. Catalog description: Screw,8-32x. 937,SCKT,HD CAP,SS/P,W/Nyl. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['211-64239-19'],
   },
   {
     group: 'Products',
@@ -5115,6 +14481,16 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'SD Card, GX000 SurfaceWatch Enablement SysRel 7.51 or Later',
+    href: '/products/garmin-sd-card-gx000-surfacewatch-enablement-sysrel-7-51-or-later-010-03905-08',
+    handle:
+      'garmin-sd-card-gx000-surfacewatch-enablement-sysrel-7-51-or-later-010-03905-08',
+    description:
+      'SD Card, GX000 SurfaceWatch Enablement SysRel 7. 51 or LaterGarmin part number 010-03905-08. Confirm compatibility and availability before ordering.',
+    skus: ['010-03905-08'],
+  },
+  {
+    group: 'Products',
     title: 'SD Card, GX000 TAWS Unlock Enablement SysRel 7.51 or Later',
     href: '/products/garmin-sd-card-gx000-taws-unlock-enablement-sysrel-7-51-or-later-010-03905-04',
     handle:
@@ -5122,6 +14498,15 @@ export const SITE_SEARCH_INDEX = [
     description:
       'SD Card, GX000 TAWS Unlock Enablement SysRel 7. 51 or LaterGarmin part number 010-03905-04. Confirm compatibility and availability before ordering.',
     skus: ['010-03905-04'],
+  },
+  {
+    group: 'Products',
+    title: 'SD Card, Jeppesen ChartView Enablement',
+    href: '/products/sd-card-jeppesen-chartview-enablement-010-03905-16',
+    handle: 'sd-card-jeppesen-chartview-enablement-010-03905-16',
+    description:
+      'Genuine Garmin product. Manufacturer part number 010-03905-16.',
+    skus: ['010-03905-16'],
   },
   {
     group: 'Products',
@@ -5179,12 +14564,57 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Sensor,MR,2-Axis,SOIC',
+    href: '/products/sensor-mr-2-axis-soic',
+    handle: 'sensor-mr-2-axis-soic',
+    description:
+      'Sensor,MR,2-Axis,SOICGarmin part number 494-00004-00. Catalog description: Sensor,MR,2-Axis,SOIC. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['494-00004-00'],
+  },
+  {
+    group: 'Products',
     title: 'Shaft Locking Device, GFS83',
     href: '/products/shaft-locking-device-gfs83-117-01307-00',
     handle: 'shaft-locking-device-gfs83-117-01307-00',
     description:
       'Genuine Garmin product. Manufacturer part number 117-01307-00.',
     skus: ['117-01307-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SHELF, REMOTE LRU, AIRBUS HELICOPTERS, PMA',
+    href: '/products/shelf-remote-lru-airbus-helicopters-pma',
+    handle: 'shelf-remote-lru-airbus-helicopters-pma',
+    description:
+      'SHELF, REMOTE LRU, AIRBUS HELICOPTERS, PMAGarmin part number 115-01761-00. Catalog description: SHELF, REMOTE LRU, AIRBUS HELICOPTERS, PMA. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['115-01761-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SL60 Readout Filter',
+    href: '/products/sl60-readout-filter',
+    handle: 'sl60-readout-filter',
+    description:
+      'SL60 Readout FilterGarmin part number 308-3201-30. Catalog description: SL60 Readout Filter. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['308-3201-30'],
+  },
+  {
+    group: 'Products',
+    title: 'SL70 Readout Filter',
+    href: '/products/sl70-readout-filter',
+    handle: 'sl70-readout-filter',
+    description:
+      'SL70 Readout Filter is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: SL70 Readout Filter. 56 Fulfillment: Garmin items are…',
+    skus: ['308-3201-50'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, Bracket, Generic, GSA28',
+    href: '/products/smp-bracket-generic-gsa28',
+    handle: 'smp-bracket-generic-gsa28',
+    description:
+      'SMP, Bracket, Generic, GSA28Garmin part number 115-01854-00. Catalog description: SMP, Bracket, Generic, GSA28. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['115-01854-00'],
   },
   {
     group: 'Products',
@@ -5197,6 +14627,195 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'SMP, GTX3x5 REMOTE RACK, G1000 TYPE',
+    href: '/products/smp-gtx3x5-remote-rack-g1000-type',
+    handle: 'smp-gtx3x5-remote-rack-g1000-type',
+    description:
+      'SMP, GTX3x5 REMOTE RACK, G1000 TYPEGarmin part number 115-02250-00. Catalog description: GTX 3x5 G1000 Install Rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['115-02250-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, Install Rack, 1.35" GTR/GNC, FW',
+    href: '/products/smp-install-rack-1-35-gtr-gnc-fw',
+    handle: 'smp-install-rack-1-35-gtr-gnc-fw',
+    description:
+      'SMP, Install Rack, 1. 35" GTR/GNC, FWGarmin part number 115-04497-00. Catalog description: SMP, Install Rack, 1. 35" GTR/GNC, FW. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['115-04497-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, INSTALL RACK, GMC 605',
+    href: '/products/smp-install-rack-gmc-605',
+    handle: 'smp-install-rack-gmc-605',
+    description:
+      'SMP, INSTALL RACK, GMC 605Garmin part number 115-01918-10. Catalog description: SMP, INSTALL RACK, GMC 605. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-01918-10'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, INSTALL RACK, GNC355',
+    href: '/products/smp-install-rack-gnc355',
+    handle: 'smp-install-rack-gnc355',
+    description:
+      'SMP, INSTALL RACK, GNC355Garmin part number 115-03127-00. Catalog description: SMP, INSTALL RACK, GNC355. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-03127-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, INSTALL RACK, GNX375',
+    href: '/products/smp-install-rack-gnx375',
+    handle: 'smp-install-rack-gnx375',
+    description:
+      'SMP, INSTALL RACK, GNX375Garmin part number 115-02768-00. Catalog description: SMP, INSTALL RACK, GNX375. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-02768-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, INSTALL RACK, GTX3x5',
+    href: '/products/smp-install-rack-gtx3x5',
+    handle: 'smp-install-rack-gtx3x5',
+    description:
+      'SMP, INSTALL RACK, GTX3x5Garmin part number 115-01771-01. Catalog description: GTX 3x5 Install Rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-01771-01'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, Rack w/ Tab, GTR200',
+    href: '/products/smp-rack-w-tab-gtr200',
+    handle: 'smp-rack-w-tab-gtr200',
+    description:
+      'SMP, Rack w/ Tab, GTR200Garmin part number 115-01878-00. Catalog description: SMP, Rack w/ Tab, GTR200. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-01878-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, Remote Install Rack, GSR 56',
+    href: '/products/smp-remote-install-rack-gsr-56',
+    handle: 'smp-remote-install-rack-gsr-56',
+    description:
+      'SMP, Remote Install Rack, GSR 56Garmin part number 115-01018-00. Catalog description: SMP, Remote Install Rack, GSR 56. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['115-01018-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, Remote Install Rack, Horizontal, GTS 8XX',
+    href: '/products/smp-remote-install-rack-horizontal-gts-8xx',
+    handle: 'smp-remote-install-rack-horizontal-gts-8xx',
+    description:
+      'SMP, Remote Install Rack, Horizontal, GTS 8XXGarmin part number 115-00784-00. Catalog description: Horizontal Install Rack, GTS Processor. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['115-00784-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, Servo Cable Guard',
+    href: '/products/smp-servo-cable-guard',
+    handle: 'smp-servo-cable-guard',
+    description:
+      'SMP, Servo Cable GuardGarmin part number 115-03692-00. Catalog description: SMP, Servo Cable Guard. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['115-03692-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, SWITCH MOUNT, PIPER PA-24, MIL',
+    href: '/products/smp-switch-mount-piper-pa-24-mil',
+    handle: 'smp-switch-mount-piper-pa-24-mil',
+    description:
+      'SMP, SWITCH MOUNT, PIPER PA-24, MILGarmin part number 115-03836-01. Catalog description: SMP, SWITCH MOUNT, PIPER PA-24, MIL. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['115-03836-01'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP, YAW BRACKET ASSY',
+    href: '/products/smp-yaw-bracket-assy',
+    handle: 'smp-yaw-bracket-assy',
+    description:
+      'SMP, YAW BRACKET ASSYGarmin part number 115-02804-00. Catalog description: SMP, YAW BRACKET ASSY. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['115-02804-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP,Install Rack,GTR225',
+    href: '/products/smp-install-rack-gtr225',
+    handle: 'smp-install-rack-gtr225',
+    description:
+      'SMP,Install Rack,GTR225Garmin part number 115-01613-00. Catalog description: SMP,Install Rack,GTR225. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['115-01613-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SMP,PITCH TRIM ANGLE, TOP',
+    href: '/products/smp-pitch-trim-angle-top',
+    handle: 'smp-pitch-trim-angle-top',
+    description:
+      'SMP,PITCH TRIM ANGLE, TOPGarmin part number 115-02735-00. Catalog description: SMP,PITCH TRIM ANGLE, TOP. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['115-02735-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Snapdome Array,GNC4XX',
+    href: '/products/snapdome-array-gnc4xx',
+    handle: 'snapdome-array-gnc4xx',
+    description:
+      'Snapdome Array,GNC4XXGarmin part number 340-00035-00. Catalog description: Snapdome Array,GNC4XX. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['340-00035-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Snapdome Array,GNC5XX',
+    href: '/products/snapdome-array-gnc5xx',
+    handle: 'snapdome-array-gnc5xx',
+    description:
+      'Snapdome Array,GNC5XXGarmin part number 340-00037-00. Catalog description: Snapdome Array,GNC5XX. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['340-00037-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Socket, 1/4 Turn, Rear Mount',
+    href: '/products/socket-1-4-turn-rear-mount',
+    handle: 'socket-1-4-turn-rear-mount',
+    description:
+      'Socket, 1/4 Turn, Rear Mount is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: Socket, 1/4 Turn, Rear Mount. 00 Fulfillment:…',
+    skus: ['125-00062-04'],
+  },
+  {
+    group: 'Products',
+    title: 'Socket, Captive Screw, Panel Mount',
+    href: '/products/socket-captive-screw-panel-mount',
+    handle: 'socket-captive-screw-panel-mount',
+    description:
+      'Socket, Captive Screw, Panel MountGarmin part number 125-00276-00. Catalog description: Socket, Captive Screw, Panel Mount. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['125-00276-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sonalert, Mallory SC628MD',
+    href: '/products/sonalert-mallory-sc628md',
+    handle: 'sonalert-mallory-sc628md',
+    description:
+      'Sonalert, Mallory SC628MDGarmin part number 013-00636-00. Catalog description: Sonalert, Mallory SC628MD. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['013-00636-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Spacer,Bridle Cable,GFC 700',
+    href: '/products/spacer-bridle-cable-gfc-700',
+    handle: 'spacer-bridle-cable-gfc-700',
+    description:
+      'Spacer,Bridle Cable,GFC 700Garmin part number 117-00277-00. Catalog description: Spacer,Bridle Cable,GFC 700. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['117-00277-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Spacer,Config Module',
+    href: '/products/spacer-config-module',
+    handle: 'spacer-config-module',
+    description:
+      'Spacer,Config ModuleGarmin part number 213-00043-00. Catalog description: Spacer,Config Module. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['213-00043-00'],
+  },
+  {
+    group: 'Products',
     title: 'Spine Mount Adapter with Carabiner and Hardware',
     href: '/products/spine-mount-adapter-with-carabiner-and-hardware',
     handle: 'spine-mount-adapter-with-carabiner-and-hardware',
@@ -5206,12 +14825,779 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Spring, Ratchet Install Mechanism',
+    href: '/products/spring-ratchet-install-mechanism',
+    handle: 'spring-ratchet-install-mechanism',
+    description:
+      'Spring, Ratchet Install MechanismGarmin part number 234-00118-00. Catalog description: Spring, Ratchet Install Mechanism. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['234-00118-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sprocket,.25 Pitch x 25T, GSA 87',
+    href: '/products/sprocket-25-pitch-x-25t-gsa-87',
+    handle: 'sprocket-25-pitch-x-25t-gsa-87',
+    description:
+      'Sprocket,. 25 Pitch x 25T, GSA 87Garmin part number 380-00015-15. Catalog description: Sprocket,. 25 Pitch x 25T, GSA 87. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['380-00015-15'],
+  },
+  {
+    group: 'Products',
+    title: 'STANDOFF .250 HEX x .497',
+    href: '/products/standoff-250-hex-x-497',
+    handle: 'standoff-250-hex-x-497',
+    description:
+      'STANDOFF . 250 HEX x . 497 is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: STANDOFF . 250 HEX x . 497. 00 Fulfillment:…',
+    skus: ['251-9615-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Stdoff,M/F,Hex,4-40,.275"Thrds,.195"L,SS/P,w/Nyl',
+    href: '/products/stdoff-m-f-hex-4-40-275thrds-195l-ss-p-w-nyl',
+    handle: 'stdoff-m-f-hex-4-40-275thrds-195l-ss-p-w-nyl',
+    description:
+      'Stdoff,M/F,Hex,4-40,. 275"Thrds,. 195"L,SS/P,w/NylGarmin part number 214-00023-11. Catalog description: Stdoff,M/F,Hex,4-40,. 275"Thrds,. 195"L,SS/P,w/Nyl. Garmin product or accessory. Confirm compatibility and intended application before…',
+    skus: ['214-00023-11'],
+  },
+  {
+    group: 'Products',
+    title: 'Strain Relief, Circular, M85049/38S17N',
+    href: '/products/strain-relief-circular-m85049-38s17n',
+    handle: 'strain-relief-circular-m85049-38s17n',
+    description:
+      'Strain Relief, Circular, M85049/38S17NGarmin part number 330-90007-01. Catalog description: Strain Relief, Circular, M85049/38S17N. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-90007-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Strain Relief, Circular, M85049/38S19N',
+    href: '/products/strain-relief-circular-m85049-38s19n',
+    handle: 'strain-relief-circular-m85049-38s19n',
+    description:
+      'Strain Relief, Circular, M85049/38S19NGarmin part number 330-90007-02. Catalog description: Strain Relief, Circular, M85049/38S19N. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['330-90007-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub Assy, Conn Kit, GSU 75',
+    href: '/products/sub-assy-conn-kit-gsu-75',
+    handle: 'sub-assy-conn-kit-gsu-75',
+    description:
+      'Sub Assy, Conn Kit, GSU 75Garmin part number 011-03109-00. Catalog description: Sub Assy, Conn Kit, GSU 75. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['011-03109-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub Assy, GTX 3000 rack',
+    href: '/products/sub-assy-gtx-3000-rack',
+    handle: 'sub-assy-gtx-3000-rack',
+    description:
+      'Sub Assy, GTX 3000 rackGarmin part number 011-02515-00. Catalog description: Sub Assy, GTX 3000 rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02515-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub Assy, Vertical Mount Kit, GTX3x5',
+    href: '/products/sub-assy-vertical-mount-kit-gtx3x5',
+    handle: 'sub-assy-vertical-mount-kit-gtx3x5',
+    description:
+      'Sub Assy, Vertical Mount Kit, GTX3x5Garmin part number 011-03762-00. Catalog description: GTX 3x5 Vertical Mount. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['011-03762-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub Assy,Backplate,GMA35',
+    href: '/products/sub-assy-backplate-gma35',
+    handle: 'sub-assy-backplate-gma35',
+    description:
+      'Sub Assy,Backplate,GMA35Garmin part number 011-02300-00. Catalog description: Sub Assy,Backplate,GMA35. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02300-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub Assy,Conn Kit,GMC605',
+    href: '/products/sub-assy-conn-kit-gmc605',
+    handle: 'sub-assy-conn-kit-gmc605',
+    description:
+      'Sub Assy,Conn Kit,GMC605Garmin part number 011-03296-00. Catalog description: Sub Assy,Conn Kit,GMC605. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-03296-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub Assy,CONN Kit,GRS 7800',
+    href: '/products/sub-assy-conn-kit-grs-7800',
+    handle: 'sub-assy-conn-kit-grs-7800',
+    description:
+      'Sub Assy,CONN Kit,GRS 7800Garmin part number 011-02343-00. Catalog description: Sub Assy,CONN Kit,GRS 7800. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['011-02343-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub Assy,GSR56H rack',
+    href: '/products/sub-assy-gsr56h-rack',
+    handle: 'sub-assy-gsr56h-rack',
+    description:
+      'Sub Assy,GSR56H rackGarmin part number 011-02435-00. Catalog description: Sub Assy,GSR56H rack. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['011-02435-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub Assy,Install Rack,GMA35',
+    href: '/products/sub-assy-install-rack-gma35',
+    handle: 'sub-assy-install-rack-gma35',
+    description:
+      'Sub Assy,Install Rack,GMA35Garmin part number 011-02645-00. Catalog description: Sub Assy,Install Rack,GMA35. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02645-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Altitude Encoder GAE 12',
+    href: '/products/sub-assy-altitude-encoder-gae-12',
+    handle: 'sub-assy-altitude-encoder-gae-12',
+    description:
+      'Sub-Assy, Altitude Encoder GAE 12Garmin part number 011-03080-00. Catalog description: GAE 12 Altitude Encoder. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['011-03080-00'],
+  },
+  {
+    group: 'Products',
     title: 'Sub-Assy, AP Disc/Trim Int Switch',
     href: '/products/sub-assy-ap-disc-trim-int-switch',
     handle: 'sub-assy-ap-disc-trim-int-switch',
     description:
       'Garmin AP DISC/TRIM INT Switch Sub-AssemblyGarmin part number 011-04895-00. Identity and compatibilityGarmin GFC 500 principal installation manual 190-02291-00 Revision 34 identifies this exact AP DISC/TRIM INT switch kit. Revision A and…',
     skus: ['011-04895-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Backplate, GDL88H',
+    href: '/products/sub-assy-backplate-gdl88h',
+    handle: 'sub-assy-backplate-gdl88h',
+    description:
+      'Sub-Assy, Backplate, GDL88HGarmin part number 011-01718-40. Catalog description: Back Plate, GDL88H. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-01718-40'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Backplate, GDL88H, w/GPS',
+    href: '/products/sub-assy-backplate-gdl88h-w-gps',
+    handle: 'sub-assy-backplate-gdl88h-w-gps',
+    description:
+      'Sub-Assy, Backplate, GDL88H, w/GPSGarmin part number 011-01718-50. Catalog description: Back Plate,GDL88H with WAAS or GDL 84H with WAAS. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['011-01718-50'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Backplate, GDL88HD',
+    href: '/products/sub-assy-backplate-gdl88hd',
+    handle: 'sub-assy-backplate-gdl88hd',
+    description:
+      'Sub-Assy, Backplate, GDL88HDGarmin part number 011-01718-60. Catalog description: Back Plate, GDL88HD. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-01718-60'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Backplate, GDL88HD, w/GPS',
+    href: '/products/sub-assy-backplate-gdl88hd-w-gps',
+    handle: 'sub-assy-backplate-gdl88hd-w-gps',
+    description:
+      'Sub-Assy, Backplate, GDL88HD, w/GPSGarmin part number 011-01718-70. Catalog description: Back Plate, GDL88HD with WAAS. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-01718-70'],
+  },
+  {
+    group: 'Products',
+    title: 'SUB-ASSY, BACKPLATE, GNC355',
+    href: '/products/sub-assy-backplate-gnc355',
+    handle: 'sub-assy-backplate-gnc355',
+    description:
+      'SUB-ASSY, BACKPLATE, GNC355Garmin part number 011-04994-00. Catalog description: SUB-ASSY, BACKPLATE, GNC355. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-04994-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Backplate, GNX375',
+    href: '/products/sub-assy-backplate-gnx375',
+    handle: 'sub-assy-backplate-gnx375',
+    description:
+      'Sub-Assy, Backplate, GNX375Garmin part number 011-04781-00. Catalog description: Sub-Assy, Backplate, GNX375. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-04781-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Backplate, GPS175, Fixed Wing',
+    href: '/products/sub-assy-backplate-gps175-fixed-wing',
+    handle: 'sub-assy-backplate-gps175-fixed-wing',
+    description:
+      'Sub-Assy, Backplate, GPS175, Fixed WingGarmin part number 011-04780-01. Catalog description: Sub-Assy, Backplate, GPS175, Fixed Wing. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['011-04780-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Backplate, GTX 330',
+    href: '/products/sub-assy-backplate-gtx-330',
+    handle: 'sub-assy-backplate-gtx-330',
+    description:
+      'Sub-Assy, Backplate, GTX 330Garmin part number 011-00582-00. Catalog description: Sub-Assy, Backplate, GTX 330. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-00582-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Bridle Cable Clamp, .063',
+    href: '/products/sub-assy-bridle-cable-clamp-063',
+    handle: 'sub-assy-bridle-cable-clamp-063',
+    description:
+      'Sub-Assy, Bridle Cable Clamp, . 063Garmin part number 011-04888-00. Catalog description: Sub-Assy, Bridle Cable Clamp, . 063. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-04888-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Bridle Cable Clamp, .125',
+    href: '/products/sub-assy-bridle-cable-clamp-125',
+    handle: 'sub-assy-bridle-cable-clamp-125',
+    description:
+      'Sub-Assy, Bridle Cable Clamp, . 125Garmin part number 011-04888-01. Catalog description: Sub-Assy, Bridle Cable Clamp, . 125. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-04888-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Bridle Cable Clamp, .156',
+    href: '/products/sub-assy-bridle-cable-clamp-156',
+    handle: 'sub-assy-bridle-cable-clamp-156',
+    description:
+      'Sub-Assy, Bridle Cable Clamp, . 156Garmin part number 011-04888-02. Catalog description: Sub-Assy, Bridle Cable Clamp, . 156. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-04888-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Bridle Cable Clamp, CS, .125',
+    href: '/products/sub-assy-bridle-cable-clamp-cs-125-011-04888-03',
+    handle: 'sub-assy-bridle-cable-clamp-cs-125-011-04888-03',
+    description:
+      'Genuine Garmin product. Manufacturer part number 011-04888-03.',
+    skus: ['011-04888-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, CLAMP, CABLE, AIRCRAFT CONTROL, .125',
+    href: '/products/sub-assy-clamp-cable-aircraft-control-125',
+    handle: 'sub-assy-clamp-cable-aircraft-control-125',
+    description:
+      'Sub-Assy, CLAMP, CABLE, AIRCRAFT CONTROL, . 125Garmin part number 011-04888-08. Catalog description: Sub-Assy, CLAMP, CABLE, AIRCRAFT CONTROL, . 125. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin…',
+    skus: ['011-04888-08'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Complete Connector Kit, GDL 60, 90 Deg',
+    href: '/products/garmin-sub-assy-complete-connector-kit-gdl-60-90-deg-011-06440-01',
+    handle: 'garmin-sub-assy-complete-connector-kit-gdl-60-90-deg-011-06440-01',
+    description:
+      'Sub-Assy, Complete Connector Kit, GDL 60, 90 DegGarmin part number 011-06440-01.',
+    skus: ['011-06440-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, 90 Deg, GTX 3000',
+    href: '/products/sub-assy-conn-kit-90-deg-gtx-3000',
+    handle: 'sub-assy-conn-kit-90-deg-gtx-3000',
+    description:
+      'Sub-Assy, Conn Kit, 90 Deg, GTX 3000Garmin part number 011-02019-01. Catalog description: Sub-Assy, Conn Kit, 90 Deg, GTX 3000. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['011-02019-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GAD 27',
+    href: '/products/sub-assy-conn-kit-gad-27',
+    handle: 'sub-assy-conn-kit-gad-27',
+    description:
+      'Sub-Assy, Conn Kit, GAD 27Garmin part number 011-03877-00. Catalog description: Sub-Assy, Conn Kit, GAD 27. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-03877-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GAD 27, FAA-PMA',
+    href: '/products/sub-assy-conn-kit-gad-27-faa-pma',
+    handle: 'sub-assy-conn-kit-gad-27-faa-pma',
+    description:
+      'Sub-Assy, Conn Kit, GAD 27, FAA-PMAGarmin part number 011-03877-01. Catalog description: Sub-Assy, Conn Kit, GAD 27, FAA-PMA. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['011-03877-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GAD 29',
+    href: '/products/sub-assy-conn-kit-gad-29',
+    handle: 'sub-assy-conn-kit-gad-29',
+    description:
+      'Sub-Assy, Conn Kit, GAD 29Garmin part number 011-03271-00. Catalog description: Sub-Assy, Conn Kit, GAD 29. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-03271-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GAD43+',
+    href: '/products/sub-assy-conn-kit-gad43',
+    handle: 'sub-assy-conn-kit-gad43',
+    description:
+      'Sub-Assy, Conn Kit, GAD43+Garmin part number 011-02350-00. Catalog description: Sub-Assy, Conn Kit, GAD43+. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02350-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GEA 24, FAA-PMA',
+    href: '/products/sub-assy-conn-kit-gea-24-faa-pma',
+    handle: 'sub-assy-conn-kit-gea-24-faa-pma',
+    description:
+      'Sub-Assy, Conn Kit, GEA 24, FAA-PMAGarmin part number 011-02886-01. Catalog description: Sub-Assy, Conn Kit, GEA 24, FAA-PMA. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['011-02886-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GPS 3000',
+    href: '/products/sub-assy-conn-kit-gps-3000',
+    handle: 'sub-assy-conn-kit-gps-3000',
+    description:
+      'Sub-Assy, Conn Kit, GPS 3000Garmin part number 011-04433-00. Catalog description: Sub-Assy, Conn Kit, GPS 3000. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['011-04433-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GSA28',
+    href: '/products/sub-assy-conn-kit-gsa28',
+    handle: 'sub-assy-conn-kit-gsa28',
+    description:
+      'Sub-Assy, Conn Kit, GSA28Garmin part number 011-02950-00. Catalog description: Sub-Assy, Conn Kit, GSA28. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['011-02950-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GSA28, 90 Deg',
+    href: '/products/sub-assy-conn-kit-gsa28-90-deg',
+    handle: 'sub-assy-conn-kit-gsa28-90-deg',
+    description:
+      'Sub-Assy, Conn Kit, GSA28, 90 DegGarmin part number 011-02950-01. Catalog description: Sub-Assy, Conn Kit, GSA28, 90 Deg. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-02950-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GSA28, FAA-PMA',
+    href: '/products/sub-assy-conn-kit-gsa28-faa-pma',
+    handle: 'sub-assy-conn-kit-gsa28-faa-pma',
+    description:
+      'Sub-Assy, Conn Kit, GSA28, FAA-PMAGarmin part number 011-04755-00. Catalog description: Sub-Assy, Conn Kit, GSA28, FAA-PMA. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-04755-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GTR20',
+    href: '/products/sub-assy-conn-kit-gtr20',
+    handle: 'sub-assy-conn-kit-gtr20',
+    description:
+      'Sub-Assy, Conn Kit, GTR20Garmin part number 011-03241-00. Catalog description: Sub-Assy, Conn Kit, GTR20. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-03241-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GTR200',
+    href: '/products/sub-assy-conn-kit-gtr200',
+    handle: 'sub-assy-conn-kit-gtr200',
+    description:
+      'Sub-Assy, Conn Kit, GTR200Garmin part number 011-03240-00. Catalog description: Sub-Assy, Conn Kit, GTR200. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-03240-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, GTR200,PMA',
+    href: '/products/garmin-sub-assy-conn-kit-gtr200-pma-011-03240-01',
+    handle: 'garmin-sub-assy-conn-kit-gtr200-pma-011-03240-01',
+    description:
+      'Sub-Assy, Conn Kit, GTR200,PMAGarmin part number 011-03240-01.',
+    skus: ['011-03240-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Conn Kit, SB, GEA 71',
+    href: '/products/sub-assy-conn-kit-sb-gea-71',
+    handle: 'sub-assy-conn-kit-sb-gea-71',
+    description:
+      'Sub-Assy, Conn Kit, SB, GEA 71Garmin part number 011-00797-03. Catalog description: Sub-Assy, Conn Kit, SB, GEA 71. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-00797-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Connector Kit w/ Config & USB Pigtail, GRA 5500',
+    href: '/products/sub-assy-connector-kit-w-config-usb-pigtail-gra-5500',
+    handle: 'sub-assy-connector-kit-w-config-usb-pigtail-gra-5500',
+    description:
+      'Sub-Assy, Connector Kit w/ Config & USB Pigtail, GRA 5500Garmin part number 011-02573-01. Catalog description: Sub-Assy, Connector Kit w/ Config & USB Pigtail, GRA 5500. Certified Garmin avionics may require approved installation,…',
+    skus: ['011-02573-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Connector Kit, GDL 50R/52R',
+    href: '/products/sub-assy-connector-kit-gdl-50r-52r',
+    handle: 'sub-assy-connector-kit-gdl-50r-52r',
+    description:
+      'Sub-Assy, Connector Kit, GDL 50R/52RGarmin part number 011-04170-00. Catalog description: Sub-Assy, Connector Kit, GDL 50R/52R. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['011-04170-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Connector Kit, GDL 60',
+    href: '/products/garmin-sub-assy-connector-kit-gdl-60-011-05129-00',
+    handle: 'garmin-sub-assy-connector-kit-gdl-60-011-05129-00',
+    description:
+      'Sub-Assy, Connector Kit, GDL 60Garmin part number 011-05129-00.',
+    skus: ['011-05129-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Connector Kit, GDL 60, 90 Deg',
+    href: '/products/sub-assy-connector-kit-gdl-60-90-deg',
+    handle: 'sub-assy-connector-kit-gdl-60-90-deg',
+    description:
+      'Sub-Assy, Connector Kit, GDL 60, 90 DegGarmin part number 011-05129-01. Catalog description: Sub-Assy, Connector Kit, GDL 60, 90 Deg. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['011-05129-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Connector Kit, GNX375',
+    href: '/products/sub-assy-connector-kit-gnx375',
+    handle: 'sub-assy-connector-kit-gnx375',
+    description:
+      'Sub-Assy, Connector Kit, GNX375Garmin part number 011-04779-01. Catalog description: Sub-Assy, Connector Kit, GNX375. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-04779-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Connector Kit, GSB 15',
+    href: '/products/sub-assy-connector-kit-gsb-15',
+    handle: 'sub-assy-connector-kit-gsb-15',
+    description:
+      'Sub-Assy, Connector Kit, GSB 15Garmin part number 011-05044-00. Catalog description: Sub-Assy, Connector Kit, GSB 15. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['011-05044-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Connector Kit, GTR205/GTR25R',
+    href: '/products/sub-assy-connector-kit-gtr205-gtr25r',
+    handle: 'sub-assy-connector-kit-gtr205-gtr25r',
+    description:
+      'Sub-Assy, Connector Kit, GTR205/GTR25RGarmin part number 011-05779-10. Catalog description: Sub-Assy, Connector Kit, GTR205/GTR25R. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['011-05779-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, GDC 7400 Connector Kit',
+    href: '/products/sub-assy-gdc-7400-connector-kit',
+    handle: 'sub-assy-gdc-7400-connector-kit',
+    description:
+      'Sub-Assy, GDC 7400 Connector KitGarmin part number 011-02364-00. Catalog description: Sub-Assy, GDC 7400 Connector Kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['011-02364-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, GDC 7400 Mounting Rack',
+    href: '/products/sub-assy-gdc-7400-mounting-rack',
+    handle: 'sub-assy-gdc-7400-mounting-rack',
+    description:
+      'Sub-Assy, GDC 7400 Mounting RackGarmin part number 011-02363-00. Catalog description: Sub-Assy, GDC 7400 Mounting Rack. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['011-02363-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, GEA 71B, Unit Only',
+    href: '/products/sub-assy-gea-71b-unit-only',
+    handle: 'sub-assy-gea-71b-unit-only',
+    description:
+      'Sub-Assy, GEA 71B, Unit OnlyGarmin part number 010-01405-05. Catalog description: Sub-Assy, GEA 71B, Unit Only. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['010-01405-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, GFC600 control head kit',
+    href: '/products/garmin-sub-assy-gfc600-control-head-kit-011-04945-00',
+    handle: 'garmin-sub-assy-gfc600-control-head-kit-011-04945-00',
+    description:
+      'Sub-Assy, GFC600 control head kitGarmin part number 011-04945-00.',
+    skus: ['011-04945-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, GMC Air Data Module',
+    href: '/products/sub-assy-gmc-air-data-module',
+    handle: 'sub-assy-gmc-air-data-module',
+    description:
+      'Sub-Assy, GMC Air Data ModuleGarmin part number 011-04426-00. Catalog description: Sub-Assy, GMC Air Data Module. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment…',
+    skus: ['011-04426-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, GMU 44B, Conn Kit',
+    href: '/products/sub-assy-gmu-44b-conn-kit',
+    handle: 'sub-assy-gmu-44b-conn-kit',
+    description:
+      'Sub-Assy, GMU 44B, Conn KitGarmin part number 011-04205-00. Catalog description: Sub-Assy, GMU 44B, Conn Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-04205-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, GRA 5500 Mounting Rack',
+    href: '/products/sub-assy-gra-5500-mounting-rack',
+    handle: 'sub-assy-gra-5500-mounting-rack',
+    description:
+      'Sub-Assy, GRA 5500 Mounting RackGarmin part number 011-02567-00. Catalog description: Sub-Assy, GRA 5500 Mounting Rack. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-02567-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, GRS 7800 Remote Install Rack',
+    href: '/products/garmin-sub-assy-grs-7800-remote-install-rack-011-02342-00',
+    handle: 'garmin-sub-assy-grs-7800-remote-install-rack-011-02342-00',
+    description:
+      'Sub-Assy, GRS 7800 Remote Install RackGarmin part number 011-02342-00. Confirm compatibility and availability before ordering.',
+    skus: ['011-02342-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, GSA28 Mounting Kit, RV-10 Yaw',
+    href: '/products/sub-assy-gsa28-mounting-kit-rv-10-yaw',
+    handle: 'sub-assy-gsa28-mounting-kit-rv-10-yaw',
+    description:
+      'Sub-Assy, GSA28 Mounting Kit, RV-10 YawGarmin part number 011-02952-16. Catalog description: Sub-Assy, GSA28 Mounting Kit, RV-10 Yaw. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['011-02952-16'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, GTX 3x5D, Backplate, Vert Mount, TNC',
+    href: '/products/sub-assy-gtx-3x5d-backplate-vert-mount-tnc',
+    handle: 'sub-assy-gtx-3x5d-backplate-vert-mount-tnc',
+    description:
+      'Sub-Assy, GTX 3x5D, Backplate, Vert Mount, TNCGarmin part number 011-04340-11. Catalog description: Sub-Assy, GTX 3x5D, Backplate, Vert Mount, TNC. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['011-04340-11'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, GTX3x5D, Backplate, Vert Mount',
+    href: '/products/sub-assy-gtx3x5d-backplate-vert-mount',
+    handle: 'sub-assy-gtx3x5d-backplate-vert-mount',
+    description:
+      'Sub-Assy, GTX3x5D, Backplate, Vert MountGarmin part number 011-04340-10. Catalog description: GTX 3x5D, Backplate, Vertical Mount. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['011-04340-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Hardware Kit, Cessna 210-5',
+    href: '/products/garmin-sub-assy-hardware-kit-cessna-210-5-011-05839-0j',
+    handle: 'garmin-sub-assy-hardware-kit-cessna-210-5-011-05839-0j',
+    description:
+      'Sub-Assy, Hardware Kit, Cessna 210-5Garmin part number 011-05839-0J. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-0J'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Hardware Kit, Piper PA-34',
+    href: '/products/sub-assy-hardware-kit-piper-pa-34',
+    handle: 'sub-assy-hardware-kit-piper-pa-34',
+    description:
+      'Sub-Assy, Hardware Kit, Piper PA-34Garmin part number 011-05839-0G. Catalog description: Sub-Assy, Hardware Kit, Piper PA-34. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-05839-0G'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Hardware Kit, Textron Aviation 190/195',
+    href: '/products/garmin-sub-assy-hardware-kit-textron-aviation-190-195-011-05839-0q',
+    handle:
+      'garmin-sub-assy-hardware-kit-textron-aviation-190-195-011-05839-0q',
+    description:
+      'Sub-Assy, Hardware Kit, Textron Aviation 190/195Garmin part number 011-05839-0Q. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-0Q'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Hardware Kit, Textron Aviation A45/D45 (T-34)',
+    href: '/products/garmin-sub-assy-hardware-kit-textron-aviation-a45-d45-t-34-011-05839-0e',
+    handle:
+      'garmin-sub-assy-hardware-kit-textron-aviation-a45-d45-t-34-011-05839-0e',
+    description:
+      'Sub-Assy, Hardware Kit, Textron Aviation A45/D45 (T-34)Garmin part number 011-05839-0E. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-0E'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Helicopter Rack, GTX33',
+    href: '/products/sub-assy-helicopter-rack-gtx33',
+    handle: 'sub-assy-helicopter-rack-gtx33',
+    description:
+      'Sub-Assy, Helicopter Rack, GTX33Garmin part number 011-02422-00. Catalog description: Sub-Assy, Helicopter Rack, GTX33. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-02422-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Install Kit, GSA28, Generic',
+    href: '/products/sub-assy-install-kit-gsa28-generic',
+    handle: 'sub-assy-install-kit-gsa28-generic',
+    description:
+      'Sub-Assy, Install Kit, GSA28, GenericGarmin part number 011-02952-00. Catalog description: Sub-Assy, Install Kit, GSA28, Generic. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-02952-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Install Kit, GSA28, Generic, Capstan',
+    href: '/products/sub-assy-install-kit-gsa28-generic-capstan',
+    handle: 'sub-assy-install-kit-gsa28-generic-capstan',
+    description:
+      'Sub-Assy, Install Kit, GSA28, Generic, CapstanGarmin part number 011-02952-02. Catalog description: Sub-Assy, Install Kit, GSA28, Generic, Capstan. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin…',
+    skus: ['011-02952-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Install Kit, GSA28, Generic, W/Bracket',
+    href: '/products/sub-assy-install-kit-gsa28-generic-w-bracket',
+    handle: 'sub-assy-install-kit-gsa28-generic-w-bracket',
+    description:
+      'Sub-Assy, Install Kit, GSA28, Generic, W/BracketGarmin part number 011-02952-01. Catalog description: Sub-Assy, Install Kit, GSA28, Generic, W/Bracket. Garmin avionics accessory or service part. Confirm compatibility with the target…',
+    skus: ['011-02952-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Install Kit, GSA28, RV-10 Pitch',
+    href: '/products/sub-assy-install-kit-gsa28-rv-10-pitch',
+    handle: 'sub-assy-install-kit-gsa28-rv-10-pitch',
+    description:
+      'Sub-Assy, Install Kit, GSA28, RV-10 PitchGarmin part number 011-02952-15. Catalog description: Sub-Assy, Install Kit, GSA28, RV-10 Pitch. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['011-02952-15'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Install Kit, GSA28, RV-4/8 Pitch',
+    href: '/products/sub-assy-install-kit-gsa28-rv-4-8-pitch',
+    handle: 'sub-assy-install-kit-gsa28-rv-4-8-pitch',
+    description:
+      'Sub-Assy, Install Kit, GSA28, RV-4/8 PitchGarmin part number 011-02952-11. Catalog description: Sub-Assy, Install Kit, GSA28, RV-4/8 Pitch. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['011-02952-11'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Install Kit, GSA28, RV-6 Roll',
+    href: '/products/sub-assy-install-kit-gsa28-rv-6-roll',
+    handle: 'sub-assy-install-kit-gsa28-rv-6-roll',
+    description:
+      'Sub-Assy, Install Kit, GSA28, RV-6 RollGarmin part number 011-02952-10. Catalog description: Sub-Assy, Install Kit, GSA28, RV-6 Roll. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['011-02952-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Install Kit, GSA28, RV-6/7/9 Pitch',
+    href: '/products/sub-assy-install-kit-gsa28-rv-6-7-9-pitch',
+    handle: 'sub-assy-install-kit-gsa28-rv-6-7-9-pitch',
+    description:
+      'Sub-Assy, Install Kit, GSA28, RV-6/7/9 PitchGarmin part number 011-02952-14. Catalog description: Sub-Assy, Install Kit, GSA28, RV-6/7/9 Pitch. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit…',
+    skus: ['011-02952-14'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Install Kit, GSA28, RV-7/8/10 Roll',
+    href: '/products/sub-assy-install-kit-gsa28-rv-7-8-10-roll',
+    handle: 'sub-assy-install-kit-gsa28-rv-7-8-10-roll',
+    description:
+      'Sub-Assy, Install Kit, GSA28, RV-7/8/10 RollGarmin part number 011-02952-12. Catalog description: Sub-Assy, Install Kit, GSA28, RV-7/8/10 Roll. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit…',
+    skus: ['011-02952-12'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Install Kit, GSA28, RV-9 Roll',
+    href: '/products/sub-assy-install-kit-gsa28-rv-9-roll',
+    handle: 'sub-assy-install-kit-gsa28-rv-9-roll',
+    description:
+      'Sub-Assy, Install Kit, GSA28, RV-9 RollGarmin part number 011-02952-13. Catalog description: Sub-Assy, Install Kit, GSA28, RV-9 Roll. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['011-02952-13'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, KI256 Adapter Kit, GI275',
+    href: '/products/sub-assy-ki256-adapter-kit-gi275',
+    handle: 'sub-assy-ki256-adapter-kit-gi275',
+    description:
+      'Sub-Assy, KI256 Adapter Kit, GI275Garmin part number 011-05285-00. Catalog description: Sub-Assy, KI256 Adapter Kit, GI275. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-05285-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Mount HW, Captive Screw',
+    href: '/products/sub-assy-mount-hw-captive-screw',
+    handle: 'sub-assy-mount-hw-captive-screw',
+    description:
+      'Sub-Assy, Mount HW, Captive ScrewGarmin part number 011-00821-31. Catalog description: Sub-Assy, Mount HW, Captive Screw. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-00821-31'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Remote Rack Kit, GDL88H',
+    href: '/products/sub-assy-remote-rack-kit-gdl88h',
+    handle: 'sub-assy-remote-rack-kit-gdl88h',
+    description:
+      'Sub-Assy, Remote Rack Kit, GDL88HGarmin part number 011-02621-A0. Catalog description: Install Rack, GDL 88H. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02621-A0'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy, Sgl BkPlt Key A, GEA 71',
+    href: '/products/sub-assy-sgl-bkplt-key-a-gea-71',
+    handle: 'sub-assy-sgl-bkplt-key-a-gea-71',
+    description:
+      'Sub-Assy, Sgl BkPlt Key A, GEA 71Garmin part number 011-00796-00. Catalog description: Sub-Assy, Sgl BkPlt Key A, GEA 71. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-00796-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Audio Cables,3.5mm RA',
+    href: '/products/sub-assy-audio-cables-3-5mm-ra',
+    handle: 'sub-assy-audio-cables-3-5mm-ra',
+    description:
+      'Sub-Assy,Audio Cables,3. 5mm RAGarmin part number 011-02412-00. Catalog description: Sub-Assy,Audio Cables,3. 5mm RA. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['011-02412-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Back Plate,GDL88',
+    href: '/products/sub-assy-back-plate-gdl88',
+    handle: 'sub-assy-back-plate-gdl88',
+    description:
+      'Sub-Assy,Back Plate,GDL88Garmin part number 011-01718-00. Catalog description: Back Plate,GDL88 or GDL 84. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-01718-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Back Plate,GDL88 W/GPS',
+    href: '/products/sub-assy-back-plate-gdl88-w-gps',
+    handle: 'sub-assy-back-plate-gdl88-w-gps',
+    description:
+      'Sub-Assy,Back Plate,GDL88 W/GPSGarmin part number 011-01718-10. Catalog description: Sub-Assy,Back Plate,GDL88 W/GPS. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-01718-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Back Plate,GNC255',
+    href: '/products/sub-assy-back-plate-gnc255',
+    handle: 'sub-assy-back-plate-gnc255',
+    description:
+      'Sub-Assy,Back Plate,GNC255Garmin part number 011-02722-10. Catalog description: Sub-Assy,Back Plate,GNC255. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02722-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Back Plate,GTR225',
+    href: '/products/sub-assy-back-plate-gtr225',
+    handle: 'sub-assy-back-plate-gtr225',
+    description:
+      'Sub-Assy,Back Plate,GTR225Garmin part number 011-02722-00. Catalog description: Sub-Assy,Back Plate,GTR225. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02722-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Backplate,GNC215',
+    href: '/products/sub-assy-backplate-gnc215',
+    handle: 'sub-assy-backplate-gnc215',
+    description:
+      'Sub-Assy,Backplate,GNC215Garmin part number 011-05691-10. Catalog description: Sub-Assy,Backplate,GNC215. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-05691-10'],
   },
   {
     group: 'Products',
@@ -5242,6 +15628,239 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Sub-Assy,Bkshl w/Hdw,9/15 Pin',
+    href: '/products/sub-assy-bkshl-w-hdw-9-15-pin',
+    handle: 'sub-assy-bkshl-w-hdw-9-15-pin',
+    description:
+      'Sub-Assy,Bkshl w/Hdw,9/15 PinGarmin part number 011-00950-00. Catalog description: Sub-Assy,Bkshl w/Hdw,9/15 Pin. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['011-00950-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,bkshl w/Hdw,Jackscrew,9/15 Pin',
+    href: '/products/sub-assy-bkshl-w-hdw-jackscrew-9-15-pin',
+    handle: 'sub-assy-bkshl-w-hdw-jackscrew-9-15-pin',
+    description:
+      'Sub-Assy,bkshl w/Hdw,Jackscrew,9/15 PinGarmin part number 011-01855-00. Catalog description: Sub-Assy,bkshl w/Hdw,Jackscrew,9/15 Pin. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['011-01855-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Bluetooth Antenna Kit',
+    href: '/products/sub-assy-bluetooth-antenna-kit',
+    handle: 'sub-assy-bluetooth-antenna-kit',
+    description:
+      'Sub-Assy,Bluetooth Antenna KitGarmin part number 011-03909-00. Catalog description: Sub-Assy,Bluetooth Antenna Kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['011-03909-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,CAN termination kit',
+    href: '/products/sub-assy-can-termination-kit',
+    handle: 'sub-assy-can-termination-kit',
+    description:
+      'Sub-Assy,CAN termination kitGarmin part number 011-02887-00. Catalog description: Sub-Assy,CAN termination kit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['011-02887-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Config Mdl,w/EEPROM,Jackscrew',
+    href: '/products/sub-assy-config-mdl-w-eeprom-jackscrew',
+    handle: 'sub-assy-config-mdl-w-eeprom-jackscrew',
+    description:
+      'Sub-Assy,Config Mdl,w/EEPROM,JackscrewGarmin part number 011-00979-20. Catalog description: GWX Configuration Module. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['011-00979-20'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Config Mdl,w/EEPROM,Jackscrew,2Mbit',
+    href: '/products/sub-assy-config-mdl-w-eeprom-jackscrew-2mbit',
+    handle: 'sub-assy-config-mdl-w-eeprom-jackscrew-2mbit',
+    description:
+      'Sub-Assy,Config Mdl,w/EEPROM,Jackscrew,2MbitGarmin part number 011-04038-00. Catalog description: Sub-Assy,Config Mdl,w/EEPROM,Jackscrew,2Mbit. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit…',
+    skus: ['011-04038-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Config Mdl,w/EEPROM,Jackscrew,Teflon harness',
+    href: '/products/sub-assy-config-mdl-w-eeprom-jackscrew-teflon-harness',
+    handle: 'sub-assy-config-mdl-w-eeprom-jackscrew-teflon-harness',
+    description:
+      'Sub-Assy,Config Mdl,w/EEPROM,Jackscrew,Teflon harnessGarmin part number 011-00979-17. Catalog description: Sub-Assy,Config Mdl,w/EEPROM,Jackscrew,Teflon harness. Garmin avionics accessory or service part. Confirm compatibility with the…',
+    skus: ['011-00979-17'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit 2, GI275',
+    href: '/products/sub-assy-conn-kit-2-gi275',
+    handle: 'sub-assy-conn-kit-2-gi275',
+    description:
+      'Sub-Assy,Conn Kit 2, GI275Garmin part number 011-04809-01. Catalog description: Sub-Assy,Conn Kit 2, GI275. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['011-04809-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit, GDU 700',
+    href: '/products/sub-assy-conn-kit-gdu-700',
+    handle: 'sub-assy-conn-kit-gdu-700',
+    description:
+      'Sub-Assy,Conn Kit, GDU 700Garmin part number 011-03527-00. Catalog description: Sub-Assy,Conn Kit, GDU 700. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-03527-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit, GI275',
+    href: '/products/sub-assy-conn-kit-gi275',
+    handle: 'sub-assy-conn-kit-gi275',
+    description:
+      'Sub-Assy,Conn Kit, GI275Garmin part number 011-04809-00. Catalog description: Sub-Assy,Conn Kit, GI275. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['011-04809-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit,15 Pin,Hi Den Male,w/Jackscrews',
+    href: '/products/sub-assy-conn-kit-15-pin-hi-den-male-w-jackscrews',
+    handle: 'sub-assy-conn-kit-15-pin-hi-den-male-w-jackscrews',
+    description:
+      'Sub-Assy,Conn Kit,15 Pin,Hi Den Male,w/JackscrewsGarmin part number 011-01824-01. Catalog description: Sub-Assy,Conn Kit,15 Pin,Hi Den Male,w/Jackscrews. Garmin avionics accessory or service part. Confirm compatibility with the target…',
+    skus: ['011-01824-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit,GAD43',
+    href: '/products/garmin-sub-assy-conn-kit-gad43-011-01990-00',
+    handle: 'garmin-sub-assy-conn-kit-gad43-011-01990-00',
+    description: 'Sub-Assy,Conn Kit,GAD43Garmin part number 011-01990-00.',
+    skus: ['011-01990-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit,GDL 82',
+    href: '/products/sub-assy-conn-kit-gdl-82',
+    handle: 'sub-assy-conn-kit-gdl-82',
+    description:
+      'Sub-Assy,Conn Kit,GDL 82Garmin part number 011-03945-00. Catalog description: Sub-Assy,Conn Kit,GDL 82. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-03945-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit,GDL88',
+    href: '/products/sub-assy-conn-kit-gdl88',
+    handle: 'sub-assy-conn-kit-gdl88',
+    description:
+      'Sub-Assy,Conn Kit,GDL88Garmin part number 011-02375-00. Catalog description: Conn Kit, GDL 88/84. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02375-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit,GEA24',
+    href: '/products/sub-assy-conn-kit-gea24',
+    handle: 'sub-assy-conn-kit-gea24',
+    description:
+      'Sub-Assy,Conn Kit,GEA24Garmin part number 011-02886-00. Catalog description: Sub-Assy,Conn Kit,GEA24. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02886-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit,GNC255',
+    href: '/products/sub-assy-conn-kit-gnc255',
+    handle: 'sub-assy-conn-kit-gnc255',
+    description:
+      'Sub-Assy,Conn Kit,GNC255Garmin part number 011-02721-10. Catalog description: Sub-Assy,Conn Kit,GNC255. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02721-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit,GTR225',
+    href: '/products/sub-assy-conn-kit-gtr225',
+    handle: 'sub-assy-conn-kit-gtr225',
+    description:
+      'Sub-Assy,Conn Kit,GTR225Garmin part number 011-02721-00. Catalog description: Sub-Assy,Conn Kit,GTR225. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02721-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit,GTX35',
+    href: '/products/sub-assy-conn-kit-gtx35',
+    handle: 'sub-assy-conn-kit-gtx35',
+    description:
+      'Sub-Assy,Conn Kit,GTX35Garmin part number 011-02019-00. Catalog description: Sub-Assy,Conn Kit,GTX3000. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02019-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit,SB,GDL69',
+    href: '/products/sub-assy-conn-kit-sb-gdl69',
+    handle: 'sub-assy-conn-kit-sb-gdl69',
+    description:
+      'Sub-Assy,Conn Kit,SB,GDL69Garmin part number 011-00997-01. Catalog description: Sub-Assy,Conn Kit,SB,GDL69. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-00997-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit,SB,GTX32',
+    href: '/products/sub-assy-conn-kit-sb-gtx32',
+    handle: 'sub-assy-conn-kit-sb-gtx32',
+    description:
+      'Sub-Assy,Conn Kit,SB,GTX32Garmin part number 011-01013-01. Catalog description: Sub-Assy,Conn Kit,SB,GTX32. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-01013-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Conn Kit,SB,GTX33',
+    href: '/products/sub-assy-conn-kit-sb-gtx33',
+    handle: 'sub-assy-conn-kit-sb-gtx33',
+    description:
+      'Sub-Assy,Conn Kit,SB,GTX33Garmin part number 011-01012-01. Catalog description: Sub-Assy,Conn Kit,SB,GTX33. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-01012-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Connector Kit w/ Config & USB Pigtail,GTS8XX',
+    href: '/products/sub-assy-connector-kit-w-config-usb-pigtail-gts8xx',
+    handle: 'sub-assy-connector-kit-w-config-usb-pigtail-gts8xx',
+    description:
+      'Sub-Assy,Connector Kit w/ Config & USB Pigtail,GTS8XXGarmin part number 011-01360-01. Catalog description: Sub-Assy,Connector Kit w/ Config & USB Pigtail, GTS8XX. Certified Garmin avionics may require approved installation, configuration,…',
+    skus: ['011-01360-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Connector Kit w/Config&USB,Sealed,GTS Processor',
+    href: '/products/sub-assy-connector-kit-w-config-usb-sealed-gts-processor',
+    handle: 'sub-assy-connector-kit-w-config-usb-sealed-gts-processor',
+    description:
+      'Sub-Assy,Connector Kit w/Config&USB,Sealed,GTS ProcessorGarmin part number 011-01360-11. Catalog description: Sub-Assy, Connector Kit w/Config & USB, Sealed, GTS Processor. Certified Garmin avionics may require approved installation,…',
+    skus: ['011-01360-11'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Connector Kit,GTS8XX',
+    href: '/products/sub-assy-connector-kit-gts8xx',
+    handle: 'sub-assy-connector-kit-gts8xx',
+    description:
+      'Sub-Assy,Connector Kit,GTS8XXGarmin part number 011-01360-00. Catalog description: Sub-Assy,Connector Kit,GTS Processor. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-01360-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Connector Kit,Sealed,GTS Processor',
+    href: '/products/sub-assy-connector-kit-sealed-gts-processor',
+    handle: 'sub-assy-connector-kit-sealed-gts-processor',
+    description:
+      'Sub-Assy,Connector Kit,Sealed,GTS ProcessorGarmin part number 011-01360-10. Catalog description: Sub-Assy,Connector Kit,Sealed,GTS Processor. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['011-01360-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,GMU44,Mtg Bracket Kit,RV 7/9',
+    href: '/products/sub-assy-gmu44-mtg-bracket-kit-rv-7-9',
+    handle: 'sub-assy-gmu44-mtg-bracket-kit-rv-7-9',
+    description:
+      'Sub-Assy,GMU44,Mtg Bracket Kit,RV 7/9Garmin part number 011-01796-00. Catalog description: Sub-Assy,GMU44,Mtg Bracket Kit,RV 7/9. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['011-01796-00'],
+  },
+  {
+    group: 'Products',
     title: 'Sub-Assy,Grnd Adaptr,Shell 1-3',
     href: '/products/sub-assy-grnd-adaptr-shell-1-3',
     handle: 'sub-assy-grnd-adaptr-shell-1-3',
@@ -5251,12 +15870,321 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Sub-Assy,GTX325,Connector Kit',
+    href: '/products/sub-assy-gtx325-connector-kit',
+    handle: 'sub-assy-gtx325-connector-kit',
+    description:
+      'Sub-Assy,GTX325,Connector KitGarmin part number 011-02977-00. Catalog description: GTX 335 Connector Kit. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02977-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,GTX335,Backplate,Vert Mount',
+    href: '/products/sub-assy-gtx335-backplate-vert-mount',
+    handle: 'sub-assy-gtx335-backplate-vert-mount',
+    description:
+      'Sub-Assy,GTX335,Backplate,Vert MountGarmin part number 011-02976-10. Catalog description: GTX 3X5 Vertical Mount Backplate. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-02976-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,GTX335,Backplate,wGPS,Vert Mount',
+    href: '/products/sub-assy-gtx335-backplate-wgps-vert-mount',
+    handle: 'sub-assy-gtx335-backplate-wgps-vert-mount',
+    description:
+      'Sub-Assy,GTX335,Backplate,wGPS,Vert MountGarmin part number 011-02976-11. Catalog description: GTX 335 w/ GPS Vertical Mount Backplate. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['011-02976-11'],
+  },
+  {
+    group: 'Products',
     title: 'Sub-Assy,GTX345,Connector Kit',
     href: '/products/sub-assy-gtx345-connector-kit',
     handle: 'sub-assy-gtx345-connector-kit',
     description:
       "Garmin GTX 345 Connector KitGarmin part number 011-02977-01. Order unit: quantity 1 adds one Garmin GTX 345 connector kit to the order. This listing does not make a separate claim about the kit's individual contents. Confirm compatibility…",
     skus: ['011-02977-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,GTX3x5, Backplate, XPDR w/TNC',
+    href: '/products/sub-assy-gtx3x5-backplate-xpdr-w-tnc',
+    handle: 'sub-assy-gtx3x5-backplate-xpdr-w-tnc',
+    description:
+      'Sub-Assy,GTX3x5, Backplate, XPDR w/TNCGarmin part number 011-02976-02. Catalog description: GTX 3X5 Backplate with TNC. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-02976-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,GTX3x5,Backplate',
+    href: '/products/sub-assy-gtx3x5-backplate',
+    handle: 'sub-assy-gtx3x5-backplate',
+    description:
+      'Sub-Assy,GTX3x5,BackplateGarmin part number 011-02976-00. Catalog description: GTX 3x5 Backplate. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['011-02976-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,GTX3x5,Backplate,wGPS',
+    href: '/products/sub-assy-gtx3x5-backplate-wgps',
+    handle: 'sub-assy-gtx3x5-backplate-wgps',
+    description:
+      'Sub-Assy,GTX3x5,Backplate,wGPSGarmin part number 011-02976-01. Catalog description: Sub-Assy,GTX3x5,Backplate,wGPS. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before…',
+    skus: ['011-02976-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,GTX3x5D,Backplate,BT',
+    href: '/products/sub-assy-gtx3x5d-backplate-bt',
+    handle: 'sub-assy-gtx3x5d-backplate-bt',
+    description:
+      'Sub-Assy,GTX3x5D,Backplate,BTGarmin part number 011-04340-02. Catalog description: GTX 3x5D, Backplate, BT. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-04340-02'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, C210 G,H,J',
+    href: '/products/garmin-sub-assy-hardware-kit-c210-g-h-j-011-05839-56',
+    handle: 'garmin-sub-assy-hardware-kit-c210-g-h-j-011-05839-56',
+    description:
+      'Sub-Assy,Hardware Kit, C210 G,H,JGarmin part number 011-05839-56. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-56'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Piper PA-28 Series',
+    href: '/products/sub-assy-hardware-kit-piper-pa-28-series',
+    handle: 'sub-assy-hardware-kit-piper-pa-28-series',
+    description:
+      'Sub-Assy,Hardware Kit, Piper PA-28 SeriesGarmin part number 011-05839-05. Catalog description: Sub-Assy,Hardware Kit, Piper PA-28 Series. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['011-05839-05'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Piper Saratoga, Lance, 6X',
+    href: '/products/garmin-sub-assy-hardware-kit-piper-saratoga-lance-6x-011-05839-10',
+    handle: 'garmin-sub-assy-hardware-kit-piper-saratoga-lance-6x-011-05839-10',
+    description:
+      'Sub-Assy,Hardware Kit, Piper Saratoga, Lance, 6XGarmin part number 011-05839-10. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Piper, Cherokee',
+    href: '/products/garmin-sub-assy-hardware-kit-piper-cherokee-011-05839-46',
+    handle: 'garmin-sub-assy-hardware-kit-piper-cherokee-011-05839-46',
+    description:
+      'Sub-Assy,Hardware Kit, Piper, CherokeeGarmin part number 011-05839-46. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-46'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Piper, PA-32RT',
+    href: '/products/garmin-sub-assy-hardware-kit-piper-pa-32rt-011-05839-51',
+    handle: 'garmin-sub-assy-hardware-kit-piper-pa-32rt-011-05839-51',
+    description:
+      'Sub-Assy,Hardware Kit, Piper, PA-32RTGarmin part number 011-05839-51. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-51'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Textron Aviation Model 172',
+    href: '/products/sub-assy-hardware-kit-textron-aviation-model-172',
+    handle: 'sub-assy-hardware-kit-textron-aviation-model-172',
+    description:
+      'Sub-Assy,Hardware Kit, Textron Aviation Model 172Garmin part number 011-05839-03. Catalog description: Sub-Assy,Hardware Kit, Textron Aviation Model 172. Garmin avionics accessory or service part. Confirm compatibility with the target…',
+    skus: ['011-05839-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Textron Aviation Model 182',
+    href: '/products/sub-assy-hardware-kit-textron-aviation-model-182',
+    handle: 'sub-assy-hardware-kit-textron-aviation-model-182',
+    description:
+      'Sub-Assy,Hardware Kit, Textron Aviation Model 182Garmin part number 011-05839-04. Catalog description: Sub-Assy,Hardware Kit, Textron Aviation Model 182. Garmin avionics accessory or service part. Confirm compatibility with the target…',
+    skus: ['011-05839-04'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Textron Aviation, Cessna 210',
+    href: '/products/sub-assy-hardware-kit-textron-aviation-cessna-210',
+    handle: 'sub-assy-hardware-kit-textron-aviation-cessna-210',
+    description:
+      'Sub-Assy,Hardware Kit, Textron Aviation, Cessna 210Garmin part number 011-05839-13. Catalog description: Sub-Assy,Hardware Kit, Textron Aviation, Cessna 210. Garmin avionics accessory or service part. Confirm compatibility with the target…',
+    skus: ['011-05839-13'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Textron Beechcraft Model A36, A36TC',
+    href: '/products/sub-assy-hardware-kit-textron-beechcraft-model-a36-a36tc',
+    handle: 'sub-assy-hardware-kit-textron-beechcraft-model-a36-a36tc',
+    description:
+      'Sub-Assy,Hardware Kit, Textron Beechcraft Model A36, A36TCGarmin part number 011-05839-24. Catalog description: Sub-Assy,Hardware Kit, Textron Beechcraft Model A36, A36TC. Garmin avionics accessory or service part. Confirm compatibility…',
+    skus: ['011-05839-24'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Textron Bonanza S35,V35,V35A,V35B',
+    href: '/products/garmin-sub-assy-hardware-kit-textron-bonanza-s35-v35-v35a-v35b-011-05839-08',
+    handle:
+      'garmin-sub-assy-hardware-kit-textron-bonanza-s35-v35-v35a-v35b-011-05839-08',
+    description:
+      'Sub-Assy,Hardware Kit, Textron Bonanza S35,V35,V35A,V35BGarmin part number 011-05839-08. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-08'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Textron Cessna 180,185',
+    href: '/products/garmin-sub-assy-hardware-kit-textron-cessna-180-185-011-05839-22',
+    handle: 'garmin-sub-assy-hardware-kit-textron-cessna-180-185-011-05839-22',
+    description:
+      'Sub-Assy,Hardware Kit, Textron Cessna 180,185Garmin part number 011-05839-22. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-22'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Textron Cessna, 177',
+    href: '/products/garmin-sub-assy-hardware-kit-textron-cessna-177-011-05839-40',
+    handle: 'garmin-sub-assy-hardware-kit-textron-cessna-177-011-05839-40',
+    description:
+      'Sub-Assy,Hardware Kit, Textron Cessna, 177Garmin part number 011-05839-40. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-40'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Textron, Model 206 (Earlier Models)',
+    href: '/products/garmin-sub-assy-hardware-kit-textron-model-206-earlier-models-011-05839-66',
+    handle:
+      'garmin-sub-assy-hardware-kit-textron-model-206-earlier-models-011-05839-66',
+    description:
+      'Sub-Assy,Hardware Kit, Textron, Model 206 (Earlier Models)Garmin part number 011-05839-66. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-66'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Hardware Kit, Textron, Model 206 (Later Models)',
+    href: '/products/garmin-sub-assy-hardware-kit-textron-model-206-later-models-011-05839-44',
+    handle:
+      'garmin-sub-assy-hardware-kit-textron-model-206-later-models-011-05839-44',
+    description:
+      'Sub-Assy,Hardware Kit, Textron, Model 206 (Later Models)Garmin part number 011-05839-44. Confirm compatibility and availability before ordering.',
+    skus: ['011-05839-44'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Install Kit,GWX7x',
+    href: '/products/sub-assy-install-kit-gwx7x',
+    handle: 'sub-assy-install-kit-gwx7x',
+    description:
+      'Sub-Assy,Install Kit,GWX7xGarmin part number 011-01769-00. Catalog description: Install Kit - GWX 7X. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-01769-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Install Kit,Remote,GDL88',
+    href: '/products/sub-assy-install-kit-remote-gdl88',
+    handle: 'sub-assy-install-kit-remote-gdl88',
+    description:
+      'Sub-Assy,Install Kit,Remote,GDL88Garmin part number 011-02621-00. Catalog description: Install Rack, GDL 88. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or…',
+    skus: ['011-02621-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Kit,GMU44,Lancair IV Mount',
+    href: '/products/sub-assy-kit-gmu44-lancair-iv-mount',
+    handle: 'sub-assy-kit-gmu44-lancair-iv-mount',
+    description:
+      'Sub-Assy,Kit,GMU44,Lancair IV MountGarmin part number 011-01788-00. Catalog description: Sub-Assy,Kit,GMU44,Lancair IV Mount. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review…',
+    skus: ['011-01788-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Mem Card,3.3v Flash,16MByte',
+    href: '/products/garmin-sub-assy-mem-card-3-3v-flash-16mbyte-011-00460-61',
+    handle: 'garmin-sub-assy-mem-card-3-3v-flash-16mbyte-011-00460-61',
+    description:
+      'Sub-Assy,Mem Card,3. 3v Flash,16MByteGarmin part number 011-00460-61. Confirm compatibility and availability before ordering.',
+    skus: ['011-00460-61'],
+  },
+  {
+    group: 'Products',
+    title: 'SUB-ASSY,NON-ILLUMINATED,SMART GLIDE SWITCH KIT',
+    href: '/products/sub-assy-non-illuminated-smart-glide-switch-kit',
+    handle: 'sub-assy-non-illuminated-smart-glide-switch-kit',
+    description:
+      'SUB-ASSY,NON-ILLUMINATED,SMART GLIDE SWITCH KITGarmin part number 011-05930-00. Catalog description: SUB-ASSY,NON-ILLUMINATED,SMART GLIDE SWITCH KIT. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin…',
+    skus: ['011-05930-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Pressure Sensor,AN4,15 PSI',
+    href: '/products/sub-assy-pressure-sensor-an4-15-psi',
+    handle: 'sub-assy-pressure-sensor-an4-15-psi',
+    description:
+      'Sub-Assy,Pressure Sensor,AN4,15 PSIGarmin part number 011-05783-10. Catalog description: Sub-Assy,Pressure Sensor,GPT 15G. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-05783-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Pressure Sensor,AN4,150 PSI',
+    href: '/products/sub-assy-pressure-sensor-an4-150-psi',
+    handle: 'sub-assy-pressure-sensor-an4-150-psi',
+    description:
+      'Sub-Assy,Pressure Sensor,AN4,150 PSIGarmin part number 011-05783-30. Catalog description: Sub-Assy,Pressure Sensor,GPT 150G. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-05783-30'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Pressure Sensor,AN4,75 PSI',
+    href: '/products/sub-assy-pressure-sensor-an4-75-psi',
+    handle: 'sub-assy-pressure-sensor-an4-75-psi',
+    description:
+      'Sub-Assy,Pressure Sensor,AN4,75 PSIGarmin part number 011-05783-20. Catalog description: Sub-Assy,Pressure Sensor,GPT 75G. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-05783-20'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Presure Sensor,SS,30 PSIA',
+    href: '/products/sub-assy-presure-sensor-ss-30-psia',
+    handle: 'sub-assy-presure-sensor-ss-30-psia',
+    description:
+      'Sub-Assy,Presure Sensor,SS,30 PSIAGarmin part number 011-05783-00. Catalog description: Sub-Assy, Pressure Sensor, GPT 30A. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['011-05783-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,USB-B Pigtail',
+    href: '/products/sub-assy-usb-b-pigtail',
+    handle: 'sub-assy-usb-b-pigtail',
+    description:
+      'Sub-Assy,USB-B PigtailGarmin part number 011-01782-00. Catalog description: USB-B Pigtail. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['011-01782-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Vertical Install Rack,GTS Processor',
+    href: '/products/sub-assy-vertical-install-rack-gts-processor',
+    handle: 'sub-assy-vertical-install-rack-gts-processor',
+    description:
+      'Sub-Assy,Vertical Install Rack,GTS ProcessorGarmin part number 011-02572-00. Catalog description: Vertical Install Rack,GTS Processor. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility…',
+    skus: ['011-02572-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Sub-Assy,Waterproofness Kit,GTS Processor',
+    href: '/products/sub-assy-waterproofness-kit-gts-processor',
+    handle: 'sub-assy-waterproofness-kit-gts-processor',
+    description:
+      'Sub-Assy,Waterproofness Kit,GTS ProcessorGarmin part number 011-02757-00. Catalog description: Sub-Assy, Waterproofness Kit,GTS Processor. Certified Garmin avionics may require approved installation, configuration, and aircraft…',
+    skus: ['011-02757-00'],
+  },
+  {
+    group: 'Products',
+    title: 'SubAsy, G1000 Rack Nplt Kt, 2Pos',
+    href: '/products/subasy-g1000-rack-nplt-kt-2pos',
+    handle: 'subasy-g1000-rack-nplt-kt-2pos',
+    description:
+      'SubAsy, G1000 Rack Nplt Kt, 2PosGarmin part number 011-00915-00. Catalog description: SubAsy, G1000 Rack Nplt Kt, 2Pos. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation…',
+    skus: ['011-00915-00'],
   },
   {
     group: 'Products',
@@ -5284,6 +16212,42 @@ export const SITE_SEARCH_INDEX = [
     description:
       'Supplemental Database Card, GIFD, IFR/VFR ChartsGarmin part number 010-00474-50. Catalog description: Supplemental Database Card, GIFD, IFR/VFR Charts. Garmin data card or database media item. Confirm region, database type, and compatible…',
     skus: ['010-00474-50'],
+  },
+  {
+    group: 'Products',
+    title: 'SW,Rotary,1 Deck,Solder Lugs,30 Deg,4 Poles,3 Pos/Pole,NSC',
+    href: '/products/sw-rotary-1-deck-solder-lugs-30-deg-4-poles-3-pos-pole-nsc',
+    handle: 'sw-rotary-1-deck-solder-lugs-30-deg-4-poles-3-pos-pole-nsc',
+    description:
+      'SW,Rotary,1 Deck,Solder Lugs,30 Deg,4 Poles,3 Pos/Pole,NSCGarmin part number 340-00201-01. Catalog description: SW,Rotary,1 Deck,Solder Lugs,30 Deg,4 Poles,3 Pos/Pole,NSC. Garmin product or accessory. Confirm compatibility and intended…',
+    skus: ['340-00201-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Switch Mount, Piper, Ramshorn, Cygnet Switch',
+    href: '/products/switch-mount-piper-ramshorn-cygnet-switch',
+    handle: 'switch-mount-piper-ramshorn-cygnet-switch',
+    description:
+      'Switch Mount, Piper, Ramshorn, Cygnet SwitchGarmin part number 117-01472-01. Catalog description: Switch Mount, Piper, Ramshorn, Cygnet Switch. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit…',
+    skus: ['117-01472-01'],
+  },
+  {
+    group: 'Products',
+    title: 'Switch, Go Around',
+    href: '/products/switch-go-around-340-00258-00',
+    handle: 'switch-go-around-340-00258-00',
+    description:
+      'Genuine Garmin product. Manufacturer part number 340-00258-00.',
+    skus: ['340-00258-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Switch, Toggle, MS27717-27-1',
+    href: '/products/switch-toggle-ms27717-27-1',
+    handle: 'switch-toggle-ms27717-27-1',
+    description:
+      'Switch, Toggle, MS27717-27-1Garmin part number 340-00235-04. Catalog description: Switch, Toggle, MS27717-27-1. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['340-00235-04'],
   },
   {
     group: 'Products',
@@ -5372,6 +16336,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'TNC Jack - BNC Plug Adapter',
+    href: '/products/tnc-jack-bnc-plug-adapter',
+    handle: 'tnc-jack-bnc-plug-adapter',
+    description:
+      'TNC Jack - BNC Plug AdapterGarmin part number 330-01754-00. Catalog description: TNC Jack - BNC Plug Adapter. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['330-01754-00'],
+  },
+  {
+    group: 'Products',
     title: 'Top Assy, GAP26, Unit Only, Htr Control',
     href: '/products/top-assy-gap26-unit-only-htr-control',
     handle: 'top-assy-gap26-unit-only-htr-control',
@@ -5381,12 +16354,373 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Top Assy, GDL 69e',
+    href: '/products/top-assy-gdl-69e',
+    handle: 'top-assy-gdl-69e',
+    description:
+      'Top Assy, GDL 69eGarmin part number 010-01294-00. Catalog description: Top Assy, GDL 69e. Certified Garmin avionics may require approved installation, configuration, and aircraft eligibility review before shipment or installation.',
+    skus: ['010-01294-00'],
+  },
+  {
+    group: 'Products',
+    title: 'TOP ASSY, GSA 28, UNIT ONLY',
+    href: '/products/garmin-top-assy-gsa-28-unit-only-010-01068-20',
+    handle: 'garmin-top-assy-gsa-28-unit-only-010-01068-20',
+    description: 'TOP ASSY, GSA 28, UNIT ONLYGarmin part number 010-01068-20.',
+    skus: ['010-01068-20'],
+  },
+  {
+    group: 'Products',
     title: 'TOP ASSY, GSA 28, W/ BALL BEARINGS, PMA',
     href: '/products/top-assy-gsa-28-w-ball-bearings-pma',
     handle: 'top-assy-gsa-28-w-ball-bearings-pma',
     description:
       'TOP ASSY, GSA 28, W/ BALL BEARINGS, PMAGarmin part number 010-01068-21. Catalog description: GSA 28 Servo, (FAA-PMA). Garmin product or accessory. Confirm compatibility and intended application before ordering.',
     skus: ['010-01068-21'],
+  },
+  {
+    group: 'Products',
+    title:
+      'Traffic System Helicopter (DO-160F Category U, Test Curve G) Vertical Installation Rack',
+    href: '/products/traffic-system-helicopter-do-160f-category-u-test-curve-g-vertical-installation-rack',
+    handle:
+      'traffic-system-helicopter-do-160f-category-u-test-curve-g-vertical-installation-rack',
+    description:
+      'Traffic System Helicopter (DO-160F Category U, Test Curve G) Vertical Installation RackGarmin part number 011-02420-00. Catalog description: Vertical Helicopter Install Rack, GTS Processor. Garmin avionics accessory or service part.…',
+    skus: ['011-02420-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Traffic System Vertical Fixed-wing Installation Rack',
+    href: '/products/traffic-system-vertical-fixed-wing-installation-rack',
+    handle: 'traffic-system-vertical-fixed-wing-installation-rack',
+    description:
+      'Traffic System Vertical Fixed-wing Installation RackGarmin part number 115-00781-00. Catalog description: Traffic System Vertical Fixed-wing Installation Rack. Garmin avionics accessory or service part. Confirm compatibility with the…',
+    skus: ['115-00781-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Trim Switch',
+    href: '/products/garmin-trim-switch-010-02917-00',
+    handle: 'garmin-trim-switch-010-02917-00',
+    description:
+      'Trim SwitchGarmin part number 010-02917-00. Confirm compatibility and availability before ordering.',
+    skus: ['010-02917-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Trim Switch',
+    href: '/products/garmin-trim-switch-340-00214-00',
+    handle: 'garmin-trim-switch-340-00214-00',
+    description:
+      'Trim SwitchGarmin part number 340-00214-00. Confirm compatibility and availability before ordering.',
+    skus: ['340-00214-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Turbine Inlet Temperature Probe',
+    href: '/products/turbine-inlet-temperature-probe',
+    handle: 'turbine-inlet-temperature-probe',
+    description:
+      'Turbine Inlet Temperature ProbeGarmin part number 494-70002-00. Catalog description: Type K thermocouple, 7/16-20 bayonet, TIT. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['494-70002-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Two-Way Splitter (500 ohm, BNC)',
+    href: '/products/two-way-splitter-500-ohm-bnc',
+    handle: 'two-way-splitter-500-ohm-bnc',
+    description:
+      'Two-Way Splitter (500 ohm, BNC)Garmin part number 013-00112-00. Catalog description: Two-Way Splitter (500 ohm, BNC). Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['013-00112-00'],
+  },
+  {
+    group: 'Products',
+    title: 'UAT BL Ant Passive Passive,TNC',
+    href: '/products/uat-bl-ant-passive-passive-tnc',
+    handle: 'uat-bl-ant-passive-passive-tnc',
+    description:
+      'UAT BL Ant Passive Passive,TNCGarmin part number 013-00219-00. Catalog description: A40 UAT blade antenna, passive, TNC. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['013-00219-00'],
+  },
+  {
+    group: 'Products',
+    title: 'UAT Blade Antenna, passive, TNC',
+    href: '/products/uat-blade-antenna-passive-tnc',
+    handle: 'uat-blade-antenna-passive-tnc',
+    description:
+      'UAT Blade Antenna, passive, TNCGarmin part number 013-00174-00. Catalog description: A41 UAT blade antenna, passive, TNC. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['013-00174-00'],
+  },
+  {
+    group: 'Products',
+    title: 'UPG KIT,GX SERIES 3.5 SOFTWARE',
+    href: '/products/upg-kit-gx-series-3-5-software',
+    handle: 'upg-kit-gx-series-3-5-software',
+    description:
+      'UPG KIT,GX SERIES 3. 5 SOFTWARE is a Garmin product offered through Roger Wilco Aviation Services, an authorized Garmin aviation dealer and FAA Part 145 repair station. Garmin source description: UPG KIT,GX SERIES 3. 5 SOFTWARE. 00…',
+    skus: ['450-0048-035'],
+  },
+  {
+    group: 'Products',
+    title: 'USB Cable',
+    href: '/products/garmin-usb-cable-010-10723-01',
+    handle: 'garmin-usb-cable-010-10723-01',
+    description:
+      'USB CableGarmin part number 010-10723-01. Confirm compatibility and availability before ordering.',
+    skus: ['010-10723-01'],
+  },
+  {
+    group: 'Products',
+    title: 'USB Cable',
+    href: '/products/garmin-usb-cable-010-10723-15',
+    handle: 'garmin-usb-cable-010-10723-15',
+    description:
+      'USB CableGarmin part number 010-10723-15. Confirm compatibility and availability before ordering.',
+    skus: ['010-10723-15'],
+  },
+  {
+    group: 'Products',
+    title: 'USB Cable - Type C to Type C (0.5 m)',
+    href: '/products/usb-cable-type-c-to-type-c-0-5-m',
+    handle: 'usb-cable-type-c-to-type-c-0-5-m',
+    description:
+      'USB Cable - Type C to Type C (0. 5 m)Garmin part number 010-13323-00. Catalog description: USB Cable - Type C to Type C (0. 5 m). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['010-13323-00'],
+  },
+  {
+    group: 'Products',
+    title: 'USB Cable - Type C to Type C (1 m)',
+    href: '/products/usb-cable-type-c-to-type-c-1-m',
+    handle: 'usb-cable-type-c-to-type-c-1-m',
+    description:
+      'USB Cable - Type C to Type C (1 m)Garmin part number 010-12994-60. Catalog description: USB Cable - Type C to Type C (1 m). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['010-12994-60'],
+  },
+  {
+    group: 'Products',
+    title: 'USB Cable - Type C to Type C (2 m)',
+    href: '/products/garmin-usb-cable-type-c-to-type-c-2-m-010-13315-a3',
+    handle: 'garmin-usb-cable-type-c-to-type-c-2-m-010-13315-a3',
+    description:
+      'USB Cable - Type C to Type C (2 m)Garmin part number 010-13315-A3. Confirm compatibility and availability before ordering.',
+    skus: ['010-13315-A3'],
+  },
+  {
+    group: 'Products',
+    title: 'USB Cable Type A to Type C (0.5 meter)',
+    href: '/products/usb-cable-type-a-to-type-c-0-5-meter',
+    handle: 'usb-cable-type-a-to-type-c-0-5-meter',
+    description:
+      'USB Cable Type A to Type C (0. 5 meter)Garmin part number 010-13199-00. Catalog description: USB Cable Type A to Type C (0. 5 meter). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and…',
+    skus: ['010-13199-00'],
+  },
+  {
+    group: 'Products',
+    title: 'USB Cable Type A to Type C (1 meter)',
+    href: '/products/usb-cable-type-a-to-type-c-1-meter',
+    handle: 'usb-cable-type-a-to-type-c-1-meter',
+    description:
+      'USB Cable Type A to Type C (1 meter)Garmin part number 010-12994-61. Catalog description: USB Cable Type A to Type C (1 meter). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['010-12994-61'],
+  },
+  {
+    group: 'Products',
+    title: 'USB Power Cable',
+    href: '/products/usb-power-cable',
+    handle: 'usb-power-cable',
+    description:
+      'USB Power CableGarmin part number 010-11131-10. Catalog description: USB Power Cable. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-11131-10'],
+  },
+  {
+    group: 'Products',
+    title: 'USB-A Charging/Data Cable (0.5 Meter)',
+    href: '/products/usb-a-charging-data-cable-0-5-meter',
+    handle: 'usb-a-charging-data-cable-0-5-meter',
+    description:
+      'USB-A Charging/Data Cable (0. 5 Meter)Garmin part number 010-12491-01. Catalog description: USB-A Charging/Data Cable (0. 5 Meter). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['010-12491-01'],
+  },
+  {
+    group: 'Products',
+    title: 'USB-A Charging/Data Cable (1 Meter)',
+    href: '/products/usb-a-charging-data-cable-1-meter',
+    handle: 'usb-a-charging-data-cable-1-meter',
+    description:
+      'USB-A Charging/Data Cable (1 Meter)Garmin part number 010-12983-00. Catalog description: USB-A Charging/Data Cable (1 Meter). Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['010-12983-00'],
+  },
+  {
+    group: 'Products',
+    title: 'USB-C AC Adapter',
+    href: '/products/garmin-usb-c-ac-adapter-010-13304-00',
+    handle: 'garmin-usb-c-ac-adapter-010-13304-00',
+    description:
+      'USB-C AC AdapterGarmin part number 010-13304-00. Confirm compatibility and availability before ordering.',
+    skus: ['010-13304-00'],
+  },
+  {
+    group: 'Products',
+    title: 'USB-C AC Adapter',
+    href: '/products/garmin-usb-c-ac-adapter-010-13304-05',
+    handle: 'garmin-usb-c-ac-adapter-010-13304-05',
+    description:
+      'USB-C AC AdapterGarmin part number 010-13304-05. Confirm compatibility and availability before ordering.',
+    skus: ['010-13304-05'],
+  },
+  {
+    group: 'Products',
+    title: 'USB-C AC Adapter',
+    href: '/products/garmin-usb-c-ac-adapter-010-13304-10',
+    handle: 'garmin-usb-c-ac-adapter-010-13304-10',
+    description:
+      'USB-C AC AdapterGarmin part number 010-13304-10. Confirm compatibility and availability before ordering.',
+    skus: ['010-13304-10'],
+  },
+  {
+    group: 'Products',
+    title: 'USB-C Charging/Data Cable, 0.5 Meter',
+    href: '/products/usb-c-charging-data-cable-0-5-meter',
+    handle: 'usb-c-charging-data-cable-0-5-meter',
+    description:
+      'USB-C Charging/Data Cable, 0. 5 MeterGarmin part number 010-13278-01. Catalog description: USB-C Charging/Data Cable, 0. 5 Meter. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['010-13278-01'],
+  },
+  {
+    group: 'Products',
+    title: 'USB-C Charging/Data Cable, 1 meter',
+    href: '/products/usb-c-charging-data-cable-1-meter',
+    handle: 'usb-c-charging-data-cable-1-meter',
+    description:
+      'USB-C Charging/Data Cable, 1 meterGarmin part number 010-13278-00. Catalog description: USB-C Charging/Data Cable, 1 meter. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft…',
+    skus: ['010-13278-00'],
+  },
+  {
+    group: 'Products',
+    title: 'USB/Charger Cable',
+    href: '/products/usb-charger-cable',
+    handle: 'usb-charger-cable',
+    description:
+      'USB/Charger CableGarmin part number 010-11814-10. Catalog description: USB/Charger Cable. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-11814-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Vehicle power cable',
+    href: '/products/vehicle-power-cable',
+    handle: 'vehicle-power-cable',
+    description:
+      'Vehicle power cableGarmin part number 010-10563-00. Catalog description: Vehicle power cable. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before ordering.',
+    skus: ['010-10563-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Vehicle Power Cable',
+    href: '/products/garmin-vehicle-power-cable-010-10085-00',
+    handle: 'garmin-vehicle-power-cable-010-10085-00',
+    description:
+      'Vehicle Power CableGarmin part number 010-10085-00. Confirm compatibility and availability before ordering.',
+    skus: ['010-10085-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Vehicle Power Cable',
+    href: '/products/garmin-vehicle-power-cable-010-10747-03',
+    handle: 'garmin-vehicle-power-cable-010-10747-03',
+    description:
+      'Vehicle Power CableGarmin part number 010-10747-03. Confirm compatibility and availability before ordering.',
+    skus: ['010-10747-03'],
+  },
+  {
+    group: 'Products',
+    title: 'Vehicle Power Cable',
+    href: '/products/garmin-vehicle-power-cable-010-12498-30',
+    handle: 'garmin-vehicle-power-cable-010-12498-30',
+    description:
+      'Vehicle Power CableGarmin part number 010-12498-30. Confirm compatibility and availability before ordering.',
+    skus: ['010-12498-30'],
+  },
+  {
+    group: 'Products',
+    title: 'Washer,AN960,Cad Plate,#10',
+    href: '/products/washer-an960-cad-plate-10',
+    handle: 'washer-an960-cad-plate-10',
+    description:
+      'Washer,AN960,Cad Plate,#10Garmin part number 212-00035-10. Catalog description: Washer,AN960,Cad Plate,#10. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit and aircraft installation before…',
+    skus: ['212-00035-10'],
+  },
+  {
+    group: 'Products',
+    title: 'Washer,Spring Lock,Backshell,Jackscrew,D-sub',
+    href: '/products/washer-spring-lock-backshell-jackscrew-d-sub',
+    handle: 'washer-spring-lock-backshell-jackscrew-d-sub',
+    description:
+      'Washer,Spring Lock,Backshell,Jackscrew,D-subGarmin part number 212-00054-00. Catalog description: Washer,Spring Lock,Backshell,Jackscrew,D-sub. Garmin avionics accessory or service part. Confirm compatibility with the target Garmin unit…',
+    skus: ['212-00054-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Weather Cap (BNC)',
+    href: '/products/weather-cap-bnc',
+    handle: 'weather-cap-bnc',
+    description:
+      'Weather Cap (BNC)Garmin part number 010-11261-00. Catalog description: Weather Cap (BNC). Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['010-11261-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Wheel Well Doubler w/label',
+    href: '/products/wheel-well-doubler-w-label',
+    handle: 'wheel-well-doubler-w-label',
+    description:
+      'Wheel Well Doubler w/labelGarmin part number 117-00581-00. Catalog description: Wheel Well Doubler w/label. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['117-00581-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Wrist Lanyard',
+    href: '/products/wrist-lanyard',
+    handle: 'wrist-lanyard',
+    description:
+      'Wrist LanyardGarmin part number 013-00005-00. Catalog description: Wrist Lanyard. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['013-00005-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Wshr,Flat,Non-Std,SS,ID.120',
+    href: '/products/wshr-flat-non-std-ss-id-120',
+    handle: 'wshr-flat-non-std-ss-id-120',
+    description:
+      'Wshr,Flat,Non-Std,SS,ID. 120Garmin part number 212-20053-00. Catalog description: Wshr,Flat,Non-Std,SS,ID. 120. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['212-20053-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Wshr,Flat,SAE,SS,#6',
+    href: '/products/wshr-flat-sae-ss-6',
+    handle: 'wshr-flat-sae-ss-6',
+    description:
+      'Wshr,Flat,SAE,SS,#6Garmin part number 212-00024-06. Catalog description: Wshr,Flat,SAE,SS,#6. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['212-00024-06'],
+  },
+  {
+    group: 'Products',
+    title: 'Wshr,Lock,Self-Sealing,5/16"',
+    href: '/products/wshr-lock-self-sealing-5-16',
+    handle: 'wshr-lock-self-sealing-5-16',
+    description:
+      'Wshr,Lock,Self-Sealing,5/16"Garmin part number 212-00026-00. Catalog description: Wshr,Lock,Self-Sealing,5/16". Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['212-00026-00'],
+  },
+  {
+    group: 'Products',
+    title: 'Wshr,Locking,Int Star,#4',
+    href: '/products/wshr-locking-int-star-4',
+    handle: 'wshr-locking-int-star-4',
+    description:
+      'Wshr,Locking,Int Star,#4Garmin part number 212-00030-04. Catalog description: Wshr,Locking,Int Star,#4. Garmin product or accessory. Confirm compatibility and intended application before ordering.',
+    skus: ['212-00030-04'],
   },
   {
     group: 'Products',

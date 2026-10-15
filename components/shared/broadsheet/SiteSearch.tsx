@@ -60,7 +60,21 @@ export default function SiteSearch({
   }, [index, open]);
 
   useEffect(() => {
-    if (open) window.requestAnimationFrame(() => inputRef.current?.focus());
+    if (!open) return;
+
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const htmlOverflow = document.documentElement.style.overflow;
+    const bodyOverflow = document.body.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    window.requestAnimationFrame(() => inputRef.current?.focus());
+
+    return () => {
+      document.documentElement.style.overflow = htmlOverflow;
+      document.body.style.overflow = bodyOverflow;
+      window.scrollTo(scrollX, scrollY);
+    };
   }, [open]);
 
   const matches = useMemo(
@@ -181,6 +195,18 @@ export default function SiteSearch({
               className="mt-2 min-h-12 w-full rounded-none border-2 border-black bg-white px-4 py-3 text-base text-black placeholder:text-black/45 focus:outline focus:outline-2 focus:outline-offset-2"
               aria-describedby={inputId + '-coverage'}
             />
+            {query ? (
+              <button
+                type="button"
+                className="mt-2 min-h-11 border border-black px-4 py-2 text-sm font-bold uppercase tracking-[0.08em] hover:bg-black hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                onClick={() => {
+                  setQuery('');
+                  window.requestAnimationFrame(() => inputRef.current?.focus());
+                }}
+              >
+                Clear search
+              </button>
+            ) : null}
             <p
               id={inputId + '-coverage'}
               className="mt-2 text-xs text-black/60"
@@ -214,7 +240,7 @@ export default function SiteSearch({
               ) : (
                 <div className="space-y-5">
                   <p className="sr-only">
-                    {matches.length} result{matches.length === 1 ? '' : 's'}
+                    {matches.length} result{matches.length === 1 ? '' : 's'}{' '}
                     found.
                   </p>
                   {grouped.map(({ group, total, items }) => (
