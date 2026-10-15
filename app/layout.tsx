@@ -6,6 +6,7 @@ import Script from 'next/script';
 import CartFloater from '@/components/shared/CartFloater';
 import ClientVisualEffects from './client-visual-effects';
 import DeferredJerryWidget from '@/components/shared/DeferredJerryWidget';
+import MediaDownloadDeterrent from '@/components/shared/MediaDownloadDeterrent';
 
 import { colors } from '@/data/config/colors.js';
 
@@ -257,6 +258,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <DeferredJerryWidget />
+        <MediaDownloadDeterrent />
         <Script
           src="/rwas-analytics.js?v=20260721-track-fix"
           strategy="afterInteractive"
