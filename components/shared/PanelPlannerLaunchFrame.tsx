@@ -10,10 +10,11 @@ const PANEL_PLANNER_POSTER = '/images/social/panel-planner-ad-v5-premium.png';
 export function PanelPlannerLaunchFrame() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoError, setVideoError] = useState(false);
+  const [videoRequested, setVideoRequested] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !videoRequested) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const syncPlayback = () => {
@@ -31,7 +32,7 @@ export function PanelPlannerLaunchFrame() {
     reducedMotion.addEventListener('change', syncPlayback);
 
     return () => reducedMotion.removeEventListener('change', syncPlayback);
-  }, []);
+  }, [videoRequested]);
 
   return (
     <section
@@ -46,9 +47,8 @@ export function PanelPlannerLaunchFrame() {
             alt="Preview of the RWAS Panel Planner showing a Garmin avionics layout in a Cessna R182 panel"
             fill
             sizes="(max-width: 900px) 100vw, 860px"
-            priority
           />
-        ) : (
+        ) : videoRequested ? (
           <video
             ref={videoRef}
             className="panel-planner-launch__video"
@@ -66,6 +66,24 @@ export function PanelPlannerLaunchFrame() {
             <source src="/videos/rwas-panel-planner-promo.mp4" type="video/mp4" />
             Your browser does not support the Panel Planner promotional video.
           </video>
+        ) : (
+          <button
+            type="button"
+            className="panel-planner-launch__play"
+            aria-describedby="panel-planner-video-description"
+            onClick={() => setVideoRequested(true)}
+          >
+            <Image
+              className="panel-planner-launch__fallback"
+              src={PANEL_PLANNER_POSTER}
+              alt=""
+              fill
+              sizes="(max-width: 900px) 100vw, 860px"
+            />
+            <span className="panel-planner-launch__play-label">
+              <span aria-hidden="true">▶</span> Play Panel Planner preview
+            </span>
+          </button>
         )}
       </div>
       <p id="panel-planner-video-description" className="sr-only">
