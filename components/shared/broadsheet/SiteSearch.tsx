@@ -243,11 +243,6 @@ export default function SiteSearch({
                             >
                               <span className="flex flex-wrap items-center gap-2 font-bold underline decoration-black/30 underline-offset-2">
                                 {item.title}
-                                {item.preview && (
-                                  <span className="border border-[#8a6818] px-1.5 py-0.5 text-[0.65rem] uppercase tracking-wider text-[#6d5110] no-underline">
-                                    Preview
-                                  </span>
-                                )}
                               </span>
                               {item.skus?.length ? (
                                 <span className="mt-0.5 block text-xs font-semibold uppercase tracking-wide text-black/65">

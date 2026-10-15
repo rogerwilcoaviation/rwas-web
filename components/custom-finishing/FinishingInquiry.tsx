@@ -279,9 +279,8 @@ export default function FinishingInquiry({
           />
         </fieldset>
         <div className="finishing-upload-note">
-          <strong>Photos and artwork:</strong> secure direct upload is not wired
-          into this preview. After the draft opens, attach files in your email
-          app. Nothing is uploaded or sent from this page.
+          <strong>Photos and artwork:</strong> after the draft opens, attach
+          files in your email app. Nothing is uploaded or sent from this page.
         </div>
         {error ? (
           <p className="finishing-error" role="alert">
@@ -289,7 +288,7 @@ export default function FinishingInquiry({
           </p>
         ) : null}
         <button type="submit" className="finishing-submit">
-          Request a Printing or Coating Quote
+          Open Email Draft
         </button>
         <p className="finishing-submit-note">
           This opens your email app with a prepared summary addressed to

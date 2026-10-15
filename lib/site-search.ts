@@ -17,7 +17,6 @@ export type SiteSearchEntry = {
   handle?: string;
   skus?: readonly string[];
   keywords?: readonly string[];
-  preview?: boolean;
 };
 
 export type SiteSearchMatch = SiteSearchEntry & { score: number };

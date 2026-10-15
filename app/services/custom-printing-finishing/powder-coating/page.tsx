@@ -12,9 +12,9 @@ import { genPageMetadata } from '@/app/seo';
 import FinishingInquiry from '@/components/custom-finishing/FinishingInquiry';
 import '../custom-finishing.css';
 export const metadata = genPageMetadata({
-  title: 'Powder Coating Preview | RWAS',
+  title: 'Powder Coating | RWAS',
   description:
-    'Preview powder coating inquiries for reviewed aviation shop and decorative work.',
+    'Powder coating inquiries for reviewed aviation shop and decorative work.',
   canonical:
     'https://www.rogerwilcoaviation.com/services/custom-printing-finishing/powder-coating',
 });
