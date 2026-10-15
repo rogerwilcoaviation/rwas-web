@@ -130,13 +130,106 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.25rem;
 }
-.finishing-placeholder-card {
+.finishing-media-card {
+  min-width: 0;
+  margin: 0;
   border: 1px solid var(--rule-soft);
   background: var(--bone);
 }
-.finishing-placeholder {
+.finishing-photo-button,
+.finishing-video-frame {
+  position: relative;
+  display: block;
+  width: 100%;
   aspect-ratio: 16/10;
+  overflow: hidden;
+  border: 0;
+  background: #181818;
+}
+.finishing-photo-button {
+  padding: 0;
+  cursor: zoom-in;
+}
+.finishing-photo-button img,
+.finishing-video-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.finishing-photo-button:focus-visible,
+.finishing-video-play:focus-visible,
+.finishing-dialog-close:focus-visible {
+  outline: 3px solid var(--gold-700);
+  outline-offset: 3px;
+}
+.finishing-media-card figcaption {
+  min-height: 3rem;
+  padding: 0.8rem 1rem;
+  font: 700 0.78rem/1.35 var(--font-ui);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.finishing-video-play {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  min-height: 48px;
+  border: 2px solid var(--bone);
+  padding: 0.75rem 1rem;
+  background: rgb(17 17 17 / 88%);
+  color: var(--bone);
+  font: 700 0.82rem/1.2 var(--font-ui);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.finishing-video-play span {
+  margin-right: 0.35rem;
+}
+.finishing-gallery-dialog {
+  width: min(96vw, 1100px);
+  max-width: none;
+  max-height: 94vh;
+  margin: auto;
+  border: 1px solid var(--rule);
+  padding: 0;
   background: var(--bone);
+  color: var(--ink-900);
+}
+.finishing-gallery-dialog::backdrop {
+  background: rgb(8 8 8 / 82%);
+}
+.finishing-dialog-content {
+  position: relative;
+  display: grid;
+  max-height: 94vh;
+  place-items: center;
+  padding: 3rem 1rem 1rem;
+}
+.finishing-dialog-content img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: calc(94vh - 7rem);
+  object-fit: contain;
+}
+.finishing-dialog-content p {
+  margin: 0.75rem 0 0;
+  font-weight: 700;
+}
+.finishing-dialog-close {
+  position: absolute;
+  z-index: 1;
+  top: 0.45rem;
+  right: 0.55rem;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--rule);
+  background: var(--bone);
+  color: var(--ink-900);
+  font: 400 2rem/1 var(--font-ui);
+  cursor: pointer;
 }
 .finishing-inquiry {
   display: grid;
