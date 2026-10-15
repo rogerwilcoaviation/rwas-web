@@ -1173,6 +1173,13 @@ export default async function ProductDetailPage({
     gating.isGarmin && gating.otc !== 'eligible'
       ? verifiedQuoteRetailPrice(product, quoteRetailPolicy)
       : null;
+  // Public retail display is fail-closed for non-OTC Garmin products. Shopify's
+  // catalog price is not, by itself, authorization to publish a dealer/install
+  // price. The reviewed policy binds product, variant, SKU, amount and currency.
+  const publicPriceAllowed =
+    !gating.isGarmin ||
+    gating.otc === 'eligible' ||
+    Boolean(approvedQuoteRetailPrice);
   const hasSingleVariant = product.variants.length === 1;
   const normalListPrice = product.variants[0]?.compareAtPrice;
   const hasSalePrice = Boolean(
@@ -1243,8 +1250,12 @@ export default async function ProductDetailPage({
           ? 'Standard configuration'
           : v.title,
       sku: v.sku,
-      price: v.price,
-      compareAtPrice: v.compareAtPrice,
+      // Do not serialize an unapproved dealer/install price into the client
+      // payload merely to hide it with CSS/conditional rendering.
+      price: publicPriceAllowed
+        ? v.price
+        : { amount: '0', currencyCode: v.price.currencyCode },
+      compareAtPrice: publicPriceAllowed ? v.compareAtPrice : null,
       availableForSale: v.availableForSale,
       selectedOptions,
       image: v.image,
@@ -1303,36 +1314,10 @@ export default async function ProductDetailPage({
     url: canonicalUrl,
     offers: (() => {
       if (!primaryPrice) return undefined;
-      // A quote-only listing is not an online transactional offer, even when
-      // its independently verified retail equipment price is visible.
-      if (
-        gating.isGarmin &&
-        gating.otc !== 'eligible' &&
-        quoteRetailPolicy.quoteOnlyAuditProducts.some(
-          (row) =>
-            row.productId === product.id && row.handle === product.handle,
-        )
-      )
-        return undefined;
-      // Preserve existing quote-offer behavior outside the explicitly audited
-      // 521 products; this remediation does not change other listing policies.
-      if (gating.isGarmin && gating.otc !== 'eligible') {
-        return {
-          '@type': 'Offer',
-          availability: 'https://schema.org/PreOrder',
-          itemCondition: 'https://schema.org/NewCondition',
-          url: canonicalUrl,
-          priceSpecification: {
-            '@type': 'PriceSpecification',
-            price: primaryPrice.amount,
-            priceCurrency: primaryPrice.currencyCode,
-          },
-          seller: {
-            '@type': 'Organization',
-            name: 'Roger Wilco Aviation Services',
-          },
-        };
-      }
+      // Non-OTC Garmin listings are quote/install inquiries, not online
+      // transactional offers. A reviewed equipment retail price may be shown
+      // in the page, but it must never become a Product Offer in JSON-LD.
+      if (gating.isGarmin && gating.otc !== 'eligible') return undefined;
       // Default path: full Offer with price, used for non-Garmin products
       // (Papa-Alpha tools) and Garmin products tagged otc-eligible (Garmin
       // Watches collection and similar).
@@ -1523,9 +1508,7 @@ export default async function ProductDetailPage({
               stockCheckRequired={gating.stockCheckRequired}
               isGarmin={gating.isGarmin}
               mapLocked={gating.mapLocked}
-              showQuoteRetailPrice={
-                showDualG5KitDetails || Boolean(approvedQuoteRetailPrice)
-              }
+              showQuoteRetailPrice={Boolean(approvedQuoteRetailPrice)}
               verifiedQuoteRetailDisplay={Boolean(approvedQuoteRetailPrice)}
               showGarminListPriceLabel={
                 ['010-02326-10', '010-02326-20', '010-02327-20'].includes(
@@ -1716,10 +1699,7 @@ export default async function ProductDetailPage({
                       </tr>
                     </>
                   ) : null}
-                  {(hasSingleVariant &&
-                    primaryPrice &&
-                    !(gating.isGarmin && gating.otc !== 'eligible')) ||
-                  gating.isDealerInstall ? (
+                  {hasSingleVariant && primaryPrice && publicPriceAllowed ? (
                     <tr>
                       <th>{hasSalePrice ? 'Sale Price' : 'Price'}</th>
                       <td>
@@ -1732,7 +1712,7 @@ export default async function ProductDetailPage({
                       </td>
                     </tr>
                   ) : null}
-                  {hasSalePrice && normalListPrice ? (
+                  {publicPriceAllowed && hasSalePrice && normalListPrice ? (
                     <tr>
                       <th>Normal List Price After Sale</th>
                       <td>

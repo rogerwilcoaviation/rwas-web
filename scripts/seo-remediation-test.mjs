@@ -191,8 +191,16 @@ const page = fs.readFileSync(
   new URL('../app/products/[handle]/page.tsx', import.meta.url),
   'utf8',
 );
-test(page.includes('quoteRetailPolicy.quoteOnlyAuditProducts.some'));
-test(page.includes("gating.otc !== 'eligible'"));
+test(page.includes('const publicPriceAllowed ='));
+test(page.includes("gating.otc === 'eligible'"));
+test(page.includes('Boolean(approvedQuoteRetailPrice)'));
+test(page.includes("price: publicPriceAllowed"));
+test(page.includes("compareAtPrice: publicPriceAllowed ? v.compareAtPrice : null"));
+test(
+  page.includes(
+    "if (gating.isGarmin && gating.otc !== 'eligible') return undefined",
+  ),
+);
 console.log(
   JSON.stringify({
     passed,
