@@ -9,15 +9,13 @@
 .finishing-eyebrow {
   display: inline-flex;
   align-items: center;
-  border: 1px solid #17466b;
+  border: 1px solid var(--gold-800);
   padding: 0.35rem 0.7rem;
-  font:
-    700 0.72rem/1.2 Arial,
-    sans-serif;
+  font: 700 0.72rem/1.2 var(--font-ui);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #17466b;
-  background: #edf4f7;
+  color: var(--gold-800);
+  background: var(--parchment);
 }
 .finishing-actions {
   display: flex;
@@ -34,12 +32,10 @@
   align-items: center;
   justify-content: center;
   padding: 0.78rem 1rem;
-  border: 2px solid #153f5f;
-  background: #153f5f;
-  color: #fff;
-  font:
-    700 0.8rem/1.2 Arial,
-    sans-serif;
+  border: 2px solid var(--ink-900);
+  background: var(--ink-900);
+  color: var(--bone);
+  font: 700 0.8rem/1.2 var(--font-ui);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-decoration: none;
@@ -47,28 +43,26 @@
 }
 .finishing-actions a + a {
   background: transparent;
-  color: #153f5f;
+  color: var(--ink-900);
 }
 .finishing-planner-link {
   margin: 1.2rem auto 0;
   max-width: 700px;
   padding: 0.8rem;
-  border-block: 1px solid #b7ad9e;
+  border-block: 1px solid var(--rule-soft);
 }
 .finishing-trust-strip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border-block: 1px solid #b7ad9e;
+  border-block: 1px solid var(--rule-soft);
   margin: 0 0 2rem;
 }
 .finishing-trust-strip p {
   padding: 1rem;
   margin: 0;
   text-align: center;
-  border-right: 1px solid #b7ad9e;
-  font:
-    600 0.78rem/1.45 Arial,
-    sans-serif;
+  border-right: 1px solid var(--rule-soft);
+  font: 600 0.78rem/1.45 var(--font-ui);
 }
 .finishing-trust-strip p:last-child {
   border: 0;
@@ -80,10 +74,10 @@
   margin: 2rem 0;
 }
 .finishing-service-card {
-  border: 1px solid #9f9585;
-  background: #faf7f0;
+  border: 1px solid var(--rule);
+  background: var(--bone);
   padding: clamp(1.25rem, 3vw, 2rem);
-  box-shadow: 5px 5px 0 rgba(26, 53, 70, 0.11);
+  box-shadow: 5px 5px 0 var(--ink-900);
 }
 .finishing-service-card h2 {
   margin: 0.45rem 0 0.75rem;
@@ -92,8 +86,8 @@
   font-weight: 700;
 }
 .finishing-caveat {
-  border-left: 5px solid #b85f2e;
-  background: #f8eee7;
+  border-left: 5px solid var(--gold-700);
+  background: var(--parchment);
   padding: 1rem 1.25rem;
   margin: 1.5rem 0;
 }
@@ -116,17 +110,17 @@
 .finishing-choice-grid button,
 .finishing-chips button {
   min-height: 44px;
-  border: 1px solid #526777;
-  background: #fff;
-  color: #173f5e;
+  border: 1px solid var(--rule);
+  background: var(--bone);
+  color: var(--ink-900);
   padding: 0.65rem 0.9rem;
   font-weight: 700;
   cursor: pointer;
 }
 .finishing-filter button[aria-pressed='true'],
 .finishing-choice-grid button[aria-pressed='true'] {
-  background: #173f5e;
-  color: #fff;
+  background: var(--ink-900);
+  color: var(--bone);
 }
 .finishing-gallery {
   margin: 3rem 0;
@@ -137,8 +131,8 @@
   gap: 1.25rem;
 }
 .finishing-placeholder-card {
-  border: 1px solid #a69b8b;
-  background: #faf7f0;
+  border: 1px solid var(--rule-soft);
+  background: var(--bone);
 }
 .finishing-placeholder {
   aspect-ratio: 16/10;
@@ -148,20 +142,18 @@
   justify-content: center;
   text-align: center;
   padding: 1.25rem;
-  color: #2c5069;
+  color: var(--ink-700);
   background: repeating-linear-gradient(
     135deg,
-    #e9eef0 0,
-    #e9eef0 12px,
-    #f4f1e9 12px,
-    #f4f1e9 24px
+    var(--parchment) 0,
+    var(--parchment) 12px,
+    var(--bone) 12px,
+    var(--bone) 24px
   );
-  border-bottom: 1px solid #a69b8b;
+  border-bottom: 1px solid var(--rule-soft);
 }
 .finishing-placeholder span {
-  font:
-    700 0.7rem/1.2 Arial,
-    sans-serif;
+  font: 700 0.7rem/1.2 var(--font-ui);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -173,7 +165,7 @@
   margin: 0.7rem 0;
 }
 .finishing-placeholder small {
-  background: #fff;
+  background: var(--bone);
   padding: 0.3rem 0.5rem;
 }
 .finishing-placeholder-copy {
@@ -185,11 +177,9 @@
   flex-wrap: wrap;
 }
 .finishing-placeholder-copy span {
-  border: 1px solid #9e9384;
+  border: 1px solid var(--rule-soft);
   padding: 0.2rem 0.45rem;
-  font:
-    700 0.65rem/1.2 Arial,
-    sans-serif;
+  font: 700 0.65rem/1.2 var(--font-ui);
   text-transform: uppercase;
 }
 .finishing-inquiry {
@@ -204,8 +194,8 @@
   top: 1.5rem;
 }
 .finishing-question-card {
-  background: #173f5e;
-  color: #fff;
+  background: var(--ink-900);
+  color: var(--bone);
   padding: 1.25rem;
   margin-top: 1.25rem;
 }
@@ -214,25 +204,23 @@
   margin-top: 0.75rem;
 }
 .finishing-jerry-button {
-  background: #f4e7cf;
-  color: #173f5e;
-  border-color: #f4e7cf;
+  background: var(--gold-light);
+  color: var(--ink-900);
+  border-color: var(--gold-light);
 }
 .finishing-form {
-  border: 1px solid #9f9585;
+  border: 1px solid var(--rule);
   padding: clamp(1rem, 4vw, 2rem);
-  background: #faf7f0;
+  background: var(--bone);
 }
 .finishing-form label,
 .finishing-form legend {
   display: block;
   margin: 0.9rem 0 0.4rem;
-  font:
-    700 0.78rem/1.25 Arial,
-    sans-serif;
+  font: 700 0.78rem/1.25 var(--font-ui);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #193e58;
+  color: var(--ink-800);
 }
 .finishing-form legend span {
   font-weight: 400;
@@ -243,8 +231,8 @@
 .finishing-form textarea {
   width: 100%;
   min-height: 44px;
-  border: 1px solid #70695f;
-  background: #fff;
+  border: 1px solid var(--rule);
+  background: var(--bone);
   padding: 0.7rem;
   font: inherit;
   border-radius: 0;
@@ -280,12 +268,12 @@
 }
 .finishing-upload-note {
   margin: 1.25rem 0;
-  background: #eef2f3;
-  border-left: 4px solid #173f5e;
+  background: var(--parchment);
+  border-left: 4px solid var(--ink-900);
   padding: 0.9rem;
 }
 .finishing-error {
-  color: #8c251f;
+  color: #7a2f22;
   font-weight: 700;
 }
 .finishing-submit {
@@ -302,9 +290,9 @@
   margin: 2rem 0;
 }
 .finishing-process div {
-  border-top: 4px solid #173f5e;
+  border-top: 4px solid var(--ink-900);
   padding: 0.8rem;
-  background: #f5f0e7;
+  background: var(--parchment);
 }
 .finishing-process strong {
   display: block;
@@ -316,7 +304,7 @@
   margin: 2rem 0;
 }
 .finishing-facts {
-  background: #f5f0e7;
+  background: var(--parchment);
   padding: 1.25rem;
 }
 .finishing-facts dt {
@@ -356,7 +344,7 @@
   }
   .finishing-trust-strip p {
     border-right: 0;
-    border-bottom: 1px solid #b7ad9e;
+    border-bottom: 1px solid var(--rule-soft);
   }
   .finishing-trust-strip p:last-child {
     border-bottom: 0;
@@ -385,7 +373,7 @@
   }
   .finishing-actions a {
     max-width: 100%;
-    padding-inline: .6rem;
+    padding-inline: 0.6rem;
     text-align: center;
     white-space: normal;
   }
