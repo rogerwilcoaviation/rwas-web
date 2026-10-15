@@ -66,13 +66,28 @@ export default function SiteSearch({
     const scrollY = window.scrollY;
     const htmlOverflow = document.documentElement.style.overflow;
     const bodyOverflow = document.body.style.overflow;
+    const bodyPosition = document.body.style.position;
+    const bodyTop = document.body.style.top;
+    const bodyLeft = document.body.style.left;
+    const bodyRight = document.body.style.right;
+    const bodyWidth = document.body.style.width;
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
     window.requestAnimationFrame(() => inputRef.current?.focus());
 
     return () => {
       document.documentElement.style.overflow = htmlOverflow;
       document.body.style.overflow = bodyOverflow;
+      document.body.style.position = bodyPosition;
+      document.body.style.top = bodyTop;
+      document.body.style.left = bodyLeft;
+      document.body.style.right = bodyRight;
+      document.body.style.width = bodyWidth;
       window.scrollTo(scrollX, scrollY);
     };
   }, [open]);
