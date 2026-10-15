@@ -258,7 +258,13 @@ const entries = [
       ),
       keywords: [article.category, ...(article.tags || [])]
         .map((value) => cleanText(value, 80))
-        .filter(Boolean),
+        .filter(
+          (value) =>
+            value &&
+            !['admin', 'dealer-memo', 'draft', 'internal', 'private'].includes(
+              value.toLowerCase(),
+            ),
+        ),
     })),
   ...PLANNING_TOOLS.map(([title, href, description, keywords]) => ({
     group: 'Planning tools',

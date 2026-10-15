@@ -5595,7 +5595,6 @@ export const SITE_SEARCH_INDEX = [
     keywords: [
       'product-update',
       'garmin',
-      'dealer-memo',
       'axis',
       'flight-displays',
       'avionics',
@@ -5714,7 +5713,6 @@ export const SITE_SEARCH_INDEX = [
       'garmin-pilot',
       'promotion',
       'right-seat-rewards',
-      'dealer-memo',
     ],
   },
   {
