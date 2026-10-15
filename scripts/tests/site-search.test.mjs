@@ -100,13 +100,24 @@ test('AND text matching finds required public coverage', () => {
   assert.deepEqual(searchSiteIndex(index, 'powder CitationJet'), []);
 });
 
-test('custom printing service pages are marked Preview', () => {
-  const previewServices = index.filter(
-    (entry) => entry.group === 'Services' && entry.preview,
-  );
-  assert.deepEqual(previewServices.map((entry) => entry.href).sort(), [
+test('custom printing service pages are production-ready public entries', () => {
+  const routes = index
+    .filter((entry) =>
+      entry.href.startsWith('/services/custom-printing-finishing'),
+    )
+    .map((entry) => entry.href)
+    .sort();
+  assert.deepEqual(routes, [
     '/services/custom-printing-finishing',
     '/services/custom-printing-finishing/powder-coating',
     '/services/custom-printing-finishing/uv-printing',
   ]);
+  assert.ok(index.every((entry) => !Object.hasOwn(entry, 'preview')));
+  assert.ok(
+    index
+      .filter((entry) =>
+        entry.href.startsWith('/services/custom-printing-finishing'),
+      )
+      .every((entry) => !/\bpreview\b/i.test(entry.description)),
+  );
 });

@@ -84,20 +84,17 @@ const SERVICES = [
   [
     'Custom Printing & Finishing',
     '/services/custom-printing-finishing',
-    'Preview custom UV printing and powder coating for reviewed aviation and decorative work.',
-    true,
+    'Custom UV printing and powder coating for reviewed aviation and decorative work.',
   ],
   [
     'UV Printing',
     '/services/custom-printing-finishing/uv-printing',
-    'Preview UV printing inquiries for primarily flat aviation and decorative parts.',
-    true,
+    'UV printing inquiries for primarily flat aviation and decorative parts.',
   ],
   [
     'Powder Coating',
     '/services/custom-printing-finishing/powder-coating',
-    'Preview powder coating inquiries for reviewed aviation shop and decorative work.',
-    true,
+    'Powder coating inquiries for reviewed aviation shop and decorative work.',
   ],
 ];
 
@@ -227,12 +224,11 @@ const [products, blogData] = await Promise.all([
 ]);
 
 const entries = [
-  ...SERVICES.map(([title, href, description, preview = false]) => ({
+  ...SERVICES.map(([title, href, description]) => ({
     group: 'Services',
     title,
     href,
     description,
-    ...(preview ? { preview: true } : {}),
   })),
   ...products.map((product) => ({
     group: 'Products',

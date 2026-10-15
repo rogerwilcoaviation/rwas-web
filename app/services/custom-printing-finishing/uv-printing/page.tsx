@@ -12,9 +12,9 @@ import { genPageMetadata } from '@/app/seo';
 import FinishingInquiry from '@/components/custom-finishing/FinishingInquiry';
 import '../custom-finishing.css';
 export const metadata = genPageMetadata({
-  title: 'UV Printing Preview | RWAS',
+  title: 'UV Printing | RWAS',
   description:
-    'Preview UV printing inquiries for primarily flat aviation and decorative parts.',
+    'UV printing inquiries for primarily flat aviation and decorative parts.',
   canonical:
     'https://www.rogerwilcoaviation.com/services/custom-printing-finishing/uv-printing',
 });

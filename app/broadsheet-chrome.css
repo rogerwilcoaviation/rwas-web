@@ -2725,45 +2725,6 @@ body {
   }
 }
 
-/* Homepage feature: printing and coating service preview. */
-.broadsheet .home-printing-feature {
-  margin: 32px 0 0;
-  padding: 24px 28px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 28px;
-  align-items: center;
-  border: var(--hairline);
-  border-top: var(--rule-top-accent);
-  background: var(--bone);
-  box-shadow: var(--specimen-shadow);
-}
-.broadsheet .home-printing-feature__copy {
-  max-width: 780px;
-}
-.broadsheet .home-printing-feature h2 {
-  margin: 5px 0 8px;
-}
-.broadsheet .home-printing-feature p {
-  margin: 0;
-  color: var(--ink-700);
-}
-.broadsheet .home-printing-feature__cta {
-  white-space: nowrap;
-}
-@media (max-width: 700px) {
-  .broadsheet .home-printing-feature {
-    grid-template-columns: 1fr;
-    gap: 18px;
-    padding: 20px;
-  }
-  .broadsheet .home-printing-feature__cta {
-    width: 100%;
-    white-space: normal;
-    text-align: center;
-  }
-}
-
 /* Shared public-site search bar beneath the primary navigation. */
 .broadsheet .bs-site-search {
   width: min(760px, calc(100% - 56px));

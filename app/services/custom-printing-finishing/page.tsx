@@ -13,9 +13,9 @@ import FinishingGallery from '@/components/custom-finishing/FinishingGallery';
 import FinishingInquiry from '@/components/custom-finishing/FinishingInquiry';
 import './custom-finishing.css';
 export const metadata = genPageMetadata({
-  title: 'UV Printing & Powder Coating Preview | RWAS',
+  title: 'UV Printing & Powder Coating | RWAS',
   description:
-    'Preview RWAS UV printing and powder coating services for reviewed aviation and decorative work.',
+    'RWAS UV printing and powder coating services for reviewed aviation and decorative work.',
   canonical:
     'https://www.rogerwilcoaviation.com/services/custom-printing-finishing',
 });
@@ -29,9 +29,7 @@ export default function Page() {
       <BulletinBar />
       <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="finishing-hero" aria-labelledby="finishing-title">
-          <span className="finishing-eyebrow">
-            Preview · specialized shop services
-          </span>
+          <span className="finishing-eyebrow">Specialized shop services</span>
           <p className="bs-script-accent">— color, graphics &amp; finish —</p>
           <h1 id="finishing-title" className="bs-headline bs-headline--hero">
             UV Printing &amp;

@@ -80,24 +80,21 @@ export const SITE_SEARCH_INDEX = [
     title: 'Custom Printing & Finishing',
     href: '/services/custom-printing-finishing',
     description:
-      'Preview custom UV printing and powder coating for reviewed aviation and decorative work.',
-    preview: true,
+      'Custom UV printing and powder coating for reviewed aviation and decorative work.',
   },
   {
     group: 'Services',
     title: 'UV Printing',
     href: '/services/custom-printing-finishing/uv-printing',
     description:
-      'Preview UV printing inquiries for primarily flat aviation and decorative parts.',
-    preview: true,
+      'UV printing inquiries for primarily flat aviation and decorative parts.',
   },
   {
     group: 'Services',
     title: 'Powder Coating',
     href: '/services/custom-printing-finishing/powder-coating',
     description:
-      'Preview powder coating inquiries for reviewed aviation shop and decorative work.',
-    preview: true,
+      'Powder coating inquiries for reviewed aviation shop and decorative work.',
   },
   {
     group: 'Products',
