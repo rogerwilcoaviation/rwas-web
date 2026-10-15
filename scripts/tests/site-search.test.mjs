@@ -114,6 +114,16 @@ test('custom printing service pages are production-ready public entries', () => 
   ]);
   assert.ok(index.every((entry) => !Object.hasOwn(entry, 'preview')));
   assert.ok(
+    index.every((entry) =>
+      (entry.keywords || []).every(
+        (keyword) =>
+          !['admin', 'dealer-memo', 'draft', 'internal', 'private'].includes(
+            keyword.toLowerCase(),
+          ),
+      ),
+    ),
+  );
+  assert.ok(
     index
       .filter((entry) =>
         entry.href.startsWith('/services/custom-printing-finishing'),
