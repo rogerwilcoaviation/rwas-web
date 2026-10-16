@@ -76,6 +76,8 @@ for (const path of [
   '/api/service-receipt',
   '/api/intake-dispatch',
   '/api/service-intake-config',
+  '/api/aircraft-sale',
+  '/api/aircraft-sale/*',
 ]) {
   routes.include = routes.include || [];
   if (
@@ -91,7 +93,7 @@ for (const path of [
     )
   )
     throw new Error(
-      'An existing wildcard exclusion would bypass service intake',
+      'An existing wildcard exclusion would bypass intake or seller API',
     );
 }
 writeFileSync(routesPath, JSON.stringify(routes, null, 2));

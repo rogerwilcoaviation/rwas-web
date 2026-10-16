@@ -2,8 +2,32 @@
 'use client';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { SELLER_API } from '@/lib/seller-api';
+import ClerkProductionPanel, {
+  ClerkProductionAccountPanel,
+  ClerkOwnerIdentityPanel,
+} from './clerk-production-panel';
+import {
+  getClerkProductionBrowser,
+  isClerkProductionMethodEnabled,
+  type ClerkProductionLinkOwner,
+  type ClerkProductionOwnerProof,
+  type ClerkProductionSession,
+} from './clerk-production-browser';
+import {
+  CLERK_OWNER_FLOW_KEY,
+  readClerkOwnerFlow,
+  storeClerkOwnerFlow,
+} from './clerk-owner-reauth';
+import { createSellerRequestFacade } from './seller-request-facade';
 
-type Session = { token: string; email: string; name: string };
+type Auth0Session = {
+  purpose?: never;
+  provider?: 'auth0';
+  token: string;
+  email: string;
+  name: string;
+};
+type Session = Auth0Session | ClerkProductionSession;
 type Media = {
   key: string;
   name: string;
@@ -39,6 +63,29 @@ type Account = {
 };
 const key = 'rwas_sale_v2';
 const identityKey = 'rwas_sale_identity';
+const clerkLinkKey = 'rwas_sale_clerk_link_intent';
+
+async function clerkLinkFingerprint(token: string) {
+  const digest = await crypto.subtle.digest(
+    'SHA-256',
+    new TextEncoder().encode(token),
+  );
+  return btoa(String.fromCharCode(...new Uint8Array(digest)))
+    .replaceAll('+', '-')
+    .replaceAll('/', '_')
+    .replaceAll('=', '');
+}
+
+function clearSellerAuthRoute() {
+  const current = new URL(window.location.href);
+  if (!current.searchParams.has('seller-auth')) return;
+  current.searchParams.delete('seller-auth');
+  history.replaceState(
+    null,
+    '',
+    current.pathname + current.search + current.hash,
+  );
+}
 const inputs: [string, string, string?][] = [
   ['make', 'Make'],
   ['model', 'Model'],
@@ -76,12 +123,42 @@ const categories: [string, string][] = [
   ['misc', 'Other records'],
 ];
 
+async function sellerSessionHeaders(
+  session: Session,
+): Promise<Record<string, string>> {
+  if (session.purpose !== undefined)
+    throw new Error('Seller sign-in is required.');
+  if (session.provider === 'clerk-production') {
+    const client = await getClerkProductionBrowser();
+    return {
+      Authorization: 'Bearer ' + session.token,
+      'X-Clerk-Session-Token': await client.token(),
+      'X-RWAS-CSRF': session.csrf,
+    };
+  }
+  return { Authorization: 'Bearer ' + session.token };
+}
+
 export default function SellerAuthPanel() {
   const [session, setSession] = useState<Session | null>(null);
   const [identityMethods, setIdentityMethods] = useState<IdentityMethod[]>([]);
+  const [clerkProduction, setClerkProduction] = useState(false);
+  const [clerkExistingAccountLink, setClerkExistingAccountLink] =
+    useState(false);
+  const [clerkOwnerReauthEnabled, setClerkOwnerReauthEnabled] = useState(false);
+  const [ownerProof, setOwnerProof] =
+    useState<ClerkProductionOwnerProof | null>(null);
+  const [ownerStage, setOwnerStage] = useState<
+    'identity' | 'starting' | 'confirmation' | 'error'
+  >('identity');
+  const ownerGeneration = useRef(0);
+  const [clerkSignOutPending, setClerkSignOutPending] = useState(false);
+  const [clerkLinkOwner, setClerkLinkOwner] =
+    useState<ClerkProductionLinkOwner | null>(null);
   const [emailCodeLogin, setEmailCodeLogin] = useState(false);
+  const [clerkRouteStage, setClerkRouteStage] = useState('');
   const [view, setView] = useState<
-    'login' | 'listings' | 'edit' | 'account' | null
+    'login' | 'clerk' | 'clerk-owner' | 'listings' | 'edit' | 'account' | null
   >(null);
   const [email, setEmail] = useState(''),
     [code, setCode] = useState(''),
@@ -101,10 +178,30 @@ export default function SellerAuthPanel() {
     [emailSent, setEmailSent] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null),
     submission = useRef(crypto.randomUUID());
+  const currentAuth = useRef<Session | null>(null);
+  const authGeneration = useRef(0);
+  const requestFacade = useRef<ReturnType<
+    typeof createSellerRequestFacade
+  > | null>(null);
   const setAuth = (s: Session | null) => {
+    if (s?.purpose !== undefined)
+      throw new Error('Seller sign-in is required.');
+    authGeneration.current += 1;
+    currentAuth.current = s;
+    if (s && requestFacade.current) {
+      window.rwasSellerRequestHeaders = requestFacade.current.requestHeaders;
+      window.rwasSellerSessionRejected = requestFacade.current.sessionRejected;
+    } else {
+      delete window.rwasSellerRequestHeaders;
+      delete window.rwasSellerSessionRejected;
+    }
     setSession(s);
     if (s) sessionStorage.setItem(key, JSON.stringify(s));
     else sessionStorage.removeItem(key);
+    if (!s || s.provider === 'clerk-production') {
+      sessionStorage.removeItem(clerkLinkKey);
+      setClerkLinkOwner(null);
+    }
     // Compatibility envelope shared with the listing widget; no token logging.
     (window as unknown as { rwasSaleSession: Session | null }).rwasSaleSession =
       s;
@@ -112,31 +209,335 @@ export default function SellerAuthPanel() {
       new CustomEvent('rwas:session-changed', { detail: s }),
     );
   };
+  const clerkSessionToken =
+    session?.provider === 'clerk-production' ? session.token : null;
   useEffect(() => {
+    const facade = createSellerRequestFacade({
+      read: () => ({
+        session: currentAuth.current,
+        generation: authGeneration.current,
+      }),
+      headers: async (captured) => {
+        const current = currentAuth.current;
+        if (!current || captured !== current)
+          throw new Error('Seller sign-in is required.');
+        return sellerSessionHeaders(current);
+      },
+      origin: () => window.location.origin,
+      reject: () => {
+        setAuth(null);
+        setAccount(null);
+        setError('Your session ended. Please sign in again.');
+        setView('login');
+      },
+    });
+    requestFacade.current = facade;
+    return () => {
+      authGeneration.current += 1;
+      requestFacade.current = null;
+      if (window.rwasSellerRequestHeaders === facade.requestHeaders)
+        delete window.rwasSellerRequestHeaders;
+      if (window.rwasSellerSessionRejected === facade.sessionRejected)
+        delete window.rwasSellerSessionRejected;
+    };
+    // Both callbacks read the current session ref rather than a rendered envelope.
+  }, []);
+  useEffect(() => {
+    if (!clerkSessionToken || session?.provider !== 'clerk-production') return;
+    const current = session;
+    let active = true;
+    let ended = false;
+    let unsubscribe = () => {};
+    const isCurrent = () =>
+      active && !ended && currentAuth.current?.token === current.token;
+    const endSession = () => {
+      if (!isCurrent()) return;
+      ended = true;
+      setAuth(null);
+      setAccount(null);
+      setMessage('');
+      setError('Your secure session ended. Please sign in again.');
+      setView('login');
+    };
+    void getClerkProductionBrowser()
+      .then((client) => {
+        if (!isCurrent()) return;
+        const original = client.identityState();
+        if (!original.sessionId || !original.userId) {
+          endSession();
+          return;
+        }
+        let userUpdatedAt = original.userUpdatedAt;
+        let validating = false;
+        let validationQueued = false;
+        const validate = async () => {
+          if (!isCurrent()) return;
+          if (validating) {
+            validationQueued = true;
+            return;
+          }
+          validating = true;
+          try {
+            do {
+              validationQueued = false;
+              const clerkToken = await client.token();
+              if (!isCurrent()) return;
+              const response = await fetch(SELLER_API + '/account', {
+                cache: 'no-store',
+                credentials: 'same-origin',
+                headers: {
+                  Authorization: 'Bearer ' + current.token,
+                  'X-Clerk-Session-Token': clerkToken,
+                  'X-RWAS-CSRF': current.csrf,
+                },
+              });
+              // UserProfile changes must pass the same server-side identity and
+              // password-generation fences as every other seller request.
+              if (response.status === 401 || response.status === 403)
+                endSession();
+            } while (isCurrent() && validationQueued);
+          } catch {
+            // Transient failures do not create a replacement seller session.
+          } finally {
+            validating = false;
+          }
+        };
+        unsubscribe = client.addIdentityListener((next) => {
+          if (!isCurrent()) return;
+          if (
+            next.sessionId !== original.sessionId ||
+            next.userId !== original.userId
+          ) {
+            endSession();
+            return;
+          }
+          if (next.userUpdatedAt !== userUpdatedAt) {
+            userUpdatedAt = next.userUpdatedAt;
+            void validate();
+          }
+        });
+        void validate();
+      })
+      .catch(endSession);
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+    // The listener belongs to this RWAS session, not to profile form rerenders.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clerkSessionToken]);
+  useEffect(() => {
+    let active = true;
     localStorage.removeItem('rwas_sale_session'); // Legacy sessions are not accepted by v2.
+    let storedSession: Session | null = null;
     try {
-      const s = JSON.parse(
+      storedSession = JSON.parse(
         sessionStorage.getItem(key) || 'null',
       ) as Session | null;
-      if (s?.token && s.email) setAuth(s);
+      if (storedSession?.purpose !== undefined) {
+        storedSession = null;
+        sessionStorage.removeItem(key);
+      }
+      if (
+        storedSession?.email &&
+        storedSession.token &&
+        storedSession.provider !== 'clerk-production'
+      )
+        setAuth(storedSession);
     } catch {
       sessionStorage.removeItem(key);
     }
+    const requestedClerkRoute = new URL(window.location.href).searchParams.get(
+      'seller-auth',
+    );
+    const initialUrl = new URL(window.location.href);
+    const ownerCallback =
+      Boolean(sessionStorage.getItem(CLERK_OWNER_FLOW_KEY)) &&
+      ['state', 'code', 'error'].some((name) =>
+        initialUrl.searchParams.has(name),
+      );
+    if (requestedClerkRoute !== null) setClerkRouteStage('methods-loading');
     void fetch(SELLER_API + '/auth/methods', { cache: 'no-store' })
       .then(async (response) => {
-        if (response.ok) {
-          const data = await response.json();
-          setIdentityMethods(
-            (data.methods || []).filter((value: string) =>
-              ['password', 'google', 'apple'].includes(value),
-            ),
+        if (!response.ok) throw new Error('methods unavailable');
+        const data = await response.json();
+        if (!active) return;
+        setIdentityMethods(
+          (data.methods || []).filter((value: string) =>
+            ['password', 'google', 'apple'].includes(value),
+          ),
+        );
+        setEmailCodeLogin(data.emailCode === true);
+        const clerkEnabled = isClerkProductionMethodEnabled(data);
+        setClerkProduction(clerkEnabled);
+        const linkingEnabled =
+          clerkEnabled &&
+          data.existingAccountLink === 'fresh-email-code-session';
+        setClerkExistingAccountLink(linkingEnabled);
+        const ownerEnabled =
+          clerkEnabled && data.existingAccountOwnerReauth === 'auth0-password';
+        setClerkOwnerReauthEnabled(ownerEnabled);
+        const rawOwnerFlow = sessionStorage.getItem(CLERK_OWNER_FLOW_KEY);
+        const ownerFlow = readClerkOwnerFlow(sessionStorage);
+        if (rawOwnerFlow && !ownerCallback) {
+          // Preserve the SDK's sign-up route until its identity-only view mounts.
+          if (ownerFlow?.phase !== 'identity') clearSellerAuthRoute();
+          if (!ownerEnabled || !ownerFlow) {
+            sessionStorage.removeItem(CLERK_OWNER_FLOW_KEY);
+            setOwnerStage('error');
+            setError(
+              'Account connection expired or is unavailable. Please start again.',
+            );
+          } else if (ownerFlow.phase === 'confirmation') {
+            setOwnerProof(ownerFlow);
+            setOwnerStage('confirmation');
+          } else if (ownerFlow.phase === 'identity') {
+            setOwnerStage('identity');
+          } else {
+            setOwnerStage('error');
+            setError(
+              'Password verification was interrupted. Please start account connection again.',
+            );
+          }
+          setView('clerk-owner');
+        }
+        const clerkRoute = new URL(window.location.href).searchParams.get(
+          'seller-auth',
+        );
+        let linkIntentInvalid = false;
+        const rawLinkIntent = sessionStorage.getItem(clerkLinkKey);
+        if (
+          rawLinkIntent &&
+          !rawOwnerFlow &&
+          !ownerCallback &&
+          ['sign-up', 'complete'].includes(clerkRoute || '')
+        ) {
+          let intent: { fingerprint?: string; requestedAt?: number } | null =
+            null;
+          try {
+            intent = JSON.parse(rawLinkIntent);
+          } catch {
+            /* Invalid local connection intent. */
+          }
+          const age = Date.now() - (intent?.requestedAt ?? 0);
+          const matchingOwner =
+            storedSession?.token &&
+            intent?.fingerprint ===
+              (await clerkLinkFingerprint(storedSession.token));
+          if (!active) return;
+          if (sessionStorage.getItem(clerkLinkKey) !== rawLinkIntent) return;
+          if (
+            linkingEnabled &&
+            storedSession?.token &&
+            storedSession.provider !== 'clerk-production' &&
+            age >= 0 &&
+            age <= 600000 &&
+            matchingOwner
+          ) {
+            setClerkLinkOwner(storedSession);
+          } else {
+            linkIntentInvalid = true;
+            sessionStorage.removeItem(clerkLinkKey);
+            clearSellerAuthRoute();
+            setError(
+              'Account connection expired. Open Account and start again after a fresh email-code sign-in.',
+            );
+            setView('login');
+          }
+        }
+        if (
+          ['sign-up', 'complete'].includes(clerkRoute || '') &&
+          clerkEnabled &&
+          !linkIntentInvalid &&
+          !rawOwnerFlow &&
+          !ownerCallback
+        ) {
+          setClerkRouteStage('panel-requested');
+          setView('clerk');
+        } else if (
+          clerkRoute !== null &&
+          !linkIntentInvalid &&
+          !rawOwnerFlow &&
+          !ownerCallback
+        ) {
+          setClerkRouteStage(
+            clerkEnabled ? 'route-invalid' : 'method-unavailable',
           );
-          setEmailCodeLogin(data.emailCode === true);
+          clearSellerAuthRoute();
+        }
+        if (storedSession?.provider === 'clerk-production') {
+          if (clerkEnabled && storedSession.email && storedSession.token)
+            setAuth(storedSession);
+          else sessionStorage.removeItem(key);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!active) return;
+        if (requestedClerkRoute !== null) {
+          setClerkRouteStage('methods-failed');
+          clearSellerAuthRoute();
+        }
+      });
     const callback = new URL(window.location.href);
-    if (
+    if (ownerCallback) {
+      const generation = ownerGeneration.current;
+      const state = callback.searchParams.get('state');
+      const authorizationCode = callback.searchParams.get('code');
+      const providerError = callback.searchParams.get('error');
+      const pending = readClerkOwnerFlow(sessionStorage);
+      for (const name of ['state', 'code', 'error', 'error_description'])
+        callback.searchParams.delete(name);
+      history.replaceState(
+        null,
+        '',
+        callback.pathname + callback.search + callback.hash,
+      );
+      setView('clerk-owner');
+      setOwnerStage('starting');
+      if (
+        !pending ||
+        pending.phase !== 'reauth' ||
+        pending.state !== state ||
+        (!authorizationCode && !providerError)
+      ) {
+        sessionStorage.removeItem(CLERK_OWNER_FLOW_KEY);
+        setOwnerStage('error');
+        setError(
+          'Account connection was started in another tab or expired. Please start again.',
+        );
+      } else {
+        void getClerkProductionBrowser()
+          .then((client) => {
+            if (!active || generation !== ownerGeneration.current)
+              throw new Error('Account connection closed.');
+            return client.finishOwnerReauthentication(
+              pending,
+              authorizationCode,
+              providerError,
+            );
+          })
+          .then((proof) => {
+            if (!active || generation !== ownerGeneration.current) return;
+            storeClerkOwnerFlow(sessionStorage, {
+              ...proof,
+              phase: 'confirmation',
+              requestedAt: Date.now(),
+            });
+            setOwnerProof(proof);
+            setOwnerStage('confirmation');
+            setError('');
+          })
+          .catch(() => {
+            if (!active || generation !== ownerGeneration.current) return;
+            sessionStorage.removeItem(CLERK_OWNER_FLOW_KEY);
+            setOwnerProof(null);
+            setOwnerStage('error');
+            setError(
+              'The existing seller account could not be verified. Start again or contact RWAS for help.',
+            );
+          });
+      }
+    } else if (
       callback.searchParams.has('state') &&
       (callback.searchParams.has('code') || callback.searchParams.has('error'))
     ) {
@@ -177,6 +578,7 @@ export default function SellerAuthPanel() {
         })
           .then(async (response) => {
             const data = await response.json();
+            if (!active) return;
             if (!response.ok)
               throw Error(data.error || 'Sign-in could not be completed.');
             setAuth({
@@ -190,6 +592,7 @@ export default function SellerAuthPanel() {
             setView(null);
           })
           .catch((error) => {
+            if (!active) return;
             setError(
               error instanceof Error
                 ? error.message
@@ -197,7 +600,9 @@ export default function SellerAuthPanel() {
             );
             setView('login');
           })
-          .finally(() => setBusy(false));
+          .finally(() => {
+            if (active) setBusy(false);
+          });
       }
     }
     const login = () => {
@@ -231,10 +636,21 @@ export default function SellerAuthPanel() {
     document.addEventListener('rwas:seller-draft', draft);
     document.addEventListener('rwas:open-seller-login', login);
     return () => {
+      active = false;
+      ownerGeneration.current += 1;
       document.removeEventListener('rwas:open-seller-login', login);
       document.removeEventListener('rwas:seller-draft', draft);
     };
   }, []);
+  const closeSellerPanel = () => {
+    ownerGeneration.current += 1;
+    sessionStorage.removeItem(CLERK_OWNER_FLOW_KEY);
+    setOwnerProof(null);
+    clearSellerAuthRoute();
+    sessionStorage.removeItem(clerkLinkKey);
+    setClerkLinkOwner(null);
+    setView(null);
+  };
   useEffect(() => {
     if (view && !dialog.current?.open) dialog.current?.showModal();
     else if (!view && dialog.current?.open) dialog.current.close();
@@ -245,24 +661,47 @@ export default function SellerAuthPanel() {
     body?: unknown,
     extra?: Record<string, string>,
   ) {
+    const captured = currentAuth.current;
+    const generation = authGeneration.current;
+    const stillCurrent = () =>
+      generation === authGeneration.current && captured === currentAuth.current;
+    const headers = captured ? await sellerSessionHeaders(captured) : {};
+    if (!stillCurrent())
+      throw Object.assign(Error('Your session changed. Please try again.'), {
+        status: 401,
+      });
     const resp = await fetch(SELLER_API + path, {
       method,
       cache: 'no-store',
+      credentials: 'same-origin',
       headers: {
         ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
-        ...(session ? { Authorization: 'Bearer ' + session.token } : {}),
+        ...headers,
         ...extra,
       },
       ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
     });
-    const data = await resp.json();
-    if (resp.status === 401) {
+    const data = await resp.json().catch(() => null);
+    if (
+      stillCurrent() &&
+      (resp.status === 401 ||
+        (resp.status === 403 && captured?.provider === 'clerk-production'))
+    ) {
       setAuth(null);
+      setAccount(null);
       setView('login');
       setSent(false);
     }
     if (!resp.ok)
-      throw Error(data.error || 'The request could not be completed.');
+      throw Object.assign(
+        Error(data?.error || 'The request could not be completed.'),
+        { status: resp.status },
+      );
+    if (!stillCurrent())
+      throw Object.assign(Error('Your session changed. Please try again.'), {
+        status: 401,
+      });
+    if (!data) throw Error('The request could not be completed.');
     return data;
   }
   async function perform(fn: () => Promise<void>) {
@@ -288,6 +727,72 @@ export default function SellerAuthPanel() {
         JSON.stringify({ state: data.state, proof, link }),
       );
       window.location.assign(data.authorizationUrl);
+    });
+  }
+  function beginClerkOwnerConnection() {
+    ownerGeneration.current += 1;
+    storeClerkOwnerFlow(sessionStorage, {
+      purpose: 'clerk-owner',
+      phase: 'identity',
+      requestedAt: Date.now(),
+    });
+    setOwnerProof(null);
+    sessionStorage.removeItem(clerkLinkKey);
+    sessionStorage.removeItem(identityKey);
+    setClerkLinkOwner(null);
+    setOwnerStage('identity');
+    setError('');
+    setMessage('');
+    clearSellerAuthRoute();
+    setView('clerk-owner');
+  }
+  async function beginOwnerPasswordVerification() {
+    const generation = ownerGeneration.current;
+    setOwnerStage('starting');
+    try {
+      const client = await getClerkProductionBrowser();
+      if (generation !== ownerGeneration.current) return;
+      const result = await client.startOwnerReauthentication();
+      if (generation !== ownerGeneration.current) return;
+      // Persist the dedicated purpose, state, proof, and CSRF before leaving RWAS.
+      storeClerkOwnerFlow(sessionStorage, {
+        ...result.transaction,
+        phase: 'reauth',
+      });
+      clearSellerAuthRoute();
+      window.location.assign(result.authorizationUrl);
+    } catch {
+      if (generation !== ownerGeneration.current) return;
+      sessionStorage.removeItem(CLERK_OWNER_FLOW_KEY);
+      setOwnerStage('error');
+      setError(
+        'Password verification could not be started. Please start account connection again.',
+      );
+    }
+  }
+  async function confirmClerkOwnerConnection() {
+    const proof = ownerProof;
+    const generation = ownerGeneration.current;
+    await perform(async () => {
+      try {
+        if (!proof || proof.expiresAt <= Date.now())
+          throw new Error('Account connection expired. Please start again.');
+        const client = await getClerkProductionBrowser();
+        if (generation !== ownerGeneration.current) return;
+        const connected = await client.link(proof);
+        if (generation !== ownerGeneration.current) return;
+        setAuth(connected);
+        sessionStorage.removeItem(CLERK_OWNER_FLOW_KEY);
+        setOwnerProof(null);
+        setMessage('Your existing seller account is connected.');
+        setView(null);
+      } catch (error) {
+        if (generation !== ownerGeneration.current) return;
+        sessionStorage.removeItem(CLERK_OWNER_FLOW_KEY);
+        setOwnerProof(null);
+        setOwnerStage('error');
+        throw error;
+      }
     });
   }
   async function load() {
@@ -335,7 +840,7 @@ export default function SellerAuthPanel() {
     await load();
     setMessage(
       next === 'pending'
-        ? 'Submitted for private RWAS review. It will not be published during this intake launch.'
+        ? 'Submitted for private RWAS review.'
         : 'Listing updated.',
     );
   }
@@ -344,8 +849,60 @@ export default function SellerAuthPanel() {
     void perform(fn);
   };
   async function openAccount() {
+    setAccount(null);
+    setNewEmail('');
+    setEmailCode('');
+    setEmailSent(false);
     setView('account');
     await perform(async () => setAccount(await api('/account')));
+  }
+  async function beginClerkLink() {
+    if (
+      !session ||
+      session.provider === 'clerk-production' ||
+      !clerkExistingAccountLink
+    )
+      return;
+    await perform(async () => {
+      sessionStorage.setItem(
+        clerkLinkKey,
+        JSON.stringify({
+          fingerprint: await clerkLinkFingerprint(session.token),
+          requestedAt: Date.now(),
+        }),
+      );
+      setClerkLinkOwner(session);
+      setView('clerk');
+    });
+  }
+  async function signOutSeller() {
+    if (!session) return;
+    const provider = session.provider;
+    let result: { logoutUrl?: string } = {};
+    try {
+      result = await api('/logout', 'POST');
+    } catch (caught) {
+      const status = (caught as { status?: number })?.status;
+      if (status !== 401 && status !== 403) throw caught;
+      // Expired or denied RWAS access still permits local and provider sign-out.
+    }
+    sessionStorage.removeItem(identityKey);
+    setAuth(null);
+    setAccount(null);
+    closeSellerPanel();
+    if (provider === 'clerk-production') {
+      setClerkSignOutPending(true);
+      try {
+        await (await getClerkProductionBrowser()).signOut();
+        setClerkSignOutPending(false);
+      } catch {
+        setView('login');
+        throw Error(
+          'You are signed out of RWAS. Secure identity sign-out could not be completed. Choose Finish secure sign-out to try again.',
+        );
+      }
+    }
+    if (result.logoutUrl) window.location.assign(result.logoutUrl);
   }
   async function jerry() {
     if (!session) {
@@ -376,6 +933,9 @@ export default function SellerAuthPanel() {
   );
   return (
     <>
+      {clerkRouteStage && (
+        <span hidden data-rwas-clerk-route-stage={clerkRouteStage} />
+      )}
       <button className="a4s-cta-btn" onClick={() => void jerry()}>
         List Your Aircraft
       </button>
@@ -393,43 +953,50 @@ export default function SellerAuthPanel() {
           >
             Account
           </button>
-          <button
-            className="a4s-cta-btn secondary"
-            disabled={busy}
-            onClick={() =>
-              void perform(async () => {
-                const result = await api('/logout', 'POST');
-                sessionStorage.removeItem(identityKey);
-                setAuth(null);
-                setView(null);
-                if (result.logoutUrl) window.location.assign(result.logoutUrl);
-              })
-            }
-          >
-            Sign Out
-          </button>
+          {!view && (
+            <button
+              className="a4s-cta-btn secondary"
+              disabled={busy}
+              onClick={() => void perform(signOutSeller)}
+            >
+              Sign Out
+            </button>
+          )}
         </>
       )}
       <dialog
         ref={dialog}
         className="seller-dialog"
         aria-labelledby="seller-title"
-        onCancel={() => setView(null)}
+        onCancel={closeSellerPanel}
       >
         <header>
           <h2 id="seller-title">
             {view === 'login'
               ? 'Seller Login'
-              : view === 'account'
-                ? 'Your Account'
-                : view === 'edit'
-                  ? 'Listing Draft'
-                  : 'My Listings'}
+              : view === 'clerk'
+                ? 'Secure Seller Login'
+                : view === 'clerk-owner'
+                  ? 'Connect Existing Seller Account'
+                  : view === 'account'
+                    ? 'Your Account'
+                    : view === 'edit'
+                      ? 'Listing Draft'
+                      : 'My Listings'}
           </h2>
+          {session && (
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void perform(signOutSeller)}
+            >
+              Sign Out
+            </button>
+          )}
           <button
             type="button"
             aria-label="Close seller panel"
-            onClick={() => setView(null)}
+            onClick={closeSellerPanel}
           >
             Close
           </button>
@@ -442,6 +1009,36 @@ export default function SellerAuthPanel() {
         {message && <p role="status">{message}</p>}
         {view === 'login' && (
           <>
+            {clerkSignOutPending && (
+              <button
+                disabled={busy}
+                onClick={() =>
+                  void perform(async () => {
+                    await (await getClerkProductionBrowser()).signOut();
+                    setClerkSignOutPending(false);
+                    closeSellerPanel();
+                  })
+                }
+              >
+                Finish secure sign-out
+              </button>
+            )}
+            {session && (
+              <button disabled={busy} onClick={() => void openAccount()}>
+                Open your account
+              </button>
+            )}
+            {clerkProduction && !session && !clerkSignOutPending && (
+              <nav aria-label="RWAS secure sign-in">
+                <button disabled={busy} onClick={() => setView('clerk')}>
+                  Continue with RWAS secure sign-in
+                </button>
+                <p>
+                  Includes password sign-in, verified-email account creation,
+                  and password recovery.
+                </p>
+              </nav>
+            )}
             {identityMethods.length > 0 && (
               <nav aria-label="Sign-in methods">
                 {identityMethods.map((method) => (
@@ -460,6 +1057,11 @@ export default function SellerAuthPanel() {
                   sign-in page.
                 </p>
               </nav>
+            )}
+            {clerkOwnerReauthEnabled && !clerkSignOutPending && (
+              <button disabled={busy} onClick={beginClerkOwnerConnection}>
+                Connect existing seller account
+              </button>
             )}
             {emailCodeLogin && (
               <form
@@ -528,6 +1130,73 @@ export default function SellerAuthPanel() {
               </form>
             )}
           </>
+        )}
+        {view === 'clerk' &&
+          clerkProduction &&
+          (!session || clerkLinkOwner ? (
+            <ClerkProductionPanel
+              linkOwner={clerkLinkOwner || undefined}
+              onConnectExisting={
+                clerkOwnerReauthEnabled ? beginClerkOwnerConnection : undefined
+              }
+              onSignedIn={(next) => {
+                setAuth(next);
+                setMessage(
+                  clerkLinkOwner
+                    ? 'Secure sign-in connected to your seller account.'
+                    : 'Signed in.',
+                );
+                closeSellerPanel();
+              }}
+            />
+          ) : (
+            <>
+              <p>
+                You are already signed in to RWAS. Open your account to manage
+                sign-in settings or connect secure sign-in.
+              </p>
+              <button disabled={busy} onClick={() => void openAccount()}>
+                Open your account
+              </button>
+            </>
+          ))}
+        {view === 'clerk-owner' && (
+          <section aria-label="Existing seller account connection">
+            <p>
+              Connect the password account you previously used for RWAS to your
+              secure sign-in. Your existing contact profile and aircraft stay
+              with that seller account. Matching email addresses alone do not
+              connect accounts.
+            </p>
+            {ownerStage === 'identity' && clerkOwnerReauthEnabled && (
+              <ClerkOwnerIdentityPanel
+                onReady={() => void beginOwnerPasswordVerification()}
+              />
+            )}
+            {ownerStage === 'starting' && (
+              <p role="status">Verifying your existing seller account…</p>
+            )}
+            {ownerStage === 'confirmation' && ownerProof && (
+              <>
+                <p>Existing RWAS seller account: {ownerProof.email}</p>
+                <p>
+                  Your password identity is verified. Confirm to connect this
+                  seller account to the secure identity you just signed in with.
+                </p>
+                <button
+                  disabled={busy}
+                  onClick={() => void confirmClerkOwnerConnection()}
+                >
+                  Connect this seller account
+                </button>
+              </>
+            )}
+            {ownerStage === 'error' && clerkOwnerReauthEnabled && (
+              <button disabled={busy} onClick={beginClerkOwnerConnection}>
+                Start account connection again
+              </button>
+            )}
+          </section>
         )}
         {view === 'listings' && (
           <>
@@ -728,36 +1397,63 @@ export default function SellerAuthPanel() {
         )}
         {view === 'account' && account && (
           <>
-            {identityMethods.length > 0 && (
-              <section aria-label="Connected sign-in methods">
-                <h3>Sign-in methods</h3>
-                <p>
-                  {account.loginMethods?.length
-                    ? 'Connected: ' +
-                      account.loginMethods
-                        .map((method) => methodLabels[method])
-                        .join(', ')
-                    : 'Email-code login. Connect another method to use this same seller account.'}
-                </p>
-                {identityMethods.map((method) => (
-                  <button
-                    key={method}
-                    disabled={busy}
-                    onClick={() => void beginIdentity(method, true)}
-                  >
-                    Connect {methodLabels[method]}
+            {session?.provider !== 'clerk-production' &&
+              clerkExistingAccountLink && (
+                <section aria-label="Connect secure sign-in">
+                  <h3>Connect RWAS secure sign-in</h3>
+                  <p>
+                    Connect using an existing RWAS email-code session that is
+                    less than ten minutes old to keep this seller account and
+                    its aircraft. Expired, signed-out, and existing
+                    sign-in-provider accounts can verify their existing password
+                    account when account connection is available, or contact
+                    RWAS for help.
+                  </p>
+                  <button disabled={busy} onClick={() => void beginClerkLink()}>
+                    Connect RWAS secure sign-in
                   </button>
-                ))}
-                {identityMethods.includes('password') && (
-                  <button
-                    disabled={busy}
-                    onClick={() => void beginIdentity('password')}
-                  >
-                    Password help
-                  </button>
-                )}
-              </section>
+                </section>
+              )}
+            {session?.provider !== 'clerk-production' &&
+              clerkOwnerReauthEnabled && (
+                <button disabled={busy} onClick={beginClerkOwnerConnection}>
+                  Connect existing seller account
+                </button>
+              )}
+            {session?.provider === 'clerk-production' && (
+              <ClerkProductionAccountPanel />
             )}
+            {session?.provider !== 'clerk-production' &&
+              identityMethods.length > 0 && (
+                <section aria-label="Connected sign-in methods">
+                  <h3>Sign-in methods</h3>
+                  <p>
+                    {account.loginMethods?.length
+                      ? 'Connected: ' +
+                        account.loginMethods
+                          .map((method) => methodLabels[method])
+                          .join(', ')
+                      : 'Email-code login. Connect another method to use this same seller account.'}
+                  </p>
+                  {identityMethods.map((method) => (
+                    <button
+                      key={method}
+                      disabled={busy}
+                      onClick={() => void beginIdentity(method, true)}
+                    >
+                      Connect {methodLabels[method]}
+                    </button>
+                  ))}
+                  {identityMethods.includes('password') && (
+                    <button
+                      disabled={busy}
+                      onClick={() => void beginIdentity('password')}
+                    >
+                      Password help
+                    </button>
+                  )}
+                </section>
+              )}
             <form
               onSubmit={onSubmit(async () => {
                 const data = await api(
@@ -775,7 +1471,14 @@ export default function SellerAuthPanel() {
                 setMessage('Profile updated.');
               })}
             >
-              <p>Signed in as {account.profile.email}</p>
+              {session?.provider === 'clerk-production' ? (
+                <>
+                  <h3>RWAS contact profile</h3>
+                  <p>Contact email: {account.profile.email}</p>
+                </>
+              ) : (
+                <p>Signed in as {account.profile.email}</p>
+              )}
               {(['name', 'phone', 'location'] as const).map((k) => (
                 <label className="seller-field" key={k}>
                   {k}
@@ -815,7 +1518,17 @@ export default function SellerAuthPanel() {
                 }
               })}
             >
-              <h3>Change email</h3>
+              <h3>
+                {session?.provider === 'clerk-production'
+                  ? 'Change RWAS contact email'
+                  : 'Change email'}
+              </h3>
+              {session?.provider === 'clerk-production' && (
+                <p>
+                  RWAS uses this address to contact you about your aircraft.
+                  Changing it here does not change your secure sign-in email.
+                </p>
+              )}
               <label className="seller-field">
                 New email
                 <input
@@ -841,7 +1554,17 @@ export default function SellerAuthPanel() {
                 {emailSent ? 'Verify New Email' : 'Send New Email Code'}
               </button>
             </form>
-            <h3>Active sessions</h3>
+            <h3>
+              {session?.provider === 'clerk-production'
+                ? 'RWAS sessions'
+                : 'Active sessions'}
+            </h3>
+            {session?.provider === 'clerk-production' && (
+              <p>
+                These are sessions for RWAS seller access. Manage your secure
+                sign-in sessions in Sign-in and security above.
+              </p>
+            )}
             {account.sessions.map((s) => (
               <p key={s.id}>
                 {s.current ? 'This session' : 'Other session'} · expires{' '}
@@ -867,7 +1590,7 @@ export default function SellerAuthPanel() {
                 void perform(async () => {
                   await api('/account/sessions', 'DELETE', { all: true });
                   setAccount(await api('/account'));
-                  setMessage('Other sessions revoked.');
+                  setMessage('Other RWAS sessions revoked.');
                 })
               }
             >
@@ -1019,7 +1742,10 @@ function SellerMedia({
       media.map(async (f) => {
         const r = await fetch(
           SELLER_API + '/files/' + encodeURIComponent(f.key),
-          { headers: { Authorization: 'Bearer ' + session.token } },
+          {
+            credentials: 'same-origin',
+            headers: await sellerSessionHeaders(session),
+          },
         );
         if (r.ok) {
           const url = URL.createObjectURL(await r.blob());
@@ -1032,7 +1758,7 @@ function SellerMedia({
       alive = false;
       made.forEach((url) => URL.revokeObjectURL(url));
     };
-  }, [listing, session.token]);
+  }, [listing, session]);
   async function action(fn: () => Promise<void>) {
     setBusy(true);
     onBusy(true);
@@ -1050,8 +1776,9 @@ function SellerMedia({
   async function request(path: string, method: string, body: unknown) {
     const r = await fetch(SELLER_API + path, {
       method,
+      credentials: 'same-origin',
       headers: {
-        Authorization: 'Bearer ' + session.token,
+        ...(await sellerSessionHeaders(session)),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
@@ -1116,7 +1843,8 @@ function SellerMedia({
                           encodeURIComponent(f.name),
                         {
                           method: 'POST',
-                          headers: { Authorization: 'Bearer ' + session.token },
+                          credentials: 'same-origin',
+                          headers: await sellerSessionHeaders(session),
                           body: f,
                         },
                       );
@@ -1157,9 +1885,8 @@ function SellerMedia({
                         const r = await fetch(
                           SELLER_API + '/files/' + encodeURIComponent(f.key),
                           {
-                            headers: {
-                              Authorization: 'Bearer ' + session.token,
-                            },
+                            credentials: 'same-origin',
+                            headers: await sellerSessionHeaders(session),
                           },
                         );
                         if (!r.ok)

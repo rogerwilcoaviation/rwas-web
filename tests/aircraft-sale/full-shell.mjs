@@ -1,7 +1,9 @@
 import { createServer } from 'node:http';
-import { stat, readFile, writeFile, mkdir } from 'node:fs/promises';
+import { stat, readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { resolve, extname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { fixture, approve } from './fixture.mjs';
 import { execFileSync } from 'node:child_process';
 const [png, pdf, mp4] = await Promise.all(
@@ -26,15 +28,69 @@ class Progress extends Array {
     return super.push(...items);
   }
 }
-// Require the real production export rather than a synthetic component shell.
-const exportedHome = await readFile(resolve('out/index.html'), 'utf8');
+// The root runner must explicitly supply a freshly built isolated export.
+// This manifest proves local source provenance, never live Clerk acceptance.
+assert.ok(process.env.TEST_EXPORT_DIR, 'Set TEST_EXPORT_DIR to the fresh isolated Next export.');
+const exportedRoot = resolve(process.env.TEST_EXPORT_DIR);
+const sourceRoot = fileURLToPath(new URL('../../', import.meta.url));
+const manifest = JSON.parse(await readFile(
+  join(exportedRoot, 'RWAS-LOCAL-BUILD-MANIFEST.json'),
+  'utf8',
+));
+assert.equal(manifest.schema, 1);
+assert.equal(resolve(manifest.sourceRoot), resolve(sourceRoot));
+assert.match(manifest.gitBase, /^6bf7494[0-9a-f]{33}$/);
+assert.ok(Number.isFinite(Date.parse(manifest.builtAt)));
+assert.equal(manifest.publicClerkBuild, true);
+assert.equal(manifest.syntheticNetwork, true);
+const requiredSources = [
+  'app/aircraft-for-sale/page.tsx',
+  'app/aircraft-for-sale/listings-grid.tsx',
+  'app/aircraft-for-sale/listing-card.tsx',
+  'app/aircraft-for-sale/seller-auth-panel.tsx',
+  'app/aircraft-for-sale/clerk-production-browser.ts',
+  'app/aircraft-for-sale/clerk-production-panel.tsx',
+  'app/aircraft-for-sale/clerk-owner-reauth.ts',
+  'app/aircraft-for-sale/seller-request-facade.ts',
+  'public/jerry-widget.js',
+  'lib/public-aircraft-marketplace.mjs',
+];
+for (const path of requiredSources) {
+  const expected = manifest.sourceHashes?.[path];
+  assert.match(expected || '', /^[0-9a-f]{64}$/, 'Missing source hash for ' + path);
+  const current = createHash('sha256')
+    .update(await readFile(join(sourceRoot, path)))
+    .digest('hex');
+  assert.equal(current, expected, 'Export source changed after build: ' + path);
+}
+async function exportedJavascript(directory) {
+  const files = await readdir(directory, { withFileTypes: true });
+  const contents = await Promise.all(files.map((file) => {
+    const path = join(directory, file.name);
+    if (file.isDirectory()) return exportedJavascript(path);
+    return file.name.endsWith('.js') ? readFile(path, 'utf8') : '';
+  }));
+  return contents.join('\n');
+}
+const bundledJavascript = await exportedJavascript(join(exportedRoot, '_next/static/chunks'));
+assert.ok(
+  bundledJavascript.includes('Public browse unavailable.') &&
+    bundledJavascript.includes('Invalid public browse response.'),
+  'Export must contain the current dual-source marketplace bundle.',
+);
+assert.ok(
+  bundledJavascript.includes('rwasSellerRequestHeaders') &&
+    bundledJavascript.includes('Connect existing seller account'),
+  'Export must contain the current owner authentication and widget header bridge.',
+);
+const exportedHome = await readFile(join(exportedRoot, 'index.html'), 'utf8');
 assert.ok(
   !exportedHome.includes('sale-api.rogerwilcoaviation.com/files/'),
   'Homepage export must not freeze legacy aircraft photos.',
 );
 assert.ok(
   !/<loc>[^<]*\/aircraft-for-sale\/[^<]+<\/loc>/.test(
-    await readFile(resolve('out/sitemap.xml'), 'utf8'),
+    await readFile(join(exportedRoot, 'sitemap.xml'), 'utf8'),
   ),
   'Static sitemap must not freeze dynamic aircraft IDs.',
 );
@@ -43,29 +99,37 @@ const f = fixture(),
   requests = [],
   blocked = [],
   errors = [];
+const legacySnapshot = JSON.parse(await readFile(
+  new URL('./legacy-marketplace-fixture.json', import.meta.url),
+  'utf8',
+));
+const legacyListing = legacySnapshot.listings[0];
+const legacyHref = '/aircraft-for-sale/' + encodeURIComponent(legacyListing.id);
+const legacyPhotoPath = '/files/' + encodeURIComponent(legacyListing.photos[0].key);
+assert.ok(
+  (await readFile(join(exportedRoot, 'aircraft-for-sale.html'), 'utf8'))
+    .includes(legacyListing.id),
+  'Fresh export must use the independent synthetic legacy browse snapshot.',
+);
+const legacyRequests = [],
+  serviceBlocked = [];
 const origin = 'http://127.0.0.1:18763';
+const nativeFetch = globalThis.fetch;
+globalThis.fetch = (input, options) => {
+  const url = new URL(input instanceof Request ? input.url : String(input));
+  if (url.origin === origin) return nativeFetch(input, options);
+  serviceBlocked.push(url.href);
+  return Promise.reject(new Error('External service fetch blocked by full-shell fixture.'));
+};
 let chatCalls = 0,
-  browseFailures = 0;
+  sellerBrowseFailures = 0,
+  legacyBrowseFailures = 0;
 const server = createServer(async (req, res) => {
   try {
     const url = new URL(req.url, origin),
       path = url.pathname + url.search;
     if (!url.pathname.startsWith('/api/aircraft-sale')) {
-      if (/^\/aircraft-for-sale\/[^/]+$/.test(url.pathname)) {
-        const headers = { ...req.headers, accept: 'text/html' };
-        const response = await f.call(
-          '/listing/' + url.pathname.split('/')[2],
-          'GET',
-          undefined,
-          undefined,
-          headers,
-        );
-        requests.push({ method: 'GET', path, status: response.status });
-        res.writeHead(response.status, Object.fromEntries(response.headers));
-        res.end(Buffer.from(await response.arrayBuffer()));
-        return;
-      }
-      const base = resolve('out');
+      const base = exportedRoot;
       let asset = resolve(base, '.' + url.pathname);
       if (asset !== base && !asset.startsWith(base + '/')) {
         res.writeHead(403);
@@ -134,8 +198,8 @@ const server = createServer(async (req, res) => {
       res.end();
       return;
     }
-    if (url.pathname === '/api/aircraft-sale/browse' && browseFailures > 0) {
-      browseFailures--;
+    if (url.pathname === '/api/aircraft-sale/browse' && sellerBrowseFailures > 0) {
+      sellerBrowseFailures--;
       requests.push({ method: req.method, path, status: 503 });
       res.writeHead(503, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Synthetic unavailable inventory' }));
@@ -153,6 +217,7 @@ const server = createServer(async (req, res) => {
       path,
       status: response.status,
       range: req.headers.range || null,
+      anonymous: !req.headers.authorization && !req.headers.cookie,
     });
     res.writeHead(response.status, Object.fromEntries(response.headers));
     res.end(Buffer.from(await response.arrayBuffer()));
@@ -167,24 +232,34 @@ try {
   browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
     viewport: { width: 1200, height: 900 },
+    serviceWorkers: 'block',
   });
   await context.route('**/*', async (route) => {
     const url = route.request().url();
     const target = new URL(url);
     if (target.origin === origin) await route.continue();
-    else if (target.origin === 'https://sale-api.rogerwilcoaviation.com') {
-      if (target.pathname === '/browse' && browseFailures > 0) {
-        browseFailures--;
+    else if (
+      target.origin === 'https://sale-api.rogerwilcoaviation.com' &&
+      route.request().method() === 'GET' &&
+      (target.pathname === '/browse' || target.pathname === legacyPhotoPath)
+    ) {
+      const headers = route.request().headers();
+      assert.equal(headers.authorization, undefined);
+      assert.equal(headers.cookie, undefined);
+      if (target.pathname === '/browse' && legacyBrowseFailures > 0) {
+        legacyBrowseFailures--;
+        legacyRequests.push({ path: target.pathname + target.search, status: 503 });
         return route.fulfill({
           status: 503,
           contentType: 'application/json',
           body: JSON.stringify({ error: 'Synthetic unavailable inventory' }),
         });
       }
-      const response =
-        target.pathname === '/browse'
-          ? await f.call('/browse' + target.search)
-          : await f.call(target.pathname);
+      // Legacy inventory and media never share SellerStore state.
+      const response = target.pathname === '/browse'
+        ? Response.json(legacySnapshot)
+        : new Response(png, { headers: { 'Content-Type': 'image/png' } });
+      legacyRequests.push({ path: target.pathname + target.search, status: response.status });
       await route.fulfill({
         status: response.status,
         headers: Object.fromEntries(response.headers),
@@ -202,8 +277,9 @@ try {
   await page.goto(origin + '/');
   await page.locator('a[href="/aircraft-for-sale"]:visible').first().click();
   await page.waitForURL(origin + '/aircraft-for-sale');
+  await page.locator('a.a4s-card[href="' + legacyHref + '"]').waitFor();
   results.push(
-    'PASS actual exported Next home-to-aircraft navigation and hydration',
+    'PASS current exported Next home-to-aircraft navigation, hydration and independent legacy card',
   );
   await page.getByRole('button', { name: 'Seller Login', exact: true }).click();
   await page.getByLabel('Email', { exact: true }).fill('browser@example.test');
@@ -281,6 +357,27 @@ try {
     .waitFor();
   let l = Object.values(f.state().listings)[0];
   assert.equal(l.status, 'draft');
+  const privateBuyer = await context.newPage();
+  await privateBuyer.goto(origin + '/aircraft-for-sale');
+  await privateBuyer.locator('a.a4s-card[href="' + legacyHref + '"]').waitFor();
+  await privateBuyer.waitForFunction(
+    () => document.querySelector('.a4s-grid')?.style.opacity === '1',
+  );
+  assert.equal(
+    await privateBuyer.locator('a.a4s-card[href="/api/aircraft-sale/listing/' + l.id + '"]').count(),
+    0,
+  );
+  const privateDetail = await privateBuyer.goto(origin + '/api/aircraft-sale/listing/' + l.id);
+  assert.equal(privateDetail.status(), 404);
+  await privateBuyer.goto(origin + '/aircraft-for-sale');
+  await privateBuyer.locator('a.a4s-card[href="' + legacyHref + '"]').click();
+  await privateBuyer.waitForURL(origin + legacyHref);
+  await privateBuyer.getByRole('heading', {
+    name: '1999 Synthetic Legacy Original Snapshot',
+    exact: true,
+  }).waitFor();
+  await privateBuyer.close();
+  results.push('PASS owned draft absent from anonymous discovery/detail; original legacy link remains its exported page');
   results.push('PASS draft saved before media or review');
   const inputs = page.locator('dialog input[type=file]');
   await inputs.nth(0).setInputFiles([
@@ -357,6 +454,7 @@ try {
   assert.equal(l.status, 'pending');
   const staffContext = await browser.newContext({
     extraHTTPHeaders: { Authorization: 'Bearer fixture-reviewer' },
+    serviceWorkers: 'block',
   });
   await staffContext.route('**/*', async (route) => {
     if (new URL(route.request().url()).origin === origin)
@@ -411,9 +509,19 @@ try {
     .locator('a.bs-listing[href="/aircraft-for-sale/' + l.id + '"]')
     .waitFor();
   await buyer.goto(origin + '/aircraft-for-sale');
+  await buyer.locator('a.a4s-card[href="' + legacyHref + '"]').waitFor();
+  const publicCard = buyer.locator('a.a4s-card[href="/api/aircraft-sale/listing/' + l.id + '"]');
+  await publicCard.waitFor();
+  await publicCard.locator('img').waitFor();
+  assert.ok((await publicCard.locator('img').getAttribute('src')).startsWith('/api/aircraft-sale/files/'));
+  assert.equal(
+    await buyer.locator('a.a4s-card[href="/aircraft-for-sale/' + l.id + '"]').count(),
+    0,
+  );
   await buyer
-    .locator('a.a4s-card[href="/aircraft-for-sale/' + l.id + '"]')
+    .locator('a.a4s-card[href="/api/aircraft-sale/listing/' + l.id + '"]')
     .click();
+  await buyer.waitForURL(origin + '/api/aircraft-sale/listing/' + l.id);
   await buyer
     .getByRole('heading', { name: '2000 Synthetic Jerry Draft', exact: true })
     .waitFor();
@@ -456,18 +564,31 @@ try {
   );
   assert.equal(privateStatus, 401);
   results.push(
-    'PASS live homepage/card detail navigation, public media and private-record denial',
+    'PASS live homepage discovery, source-aware seller-card detail navigation, public media and private-record denial',
   );
   // The bounded intake launch deliberately preserves the existing read-only
   // catalogue behavior: an external refresh outage retains the static legacy cards.
-  browseFailures = 2;
+  legacyBrowseFailures = 1;
+  sellerBrowseFailures = 1;
   await buyer.goto(origin + '/aircraft-for-sale');
-  await buyer.locator('.a4s-card').first().waitFor();
-  assert.ok((await buyer.locator('.a4s-card').count()) > 0);
-  browseFailures = 0;
+  await buyer.locator('a.a4s-card[href="' + legacyHref + '"]').waitFor();
+  await buyer.waitForFunction(
+    () => document.querySelector('.a4s-grid')?.style.opacity === '1',
+  );
+  assert.equal(await buyer.locator('.a4s-card').count(), 1);
+  assert.equal(
+    await buyer.locator('a.a4s-card[href="/api/aircraft-sale/listing/' + l.id + '"]').count(),
+    0,
+  );
+  assert.ok(legacyRequests.some((request) => request.status === 503));
+  assert.ok(requests.some((request) => request.path === '/api/aircraft-sale/browse?include=sold' && request.status === 503));
+  legacyBrowseFailures = 0;
+  sellerBrowseFailures = 0;
   await buyer.reload();
-  await buyer.locator('.a4s-card').waitFor();
-  results.push('PASS legacy inventory remains readable across refresh outage');
+  await buyer.locator('a.a4s-card[href="' + legacyHref + '"]').waitFor();
+  await buyer.locator('a.a4s-card[href="/api/aircraft-sale/listing/' + l.id + '"]').waitFor();
+  assert.equal(await buyer.locator('.a4s-card').count(), 2);
+  results.push('PASS source failures keep the original legacy snapshot and hide failed seller inventory; recovery restores both sources');
   await page.getByRole('button', { name: 'Refresh', exact: true }).click();
   await page.getByRole('button', { name: 'Pause', exact: true }).click();
   await page.getByRole('button', { name: 'Resume', exact: true }).click();
@@ -480,7 +601,17 @@ try {
     .getByText('No aircraft currently listed.', { exact: false })
     .waitFor();
   assert.equal(await buyer.locator('a.bs-listing').count(), 0);
-  const stale = await buyer.goto(origin + '/aircraft-for-sale/' + l.id);
+  await buyer.goto(origin + '/aircraft-for-sale');
+  await buyer.locator('a.a4s-card[href="' + legacyHref + '"]').waitFor();
+  await buyer.waitForFunction(
+    () => document.querySelector('.a4s-grid')?.style.opacity === '1',
+  );
+  assert.equal(await buyer.locator('.a4s-card').count(), 1);
+  assert.equal(
+    await buyer.locator('a.a4s-card[href="/api/aircraft-sale/listing/' + l.id + '"]').count(),
+    0,
+  );
+  const stale = await buyer.goto(origin + '/api/aircraft-sale/listing/' + l.id);
   assert.ok([401, 404].includes(stale.status()));
   assert.equal(
     await buyer
@@ -489,7 +620,7 @@ try {
     0,
   );
   await buyer.close();
-  results.push('PASS archive removes homepage/inventory and old public detail');
+  results.push('PASS archive removes seller homepage/inventory/detail while preserving original legacy inventory');
   await page
     .getByRole('button', { name: 'Restore to Draft', exact: true })
     .click();
@@ -651,6 +782,12 @@ try {
   results.push('PASS UI logout revokes server token');
   assert.equal(errors.length, 0);
   assert.ok(blocked.every((url) => new URL(url).origin !== origin));
+  assert.equal(serviceBlocked.length, 0);
+  const publicBrowseRequests = requests.filter((request) => request.path === '/api/aircraft-sale/browse?include=sold' && request.status === 200);
+  assert.ok(publicBrowseRequests.length > 0);
+  assert.ok(publicBrowseRequests.every((request) => request.anonymous));
+  assert.ok(legacyRequests.some((request) => request.path.startsWith('/files/')));
+  results.push('PASS anonymous public discovery and fail-closed external browser/service routing');
 } catch (e) {
   results.push('FAIL ' + e.stack);
   process.exitCode = 1;
@@ -663,6 +800,7 @@ try {
         fullPage: true,
       });
 } finally {
+  globalThis.fetch = nativeFetch;
   await browser?.close();
   server.closeAllConnections();
   await new Promise((r) => server.close(r));
@@ -672,11 +810,19 @@ try {
       {
         results,
         requests,
+        legacyRequests,
         blocked,
+        serviceBlocked,
         errors,
         chatCalls,
         scope:
-          'Actual production Next static export and navigation, seller/staff dynamically loaded bundles, deferred Jerry widget; disposable v2 API/mail/storage; all external browser traffic blocked. Dynamic details use the same Worker API route as Pages; no cloud settings.',
+          'Current-source manifest-validated isolated Next static export and navigation; dynamically loaded seller/staff bundles and deferred Jerry widget; independent synthetic legacy snapshot/media; in-memory SellerStore/mail/storage fixtures. Seller public details use /api/aircraft-sale/listing. External browser routes are fulfilled only by explicit synthetic legacy mocks, otherwise aborted; service fetches cannot leave loopback. Email-code lifecycle coverage is separate from Clerk provider fixtures and does not prove live Clerk acceptance. No cloud settings.',
+        build: {
+          exportedRoot,
+          builtAt: manifest.builtAt,
+          gitBase: manifest.gitBase,
+          sourceHashes: Object.fromEntries(requiredSources.map((path) => [path, manifest.sourceHashes[path]])),
+        },
       },
       null,
       2,

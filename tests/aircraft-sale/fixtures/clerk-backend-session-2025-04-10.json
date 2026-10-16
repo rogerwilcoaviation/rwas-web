@@ -1,0 +1,16 @@
+{
+  "object": "session",
+  "id": "sess_ContractFixture01",
+  "user_id": "user_ContractFixture01",
+  "client_id": "client_ContractFixture01",
+  "actor": null,
+  "status": "active",
+  "last_active_organization_id": null,
+  "last_active_at": 1700000000000,
+  "latest_activity": {},
+  "expire_at": 4102444800000,
+  "abandon_at": 4102444800000,
+  "updated_at": 1700000000000,
+  "created_at": 1700000000000,
+  "tasks": null
+}

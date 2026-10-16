@@ -1,4 +1,29 @@
 import {
+  clerkProductionConfig,
+  clerkProductionIdentity,
+  sellerPublicListingsEnabled,
+} from './clerk-production.mjs';
+import { mailAuthenticationRequest } from './mail-context.mjs';
+import {
+  clerkLinkOwner,
+  clerkLinkInput,
+  clerkLinkIdentity,
+  clerkLinkTransaction,
+  clerkLinkFinishProof,
+  clerkLinkProviderProof,
+  clerkLinkOwnerProviderProof,
+} from './clerk-existing-account.mjs';
+import {
+  CLERK_OWNER_PURPOSE,
+  CLERK_OWNER_METHOD,
+  clerkOwnerConfig,
+  clerkOwnerInput,
+  clerkOwnerProviderBinding,
+  clerkOwnerProviderProof,
+  clerkOwnerFinishProof,
+  clerkOwnerAccount,
+} from './clerk-owner-reauth.mjs';
+import {
   listingFields as fields,
   cleanListing as clean,
 } from './listing-fields.mjs';
@@ -28,6 +53,12 @@ import {
   applyAccountOperation,
 } from './account-admin.mjs';
 import { hasProductSnippetEligibility } from '../../lib/product-snippet-eligibility.mjs';
+import {
+  ConservationCapture,
+  ConservationError,
+  isConservationRequest,
+  loadConservationRows,
+} from './conservation.mjs';
 // Versioned seller API. Requires explicitly provisioned Durable Object + private R2.
 // No legacy KV fallback: migration/import is a separately reviewed operation.
 const HOUR = 3600000,
@@ -64,12 +95,33 @@ const empty = () => ({
   audit: [],
   outbox: {},
 });
-const reply = (data, status = 200) =>
+const clerkFailureStages = new Set([
+  'runtime-config',
+  'request-origin',
+  'session-token',
+  'jwt-format',
+  'jwt-header',
+  'jwt-jwks-fetch',
+  'jwt-jwks-status',
+  'jwt-jwks-json',
+  'jwt-jwks-schema',
+  'jwt-key-selection',
+  'jwt-key-import',
+  'jwt-signature',
+  'jwt-claims',
+  'provider-session',
+  'provider-user',
+  'provider-account',
+  'provider-email',
+  'provider-password-state',
+]);
+const reply = (data, status = 200, headers = {}) =>
   Response.json(data, {
     status,
     headers: {
       'Cache-Control': 'no-store',
       'X-Content-Type-Options': 'nosniff',
+      ...headers,
     },
   });
 const fail = (status, message) => {
@@ -105,6 +157,8 @@ function publicListing(l) {
     fields,
     revision,
     approvedRevision,
+    acceptanceApprovedRevision,
+    acceptancePublicUntil,
     archiveFrom,
     deleteFrom,
     deletedAt,
@@ -120,6 +174,13 @@ function publicListing(l) {
     ),
   };
 }
+const acceptancePublished = (listing, env, now = Date.now()) =>
+  env.CLERK_ACCEPTANCE_ENABLED === 'true' &&
+  listing?.status === 'pending' &&
+  Number.isInteger(listing.acceptanceApprovedRevision) &&
+  listing.acceptanceApprovedRevision === listing.revision &&
+  Number.isFinite(listing.acceptancePublicUntil) &&
+  listing.acceptancePublicUntil > now;
 const escape = (s) =>
   String(s ?? '').replace(
     /[&<>"']/g,
@@ -268,10 +329,7 @@ export class SellerStore {
     this.ctx = ctx;
     this.env = env;
     this.queue = Promise.resolve();
-    if (ctx.storage.sql)
-      ctx.storage.sql.exec(
-        'CREATE TABLE IF NOT EXISTS seller_records (bucket TEXT NOT NULL, record_key TEXT NOT NULL, value TEXT NOT NULL, PRIMARY KEY(bucket, record_key))',
-      );
+    this.schemaReady = false;
   }
   fetch(req) {
     const operation = this.queue.then(() => this.run(req));
@@ -281,6 +339,14 @@ export class SellerStore {
   async loadState() {
     if (!this.ctx.storage.sql)
       return (await this.ctx.storage.get('state')) || empty(); // memory fixture only
+    // Normal business/mail/alarm processing retains its existing initializer.
+    // A conservation read never creates a missing table on a fresh instance.
+    if (!this.schemaReady) {
+      this.ctx.storage.sql.exec(
+        'CREATE TABLE IF NOT EXISTS seller_records (bucket TEXT NOT NULL, record_key TEXT NOT NULL, value TEXT NOT NULL, PRIMARY KEY(bucket, record_key))',
+      );
+      this.schemaReady = true;
+    }
     const state = empty();
     for (const row of this.ctx.storage.sql
       .exec(
@@ -362,6 +428,10 @@ export class SellerStore {
     await this.scheduleAuth0ReceiptExpiry(state);
   }
   async run(req) {
+    // Wider account/business digests require the separately scoped account-read
+    // administrator. Keep this on the queue, outside BOTH persistence paths:
+    // normal loadState drops unknown buckets and normal error handling saves.
+    if (isConservationRequest(req)) return this.readConservation(req);
     this.state = await this.loadState();
     this.state.auth0EventReceipts ||= {};
     this.rollbackState = structuredClone(this.state);
@@ -370,6 +440,40 @@ export class SellerStore {
       await this.saveState(this.state);
       return result;
     } catch (e) {
+      if (
+        this.env.CLERK_PRODUCTION_ENABLED === 'true' &&
+        req.body &&
+        !req.bodyUsed
+      ) {
+        try {
+          await req.arrayBuffer();
+        } catch {}
+      }
+      if (this.env.CLERK_PRODUCTION_ENABLED === 'true' && e.providerIdentity) {
+        this.state = structuredClone(this.rollbackState);
+        const key = await digest(
+          e.providerIdentity.issuer + '|' + e.providerIdentity.subject,
+        );
+        this.state.identitySecurity[key] = {
+          ...this.state.identitySecurity[key],
+          ...(e.providerIdentity.blocked ? { blocked: true } : {}),
+          ...(Number.isFinite(e.providerIdentity.credentialsChangedAt)
+            ? {
+                credentialsChangedAt: Math.max(
+                  this.state.identitySecurity[key]?.credentialsChangedAt || 0,
+                  e.providerIdentity.credentialsChangedAt,
+                ),
+              }
+            : {}),
+        };
+        const id = this.state.identities[key]?.userId;
+        if (id)
+          for (const [sessionKey, record] of Object.entries(
+            this.state.sessions,
+          ))
+            if (record.userId === id) delete this.state.sessions[sessionKey];
+        e.persist = true;
+      }
       // Persist failed OTP attempts/rate counters, but roll back other partial writes.
       if (!e.persist) {
         for (const k of Object.keys(this.state.files))
@@ -383,6 +487,9 @@ export class SellerStore {
       try {
         await this.saveState(this.state);
       } catch {}
+      const clerkFailureStage = clerkFailureStages.has(e.authStage)
+        ? e.authStage
+        : '';
       return reply(
         {
           error: e.status
@@ -390,7 +497,32 @@ export class SellerStore {
             : 'The request could not be saved. Please retry.',
         },
         e.status || 503,
+        clerkFailureStage
+          ? { 'X-RWAS-Clerk-Failure-Stage': clerkFailureStage }
+          : {},
       );
+    }
+  }
+  async readConservation(req) {
+    if (req.method !== 'GET')
+      return reply({ error: 'Conservation capture is read-only.', code: 'READ_ONLY_METHOD' }, 405, { Allow: 'GET' });
+    try {
+      assertAccountOrigin(req, this.env, false);
+      const identity = await this.accountAdministrator(req, false);
+      this.conservationCapture ||= new ConservationCapture({
+        loadRows: () => loadConservationRows(this.ctx.storage),
+        media: this.env.MEDIA,
+      });
+      return reply(await this.conservationCapture.handle(req, identity.actor));
+    } catch (error) {
+      // Never expose provider/storage messages, record keys, customer values or
+      // any auth payload; never save/rollback/audit after capture failures.
+      if (error instanceof ConservationError)
+        return reply({ error: error.message, code: error.code,
+          ...(error.metadataReason ? { metadataReason: error.metadataReason } : {}) }, error.status);
+      const status = error.status === 403 ? 403 : 503;
+      return reply({ error: 'Conservation account authorization or read unavailable.',
+        code: status === 403 ? 'ACCOUNT_ADMIN_REQUIRED' : 'CAPTURE_UNAVAILABLE' }, status);
     }
   }
   async json(req, allowEmpty = false) {
@@ -445,6 +577,53 @@ export class SellerStore {
       accountHeld(this.state.profiles[s.userId])
     )
       fail(401, 'Your session expired. Please sign in again.');
+    if (s.method === CLERK_OWNER_METHOD || s.scope === 'clerk-link-only')
+      fail(
+        401,
+        'Owner authentication can only connect an existing seller account.',
+      );
+    if (s.method === 'clerk-production') {
+      const config = clerkProductionConfig(this.env, req);
+      if (!config || req.headers.get('X-RWAS-CSRF') !== s.csrf)
+        fail(403, 'Production session proof rejected.');
+      const current = await clerkProductionIdentity(this.env, req);
+      if (
+        current.issuer !== s.issuer ||
+        current.subject !== s.subject ||
+        current.providerSessionId !== s.providerSessionId
+      )
+        fail(401, 'Provider session changed. Please sign in again.');
+      if (current.passwordLastUpdatedAt !== s.passwordLastUpdatedAt) {
+        const changedAt = Date.now();
+        const security = (this.state.identitySecurity[s.identityKey] ||= {});
+        security.providerResetHold = true;
+        security.providerResetGeneration = current.passwordLastUpdatedAt;
+        security.providerResetSessionId = s.providerSessionId;
+        security.credentialsChangedAt = Math.max(
+          security.credentialsChangedAt || 0,
+          changedAt,
+        );
+        this.state.profiles[s.userId].sessionRevokedAt = Math.max(
+          this.state.profiles[s.userId].sessionRevokedAt || 0,
+          changedAt,
+        );
+        for (const [sessionKey, record] of Object.entries(this.state.sessions))
+          if (record.userId === s.userId)
+            delete this.state.sessions[sessionKey];
+        throw Object.assign(new Error('Session was revoked.'), {
+          status: 401,
+          persist: true,
+        });
+      }
+      const security = this.state.identitySecurity[s.identityKey];
+      if (
+        security?.blocked ||
+        security?.providerResetHold ||
+        (security?.credentialsChangedAt || 0) >= s.createdAt ||
+        (this.state.profiles[s.userId].sessionRevokedAt || 0) >= s.createdAt
+      )
+        fail(401, 'Session was revoked.');
+    }
     if (recent && Date.now() - s.createdAt > 600000)
       fail(
         401,
@@ -649,6 +828,22 @@ export class SellerStore {
     )
       fail(404, 'Not found.');
     const body = await this.json(req);
+    // Only this private service-binding route may reconstruct the canonical
+    // auth request. Public origin checks and Clerk verification stay unchanged.
+    const mailOwner = async () => {
+      if (!body.context && this.env.CLERK_PRODUCTION_ENABLED !== 'true')
+        return this.user(req, true);
+      const authenticated = mailAuthenticationRequest(
+        body.context,
+        req.headers.get('Authorization') || '',
+      );
+      if (!clerkProductionConfig(this.env, authenticated))
+        fail(503, 'Production Clerk authentication is unavailable.');
+      const owner = await this.user(authenticated, true);
+      if (this.state.sessions[owner.sessionKey]?.method !== 'clerk-production')
+        fail(403, 'Production Clerk sign-in is required.');
+      return owner;
+    };
     this.state.mailRequests ||= {};
     this.state.mailSequences ||= {};
     // Expired delivery tickets can never activate or resurrect a consumed code.
@@ -663,10 +858,7 @@ export class SellerStore {
         fail(404, 'Email-code sign-in is unavailable.');
       if (!['login', 'email-change'].includes(body.purpose))
         fail(400, 'Invalid verification purpose.');
-      const u =
-        body.purpose === 'email-change'
-          ? await this.user(req, true)
-          : undefined;
+      const u = body.purpose === 'email-change' ? await mailOwner() : undefined;
       const { address, key, pendingCode, value } = await this.prepareCode(
         req,
         body,
@@ -713,7 +905,7 @@ export class SellerStore {
       fail(409, 'A newer verification request exists. Request a new code.');
     // Email-change delivery must not survive logout, block or session expiry.
     if (item.pendingCode.purpose === 'email-change') {
-      const u = await this.user(req, true);
+      const u = await mailOwner();
       if (u.id !== item.pendingCode.userId)
         fail(403, 'Verification owner changed.');
     }
@@ -891,6 +1083,394 @@ export class SellerStore {
       return this.mailRequest(req, path);
     if (method === 'OPTIONS') return new Response(null, { status: 204 }); // Same-origin service; no wildcard CORS.
     if (path === '/health') return reply({ service: 'seller-v2', schema: 2 });
+    if (path.startsWith('/auth/clerk-production/')) {
+      const config = clerkProductionConfig(this.env, req);
+      if (!config) fail(404, 'Not found.');
+      if (method !== 'POST') fail(405, 'Method not allowed.');
+      const linkFinishing = path === '/auth/clerk-production/link/finish';
+      const ownerFinishing = path === '/auth/clerk-production/owner/finish';
+      if (
+        !linkFinishing &&
+        !ownerFinishing &&
+        req.headers.get('Origin') !== config.origin
+      )
+        fail(403, 'Origin rejected.');
+      const body = await this.json(req);
+      if (path === '/auth/clerk-production/owner/start' || ownerFinishing) {
+        const ownerConfig = clerkOwnerConfig(this.env, config.origin);
+        let tx;
+        if (ownerFinishing) {
+          const key = await digest(
+            typeof body?.state === 'string' ? body.state : '',
+          );
+          tx = this.state.authTransactions[key];
+          if (!tx || tx.purpose !== CLERK_OWNER_PURPOSE)
+            fail(401, 'Owner authentication expired. Start again.');
+          delete this.state.authTransactions[key];
+          await this.saveState(this.state);
+          this.rollbackState = structuredClone(this.state);
+          if (!Number.isSafeInteger(tx.expiresAt) || tx.expiresAt <= Date.now())
+            fail(401, 'Owner authentication expired. Start again.');
+          if (req.headers.get('Origin') !== config.origin)
+            fail(403, 'Origin rejected.');
+          if (!ownerConfig)
+            fail(503, 'Existing-owner authentication is unavailable.');
+          await clerkOwnerFinishProof(tx, req, body, ownerConfig);
+          if (body.error)
+            fail(
+              400,
+              'Owner authentication was cancelled. Your account was not changed.',
+            );
+        } else {
+          if (!ownerConfig)
+            fail(503, 'Existing-owner authentication is unavailable.');
+          clerkOwnerInput(req, body);
+        }
+        const currentClerk = await clerkProductionIdentity(this.env, req);
+        if (ownerFinishing) clerkOwnerProviderProof(tx, currentClerk);
+        if (!ownerFinishing) {
+          const clerkIdentityKey = await digest(
+            currentClerk.issuer + '|' + currentClerk.subject,
+          );
+          const security = this.state.identitySecurity[clerkIdentityKey];
+          if (security?.blocked || security?.providerResetHold)
+            fail(403, 'Account unavailable.');
+          if (this.state.identities[clerkIdentityKey])
+            fail(
+              409,
+              'That secure login is already connected to a seller account.',
+            );
+          this.rate('clerk-owner-reauth:' + clerkIdentityKey, 10);
+          this.rate(
+            'clerk-owner-ip:' +
+              (await hash(req.headers.get('CF-Connecting-IP') || 'local')),
+            20,
+          );
+          for (const [key, value] of Object.entries(
+            this.state.authTransactions,
+          ))
+            if (value.expiresAt <= Date.now())
+              delete this.state.authTransactions[key];
+          const csrf = token();
+          tx = {
+            purpose: CLERK_OWNER_PURPOSE,
+            method: 'password',
+            state: randomProof(),
+            nonce: randomProof(),
+            verifier: randomProof(),
+            browserProof: await digest(body.proof),
+            csrfProof: await digest(csrf),
+            origin: config.origin,
+            ownerIssuer: ownerConfig.issuer,
+            ownerClientId: ownerConfig.clientId,
+            ownerCallback: ownerConfig.callback,
+            ...clerkOwnerProviderBinding(currentClerk),
+            clerkSessionExpiresAt: currentClerk.providerSessionExpiresAt,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 300000,
+          };
+          this.state.authTransactions[await digest(tx.state)] = tx;
+          return reply({
+            state: tx.state,
+            csrf,
+            authorizationUrl: await authorizationUrl(ownerConfig, tx),
+          });
+        }
+        const external = await exchangeIdentity(
+          this.env,
+          ownerConfig,
+          tx,
+          body.code,
+        );
+        const owner = await clerkOwnerAccount(this.state, external, tx);
+        await clerkLinkIdentity(this.state, owner, currentClerk, tx.createdAt);
+        const raw = token(),
+          ownerCsrf = token();
+        const expiresAt = Math.min(
+          Date.now() + 300000,
+          owner.authenticatedAt + 600000,
+          tx.clerkSessionExpiresAt,
+        );
+        this.state.sessions[await hash(raw)] = {
+          method: CLERK_OWNER_METHOD,
+          scope: 'clerk-link-only',
+          userId: owner.profile.id,
+          identityKey: owner.identityKey,
+          issuer: external.issuer,
+          subject: external.subject,
+          authenticatedAt: owner.authenticatedAt,
+          ownerCsrf,
+          ...clerkOwnerProviderBinding(currentClerk),
+          createdAt: Date.now(),
+          expiresAt,
+        };
+        this.audit('clerk-owner-proof-issued', owner.profile.id, {
+          method: 'password',
+        });
+        return reply({
+          ok: true,
+          ownerProof: raw,
+          ownerCsrf,
+          expiresAt,
+          email: owner.profile.email,
+          name: owner.profile.name,
+        });
+      }
+      if (path === '/auth/clerk-production/link/start' || linkFinishing) {
+        let tx;
+        if (linkFinishing) {
+          const nonceKey = await hash(
+            typeof body?.nonce === 'string' ? body.nonce : '',
+          );
+          tx = this.state.authTransactions[nonceKey];
+          if (!tx || tx.method !== 'clerk-production-link')
+            fail(401, 'Account connection expired. Start again.');
+          // Persist consumption before validating either credential or proof.
+          // Failed provider calls, changed owners and rejected CSRF cannot replay.
+          delete this.state.authTransactions[nonceKey];
+          await this.saveState(this.state);
+          this.rollbackState = structuredClone(this.state);
+          if (!Number.isSafeInteger(tx.expiresAt) || tx.expiresAt <= Date.now())
+            fail(401, 'Account connection expired. Start again.');
+          if (req.headers.get('Origin') !== config.origin)
+            fail(403, 'Origin rejected.');
+        }
+        clerkLinkInput(req, body, linkFinishing);
+        const ownerSessionKey = await hash(
+          (req.headers.get('Authorization') || '').replace(/^Bearer /, ''),
+        );
+        const owner = clerkLinkOwner(
+          this.state,
+          ownerSessionKey,
+          Date.now(),
+          identityConfig(this.env)?.issuer,
+        );
+        if (linkFinishing)
+          await clerkLinkFinishProof(tx, owner, req, body, config.origin);
+        const external = await clerkProductionIdentity(this.env, req);
+        clerkLinkOwnerProviderProof(owner, external, req);
+        if (linkFinishing) clerkLinkProviderProof(tx, external);
+        const identityKey = await clerkLinkIdentity(
+          this.state,
+          owner,
+          external,
+          tx?.createdAt || Date.now(),
+        );
+        if (!linkFinishing) {
+          this.rate('clerk-production-link:' + owner.profile.id, 10);
+          for (const [key, value] of Object.entries(
+            this.state.authTransactions,
+          ))
+            if (value.expiresAt <= Date.now())
+              delete this.state.authTransactions[key];
+          const nonce = token(),
+            csrf = token();
+          this.state.authTransactions[await hash(nonce)] =
+            await clerkLinkTransaction(
+              owner,
+              external,
+              config.origin,
+              body.proof,
+              csrf,
+            );
+          return reply({ nonce, csrf });
+        }
+        this.state.identities[identityKey] = {
+          userId: owner.profile.id,
+          issuer: external.issuer,
+          subject: external.subject,
+          method: 'clerk-production',
+          createdAt: Date.now(),
+          credentialsChangedAt: 0,
+        };
+        // Complete the cutover by retiring existing RWAS bearer sessions. No
+        // seller profile, listing owner or pre-existing identity is rewritten.
+        for (const [key, session] of Object.entries(this.state.sessions))
+          if (session.userId === owner.profile.id)
+            delete this.state.sessions[key];
+        for (const [key, transaction] of Object.entries(
+          this.state.authTransactions,
+        ))
+          if (transaction.linkUserId === owner.profile.id)
+            delete this.state.authTransactions[key];
+        const raw = token(),
+          csrf = token();
+        this.state.sessions[await hash(raw)] = {
+          userId: owner.profile.id,
+          method: 'clerk-production',
+          csrf,
+          identityKey,
+          issuer: external.issuer,
+          subject: external.subject,
+          providerSessionId: external.providerSessionId,
+          passwordLastUpdatedAt: external.passwordLastUpdatedAt,
+          createdAt: Date.now(),
+          expiresAt: Math.min(
+            Date.now() + DAY,
+            external.providerSessionExpiresAt,
+          ),
+        };
+        this.audit('identity-link', owner.profile.id, {
+          method: 'clerk-production',
+        });
+        return reply({ ok: true, session: raw, csrf });
+      }
+      if (path === '/auth/clerk-production/start') {
+        const initiated = await clerkProductionIdentity(this.env, req);
+        this.rate(
+          'clerk-production-login:' +
+            (await digest(initiated.issuer + '|' + initiated.subject)),
+          20,
+        );
+        for (const [key, value] of Object.entries(this.state.authTransactions))
+          if (value.expiresAt <= Date.now())
+            delete this.state.authTransactions[key];
+        const nonce = token();
+        this.state.authTransactions[await hash(nonce)] = {
+          method: 'clerk-production',
+          origin: config.origin,
+          issuer: initiated.issuer,
+          subject: initiated.subject,
+          providerSessionId: initiated.providerSessionId,
+          passwordLastUpdatedAt: initiated.passwordLastUpdatedAt,
+          createdAt: Date.now(),
+          expiresAt: Date.now() + 300000,
+        };
+        return reply({ nonce });
+      }
+      if (path !== '/auth/clerk-production/finish') fail(404, 'Not found.');
+      const nonceKey = await hash(String(body.nonce || ''));
+      const tx = this.state.authTransactions[nonceKey];
+      if (!tx || tx.method !== 'clerk-production' || tx.expiresAt <= Date.now())
+        fail(401, 'Login transaction expired.');
+      delete this.state.authTransactions[nonceKey];
+      await this.saveState(this.state);
+      this.rollbackState = structuredClone(this.state);
+      const external = await clerkProductionIdentity(this.env, req);
+      if (
+        tx.origin !== config.origin ||
+        tx.issuer !== external.issuer ||
+        tx.subject !== external.subject ||
+        tx.providerSessionId !== external.providerSessionId ||
+        tx.passwordLastUpdatedAt !== external.passwordLastUpdatedAt
+      )
+        fail(401, 'Login transaction identity mismatch.');
+      const identityKey = await digest(
+        external.issuer + '|' + external.subject,
+      );
+      const security = this.state.identitySecurity[identityKey];
+      if (
+        security?.blocked ||
+        tx.createdAt <= (security?.credentialsChangedAt || 0)
+      )
+        fail(403, 'Account unavailable.');
+      const existing = this.state.identities[identityKey];
+      let profile = existing && this.state.profiles[existing.userId];
+      if (!existing) {
+        if (
+          Object.values(this.state.profiles).some(
+            (candidate) => candidate.email === external.email,
+          )
+        )
+          fail(409, 'Accounts are never linked by email.');
+        profile = {
+          id: crypto.randomUUID(),
+          email: external.email,
+          name: external.name || '',
+          phone: '',
+          location: '',
+          createdAt: Date.now(),
+        };
+        this.state.profiles[profile.id] = profile;
+      }
+      if (
+        !profile ||
+        accountHeld(profile) ||
+        tx.createdAt <=
+          Math.max(
+            existing?.credentialsChangedAt || 0,
+            profile.sessionRevokedAt || 0,
+          )
+      )
+        fail(403, 'Account unavailable.');
+      if (security?.providerResetHold) {
+        // Clear only our provider-reset hold. Manual profile flags, identity
+        // blocks, and revocation fences above remain authoritative and intact.
+        // A new nonce or refreshed JWT on the old provider session is not recovery.
+        if (
+          !Number.isSafeInteger(security.providerResetGeneration) ||
+          security.providerResetGeneration <= 0 ||
+          !Number.isSafeInteger(external.passwordLastUpdatedAt) ||
+          external.passwordLastUpdatedAt < security.providerResetGeneration ||
+          !Number.isSafeInteger(external.providerSessionCreatedAt) ||
+          external.providerSessionCreatedAt <= external.passwordLastUpdatedAt ||
+          external.providerSessionCreatedAt <= security.credentialsChangedAt ||
+          external.providerSessionCreatedAt > tx.createdAt ||
+          !security.providerResetSessionId ||
+          external.providerSessionId === security.providerResetSessionId
+        )
+          fail(403, 'Fresh provider sign-in required.');
+        security.providerResetHold = false;
+        this.audit('provider-reset-recovered', profile.id, {
+          method: 'clerk-production',
+        });
+      }
+      this.state.identities[identityKey] = {
+        userId: profile.id,
+        issuer: external.issuer,
+        subject: external.subject,
+        method: 'clerk-production',
+        createdAt: existing?.createdAt || Date.now(),
+        credentialsChangedAt: existing?.credentialsChangedAt || 0,
+      };
+      const raw = token(),
+        csrf = token();
+      this.state.sessions[await hash(raw)] = {
+        userId: profile.id,
+        method: 'clerk-production',
+        csrf,
+        identityKey,
+        issuer: external.issuer,
+        subject: external.subject,
+        providerSessionId: external.providerSessionId,
+        passwordLastUpdatedAt: external.passwordLastUpdatedAt,
+        createdAt: Date.now(),
+        expiresAt: Math.min(
+          Date.now() + DAY,
+          external.providerSessionExpiresAt,
+        ),
+      };
+      this.audit('identity-login', profile.id, { method: 'clerk-production' });
+      return reply({ ok: true, session: raw, csrf });
+    }
+    if (
+      this.env.CLERK_PRODUCTION_ENABLED === 'true' &&
+      (path.startsWith('/auth/') ||
+        ['/send-code', '/check-code'].includes(path)) &&
+      !(
+        method === 'POST' &&
+        ['/auth/events', '/auth/auth0-events'].includes(path)
+      )
+    ) {
+      if (path === '/auth/methods' && method === 'GET') {
+        // Advertise Clerk only when the complete runtime configuration used by
+        // the start/finish routes is valid for this exact production origin.
+        clerkProductionConfig(this.env, req);
+        return reply({
+          methods: ['clerk-production'],
+          emailCode: false,
+          existingAccountLink: 'fresh-email-code-session',
+          ...(clerkOwnerConfig(this.env, new URL(req.url).origin)
+            ? { existingAccountOwnerReauth: 'auth0-password' }
+            : {}),
+          publicListings: sellerPublicListingsEnabled(this.env),
+        });
+      }
+      fail(
+        404,
+        'Alternate login is disabled when production Clerk is enabled.',
+      );
+    }
     if (path === '/auth/methods' && method === 'GET') {
       const config = identityConfig(this.env);
       return reply({
@@ -902,7 +1482,7 @@ export class SellerStore {
             )
           : [],
         emailCode: this.env.EMAIL_CODE_LOGIN_ENABLED === 'true',
-        publicListings: this.env.PUBLIC_LISTINGS_ENABLED === 'true',
+        publicListings: sellerPublicListingsEnabled(this.env),
       });
     }
     if (path === '/auth/start' && method === 'POST') {
@@ -976,6 +1556,8 @@ export class SellerStore {
       delete this.state.authTransactions[key];
       await this.saveState(this.state);
       this.rollbackState = structuredClone(this.state); // One-use transaction before contacting the provider.
+      if (tx.purpose !== undefined || !config.methods[tx.method])
+        fail(400, 'Sign-in transaction belongs to another flow. Start again.');
       if (body.error)
         fail(400, 'Sign-in was cancelled. Your account was not changed.');
       const external = await exchangeIdentity(this.env, config, tx, body.code);
@@ -1350,12 +1932,20 @@ export class SellerStore {
       return this.sessionReply(p);
     }
     if (path === '/browse' && method === 'GET') {
-      if (this.env.PUBLIC_LISTINGS_ENABLED !== 'true')
+      if (
+        !sellerPublicListingsEnabled(this.env) &&
+        this.env.CLERK_ACCEPTANCE_ENABLED !== 'true'
+      )
         return reply({ listings: [] });
       const sold = url.searchParams.get('include') === 'sold';
       return reply({
         listings: Object.values(this.state.listings)
-          .filter((l) => l.status === 'active' || (sold && l.status === 'sold'))
+          .filter(
+            (l) =>
+              acceptancePublished(l, this.env) ||
+              (sellerPublicListingsEnabled(this.env) &&
+                (l.status === 'active' || (sold && l.status === 'sold'))),
+          )
           .map((l) => publicListing(this.hydrate(l))),
       });
     }
@@ -1388,9 +1978,10 @@ export class SellerStore {
       if (!f || f.deleting) fail(404, 'File not found.');
       const l = this.state.listings[f.listingId];
       const published =
-        this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
         l &&
-        ['active', 'sold'].includes(l.status) &&
+        (acceptancePublished(l, this.env) ||
+          (sellerPublicListingsEnabled(this.env) &&
+            ['active', 'sold'].includes(l.status))) &&
         ['photos', 'videos'].includes(f.category);
       if (!published) {
         const u = await this.user(req);
@@ -1457,8 +2048,11 @@ export class SellerStore {
       const l = this.state.listings[path.slice(9)];
       if (!l) fail(404, 'Listing not found.');
       const published =
-        this.env.PUBLIC_LISTINGS_ENABLED === 'true' &&
-        ['active', 'sold'].includes(l.status);
+        acceptancePublished(l, this.env) ||
+        (sellerPublicListingsEnabled(this.env) &&
+          ['active', 'sold'].includes(l.status));
+      if (!published && (req.headers.get('Accept') || '').includes('text/html'))
+        fail(404, 'Listing not found.');
       if (!published) {
         const u = await this.user(req);
         if (l.ownerId !== u.id) fail(404, 'Listing not found.');
@@ -1483,29 +2077,51 @@ export class SellerStore {
       const actor = await this.admin(req),
         b = await this.json(req),
         l = this.state.listings[b.listingId];
-      if (!l || l.status !== 'pending')
-        fail(409, 'Listing is not awaiting review.');
+      if (!l) fail(404, 'Listing not found.');
       if (b.revision !== l.revision)
         fail(409, 'Listing changed. Review the latest revision.');
-      if (!['approve', 'reject'].includes(b.decision))
-        fail(400, 'Invalid review decision.');
       if (
-        b.decision === 'approve' &&
-        this.env.PUBLIC_LISTINGS_ENABLED !== 'true'
+        ['acceptance-approve', 'acceptance-unpublish'].includes(b.decision) &&
+        this.env.CLERK_ACCEPTANCE_ENABLED !== 'true'
       )
+        fail(409, 'Bounded acceptance publication is disabled.');
+      if (b.decision === 'acceptance-unpublish') {
+        if (
+          !Number.isFinite(l.acceptancePublicUntil) ||
+          !Number.isInteger(l.acceptanceApprovedRevision)
+        )
+          fail(409, 'Listing has no acceptance publication marker.');
+        delete l.acceptancePublicUntil;
+        delete l.acceptanceApprovedRevision;
+        l.updatedAt = Date.now();
+        this.audit('acceptance-publication-rollback', actor, {
+          listingId: l.id,
+          revision: l.revision,
+        });
+        return reply({ ok: true, listing: this.hydrate(l) });
+      }
+      if (l.status !== 'pending') fail(409, 'Listing is not awaiting review.');
+      if (!['approve', 'reject', 'acceptance-approve'].includes(b.decision))
+        fail(400, 'Invalid review decision.');
+      if (b.decision === 'approve' && !sellerPublicListingsEnabled(this.env))
         fail(409, 'Public listing activation is disabled.');
-      if (b.decision === 'approve') {
+      if (b.decision === 'acceptance-approve') {
+        clean(l.fields, true);
+        l.acceptanceApprovedRevision = l.revision;
+        l.acceptancePublicUntil = Date.now() + 10 * 60 * 1000;
+      } else if (b.decision === 'approve') {
         clean(l.fields, true);
         l.approvedRevision = l.revision;
         l.status = 'active';
+        delete this.state.outbox[l.id + ':' + l.revision];
       } else {
         l.status = 'rejected';
         l.reviewNote = String(b.note || 'Please update your listing.').slice(
           0,
           1000,
         );
+        delete this.state.outbox[l.id + ':' + l.revision];
       }
-      delete this.state.outbox[l.id + ':' + l.revision];
       l.updatedAt = Date.now();
       this.audit('review', actor, {
         listingId: l.id,
@@ -1816,7 +2432,7 @@ export class SellerStore {
         };
       } else if (next === 'paused' && l.status === 'active')
         l.status = 'paused';
-      else if (next === 'active' && this.env.PUBLIC_LISTINGS_ENABLED !== 'true')
+      else if (next === 'active' && !sellerPublicListingsEnabled(this.env))
         fail(409, 'Public listing activation is disabled.');
       else if (
         next === 'active' &&
@@ -1824,7 +2440,7 @@ export class SellerStore {
         l.approvedRevision === l.revision
       )
         l.status = 'active';
-      else if (next === 'sold' && this.env.PUBLIC_LISTINGS_ENABLED !== 'true')
+      else if (next === 'sold' && !sellerPublicListingsEnabled(this.env))
         fail(409, 'Public listing activation is disabled.');
       else if (next === 'sold' && ['active', 'paused'].includes(l.status))
         l.status = 'sold';
