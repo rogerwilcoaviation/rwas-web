@@ -353,6 +353,19 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '340-00035-00',
+    family: 'GNC 4XX snapdome array',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU OTC retail authorization from Ryan on 2026-10-19',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback on 2026-10-19 identifies Snapdome Array,GNC4XX at $20.00 List, In Stock and order-enabled. The current MRP List 10-7-2026, current 2026 End of Year Price Adjustments Comparison and exact marketing-memo search contain no row for 340-00035-00. Retail eligibility is an operator-authorized exact-SKU exception and remains separate from installed-unit compatibility or repair applicability.',
+    productId: 'gid://shopify/Product/8961817411803',
+    variantId: 'gid://shopify/ProductVariant/47408749936859',
+    handle: 'snapdome-array-gnc4xx',
+    removeTags: [],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '330-90006-01',
     family: 'D-sub slide lock kit, 15/26 pin',
     eligibilityAuthority:
@@ -464,6 +477,13 @@ const PUBLIC_PRICE_AUTHORITIES = {
       'Fresh authenticated Garmin DRC Quick Order exact product readback for 233-20003-00 on 2026-10-14; customer List Price shown as $70.00',
     priceType: 'List',
     accessed: '2026-10-14',
+  },
+  '340-00035-00': {
+    list_price: 20,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 340-00035-00 on 2026-10-19; customer List Price shown as $20.00',
+    priceType: 'List',
+    accessed: '2026-10-19',
   },
   '011-04895-00': {
     list_price: 75,
@@ -685,6 +705,8 @@ const GDL_82_DESCRIPTION = `
 `.trim();
 
 const POLICY_DESCRIPTIONS = {
+  '340-00035-00':
+    '<p><strong>Garmin Snapdome Array for GNC 4XX</strong></p><p>Garmin part number <strong>340-00035-00</strong>.</p><h3>Exact item</h3><p>This listing is for one snapdome array identified by Garmin for the GNC 4XX product family. It is a replacement component, not a complete navigator, bezel, display, keypad, installation kit, or installation service.</p><h3>Compatibility and availability</h3><p>Confirm the installed navigator model, hardware applicability, approved service data, and installation requirements before ordering. Installation and return to service must be completed by appropriately authorized personnel when required.</p><p>Garmin reported this exact item in stock when RWAS verified it on October 19, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
   '117-00931-00':
     '<p><strong>Garmin Bridle Cable Clamp, .156, with Label</strong></p><p>Garmin part number <strong>117-00931-00</strong>.</p><h3>Exact item</h3><p>This listing is for <strong>one individual two-hole clamp</strong> for .156-inch (5/32-inch) main cable, 1.500 inches long. It is not Garmin kit 011-04888-02 and does not include a second clamp or other kit contents.</p><h3>Applicability and availability</h3><p>Aircraft and autopilot applicability, approved installation data, cable and clamp compatibility, installation, and return to service must be confirmed separately by appropriately authorized personnel.</p><p>Garmin reported this exact item in stock when RWAS verified it on October 12, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
   '011-04895-00':

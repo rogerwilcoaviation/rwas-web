@@ -140,6 +140,48 @@ test('233-20003-00 keeps exact operator-authorized retail identity and current L
   assert.doesNotThrow(() => assertReviewedCommercialWrites([sku]));
 });
 
+test('340-00035-00 keeps exact operator-authorized retail identity and current List price', () => {
+  const sku = '340-00035-00';
+  const policies = OTC_RETAIL_PRODUCTS.filter((policy) => policy.sku === sku);
+  assert.equal(policies.length, 1);
+  assert.deepEqual(
+    {
+      productId: policies[0].productId,
+      variantId: policies[0].variantId,
+      handle: policies[0].handle,
+    },
+    {
+      productId: 'gid://shopify/Product/8961817411803',
+      variantId: 'gid://shopify/ProductVariant/47408749936859',
+      handle: 'snapdome-array-gnc4xx',
+    },
+  );
+  assert.deepEqual(PUBLIC_PRICE_AUTHORITIES[sku], {
+    list_price: 20,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 340-00035-00 on 2026-10-19; customer List Price shown as $20.00',
+    priceType: 'List',
+    accessed: '2026-10-19',
+  });
+  assert.ok(POLICY_DESCRIPTIONS[sku].includes('one snapdome array'));
+  assert.ok(POLICY_DESCRIPTIONS[sku].includes('not a complete navigator'));
+  assert.deepEqual(
+    OPERATOR_CONFIRMED_CERTIFIED_OTC.filter((entry) => entry.sku === sku),
+    [
+      {
+        sku,
+        productId: 'gid://shopify/Product/8961817411803',
+        variantId: 'gid://shopify/ProductVariant/47408749936859',
+        handle: 'snapdome-array-gnc4xx',
+      },
+    ],
+  );
+  assert.ok(
+    !OTC_RETAIL_PRODUCTS.some((policy) => policy.sku === '340-00035-01'),
+  );
+  assert.doesNotThrow(() => assertReviewedCommercialWrites([sku]));
+});
+
 test('September exact-SKU contracts and mocked reconciliation', async (t) => {
   const originalFetch = globalThis.fetch;
   const envKeys = [

@@ -195,6 +195,12 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     variantId: 'gid://shopify/ProductVariant/47408683811035',
     handle: 'cable-assy-ball-ends-25',
   },
+  {
+    sku: '340-00035-00',
+    productId: 'gid://shopify/Product/8961817411803',
+    variantId: 'gid://shopify/ProductVariant/47408749936859',
+    handle: 'snapdome-array-gnc4xx',
+  },
 ];
 
 // Exact generic hardware items separately reviewed against the current dealer
