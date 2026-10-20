@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-10-20T16:10:03.301844+00:00",
+    "last_updated": "2026-10-20T16:23:55.816851+00:00",
     "total_articles": 26,
     "categories": [
       "regulatory",
@@ -15,7 +15,7 @@
   "articles": [
     {
       "id": "garmin-pricing-changes-december-21-2026-20261019",
-      "status": "draft",
+      "status": "published",
       "category": "product-update",
       "title": "Garmin Aviation Pricing Changes Take Effect December 21, 2026",
       "subtitle": "Aircraft owners planning avionics purchases or upgrades should review quotes and timing before Garmin’s year-end pricing update.",
@@ -41,16 +41,20 @@
       ],
       "social": {
         "facebook": {
-          "text": "Garmin aviation pricing changes take effect December 21, 2026. If you are planning an avionics upgrade, contact RWAS to review equipment, availability, installation scope, and current customer-facing pricing before the change. Draft article pending approval.",
-          "status": "pending"
+          "text": "Garmin aviation pricing changes take effect December 21, 2026. If you are planning an avionics upgrade, contact RWAS to review equipment, availability, installation scope, and current customer-facing pricing before the change.\n\nRead more: https://www.rogerwilcoaviation.com/blog/garmin-pricing-changes-december-21-2026-20261019",
+          "status": "approved",
+          "approved_at": "2026-10-20T16:23:55.816851+00:00"
         },
         "instagram": {
-          "text": "Planning a Garmin avionics upgrade? Updated aviation pricing takes effect December 21, 2026. Ask RWAS to review your aircraft and project timing. Draft content pending approval.",
-          "status": "pending"
+          "text": "Planning a Garmin avionics upgrade? Updated aviation pricing takes effect December 21, 2026. Ask RWAS to review your aircraft, equipment, availability, installation scope, and project timing before the change.\n\nRead more: https://www.rogerwilcoaviation.com/blog/garmin-pricing-changes-december-21-2026-20261019\n\n#GarminAviation #Avionics #AircraftMaintenance #GeneralAviation #RWAS",
+          "status": "approved",
+          "approved_at": "2026-10-20T16:23:55.816851+00:00"
         }
       },
       "image": "/images/blog/garmin-g500-txi-with-gtn-xi-panel.jpg",
-      "image_alt": "Garmin avionics displays installed in an aircraft panel."
+      "image_alt": "Garmin avionics displays installed in an aircraft panel.",
+      "approved_at": "2026-10-20T16:23:55.816851+00:00",
+      "published_at": "2026-10-20T16:23:55.816851+00:00"
     },
     {
       "id": "garmin-flight-log-analysis-integrations-class-a-coflyt",
