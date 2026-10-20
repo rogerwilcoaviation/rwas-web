@@ -1,6 +1,6 @@
 {
   "meta": {
-    "last_updated": "2026-10-20T16:23:55.816851+00:00",
+    "last_updated": "2026-10-20T16:30:04.162803+00:00",
     "total_articles": 26,
     "categories": [
       "regulatory",
@@ -42,13 +42,19 @@
       "social": {
         "facebook": {
           "text": "Garmin aviation pricing changes take effect December 21, 2026. If you are planning an avionics upgrade, contact RWAS to review equipment, availability, installation scope, and current customer-facing pricing before the change.\n\nRead more: https://www.rogerwilcoaviation.com/blog/garmin-pricing-changes-december-21-2026-20261019",
-          "status": "approved",
-          "approved_at": "2026-10-20T16:23:55.816851+00:00"
+          "status": "published",
+          "approved_at": "2026-10-20T16:23:55.816851+00:00",
+          "published_at": "2026-10-20T16:28:55.098860+00:00",
+          "post_id": "106057782039473_1108117938642077",
+          "permalink": "https://www.facebook.com/947347741385765/posts/1108117938642077"
         },
         "instagram": {
           "text": "Planning a Garmin avionics upgrade? Updated aviation pricing takes effect December 21, 2026. Ask RWAS to review your aircraft, equipment, availability, installation scope, and project timing before the change.\n\nRead more: https://www.rogerwilcoaviation.com/blog/garmin-pricing-changes-december-21-2026-20261019\n\n#GarminAviation #Avionics #AircraftMaintenance #GeneralAviation #RWAS",
-          "status": "approved",
-          "approved_at": "2026-10-20T16:23:55.816851+00:00"
+          "status": "published",
+          "approved_at": "2026-10-20T16:23:55.816851+00:00",
+          "published_at": "2026-10-20T16:29:46.236587+00:00",
+          "media_id": "18104139701237601",
+          "permalink": "https://www.instagram.com/p/DeuQ4Qikd5E/"
         }
       },
       "image": "/images/blog/garmin-g500-txi-with-gtn-xi-panel.jpg",
