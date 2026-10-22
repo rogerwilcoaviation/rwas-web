@@ -6,6 +6,8 @@ interface PageSEOProps {
   description: string;
   image?: string;
   canonical: string;
+  locale?: string;
+  languages?: Record<string, string>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
@@ -15,6 +17,8 @@ export function genPageMetadata({
   description,
   image,
   canonical,
+  locale = 'en_US',
+  languages,
   ...rest
 }: PageSEOProps): Metadata {
   const socialImage = image || siteConfig.socialBanner;
@@ -28,7 +32,7 @@ export function genPageMetadata({
       url: canonical,
       siteName: siteConfig.title,
       images: [socialImage],
-      locale: 'en_US',
+      locale,
       type: 'website',
     },
     twitter: {
@@ -37,7 +41,7 @@ export function genPageMetadata({
       card: 'summary_large_image',
       images: [socialImage],
     },
-    alternates: { canonical },
+    alternates: { canonical, ...(languages ? { languages } : {}) },
     ...rest,
   };
 }

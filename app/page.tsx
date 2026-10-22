@@ -18,6 +18,11 @@ export const metadata = genPageMetadata({
   description:
     'FAA Part 145 repair station at KYKN in Yankton. Certified Garmin dealer for G3X Touch, GFC 500, annual inspections, NDT, and fabrication.',
   canonical: 'https://www.rogerwilcoaviation.com/',
+  languages: {
+    'en-US': 'https://www.rogerwilcoaviation.com/',
+    'pt-BR': 'https://www.rogerwilcoaviation.com/pt-br/',
+    'x-default': 'https://www.rogerwilcoaviation.com/',
+  },
 });
 
 /*

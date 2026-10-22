@@ -22,6 +22,11 @@ export const metadata = genPageMetadata({
   description:
     'Papa-Alpha Piper rigging tools from RWAS: CNC-machined reference tools for PA-28, PA-30, PA-31, and PA-36 flight-control rigging work.',
   canonical: pageUrl,
+  languages: {
+    'en-US': pageUrl,
+    'pt-BR': 'https://www.rogerwilcoaviation.com/pt-br/papa-alpha',
+    'x-default': pageUrl,
+  },
 });
 
 export default function PapaAlphaToolsPage() {

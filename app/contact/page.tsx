@@ -19,6 +19,11 @@ export const metadata = genPageMetadata({
   description:
     'Contact Roger Wilco Aviation Services at KYKN in Yankton for Garmin avionics, maintenance, NDT, fabrication, facility recommendations, and quotes.',
   canonical: pageUrl,
+  languages: {
+    'en-US': pageUrl,
+    'pt-BR': 'https://www.rogerwilcoaviation.com/pt-br/contato',
+    'x-default': pageUrl,
+  },
 });
 
 // Dynamic = the form reads ?product=/?sku= from the URL on the client,
