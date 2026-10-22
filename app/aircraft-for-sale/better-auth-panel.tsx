@@ -234,12 +234,14 @@ export default function BetterAuthPanel({
     }
   }
   useEffect(() => {
+    // Keep the stable counter container; cleanup must invalidate its latest value.
+    const lifecycleGeneration = generation;
     mounted.current = true;
     const current = ++generation.current;
     if (resetToken || mode === 'reset')
       return () => {
         mounted.current = false;
-        generation.current++;
+        lifecycleGeneration.current++;
       };
     void getSellerIdentityClient()
       .getSession({ query: { disableCookieCache: true } })
@@ -257,7 +259,7 @@ export default function BetterAuthPanel({
       });
     return () => {
       mounted.current = false;
-      generation.current++;
+      lifecycleGeneration.current++;
     };
     // Initial handoff only; form changes must not replay authentication.
     // eslint-disable-next-line react-hooks/exhaustive-deps

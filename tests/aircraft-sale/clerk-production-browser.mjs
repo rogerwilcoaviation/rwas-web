@@ -261,6 +261,7 @@ try {
   assert.equal(result.signUpUnmounted, true);
   assert.deepEqual(result.signInOptions, {
     routing: 'hash',
+    initialValues: undefined,
     forceRedirectUrl:
       'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
     fallbackRedirectUrl:
@@ -274,6 +275,7 @@ try {
   });
   assert.deepEqual(result.signUpOptions, {
     routing: 'hash',
+    initialValues: undefined,
     forceRedirectUrl:
       'https://www.rogerwilcoaviation.com/aircraft-for-sale?seller-auth=complete',
     fallbackRedirectUrl:

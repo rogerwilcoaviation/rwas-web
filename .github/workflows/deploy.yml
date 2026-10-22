@@ -37,7 +37,9 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Browser dependency provisioning has taken 12m40s; retain time for the
+    # required seller contracts, lint, build and deployment smoke checks.
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v6
 

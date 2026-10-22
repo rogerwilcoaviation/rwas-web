@@ -120,6 +120,8 @@ function IdentityDirectory({ canManage }: { canManage: boolean }) {
     setBusy(false);
   }
   useEffect(() => {
+    // Capture the stable counter container without freezing its current value.
+    const lifecycleGeneration = generation;
     const clear = () => {
       clearPrivate();
       setNotice(
@@ -132,7 +134,7 @@ function IdentityDirectory({ canManage }: { canManage: boolean }) {
     window.addEventListener('focus', clear);
     document.addEventListener('visibilitychange', hide);
     return () => {
-      generation.current++;
+      lifecycleGeneration.current++;
       window.removeEventListener('focus', clear);
       document.removeEventListener('visibilitychange', hide);
     };
