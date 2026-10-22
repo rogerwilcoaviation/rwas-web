@@ -11,6 +11,15 @@ module.exports = () => {
   const plugins = [withBundleAnalyzer];
   return plugins.reduce((acc, next) => next(acc), {
     reactStrictMode: true,
+    // The permanent seller release replaces the retired placeholder catalogue.
+    // Apply this in Next itself so Cloudflare's Git build and CI agree. An
+    // explicit false remains available for a deliberate compatible baseline.
+    env: {
+      NEXT_PUBLIC_SELLER_REPLACE_LEGACY_CATALOG:
+        process.env.NEXT_PUBLIC_SELLER_REPLACE_LEGACY_CATALOG === 'false'
+          ? 'false'
+          : 'true',
+    },
     output: 'export',
     experimental: {
       optimizeCss: true,

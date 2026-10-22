@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, copyFile, symlink, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { Miniflare } from 'miniflare';
 test('Pages advanced wrapper gates missing seller binding and serves current new IDs without static export', async () => {
@@ -198,14 +198,38 @@ test('default UUID canonical routes preserve real seller publication, unpublish 
   let mf;
   let sellerCalls = 0;
   try {
+    const staticApp = 'export default {fetch(request){return new Response("static:"+new URL(request.url).pathname,{headers:{"X-Static-Fixture":"preserved"}})}}';
     await mkdir(join(root, '_worker.js'));
-    await writeFile(join(root, '_worker.js/index.js'),
-      'export default {fetch(request){return new Response("static:"+new URL(request.url).pathname,{headers:{"X-Static-Fixture":"preserved"}})}}');
+    await writeFile(join(root, '_worker.js/index.js'), staticApp);
     await writeFile(join(root, '_routes.json'), JSON.stringify({version:1,include:['/*'],exclude:[]}));
     execFileSync(process.execPath, ['scripts/stage-service-intake.mjs', root]);
+
+    // Exercise the tracked production script's default output path in an
+    // isolated build root. No external, previously built artifact is needed.
+    const productionRoot = join(root, 'production-build');
+    const productionOutput = join(productionRoot, '.vercel/output/static');
+    await mkdir(join(productionRoot, 'scripts'), { recursive: true });
+    await mkdir(join(productionOutput, '_worker.js'), { recursive: true });
+    await copyFile('scripts/stage-service-intake.mjs', join(productionRoot, 'scripts/stage-service-intake.mjs'));
+    await symlink(resolve('functions'), join(productionRoot, 'functions'), 'dir');
+    await symlink(resolve('node_modules'), join(productionRoot, 'node_modules'), 'dir');
+    await writeFile(join(productionOutput, '_worker.js/index.js'), staticApp);
+    await writeFile(join(productionOutput, '_routes.json'), JSON.stringify({version:1,include:['/*'],exclude:[]}));
+    execFileSync(process.execPath, ['scripts/stage-service-intake.mjs'], { cwd: productionRoot });
     assert.equal(await readFile(join(root,'_worker.js/index.js'),'utf8'),
-      await readFile('../artifact/_worker.js/index.js','utf8'),
-      'one-file artifact wrapper exactly matches source generation, without restaging its prior wrapper');
+      await readFile(join(productionOutput,'_worker.js/index.js'),'utf8'),
+      'explicit staging exactly matches the production script default output path');
+    assert.equal(await readFile(join(productionOutput,'_worker.js/rwas-csp-wrapper.js'),'utf8'),
+      staticApp, 'production staging preserves the original application exactly once');
+    // The prebuild suite is self-contained. CI supplies its completed Pages
+    // output explicitly after pages:build to verify the deployable wrapper too.
+    if (process.env.SELLER_PAGES_ARTIFACT_DIR !== undefined) {
+      assert.ok(process.env.SELLER_PAGES_ARTIFACT_DIR.trim(), 'artifact directory must be explicit and nonempty');
+      const artifactRoot = resolve(process.env.SELLER_PAGES_ARTIFACT_DIR);
+      assert.equal(await readFile(join(root,'_worker.js/index.js'),'utf8'),
+        await readFile(join(artifactRoot,'_worker.js/index.js'),'utf8'),
+        'built Pages artifact wrapper exactly matches source generation');
+    }
     const options = {
       modules:true,
       modulesRules:[{type:'ESModule',include:['**/*.js']}],

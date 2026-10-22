@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { build } from 'esbuild';
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
+import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
 import test, { after } from 'node:test';
 import {
@@ -31,6 +32,22 @@ const approved = {
 };
 
 const response = (listings) => Response.json({ listings });
+test('actual Next configuration defaults Git builds to the seller catalogue and retains explicit baseline mode', () => {
+  const flag = 'NEXT_PUBLIC_SELLER_REPLACE_LEGACY_CATALOG';
+  const previous = process.env[flag];
+  const configure = createRequire(import.meta.url)('../../next.config.js');
+  try {
+    delete process.env[flag];
+    assert.equal(configure().env[flag], 'true');
+    process.env[flag] = 'false';
+    assert.equal(configure().env[flag], 'false');
+    process.env[flag] = 'true';
+    assert.equal(configure().env[flag], 'true');
+  } finally {
+    if (previous === undefined) delete process.env[flag];
+    else process.env[flag] = previous;
+  }
+});
 test('replacement browse excludes old fallback and performs no legacy fetch', async () => {
   const calls = [];
   const listings = await refreshPublicMarketplaceListings(
