@@ -171,6 +171,12 @@ async function setup(entry, hold = false) {
         entry.externalBlocked.push(url.origin + url.pathname);
         return route.abort();
       }
+      if (['/api/track', '/api/rum'].includes(url.pathname)) {
+        return route.fulfill({ status: 204 });
+      }
+      if (url.pathname === '/api/aircraft-sale/auth/methods') {
+        return route.fulfill({ status: 200, contentType: 'application/json', json: { methods: [] } });
+      }
       if (url.pathname.startsWith('/api/aircraft-sale/admin/accounts')) {
         const path = url.pathname.replace(
           '/api/aircraft-sale/admin/accounts',
@@ -404,6 +410,9 @@ test(
       async (s, entry) => {
         const { page } = s;
         await previewKeyboard(page, 'Preview suspension');
+        assert.equal(await page.getByRole('tab', { name: 'Account directory', exact: true }).isDisabled(), true);
+        await page.getByRole('button', { name: 'Cancel operation', exact: true }).click();
+        await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
         const viewB = page.getByRole('button', {
           name: 'View account account-b@example.test',
           exact: true,

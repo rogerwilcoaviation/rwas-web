@@ -7,6 +7,10 @@ import {
   type FormEvent,
 } from 'react';
 import { SELLER_API } from '@/lib/seller-api';
+import {
+  AccountSection,
+  AccountWorkspace,
+} from '@/components/shared/AccountWorkspace';
 import { scheduleAbsoluteDeadline } from './authority-deadline';
 import BetterAuthIdentityAdmin from './BetterAuthIdentityAdmin';
 
@@ -117,6 +121,7 @@ async function request(path: string, input?: unknown) {
 }
 const time = (value: number) => new Date(value).toLocaleString();
 export default function SellerAccounts() {
+  const [adminSection, setAdminSection] = useState('directory');
   const [rows, setRows] = useState<Summary[]>([]),
     [selected, setSelected] = useState<Account | null>(null),
     [audit, setAudit] = useState<Audit[]>([]);
@@ -135,6 +140,20 @@ export default function SellerAccounts() {
     preview: Preview;
   } | null>(null);
   const generation = useRef(0);
+  const selectedHeading = useRef<HTMLHeadingElement>(null);
+  const focusSelected = useRef<Element | null>(null);
+  useLayoutEffect(() => {
+    if (focusSelected.current && selected && adminSection === 'details') {
+      const trigger = focusSelected.current;
+      focusSelected.current = null;
+      if (
+        document.activeElement === trigger ||
+        document.activeElement === document.body
+      ) {
+        selectedHeading.current?.focus();
+      }
+    }
+  }, [selected, adminSection]);
   const confirmationHeading = useRef<HTMLHeadingElement>(null);
   const previewFocus = useRef<{
     trigger: HTMLButtonElement;
@@ -178,6 +197,8 @@ export default function SellerAccounts() {
     }
   }, [authority, busy, pending, selected?.id]);
   function clearPrivate() {
+    setAdminSection('directory');
+    focusSelected.current = null;
     generation.current++;
     setRows([]);
     setSelected(null);
@@ -235,6 +256,7 @@ export default function SellerAccounts() {
     );
   }
   async function load(next = false) {
+    setAdminSection('directory');
     const g = ++generation.current;
     setBusy(true);
     setError('');
@@ -288,6 +310,7 @@ export default function SellerAccounts() {
     return d.account as Account;
   }
   async function open(id: string) {
+    const trigger = document.activeElement;
     const g = ++generation.current;
     setBusy(true);
     setError('');
@@ -298,7 +321,10 @@ export default function SellerAccounts() {
     setContact({ name: '', phone: '', location: '' });
     setReason('support-request');
     try {
-      await detail(id, g);
+      if (await detail(id, g)) {
+        focusSelected.current = trigger;
+        setAdminSection('details');
+      }
     } catch (e) {
       if (g === generation.current) failure(e);
     } finally {
@@ -399,29 +425,6 @@ export default function SellerAccounts() {
           Find a seller, review account activity, and manage sign-in access.
         </p>
       </header>
-      <form onSubmit={search} className="search-form">
-        <label>
-          Search accounts
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            maxLength={100}
-            placeholder="Name, email or account ID"
-          />
-        </label>
-        <label>
-          Account status
-          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">All accounts</option>
-            <option value="active">Active</option>
-            <option value="suspended">Suspended</option>
-            <option value="security-held">Security hold</option>
-          </select>
-        </label>
-        <button disabled={busy} type="submit">
-          Load accounts
-        </button>
-      </form>
       {error ? <p role="alert">{error}</p> : null}
       {notice ? <p role="status">{notice}</p> : null}
       {authority ? (
@@ -434,55 +437,115 @@ export default function SellerAccounts() {
       ) : (
         <p>Approved account administrator access is required.</p>
       )}
-      <div className="admin-grid">
-        <section aria-label="Account directory">
-          <h2>Account directory</h2>
-          <p>{total} matching accounts</p>
-          <div className="table-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th>Seller</th>
-                  <th>Status</th>
-                  <th>Listings</th>
-                  <th>Active sessions</th>
-                  <th>Account</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((r) => (
-                  <tr key={r.id}>
-                    <td>
-                      {r.name || 'Unnamed seller'}
-                      <br />
-                      {r.email}
-                    </td>
-                    <td>{r.status}</td>
-                    <td>{r.listingCount}</td>
-                    <td>{r.activeSessions}</td>
-                    <td>
-                      <button
-                        disabled={busy}
-                        onClick={() => void open(r.id)}
-                        aria-label={'View account ' + r.email}
-                      >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {cursor ? (
-            <button disabled={busy} onClick={() => void load(true)}>
-              Next page
+      <AccountWorkspace
+        label="Admin index"
+        value={adminSection}
+        onValueChange={setAdminSection}
+        disabled={busy || !!pending}
+        items={[
+          { value: 'directory', label: 'Account directory' },
+          {
+            value: 'details',
+            label: 'Contact and access',
+            disabled: !selected,
+          },
+          { value: 'listings', label: 'Seller listings', disabled: !selected },
+          { value: 'sessions', label: 'Active sessions', disabled: !selected },
+          {
+            value: 'activity',
+            label: 'Administrator activity',
+            disabled: !selected,
+          },
+          {
+            value: 'identity',
+            label: 'Identity accounts',
+            disabled: !authority,
+          },
+        ]}
+      >
+        <AccountSection value="directory">
+          <form onSubmit={search} className="search-form">
+            <label>
+              Search accounts
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                maxLength={100}
+                placeholder="Name, email or account ID"
+              />
+            </label>
+            <label>
+              Account status
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+              >
+                <option value="all">All accounts</option>
+                <option value="active">Active</option>
+                <option value="suspended">Suspended</option>
+                <option value="security-held">Security hold</option>
+              </select>
+            </label>
+            <button disabled={busy} type="submit">
+              Load accounts
             </button>
-          ) : null}
-        </section>
+          </form>
+          <section aria-label="Account directory">
+            <h2>Account directory</h2>
+            <p>{total} matching accounts</p>
+            <p>Choose View to open a seller in the account index.</p>
+            <div className="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Seller</th>
+                    <th>Status</th>
+                    <th>Listings</th>
+                    <th>Active sessions</th>
+                    <th>Account</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((r) => (
+                    <tr key={r.id}>
+                      <td>
+                        {r.name || 'Unnamed seller'}
+                        <br />
+                        {r.email}
+                      </td>
+                      <td>{r.status}</td>
+                      <td>{r.listingCount}</td>
+                      <td>{r.activeSessions}</td>
+                      <td>
+                        <button
+                          disabled={busy}
+                          onClick={() => void open(r.id)}
+                          aria-label={'View account ' + r.email}
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {cursor ? (
+              <button disabled={busy} onClick={() => void load(true)}>
+                Next page
+              </button>
+            ) : null}
+          </section>
+        </AccountSection>
         {selected ? (
-          <section aria-label="Selected account">
-            <h2>{selected.name || 'Unnamed seller'}</h2>
+          <div
+            role="region"
+            aria-label="Selected account"
+            hidden={adminSection === 'directory' || adminSection === 'identity'}
+          >
+            <h2 ref={selectedHeading} tabIndex={-1}>
+              {selected.name || 'Unnamed seller'}
+            </h2>
             <p>{selected.email}</p>
             <p>Account ID: {selected.id}</p>
             <p>
@@ -502,174 +565,199 @@ export default function SellerAccounts() {
                 ? 'Saved intake draft'
                 : 'No saved intake draft'}
             </p>
-            <h3>Contact details</h3>
-            <fieldset disabled={busy || !authority?.canManage || !!pending}>
-              <label>
-                Name
-                <input
-                  value={contact.name}
-                  maxLength={200}
-                  onChange={(e) =>
-                    setContact((c) => ({ ...c, name: e.target.value }))
-                  }
-                />
-              </label>
-              <label>
-                Phone
-                <input
-                  value={contact.phone}
-                  maxLength={200}
-                  onChange={(e) =>
-                    setContact((c) => ({ ...c, phone: e.target.value }))
-                  }
-                />
-              </label>
-              <label>
-                Location
-                <input
-                  value={contact.location}
-                  maxLength={200}
-                  onChange={(e) =>
-                    setContact((c) => ({ ...c, location: e.target.value }))
-                  }
-                />
-              </label>
-              <label>
-                Operation reason
-                <select
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                >
-                  {Object.entries(reasons).map(([key, label]) => (
-                    <option key={key} value={key}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <button
-                onClick={(e) => void preview('update-profile', e.currentTarget)}
-              >
-                Preview contact update
-              </button>
-              <button
-                onClick={(e) =>
-                  void preview(
-                    selected.adminSuspended ? 'reinstate' : 'suspend',
-                    e.currentTarget,
-                  )
-                }
-              >
-                {selected.adminSuspended
-                  ? 'Preview reinstatement'
-                  : 'Preview suspension'}
-              </button>
-              <button
-                onClick={(e) =>
-                  void preview('revoke-sessions', e.currentTarget)
-                }
-              >
-                Preview session revocation
-              </button>
-            </fieldset>
-            {pending ? (
-              <section
-                aria-label="Confirm account operation"
-                className="confirmation"
-              >
-                <h3 ref={confirmationHeading} tabIndex={-1}>
-                  Confirm {labels[pending.input.operation].toLowerCase()}
-                </h3>
-                <p>Target: {selected.email}</p>
-                <p>
-                  Reason:{' '}
-                  {reasons[pending.input.reasonCode as keyof typeof reasons]}
-                </p>
-                {pending.preview.proposedChanges ? (
-                  <dl>
-                    {Object.entries(pending.preview.proposedChanges).map(
-                      ([key, value]) => (
-                        <div key={key}>
-                          <dt>{key}</dt>
-                          <dd>{value || '(empty)'}</dd>
-                        </div>
-                      ),
-                    )}
-                  </dl>
-                ) : null}
-                <p>
-                  {pending.preview.sessionsToRevoke} stored sessions will be
-                  revoked.
-                </p>
-                <p>Listings, media and ownership stay unchanged.</p>
-                {pending.preview.securityHoldRemains ? (
-                  <p>The separate security hold remains in effect.</p>
-                ) : null}
+            <AccountSection value="details">
+              <h3>Contact details</h3>
+              <fieldset disabled={busy || !authority?.canManage || !!pending}>
+                <label>
+                  Name
+                  <input
+                    value={contact.name}
+                    maxLength={200}
+                    onChange={(e) =>
+                      setContact((c) => ({ ...c, name: e.target.value }))
+                    }
+                  />
+                </label>
+                <label>
+                  Phone
+                  <input
+                    value={contact.phone}
+                    maxLength={200}
+                    onChange={(e) =>
+                      setContact((c) => ({ ...c, phone: e.target.value }))
+                    }
+                  />
+                </label>
+                <label>
+                  Location
+                  <input
+                    value={contact.location}
+                    maxLength={200}
+                    onChange={(e) =>
+                      setContact((c) => ({ ...c, location: e.target.value }))
+                    }
+                  />
+                </label>
+                <label>
+                  Operation reason
+                  <select
+                    value={reason}
+                    onChange={(e) => setReason(e.target.value)}
+                  >
+                    {Object.entries(reasons).map(([key, label]) => (
+                      <option key={key} value={key}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
                 <button
-                  disabled={busy || !authority?.canManage}
-                  onClick={() => void apply()}
+                  onClick={(e) =>
+                    void preview('update-profile', e.currentTarget)
+                  }
                 >
-                  Confirm operation
+                  Preview contact update
                 </button>
-                <button disabled={busy} onClick={cancelPreview}>
-                  Cancel operation
+                <button
+                  onClick={(e) =>
+                    void preview(
+                      selected.adminSuspended ? 'reinstate' : 'suspend',
+                      e.currentTarget,
+                    )
+                  }
+                >
+                  {selected.adminSuspended
+                    ? 'Preview reinstatement'
+                    : 'Preview suspension'}
                 </button>
-              </section>
-            ) : null}
-            <h3>Listings</h3>
-            {selected.listings.length ? (
+                <button
+                  onClick={(e) =>
+                    void preview('revoke-sessions', e.currentTarget)
+                  }
+                >
+                  Preview session revocation
+                </button>
+              </fieldset>
+              {pending ? (
+                <section
+                  aria-label="Confirm account operation"
+                  className="confirmation"
+                >
+                  <h3 ref={confirmationHeading} tabIndex={-1}>
+                    Confirm {labels[pending.input.operation].toLowerCase()}
+                  </h3>
+                  <p>Target: {selected.email}</p>
+                  <p>
+                    Reason:{' '}
+                    {reasons[pending.input.reasonCode as keyof typeof reasons]}
+                  </p>
+                  {pending.preview.proposedChanges ? (
+                    <dl>
+                      {Object.entries(pending.preview.proposedChanges).map(
+                        ([key, value]) => (
+                          <div key={key}>
+                            <dt>{key}</dt>
+                            <dd>{value || '(empty)'}</dd>
+                          </div>
+                        ),
+                      )}
+                    </dl>
+                  ) : null}
+                  <p>
+                    {pending.preview.sessionsToRevoke} stored sessions will be
+                    revoked.
+                  </p>
+                  <p>Listings, media and ownership stay unchanged.</p>
+                  {pending.preview.securityHoldRemains ? (
+                    <p>The separate security hold remains in effect.</p>
+                  ) : null}
+                  <button
+                    disabled={busy || !authority?.canManage}
+                    onClick={() => void apply()}
+                  >
+                    Confirm operation
+                  </button>
+                  <button disabled={busy} onClick={cancelPreview}>
+                    Cancel operation
+                  </button>
+                </section>
+              ) : null}
+            </AccountSection>
+            <AccountSection value="listings">
+              <h3>Listings</h3>
+              {selected.listings.length ? (
+                <ul>
+                  {selected.listings.map((l) => (
+                    <li key={l.id}>
+                      {l.title} · {l.status} · revision {l.revision}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No listings</p>
+              )}
+            </AccountSection>
+            <AccountSection value="sessions">
+              <h3>Active sessions</h3>
               <ul>
-                {selected.listings.map((l) => (
-                  <li key={l.id}>
-                    {l.title} · {l.status} · revision {l.revision}
+                {selected.sessions.map((s, i) => (
+                  <li key={`${s.createdAt}:${i}`}>
+                    {s.method} · started {time(s.createdAt)} · expires{' '}
+                    {time(s.expiresAt)}
                   </li>
                 ))}
               </ul>
-            ) : (
-              <p>No listings</p>
-            )}
-            <h3>Active sessions</h3>
-            <ul>
-              {selected.sessions.map((s, i) => (
-                <li key={`${s.createdAt}:${i}`}>
-                  {s.method} · started {time(s.createdAt)} · expires{' '}
-                  {time(s.expiresAt)}
-                </li>
-              ))}
-            </ul>
-            <h3>Administrator activity</h3>
-            {audit.length ? (
-              <ul>
-                {audit.map((a) => (
-                  <li key={a.operationId}>
-                    {time(a.at)} · {a.actor} · {a.operation} · {a.reasonCode} ·{' '}
-                    {a.revokedSessions} sessions revoked
-                    {a.changedFields.length
-                      ? ' · fields: ' + a.changedFields.join(', ')
-                      : ''}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No administrator operations recorded.</p>
-            )}
-          </section>
+            </AccountSection>
+            <AccountSection value="activity">
+              <h3>Administrator activity</h3>
+              {audit.length ? (
+                <ul>
+                  {audit.map((a) => (
+                    <li key={a.operationId}>
+                      {time(a.at)} · {a.actor} · {a.operation} · {a.reasonCode}{' '}
+                      · {a.revokedSessions} sessions revoked
+                      {a.changedFields.length
+                        ? ' · fields: ' + a.changedFields.join(', ')
+                        : ''}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No administrator operations recorded.</p>
+              )}
+            </AccountSection>
+          </div>
         ) : null}
-      </div>
-      {authority ? (
-        <BetterAuthIdentityAdmin
-          key={`${authority.actor}:${authority.expiresAt}`}
-          canManage={authority.canManage}
-        />
-      ) : null}
+        <AccountSection value="identity">
+          {authority ? (
+            <BetterAuthIdentityAdmin
+              key={`${authority.actor}:${authority.expiresAt}`}
+              canManage={authority.canManage}
+            />
+          ) : null}
+        </AccountSection>
+      </AccountWorkspace>
       <style jsx>{`
         .accounts-admin {
+          width: 100%;
+          min-width: 0;
           max-width: 1300px;
           margin: 0 auto;
           padding: 32px 20px;
           color: #1c1c1a;
+          font-family: Arial, sans-serif;
           background: #f7f4ec;
           min-height: 65vh;
+        }
+        .accounts-admin :global(h1),
+        .accounts-admin :global(h2),
+        .accounts-admin :global(h3),
+        .accounts-admin :global(h4),
+        .accounts-admin :global(button),
+        .accounts-admin :global(input),
+        .accounts-admin :global(select),
+        .accounts-admin :global(textarea) {
+          font-family: Arial, sans-serif;
         }
         .eyebrow {
           text-transform: uppercase;
@@ -703,6 +791,12 @@ export default function SellerAccounts() {
           cursor: pointer;
           margin: 4px 8px 4px 0;
         }
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+          outline: 3px solid #8a681b;
+          outline-offset: 3px;
+        }
         button:disabled {
           opacity: 0.5;
           cursor: default;
@@ -728,18 +822,12 @@ export default function SellerAccounts() {
         }
         .search-form label:first-child {
           flex: 1;
-          min-width: 220px;
-        }
-        .admin-grid {
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-          gap: 20px;
-          margin-top: 20px;
+          min-width: min(220px, 100%);
         }
         section {
-          padding: 18px;
+          padding: 0;
           background: #fff;
-          border: 1px solid #bbb;
+          border: 0;
           overflow-wrap: anywhere;
         }
         .table-scroll {
@@ -768,6 +856,8 @@ export default function SellerAccounts() {
           padding: 0;
         }
         .confirmation {
+          padding: 18px;
+          border: 1px solid #d5cec1;
           background: #fbf4dd;
           margin-top: 18px;
         }
@@ -794,9 +884,6 @@ export default function SellerAccounts() {
           background: #e9f1e8;
         }
         @media (max-width: 900px) {
-          .admin-grid {
-            grid-template-columns: minmax(0, 1fr);
-          }
           h1 {
             font-size: 29px;
           }

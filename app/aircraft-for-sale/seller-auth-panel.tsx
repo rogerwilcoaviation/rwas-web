@@ -8,6 +8,10 @@ import {
   type FormEvent,
 } from 'react';
 import { SELLER_API } from '@/lib/seller-api';
+import {
+  AccountSection,
+  AccountWorkspace,
+} from '@/components/shared/AccountWorkspace';
 import BetterAuthPanel, {
   BetterAuthAccountPanel,
   BetterAuthDeleteAccount,
@@ -34,9 +38,7 @@ import {
   type ClerkProductionSession,
 } from './clerk-production-browser';
 import { clerkQaMethodsHeaders } from './clerk-qa-cohort';
-import {
-  betterAuthQaMethodsHeaders,
-} from './better-auth-qa-entry';
+import { betterAuthQaMethodsHeaders } from './better-auth-qa-entry';
 import {
   CLERK_OWNER_FLOW_KEY,
   readClerkOwnerFlow,
@@ -222,6 +224,7 @@ export default function SellerAuthPanel() {
     [editing, setEditing] = useState<Listing | null>(null);
   const [form, setForm] = useState<Record<string, string>>({}),
     [account, setAccount] = useState<Account | null>(null);
+  const [accountSection, setAccountSection] = useState('profile');
   const [message, setMessage] = useState(''),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false);
@@ -1072,6 +1075,7 @@ export default function SellerAuthPanel() {
     void perform(fn);
   };
   async function openAccount() {
+    setAccountSection('profile');
     setAccount(null);
     setNewEmail('');
     setEmailCode('');
@@ -1329,7 +1333,7 @@ export default function SellerAuthPanel() {
       )}
       <dialog
         ref={dialog}
-        className="seller-dialog"
+        className={`seller-dialog${view === 'account' ? ' seller-account-dialog' : ''}`}
         aria-labelledby="seller-title"
         onCancel={closeSellerPanel}
       >
@@ -1795,333 +1799,378 @@ export default function SellerAuthPanel() {
           </>
         )}
         {view === 'account' && account && (
-          <>
-            {betterAuthEnabled && session?.provider === 'better-auth' && (
-              <BetterAuthAccountPanel
-                expectedTarget={{
-                  userId: session.identityUserId,
-                  sessionId: session.identitySessionId,
-                }}
-                onIdentityEnded={() => {
-                  if (currentAuth.current !== session) return;
-                  setAuth(null);
-                  setAccount(null);
-                  setView('login');
-                }}
-                onIdentityUpdated={async (identity) => {
-                  const captured = currentAuth.current;
-                  const generation = authGeneration.current;
-                  if (
-                    !captured ||
-                    captured.provider !== 'better-auth' ||
-                    captured !== session
-                  )
-                    throw new Error('Your seller sign-in changed.');
-                  const next = await connectBetterAuthSeller(
-                    undefined,
-                    identity,
+          <AccountWorkspace
+            label="Account index"
+            value={accountSection}
+            onValueChange={setAccountSection}
+            disabled={busy}
+            items={[
+              { value: 'profile', label: 'Contact profile' },
+              { value: 'email', label: 'Contact email' },
+              { value: 'security', label: 'Sign-in and security' },
+              { value: 'sessions', label: 'Active sessions' },
+              { value: 'delete', label: 'Delete account' },
+            ]}
+          >
+            <AccountSection value="profile">
+              <form
+                onSubmit={onSubmit(async () => {
+                  const data = await api(
+                    '/account',
+                    'PATCH',
+                    account.profile.email
+                      ? {
+                          name: account.profile.name,
+                          phone: account.profile.phone,
+                          location: account.profile.location,
+                        }
+                      : {},
                   );
-                  if (
-                    currentAuth.current !== captured ||
-                    authGeneration.current !== generation
-                  )
-                    throw new Error('Your seller sign-in changed.');
-                  setAuth(next);
-                }}
-              />
-            )}
-            {betterAuthEnabled &&
-              betterLegacyLink &&
-              session &&
-              session.provider !== 'better-auth' && (
-                <section aria-label="Connect new secure sign-in">
-                  <h3>Connect secure sign-in</h3>
-                  <p>
-                    Keep this existing seller account by proving both your old
-                    login and your new secure sign-in. Email matching alone does
-                    not link accounts.
-                  </p>
-                  <button
-                    disabled={busy}
-                    onClick={() =>
-                      void perform(async () => {
-                        sessionStorage.setItem(
-                          betterLinkKey,
-                          JSON.stringify({
-                            fingerprint: await clerkLinkFingerprint(
-                              session.token,
-                            ),
-                            requestedAt: Date.now(),
-                          }),
-                        );
-                        setBetterLinkOwner({
-                          token: session.token,
-                          ...('csrf' in session ? { csrf: session.csrf } : {}),
-                        });
-                        setView('better-auth');
-                      })
-                    }
-                  >
-                    Connect secure sign-in
-                  </button>
-                </section>
-              )}
-
-            {session?.provider !== 'clerk-production' &&
-              clerkExistingAccountLink && (
-                <section aria-label="Connect secure sign-in">
-                  <h3>Connect RWAS secure sign-in</h3>
-                  <p>
-                    Connect using an existing RWAS email-code session that is
-                    less than ten minutes old to keep this seller account and
-                    its aircraft. Expired, signed-out, and existing
-                    sign-in-provider accounts can verify their existing password
-                    account when account connection is available, or contact
-                    RWAS for help.
-                  </p>
-                  <button disabled={busy} onClick={() => void beginClerkLink()}>
-                    Connect RWAS secure sign-in
-                  </button>
-                </section>
-              )}
-            {session?.provider !== 'clerk-production' &&
-              clerkOwnerReauthEnabled && (
-                <button disabled={busy} onClick={beginClerkOwnerConnection}>
-                  Connect existing seller account
-                </button>
-              )}
-            {session?.provider === 'clerk-production' && (
-              <ClerkProductionAccountPanel />
-            )}
-            {!betterAuthEnabled &&
-              session?.provider !== 'clerk-production' &&
-              identityMethods.length > 0 && (
-                <section aria-label="Connected sign-in methods">
-                  <h3>Sign-in methods</h3>
-                  <p>
-                    {account.loginMethods?.length
-                      ? 'Connected: ' +
-                        account.loginMethods
-                          .map((method) => methodLabels[method])
-                          .join(', ')
-                      : 'Email-code login. Connect another method to use this same seller account.'}
-                  </p>
-                  {identityMethods.map((method) => (
-                    <button
-                      key={method}
-                      disabled={busy}
-                      onClick={() => void beginIdentity(method, true)}
-                    >
-                      Connect {methodLabels[method]}
-                    </button>
-                  ))}
-                  {identityMethods.includes('password') && (
-                    <button
-                      disabled={busy}
-                      onClick={() => void beginIdentity('password')}
-                    >
-                      Password help
-                    </button>
-                  )}
-                </section>
-              )}
-            <form
-              onSubmit={onSubmit(async () => {
-                const data = await api(
-                  '/account',
-                  'PATCH',
-                  account.profile.email
-                    ? {
-                        name: account.profile.name,
-                        phone: account.profile.phone,
-                        location: account.profile.location,
+                  setAccount({ ...account, profile: data.profile });
+                  setMessage('Profile updated.');
+                })}
+              >
+                <h3>Contact profile</h3>
+                {['clerk-production', 'better-auth'].includes(
+                  session?.provider || '',
+                ) ? (
+                  <>
+                    <p>Contact email: {account.profile.email}</p>
+                  </>
+                ) : (
+                  <p>Signed in as {account.profile.email}</p>
+                )}
+                {(['name', 'phone', 'location'] as const).map((k) => (
+                  <label className="seller-field" key={k}>
+                    {k}
+                    <input
+                      value={account.profile[k]}
+                      onChange={(e) =>
+                        setAccount({
+                          ...account,
+                          profile: { ...account.profile, [k]: e.target.value },
+                        })
                       }
-                    : {},
-                );
-                setAccount({ ...account, profile: data.profile });
-                setMessage('Profile updated.');
-              })}
-            >
-              {['clerk-production', 'better-auth'].includes(
-                session?.provider || '',
-              ) ? (
-                <>
-                  <h3>RWAS contact profile</h3>
-                  <p>Contact email: {account.profile.email}</p>
-                </>
-              ) : (
-                <p>Signed in as {account.profile.email}</p>
-              )}
-              {(['name', 'phone', 'location'] as const).map((k) => (
-                <label className="seller-field" key={k}>
-                  {k}
+                      maxLength={200}
+                    />
+                  </label>
+                ))}
+                <button disabled={busy}>Save Profile</button>
+              </form>
+            </AccountSection>
+            <AccountSection value="email">
+              <form
+                onSubmit={onSubmit(async () => {
+                  if (!emailSent) {
+                    await api('/account/email-code', 'POST', {
+                      email: newEmail,
+                    });
+                    setEmailSent(true);
+                  } else {
+                    await api('/account/email', 'PUT', {
+                      email: newEmail,
+                      code: emailCode,
+                    });
+                    setAuth({
+                      ...session!,
+                      email: newEmail.trim().toLowerCase(),
+                    });
+                    setAccount(await api('/account'));
+                    setEmailSent(false);
+                    setMessage(
+                      'Email verified and updated. Other sessions have been revoked.',
+                    );
+                  }
+                })}
+              >
+                <h3>
+                  {['clerk-production', 'better-auth'].includes(
+                    session?.provider || '',
+                  )
+                    ? 'Change RWAS contact email'
+                    : 'Change email'}
+                </h3>
+                {['clerk-production', 'better-auth'].includes(
+                  session?.provider || '',
+                ) && (
+                  <p>
+                    RWAS uses this address to contact you about your aircraft.
+                    Changing it here does not change your secure sign-in email.
+                  </p>
+                )}
+                <label className="seller-field">
+                  New email
                   <input
-                    value={account.profile[k]}
-                    onChange={(e) =>
-                      setAccount({
-                        ...account,
-                        profile: { ...account.profile, [k]: e.target.value },
-                      })
-                    }
-                    maxLength={200}
+                    type="email"
+                    required
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
                   />
                 </label>
-              ))}
-              <button disabled={busy}>Save Profile</button>
-            </form>
-            <form
-              onSubmit={onSubmit(async () => {
-                if (!emailSent) {
-                  await api('/account/email-code', 'POST', { email: newEmail });
-                  setEmailSent(true);
-                } else {
-                  await api('/account/email', 'PUT', {
-                    email: newEmail,
-                    code: emailCode,
-                  });
-                  setAuth({
-                    ...session!,
-                    email: newEmail.trim().toLowerCase(),
-                  });
-                  setAccount(await api('/account'));
-                  setEmailSent(false);
-                  setMessage(
-                    'Email verified and updated. Other sessions have been revoked.',
-                  );
-                }
-              })}
-            >
+                {emailSent && (
+                  <label className="seller-field">
+                    New email code
+                    <input
+                      inputMode="numeric"
+                      pattern="[0-9]{6}"
+                      required
+                      value={emailCode}
+                      onChange={(e) => setEmailCode(e.target.value)}
+                    />
+                  </label>
+                )}
+                <button disabled={busy}>
+                  {emailSent ? 'Verify New Email' : 'Send New Email Code'}
+                </button>
+              </form>
+            </AccountSection>
+            <AccountSection value="security">
+              {session?.provider !== 'better-auth' &&
+                session?.provider !== 'clerk-production' &&
+                !betterLegacyLink &&
+                !clerkExistingAccountLink &&
+                !clerkOwnerReauthEnabled &&
+                identityMethods.length === 0 && (
+                  <>
+                    <h3>Sign-in and security</h3>
+                    <p>
+                      You sign in with an email code. Review and revoke your
+                      seller sessions in Active sessions.
+                    </p>
+                  </>
+                )}
+              {betterAuthEnabled && session?.provider === 'better-auth' && (
+                <BetterAuthAccountPanel
+                  expectedTarget={{
+                    userId: session.identityUserId,
+                    sessionId: session.identitySessionId,
+                  }}
+                  onIdentityEnded={() => {
+                    if (currentAuth.current !== session) return;
+                    setAuth(null);
+                    setAccount(null);
+                    setView('login');
+                  }}
+                  onIdentityUpdated={async (identity) => {
+                    const captured = currentAuth.current;
+                    const generation = authGeneration.current;
+                    if (
+                      !captured ||
+                      captured.provider !== 'better-auth' ||
+                      captured !== session
+                    )
+                      throw new Error('Your seller sign-in changed.');
+                    const next = await connectBetterAuthSeller(
+                      undefined,
+                      identity,
+                    );
+                    if (
+                      currentAuth.current !== captured ||
+                      authGeneration.current !== generation
+                    )
+                      throw new Error('Your seller sign-in changed.');
+                    setAuth(next);
+                  }}
+                />
+              )}
+              {betterAuthEnabled &&
+                betterLegacyLink &&
+                session &&
+                session.provider !== 'better-auth' && (
+                  <section aria-label="Connect new secure sign-in">
+                    <h3>Connect secure sign-in</h3>
+                    <p>
+                      Keep this existing seller account by proving both your old
+                      login and your new secure sign-in. Email matching alone
+                      does not link accounts.
+                    </p>
+                    <button
+                      disabled={busy}
+                      onClick={() =>
+                        void perform(async () => {
+                          sessionStorage.setItem(
+                            betterLinkKey,
+                            JSON.stringify({
+                              fingerprint: await clerkLinkFingerprint(
+                                session.token,
+                              ),
+                              requestedAt: Date.now(),
+                            }),
+                          );
+                          setBetterLinkOwner({
+                            token: session.token,
+                            ...('csrf' in session
+                              ? { csrf: session.csrf }
+                              : {}),
+                          });
+                          setView('better-auth');
+                        })
+                      }
+                    >
+                      Connect secure sign-in
+                    </button>
+                  </section>
+                )}
+
+              {session?.provider !== 'clerk-production' &&
+                clerkExistingAccountLink && (
+                  <section aria-label="Connect secure sign-in">
+                    <h3>Connect RWAS secure sign-in</h3>
+                    <p>
+                      Connect using an existing RWAS email-code session that is
+                      less than ten minutes old to keep this seller account and
+                      its aircraft. Expired, signed-out, and existing
+                      sign-in-provider accounts can verify their existing
+                      password account when account connection is available, or
+                      contact RWAS for help.
+                    </p>
+                    <button
+                      disabled={busy}
+                      onClick={() => void beginClerkLink()}
+                    >
+                      Connect RWAS secure sign-in
+                    </button>
+                  </section>
+                )}
+              {session?.provider !== 'clerk-production' &&
+                clerkOwnerReauthEnabled && (
+                  <button disabled={busy} onClick={beginClerkOwnerConnection}>
+                    Connect existing seller account
+                  </button>
+                )}
+              {session?.provider === 'clerk-production' && (
+                <ClerkProductionAccountPanel />
+              )}
+              {!betterAuthEnabled &&
+                session?.provider !== 'clerk-production' &&
+                identityMethods.length > 0 && (
+                  <section aria-label="Connected sign-in methods">
+                    <h3>Sign-in methods</h3>
+                    <p>
+                      {account.loginMethods?.length
+                        ? 'Connected: ' +
+                          account.loginMethods
+                            .map((method) => methodLabels[method])
+                            .join(', ')
+                        : 'Email-code login. Connect another method to use this same seller account.'}
+                    </p>
+                    {identityMethods.map((method) => (
+                      <button
+                        key={method}
+                        disabled={busy}
+                        onClick={() => void beginIdentity(method, true)}
+                      >
+                        Connect {methodLabels[method]}
+                      </button>
+                    ))}
+                    {identityMethods.includes('password') && (
+                      <button
+                        disabled={busy}
+                        onClick={() => void beginIdentity('password')}
+                      >
+                        Password help
+                      </button>
+                    )}
+                  </section>
+                )}
+            </AccountSection>
+            <AccountSection value="sessions">
               <h3>
                 {['clerk-production', 'better-auth'].includes(
                   session?.provider || '',
                 )
-                  ? 'Change RWAS contact email'
-                  : 'Change email'}
+                  ? 'RWAS sessions'
+                  : 'Active sessions'}
               </h3>
-              {['clerk-production', 'better-auth'].includes(
-                session?.provider || '',
-              ) && (
+              {session?.provider === 'clerk-production' && (
                 <p>
-                  RWAS uses this address to contact you about your aircraft.
-                  Changing it here does not change your secure sign-in email.
+                  These are sessions for RWAS seller access. Manage your secure
+                  sign-in sessions in the Sign-in and security section.
                 </p>
               )}
-              <label className="seller-field">
-                New email
-                <input
-                  type="email"
-                  required
-                  value={newEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                />
-              </label>
-              {emailSent && (
-                <label className="seller-field">
-                  New email code
-                  <input
-                    inputMode="numeric"
-                    pattern="[0-9]{6}"
-                    required
-                    value={emailCode}
-                    onChange={(e) => setEmailCode(e.target.value)}
-                  />
-                </label>
-              )}
-              <button disabled={busy}>
-                {emailSent ? 'Verify New Email' : 'Send New Email Code'}
+              {account.sessions.map((s) => (
+                <p key={s.id}>
+                  {s.current ? 'This session' : 'Other session'} · expires{' '}
+                  {new Date(s.expiresAt).toLocaleString()}{' '}
+                  {!s.current && (
+                    <button
+                      disabled={busy}
+                      onClick={() =>
+                        void perform(async () => {
+                          await api('/account/sessions', 'DELETE', {
+                            id: s.id,
+                          });
+                          setAccount(await api('/account'));
+                        })
+                      }
+                    >
+                      Revoke
+                    </button>
+                  )}
+                </p>
+              ))}
+              <button
+                disabled={busy}
+                onClick={() =>
+                  void perform(async () => {
+                    await api('/account/sessions', 'DELETE', { all: true });
+                    setAccount(await api('/account'));
+                    setMessage('Other RWAS sessions revoked.');
+                  })
+                }
+              >
+                Sign Out Other Sessions
               </button>
-            </form>
-            <h3>
-              {['clerk-production', 'better-auth'].includes(
-                session?.provider || '',
-              )
-                ? 'RWAS sessions'
-                : 'Active sessions'}
-            </h3>
-            {session?.provider === 'clerk-production' && (
-              <p>
-                These are sessions for RWAS seller access. Manage your secure
-                sign-in sessions in Sign-in and security above.
-              </p>
-            )}
-            {account.sessions.map((s) => (
-              <p key={s.id}>
-                {s.current ? 'This session' : 'Other session'} · expires{' '}
-                {new Date(s.expiresAt).toLocaleString()}{' '}
-                {!s.current && (
+            </AccountSection>
+            <AccountSection value="delete">
+              {session?.provider === 'better-auth' && (
+                <BetterAuthDeleteAccount
+                  expectedTarget={{
+                    userId: session.identityUserId,
+                    sessionId: session.identitySessionId,
+                  }}
+                  deleteBusiness={async (confirm) => {
+                    await api('/account', 'DELETE', { confirm });
+                  }}
+                  onComplete={() => {
+                    setAuth(null);
+                    setAccount(null);
+                    setView(null);
+                    setSignOutNotice(
+                      'Your seller account and secure sign-in were deleted.',
+                    );
+                  }}
+                />
+              )}
+              {session?.provider !== 'better-auth' && (
+                <>
+                  <h3>Delete account</h3>
+                  <p>
+                    Permanently delete your listings first. Account deletion
+                    requires a recent sign-in and removes your RWAS profile,
+                    saved draft and connected login links. Your Google, Apple or
+                    sign-in-provider account is managed separately.
+                  </p>
                   <button
                     disabled={busy}
-                    onClick={() =>
-                      void perform(async () => {
-                        await api('/account/sessions', 'DELETE', { id: s.id });
-                        setAccount(await api('/account'));
-                      })
-                    }
+                    onClick={() => {
+                      const confirm = window.prompt(
+                        'Type your current email to permanently delete your account.',
+                      );
+                      if (confirm)
+                        void perform(async () => {
+                          await api('/account', 'DELETE', { confirm });
+                          setAuth(null);
+                          setView(null);
+                        });
+                    }}
                   >
-                    Revoke
+                    Delete Account
                   </button>
-                )}
-              </p>
-            ))}
-            <button
-              disabled={busy}
-              onClick={() =>
-                void perform(async () => {
-                  await api('/account/sessions', 'DELETE', { all: true });
-                  setAccount(await api('/account'));
-                  setMessage('Other RWAS sessions revoked.');
-                })
-              }
-            >
-              Sign Out Other Sessions
-            </button>
-            {session?.provider === 'better-auth' && (
-              <BetterAuthDeleteAccount
-                expectedTarget={{
-                  userId: session.identityUserId,
-                  sessionId: session.identitySessionId,
-                }}
-                deleteBusiness={async (confirm) => {
-                  await api('/account', 'DELETE', { confirm });
-                }}
-                onComplete={() => {
-                  setAuth(null);
-                  setAccount(null);
-                  setView(null);
-                  setSignOutNotice(
-                    'Your seller account and secure sign-in were deleted.',
-                  );
-                }}
-              />
-            )}
-            {session?.provider !== 'better-auth' && (
-              <>
-                <h3>Delete account</h3>
-                <p>
-                  Permanently delete your listings first. Account deletion
-                  requires a recent sign-in and removes your RWAS profile, saved
-                  draft and connected login links. Your Google, Apple or
-                  sign-in-provider account is managed separately.
-                </p>
-                <button
-                  disabled={busy}
-                  onClick={() => {
-                    const confirm = window.prompt(
-                      'Type your current email to permanently delete your account.',
-                    );
-                    if (confirm)
-                      void perform(async () => {
-                        await api('/account', 'DELETE', { confirm });
-                        setAuth(null);
-                        setView(null);
-                      });
-                  }}
-                >
-                  Delete Account
-                </button>
-              </>
-            )}
-          </>
+                </>
+              )}
+            </AccountSection>
+          </AccountWorkspace>
         )}
       </dialog>
       <style jsx>{`
@@ -2133,17 +2182,32 @@ export default function SellerAuthPanel() {
           padding: 24px;
           background: #f7f4ef;
           color: #222;
+          font-family: Arial, sans-serif;
+        }
+        .seller-account-dialog {
+          width: min(1120px, 94vw);
         }
         .seller-dialog::backdrop {
           background: #0008;
         }
         header {
           display: flex;
+          flex-wrap: wrap;
           align-items: center;
           justify-content: space-between;
           gap: 16px;
         }
+        .seller-dialog :global(h2),
+        .seller-dialog :global(h3),
+        .seller-dialog :global(h4),
+        .seller-dialog :global(button),
+        .seller-dialog :global(input),
+        .seller-dialog :global(select),
+        .seller-dialog :global(textarea) {
+          font-family: Arial, sans-serif;
+        }
         h2 {
+          flex: 1 1 180px;
           font-size: 26px;
         }
         h3 {
@@ -2208,6 +2272,12 @@ export default function SellerAuthPanel() {
           gap: 4px;
         }
         @media (max-width: 600px) {
+          .seller-account-dialog header {
+            justify-content: flex-end;
+          }
+          .seller-account-dialog header h2 {
+            flex-basis: 100%;
+          }
           .seller-fields {
             grid-template-columns: 1fr;
           }

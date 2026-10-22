@@ -183,6 +183,7 @@ try {
     contentType: 'text/html',
     body: '<html>Access login</html>',
   };
+  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
   await load.click();
   await page.locator('main').getByRole('alert').waitFor();
   await privacyCleared();
@@ -196,6 +197,7 @@ try {
     contentType: 'application/json',
     body: '{"error":"PRIVATE-DIAGNOSTIC"}',
   };
+  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
   await load.click();
   await page
     .locator('main')
@@ -209,6 +211,7 @@ try {
   checkpoints.push(
     'Service failure shows bounded diagnostics and clears private state',
   );
+  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
   await load.click();
   await page.getByText('27 matching accounts', { exact: true }).waitFor();
   assert.equal(await page.locator('main tbody tr').count(), 25);
@@ -229,19 +232,29 @@ try {
   await page
     .getByRole('textbox', { name: 'Search accounts' })
     .fill('owner@example.test');
+  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
   await load.click();
   await page.getByText('1 matching accounts', { exact: true }).waitFor();
   await page
     .getByRole('button', { name: 'View account owner@example.test' })
     .click();
   await selected.waitFor();
+  const adminTabs = page.getByRole('tablist', { name: 'Admin index', exact: true });
+  assert.equal(await page.getByRole('tabpanel').count(), 1);
+  assert.equal(await adminTabs.getByRole('tab', { name: 'Contact and access', exact: true }).getAttribute('aria-selected'), 'true');
+  const indexBox = await adminTabs.boundingBox();
+  const panelBox = await page.getByRole('tabpanel').boundingBox();
+  assert.ok(indexBox.x + indexBox.width < panelBox.x, 'Admin index is left of the selected section');
   assert.equal(
+
     await selected
       .getByRole('textbox', { name: 'Phone', exact: true })
       .inputValue(),
     'PRIVATE-PHONE',
   );
+  await page.getByRole('tab', { name: 'Seller listings', exact: true }).click();
   assert.ok((await selected.innerText()).includes('Account Ownership Fixture'));
+  await page.getByRole('tab', { name: 'Contact and access', exact: true }).click();
   const ownerId = (
     await (await f.call('/account', 'GET', undefined, owner)).json()
   ).profile.id;
@@ -368,6 +381,9 @@ try {
     ),
     true,
   );
+  const fonts = await page.locator('main').evaluate(root => [...root.querySelectorAll('h1,h2,h3,p,label,button,input,select')].filter(element => element.getClientRects().length).map(element => getComputedStyle(element).fontFamily));
+  assert.ok(fonts.every(font => /^Arial(?:,|$)/.test(font)), JSON.stringify(fonts));
+  assert.equal(await page.getByRole('tabpanel').count(), 1);
   const artifacts =
     process.env.TEST_ARTIFACT_DIR ||
     join(tmpdir(), 'rwas-account-admin-evidence');
@@ -387,10 +403,12 @@ try {
     'Desktop and mobile layouts expose labeled controls without horizontal page overflow',
   );
   failure = { status: 403, contentType: 'application/json', body: '{}' };
+  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
   await load.click();
   await page.locator('main').getByRole('alert').waitFor();
   await privacyCleared();
   fresh = Date.now() - 700000;
+  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
   await load.click();
   await page
     .getByRole('button', { name: 'View account owner@example.test' })
@@ -413,6 +431,7 @@ try {
   );
   fresh = Date.now();
   expiry = Date.now() + 1500;
+  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
   await load.click();
   await page
     .getByRole('button', { name: 'View account owner@example.test' })

@@ -241,6 +241,7 @@ try {
     model: 'Identity Owner',
   });
   await page.getByRole('button', { name: 'Account', exact: true }).click();
+  await page.getByRole('tab', { name: 'Sign-in and security', exact: true }).click();
   providerSubject = 'google|connected';
   providerEmail = 'password-browser@example.test';
   await page
@@ -248,6 +249,7 @@ try {
     .click();
   await complete();
   await page.getByRole('button', { name: 'Account', exact: true }).click();
+  await page.getByRole('tab', { name: 'Sign-in and security', exact: true }).click();
   await page
     .getByText('Connected: Email and password, Google', { exact: true })
     .waitFor();
@@ -269,6 +271,7 @@ try {
   // The already rendered page holds its success URL; go back and start an actual cancelled transaction.
   await page.goBack();
   await page.getByRole('button', { name: 'Account', exact: true }).click();
+  await page.getByRole('tab', { name: 'Sign-in and security', exact: true }).click();
   await page
     .getByRole('button', { name: 'Password help', exact: true })
     .click();

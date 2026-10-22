@@ -777,7 +777,7 @@ export function BetterAuthAccountPanel({
           <h4>Change sign-in email</h4>
           <p>
             This changes your login address. Your RWAS contact email is managed
-            separately below.
+            in the Contact email section.
           </p>
           <label className="seller-field">
             New sign-in email

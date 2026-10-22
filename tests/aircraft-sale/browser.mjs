@@ -328,6 +328,7 @@ try {
   await page.getByLabel('name', { exact: true }).fill('Synthetic Name');
   await page.getByRole('button', { name: 'Save Profile', exact: true }).click();
   await page.getByText('Profile updated.', { exact: true }).waitFor();
+  await page.getByRole('tab', { name: 'Contact email', exact: true }).click();
   await page
     .getByLabel('New email', { exact: true })
     .fill('changed@example.test');

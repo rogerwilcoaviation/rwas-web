@@ -763,6 +763,7 @@ test('successful MFA session rotation refreshes the bound RWAS session and reque
   });
   try {
     await f.page.getByRole('button', { name: 'Account', exact: true }).click();
+    await f.page.getByRole('tab', { name: 'Sign-in and security', exact: true }).click();
     await f.page.getByText('Sign-in email: seller@example.test').waitFor();
     await f.page
       .getByLabel('Password for security changes', { exact: false })
@@ -786,6 +787,7 @@ test('successful MFA session rotation refreshes the bound RWAS session and reque
     );
     assert.equal(bridge.body.expectedUserId, 'fixture-user');
     assert.equal(bridge.body.expectedSessionId, 'rotated-fixture-session');
+    await f.page.getByRole('tab', { name: 'Contact profile', exact: true }).click();
     await f.page
       .getByRole('button', { name: 'Save Profile', exact: true })
       .click();

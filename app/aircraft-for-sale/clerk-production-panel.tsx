@@ -575,8 +575,8 @@ export function ClerkProductionAccountPanel() {
         account. Password changes can require a new sign-in to RWAS.
       </p>
       <p>
-        Your RWAS contact profile and contact email are managed separately
-        below.
+        Manage your RWAS contact profile and contact email in their sections
+        in the account index.
       </p>
       {error && <p role="alert">{error}</p>}
       <button

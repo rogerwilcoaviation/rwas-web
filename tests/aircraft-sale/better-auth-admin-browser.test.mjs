@@ -207,6 +207,7 @@ async function loadIdentity(page) {
   await page
     .getByRole('button', { name: 'Load accounts', exact: true })
     .click();
+  await page.getByRole('tab', { name: 'Identity accounts', exact: true }).click();
   await page
     .getByRole('button', { name: 'Load identity accounts', exact: true })
     .click();
@@ -563,6 +564,7 @@ test('Access expiration unmounts the identity directory and blocks a delayed pri
       state.delayedList = new Promise((resolve) => {
         release = resolve;
       });
+      await page.getByRole('tab', { name: 'Identity accounts', exact: true }).click();
       await page
         .getByRole('button', { name: 'Load identity accounts', exact: true })
         .click();
