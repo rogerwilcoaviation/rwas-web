@@ -8,15 +8,18 @@
 // listings don't appear until the next site rebuild. This component fixes
 // that by hydrating from server-provided `initialListings` (for SEO and fast
 // first paint), then refetching from /browse on mount to show the current
-// state.
+// state. New seller inventory comes only from its anonymous public browse
+// route; private account listings never feed this grid.
 // ============================================================================
 
 'use client';
 
 import { useEffect, useState } from 'react';
 import { ListingCard, type Listing } from './listing-card';
-
-const API = 'https://sale-api.rogerwilcoaviation.com';
+import {
+  marketplaceListingKey,
+  refreshPublicMarketplaceListings,
+} from '@/lib/public-aircraft-marketplace.mjs';
 
 export function ListingsGrid({ initialListings }: { initialListings: Listing[] }) {
   const [listings, setListings] = useState<Listing[]>(initialListings);
@@ -24,26 +27,24 @@ export function ListingsGrid({ initialListings }: { initialListings: Listing[] }
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
     setRefreshing(true);
-    fetch(API + '/browse?include=sold', { cache: 'no-store' })
-      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((data: { listings?: Listing[] }) => {
+    refreshPublicMarketplaceListings(
+      (input, options) => fetch(input, { ...options, signal: controller.signal }),
+      initialListings,
+    )
+      .then((fresh) => {
         if (cancelled) return;
-        const fresh = (data.listings || []).filter(
-          (l) => !l.status || l.status === 'active' || l.status === 'sold',
-        );
         setListings(fresh);
-      })
-      .catch(() => {
-        // Network or server error — keep showing initialListings rather than blanking
       })
       .finally(() => {
         if (!cancelled) setRefreshing(false);
       });
     return () => {
       cancelled = true;
+      controller.abort();
     };
-  }, []);
+  }, [initialListings]);
 
   if (listings.length === 0) {
     return (
@@ -57,7 +58,7 @@ export function ListingsGrid({ initialListings }: { initialListings: Listing[] }
   return (
     <div className="a4s-grid" style={{ opacity: refreshing ? 0.88 : 1, transition: 'opacity 200ms' }}>
       {listings.map((l) => (
-        <ListingCard key={l.id} listing={l} />
+        <ListingCard key={marketplaceListingKey(l)} listing={l} />
       ))}
     </div>
   );

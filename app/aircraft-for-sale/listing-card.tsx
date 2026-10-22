@@ -16,20 +16,13 @@
 "use client";
 
 import { useState } from "react";
+import {
+  marketplaceListingHref,
+  marketplaceListingPhoto,
+  type MarketplaceListing,
+} from '@/lib/public-aircraft-marketplace.mjs';
 
-export interface Listing {
-  id: string;
-  make?: string;
-  model?: string;
-  year?: string;
-  nNumber?: string;
-  price?: string | number;
-  sellerLocation?: string;
-  totalTime?: string | number;
-  engineTime?: string | number;
-  status?: string;
-  photos?: Array<{ key: string; name?: string; contentType?: string }>;
-}
+export type Listing = MarketplaceListing;
 
 function formatPrice(price: Listing["price"]): string {
   if (price === undefined || price === null || price === "") {
@@ -52,19 +45,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
   const [imageBroken, setImageBroken] = useState(false);
   const isSold = listing.status === "sold";
 
-  const firstPhoto = listing.photos?.[0];
-  const photoBase =
-    firstPhoto && firstPhoto.key
-      ? `https://sale-api.rogerwilcoaviation.com/files/${encodeURIComponent(
-          firstPhoto.key,
-        )}`
-      : null;
-  // Resized variants via Worker: w=800 for default, w=1200 for retina.
-  // Aircraft cards display ~280-400px wide on mobile, ~360px on desktop.
-  const imageUrl = photoBase ? `${photoBase}?w=800&q=80` : null;
-  const imageSrcSet = photoBase
-    ? `${photoBase}?w=600&q=80 600w, ${photoBase}?w=800&q=80 800w, ${photoBase}?w=1200&q=80 1200w`
-    : undefined;
+  const { src: imageUrl, srcSet: imageSrcSet } = marketplaceListingPhoto(listing);
 
   const headline =
     [listing.year, listing.make, listing.model].filter(Boolean).join(" ") ||
@@ -244,7 +225,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
 
       <a
         className={`a4s-card${isSold ? " a4s-card--sold" : ""}`}
-        href={`/aircraft-for-sale/${encodeURIComponent(listing.id)}`}
+        href={marketplaceListingHref(listing)}
         aria-label={`${headline}, ${isSold ? "sold" : priceLabel}${listing.nNumber ? `, tail ${listing.nNumber}` : ''}`}
       >
         {isSold ? <div className="a4s-card-sold-ribbon">Sold</div> : null}

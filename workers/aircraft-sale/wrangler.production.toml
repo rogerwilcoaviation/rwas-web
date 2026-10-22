@@ -2,6 +2,9 @@ name = "rwas-seller-production-20261006"
 account_id = "08c51088fd98ea9214af8a0ae226663c"
 main = "entry.mjs"
 compatibility_date = "2026-09-01"
+# Route same-zone Clerk custom-domain JWKS requests through Cloudflare's public
+# front door instead of bypassing Cloudflare security to the zone origin.
+compatibility_flags = ["global_fetch_strictly_public"]
 workers_dev = false
 
 [vars]
@@ -12,6 +15,8 @@ AUTH_CONNECTIONS = "{\"password\":\"Username-Password-Authentication\"}"
 PASSWORD_ONLY_LOGIN = "true"
 EMAIL_CODE_LOGIN_ENABLED = "false"
 PUBLIC_LISTINGS_ENABLED = "false"
+CLERK_PRODUCTION_ENABLED = "true"
+CLERK_ACCEPTANCE_ENABLED = "false"
 MAIL_VIA_PAGES = "true"
 ACCESS_TEAM_DOMAIN = "john-08c.cloudflareaccess.com"
 ACCESS_AUD = "7af12c6b5590fb8587bf05051942c48da7a93677b2f8918cbb550afa48d22f97"

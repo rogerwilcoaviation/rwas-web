@@ -1,0 +1,19 @@
+{
+  "listings": [
+    {
+      "id": "legacy-fixture-aircraft",
+      "make": "Synthetic Legacy",
+      "model": "Original Snapshot",
+      "year": 1999,
+      "price": 2,
+      "status": "active",
+      "photos": [
+        {
+          "key": "legacy-fixtures/original.png",
+          "name": "original.png",
+          "contentType": "image/png"
+        }
+      ]
+    }
+  ]
+}

@@ -4,8 +4,8 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - "**.md"
-      - ".github/workflows/intake-bridge-deploy.yml"
+      - '**.md'
+      - '.github/workflows/intake-bridge-deploy.yml'
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: '22'
       - name: Exact Garmin retail contracts (offline)
         run: node --test scripts/garmin-exact-retail-test.mjs
 
@@ -43,14 +43,29 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: "22"
-          cache: "npm"
+          node-version: '22'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Offline durable intake and advanced routing regressions
         run: npm run test:intake
+
+      - name: Seller authentication and advanced-mode forwarding regressions
+        run: npm run test:seller
+
+      - name: Install pinned browser contract test runtime
+        run: |
+          npm install --prefix "${RUNNER_TEMP}/rwas-browser-runtime" --no-save --package-lock=false --ignore-scripts playwright@1.62.1
+          "${RUNNER_TEMP}/rwas-browser-runtime/node_modules/.bin/playwright" install --with-deps chromium
+
+      - name: Isolated production Clerk security and compiled browser contracts
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/rwas-browser-runtime/node_modules/playwright/index.mjs
+        run: |
+          node --test tests/aircraft-sale/clerk-production-security.test.mjs
+          node tests/aircraft-sale/clerk-production-browser.mjs
 
       - name: Lint
         run: npm run lint
@@ -66,6 +81,7 @@ jobs:
           node scripts/cart-private-pricing-test.mjs
           node scripts/cart-private-runtime-test.mjs
           node scripts/cart-stale-id-recovery-test.mjs
+          node scripts/cart-stale-id-runtime-parity-test.mjs
           node scripts/cart-native-refresh-test.mjs
           node scripts/cart-purchase-exceptions-test.mjs
           node scripts/papa-alpha-variant-selection-test.mjs
@@ -78,7 +94,8 @@ jobs:
       - name: Build (next-on-pages)
         run: npm run pages:build
         env:
-          NODE_VERSION: "22"
+          NODE_VERSION: '22'
+          NEXT_PUBLIC_SELLER_CLERK_PRODUCTION: 'true'
 
       - name: Verify SEO build artifact and catalog payload budgets
         run: |

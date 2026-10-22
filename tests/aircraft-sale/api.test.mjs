@@ -528,7 +528,7 @@ test('metadata interruption compensates uploaded object; public HTML escapes str
         Accept: 'text/html',
       })
     ).status,
-    401,
+    404,
   );
 });
 
@@ -816,4 +816,127 @@ test('review: unavailable durable counters prevent mail delivery before any exte
   assert.equal(f.mail.length, 1);
   f.restart();
   assert.equal(f.state().rates['email:unavailable@example.test'].count, 1);
+});
+
+test('staff bounded acceptance publication is explicit and reversible', async () => {
+  const f = fixture();
+  f.env.PUBLIC_LISTINGS_ENABLED = 'false';
+  f.env.CLERK_ACCEPTANCE_ENABLED = 'true';
+  const t = await f.login(),
+    ordinary = await create(f, t, fields, 'ordinary-active'),
+    l = await create(f, t, fields, 'acceptance-pending');
+  f.env.PUBLIC_LISTINGS_ENABLED = 'true';
+  await submit(f, t, ordinary);
+  assert.equal((await approve(f, ordinary)).status, 200);
+  assert.equal(f.state().listings[ordinary.id].status, 'active');
+  f.env.PUBLIC_LISTINGS_ENABLED = 'false';
+  await submit(f, t, l);
+  assert.equal(
+    (
+      await f.call(
+        '/admin/review',
+        'POST',
+        {
+          listingId: l.id,
+          revision: l.revision,
+          decision: 'acceptance-approve',
+        },
+        'fixture-reviewer',
+      )
+    ).status,
+    200,
+  );
+  assert.equal((await f.call('/listing/' + l.id)).status, 200);
+  const visible = (await (await f.call('/browse')).json()).listings;
+  assert.deepEqual(visible.map((item) => item.id), [l.id]);
+  assert.equal(
+    (
+      await f.call('/listing/' + ordinary.id, 'GET', undefined, undefined, {
+        Accept: 'text/html',
+      })
+    ).status,
+    404,
+  );
+  assert.equal(f.state().listings[l.id].status, 'pending');
+  assert.equal(
+    (
+      await f.call(
+        '/admin/review',
+        'POST',
+        {
+          listingId: l.id,
+          revision: l.revision,
+          decision: 'acceptance-unpublish',
+        },
+        'fixture-reviewer',
+      )
+    ).status,
+    200,
+  );
+  assert.equal(
+    (
+      await f.call('/listing/' + l.id, 'GET', undefined, undefined, {
+        Accept: 'text/html',
+      })
+    ).status,
+    404,
+  );
+  assert.deepEqual((await (await f.call('/browse')).json()).listings, []);
+  assert.equal(f.state().listings[l.id].acceptancePublicUntil, undefined);
+  assert.equal(f.state().listings[l.id].acceptanceApprovedRevision, undefined);
+
+  const pending = f.state().listings[l.id];
+  assert.equal(
+    (
+      await f.call(
+        '/admin/review',
+        'POST',
+        {
+          listingId: l.id,
+          revision: pending.revision,
+          decision: 'acceptance-approve',
+        },
+        'fixture-reviewer',
+      )
+    ).status,
+    200,
+  );
+  const edited = (
+    await (
+      await f.call('/listings/' + l.id, 'PUT', { model: 'Edited after review' }, t)
+    ).json()
+  ).listing;
+  assert.equal(edited.status, 'draft');
+  assert.ok(f.state().listings[l.id].acceptancePublicUntil);
+  assert.notEqual(
+    f.state().listings[l.id].acceptanceApprovedRevision,
+    f.state().listings[l.id].revision,
+  );
+  assert.deepEqual((await (await f.call('/browse')).json()).listings, []);
+  assert.equal(
+    (
+      await f.call('/listing/' + l.id, 'GET', undefined, undefined, {
+        Accept: 'text/html',
+      })
+    ).status,
+    404,
+  );
+  assert.equal((await f.call('/listing/' + l.id, 'GET', undefined, t)).status, 200);
+  assert.equal(
+    (
+      await f.call(
+        '/admin/review',
+        'POST',
+        {
+          listingId: l.id,
+          revision: edited.revision,
+          decision: 'acceptance-unpublish',
+        },
+        'fixture-reviewer',
+      )
+    ).status,
+    200,
+  );
+  assert.equal(f.state().listings[l.id].acceptancePublicUntil, undefined);
+  assert.equal(f.state().listings[l.id].acceptanceApprovedRevision, undefined);
 });

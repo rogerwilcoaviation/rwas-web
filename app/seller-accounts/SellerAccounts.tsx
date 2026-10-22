@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { SELLER_API } from '@/lib/seller-api';
+import { scheduleAbsoluteDeadline } from './authority-deadline';
 
 type Summary = {
   id: string;
@@ -149,14 +150,14 @@ export default function SellerAccounts() {
   );
   useEffect(() => {
     if (!authority) return;
-    const timer = setTimeout(
+    const cancelExpiry = scheduleAbsoluteDeadline(
+      authority.expiresAt,
       () => {
         clearPrivate();
         setError(
           'Administrator access expired. Sign in again and load accounts.',
         );
       },
-      Math.max(0, authority.expiresAt - Date.now()),
     );
     const manageTimer = authority.manageUntil
       ? setTimeout(
@@ -172,7 +173,7 @@ export default function SellerAccounts() {
         )
       : undefined;
     return () => {
-      clearTimeout(timer);
+      cancelExpiry();
       if (manageTimer) clearTimeout(manageTimer);
     };
   }, [authority]);
