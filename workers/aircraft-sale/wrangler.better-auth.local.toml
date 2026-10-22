@@ -1,0 +1,41 @@
+# LOCAL FIXTURE ONLY. Never deploy this configuration or its public fixture key.
+name = "rwas-seller-identity-local-only"
+main = "entry.mjs"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+workers_dev = false
+
+[vars]
+BETTER_AUTH_ENABLED = "true"
+BETTER_AUTH_LOCAL = "true"
+BETTER_AUTH_URL = "http://localhost:8787"
+BETTER_AUTH_SECRET = "rwas-local-fixture-only-not-a-production-credential"
+BETTER_AUTH_GOOGLE_ENABLED = "false"
+BETTER_AUTH_APPLE_ENABLED = "false"
+BETTER_AUTH_LEGACY_LINK_ENABLED = "false"
+CLERK_PRODUCTION_ENABLED = "false"
+EMAIL_CODE_LOGIN_ENABLED = "false"
+PUBLIC_LISTINGS_ENABLED = "false"
+# Real email is intentionally unconfigured. Tests intercept the issuing service.
+
+[[d1_databases]]
+binding = "SELLER_AUTH_DB"
+database_name = "rwas-seller-identity-local-only"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+[[durable_objects.bindings]]
+name = "SELLER_STORE"
+class_name = "SellerStore"
+
+[[migrations]]
+tag = "identity-local-fixture-v1"
+new_sqlite_classes = ["SellerStore"]
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "rwas-seller-media-local-only"
+
+[observability.logs]
+enabled = false
+invocation_logs = false

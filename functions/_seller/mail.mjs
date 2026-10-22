@@ -1,4 +1,8 @@
 import { deliverCode } from '../../workers/aircraft-sale/adapters.mjs';
+import {
+  SELLER_MAIL_PRODUCTION_ORIGIN,
+  mailContextFromRequest,
+} from '../../workers/aircraft-sale/mail-context.mjs';
 
 export const SELLER_STAGING_ORIGIN =
   'https://repair-aircraft-seller-workf.rwas-web.pages.dev';
@@ -33,13 +37,39 @@ export async function sellerMail(request, env) {
     ].includes(path)
   )
     return null;
+  const staging = env.INTAKE_STAGING_MODE === 'true';
+  const production =
+    (env.INTAKE_STAGING_MODE === undefined ||
+      env.INTAKE_STAGING_MODE === 'false') &&
+    !env.SELLER_STAGING_ORIGIN &&
+    new URL(request.url).origin === SELLER_MAIL_PRODUCTION_ORIGIN &&
+    request.headers.get('Origin') === SELLER_MAIL_PRODUCTION_ORIGIN;
   if (
-    env.INTAKE_STAGING_MODE !== 'true' ||
-    env.SELLER_STAGING_ORIGIN !== SELLER_STAGING_ORIGIN ||
-    new URL(request.url).origin !== SELLER_STAGING_ORIGIN ||
-    request.headers.get('Origin') !== SELLER_STAGING_ORIGIN
+    staging
+      ? env.SELLER_STAGING_ORIGIN !== SELLER_STAGING_ORIGIN ||
+        new URL(request.url).origin !== SELLER_STAGING_ORIGIN ||
+        request.headers.get('Origin') !== SELLER_STAGING_ORIGIN
+      : !production
   )
     return reply({ error: 'Verification destination not allowed.' }, 403);
+  if (production && request.headers.get('Sec-Fetch-Site') === 'cross-site')
+    return reply({ error: 'Request origin rejected.' }, 403);
+  let context;
+  if (
+    production &&
+    path === '/api/aircraft-sale/account/email-code' &&
+    (request.headers.has('X-Clerk-Session-Token') ||
+      request.headers.has('X-RWAS-CSRF'))
+  ) {
+    try {
+      context = mailContextFromRequest(request);
+    } catch {
+      return reply({ error: 'Verification session proof rejected.' }, 403);
+    }
+  }
+  // The private Worker RPC decides whether ordinary Auth0/email-code login is
+  // enabled. Missing both Clerk proofs is never a claimed Clerk identity; any
+  // partial proof still fails above, and full Clerk mode rejects absent context.
   if (
     !env.SELLER_API ||
     (!env.SELLER_MAILER && (!env.RESEND_API_KEY || !env.CONTACT_FROM_EMAIL))
@@ -80,6 +110,7 @@ export async function sellerMail(request, env) {
       purpose: path.endsWith('/account/email-code') ? 'email-change' : 'login',
       authorization,
       ip: request.headers.get('CF-Connecting-IP') || '',
+      ...(context ? { context } : {}),
     });
     if (challenge.status !== 200)
       return reply(
@@ -111,6 +142,7 @@ export async function sellerMail(request, env) {
     const confirmed = await env.SELLER_API.confirmVerification({
       ticket,
       authorization,
+      ...(context ? { context } : {}),
     });
     if (confirmed.status !== 200) throw Error('Activation failed');
     return reply({ ok: true, sent: true });

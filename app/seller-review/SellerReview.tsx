@@ -2,10 +2,25 @@
 'use client';
 import { useState } from 'react';
 import { SELLER_API } from '@/lib/seller-api';
+type Decision =
+  | 'approve'
+  | 'reject'
+  | 'acceptance-approve'
+  | 'acceptance-unpublish'
+  | 'unpublish';
+const decisions: Decision[] = [
+  'approve',
+  'reject',
+  'acceptance-approve',
+  'acceptance-unpublish',
+  'unpublish',
+];
 type Review = {
   id: string;
   revision: number;
   status: string;
+  reviewActions?: Decision[];
+  acceptancePublicUntil?: number;
   fields: Record<string, string | number>;
   photos: { key: string; name: string }[];
   videos: { key: string; name: string }[];
@@ -41,23 +56,45 @@ export default function SellerReview() {
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false),
     [queueLoaded, setQueueLoaded] = useState(false),
+    [publicationAllowed, setPublicationAllowed] = useState(false),
     [activity, setActivity] = useState<'idle' | 'loading' | 'reviewing'>(
       'idle',
     ),
     [notes, setNotes] = useState<Record<string, string>>({});
   async function loadQueue() {
-    const r = await fetch(SELLER_API + '/admin/listings', {
+    setPublicationAllowed(false);
+    const availability = fetch(SELLER_API + '/auth/methods', {
       cache: 'no-store',
-    });
-    const d = await reviewResponse(r);
+      signal: AbortSignal.timeout(5000),
+    })
+      .then(reviewResponse)
+      .then((d) => d?.publicListings === true)
+      .catch(() => false);
+    const [d, publicationAvailable] = await Promise.all([
+      fetch(SELLER_API + '/admin/listings', { cache: 'no-store' }).then(
+        reviewResponse,
+      ),
+      availability,
+    ]);
     if (!Array.isArray(d.listings)) throw new ReviewRequestError(502);
-    const pending: Review[] = d.listings.filter(
-      (l: Review) => l.status === 'pending',
+    const listings: Review[] = d.listings.map((l: Review) => ({
+      ...l,
+      reviewActions: Array.isArray(l.reviewActions)
+        ? l.reviewActions.filter((action) => decisions.includes(action))
+        : [],
+    }));
+    const reviewable = listings.filter(
+      (l: Review) =>
+        l.status === 'pending' ||
+        l.reviewActions?.some((action) =>
+          ['unpublish', 'acceptance-unpublish'].includes(action),
+        ),
     );
-    setItems(pending);
+    setPublicationAllowed(publicationAvailable);
+    setItems(reviewable);
     setNotes((previous) =>
       Object.fromEntries(
-        pending
+        reviewable
           .filter((l) => Object.hasOwn(previous, noteKey(l)))
           .map((l) => [noteKey(l), previous[noteKey(l)]]),
       ),
@@ -85,15 +122,30 @@ export default function SellerReview() {
       setActivity('idle');
     }
   }
-  async function review(l: Review, decision: string) {
+  async function review(l: Review, decision: Decision) {
     if (
-      !confirm(
-        decision === 'approve'
-          ? 'Publish this reviewed revision?'
-          : 'Return this revision to the seller?',
-      )
-    )
+      decision === 'approve' &&
+      (!publicationAllowed || !l.reviewActions?.includes('approve'))
+    ) {
+      setError(
+        'Ordinary publication is unavailable. You can still request changes.',
+      );
       return;
+    }
+    if (decision !== 'reject' && !l.reviewActions?.includes(decision)) {
+      setError('This action is unavailable. Please reload the review queue.');
+      return;
+    }
+    const confirmation: Record<Decision, string> = {
+      approve: 'Publish this reviewed revision?',
+      reject: 'Return this revision to the seller?',
+      'acceptance-approve':
+        'Temporarily publish this designated QA revision for up to 10 minutes?',
+      'acceptance-unpublish': 'Remove this QA publication from public view?',
+      unpublish:
+        'Unpublish this listing and require a fresh review before publication?',
+    };
+    if (!confirm(confirmation[decision])) return;
     setBusy(true);
     setActivity('reviewing');
     setError('');
@@ -138,12 +190,20 @@ export default function SellerReview() {
     <main
       id="main-content"
       tabIndex={-1}
-      style={{ maxWidth: 1000, margin: '40px auto', padding: 24 }}
+      style={{
+        width: '100%',
+        minWidth: 0,
+        maxWidth: 1000,
+        boxSizing: 'border-box',
+        margin: '40px auto',
+        padding: 24,
+        overflowWrap: 'anywhere',
+      }}
     >
       <h1>Aircraft listing review</h1>
       <p>
         Staff access requires the approved identity service. Review details and
-        media before publishing. A changed revision cannot be approved.
+        media before deciding. A changed revision cannot be approved.
       </p>
       <button
         type="button"
@@ -158,14 +218,20 @@ export default function SellerReview() {
         <p role="status">Submitting review decision…</p>
       )}
       {error && <p role="alert">{error}</p>}
-      {queueLoaded && !error && items.length === 0 && (
+      {queueLoaded && !publicationAllowed && (
+        <p role="status">
+          Ordinary publication is unavailable. You can still request changes.
+        </p>
+      )}
+      {queueLoaded && !error && items.every((l) => l.status !== 'pending') && (
         <p role="status">No listings are awaiting review.</p>
       )}
-      {queueLoaded && !error && items.length > 0 && (
+      {queueLoaded && !error && items.some((l) => l.status === 'pending') && (
         <p role="status">
-          {items.length === 1
+          {items.filter((l) => l.status === 'pending').length === 1
             ? '1 listing is awaiting review.'
-            : items.length + ' listings are awaiting review.'}
+            : items.filter((l) => l.status === 'pending').length +
+              ' listings are awaiting review.'}
         </p>
       )}
       {items.map((l) => (
@@ -174,6 +240,13 @@ export default function SellerReview() {
             {l.fields.year} {l.fields.make} {l.fields.model}
           </h2>
           <p>Revision {l.revision}</p>
+          <p>Status: {l.status}</p>
+          {l.reviewActions?.includes('acceptance-unpublish') && (
+            <p>
+              QA publication expiry:{' '}
+              {new Date(l.acceptancePublicUntil!).toLocaleString()}.
+            </p>
+          )}
           <dl>
             {Object.entries(l.fields).map(([k, v]) => (
               <div key={k}>
@@ -222,25 +295,60 @@ export default function SellerReview() {
               ))}
             </div>
           ))}
-          <label>
-            Review note
-            <textarea
-              value={notes[noteKey(l)] || ''}
-              onChange={(e) =>
-                setNotes((previous) => ({
-                  ...previous,
-                  [noteKey(l)]: e.target.value,
-                }))
-              }
-              maxLength={1000}
-            />
-          </label>
-          <button disabled={busy} onClick={() => void review(l, 'approve')}>
-            Approve and Publish
-          </button>
-          <button disabled={busy} onClick={() => void review(l, 'reject')}>
-            Request Changes
-          </button>
+          {l.status === 'pending' && (
+            <label>
+              Review note
+              <textarea
+                value={notes[noteKey(l)] || ''}
+                onChange={(e) =>
+                  setNotes((previous) => ({
+                    ...previous,
+                    [noteKey(l)]: e.target.value,
+                  }))
+                }
+                maxLength={1000}
+                style={{ maxWidth: '100%', boxSizing: 'border-box' }}
+              />
+            </label>
+          )}
+          {l.status === 'pending' && (
+            <>
+              <button
+                disabled={
+                  busy ||
+                  !publicationAllowed ||
+                  !l.reviewActions?.includes('approve')
+                }
+                onClick={() => void review(l, 'approve')}
+              >
+                Approve and Publish
+              </button>
+              <button disabled={busy} onClick={() => void review(l, 'reject')}>
+                Request Changes
+              </button>
+            </>
+          )}
+          {l.reviewActions?.includes('acceptance-approve') && (
+            <button
+              disabled={busy}
+              onClick={() => void review(l, 'acceptance-approve')}
+            >
+              Publish QA Test Temporarily
+            </button>
+          )}
+          {l.reviewActions?.includes('acceptance-unpublish') && (
+            <button
+              disabled={busy}
+              onClick={() => void review(l, 'acceptance-unpublish')}
+            >
+              Unpublish QA Test
+            </button>
+          )}
+          {l.reviewActions?.includes('unpublish') && (
+            <button disabled={busy} onClick={() => void review(l, 'unpublish')}>
+              Unpublish Listing
+            </button>
+          )}
         </section>
       ))}
     </main>

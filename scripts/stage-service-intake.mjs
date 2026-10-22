@@ -43,12 +43,21 @@ export default { ...app, async fetch(request, env, ctx) {
  if (url.origin === STAGING_ORIGIN && env.INTAKE_STAGING_MODE !== 'true') return protect(new Response('Staging disabled', {status:503}));
  if (isolated && path === '/robots.txt') return protect(new Response('User-agent: *\\nDisallow: /\\n'));
 
- if (env.SELLER_PUBLIC_ROUTES_ENABLED === 'true' && /^\\/aircraft-for-sale\\/[^/]+\\/?$/.test(path)) {
+ // UUID listings are created after the static export. Their visibility is
+ // decided only by the seller service, including unpublish and QA expiry.
+ // Explicit false retains the operational kill-switch; true retains all IDs.
+ const sellerDetail = /^\\/aircraft-for-sale\\/([^/]+)\\/?$/.exec(path);
+ const sellerUuid = sellerDetail && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(sellerDetail[1]);
+ const sellerPublicRoute = env.SELLER_PUBLIC_ROUTES_ENABLED === 'true' ||
+   (env.SELLER_PUBLIC_ROUTES_ENABLED === undefined && sellerUuid);
+ if (sellerDetail && sellerPublicRoute) {
    if (!sellerDestinationAllowed(request, env, STAGING_ORIGIN)) return protect(new Response('Staging destination not allowed', {status:503}));
+   if (request.method !== 'GET' && request.method !== 'HEAD') return protect(new Response('Method not allowed.', {status:405,headers:{Allow:'GET, HEAD','Cache-Control':'no-store'}}));
    if (!env.SELLER_API) return protect(new Response('Seller service is not configured.',{status:503}));
-   const target = new URL(request.url); target.pathname = '/api/aircraft-sale/listing/' + path.split('/')[2];
+   const target = new URL(request.url); target.pathname = '/api/aircraft-sale/listing/' + sellerDetail[1];
    const headers = new Headers(request.headers); headers.set('Accept','text/html');
-   return protect(await env.SELLER_API.fetch(new Request(target, {method:'GET',headers})));
+   const response = await env.SELLER_API.fetch(new Request(target, {method:'GET',headers}));
+   return protect(request.method === 'HEAD' ? new Response(null, response) : response);
  }
  if (path === '/api/aircraft-sale' || path.startsWith('/api/aircraft-sale/')) {
    if (!sellerDestinationAllowed(request, env, STAGING_ORIGIN)) return protect(new Response('Staging destination not allowed', {status:503}));
@@ -76,6 +85,8 @@ for (const path of [
   '/api/service-receipt',
   '/api/intake-dispatch',
   '/api/service-intake-config',
+  '/api/aircraft-sale',
+  '/api/aircraft-sale/*',
 ]) {
   routes.include = routes.include || [];
   if (
@@ -91,7 +102,7 @@ for (const path of [
     )
   )
     throw new Error(
-      'An existing wildcard exclusion would bypass service intake',
+      'An existing wildcard exclusion would bypass intake or seller API',
     );
 }
 writeFileSync(routesPath, JSON.stringify(routes, null, 2));

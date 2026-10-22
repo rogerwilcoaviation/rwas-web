@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { pdf } from './fixture.mjs';
-import { Miniflare } from 'miniflare';
+import { Miniflare } from './fixtures/workerd-options.mjs';
 import { build } from 'esbuild';
 test('actual local workerd SQLite Durable Object/R2 login, concurrent create, review and private files', async () => {
   const mail = [];
@@ -88,6 +88,8 @@ test('actual local workerd SQLite Durable Object/R2 login, concurrent create, re
         headers: {
           Authorization: 'Bearer ' + t,
           'Content-Type': 'application/pdf',
+          'Idempotency-Key':
+            'rwas-upload-v1.' + Date.now() + '.' + crypto.randomUUID(),
         },
         body: pdf,
       },

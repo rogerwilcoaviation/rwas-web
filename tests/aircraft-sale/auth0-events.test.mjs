@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { identityFixture } from './identity-fixture.mjs';
 import { digest } from '../../workers/aircraft-sale/identity.mjs';
-import { Miniflare } from 'miniflare';
+import { Miniflare } from './fixtures/workerd-options.mjs';
 import { build } from 'esbuild';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { join } from 'node:path';

@@ -8,8 +8,9 @@
  * body::before overlay, no `np-*` ink classes.
  *
  * Hero, How-It-Works steps, and the Admin footnote are wrapped in Specimen
- * cards for the letterpress lift over the enr_h05 watermark. Listings
- * fetch logic is unchanged (ISR, sale-api.rogerwilcoaviation.com).
+ * cards for the letterpress lift over the enr_h05 watermark.
+ * Baseline builds retain the public legacy SEO snapshot. Replacement builds
+ * start empty and the client refreshes only the new seller browse endpoint.
  */
 import type { Metadata } from 'next';
 import {
@@ -23,6 +24,12 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import { type Listing } from './listing-card';
+import {
+  LEGACY_AIRCRAFT_API,
+  marketplaceListingHref,
+  publicMarketplaceListings,
+  replaceLegacyAircraftCatalog,
+} from '@/lib/public-aircraft-marketplace.mjs';
 import { ListingsGrid } from './listings-grid';
 import SellerAuthPanelLoader from './seller-auth-panel-loader';
 
@@ -63,16 +70,15 @@ export const metadata: Metadata = {
 };
 
 async function getListings(): Promise<Listing[]> {
+  if (replaceLegacyAircraftCatalog()) return [];
   try {
-    const resp = await fetch(
-      'https://sale-api.rogerwilcoaviation.com/browse?include=sold',
-      { next: { revalidate: 60 } },
-    );
+    const resp = await fetch(LEGACY_AIRCRAFT_API + '/browse?include=sold', {
+      next: { revalidate: 60 },
+      credentials: 'omit',
+      headers: { Accept: 'application/json' },
+    });
     if (!resp.ok) return [];
-    const data = (await resp.json()) as { listings?: Listing[] };
-    return (data.listings || []).filter(
-      (l) => !l.status || l.status === 'active' || l.status === 'sold',
-    );
+    return publicMarketplaceListings(await resp.json(), 'legacy');
   } catch {
     return [];
   }
@@ -90,7 +96,10 @@ export default async function AircraftForSalePage() {
     itemListElement: listings.map((listing, index) => ({
       '@type': 'ListItem',
       position: index + 1,
-      url: `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(listing.id)}`,
+      url: new URL(
+        marketplaceListingHref(listing),
+        'https://www.rogerwilcoaviation.com',
+      ).href,
       name:
         [listing.year, listing.make, listing.model].filter(Boolean).join(' ') ||
         'Aircraft listing',
@@ -101,7 +110,9 @@ export default async function AircraftForSalePage() {
     <BroadsheetLayout>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(itemListSchema).replace(/</g, '\\u003c'),
+        }}
       />
       {/* Page-scoped a4s styles. Only rules not already covered by
           broadsheet-tokens.css live here. */}

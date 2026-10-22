@@ -57,25 +57,38 @@ export function fixture() {
     },
   };
   let store = new SellerStore(ctx, env);
-  const request = (path, method = 'GET', body, session, headers = {}) =>
-    new Request(
+  const request = (path, method = 'GET', body, session, headers = {}) => {
+    const url =
       (env.AUTH_REDIRECT_URI
         ? new URL(env.AUTH_REDIRECT_URI).origin
         : 'http://localhost') +
-        '/api/aircraft-sale' +
-        path,
-      {
-        method,
-        headers: {
-          ...headers,
-          ...(session ? { Authorization: 'Bearer ' + session } : {}),
-          ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
-        },
-        ...(body !== undefined
-          ? { body: body instanceof Uint8Array ? body : JSON.stringify(body) }
-          : {}),
-      },
-    );
+      '/api/aircraft-sale' +
+      path;
+    const requestHeaders = new Headers({
+      ...headers,
+      ...(session ? { Authorization: 'Bearer ' + session } : {}),
+      ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
+    });
+    // Each deliberate fixture upload is a new operation. Explicit keys (even
+    // invalid or empty ones) are retained for replay and validation coverage.
+    // A missing-key probe can delete this header from the returned Request.
+    if (
+      method.toUpperCase() === 'POST' &&
+      new URL(url).pathname === '/api/aircraft-sale/upload' &&
+      !requestHeaders.has('Idempotency-Key')
+    )
+      requestHeaders.set(
+        'Idempotency-Key',
+        'rwas-upload-v1.' + Date.now() + '.' + crypto.randomUUID(),
+      );
+    return new Request(url, {
+      method,
+      headers: requestHeaders,
+      ...(body !== undefined
+        ? { body: body instanceof Uint8Array ? body : JSON.stringify(body) }
+        : {}),
+    });
+  };
   const call = (...args) => store.fetch(request(...args));
   async function login(address = 'owner@example.test') {
     await call('/send-code', 'POST', { email: address });

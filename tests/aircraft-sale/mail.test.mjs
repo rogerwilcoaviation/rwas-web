@@ -7,7 +7,7 @@ import {
   sellerDestinationAllowed,
   SELLER_STAGING_ORIGIN as origin,
 } from '../../functions/_seller/mail.mjs';
-import { Miniflare } from 'miniflare';
+import { Miniflare } from './fixtures/workerd-options.mjs';
 import { build } from 'esbuild';
 
 function broker() {

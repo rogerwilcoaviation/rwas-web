@@ -1,0 +1,71 @@
+{
+  "status": "ARCHIVED_PRE_PROVISIONING_EXAMPLE_NOT_DEPLOY_CONFIG",
+  "account_id": "08c51088fd98ea9214af8a0ae226663c",
+  "existing_worker": "rwas-seller-production-20261006",
+  "existing_pages_project": "rwas-web",
+  "proposed_new_identity_database": "rwas-seller-identity",
+  "binding": "SELLER_AUTH_DB",
+  "database_id": null,
+  "required_compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "vars": {
+    "BETTER_AUTH_ENABLED": "true",
+    "BETTER_AUTH_URL": "https://www.rogerwilcoaviation.com",
+    "BETTER_AUTH_LOCAL": "false",
+    "BETTER_AUTH_GOOGLE_ENABLED": "true",
+    "BETTER_AUTH_APPLE_ENABLED": "false",
+    "BETTER_AUTH_LEGACY_LINK_ENABLED": "true",
+    "BETTER_AUTH_ADMIN_USER_IDS": "REQUIRES_VERIFIED_IMMUTABLE_ID_SELECTION",
+    "CLERK_PRODUCTION_ENABLED": "false",
+    "CLERK_ACCEPTANCE_ENABLED": "false",
+    "EMAIL_CODE_LOGIN_ENABLED": "false",
+    "MAIL_VIA_PAGES": "false",
+    "PUBLIC_LISTINGS_ENABLED": "true"
+  },
+  "required_encrypted_worker_secrets": [
+    "BETTER_AUTH_SECRET",
+    "RESEND_API_KEY",
+    "GOOGLE_CLIENT_SECRET"
+  ],
+  "required_nonsecret_configuration": {
+    "FROM_EMAIL": "RWAS Seller Accounts <accounts@rogerwilcoaviation.com>",
+    "GOOGLE_CLIENT_ID": "REQUIRES_ISSUING_PROJECT_AND_WEB_CLIENT_VERIFICATION"
+  },
+  "google_redirect_uri": "https://www.rogerwilcoaviation.com/api/aircraft-sale/identity/callback/google",
+  "optional_unconfigured_apple_redirect_uri": "https://www.rogerwilcoaviation.com/api/aircraft-sale/identity/callback/apple",
+  "observability": {
+    "invocation_logs": false,
+    "reason": "Authentication callback and verification URLs contain bearer secrets; exclude raw request URL logging.",
+    "frontdoor_requirement": "Pages does not expose a documented identical invocation_logs flag. Qualify live-tail/export consumers and any zone HTTP/Logpush URL dataset; exclude sensitive identity and reset/verification URL values before activation. No logging setting changed locally."
+  },
+  "listing_and_file_deletion": "Separate exact-ID confirmation; no purge authorized by this file.",
+  "existing_staff_access": "Keep current Cloudflare Access verification and policies; Better Auth administrator privileges require separate immutable ID and MFA.",
+  "session_policy": "48-hour sliding identity sessions; protected business reads do not refresh them.",
+  "public_listing_activation_condition": "Archive exact authenticated inventory of existing placeholder listings before enabling public listings; keep files and accounts. No deletion or archive applied by this proposal.",
+  "pages_settings": {
+    "SELLER_PUBLIC_ROUTES_ENABLED": "true",
+    "SELLER_MAIL_VIA_PAGES": "false",
+    "SELLER_API": "Existing service binding to rwas-seller-production-20261006"
+  },
+  "build_flags": {
+    "NEXT_PUBLIC_SELLER_CLERK_PRODUCTION": "false",
+    "NEXT_PUBLIC_SELLER_REPLACE_LEGACY_CATALOG": "true"
+  },
+  "bot_protection": "Verified email plus database-backed endpoint and factor-failure throttles; no new CAPTCHA configured. Clerk managed challenge is not retained by this replacement.",
+  "email_provider_readonly_evidence": {
+    "provider": "Resend",
+    "domain": "rogerwilcoaviation.com",
+    "domain_id": "56a101b7-330e-4342-9d2e-5c0f833f4d93",
+    "status": "verified",
+    "sending": "enabled",
+    "region": "us-east-1",
+    "credential_scope": "Existing Worker key availability/permissions unverified; use only separately approved domain-scoped sending credential.",
+    "sender": "Proposed sender, not a sent-message proof.",
+    "readback_recorded_at_utc": "2026-10-22T09:14:21.545615+00:00",
+    "provider_observation_timestamp": "Not returned; recorded time is report assembly time, not an invented provider observation timestamp."
+  },
+  "canonical_current_configuration": "wrangler.production.toml",
+  "history_note": "Retained as an inert pre-provisioning proposal; current existing D1, verified immutable administrator, provider settings and logging exclusion are defined by the canonical production TOML. Do not use this historical proposal to replace current provider settings."
+}

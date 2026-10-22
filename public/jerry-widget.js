@@ -426,10 +426,39 @@
     var email = raw.email || raw.userEmail || null;
     var name = raw.name || raw.userName || '';
     if (!token && !email) return null;
-    return { token: token, email: email, name: name };
+    return {
+      token: token,
+      email: email,
+      name: name,
+      provider: raw.provider,
+      csrf: raw.csrf,
+      identityUserId: raw.identityUserId,
+      identitySessionId: raw.identitySessionId,
+    };
   }
 
+  var saleSessionGeneration = 0;
+  var receivedSaleSessionEvent = false;
+  var eventSaleSession = null;
+  document.addEventListener('rwas:session-changed', function (event) {
+    var previous = getSaleSession();
+    receivedSaleSessionEvent = true;
+    eventSaleSession = normalizeSaleSession(event.detail);
+    saleSessionGeneration++;
+    if (
+      !eventSaleSession ||
+      !previous ||
+      eventSaleSession.token !== previous.token
+    ) {
+      intakeState = null;
+    }
+  });
+
   function getSaleSession() {
+    // A sign-out event is authoritative even if an old storage value remains.
+    if (receivedSaleSessionEvent) return eventSaleSession;
+    if (Object.prototype.hasOwnProperty.call(window, 'rwasSaleSession'))
+      return normalizeSaleSession(window.rwasSaleSession);
     try {
       var stored = normalizeSaleSession(
         JSON.parse(sessionStorage.getItem('rwas_sale_v2') || 'null'),
@@ -437,6 +466,120 @@
       if (stored) return stored;
     } catch (e) {}
     return normalizeSaleSession(window.rwasSaleSession || null);
+  }
+
+  function sellerRequestError(status, stale) {
+    return Object.assign(new Error('Seller request failed'), {
+      status: status,
+      sellerRequest: true,
+      staleSellerRequest: !!stale,
+    });
+  }
+
+  function currentSellerRequest(request) {
+    var current = getSaleSession();
+    return !!(
+      request &&
+      request.session &&
+      current &&
+      request.generation === saleSessionGeneration &&
+      current.token === request.session.token &&
+      current.provider === request.session.provider &&
+      current.csrf === request.session.csrf &&
+      current.identityUserId === request.session.identityUserId &&
+      current.identitySessionId === request.session.identitySessionId
+    );
+  }
+
+  function checkSellerRequest(request) {
+    if (!currentSellerRequest(request)) throw sellerRequestError(401, true);
+  }
+
+  function rejectSellerSession(request) {
+    if (!currentSellerRequest(request)) return;
+    if (typeof window.rwasSellerSessionRejected === 'function')
+      window.rwasSellerSessionRejected(request.session.token);
+    if (!currentSellerRequest(request)) return;
+    // The panel normally clears its state and emits this event. Legacy pages
+    // without that callback still discard the rejected compatibility envelope.
+    try {
+      sessionStorage.removeItem('rwas_sale_v2');
+    } catch (_) {}
+    window.rwasSaleSession = null;
+    document.dispatchEvent(new CustomEvent('rwas:session-changed', { detail: null }));
+  }
+
+  async function sellerRequest(path, options, request) {
+    if (
+      path !== '/api/aircraft-sale/draft' &&
+      path !== '/api/aircraft-sale/intake'
+    ) {
+      throw sellerRequestError(403);
+    }
+    if (!request.session || !request.session.token)
+      throw sellerRequestError(401);
+    checkSellerRequest(request);
+    var headers = { Authorization: 'Bearer ' + request.session.token };
+    if (
+      request.session.provider === 'clerk-production' ||
+      request.session.provider === 'better-auth'
+    ) {
+      if (window.location.origin !== 'https://www.rogerwilcoaviation.com')
+        throw sellerRequestError(403);
+      if (!request.session.csrf) throw sellerRequestError(403);
+      if (
+        request.session.provider === 'better-auth' &&
+        (typeof request.session.identityUserId !== 'string' ||
+          !request.session.identityUserId ||
+          typeof request.session.identitySessionId !== 'string' ||
+          !request.session.identitySessionId)
+      )
+        throw sellerRequestError(401);
+      if (typeof window.rwasSellerRequestHeaders !== 'function')
+        throw sellerRequestError(401);
+      try {
+        // The mounted seller panel binds headers to the current account.
+        // Clerk JWTs stay request-local; Better Auth uses its same-origin cookie.
+        headers = await window.rwasSellerRequestHeaders(path);
+      } catch (error) {
+        checkSellerRequest(request);
+        throw sellerRequestError(
+          error && [401, 403, 429, 503].includes(error.status)
+            ? error.status
+            : 401,
+        );
+      }
+      checkSellerRequest(request);
+      if (
+        !headers ||
+        headers.Authorization !== 'Bearer ' + request.session.token ||
+        headers['X-RWAS-CSRF'] !== request.session.csrf ||
+        (request.session.provider === 'clerk-production' &&
+          (typeof headers['X-Clerk-Session-Token'] !== 'string' ||
+            !headers['X-Clerk-Session-Token']))
+      ) {
+        throw sellerRequestError(401);
+      }
+      // Keep only the seller authentication contract, never arbitrary headers.
+      headers = {
+        Authorization: headers.Authorization,
+        'X-RWAS-CSRF': headers['X-RWAS-CSRF'],
+        ...(request.session.provider === 'clerk-production'
+          ? { 'X-Clerk-Session-Token': headers['X-Clerk-Session-Token'] }
+          : {}),
+      };
+    }
+    checkSellerRequest(request);
+    var response = await fetch(
+      path,
+      Object.assign({}, options, {
+        credentials: 'same-origin',
+        headers: Object.assign({}, options.headers || {}, headers),
+      }),
+    );
+    checkSellerRequest(request);
+    if (!response.ok) throw sellerRequestError(response.status);
+    return response;
   }
 
   // Listing progress is private server state, never an unscoped browser draft.
@@ -555,6 +698,10 @@
     input.value = '';
 
     var session = getSaleSession();
+    var sellerRequestContext = {
+      session: session,
+      generation: saleSessionGeneration,
+    };
     var pendingListing = getPendingListing();
     var listingActive = false;
 
@@ -576,7 +723,7 @@
       addAssistantMessage(
         (function () {
           openSellerLoginModal();
-          return 'Before we get started, I need to verify your email. I just opened the Seller Login — enter your email, check for the 6-digit code, and come back and say ready.';
+          return 'Sign in through Seller Login, then come back to continue your private listing draft.';
         })(),
       );
       input.focus();
@@ -615,22 +762,17 @@
       // A chat message never publishes a listing. The seller panel owns review.
       if (LISTING_UI_ENABLED && wantsPendingSubmit(text)) {
         listingActive = true;
-        if (!session) {
+        if (!session || !session.token) {
           openSellerLoginModal();
-          setLoading(false);
-          return;
+          throw sellerRequestError(401);
         }
-        var savedResponse = await fetch('/api/aircraft-sale/draft', {
-          headers: { Authorization: 'Bearer ' + session.token },
-          cache: 'no-store',
-        });
-        if (!savedResponse.ok) {
-          throw Object.assign(new Error('Seller request failed'), {
-            status: savedResponse.status,
-            sellerRequest: true,
-          });
-        }
+        var savedResponse = await sellerRequest(
+          '/api/aircraft-sale/draft',
+          { cache: 'no-store' },
+          sellerRequestContext,
+        );
         var savedDraft = (await savedResponse.json()).draft;
+        checkSellerRequest(sellerRequestContext);
         setOpen(false);
         document.dispatchEvent(
           new CustomEvent('rwas:seller-draft', {
@@ -690,23 +832,22 @@
         LISTING_UI_ENABLED &&
         (hasListingIntent(text) ||
           (intakeState && !intakeState.completed && !intakeState.cancelled));
-      var response = await fetch(
-        listingActive ? '/api/aircraft-sale/intake' : apiUrl,
-        {
-          method: 'POST',
-          headers: Object.assign(
-            { 'Content-Type': 'application/json' },
-            listingActive && session
-              ? { Authorization: 'Bearer ' + session.token }
-              : {},
-          ),
-          body: JSON.stringify({
-            messages: apiMessages,
-            state: intakeState,
-            listingUi: listingActive,
-          }),
-        },
-      );
+      var requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: apiMessages,
+          state: intakeState,
+          listingUi: listingActive,
+        }),
+      };
+      var response = listingActive
+        ? await sellerRequest(
+            '/api/aircraft-sale/intake',
+            requestOptions,
+            sellerRequestContext,
+          )
+        : await fetch(apiUrl, requestOptions);
 
       if (!response.ok) {
         throw Object.assign(new Error('Chat request failed'), {
@@ -718,6 +859,7 @@
       var isStreaming = (response.headers.get('content-type') || '').includes(
         'text/event-stream',
       );
+      var responseAction = null;
 
       if (isStreaming) {
         // ── Streaming mode: show words as they arrive ──
@@ -737,6 +879,11 @@
 
         while (true) {
           var chunk = await reader.read();
+          if (listingActive && !currentSellerRequest(sellerRequestContext)) {
+            await reader.cancel();
+            streamRow.remove();
+            throw sellerRequestError(401, true);
+          }
           if (chunk.done) break;
           sBuffer += decoder.decode(chunk.value, { stream: true });
           var sLines = sBuffer.split('\n');
@@ -757,7 +904,7 @@
                   if (Object.prototype.hasOwnProperty.call(sEvt, 'state')) {
                     intakeState = sEvt.state;
                   }
-                  if (sEvt.action) window.__lastStreamAction = sEvt.action;
+                  if (sEvt.action) responseAction = sEvt.action;
                   if (typeof sEvt.cleanReply === 'string' && sEvt.cleanReply) {
                     // Prefer server-cleaned text over raw token buffer.
                     reply = sEvt.cleanReply;
@@ -773,6 +920,7 @@
       } else {
         // ── Non-streaming fallback ──
         var data = await response.json();
+        if (listingActive) checkSellerRequest(sellerRequestContext);
         var reply =
           data &&
           (data.reply ||
@@ -789,7 +937,7 @@
         if (data && Object.prototype.hasOwnProperty.call(data, 'state')) {
           intakeState = data.state;
         }
-        if (data && data.action) window.__lastStreamAction = data.action;
+        if (data && data.action) responseAction = data.action;
         if (data && typeof data.cleanReply === 'string' && data.cleanReply) {
           reply = data.cleanReply;
         }
@@ -798,11 +946,10 @@
       var rawReply = String(reply);
       // v3 protocol short-circuit: if worker surfaced a structured action,
       // synthesize the legacy marker text into a shim rawReply only for the
-      // existing handleListingActions() code path. This keeps the submission
-      // logic (fetch → /listings → status banner) untouched while letting
-      // the transport layer stop embedding structured data in text.
-      var _v3Action = window.__lastStreamAction || null;
-      window.__lastStreamAction = null; // one-shot
+      // existing handleListingActions() manual draft handoff. This request's
+      // action remains local, so a stale response cannot affect a later request.
+      if (listingActive) checkSellerRequest(sellerRequestContext);
+      var _v3Action = responseAction;
       var actionReplyShim = rawReply;
       if (_v3Action && _v3Action.type === 'listing_draft' && _v3Action.draft) {
         // Append marker block so existing extractTaggedJson picks it up.
@@ -813,12 +960,14 @@
             JSON.stringify(_v3Action.draft);
         }
       }
-      var actionMessages = await handleListingActions(
-        actionReplyShim,
-        _v3Action && _v3Action.type === 'listing_draft'
-          ? _v3Action.draft
-          : null,
-      );
+      var actionMessages = listingActive
+        ? await handleListingActions(
+            actionReplyShim,
+            _v3Action && _v3Action.type === 'listing_draft'
+              ? _v3Action.draft
+              : null,
+          )
+        : [];
       var cleanReply = rawReply;
 
       // Service completion text is never authorization for marketplace writes.
@@ -853,6 +1002,14 @@
       saveHistory();
       render();
     } catch (err) {
+      if (
+        (err.sellerRequest || listingActive) &&
+        (err.status === 401 || err.status === 403) &&
+        !err.staleSellerRequest
+      ) {
+        rejectSellerSession(sellerRequestContext);
+        openSellerLoginModal();
+      }
       var retryMessage =
         'Chat is temporarily unavailable. Your conversation is saved in this tab. Try again in a moment.';
       if (err.sellerRequest || listingActive) {

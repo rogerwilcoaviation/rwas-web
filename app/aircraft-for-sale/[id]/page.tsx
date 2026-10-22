@@ -1,3 +1,4 @@
+import { replaceLegacyAircraftCatalog } from '@/lib/public-aircraft-marketplace.mjs';
 import { hasProductSnippetEligibility } from '@/lib/product-snippet-eligibility.mjs';
 /* eslint-disable @next/next/no-html-link-for-pages */
 /*
@@ -38,10 +39,13 @@ const AIRCRAFT_LISTING_FALLBACK_IMAGE =
  * export). At build time we enumerate every active listing and pre-render
  * its detail page. New listings added after deploy won't have a detail page
  * until the next build — an acceptable tradeoff given the review-before-live
- * workflow. If generateStaticParams() fails (sale-api down at build time),
- * we return an empty array so the build still succeeds.
+ * workflow. In replacement mode the legacy catalog is empty. Next's static
+ * exporter still requires a nonempty parameter list for this dynamic route,
+ * so it receives one reserved, unlisted route that always calls notFound().
+ * This is export plumbing, not an aircraft listing or a legacy API lookup.
  */
 export async function generateStaticParams(): Promise<{ id: string }[]> {
+  if (replaceLegacyAircraftCatalog()) return [{ id: '__rwas-empty-catalog__' }];
   try {
     const resp = await fetch(
       'https://sale-api.rogerwilcoaviation.com/browse?include=sold',
@@ -117,6 +121,7 @@ interface Listing {
 }
 
 async function getListing(id: string): Promise<Listing | null> {
+  if (replaceLegacyAircraftCatalog()) return null;
   try {
     const resp = await fetch(
       `https://sale-api.rogerwilcoaviation.com/listing/${encodeURIComponent(id)}`,
@@ -327,7 +332,12 @@ export default async function AircraftDetailPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([...(hasProductSnippetEligibility(productJsonLd) ? [productJsonLd] : []), breadcrumbJsonLd]),
+          __html: JSON.stringify([
+            ...(hasProductSnippetEligibility(productJsonLd)
+              ? [productJsonLd]
+              : []),
+            breadcrumbJsonLd,
+          ]),
         }}
       />
       <style>{`

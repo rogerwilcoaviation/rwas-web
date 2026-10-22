@@ -81,7 +81,7 @@ try {
     const f = fixture();
     // Real seller implementation, disposable storage and captured test mail only.
     const token = await f.login('unattended-seller@example.test');
-    const context = await browser.newContext();
+    const context = await browser.newContext({ serviceWorkers: 'block' });
     const errors = [];
     let failed = false;
     let recovered = false;
@@ -185,6 +185,15 @@ try {
       );
       assert.equal(history.at(-1).content, text);
       // Reconnect/session renewal is simulated by the fixture, never by bypassing auth.
+      if (scenario.status === 401 || scenario.status === 403) {
+        assert.equal(await page.evaluate(() => sessionStorage.getItem('rwas_sale_v2')), null);
+        await page.evaluate(({ token }) => {
+          const session = { token, email: 'unattended-seller@example.test' };
+          sessionStorage.setItem('rwas_sale_v2', JSON.stringify(session));
+          window.rwasSaleSession = session;
+          document.dispatchEvent(new CustomEvent('rwas:session-changed', { detail: session }));
+        }, { token });
+      }
       await page.locator('.jerry-widget-text-input').fill(text);
       await page.locator('.jerry-widget-send').click();
       await page.waitForFunction(

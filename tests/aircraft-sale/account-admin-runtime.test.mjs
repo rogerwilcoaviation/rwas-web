@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { Miniflare } from 'miniflare';
+import { Miniflare } from './fixtures/workerd-options.mjs';
 import { build } from 'esbuild';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { join } from 'node:path';

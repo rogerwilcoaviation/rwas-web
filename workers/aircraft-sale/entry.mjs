@@ -1,11 +1,17 @@
 import { WorkerEntrypoint } from 'cloudflare:workers';
 import worker from './worker.mjs';
+import {
+  handleSellerIdentityRequest,
+  isSellerIdentityRequest,
+} from './better-auth-router.mjs';
 export { SellerStore } from './worker.mjs';
 
 // No public endpoint returns a verification code. Pages alone invokes these
 // methods over its service binding; the backend has no public route in staging.
 export default class SellerService extends WorkerEntrypoint {
   fetch(request) {
+    if (isSellerIdentityRequest(request))
+      return handleSellerIdentityRequest(request, this.env);
     return worker.fetch(request, this.env);
   }
   async #mail(path, body, headers = {}) {
@@ -26,17 +32,17 @@ export default class SellerService extends WorkerEntrypoint {
     );
     return { status: response.status, ...(await response.json()) };
   }
-  createVerification({ email, purpose, authorization, ip }) {
+  createVerification({ email, purpose, authorization, ip, context }) {
     return this.#mail(
       'start',
-      { email, purpose },
+      { email, purpose, ...(context ? { context } : {}) },
       { Authorization: authorization || '', 'CF-Connecting-IP': ip || '' },
     );
   }
-  confirmVerification({ ticket, authorization }) {
+  confirmVerification({ ticket, authorization, context }) {
     return this.#mail(
       'confirm',
-      { ticket },
+      { ticket, ...(context ? { context } : {}) },
       { Authorization: authorization || '' },
     );
   }

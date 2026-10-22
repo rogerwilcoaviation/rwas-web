@@ -1,6 +1,14 @@
 'use client';
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from 'react';
 import { SELLER_API } from '@/lib/seller-api';
+import { scheduleAbsoluteDeadline } from './authority-deadline';
+import BetterAuthIdentityAdmin from './BetterAuthIdentityAdmin';
 
 type Summary = {
   id: string;
@@ -127,6 +135,48 @@ export default function SellerAccounts() {
     preview: Preview;
   } | null>(null);
   const generation = useRef(0);
+  const confirmationHeading = useRef<HTMLHeadingElement>(null);
+  const previewFocus = useRef<{
+    trigger: HTMLButtonElement;
+    accountId: string;
+    inputId: string;
+    generation: number;
+    authority: Authority | null;
+  } | null>(null);
+  const focusRequest = useRef<'confirmation' | 'return' | null>(null);
+  useLayoutEffect(() => {
+    const focus = previewFocus.current;
+    if (!focus) return;
+    if (
+      focus.generation !== generation.current ||
+      focus.accountId !== selected?.id ||
+      focus.authority !== authority ||
+      !authority?.canManage ||
+      authority.expiresAt <= Date.now() ||
+      (authority.manageUntil !== null && authority.manageUntil <= Date.now()) ||
+      !focus.trigger.isConnected
+    ) {
+      previewFocus.current = null;
+      focusRequest.current = null;
+      return;
+    }
+    if (busy) return;
+    if (
+      focusRequest.current === 'confirmation' &&
+      pending?.input.id === focus.inputId
+    ) {
+      focusRequest.current = null;
+      confirmationHeading.current?.focus();
+    } else if (
+      focusRequest.current === 'return' &&
+      !pending &&
+      !focus.trigger.matches(':disabled')
+    ) {
+      previewFocus.current = null;
+      focusRequest.current = null;
+      focus.trigger.focus();
+    }
+  }, [authority, busy, pending, selected?.id]);
   function clearPrivate() {
     generation.current++;
     setRows([]);
@@ -144,20 +194,19 @@ export default function SellerAccounts() {
   useEffect(
     () => () => {
       generation.current++;
+      previewFocus.current = null;
+      focusRequest.current = null;
     },
     [],
   );
   useEffect(() => {
     if (!authority) return;
-    const timer = setTimeout(
-      () => {
-        clearPrivate();
-        setError(
-          'Administrator access expired. Sign in again and load accounts.',
-        );
-      },
-      Math.max(0, authority.expiresAt - Date.now()),
-    );
+    const cancelExpiry = scheduleAbsoluteDeadline(authority.expiresAt, () => {
+      clearPrivate();
+      setError(
+        'Administrator access expired. Sign in again and load accounts.',
+      );
+    });
     const manageTimer = authority.manageUntil
       ? setTimeout(
           () => {
@@ -172,7 +221,7 @@ export default function SellerAccounts() {
         )
       : undefined;
     return () => {
-      clearTimeout(timer);
+      cancelExpiry();
       if (manageTimer) clearTimeout(manageTimer);
     };
   }, [authority]);
@@ -256,7 +305,7 @@ export default function SellerAccounts() {
       if (g === generation.current) setBusy(false);
     }
   }
-  async function preview(operation: Operation) {
+  async function preview(operation: Operation, trigger: HTMLButtonElement) {
     if (!selected) return;
     const g = ++generation.current;
     setBusy(true);
@@ -269,6 +318,14 @@ export default function SellerAccounts() {
       reasonCode: reason,
       ...(operation === 'update-profile' ? { changes: contact } : {}),
     };
+    previewFocus.current = {
+      trigger,
+      accountId: selected.id,
+      inputId: input.id,
+      generation: g,
+      authority,
+    };
+    focusRequest.current = 'confirmation';
     try {
       const d = await request('/' + selected.id + '/preview', input);
       if (g !== generation.current) return;
@@ -280,10 +337,18 @@ export default function SellerAccounts() {
         throw new AccountRequestError(409);
       setPending({ input, preview: d });
     } catch (e) {
-      if (g === generation.current) failure(e);
+      if (g === generation.current) {
+        previewFocus.current = null;
+        focusRequest.current = null;
+        failure(e);
+      }
     } finally {
       if (g === generation.current) setBusy(false);
     }
+  }
+  function cancelPreview() {
+    focusRequest.current = 'return';
+    setPending(null);
   }
   async function apply() {
     if (!selected || !pending) return;
@@ -482,13 +547,16 @@ export default function SellerAccounts() {
                   ))}
                 </select>
               </label>
-              <button onClick={() => void preview('update-profile')}>
+              <button
+                onClick={(e) => void preview('update-profile', e.currentTarget)}
+              >
                 Preview contact update
               </button>
               <button
-                onClick={() =>
+                onClick={(e) =>
                   void preview(
                     selected.adminSuspended ? 'reinstate' : 'suspend',
+                    e.currentTarget,
                   )
                 }
               >
@@ -496,7 +564,11 @@ export default function SellerAccounts() {
                   ? 'Preview reinstatement'
                   : 'Preview suspension'}
               </button>
-              <button onClick={() => void preview('revoke-sessions')}>
+              <button
+                onClick={(e) =>
+                  void preview('revoke-sessions', e.currentTarget)
+                }
+              >
                 Preview session revocation
               </button>
             </fieldset>
@@ -505,7 +577,9 @@ export default function SellerAccounts() {
                 aria-label="Confirm account operation"
                 className="confirmation"
               >
-                <h3>Confirm {labels[pending.input.operation].toLowerCase()}</h3>
+                <h3 ref={confirmationHeading} tabIndex={-1}>
+                  Confirm {labels[pending.input.operation].toLowerCase()}
+                </h3>
                 <p>Target: {selected.email}</p>
                 <p>
                   Reason:{' '}
@@ -537,7 +611,7 @@ export default function SellerAccounts() {
                 >
                   Confirm operation
                 </button>
-                <button disabled={busy} onClick={() => setPending(null)}>
+                <button disabled={busy} onClick={cancelPreview}>
                   Cancel operation
                 </button>
               </section>
@@ -582,6 +656,12 @@ export default function SellerAccounts() {
           </section>
         ) : null}
       </div>
+      {authority ? (
+        <BetterAuthIdentityAdmin
+          key={`${authority.actor}:${authority.expiresAt}`}
+          canManage={authority.canManage}
+        />
+      ) : null}
       <style jsx>{`
         .accounts-admin {
           max-width: 1300px;
