@@ -167,6 +167,24 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '011-05779-10',
+    family: 'GTR 205 / GTR 25R connector kit',
+    eligibilityAuthority:
+      'September 2026 Garmin Americas dealer requirements list GTR 205 among products excluded from the installation policy; John authorized this exact connector-kit SKU for retail sale on 2026-10-22',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC Quick Order readback on 2026-10-22 identifies exact SKU 011-05779-10 as Sub-Assy, Connector Kit, GTR205/GTR25R at $145.00 List, In Stock and order-enabled for quantity five. Authorization excludes either radio and every related kit or suffix.',
+    productId: 'gid://shopify/Product/8961819377883',
+    variantId: 'gid://shopify/ProductVariant/47408752034011',
+    handle: 'sub-assy-connector-kit-gtr205-gtr25r',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:install-hardware',
+      'otc-disabled',
+      'stock-check-required',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '330-00185-26',
     family: '26-circuit high-density D-sub connector',
     productId: 'gid://shopify/Product/8961745092827',
@@ -534,6 +552,13 @@ const PUBLIC_PRICE_AUTHORITIES = {
     priceType: 'List',
     accessed: '2026-09-29',
   },
+  '011-05779-10': {
+    list_price: 145,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 011-05779-10 on 2026-10-22; customer List Price shown as $145.00',
+    priceType: 'List',
+    accessed: '2026-10-22',
+  },
   '011-01169-01': {
     list_price: 25,
     source:
@@ -723,6 +748,8 @@ const POLICY_DESCRIPTIONS = {
     '<p><strong>Garmin 37/62-Pin Backshell with Hardware</strong></p><p>Garmin part number <strong>011-00950-03</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one 37/62-pin backshell-with-hardware subassembly to the order.</p><p>Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>',
   '011-02977-01':
     "<p><strong>Garmin GTX 345 Connector Kit</strong></p><p>Garmin part number <strong>011-02977-01</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one Garmin GTX 345 connector kit to the order.</p><p>This listing does not make a separate claim about the kit's individual contents. Confirm compatibility with the intended installation before ordering.</p>",
+  '011-05779-10':
+    '<p><strong>Garmin GTR 205 / GTR 25R Connector Kit</strong></p><p>Garmin part number <strong>011-05779-10</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one Garmin connector kit to the order. This listing is for the connector kit only; it does not include a GTR 205 or GTR 25R radio.</p><h3>Compatibility and availability</h3><p>Confirm compatibility with the intended radio and installation before ordering. Installation and return to service must be completed by appropriately authorized personnel when required.</p><p>Garmin reported this exact kit in stock when RWAS verified quantity five on October 22, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
   '011-01169-00':
     '<p><strong>Garmin Ground Adapter Shell, Size 1–3</strong></p><p>Garmin part number <strong>011-01169-00</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one ground-adapter subassembly to the order.</p><p>This listing does not include a connector, backshell, contacts, or other connector-kit components. Confirm compatibility with the intended Garmin installation before ordering.</p>',
   '011-01169-01':

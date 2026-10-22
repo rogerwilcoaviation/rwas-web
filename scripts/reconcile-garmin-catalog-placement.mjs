@@ -154,6 +154,12 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     handle: 'sub-assy-gtx345-connector-kit',
   },
   {
+    sku: '011-05779-10',
+    productId: 'gid://shopify/Product/8961819377883',
+    variantId: 'gid://shopify/ProductVariant/47408752034011',
+    handle: 'sub-assy-connector-kit-gtr205-gtr25r',
+  },
+  {
     sku: '011-00950-03',
     productId: 'gid://shopify/Product/10317737591003',
     variantId: 'gid://shopify/ProductVariant/50534144999643',

@@ -140,6 +140,46 @@ test('233-20003-00 keeps exact operator-authorized retail identity and current L
   assert.doesNotThrow(() => assertReviewedCommercialWrites([sku]));
 });
 
+test('011-05779-10 keeps exact connector-kit identity and current List price', () => {
+  const sku = '011-05779-10';
+  const policies = OTC_RETAIL_PRODUCTS.filter((policy) => policy.sku === sku);
+  assert.equal(policies.length, 1);
+  assert.deepEqual(
+    {
+      productId: policies[0].productId,
+      variantId: policies[0].variantId,
+      handle: policies[0].handle,
+    },
+    {
+      productId: 'gid://shopify/Product/8961819377883',
+      variantId: 'gid://shopify/ProductVariant/47408752034011',
+      handle: 'sub-assy-connector-kit-gtr205-gtr25r',
+    },
+  );
+  assert.deepEqual(PUBLIC_PRICE_AUTHORITIES[sku], {
+    list_price: 145,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 011-05779-10 on 2026-10-22; customer List Price shown as $145.00',
+    priceType: 'List',
+    accessed: '2026-10-22',
+  });
+  assert.ok(POLICY_DESCRIPTIONS[sku].includes('connector kit only'));
+  assert.ok(POLICY_DESCRIPTIONS[sku].includes('quantity five'));
+  assert.deepEqual(
+    OPERATOR_CONFIRMED_CERTIFIED_OTC.filter((entry) => entry.sku === sku),
+    [
+      {
+        sku,
+        productId: 'gid://shopify/Product/8961819377883',
+        variantId: 'gid://shopify/ProductVariant/47408752034011',
+        handle: 'sub-assy-connector-kit-gtr205-gtr25r',
+      },
+    ],
+  );
+  assert.ok(!OTC_RETAIL_PRODUCTS.some((policy) => policy.sku === '011-05779-11'));
+  assert.doesNotThrow(() => assertReviewedCommercialWrites([sku]));
+});
+
 test('340-00035-00 keeps exact operator-authorized retail identity and current List price', () => {
   const sku = '340-00035-00';
   const policies = OTC_RETAIL_PRODUCTS.filter((policy) => policy.sku === sku);
