@@ -1,0 +1,85 @@
+/* Mobile containment for the Portuguese pilot pages only. */
+.ptbr-site {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.ptbr-site .broadsheet,
+.ptbr-site .bs-stage,
+.ptbr-site .hero-headline-group,
+.ptbr-site .about-grid,
+.ptbr-site .about-main,
+.ptbr-site .about-rail,
+.ptbr-site .specimen {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.ptbr-site img,
+.ptbr-site svg,
+.ptbr-site video {
+  max-width: 100%;
+  height: auto;
+}
+
+.ptbr-site .bs-headline,
+.ptbr-site .bs-subhead,
+.ptbr-site .bs-body,
+.ptbr-site .about-rail,
+.ptbr-site .specimen__caption {
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 640px) {
+  /* The language switcher occupies the dateline action slot on PT-BR phones. */
+  body:has(.ptbr-site) .bs-dateline__cta {
+    visibility: hidden;
+  }
+  .ptbr-site .bs-masthead__inner {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .ptbr-site .bs-masthead__titles {
+    min-width: 0;
+  }
+
+  .ptbr-site .bs-masthead__brand {
+    font-size: clamp(23px, 7.2vw, 29px);
+    line-height: 0.95;
+  }
+
+  .ptbr-site .hero-headline-group .bs-script-accent {
+    display: block;
+    font-size: clamp(22px, 7vw, 27px);
+    line-height: 1.2;
+  }
+
+  .ptbr-site .bs-headline--hero br {
+    display: none;
+  }
+
+  .ptbr-site .about-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .ptbr-site .about-main,
+  .ptbr-site .about-rail {
+    width: 100%;
+  }
+
+  .ptbr-site .bs-cta-primary,
+  .ptbr-site .bs-cta-secondary {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+
+  .ptbr-site .about-rail a[href^='mailto:'] {
+    overflow-wrap: anywhere;
+  }
+}
