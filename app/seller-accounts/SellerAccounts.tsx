@@ -442,10 +442,9 @@ export default function SellerAccounts({
   };
   const selectionGeneration = generation.current;
   return (
-    <main
+    <section
       className={`accounts-admin ${embedded ? 'accounts-embedded' : ''}`}
-      id={embedded ? undefined : 'main-content'}
-      tabIndex={-1}
+      aria-label="User account administration"
     >
       <header>
         <p className="eyebrow">RWAS administration</p>
@@ -1042,6 +1041,6 @@ export default function SellerAccounts({
           }
         }
       `}</style>
-    </main>
+    </section>
   );
 }
