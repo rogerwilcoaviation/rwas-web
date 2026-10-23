@@ -169,8 +169,10 @@ async function fixture(options = {}) {
         message: 'Your secure sign-in changed. Start again.',
       };
     } else if (path === base + '/get-session') body = identity(state);
-    else if (path === base + '/list-sessions')
-      body = [
+    else if (path === base + '/list-sessions') {
+      if(state.sessionsStale){status=403;body={message:'Session is not fresh',code:'SESSION_NOT_FRESH'};}
+      else if(state.sessionsUnavailable){status=503;body={message:'Temporary fixture failure',code:'UNAVAILABLE'};}
+      else body = state.sessions || [
         {
           id: 'fixture-session',
           token: 'fixture-session-token',
@@ -178,7 +180,7 @@ async function fixture(options = {}) {
           expiresAt: new Date(Date.now() + 86400000).toISOString(),
         },
       ];
-    else if (path === base + '/sign-in/email') {
+    } else if (path === base + '/sign-in/email') {
       signInStarted();
       if (state.delaySignIn)
         await new Promise((resolve) => {
@@ -1997,5 +1999,55 @@ test('an interrupted seller handoff can retry its existing secure sign-in withou
   await retry.click();await f.page.waitForFunction(()=>!!globalThis.__TEST__.signedIn);
   assert.equal(f.state.bridge,2);
   assert.equal(f.state.requests.filter(r=>r.path===base+'/sign-in/email').length,1);
+ } finally {await f.close();}
+});
+
+
+test('seller security sections, fields and session rows remain readable on desktop and narrow screens',async()=>{
+ for(const width of [1440,390,320]) {
+  const f=await fixture({account:true,active:true,factor:true,sessions:[{id:'fixture-session',token:'fixture-secret-current-token',createdAt:new Date().toISOString(),expiresAt:new Date(Date.now()+86400000).toISOString()},{id:'other-session',token:'fixture-secret-other-token',createdAt:new Date().toISOString(),expiresAt:new Date(Date.now()+86400000).toISOString()}]});
+  try {
+   await f.page.setViewportSize({width,height:1100});
+   await f.page.getByRole('button',{name:'Refresh settings',exact:true}).waitFor();
+   await f.page.getByText('This sign-in',{exact:true}).waitFor();
+   for(const title of ['Change sign-in email','Change password','Authenticator app','Sign-in sessions'])assert.equal(await f.page.getByRole('heading',{name:title,exact:true}).count(),1);
+   assert.equal(await f.page.getByRole('region',{name:'Two-factor authentication',exact:true}).getByText('Enabled',{exact:true}).count(),1);
+   assert.equal(await f.page.getByRole('listitem').filter({hasText:'Other sign-in'}).getByRole('button',{name:'Revoke sign-in',exact:true}).count(),1);
+   assert.equal(await f.page.getByRole('listitem').filter({hasText:'This sign-in'}).getByRole('button',{name:'Revoke sign-in',exact:true}).count(),0,'Current session cannot revoke itself through a row action');
+   const body=await f.page.locator('body').innerText();for(const token of ['fixture-secret-current-token','fixture-secret-other-token'])assert.equal(body.includes(token),false);
+   assert.equal(await f.page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
+   const sizes=await f.page.locator('[data-rwas-better-auth-account] input').evaluateAll(nodes=>nodes.map(node=>({height:node.getBoundingClientRect().height,font:getComputedStyle(node).fontFamily})));assert.ok(sizes.every(item=>item.height>=44&&item.font.includes('Arial')));
+   if(process.env.SELLER_SECURITY_ARTIFACT_DIR){await mkdir(process.env.SELLER_SECURITY_ARTIFACT_DIR,{recursive:true});await f.page.screenshot({path:join(process.env.SELLER_SECURITY_ARTIFACT_DIR,'security-'+width+'.png'),fullPage:true});}
+   assert.equal(f.state.requests.some(r=>r.path.includes('revoke')||r.path.includes('change-password')||r.path.includes('two-factor/enable')),false);
+  } finally {await f.close();}
+ }
+});
+
+test('a stale security session shows a clear reauthentication prompt and waits for the seller to choose sign in again',async()=>{
+ const f=await fixture({account:true,active:true,sessionsStale:true});
+ try {
+  await f.page.getByText('A recent sign-in is required',{exact:true}).waitFor();
+  assert.equal(await f.page.getByRole('alert').count(),0);
+  for(const label of ['Verify new sign-in email','Change password','Set up authenticator','Sign out other devices'])assert.equal(await f.page.getByRole('button',{name:label,exact:true}).isDisabled(),true);
+  assert.equal(f.state.requests.some(r=>r.path===base+'/sign-out'),false,'A stale session never automatically signs the seller out');
+  await f.page.getByRole('button',{name:'Refresh settings',exact:true}).click();
+  await f.page.getByRole('button',{name:'Sign in again',exact:true}).click();
+  await f.page.waitForFunction(()=>!!globalThis.__TEST__.ended);
+  assert.equal(f.state.requests.filter(r=>r.path===base+'/sign-out').length,1);
+  assert.equal(f.state.requests.some(r=>r.path.includes('revoke-other')||r.path.includes('change-password')),false);
+ } finally {await f.close();}
+});
+
+test('retrying a failed session list preserves unsaved form values and clears the loading error',async()=>{
+ const f=await fixture({account:true,active:true,sessionsUnavailable:true});
+ try {
+  await f.page.getByRole('alert').filter({hasText:'Refresh settings to try again'}).waitFor();
+  await f.page.getByLabel('New sign-in email',{exact:true}).fill('new-seller@example.test');
+  f.state.sessionsUnavailable=false;
+  await f.page.getByRole('button',{name:'Refresh settings',exact:true}).click();
+  await f.page.getByText('This sign-in',{exact:true}).waitFor();
+  assert.equal(await f.page.getByRole('alert').count(),0);
+  assert.equal(await f.page.getByLabel('New sign-in email',{exact:true}).inputValue(),'new-seller@example.test');
+  assert.equal(f.state.requests.some(r=>r.path===base+'/change-email'),false);
  } finally {await f.close();}
 });

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import AuthenticatorSetup from './authenticator-setup';
+import AccountSecurityStyles from './account-security-styles';
 import {
   connectBetterAuthSeller,
   getSellerIdentityClient,
@@ -828,6 +829,9 @@ export function BetterAuthAccountPanel({
   const [backupCodes, setBackupCodes] = useState<string[]>([]);
   const [showBackupCodes, setShowBackupCodes] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [sessionsLoaded, setSessionsLoaded] = useState(false);
+  const [requiresFreshSignIn, setRequiresFreshSignIn] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const active = useRef(true);
@@ -879,19 +883,47 @@ export function BetterAuthAccountPanel({
     setIdentity(current);
     if (enrollmentOnly) return;
     const list = await client.listSessions();
+    if (list.error?.code === 'SESSION_NOT_FRESH') {
+      if (active.current) {
+        setRequiresFreshSignIn(true);
+        setSessions([]);
+        setSessionsLoaded(false);
+      }
+      return;
+    }
     sellerIdentityError(list);
-    if (active.current) setSessions((list.data || []) as typeof sessions);
+    if (active.current) {
+      setSessions((list.data || []) as typeof sessions);
+      setSessionsLoaded(true);
+      setRequiresFreshSignIn(false);
+    }
   }
   useEffect(() => {
     active.current = true;
-    void refresh().catch(() => {
-      if (active.current) setError('Sign-in settings could not be loaded.');
-    });
+    void loadSettings();
     return () => {
       active.current = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  async function loadSettings() {
+    setLoading(true);
+    setError('');
+    try {
+      await refresh();
+    } catch {
+      if (active.current)
+        setError(
+          'Some sign-in settings could not be loaded. Refresh settings to try again.',
+        );
+    } finally {
+      if (active.current) setLoading(false);
+    }
+  }
+  const sessionDate = (value: string | Date) => {
+    const at = new Date(value);
+    return Number.isFinite(at.getTime()) ? at.toLocaleString() : 'Unavailable';
+  };
   async function run(action: () => Promise<void>) {
     if (busy) return;
     setBusy(true);
@@ -919,284 +951,438 @@ export function BetterAuthAccountPanel({
     <section
       aria-label="Sign-in and security"
       data-rwas-better-auth-account="true"
+      aria-busy={busy || loading}
     >
       <BetterAuthStyles />
-      <h3>Sign-in and security</h3>
-      {identity && <p>Sign-in email: {identity.user.email}</p>}
-      {error && <p role="alert">{error}</p>}
-      {notice && <p role="status">{notice}</p>}
-      {!enrollmentOnly && (
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            void run(async () => {
-              const result = await boundClient().changeEmail({
-                newEmail: signInEmail,
-                callbackURL: sellerIdentityReturnUrl(),
-              });
-              sellerIdentityError(result);
-              setSignInEmail('');
-              setNotice(
-                'Follow the confirmation email sent to your current address, then verify your new address. Your sign-in email is not changed until verification finishes.',
-              );
-            });
-          }}
-        >
-          <h4>Change sign-in email</h4>
+      <AccountSecurityStyles />
+      <header className="security-header">
+        <div>
+          <h3>Sign-in and security</h3>
           <p>
-            This changes your login address. Your RWAS contact email is managed
-            in the Contact email section.
+            Manage your login details, account protection and signed-in devices.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="security-button"
+          disabled={busy || loading}
+          onClick={() => void loadSettings()}
+        >
+          {loading ? 'Loading settings…' : 'Refresh settings'}
+        </button>
+      </header>
+      {identity && (
+        <div className="security-identity">
+          <p>Sign-in email: {identity.user.email}</p>
+        </div>
+      )}
+      {error && (
+        <p className="security-feedback" role="alert">
+          {error}
+        </p>
+      )}
+      {notice && (
+        <p className="security-feedback" role="status">
+          {notice}
+        </p>
+      )}
+      {requiresFreshSignIn && (
+        <div className="security-reauth" role="status">
+          <div>
+            <strong>A recent sign-in is required</strong>
+            <p>
+              For your security, sign in again before changing security settings
+              or managing your devices.
+            </p>
+          </div>
+          <button
+            type="button"
+            className="security-button security-primary"
+            disabled={busy || loading}
+            onClick={() =>
+              void run(async () => {
+                await signOutBetterAuth(binding.current);
+                if (active.current) onIdentityEnded();
+              })
+            }
+          >
+            Sign in again
+          </button>
+        </div>
+      )}
+      <div className="security-grid">
+        {!enrollmentOnly && (
+          <form
+            className="security-card"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void run(async () => {
+                const result = await boundClient().changeEmail({
+                  newEmail: signInEmail,
+                  callbackURL: sellerIdentityReturnUrl(),
+                });
+                sellerIdentityError(result);
+                setSignInEmail('');
+                setNotice(
+                  'Follow the confirmation email sent to your current address, then verify your new address. Your sign-in email is not changed until verification finishes.',
+                );
+              });
+            }}
+          >
+            <h4>Change sign-in email</h4>
+            <p className="security-help">
+              This changes your login address. Your RWAS contact email is
+              managed in the Contact email section.
+            </p>
+            <label className="seller-field">
+              New sign-in email
+              <input
+                type="email"
+                autoComplete="email"
+                required
+                value={signInEmail}
+                onChange={(event) => setSignInEmail(event.target.value)}
+              />
+            </label>
+            <div className="security-actions">
+              <button
+                className="security-button security-primary"
+                disabled={busy || loading || !identity || requiresFreshSignIn}
+              >
+                Verify new sign-in email
+              </button>
+            </div>
+          </form>
+        )}
+        {!enrollmentOnly && (
+          <form
+            className="security-card"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void run(async () => {
+                const result = await boundClient().changePassword({
+                  currentPassword: password,
+                  newPassword,
+                  revokeOtherSessions: true,
+                });
+                sellerIdentityError(result);
+                setNotice(
+                  'Password changed. Other sign-in sessions were revoked.',
+                );
+                await refresh(true);
+              });
+            }}
+          >
+            <h4>Change password</h4>
+            <p className="security-help">
+              Choose a password with at least 12 characters. Changing it signs
+              out your other devices.
+            </p>
+            <label className="seller-field">
+              Current password
+              <input
+                type="password"
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </label>
+            <label className="seller-field">
+              New password
+              <input
+                type="password"
+                autoComplete="new-password"
+                minLength={12}
+                maxLength={128}
+                required
+                value={newPassword}
+                onChange={(event) => setNewPassword(event.target.value)}
+              />
+            </label>
+            <div className="security-actions">
+              <button
+                className="security-button security-primary"
+                disabled={busy || loading || !identity || requiresFreshSignIn}
+              >
+                Change password
+              </button>
+            </div>
+          </form>
+        )}
+        <section
+          className="security-card security-wide"
+          aria-label="Two-factor authentication"
+        >
+          <div className="security-card-heading">
+            <h4>Authenticator app</h4>
+            {identity && (
+              <span
+                className={`security-badge ${identity.user.twoFactorEnabled ? 'security-badge-enabled' : ''}`}
+              >
+                {identity.user.twoFactorEnabled ? 'Enabled' : 'Not set up'}
+              </span>
+            )}
+          </div>
+          <p>
+            {!identity
+              ? 'Account protection settings are loading.'
+              : identity.user.twoFactorEnabled
+                ? 'Two-factor authentication is enabled.'
+                : 'Add an authenticator app to protect your sign-in.'}
           </p>
           <label className="seller-field">
-            New sign-in email
-            <input
-              type="email"
-              autoComplete="email"
-              required
-              value={signInEmail}
-              onChange={(event) => setSignInEmail(event.target.value)}
-            />
-          </label>
-          <button disabled={busy}>Verify new sign-in email</button>
-        </form>
-      )}
-      {!enrollmentOnly && (
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            void run(async () => {
-              const result = await boundClient().changePassword({
-                currentPassword: password,
-                newPassword,
-                revokeOtherSessions: true,
-              });
-              sellerIdentityError(result);
-              setNotice(
-                'Password changed. Other sign-in sessions were revoked.',
-              );
-              await refresh(true);
-            });
-          }}
-        >
-          <h4>Change password</h4>
-          <label className="seller-field">
-            Current password
+            Password for security changes (if your account uses one)
             <input
               type="password"
               autoComplete="current-password"
-              required
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
           </label>
-          <label className="seller-field">
-            New password
-            <input
-              type="password"
-              autoComplete="new-password"
-              minLength={12}
-              maxLength={128}
-              required
-              value={newPassword}
-              onChange={(event) => setNewPassword(event.target.value)}
-            />
-          </label>
-          <button disabled={busy}>Change password</button>
-        </form>
-      )}
-      <h4>Authenticator app</h4>
-      <p>
-        {identity?.user.twoFactorEnabled
-          ? 'Two-factor authentication is enabled.'
-          : 'Add an authenticator app to protect your sign-in.'}
-      </p>
-      <label className="seller-field">
-        Password for security changes (if your account uses one)
-        <input
-          type="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-      </label>
-      {!identity?.user.twoFactorEnabled && (
-        <button
-          disabled={busy}
-          onClick={() =>
-            void run(async () => {
-              const result = await boundClient().twoFactor.enable({
-                password: password || undefined,
-                issuer: 'Roger Wilco Aviation',
-                method: 'totp',
-              });
-              sellerIdentityError(result);
-              if (result.data?.method !== 'totp')
-                throw new Error('Authenticator setup could not be completed.');
-              setTotpUri(result.data.totpURI);
-              setBackupCodes(result.data.backupCodes);
-              setShowBackupCodes(false);
-            })
-          }
-        >
-          Set up authenticator
-        </button>
-      )}
-      {totpUri && (
-        <>
-          <AuthenticatorSetup uri={totpUri} />
-          <label className="seller-field">
-            Authenticator code
-            <input
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              value={factorCode}
-              onChange={(event) => setFactorCode(event.target.value)}
-            />
-          </label>
-          <button
-            disabled={busy || !factorCode}
-            onClick={() =>
-              void run(async () => {
-                const result = await boundClient().twoFactor.verifyTotp({
-                  code: factorCode,
-                  trustDevice: false,
-                });
-                sellerIdentityError(result);
-                setTotpUri('');
-                setNotice(
-                  'Authenticator verified. Save your recovery codes in your password manager.',
-                );
-                await refresh(true);
-              })
-            }
-          >
-            Verify authenticator
-          </button>
-        </>
-      )}
-      {identity?.user.twoFactorEnabled && (
-        <>
-          <button
-            disabled={busy}
-            onClick={() =>
-              void run(async () => {
-                const result =
-                  await boundClient().twoFactor.generateBackupCodes({
-                    password: password || undefined,
-                  });
-                sellerIdentityError(result);
-                setBackupCodes(result.data?.backupCodes || []);
-                setShowBackupCodes(false);
-                setNotice('New recovery codes replace the previous set.');
-              })
-            }
-          >
-            Replace recovery codes
-          </button>
-          <button
-            disabled={busy}
-            onClick={() =>
-              void run(async () => {
-                const result = await boundClient().twoFactor.disable({
-                  password: password || undefined,
-                });
-                sellerIdentityError(result);
-                setTotpUri('');
-                setBackupCodes([]);
-                setShowBackupCodes(false);
-                setNotice('Two-factor authentication disabled.');
-                await refresh(true);
-              })
-            }
-          >
-            Disable authenticator
-          </button>
-        </>
-      )}
-      {backupCodes.length > 0 && (
-        <section aria-label="Private recovery codes">
-          <p>Store these recovery codes securely. Each can be used once.</p>
-          <details
-            open={showBackupCodes}
-            onToggle={(event) => setShowBackupCodes(event.currentTarget.open)}
-          >
-            <summary>Show recovery codes</summary>
-            {showBackupCodes && (
-              <ul>
-                {backupCodes.map((code) => (
-                  <li key={code}>
-                    <code>{code}</code>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </details>
-          {showBackupCodes && (
+          {!identity?.user.twoFactorEnabled && (
             <button
-              onClick={() => {
-                setBackupCodes([]);
-                setShowBackupCodes(false);
-              }}
+              className="security-button"
+              disabled={busy || loading || !identity || requiresFreshSignIn}
+              onClick={() =>
+                void run(async () => {
+                  const result = await boundClient().twoFactor.enable({
+                    password: password || undefined,
+                    issuer: 'Roger Wilco Aviation',
+                    method: 'totp',
+                  });
+                  sellerIdentityError(result);
+                  if (result.data?.method !== 'totp')
+                    throw new Error(
+                      'Authenticator setup could not be completed.',
+                    );
+                  setTotpUri(result.data.totpURI);
+                  setBackupCodes(result.data.backupCodes);
+                  setShowBackupCodes(false);
+                })
+              }
             >
-              Hide recovery codes
+              Set up authenticator
+            </button>
+          )}
+          {totpUri && (
+            <>
+              <AuthenticatorSetup uri={totpUri} />
+              <label className="seller-field">
+                Authenticator code
+                <input
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  value={factorCode}
+                  onChange={(event) => setFactorCode(event.target.value)}
+                />
+              </label>
+              <button
+                className="security-button security-primary"
+                disabled={
+                  busy ||
+                  loading ||
+                  !identity ||
+                  requiresFreshSignIn ||
+                  !factorCode
+                }
+                onClick={() =>
+                  void run(async () => {
+                    const result = await boundClient().twoFactor.verifyTotp({
+                      code: factorCode,
+                      trustDevice: false,
+                    });
+                    sellerIdentityError(result);
+                    setTotpUri('');
+                    setNotice(
+                      'Authenticator verified. Save your recovery codes in your password manager.',
+                    );
+                    await refresh(true);
+                  })
+                }
+              >
+                Verify authenticator
+              </button>
+            </>
+          )}
+          {identity?.user.twoFactorEnabled && (
+            <div className="security-actions">
+              <button
+                className="security-button"
+                disabled={busy || loading || !identity || requiresFreshSignIn}
+                onClick={() =>
+                  void run(async () => {
+                    const result =
+                      await boundClient().twoFactor.generateBackupCodes({
+                        password: password || undefined,
+                      });
+                    sellerIdentityError(result);
+                    setBackupCodes(result.data?.backupCodes || []);
+                    setShowBackupCodes(false);
+                    setNotice('New recovery codes replace the previous set.');
+                  })
+                }
+              >
+                Replace recovery codes
+              </button>
+              <button
+                className="security-button security-danger"
+                disabled={busy || loading || !identity || requiresFreshSignIn}
+                onClick={() =>
+                  void run(async () => {
+                    const result = await boundClient().twoFactor.disable({
+                      password: password || undefined,
+                    });
+                    sellerIdentityError(result);
+                    setTotpUri('');
+                    setBackupCodes([]);
+                    setShowBackupCodes(false);
+                    setNotice('Two-factor authentication disabled.');
+                    await refresh(true);
+                  })
+                }
+              >
+                Disable authenticator
+              </button>
+            </div>
+          )}
+          {backupCodes.length > 0 && (
+            <section
+              className="security-recovery"
+              aria-label="Private recovery codes"
+            >
+              <p>Store these recovery codes securely. Each can be used once.</p>
+              <details
+                open={showBackupCodes}
+                onToggle={(event) =>
+                  setShowBackupCodes(event.currentTarget.open)
+                }
+              >
+                <summary>Show recovery codes</summary>
+                {showBackupCodes && (
+                  <ul>
+                    {backupCodes.map((code) => (
+                      <li key={code}>
+                        <code>{code}</code>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </details>
+              {showBackupCodes && (
+                <button
+                  className="security-button"
+                  onClick={() => {
+                    setBackupCodes([]);
+                    setShowBackupCodes(false);
+                  }}
+                >
+                  Hide recovery codes
+                </button>
+              )}
+            </section>
+          )}
+          {enrollmentOnly && onContinue && (
+            <button
+              disabled={
+                busy ||
+                loading ||
+                requiresFreshSignIn ||
+                !identity?.user.twoFactorEnabled ||
+                !identity.session.mfaVerifiedAt
+              }
+              onClick={onContinue}
+              className="security-button security-primary"
+            >
+              Continue to seller account
             </button>
           )}
         </section>
-      )}
-      {enrollmentOnly && onContinue && (
-        <button
-          disabled={
-            busy ||
-            !identity?.user.twoFactorEnabled ||
-            !identity.session.mfaVerifiedAt
-          }
-          onClick={onContinue}
-        >
-          Continue to seller account
-        </button>
-      )}
-      {!enrollmentOnly && (
-        <>
-          <h4>Sign-in sessions</h4>
-          {sessions.map((item) => (
-            <p key={item.id}>
-              {item.id === identity?.session.id
-                ? 'This sign-in'
-                : 'Other sign-in'}{' '}
-              · expires {new Date(item.expiresAt).toLocaleString()}
-              {item.id !== identity?.session.id && (
-                <button
-                  disabled={busy}
-                  onClick={() =>
-                    void run(async () => {
-                      const result = await boundClient().revokeSession({
-                        token: item.token,
-                      });
-                      sellerIdentityError(result);
-                      await refresh(true);
-                    })
-                  }
-                >
-                  Revoke sign-in
-                </button>
-              )}
-            </p>
-          ))}
-          <button
-            disabled={busy}
-            onClick={() =>
-              void run(async () => {
-                const result = await boundClient().revokeOtherSessions();
-                sellerIdentityError(result);
-                setNotice('Other sign-in sessions revoked.');
-                await refresh(true);
-              })
-            }
+        {!enrollmentOnly && (
+          <section
+            className="security-card security-wide"
+            aria-label="Signed-in devices"
           >
-            Sign out other devices
-          </button>
-        </>
-      )}
+            <h4>Sign-in sessions</h4>
+            <p className="security-help">
+              Review recent sign-ins and sign out devices you no longer use.
+              Your current sign-in stays active.
+            </p>
+            {!sessionsLoaded && (
+              <p className="security-help">
+                {loading
+                  ? 'Loading sign-in sessions…'
+                  : requiresFreshSignIn
+                    ? 'Sign in again to view active sessions.'
+                    : 'Session details are unavailable. Refresh settings to try again.'}
+              </p>
+            )}
+            {sessionsLoaded && !sessions.length && (
+              <p className="security-help">
+                No active sign-in sessions to display.
+              </p>
+            )}
+            <ul className="security-session-list">
+              {sessions.map((item) => (
+                <li className="security-session" key={item.id}>
+                  <div>
+                    <strong>
+                      {item.id === identity?.session.id
+                        ? 'This sign-in'
+                        : 'Other sign-in'}
+                    </strong>
+                    <dl>
+                      <div>
+                        <dt>Signed in</dt>
+                        <dd>{sessionDate(item.createdAt)}</dd>
+                      </div>
+                      <div>
+                        <dt>Expires</dt>
+                        <dd>{sessionDate(item.expiresAt)}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                  {item.id !== identity?.session.id && (
+                    <button
+                      className="security-button"
+                      disabled={
+                        busy || loading || !identity || requiresFreshSignIn
+                      }
+                      onClick={() =>
+                        void run(async () => {
+                          const result = await boundClient().revokeSession({
+                            token: item.token,
+                          });
+                          sellerIdentityError(result);
+                          await refresh(true);
+                        })
+                      }
+                    >
+                      Revoke sign-in
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+            <div className="security-actions">
+              <button
+                className="security-button"
+                disabled={busy || loading || !identity || requiresFreshSignIn}
+                onClick={() =>
+                  void run(async () => {
+                    const result = await boundClient().revokeOtherSessions();
+                    sellerIdentityError(result);
+                    setNotice('Other sign-in sessions revoked.');
+                    await refresh(true);
+                  })
+                }
+              >
+                Sign out other devices
+              </button>
+            </div>
+          </section>
+        )}
+      </div>
     </section>
   );
 }
