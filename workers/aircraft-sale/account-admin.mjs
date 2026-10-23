@@ -287,6 +287,11 @@ function snapshot(state, p) {
 }
 export async function accountProposal(state, accountId, operation, actor) {
   const p = profileFor(state, accountId);
+  if (p.adminPurging)
+    fail(
+      409,
+      'Permanent deletion is in progress. Resume permanent deletion before making other changes.',
+    );
   if (
     ['delete-account', 'suspend'].includes(operation.operation) &&
     p.email.toLowerCase() === actor.toLowerCase()

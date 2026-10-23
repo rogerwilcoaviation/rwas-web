@@ -20,6 +20,7 @@ export function AccountWorkspace({
   onValueChange,
   items,
   disabled = false,
+  layout = 'sidebar',
   children,
 }: {
   label: string;
@@ -27,6 +28,7 @@ export function AccountWorkspace({
   onValueChange: (value: string) => void;
   items: IndexItem[];
   disabled?: boolean;
+  layout?: 'sidebar' | 'tabs';
   children: ReactNode;
 }) {
   const id = useId();
@@ -65,14 +67,16 @@ export function AccountWorkspace({
 
   return (
     <AccountContext.Provider value={{ id, value }}>
-      <div className="account-workspace">
+      <div
+        className={`account-workspace ${layout === 'tabs' ? 'account-tabs' : ''}`}
+      >
         <nav className="account-index" aria-label={label}>
           <p className="account-index-title">{label}</p>
           <div
             ref={navigation}
             role="tablist"
             aria-label={label}
-            aria-orientation="vertical"
+            aria-orientation={layout === 'tabs' ? 'horizontal' : 'vertical'}
           >
             {items.map((item) => (
               <button
@@ -171,6 +175,39 @@ export function AccountWorkspace({
           background: #fff;
           overflow-wrap: anywhere;
         }
+        .account-tabs {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 16px;
+          margin-top: 20px;
+        }
+        .account-tabs .account-index {
+          position: static;
+        }
+        .account-tabs .account-index-title {
+          padding: 0;
+        }
+        .account-tabs .account-index [role='tablist'] {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .account-tabs .account-index button {
+          width: auto;
+          border: 1px solid #d5cec1;
+          border-bottom: 3px solid transparent;
+          background: #f7f5ef;
+          border-radius: 3px;
+        }
+        .account-tabs .account-index button[aria-selected='true'] {
+          background: #222;
+          color: white;
+          border-bottom-color: #b99727;
+        }
+        .account-tabs .account-body {
+          padding: 0;
+          border: 0;
+          min-height: 260px;
+        }
         .account-body :global(h2) {
           font-size: 24px;
           font-weight: 600;
@@ -211,6 +248,16 @@ export function AccountWorkspace({
           .account-body {
             min-height: 0;
             padding: 18px;
+          }
+          .account-tabs .account-index [role='tablist'] {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+          .account-tabs .account-index button {
+            width: 100%;
+          }
+          .account-tabs .account-body {
+            padding: 0;
           }
         }
       `}</style>

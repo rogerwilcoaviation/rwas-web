@@ -68,6 +68,13 @@ import {
   logoutUrl,
 } from './identity.mjs';
 import { securityOperation, securityProposal } from './security.mjs';
+import {
+  accountRemovalPlan,
+  removalTarget,
+  removeManagedIdentity,
+  fenceAccountRemoval,
+  finishAccountRemoval,
+} from './account-removal.mjs';
 import { auth0EventConfig, auth0BlockNotification } from './auth0-events.mjs';
 import {
   accountHeld,
@@ -77,6 +84,7 @@ import {
   accountOperation,
   accountProposal,
   applyAccountOperation,
+  reasonCodes,
 } from './account-admin.mjs';
 import { hasProductSnippetEligibility } from '../../lib/product-snippet-eligibility.mjs';
 import {
@@ -122,6 +130,7 @@ const empty = () => ({
   auth0EventReceipts: {},
   securityOperations: {},
   accountAdminOperations: {},
+  accountRemovalOperations: {},
   sessions: {},
   codes: {},
   mailRequests: {},
@@ -542,6 +551,8 @@ export class SellerStore {
       dependencies.administratorDirectory || administratorDirectory;
     this.changeAdministratorRole =
       dependencies.changeAdministratorRole || changeAdministratorRole;
+    this.removeManagedIdentity =
+      dependencies.removeManagedIdentity || removeManagedIdentity;
   }
   fetch(req) {
     const operation = this.queue.then(() => this.run(req));
@@ -1624,7 +1635,7 @@ export class SellerStore {
     // never an Access reviewer credential or an email-only role claim.
     if (path.startsWith('/staff/')) {
       if (
-        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply))?)?|administrators|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
+        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply))?)?|administrators|removals(?:\/(?:preview|apply))?|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
           path,
         )
       )
@@ -2571,6 +2582,194 @@ export class SellerStore {
       });
       return reply({ administrator });
     }
+    if (
+      [
+        '/admin/removals',
+        '/admin/removals/preview',
+        '/admin/removals/apply',
+      ].includes(path)
+    ) {
+      const authority = await this.accountAdministrator(req, method !== 'GET');
+      assertAccountOrigin(req, this.env, method !== 'GET');
+      if (path === '/admin/removals' && method === 'GET')
+        return reply({
+          removals: Object.values(this.state.accountRemovalOperations || {})
+            .filter(
+              (value) =>
+                value.stage === 'pending' &&
+                (value.actor === authority.actor ||
+                  authority.canManageAdministrators),
+            )
+            .map((value) => ({ ...value.public, resuming: true })),
+        });
+      if (path === '/admin/removals') fail(405, 'Method not allowed.');
+      if (method !== 'POST') fail(405, 'Method not allowed.');
+      const body = await this.json(req),
+        target = removalTarget(body?.target);
+      if (
+        !reasonCodes.includes(body.reasonCode) ||
+        Object.keys(body).some(
+          (key) =>
+            ![
+              'target',
+              'reasonCode',
+              'operationId',
+              'confirmation',
+              'confirmEmail',
+            ].includes(key),
+        )
+      )
+        fail(400, 'Review the deletion target and reason.');
+      if (target.identityId && !authority.canManageIdentities)
+        fail(
+          403,
+          'Super administrator access is required for identity account deletion.',
+        );
+      this.state.accountRemovalOperations ||= {};
+      const operations = this.state.accountRemovalOperations;
+      const pending = Object.values(operations).find(
+        (value) =>
+          value.stage === 'pending' &&
+          (JSON.stringify(value.target) === JSON.stringify(target) ||
+            (target.accountId && value.accountId === target.accountId) ||
+            (target.identityId &&
+              value.identities.some(
+                (identity) => identity.id === target.identityId,
+              ))),
+      );
+      if (path.endsWith('/preview')) {
+        if (pending) {
+          if (
+            pending.actor !== authority.actor &&
+            !authority.canManageAdministrators
+          )
+            fail(
+              409,
+              'Another administrator started this deletion. Ask that administrator to resume it.',
+            );
+          return reply({ ...pending.public, resuming: true });
+        }
+        const plan = await accountRemovalPlan(
+          this.state,
+          this.env,
+          target,
+          authority.actor,
+          this.administratorIdentity,
+        );
+        return reply({
+          ...plan.public,
+          operationId: crypto.randomUUID(),
+          reasonCode: body.reasonCode,
+        });
+      }
+      if (
+        typeof body.operationId !== 'string' ||
+        !/^[A-Za-z0-9_-]{1,128}$/.test(body.operationId) ||
+        ['__proto__', 'prototype', 'constructor'].includes(body.operationId) ||
+        typeof body.confirmation !== 'string' ||
+        typeof body.confirmEmail !== 'string'
+      )
+        fail(400, 'Confirm the account email before permanent deletion.');
+      let intent = Object.hasOwn(operations, body.operationId)
+        ? operations[body.operationId]
+        : null;
+      const requestHash = await digest(
+        JSON.stringify({
+          actor: intent?.actor || authority.actor,
+          target,
+          reasonCode: body.reasonCode,
+          operationId: body.operationId,
+          confirmation: body.confirmation,
+          confirmEmail: body.confirmEmail,
+        }),
+      );
+      if (intent) {
+        if (
+          intent.requestHash !== requestHash ||
+          (intent.actor !== authority.actor &&
+            !authority.canManageAdministrators)
+        )
+          fail(409, 'Deletion confirmation changed. Review the target again.');
+        if (intent.stage === 'complete')
+          return reply({ ...intent.result, replayed: true });
+      } else {
+        if (pending)
+          fail(
+            409,
+            'A deletion is already in progress. Preview again to resume it.',
+          );
+        const plan = await accountRemovalPlan(
+          this.state,
+          this.env,
+          target,
+          authority.actor,
+          this.administratorIdentity,
+        );
+        if (!plan.public.ready) fail(409, plan.public.blockers.join(' '));
+        if (body.confirmation !== plan.public.confirmation)
+          fail(409, 'The account changed. Preview permanent deletion again.');
+        if (body.confirmEmail !== plan.email)
+          fail(
+            400,
+            'Type the exact account email to confirm permanent deletion.',
+          );
+        const identities = [];
+        for (const identity of plan.identities)
+          identities.push({
+            ...identity,
+            key: await digest('rwas-better-auth|' + identity.id),
+          });
+        intent = operations[body.operationId] = {
+          ...plan,
+          identities,
+          actor: authority.actor,
+          requestHash,
+          stage: 'pending',
+          public: {
+            ...plan.public,
+            operationId: body.operationId,
+            reasonCode: body.reasonCode,
+          },
+          reasonCode: body.reasonCode,
+        };
+        fenceAccountRemoval(this.state, intent);
+        this.audit('account-permanent-deletion-started', authority.actor, {
+          operationId: body.operationId,
+          accountId: plan.accountId,
+          target: plan.target,
+          identityIds: identities.map((identity) => identity.id),
+          identityCount: identities.length,
+          reasonCode: body.reasonCode,
+        });
+        await this.saveState(this.state);
+        this.rollbackState = structuredClone(this.state);
+      }
+      for (const identity of intent.identities)
+        await this.removeManagedIdentity(this.env, identity, authority.actor);
+      finishAccountRemoval(this.state, intent);
+      const result = {
+        ok: true,
+        accountId: intent.accountId,
+        identitiesDeleted: intent.identities.length,
+        operationId: body.operationId,
+      };
+      operations[body.operationId] = {
+        stage: 'complete',
+        requestHash,
+        actor: intent.actor,
+        target: intent.target,
+        result,
+      };
+      this.audit('account-permanently-deleted', authority.actor, {
+        operationId: body.operationId,
+        accountId: intent.accountId,
+        target: intent.target,
+        identityIds: intent.identities.map((identity) => identity.id),
+        identityCount: result.identitiesDeleted,
+        reasonCode: intent.reasonCode,
+      });
+      return reply(result);
+    }
     if (/^\/admin\/accounts(?:\/|$)/.test(path)) {
       const write = method !== 'GET',
         identity = await this.accountAdministrator(req, write);
@@ -3013,8 +3212,27 @@ export class SellerStore {
       if (!['PUT', 'DELETE', 'POST'].includes(method))
         fail(405, 'Method not allowed.');
       const body = await this.json(req);
-      if (body.revision !== l.revision || l.purging)
+      const permanentlyDeleting = method === 'POST' && body.action === 'purge';
+      if (body.revision !== l.revision || (l.purging && !permanentlyDeleting))
         fail(409, 'Listing changed. Reload before making changes.');
+      if (permanentlyDeleting) {
+        const deletionAuthority = await this.accountAdministrator(req, true);
+        assertAccountOrigin(req, this.env, true);
+        if (l.status !== 'deleted' || body.confirm !== l.id)
+          fail(
+            409,
+            'Move the listing to trash, then type its listing ID to confirm permanent deletion.',
+          );
+        await this.purge(l);
+        for (const [key, value] of Object.entries(this.state.outbox))
+          if (value.listingId === l.id) delete this.state.outbox[key];
+        delete this.state.listings[l.id];
+        this.audit('admin-listing-purge', deletionAuthority.actor, {
+          listingId: l.id,
+          revision: l.revision,
+        });
+        return reply({ ok: true });
+      }
       if (method === 'PUT') {
         if (['deleted', 'archived'].includes(l.status))
           fail(409, 'Restore the listing before editing.');

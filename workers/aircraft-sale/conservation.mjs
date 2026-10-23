@@ -5,7 +5,7 @@ export const CONSERVATION_BUCKETS = Object.freeze([
 ]);
 export const CONSERVATION_EXCLUDED_BUCKETS = Object.freeze([
   'identitySecurity', 'authTransactions', 'authEvents', 'auth0EventReceipts',
-  'securityOperations', 'accountAdminOperations', 'sessions', 'codes',
+  'securityOperations', 'accountAdminOperations', 'accountRemovalOperations', 'sessions', 'codes',
   'mailRequests', 'mailSequences', 'rates', 'audit', 'outbox', 'supportTickets',
 ]);
 export const CONSERVATION_LIMITS = Object.freeze({

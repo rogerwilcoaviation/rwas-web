@@ -1,5 +1,35 @@
 import { SELLER_API } from './seller-api';
 
+export async function marketplaceStaffRequest(
+  path: string,
+  method = 'GET',
+  body?: unknown,
+) {
+  const response = await marketplaceStaffFetch(path, {
+    method,
+    ...(body !== undefined
+      ? {
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        }
+      : {}),
+  });
+  if (
+    response.redirected ||
+    !response.headers.get('Content-Type')?.includes('application/json')
+  )
+    throw Error(
+      'Sign in with your administrator account and load this section again.',
+    );
+  const data = await response.json();
+  if (!response.ok)
+    throw Object.assign(
+      Error(data.error || 'The request could not be completed.'),
+      { status: response.status },
+    );
+  return data;
+}
+
 // Authorization still comes from the service's immutable identity + MFA check.
 // This helper only forwards the current session proof to same-origin staff APIs.
 export function marketplaceStaffFetch(path: string, options: RequestInit = {}) {

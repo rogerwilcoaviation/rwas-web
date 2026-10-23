@@ -1867,7 +1867,7 @@ test('listing approval and management panels show readable grouped cards and pre
         .getByRole('button', { name: 'Back to all listings', exact: true })
         .click();
       await partCard
-        .getByRole('button', { name: 'Delete listing', exact: true })
+        .getByRole('button', { name: 'Move listing to trash', exact: true })
         .click();
       await partCard.getByText('In trash', { exact: true }).waitFor();
       assert.equal(await partCard.getByRole('img').count(),0);

@@ -63,6 +63,7 @@ f.env.ACCOUNT_ADMIN_AUTH = {
         })
       : new Response(null, { status: 403 }),
 };
+f.env.ADMIN_AUTH={fetch:async req=>req.headers.get('Authorization')==='Bearer synthetic-admin'?Response.json({actor:'admin@example.test'}):new Response(null,{status:403})};
 const owner = await f.login('owner@example.test'),
   other = await f.login('other@example.test');
 await f.call(
@@ -244,7 +245,7 @@ try {
   assert.equal(await adminTabs.getByRole('tab', { name: 'Contact and access', exact: true }).getAttribute('aria-selected'), 'true');
   const indexBox = await adminTabs.boundingBox();
   const panelBox = await page.getByRole('tabpanel').boundingBox();
-  assert.ok(indexBox.x + indexBox.width < panelBox.x, 'Admin index is left of the selected section');
+  assert.ok(indexBox.y + indexBox.height <= panelBox.y + 1, 'Account sections sit above the full-width selected panel');
   assert.equal(
 
     await selected
@@ -252,8 +253,9 @@ try {
       .inputValue(),
     'PRIVATE-PHONE',
   );
-  await page.getByRole('tab', { name: 'Seller listings', exact: true }).click();
-  assert.ok((await selected.innerText()).includes('Account Ownership Fixture'));
+  await page.getByRole('tab', { name: 'User listings', exact: true }).click();
+  await page.getByRole('button', {name:'Load user listings',exact:true}).click();
+  await selected.getByText(/Account Ownership Fixture/).first().waitFor();
   await page.getByRole('tab', { name: 'Contact and access', exact: true }).click();
   const ownerId = (
     await (await f.call('/account', 'GET', undefined, owner)).json()

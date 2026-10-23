@@ -6,7 +6,14 @@ import {
   useState,
   type FormEvent,
 } from 'react';
-import { marketplaceStaffFetch } from '@/lib/marketplace-staff-fetch';
+import {
+  marketplaceStaffFetch,
+  marketplaceStaffRequest,
+} from '@/lib/marketplace-staff-fetch';
+import AdminListings from '../aircraft-for-sale/admin-listings';
+import PermanentAccountRemoval, {
+  PendingAccountRemovals,
+} from './PermanentAccountRemoval';
 import {
   AccountSection,
   AccountWorkspace,
@@ -131,8 +138,10 @@ async function request(path: string, input?: unknown) {
 const time = (value: number) => new Date(value).toLocaleString();
 export default function SellerAccounts({
   allowIdentityAdministration = true,
+  embedded = false,
 }: {
   allowIdentityAdministration?: boolean;
+  embedded?: boolean;
 }) {
   const [adminSection, setAdminSection] = useState('directory');
   const [rows, setRows] = useState<Summary[]>([]),
@@ -268,7 +277,7 @@ export default function SellerAccounts({
         : 'The request could not be confirmed. Please try again.',
     );
   }
-  async function load(next = false) {
+  async function load(next = false, searchQuery = query) {
     setAdminSection('directory');
     const g = ++generation.current;
     setBusy(true);
@@ -279,7 +288,7 @@ export default function SellerAccounts({
     setAudit([]);
     setContact({ name: '', phone: '', location: '' });
     try {
-      const search = new URLSearchParams({ q: query, status: filter });
+      const search = new URLSearchParams({ q: searchQuery, status: filter });
       if (next && cursor) search.set('cursor', cursor);
       const d = await request('?' + search);
       if (g !== generation.current) return;
@@ -293,6 +302,7 @@ export default function SellerAccounts({
         expiresAt: d.expiresAt,
         manageUntil: d.manageUntil,
       });
+      return d.accounts as Summary[];
     } catch (e) {
       if (g === generation.current) {
         setRows([]);
@@ -302,18 +312,19 @@ export default function SellerAccounts({
       if (g === generation.current) setBusy(false);
     }
   }
-  async function detail(id: string, g: number) {
+  async function detail(id: string, g: number, preserveContact = false) {
     const d = await request('/' + encodeURIComponent(id));
     if (g !== generation.current) return null;
     if (!d.account || d.account.id !== id || !Array.isArray(d.audit))
       throw new AccountRequestError(502);
     setSelected(d.account);
     setAudit(d.audit);
-    setContact({
-      name: d.account.name,
-      phone: d.account.phone,
-      location: d.account.location,
-    });
+    if (!preserveContact)
+      setContact({
+        name: d.account.name,
+        phone: d.account.phone,
+        location: d.account.location,
+      });
     setAuthority({
       actor: d.actor,
       canManage: d.canManage,
@@ -429,8 +440,13 @@ export default function SellerAccounts({
     e.preventDefault();
     void load();
   };
+  const selectionGeneration = generation.current;
   return (
-    <main className="accounts-admin" id="main-content" tabIndex={-1}>
+    <main
+      className={`accounts-admin ${embedded ? 'accounts-embedded' : ''}`}
+      id={embedded ? undefined : 'main-content'}
+      tabIndex={-1}
+    >
       <header>
         <p className="eyebrow">RWAS administration</p>
         <h1>User accounts</h1>
@@ -450,6 +466,7 @@ export default function SellerAccounts({
       )}
       <AccountWorkspace
         label="Admin index"
+        layout="tabs"
         value={adminSection}
         onValueChange={setAdminSection}
         disabled={busy || !!pending}
@@ -458,21 +475,18 @@ export default function SellerAccounts({
           {
             value: 'details',
             label: 'Contact and access',
-            disabled: !selected,
           },
-          { value: 'listings', label: 'User listings', disabled: !selected },
-          { value: 'sessions', label: 'Active sessions', disabled: !selected },
+          { value: 'listings', label: 'User listings' },
+          { value: 'sessions', label: 'Active sessions' },
           {
             value: 'activity',
             label: 'Administrator activity',
-            disabled: !selected,
           },
           ...(allowIdentityAdministration
             ? [
                 {
                   value: 'identity',
                   label: 'Identity accounts',
-                  disabled: !authority,
                 },
               ]
             : []),
@@ -499,6 +513,7 @@ export default function SellerAccounts({
                 <option value="active">Active</option>
                 <option value="suspended">Suspended</option>
                 <option value="security-held">Security hold</option>
+                <option value="deleted">In trash</option>
               </select>
             </label>
             <button disabled={busy} type="submit">
@@ -508,7 +523,13 @@ export default function SellerAccounts({
           <section aria-label="Account directory">
             <h2>Account directory</h2>
             <p>{total} matching accounts</p>
-            <p>Choose View to open a user in the account index.</p>
+            <p>
+              Choose View to open a user’s contact details, listings, active
+              sessions and administrator activity.
+            </p>
+            {authority && !rows.length && (
+              <p className="account-empty">No accounts match your search.</p>
+            )}
             <div className="table-scroll">
               <table>
                 <thead>
@@ -528,7 +549,11 @@ export default function SellerAccounts({
                         <br />
                         {r.email}
                       </td>
-                      <td>{r.status}</td>
+                      <td>
+                        {r.status === 'deleted'
+                          ? 'In trash'
+                          : r.status.replace('-', ' ')}
+                      </td>
                       <td>{r.listingCount}</td>
                       <td>{r.activeSessions}</td>
                       <td>
@@ -551,6 +576,12 @@ export default function SellerAccounts({
               </button>
             ) : null}
           </section>
+          {authority && (
+            <PendingAccountRemovals
+              canManage={authority.canManage && !busy}
+              onComplete={() => void load()}
+            />
+          )}
         </AccountSection>
         {selected ? (
           <div
@@ -664,12 +695,12 @@ export default function SellerAccounts({
                 >
                   {selected.adminDeleted
                     ? 'Preview account restoration'
-                    : 'Preview account deletion'}
+                    : 'Preview move account to trash'}
                 </button>
                 <p>
-                  Deleting a user revokes sign-in and moves their listings to
-                  trash. Records remain recoverable; restoring the user does not
-                  republish listings.
+                  Moving a user to trash revokes sign-in and moves their
+                  listings to trash. Records remain recoverable; restoring the
+                  user does not republish listings.
                 </p>
               </fieldset>
               {pending ? (
@@ -722,23 +753,42 @@ export default function SellerAccounts({
                   </button>
                 </section>
               ) : null}
+              {selected.email.toLowerCase() !==
+                authority?.actor.toLowerCase() && (
+                <PermanentAccountRemoval
+                  key={selected.id}
+                  target={{ accountId: selected.id }}
+                  canManage={!!authority?.canManage && !busy && !pending}
+                  onComplete={() => {
+                    void load();
+                    setNotice(
+                      'User account and linked RWAS sign-in credentials permanently deleted.',
+                    );
+                  }}
+                />
+              )}
             </AccountSection>
             <AccountSection value="listings">
-              <h3>Listings</h3>
-              {selected.listings.length ? (
-                <ul>
-                  {selected.listings.map((l) => (
-                    <li key={l.id}>
-                      {l.title} · {l.status} · revision {l.revision}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No listings</p>
-              )}
+              <AdminListings
+                key={selected.id}
+                ownerId={selected.id}
+                request={marketplaceStaffRequest}
+                canManage={!!authority?.canManage}
+                onChanged={() => {
+                  if (generation.current === selectionGeneration)
+                    void detail(selected.id, selectionGeneration, true).catch(
+                      failure,
+                    );
+                }}
+              />
             </AccountSection>
             <AccountSection value="sessions">
               <h3>Active sessions</h3>
+              {!selected.sessions.length && (
+                <p className="account-empty">
+                  This user has no active sessions.
+                </p>
+              )}
               <ul>
                 {selected.sessions.map((s, i) => (
                   <li key={`${s.createdAt}:${i}`}>
@@ -768,17 +818,61 @@ export default function SellerAccounts({
             </AccountSection>
           </div>
         ) : null}
+        {!selected &&
+          ['details', 'listings', 'sessions', 'activity'].map((value) => (
+            <AccountSection key={value} value={value}>
+              <div className="account-empty">
+                <h3>Select a user account</h3>
+                <p>
+                  Open the Account directory, load accounts and choose View
+                  beside the user. This section will then show that user’s
+                  information.
+                </p>
+                <button
+                  disabled={busy}
+                  onClick={() => setAdminSection('directory')}
+                >
+                  Open account directory
+                </button>
+              </div>
+            </AccountSection>
+          ))}
         <AccountSection value="identity">
           {authority && allowIdentityAdministration ? (
             <BetterAuthIdentityAdmin
               key={`${authority.actor}:${authority.expiresAt}`}
               canManage={authority.canManage}
+              onManageAccount={async (email) => {
+                setQuery(email);
+                const accounts = await load(false, email);
+                const match = accounts?.find(
+                  (account) =>
+                    account.email.toLowerCase() === email.toLowerCase(),
+                );
+                if (match) await open(match.id);
+                else if (accounts)
+                  setNotice(
+                    'This identity has no marketplace profile. Manage its sign-in or review permanent deletion in Identity accounts.',
+                  );
+              }}
             />
-          ) : null}
+          ) : (
+            <div className="account-empty">
+              <h3>Load administrator access first</h3>
+              <p>
+                Load accounts in the Account directory before opening identity
+                accounts.
+              </p>
+              <button disabled={busy} onClick={() => void load()}>
+                Load accounts
+              </button>
+            </div>
+          )}
         </AccountSection>
       </AccountWorkspace>
       <style jsx>{`
         .accounts-admin {
+          box-sizing: border-box;
           width: 100%;
           min-width: 0;
           max-width: 1300px;
@@ -788,6 +882,21 @@ export default function SellerAccounts({
           font-family: Arial, sans-serif;
           background: #f7f4ec;
           min-height: 65vh;
+        }
+        .accounts-embedded {
+          padding: 0;
+          background: transparent;
+          min-height: 0;
+        }
+        .accounts-embedded h1 {
+          font-size: 24px;
+          margin: 0 0 12px;
+        }
+        .account-empty {
+          padding: 20px;
+          border: 1px dashed #d5cec1;
+          background: #faf8f3;
+          margin: 16px 0;
         }
         .accounts-admin :global(h1),
         .accounts-admin :global(h2),
@@ -843,6 +952,7 @@ export default function SellerAccounts({
         }
         input,
         select {
+          box-sizing: border-box;
           display: block;
           width: 100%;
           border: 1px solid #999;

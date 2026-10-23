@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { mkdtemp, readFile } from 'node:fs/promises';
+import { mkdtemp, readFile, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { build } from 'esbuild';
@@ -90,8 +90,8 @@ async function fixture(run, initial = {}) {
         });
       if (url.pathname === base + '/admin/accounts')
         return json({
-          accounts: [],
-          total: 0,
+          accounts: state.account ? [state.account] : [],
+          total: state.account ? 1 : 0,
           nextCursor: null,
           actor: 'access-admin@example.test',
           canManage: state.canManage,
@@ -100,6 +100,17 @@ async function fixture(run, initial = {}) {
             ? Date.now() + state.authorityDuration
             : null,
         });
+      if(url.pathname === base+'/admin/accounts/customer-account')return json({account:state.account,audit:[{operationId:'audit-one',actor:'admin@example.test',operation:'suspend',reasonCode:'maintenance',changedFields:[],revokedSessions:1,at:Date.now()}],actor:'access-admin@example.test',canManage:state.canManage,expiresAt:Date.now()+3600000,manageUntil:Date.now()+600000});
+      if(url.pathname === base+'/admin/listings')return json({listings:state.listings||[]});
+      if(url.pathname === base+'/admin/listings/customer-listing') {
+        assert.equal(body.action,'purge');assert.equal(body.confirm,'customer-listing');assert.equal(body.revision,3);state.listings=[];return json({ok:true});
+      }
+      if(url.pathname===base+'/admin/removals')return json({removals:state.pendingRemovals||[]});
+      if(url.pathname===base+'/admin/removals/preview')return json({target:body.target,email:body.target.identityId?'target@example.test':'customer@example.test',ready:true,blockers:[],identityCount:1,listingCount:0,supportCount:2,operationId:'removal-one',reasonCode:body.reasonCode,confirmation:'fixture-confirmation'});
+      if(url.pathname===base+'/admin/removals/apply') {
+        assert.equal(body.confirmation,'fixture-confirmation');assert.equal(body.operationId,'removal-one');
+        assert.equal(body.confirmEmail,body.target.identityId?'target@example.test':'customer@example.test');state.removed=true;state.account=null;state.pendingRemovals=[];return json({ok:true});
+      }
       if (url.pathname === base + '/auth/methods')
         return json({
           methods: state.enabled ? ['better-auth'] : ['password'],
@@ -591,4 +602,89 @@ test('Access expiration unmounts the identity directory and blocks a delayed pri
     },
     { authorityDuration: 400 },
   );
+});
+
+test('account sections explain selection and expose functional listing, activity and permanent removal controls at all widths',async()=>{
+ for(const width of [1440,390,320])await fixture(async({page,state,requests})=>{
+  await page.setViewportSize({width,height:1000});
+  for(const name of ['Contact and access','User listings','Active sessions','Administrator activity']) {
+   await page.getByRole('tab',{name,exact:true}).click();
+   await page.getByRole('heading',{name:'Select a user account',exact:true}).waitFor();
+   await page.getByRole('button',{name:'Open account directory',exact:true}).click();
+  }
+  await page.getByRole('button',{name:'Load accounts',exact:true}).click();
+  await page.getByRole('button',{name:'View account customer@example.test',exact:true}).click();
+  await page.getByRole('textbox',{name:'Phone',exact:true}).waitFor();
+  await page.getByRole('tab',{name:'User listings',exact:true}).click();
+  await page.getByRole('button',{name:'Load user listings',exact:true}).click();
+  const card=page.getByRole('article',{name:'Synthetic user listing',exact:true});await card.waitFor();
+  await card.getByRole('button',{name:'Permanently delete listing',exact:true}).click();
+  const confirm=card.getByRole('button',{name:'Confirm permanent listing deletion',exact:true});
+  assert.equal(await confirm.isDisabled(),true);
+  await card.getByLabel('Type listing ID to permanently delete',{exact:true}).fill('customer-listing');
+  assert.equal(await confirm.isEnabled(),true);
+  await card.getByRole('button',{name:'Cancel permanent deletion',exact:true}).click();
+  assert.equal(requests.some(r=>r.path.endsWith('/customer-listing')&&r.method==='POST'),false,'Opening and cancelling do not delete');
+  await card.getByRole('button',{name:'Permanently delete listing',exact:true}).click();
+  await card.getByLabel('Type listing ID to permanently delete',{exact:true}).fill('customer-listing');await confirm.click();
+  await page.getByText('Listing and its files permanently deleted.',{exact:true}).waitFor();
+  await page.getByRole('tab',{name:'Active sessions',exact:true}).click();
+  await page.getByText('This user has no active sessions.',{exact:true}).waitFor();
+  await page.getByRole('tab',{name:'Administrator activity',exact:true}).click();
+  await page.getByText(/admin@example.test.*suspend/).waitFor();
+  await page.getByRole('tab',{name:'Contact and access',exact:true}).click();
+  await page.getByRole('button',{name:'Review permanent account deletion',exact:true}).click();
+  const remove=page.getByRole('button',{name:'Confirm permanent account deletion',exact:true});
+  assert.equal(await remove.isDisabled(),true);
+  await page.getByLabel('Type account email to permanently delete',{exact:true}).fill('customer@example.test');
+  assert.equal(await remove.isEnabled(),true);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,'Account page fits narrow screens');
+  if(process.env.ADMIN_ACCOUNT_ARTIFACT_DIR){await mkdir(process.env.ADMIN_ACCOUNT_ARTIFACT_DIR,{recursive:true});await page.screenshot({path:join(process.env.ADMIN_ACCOUNT_ARTIFACT_DIR,`account-removal-${width}.png`),fullPage:true});}
+  await remove.click();await page.getByRole('tab',{name:'Account directory',exact:true}).waitFor();
+  assert.equal(state.removed,true);
+ },{account:{id:'customer-account',name:'Synthetic Customer',email:'customer@example.test',phone:'Synthetic phone',location:'Synthetic location',status:'deleted',adminDeleted:true,adminSuspended:false,securityHeld:false,listingCount:1,activeSessions:0,createdAt:Date.now(),loginMethods:['better-auth'],sessions:[],listings:[],hasSavedDraft:false,mediaCount:0},listings:[{id:'customer-listing',ownerId:'customer-account',revision:3,status:'deleted',fields:{title:'Synthetic user listing',listingType:'tools'},photos:[],videos:[],logbooks:{}}]});
+});
+
+test('identity cards stay readable on mobile and permanent deletion requires the exact email',async()=>{
+ for(const width of [1440,390,320])await fixture(async({page,state,requests})=>{
+  await page.setViewportSize({width,height:1000});await loadIdentity(page);
+  await page.getByRole('button',{name:'View identity identity-target',exact:true}).click();
+  await page.getByRole('button',{name:'Review permanent account deletion',exact:true}).click();
+  assert.equal(await page.getByRole('button',{name:'Confirm permanent account deletion',exact:true}).isDisabled(),true);
+  await page.getByLabel('Type account email to permanently delete',{exact:true}).fill('wrong@example.test');
+  assert.equal(await page.getByRole('button',{name:'Confirm permanent account deletion',exact:true}).isDisabled(),true);
+  await page.getByLabel('Type account email to permanently delete',{exact:true}).fill('target@example.test');
+  const identity=page.getByRole('region',{name:'Identity account administration',exact:true});
+  assert.equal(await identity.evaluate(node=>node.scrollWidth<=node.clientWidth+1),true,'Identity cards fit the panel');
+  assert.equal((await identity.innerText()).includes('fixture-sensitive-session-token'),false);
+  if(process.env.ADMIN_ACCOUNT_ARTIFACT_DIR){await mkdir(process.env.ADMIN_ACCOUNT_ARTIFACT_DIR,{recursive:true});await page.screenshot({path:join(process.env.ADMIN_ACCOUNT_ARTIFACT_DIR,`identity-accounts-${width}.png`),fullPage:true});}
+  await page.getByRole('button',{name:'Confirm permanent account deletion',exact:true}).click();
+  await page.getByRole('button',{name:'View identity identity-target',exact:true}).waitFor();
+  assert.equal(state.removed,true);
+  assert.equal(requests.filter(r=>r.path===base+'/admin/removals/apply').length,1);
+ });
+});
+
+test('Open marketplace account finds and opens the selected identity profile directly',async()=>{
+ await fixture(async({page,requests})=>{
+  await loadIdentity(page);await page.getByRole('button',{name:'View identity identity-target',exact:true}).click();
+  await page.getByRole('button',{name:'Open marketplace account',exact:true}).click();
+  await page.getByRole('textbox',{name:'Phone',exact:true}).waitFor();
+  assert.equal(await page.getByRole('textbox',{name:'Phone',exact:true}).inputValue(),'Synthetic phone');
+  assert.equal(await page.getByRole('tab',{name:'Contact and access',exact:true}).getAttribute('aria-selected'),'true');
+  assert.ok(requests.some(r=>r.path===base+'/admin/accounts'&&r.search.includes('q=target%40example.test')));
+ },{account:{id:'customer-account',name:'Synthetic Customer',email:'target@example.test',phone:'Synthetic phone',location:'Synthetic location',status:'active',adminDeleted:false,adminSuspended:false,securityHeld:false,listingCount:0,activeSessions:0,createdAt:Date.now(),loginMethods:['better-auth'],sessions:[],listings:[],hasSavedDraft:false,mediaCount:0}});
+});
+
+test('unfinished deletion controls remain discoverable after the identity row is gone',async()=>{
+ await fixture(async({page,state})=>{
+  await page.getByRole('button',{name:'Load accounts',exact:true}).click();
+  await page.getByRole('button',{name:'Load unfinished deletions',exact:true}).click();
+  const region=page.getByRole('region',{name:'Unfinished account deletions',exact:true});
+  await region.getByRole('button',{name:'Review permanent account deletion',exact:true}).click();
+  await region.getByLabel('Type account email to permanently delete',{exact:true}).fill('target@example.test');
+  await region.getByRole('button',{name:'Confirm permanent account deletion',exact:true}).click();
+  await region.getByText('No unfinished account deletions.',{exact:true}).waitFor();
+  assert.equal(state.removed,true);
+ },{pendingRemovals:[{operationId:'interrupted',target:{identityId:'identity-gone'},email:'target@example.test'}]});
 });
