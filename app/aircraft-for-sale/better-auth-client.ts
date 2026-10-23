@@ -110,6 +110,11 @@ export function sellerIdentityResponseTarget(
 export function sellerIdentityReturnUrl(route = 'identity') {
   const url = new URL('/aircraft-for-sale', window.location.origin);
   url.searchParams.set('seller-auth', route);
+  const listingId = new URLSearchParams(window.location.search).get(
+    'emailSeller',
+  );
+  if (listingId && /^[A-Za-z0-9_-]{1,128}$/.test(listingId))
+    url.searchParams.set('emailSeller', listingId);
   if (isBetterAuthQaEntry(window.location.search))
     url.searchParams.set('seller-auth-qa', 'better-auth');
   return url.href;

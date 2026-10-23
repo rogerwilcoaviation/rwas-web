@@ -119,7 +119,7 @@ export function cleanListing(body, complete = false) {
         'priceMode',
       ];
       if (out.listingType === 'aircraft')
-        required.push('make', 'model', 'year');
+        required.push('make', 'model', 'year', 'nNumber');
       else required.push('title');
       if (out.listingType !== 'hangars') required.push('condition');
       if (['parts', 'tools'].includes(out.listingType))
@@ -162,5 +162,17 @@ export function cleanListing(body, complete = false) {
     (!out.make || !out.model || !out.year || !out.price)
   )
     fail(400, 'Make, model, year and asking price are required.');
+  if (complete && (!out.listingType || out.listingType === 'aircraft')) {
+    if (!out.nNumber)
+      fail(
+        400,
+        'N-number (tail number) is required before submitting an aircraft listing.',
+      );
+    if (!out.sellerLocation)
+      fail(
+        400,
+        'Aircraft location is required before submitting an aircraft listing.',
+      );
+  }
   return out;
 }

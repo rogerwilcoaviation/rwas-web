@@ -288,6 +288,11 @@ async function fixture(options = {}) {
     } else if (path === '/redirected-methods')
       body={methods:['better-auth'],emailCode:false,betterAuth:{providers:['password'],legacyLink:false}};
     else if (path === '/api/aircraft-sale/account/access') body={role:state.adminRole || 'seller',canManageAdministrators:!!state.superAdmin};
+    else if (path.startsWith('/api/aircraft-sale/buyer/contact/')) {
+      assert.equal(requestHeaders.authorization,'Bearer fixture-rwas-session');
+      assert.equal(requestHeaders['x-rwas-csrf'],'fixture-csrf');
+      body={email:'owner+aircraft@example.test',title:'Synthetic Aircraft',tailNumber:'N123AB',location:'Synthetic Airport'};
+    }
     else if (path.startsWith('/api/aircraft-sale/staff/files/')) return route.fulfill({contentType:'image/webp',body:layoutPhoto});
     else if (path.startsWith('/api/aircraft-sale/staff/')) {
       assert.equal(requestHeaders.authorization,'Bearer fixture-rwas-session');
@@ -323,7 +328,14 @@ async function fixture(options = {}) {
         item.status='draft';item.revision++;item.reviewActions=[];
         body={ok:true};
       }
-      else if(path.endsWith('/support'))body={tickets:[]};
+      else if(path.endsWith('/support'))body={tickets:state.supportTickets || []};
+      else if(/\/support\/[^/]+$/.test(path)) {
+        const ticket=state.supportTickets.find(ticket=>ticket.id===path.split('/').at(-1));
+        const input=request.postDataJSON();
+        assert.equal(request.method(),'PATCH');assert.equal(input.revision,ticket.revision);
+        ticket.messages.push({from:'support',text:input.reply,at:Date.now()});
+        ticket.status=input.status;ticket.revision++;body={ok:true,ticket};
+      }
       else if(path.endsWith('/accounts'))body={accounts:[],total:0,nextCursor:null,actor:'fixture-admin',canManage:true,expiresAt:Date.now()+86400000,manageUntil:Date.now()+600000};
       else throw Error('Unexpected staff operation in fixture.');
     }
@@ -1884,4 +1896,86 @@ test('listing approval and management panels show readable grouped cards and pre
       await f.close();
     }
   }
+});
+
+test('support workspace formats conversations, filters requests and saves revision-bound replies on desktop and mobile', async () => {
+  for(const width of [1440,390,320]) {
+    const stored={provider:'better-auth',token:'fixture-rwas-session',csrf:'fixture-csrf',email:'admin@rwas.team',name:'Fixture Admin',identityUserId:'fixture-user',identitySessionId:'fixture-session'};
+    const ticket={id:'support-one',email:'customer@example.test',subject:'Listing photo question',status:'open',revision:1,updatedAt:Date.now(),messages:[{from:'customer',text:'How do I update my listing photos?\nMy draft is saved.',at:Date.now()}]};
+    const f=await fixture({parent:true,active:true,stored,adminRole:'admin',supportTickets:[ticket,{...ticket,id:'support-two',subject:'Account question',status:'resolved'}]});
+    try {
+      await f.page.setViewportSize({width,height:1000});
+      const dialog=f.page.getByRole('dialog');
+      await dialog.getByRole('tab',{name:'Customer support',exact:true}).click();
+      await dialog.getByText('Customer conversations in one place',{exact:true}).waitFor();
+      await dialog.getByRole('button',{name:'Load support requests',exact:true}).click();
+      await dialog.getByRole('status').filter({hasText:'Showing 2 of 2'}).waitFor();
+      const card=dialog.getByRole('article',{name:'Listing photo question',exact:true});
+      await card.getByRole('list',{name:'Support conversation'}).waitFor();
+      await card.getByText('customer@example.test',{exact:true}).waitFor();
+      assert.equal(await card.getByRole('button',{name:'Save reply and status'}).isDisabled(),true);
+      await dialog.getByLabel('Filter request status',{exact:true}).selectOption('open');
+      await dialog.getByRole('status').filter({hasText:'Showing 1 of 2'}).waitFor();
+      await dialog.getByLabel('Search support requests',{exact:true}).fill('no matching text');
+      await dialog.getByText('No support requests match your search.',{exact:true}).waitFor();
+      await dialog.getByLabel('Search support requests',{exact:true}).fill('');
+      assert.equal(await dialog.evaluate(el=>el.scrollWidth<=el.clientWidth+1),true);
+      await card.getByLabel('Support reply',{exact:true}).fill('Open your draft and select the Photos step.');
+      await card.getByLabel('Request status',{exact:true}).selectOption('resolved');
+      if(process.env.SUPPORT_LAYOUT_ARTIFACT_DIR) {
+        await mkdir(process.env.SUPPORT_LAYOUT_ARTIFACT_DIR,{recursive:true});
+        await f.page.screenshot({path:join(process.env.SUPPORT_LAYOUT_ARTIFACT_DIR,`support-${width}.png`)});
+      }
+      await card.getByRole('button',{name:'Save reply and status'}).click();
+      await dialog.getByRole('status').filter({hasText:'Reply saved to the customer'}).waitFor();
+      assert.equal(f.state.supportTickets[0].revision,2);
+      assert.equal(f.state.supportTickets[0].status,'resolved');
+      await dialog.getByLabel('Filter request status',{exact:true}).selectOption('all');
+      await card.getByText('RWAS Support',{exact:true}).waitFor();
+      await card.getByLabel('Support reply',{exact:true}).fill('Old draft');
+      f.state.supportTickets[0].revision++;
+      await dialog.getByRole('button',{name:'Load support requests',exact:true}).click();
+      await f.page.waitForFunction(()=>document.querySelector('.support-reply textarea')?.value==='');
+      assert.equal(await card.getByLabel('Support reply',{exact:true}).inputValue(),'');
+    } finally {await f.close();}
+  }
+});
+
+test('email seller intent survives login and produces a reviewed mailto message without sending', async () => {
+  for(const signedIn of [false,true]) {
+    const stored={provider:'better-auth',token:'fixture-rwas-session',csrf:'fixture-csrf',email:'buyer@example.test',name:'Fixture Buyer',identityUserId:'fixture-user',identitySessionId:'fixture-session'};
+    const f=await fixture({parent:true,search:'?emailSeller=synthetic-listing',active:signedIn,...(signedIn?{stored}:{})});
+    try {
+      const dialog=f.page.getByRole('dialog');
+      if(!signedIn) {
+        await dialog.getByText(/Sign in to email the seller/).waitFor();
+        assert.equal(f.state.requests.some(r=>r.path.includes('/buyer/contact/')),false);
+        await credentials(dialog);
+        await dialog.getByRole('button',{name:'Sign in',exact:true}).click();
+      }
+      await dialog.getByRole('heading',{name:'Email seller',exact:true}).waitFor();
+      const link=dialog.getByRole('link',{name:'Email seller',exact:true});
+      await link.waitFor();
+      const uri=new URL(await link.getAttribute('href'));
+      assert.equal(uri.protocol,'mailto:');
+      assert.equal(decodeURIComponent(uri.pathname),'owner+aircraft@example.test');
+      assert.match(uri.searchParams.get('subject'),/Synthetic Aircraft \(N123AB\)/);
+      assert.match(uri.searchParams.get('body'),/Synthetic Airport/);
+      assert.match(uri.searchParams.get('body'),/\/aircraft-for-sale\/synthetic-listing/);
+      assert.equal(f.state.requests.filter(r=>r.path.includes('/buyer/contact/')).length,1);
+      assert.equal(f.state.requests.some(r=>r.path.includes('/buyer/contact/')&&r.method!=='GET'),false);
+    } finally {await f.close();}
+  }
+});
+
+test('Google sign-in preserves the listing inquiry in its same-origin return URL', async () => {
+  const f=await fixture({parent:true,search:'?emailSeller=synthetic-listing',providers:['password','google']});
+  try {
+    await Promise.all([f.page.waitForResponse(r=>r.url().endsWith('/sign-in/social')),f.page.getByRole('button',{name:'Continue with Google',exact:true}).click()]);
+    const call=f.state.requests.find(r=>r.path===base+'/sign-in/social');
+    const callback=new URL(call.body.callbackURL);
+    assert.equal(callback.origin,origin);
+    assert.equal(callback.pathname,'/aircraft-for-sale');
+    assert.equal(callback.searchParams.get('emailSeller'),'synthetic-listing');
+  } finally {await f.close();}
 });

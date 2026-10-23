@@ -58,6 +58,7 @@ import {
   listingTitle,
 } from '@/lib/marketplace/schema.mjs';
 import AdminWorkspace from './admin-workspace';
+import ContactSeller from './contact-seller';
 import SupportDesk from './support-desk';
 
 type Auth0Session = {
@@ -202,8 +203,19 @@ export default function SellerAuthPanel() {
     | 'edit'
     | 'account'
     | 'admin'
+    | 'contact'
     | null
   >(null);
+  const contactListing = useRef('');
+  const [contactListingId, setContactListingId] = useState('');
+  useEffect(() => {
+    const id = new URL(window.location.href).searchParams.get('emailSeller');
+    if (id && /^[A-Za-z0-9_-]{1,128}$/.test(id)) {
+      contactListing.current = id;
+      setContactListingId(id);
+      setView('login');
+    }
+  }, []);
   const [email, setEmail] = useState(''),
     [code, setCode] = useState(''),
     [sent, setSent] = useState(false);
@@ -947,7 +959,8 @@ export default function SellerAuthPanel() {
         );
         accessRole.current = role;
         setAccess(role);
-        if (role === 'admin') setView('admin');
+        if (role === 'seller' && contactListing.current) setView('contact');
+        else if (role === 'admin') setView('admin');
         else if (role === 'restricted-admin') {
           setView(null);
           setError(
@@ -1458,23 +1471,25 @@ export default function SellerAuthPanel() {
           <h2 id="seller-title">
             {view === 'admin'
               ? 'Administrator Workspace'
-              : view === 'login'
-                ? authEntry === 'signup'
-                  ? 'Create Your Account'
-                  : 'User Login'
-                : view === 'better-auth'
-                  ? 'Secure User Login'
-                  : view === 'clerk'
+              : view === 'contact'
+                ? 'Email seller'
+                : view === 'login'
+                  ? authEntry === 'signup'
+                    ? 'Create Your Account'
+                    : 'User Login'
+                  : view === 'better-auth'
                     ? 'Secure User Login'
-                    : view === 'clerk-owner'
-                      ? 'Connect Existing Seller Account'
-                      : view === 'account'
-                        ? 'Your Account'
-                        : view === 'edit'
-                          ? 'Listing Draft'
-                          : view === 'create'
-                            ? 'Create a Listing'
-                            : 'My Listings'}
+                    : view === 'clerk'
+                      ? 'Secure User Login'
+                      : view === 'clerk-owner'
+                        ? 'Connect Existing Seller Account'
+                        : view === 'account'
+                          ? 'Your Account'
+                          : view === 'edit'
+                            ? 'Listing Draft'
+                            : view === 'create'
+                              ? 'Create a Listing'
+                              : 'My Listings'}
           </h2>
           {session && (
             <button
@@ -1499,8 +1514,17 @@ export default function SellerAuthPanel() {
           </p>
         )}
         {message && <p role="status">{message}</p>}
+        {view === 'contact' && access === 'seller' && (
+          <ContactSeller listingId={contactListingId} request={api} />
+        )}
         {view === 'login' && (
           <>
+            {contactListingId && (
+              <p>
+                Sign in to email the seller about this listing. If you need an
+                account, choose Create Your Account from the marketplace.
+              </p>
+            )}
             {clerkSignOutPending && (
               <button
                 disabled={busy}

@@ -13,6 +13,63 @@ import {
 globalThis.fetch = () => {
   throw Error('External network forbidden');
 };
+test('aircraft drafts allow missing tail and location but submission and approval require both', async () => {
+  const f=fixture(), owner=await f.login();
+  for(const name of ['nNumber','sellerLocation']) {
+    const body={...fields,[name]:''};
+    const l=await create(f,owner,body);
+    assert.ok(l.id,'An incomplete draft remains saveable');
+    assert.equal((await submit(f,owner,l)).status,400);
+    f.state().listings[l.id].status='pending';
+    assert.equal((await approve(f,l)).status,400,'Review cannot bypass required fields');
+    assert.equal(f.state().listings[l.id].approvedRevision,null);
+  }
+});
+test('buyer contact resolves the verified owner only for a current published listing and never sends mail', async () => {
+  const f=fixture(), owner=await f.login('seller@example.test'), buyer=await f.login('buyer@example.test');
+  const l=await create(f,owner), path='/buyer/contact/'+l.id;
+  assert.equal((await f.call(path)).status,401);
+  assert.equal((await f.call(path,'GET',undefined,buyer)).status,404);
+  await submit(f,owner,l); await approve(f,l);
+  const mails=f.mail.length;
+  let response=await f.call(path,'GET',undefined,buyer);
+  assert.equal(response.status,200,await response.clone().text());
+  assert.match(response.headers.get('Cache-Control'),/no-store/);
+  const contact=await response.json();
+  assert.equal(contact.email,'seller@example.test');
+  assert.equal(contact.tailNumber,fields.nNumber);
+  assert.equal(contact.location,fields.sellerLocation);
+  assert.equal((await f.call(path,'POST',{},buyer)).status,405);
+  const html=await (await f.call('/listing/'+l.id,'GET',undefined,undefined,{Accept:'text/html'})).text();
+  assert.match(html,/Email seller/); assert.match(html,/emailSeller=/);
+  assert.equal(html.includes('seller@example.test'),false,'Anonymous page never exposes the account email');
+  const publicJson=await (await f.call('/listing/'+l.id)).text();
+  assert.equal(publicJson.includes('seller@example.test'),false);
+  const listing=()=>f.state().listings[l.id];
+  listing().fields.specifications={'general-display-registration-with-this-listing':'No'};
+  assert.equal((await (await f.call(path,'GET',undefined,buyer)).json()).tailNumber,'');
+  for(const status of ['draft','pending','paused','sold','deleted']) {
+    listing().status=status;
+    assert.equal((await f.call(path,'GET',undefined,buyer)).status,404,status);
+  }
+  listing().status='active';listing().revision++;
+  assert.equal((await f.call(path,'GET',undefined,buyer)).status,404,'Unapproved revision');
+  listing().approvedRevision=listing().revision;
+  f.state().profiles[listing().ownerId].adminSuspended=true;
+  assert.equal((await f.call(path,'GET',undefined,buyer)).status,404,'Held owner');
+  f.state().profiles[listing().ownerId].adminSuspended=false;
+  listing().purging=true;
+  assert.equal((await f.call(path,'GET',undefined,buyer)).status,404,'Purging listing');
+  listing().purging=false; f.env.PUBLIC_LISTINGS_ENABLED='false';
+  assert.equal((await f.call(path,'GET',undefined,buyer)).status,404);
+  assert.equal(f.mail.length,mails,'Contact lookup does not send any message');
+});
+test('buyer contact discovery is rate limited per signed-in user', async () => {
+  const f=fixture(),owner=await f.login(),buyer=await f.login('buyer@example.test'),l=await create(f,owner);
+  await submit(f,owner,l);await approve(f,l);
+  for(let i=0;i<20;i++)assert.equal((await f.call('/buyer/contact/'+l.id,'GET',undefined,buyer)).status,200);
+  assert.equal((await f.call('/buyer/contact/'+l.id,'GET',undefined,buyer)).status,429);
+});
 test('single-use codes, expiry, attempt lockout, malformed JSON and delivery failure', async () => {
   const f = fixture();
   assert.equal((await f.call('/send-code', 'POST', {})).status, 400);
@@ -1495,4 +1552,42 @@ test('publication and removal commit durably; failed saves cannot report or reta
       if (['unpublish', 'acceptance-unpublish'].includes(decision)) await assertPublicationPrivate(f, listing);
       else assert.equal((await f.call('/listing/' + listing.id)).status, 200);
     });
+});
+
+test('Jerry asks for required aircraft tail and actual location and safely resumes an older conversation', async () => {
+  const f=fixture(),owner=await f.login();
+  const message=async content=>{
+    const r=await f.call('/intake','POST',{messages:[{role:'user',content}]},owner);
+    assert.equal(r.status,200,await r.clone().text());return r.json();
+  };
+  await message('list my aircraft');await message('aircraft');
+  let result=await message('1'),tailAsked=false,locationAsked=false;
+  for(let i=0;i<400&&!result.action;i++) {
+    const prompt=result.reply;
+    let answer;
+    if(prompt.startsWith('N-number')) {tailAsked=true;answer='N123AB';}
+    else if(prompt.startsWith('Aircraft location')) {locationAsked=true;answer='Synthetic Airport, Test City';}
+    else if(prompt.startsWith('Make'))answer='Synthetic';
+    else if(prompt.startsWith('Model'))answer='Fixture';
+    else if(prompt.startsWith('Year'))answer='2000';
+    else if(prompt.startsWith('Currency'))answer='USD';
+    else if(prompt.startsWith('Price display'))answer='on-request';
+    else if(prompt.startsWith('Description'))answer='Synthetic aircraft listing.';
+    else if(prompt.includes('(required)')&&prompt.includes('\n1. '))answer='1';
+    else {assert.match(prompt,/optional/,prompt);answer='skip';}
+    if(prompt.startsWith('N-number')||prompt.startsWith('Aircraft location')) {
+      const skip=await f.call('/intake','POST',{messages:[{role:'user',content:'skip'}]},owner);
+      assert.equal(skip.status,400);
+    }
+    result=await message(answer);
+  }
+  assert.ok(tailAsked&&locationAsked);
+  assert.equal(result.action?.draft.nNumber,'N123AB');
+  assert.equal(result.action?.draft.sellerLocation,'Synthetic Airport, Test City');
+  const profile=Object.values(f.state().profiles)[0];
+  f.state().drafts[profile.id]={intake:true,schemaVersion:3,step:99,fields:{...result.action.draft,nNumber:''}};
+  f.restart();
+  const resumed=await message('This answer was intended for an old optional question');
+  assert.match(resumed.reply,/N-number.*required/);
+  assert.equal((await message('N456CD')).state.step>0,true);
 });

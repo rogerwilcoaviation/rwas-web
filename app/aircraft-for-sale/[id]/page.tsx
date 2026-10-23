@@ -592,11 +592,15 @@ export default async function AircraftDetailPage({ params }: PageProps) {
                 </div>
               ) : null}
               <div className={`a4s-detail-cta${isSold ? ' is-sold' : ''}`}>
-                <a
-                  href={`mailto:${listing.sellerEmail || 'avionics@rwas.team'}?subject=${encodeURIComponent('Inquiry: ' + h + (listing.nNumber ? ' (' + listing.nNumber + ')' : ''))}`}
-                >
-                  Contact Seller
-                </a>
+                {listing.sellerEmail && !isSold ? (
+                  <a
+                    href={`mailto:${encodeURIComponent(listing.sellerEmail)}?subject=${encodeURIComponent('Inquiry: ' + h + (listing.nNumber ? ' (' + listing.nNumber + ')' : ''))}`}
+                  >
+                    Email seller
+                  </a>
+                ) : (
+                  <p>Seller inquiries are unavailable for this listing.</p>
+                )}
               </div>
             </div>
           </div>

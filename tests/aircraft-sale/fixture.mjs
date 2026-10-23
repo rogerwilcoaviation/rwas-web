@@ -121,6 +121,7 @@ export const fields = {
   year: 2000,
   price: 1,
   nNumber: 'N123AB',
+  sellerLocation: 'Synthetic Airport, Test City, USA',
 };
 export const png = new Uint8Array([
   137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 0,

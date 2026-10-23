@@ -48,7 +48,8 @@ export const draftFields: DraftField[] = [
   {
     name: 'nNumber',
     label: 'N-number',
-    help: 'For a US-registered aircraft, enter its registration, such as N123AB. Otherwise, skip this item.',
+    required: true,
+    help: 'Enter the aircraft’s US tail number, such as N123AB. This is required before submitting an aircraft listing.',
   },
   {
     name: 'serialNumber',
@@ -68,8 +69,9 @@ export const draftFields: DraftField[] = [
   },
   {
     name: 'sellerLocation',
-    label: 'Location',
-    help: 'Enter the city, state or region, and country where the item is located.',
+    label: 'Aircraft location',
+    required: true,
+    help: 'Enter where the aircraft is located: city, state or region, and country. Include the airport identifier when known.',
   },
   {
     name: 'totalTime',
@@ -233,7 +235,7 @@ export function validateDraftField(field: DraftField, value = '') {
   )
     return 'Enter an asking price greater than $0 and no more than $1,000,000,000.';
   if (field.name === 'nNumber' && !/^N[0-9][A-Z0-9]{0,4}$/i.test(text))
-    return 'Enter a valid US N-number, such as N123AB, or leave this optional item blank.';
+    return 'Enter a valid US N-number, such as N123AB.';
   return '';
 }
 

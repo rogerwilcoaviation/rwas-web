@@ -58,7 +58,7 @@ test('actual SQLite/R2 purge transaction preserves target outbox on final-save a
   };
   const ok = async (response, expected = 200) => { assert.equal(response.status, expected); return response.json(); };
   const login = async email => { await ok(await call('/send-code', 'POST', { email })); return (await ok(await call('/check-code', 'POST', { email, code: mail.at(-1).code }))).session; };
-  const create = async (owner, key) => (await ok(await call('/listings', 'POST', { make: 'Synthetic', model: key, year: 2000, price: 1 }, owner, { 'Idempotency-Key': key }), 201)).listing;
+  const create = async (owner, key) => (await ok(await call('/listings', 'POST', { make: 'Synthetic', model: key, year: 2000, price: 1, nNumber: 'N123AB', sellerLocation: 'Synthetic Airport, Test City' }, owner, { 'Idempotency-Key': key }), 201)).listing;
   const submit = (owner, listing) => call('/listing/' + listing.id + '/status', 'POST', { status: 'pending' }, owner);
   const purge = (owner, listing) => call('/listings/' + listing.id, 'DELETE', { confirm: listing.id }, owner);
   const snapshot = () => call('/_fixture/snapshot').then(response => response.json());

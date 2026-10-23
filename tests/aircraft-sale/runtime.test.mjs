@@ -67,7 +67,7 @@ test('actual local workerd SQLite Durable Object/R2 login, concurrent create, re
       ).json()
     ).session;
     assert.ok(t);
-    const body = { make: 'Synthetic', model: 'Runtime', year: 2000, price: 1 };
+    const body = { make: 'Synthetic', model: 'Runtime', year: 2000, price: 1, nNumber: 'N123AB', sellerLocation: 'Synthetic Airport, Test City' };
     const [a, b] = await Promise.all([
       call('/listings', 'POST', body, t, { 'Idempotency-Key': 'one' }),
       call('/listings', 'POST', body, t, { 'Idempotency-Key': 'two' }),

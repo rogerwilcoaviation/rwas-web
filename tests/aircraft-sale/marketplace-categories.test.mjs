@@ -16,6 +16,7 @@ const complete = (category) => ({
   category: category.id,
   title: 'Synthetic listing',
   make: 'Synthetic',
+  nNumber: 'N123AB',
   model: 'Fixture',
   year: 2000,
   condition: category.type === 'parts' ? 'Serviceable' : 'Used',
@@ -68,6 +69,12 @@ test('all researched categories and seven tool categories have bounded, distinct
   }
 });
 test('category, mandatory data, price, units and specification allowlists are validated by the service', () => {
+  for(const type of ['aircraft','hangars','parts','tools']) {
+    const listing=complete(listingCategories.find(c=>c.type===type));
+    if(type==='aircraft') {
+      for(const name of ['nNumber','sellerLocation'])assert.throws(()=>cleanListing({...listing,[name]:''},true),/required/);
+    } else assert.equal(cleanListing({...listing,nNumber:''},true).listingType,type);
+  }
   const hangar = complete(listingCategories.find((c) => c.type === 'hangars'));
   assert.throws(
     () => cleanListing({ ...hangar, airport: '' }, true),
@@ -240,6 +247,7 @@ async function adminFixture() {
 }
 test('immutable admin identity receives admin workspace access, cannot list, and sellers cannot escalate', async () => {
   const f = await adminFixture();
+  assert.equal((await f.call('/buyer/contact/synthetic','GET',undefined,f.admin.session,f.headers('admin'))).status,403);
   assert.equal(
     (
       await json(

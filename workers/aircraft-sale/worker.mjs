@@ -488,7 +488,13 @@ function publicPage(l) {
       escape(l.sellerLocation) +
       '</p><p>' +
       escape(l.sellerPhone) +
-      '</p><a href="/contact?topic=aircraft-sales">Contact RWAS about this listing</a></section></main></body></html>',
+      '</p>' +
+      (l.status === 'active'
+        ? '<a class="seller-contact" href="/aircraft-for-sale?emailSeller=' +
+          encodeURIComponent(l.id) +
+          '">Email seller</a><p>Sign in or create an account to email the seller for more information. Your email app will open with the listing details included.</p>'
+        : '<p>This listing is not currently accepting seller inquiries.</p>') +
+      '</section></main></body></html>',
     {
       headers: {
         'Content-Type': 'text/html;charset=UTF-8',
@@ -3165,6 +3171,33 @@ export class SellerStore {
         role: u.accountRole,
         canManageAdministrators: u.superAdministrator === true,
       });
+    const buyerContact = path.match(
+      /^\/buyer\/contact\/([A-Za-z0-9_-]{1,128})$/,
+    );
+    if (buyerContact) {
+      if (method !== 'GET') fail(405, 'Method not allowed.');
+      if (u.accountRole !== 'seller')
+        fail(403, 'Use a buyer or seller account to contact a seller.');
+      const listing = this.state.listings[buyerContact[1]];
+      const seller = listing && this.state.profiles[listing.ownerId];
+      if (
+        !sellerPublicListingsEnabled(this.env) ||
+        !listing ||
+        listing.status !== 'active' ||
+        listing.approvedRevision !== listing.revision ||
+        listing.purging ||
+        accountHeld(seller)
+      )
+        fail(404, 'This listing is no longer available for seller inquiries.');
+      this.rate('buyer-contact:' + u.id, 20);
+      const published = publicListing(this.hydrate(listing));
+      return reply({
+        email: email(seller.email),
+        title: listingTitle(published),
+        tailNumber: published.nNumber || '',
+        location: published.sellerLocation || '',
+      });
+    }
     if (path === '/support') {
       if (u.accountRole !== 'seller')
         fail(403, 'Use the administrator support workspace.');
@@ -3232,12 +3265,17 @@ export class SellerStore {
         ['price', 'Asking price in USD?'],
         ['description', 'Describe the condition and history, or say skip.'],
         ['avionics', 'Avionics and equipment, or say skip.'],
+        [
+          'sellerLocation',
+          'Where is the aircraft located? Include its city, state or country, and airport if known.',
+        ],
       ];
       const intakeFields = (fields) =>
         newListingFields(fields, [
           { name: 'make', label: 'Make', required: true },
           { name: 'model', label: 'Model', required: true },
           { name: 'year', label: 'Year', required: true, type: 'number' },
+          { name: 'nNumber', label: 'N-number (tail number)', required: true },
           { name: 'sellerLocation', label: 'Location', required: true },
           {
             name: 'description',
@@ -3273,6 +3311,7 @@ export class SellerStore {
         progress = {
           intake: true,
           schemaVersion: 3,
+          aircraftContactFieldsVersion: 1,
           step: 0,
           fields: { sellerName: u.name, workflowVersion: '3' },
         };
@@ -3284,6 +3323,25 @@ export class SellerStore {
       }
       const guidedFields =
         progress.schemaVersion === 3 ? intakeFields(progress.fields) : null;
+      // Older saved aircraft conversations used a numeric cursor without the
+      // tail-number question. Re-prompt before interpreting the next answer.
+      if (
+        guidedFields &&
+        progress.fields.listingType === 'aircraft' &&
+        progress.aircraftContactFieldsVersion !== 1
+      ) {
+        const tailIndex = guidedFields.findIndex(
+          (field) => field.name === 'nNumber',
+        );
+        if (tailIndex >= 0) {
+          progress.step = Math.min(progress.step, tailIndex);
+          progress.aircraftContactFieldsVersion = 1;
+          return reply({
+            reply: intakePrompt(guidedFields[progress.step]),
+            state: { step: progress.step },
+          });
+        }
+      }
       const steps = guidedFields
         ? guidedFields.map((field) => [field.name, intakePrompt(field)])
         : legacySteps;
@@ -3299,7 +3357,14 @@ export class SellerStore {
         text.toLowerCase() === 'skip' &&
         (guidedFields
           ? guidedFields[progress.step]?.required
-          : progress.step < 5)
+          : [
+              'nNumber',
+              'make',
+              'model',
+              'year',
+              'price',
+              'sellerLocation',
+            ].includes(field))
       )
         fail(400, 'This field is required before submitting a listing.');
       if (text.toLowerCase() !== 'skip') {

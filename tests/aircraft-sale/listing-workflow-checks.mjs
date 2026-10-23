@@ -187,9 +187,13 @@ export async function checkListingWorkflow({
     .filter({ hasText: 'valid US N-number' })
     .waitFor();
   await label('N-number').fill('');
+  await next();
+  await dialog.getByRole('alert').filter({ hasText: 'required' }).waitFor();
   // Back navigation preserves entered text; optional items can be skipped.
   await button('Back').click();
   assert.equal(await label('Description').inputValue(), original);
+  await next();
+  await label('N-number').fill('N123AB');
   await next();
   for (
     let count = 0;
@@ -197,6 +201,13 @@ export async function checkListingWorkflow({
     count++
   ) {
     const lastDetail = await label('Range').count();
+    if (await label('Aircraft location').count()) {
+      await next();
+      await dialog.getByRole('alert').filter({ hasText: 'required' }).waitFor();
+      await label('Aircraft location').fill(
+        'Synthetic Airport, Test City, USA',
+      );
+    }
     if (await label('Damage history').count())
       assert.equal(
         await label('Damage history').getAttribute('maxlength'),
