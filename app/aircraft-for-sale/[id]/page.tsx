@@ -1,3 +1,4 @@
+import ActivityTracker from '../activity-tracker';
 import { replaceLegacyAircraftCatalog } from '@/lib/public-aircraft-marketplace.mjs';
 import { hasProductSnippetEligibility } from '@/lib/product-snippet-eligibility.mjs';
 /* eslint-disable @next/next/no-html-link-for-pages */
@@ -329,6 +330,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
 
   return (
     <BroadsheetLayout>
+      <ActivityTracker />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

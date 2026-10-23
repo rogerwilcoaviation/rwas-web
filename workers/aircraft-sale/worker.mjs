@@ -1,4 +1,12 @@
 import {
+  ActivityLog,
+  activityRoute,
+  activityActor,
+  activityOutcome,
+  browserActivity,
+  safeAuditDetails,
+} from './activity-log.mjs';
+import {
   administratorDirectory,
   administratorIdentity,
   administratorRole,
@@ -515,7 +523,7 @@ function publicPage(l) {
           encodeURIComponent(l.id) +
           '">Email seller</a><p>Sign in or create an account to email the seller for more information. Your email app will open with the listing details included.</p>'
         : '<p>This listing is not currently accepting seller inquiries.</p>') +
-      '</section></main></body></html>',
+      '</section></main><script src="/aviation-exchange-activity.js?v=20261023-activity-log" defer></script></body></html>',
     {
       headers: {
         'Content-Type': 'text/html;charset=UTF-8',
@@ -531,7 +539,7 @@ const worker = {
   async fetch(request, env) {
     // Mail tickets/codes are available only through private service-binding RPC.
     if (
-      /^\/(?:api\/aircraft-sale\/)?_mail(?:\/|$)/.test(
+      /^\/(?:api\/aircraft-sale\/)?_(?:mail|activity)(?:\/|$)/.test(
         new URL(request.url).pathname,
       ) ||
       /^\/(?:api\/aircraft-sale\/)?_identity-deletion-intent(?:\/|$)/.test(
@@ -566,6 +574,8 @@ export class SellerStore {
     this.env = env;
     this.queue = Promise.resolve();
     this.schemaReady = false;
+    this.activityLog = new ActivityLog(ctx.storage);
+    this.activityRates = new Map();
     // The optional constructor dependency supports isolated fixtures. Runtime
     // Durable Objects receive only ctx/env and always use the real DB reader.
     this.readBetterAuthIdentity =
@@ -580,7 +590,75 @@ export class SellerStore {
       dependencies.removeManagedIdentity || removeManagedIdentity;
   }
   fetch(req) {
-    const operation = this.queue.then(() => this.run(req));
+    const operation = this.queue.then(async () => {
+      const route = activityRoute(req),
+        started = Date.now();
+      this.activityContext = {
+        actor: activityActor(),
+        changes: [],
+        changeCount: 0,
+      };
+      const requestId = crypto.randomUUID();
+      let response, thrown;
+      try {
+        response = await this.run(req);
+      } catch (error) {
+        thrown = error;
+      }
+      if (route && !isConservationRequest(req)) {
+        let recorded = true;
+        try {
+          if (
+            this.activityContext.actor.type === 'anonymous' &&
+            req.headers.get('Cookie')
+          )
+            this.activityContext.actor = await this.browserActivityActor(req);
+          await this.activityLog.append([
+            {
+              at: started,
+              requestId,
+              source: 'server',
+              ...route,
+              method: req.method,
+              status: response?.status || 503,
+              result: activityOutcome(response?.status || 503),
+              durationMs: Date.now() - started,
+              actor: this.activityContext.actor,
+              details: {
+                changes: this.activityContext.changes,
+                changeCount: this.activityContext.changeCount,
+                changesTruncated:
+                  this.activityContext.changeCount >
+                  this.activityContext.changes.length,
+                ...(response?.headers.get('X-RWAS-Clerk-Failure-Stage')
+                  ? {
+                      authStage: response.headers.get(
+                        'X-RWAS-Clerk-Failure-Stage',
+                      ),
+                    }
+                  : {}),
+                ...(thrown ? { failure: 'service-unavailable' } : {}),
+              },
+            },
+          ]);
+        } catch {
+          recorded = false;
+        }
+        if (response) {
+          const headers = new Headers(response.headers);
+          headers.set('X-RWAS-Request-ID', requestId);
+          headers.set('X-RWAS-Activity-Recorded', recorded ? 'true' : 'false');
+          response = new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers,
+          });
+        }
+      }
+      this.activityContext = null;
+      if (thrown) throw thrown;
+      return response;
+    });
     this.queue = operation.catch(() => {});
     return operation;
   }
@@ -745,6 +823,29 @@ export class SellerStore {
           recommendation: result.recommendation,
         });
       await this.saveState(state);
+      if (accepted) {
+        try {
+          await this.activityLog.append([
+            {
+              at: Date.now(),
+              source: 'system',
+              requestId: crypto.randomUUID(),
+              actor: { type: 'system', id: 'jerry', email: '' },
+              action: 'jerry.research',
+              route: '/research',
+              resourceId: job.id,
+              result: result.aiUnavailable ? 'failure' : 'success',
+              status: null,
+              durationMs: null,
+              details: {
+                kind: job.kind,
+                recommendation: result.recommendation,
+                applied: true,
+              },
+            },
+          ]);
+        } catch {}
+      }
       await this.scheduleAuth0ReceiptExpiry(state);
     });
     this.queue = apply.catch(() => {});
@@ -929,7 +1030,52 @@ export class SellerStore {
       fail(400, 'Invalid JSON.');
     }
   }
+  activityIdentity(profile) {
+    if (this.activityContext)
+      this.activityContext.actor = activityActor(profile);
+  }
+  async browserActivityActor(req) {
+    // Account attribution is resolved on the server, never accepted from JSON.
+    if (req.headers.get('Authorization'))
+      return activityActor(await this.user(req));
+    if (!betterAuthEnabled(this.env) || !req.headers.get('Cookie'))
+      return activityActor();
+    try {
+      const raw = await this.readBetterAuthIdentity(this.env, req);
+      if (!raw) return activityActor();
+      const identity = validateBetterAuthIdentity(raw);
+      const key = await digest(identity.issuer + '|' + identity.subject);
+      const profile = this.state.profiles[this.state.identities[key]?.userId];
+      const security = this.state.identitySecurity[key];
+      if (
+        accountHeld(profile) ||
+        security?.blocked ||
+        security?.revokedProviderSessions?.[
+          await digest(identity.providerSessionId)
+        ] ||
+        identity.createdAt <=
+          Math.max(
+            security?.credentialsChangedAt || 0,
+            profile.sessionRevokedAt || 0,
+          )
+      )
+        return activityActor();
+      return activityActor(profile);
+    } catch {
+      return activityActor();
+    }
+  }
   audit(action, actor, details = {}) {
+    if (this.activityContext) {
+      if (this.state.profiles[actor])
+        this.activityIdentity(this.state.profiles[actor]);
+      this.activityContext.changeCount++;
+      if (this.activityContext.changes.length < 100)
+        this.activityContext.changes.push({
+          action,
+          ...safeAuditDetails(details),
+        });
+    }
     this.state.audit.push({ at: Date.now(), action, actor, ...details });
   }
   async user(req, recent = false) {
@@ -1088,6 +1234,7 @@ export class SellerStore {
         : profile.email?.toLowerCase() === 'admin@rwas.team'
           ? 'restricted-admin'
           : 'seller';
+    this.activityIdentity(profile);
     return {
       ...profile,
       sessionKey: key,
@@ -1148,7 +1295,9 @@ export class SellerStore {
           ? 'Administrative review is not configured.'
           : 'Administrative review required.',
       );
-    return (await result.json()).actor || 'admin';
+    const actor = (await result.json()).actor || 'admin';
+    this.activityIdentity({ id: '', email: actor });
+    return actor;
   }
   async cookieAdministrator(req) {
     if (
@@ -1189,6 +1338,7 @@ export class SellerStore {
         )
     )
       return null;
+    this.activityIdentity(profile);
     return identity.email;
   }
   async operator(req) {
@@ -1262,6 +1412,7 @@ export class SellerStore {
       identity.authenticatedAt <= Date.now() + 30000;
     if (recent && !canManage)
       fail(403, 'Sign in again before managing an account.');
+    this.activityIdentity({ id: '', email: identity.actor });
     return {
       actor: identity.actor,
       canManage,
@@ -1709,7 +1860,7 @@ export class SellerStore {
     // never an Access reviewer credential or an email-only role claim.
     if (path.startsWith('/staff/')) {
       if (
-        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply|research))?)?|administrators|removals(?:\/(?:preview|apply))?|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
+        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|activity|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply|research))?)?|administrators|removals(?:\/(?:preview|apply))?|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
           path,
         )
       )
@@ -1727,6 +1878,104 @@ export class SellerStore {
       )
         fail(403, 'Verified administrator sign-in required.');
       path = path.replace(/^\/staff\//, '/admin/');
+    }
+    if (path === '/_activity/identity' && method === 'POST') {
+      if (url.origin !== 'https://seller-service.internal')
+        fail(404, 'Not found.');
+      const body = await this.json(req);
+      if (
+        !/^\/identity\/(?:[a-z0-9-]+\/?){1,4}$/.test(body.route || '') ||
+        !Number.isInteger(body.status) ||
+        body.status < 100 ||
+        body.status > 599 ||
+        !/^[a-f0-9-]{36}$/.test(body.requestId || '')
+      )
+        fail(400, 'Invalid identity activity.');
+      const key =
+        typeof body.subject === 'string' && body.subject.length <= 128
+          ? await digest('rwas-better-auth|' + body.subject)
+          : '';
+      const profile = this.state.profiles[this.state.identities[key]?.userId];
+      await this.activityLog.append([
+        {
+          at: Date.now(),
+          source: 'server',
+          requestId: body.requestId,
+          action: 'identity ' + body.route.slice('/identity/'.length),
+          route: body.route,
+          method: ['GET', 'POST', 'DELETE'].includes(body.method)
+            ? body.method
+            : 'POST',
+          actor: profile
+            ? activityActor(profile)
+            : body.subject
+              ? activityActor({ id: body.subject })
+              : activityActor(),
+          status: body.status,
+          result: activityOutcome(body.status),
+          durationMs: Math.max(
+            0,
+            Math.min(3600000, Number(body.durationMs) || 0),
+          ),
+          details: {},
+        },
+      ]);
+      return reply({ ok: true });
+    }
+    if (path === '/activity' && method === 'POST') {
+      const site =
+        this.env.ACCOUNT_ADMIN_SITE_ORIGIN ||
+        (this.env.AUTH_REDIRECT_URI &&
+          new URL(this.env.AUTH_REDIRECT_URI).origin) ||
+        url.origin;
+      if (
+        url.origin !== site ||
+        req.headers.get('Origin') !== site ||
+        req.headers.get('Sec-Fetch-Site') === 'cross-site'
+      )
+        fail(403, 'Marketplace activity destination rejected.');
+      const rateKey = await hash(
+        req.headers.get('CF-Connecting-IP') || 'unknown',
+      );
+      const now = Date.now();
+      for (const [key, value] of this.activityRates)
+        if (value.until <= now) this.activityRates.delete(key);
+      const rate = this.activityRates.get(rateKey) || {
+        until: now + 60000,
+        count: 0,
+      };
+      if (
+        ++rate.count > 60 ||
+        (this.activityRates.size >= 5000 && !this.activityRates.has(rateKey))
+      )
+        fail(429, 'Activity rate limit.');
+      this.activityRates.set(rateKey, rate);
+      const events = browserActivity(await this.json(req));
+      const actor = await this.browserActivityActor(req);
+      await this.activityLog.append(
+        events.map(({ accountRef, ...event }) => ({
+          ...event,
+          actor:
+            accountRef === undefined ||
+            (accountRef &&
+              Object.values(this.state.identities).some(
+                (identity) =>
+                  identity.userId === actor.id &&
+                  identity.issuer === 'rwas-better-auth' &&
+                  identity.subject === accountRef,
+              ))
+              ? actor
+              : activityActor(),
+          requestId: crypto.randomUUID(),
+        })),
+      );
+      return reply({ ok: true }, 202);
+    }
+    if (path === '/admin/activity') {
+      assertAccountOrigin(req, this.env, false);
+      await this.accountAdministrator(req, false);
+      if (method !== 'GET') fail(405, 'Activity log is read-only.');
+      return reply(await this.activityLog.query(url));
     }
     if (path.startsWith('/_mail/') && method === 'POST')
       return this.mailRequest(req, path);
@@ -3198,6 +3447,7 @@ export class SellerStore {
       }
       if (accountHeld(p))
         fail(403, 'This account is unavailable. Contact RWAS.');
+      this.activityIdentity(p);
       return this.sessionReply(p);
     }
     if (path === '/browse' && method === 'GET') {

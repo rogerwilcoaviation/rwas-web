@@ -107,7 +107,11 @@ export function ListingDraftWorkflow({
   }
 
   return (
-    <section className="listing-workflow" aria-label="Guided listing draft">
+    <section
+      className="listing-workflow"
+      aria-label="Guided listing draft"
+      data-exchange-step={step}
+    >
       <p className="workflow-intro">
         One item at a time. Required questions are marked. You can save an
         incomplete private draft and skip optional specifications and

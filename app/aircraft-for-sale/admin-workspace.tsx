@@ -9,6 +9,7 @@ import SellerReview from '../seller-review/SellerReview';
 import SupportDesk from './support-desk';
 import AdministratorManagement from './administrator-management';
 import AdminListings from './admin-listings';
+import ActivityLog from './activity-log';
 type Request = (
   path: string,
   method?: string,
@@ -32,6 +33,7 @@ export default function AdminWorkspace({
         { value: 'listings', label: 'Edit and delete listings' },
         { value: 'users', label: 'User accounts' },
         { value: 'support', label: 'Customer support' },
+        { value: 'activity', label: 'Activity log' },
         ...(canManageAdministrators
           ? [{ value: 'administrators', label: 'Administrators' }]
           : []),
@@ -51,6 +53,9 @@ export default function AdminWorkspace({
       </AccountSection>
       <AccountSection value="support">
         <SupportDesk request={request} admin />
+      </AccountSection>
+      <AccountSection value="activity">
+        {section === 'activity' && <ActivityLog request={request} />}
       </AccountSection>
       {canManageAdministrators && (
         <AccountSection value="administrators">

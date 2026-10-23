@@ -128,6 +128,7 @@ jobs:
         run: |
           node tests/aircraft-sale/account-admin-browser.mjs
           node tests/aircraft-sale/review-browser.mjs
+          node tests/aircraft-sale/activity-browser.mjs
 
       - name: AXIS funnel smoke
         run: node scripts/axis-funnel-smoke.mjs

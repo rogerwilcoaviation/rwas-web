@@ -1,3 +1,4 @@
+import ActivityTracker from './activity-tracker';
 /*
  * /aircraft-for-sale — Ship 3 Tranche C
  *
@@ -108,6 +109,7 @@ export default async function AircraftForSalePage() {
 
   return (
     <BroadsheetLayout>
+      <ActivityTracker />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
