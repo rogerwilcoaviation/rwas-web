@@ -25,7 +25,7 @@ assert.ok(
 );
 assert.ok(
   read('components/shared/DeferredJerryWidget.tsx').includes(
-    '20261004-safe-markdown',
+    '20261023-saved-draft-resume',
   ),
 );
 class Node {
