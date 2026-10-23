@@ -61,4 +61,4 @@ Fourteen reviewed PNGs are under `screenshots/`: desktop and mobile captures for
 
 ## Deployment
 
-Status will be updated after the repository's existing GitHub Actions / Cloudflare Pages production workflow completes. No DNS, Cloudflare project configuration, scheduler, price, product, checkout, or discount setting was changed.
+Deployed to production from commit `8bca0fc1e54569f553c00f2d796aaea9937c6832` by GitHub Actions run [698](https://github.com/rogerwilcoaviation/rwas-web/actions/runs/39988550509). The deploy job, Cloudflare Pages production publish, and read-only production smoke all completed successfully. Live verification returned HTTP 200 for English home/Papa-Alpha/contact/cart and all six translated routes; Spanish and Portuguese Papa-Alpha content was present. No DNS, Cloudflare project configuration, scheduler, price, product, checkout, or discount setting was changed.
