@@ -45,6 +45,8 @@ import {
   storeClerkOwnerFlow,
 } from './clerk-owner-reauth';
 import { createSellerRequestFacade } from './seller-request-facade';
+import { ListingDraftWorkflow } from './listing-draft-workflow';
+import { mediaLimits, validateUpload } from './listing-draft-fields';
 
 type Auth0Session = {
   purpose?: never;
@@ -236,6 +238,7 @@ export default function SellerAuthPanel() {
   const dialog = useRef<HTMLDialogElement>(null),
     submission = useRef(crypto.randomUUID());
   const currentAuth = useRef<Session | null>(null);
+  const editorGeneration = useRef(0);
   const manualListingAction = useRef<() => Promise<void>>(async () => {});
   const authGeneration = useRef(0);
   const requestFacade = useRef<ReturnType<
@@ -842,6 +845,7 @@ export default function SellerAuthPanel() {
         return;
       }
       const details = (event as CustomEvent).detail || {};
+      editorGeneration.current += 1;
       setEditing(null);
       submission.current = crypto.randomUUID();
       setForm(
@@ -870,6 +874,7 @@ export default function SellerAuthPanel() {
     };
   }, []);
   const closeSellerPanel = () => {
+    editorGeneration.current += 1;
     ownerGeneration.current += 1;
     sessionStorage.removeItem(CLERK_OWNER_FLOW_KEY);
     setOwnerProof(null);
@@ -1046,6 +1051,7 @@ export default function SellerAuthPanel() {
     });
   }
   function edit(l: Listing | null) {
+    editorGeneration.current += 1;
     setEditing(l);
     submission.current = crypto.randomUUID();
     setForm(
@@ -1085,8 +1091,18 @@ export default function SellerAuthPanel() {
   }
   manualListingAction.current = openManualListing;
   async function save() {
+    const generation = editorGeneration.current;
     const values = Object.fromEntries(
-      Object.entries(form).filter(([, v]) => editing || v.trim() !== ''),
+      Object.entries(form).filter(([name, value]) => {
+        if (['year', 'price'].includes(name) && !value.trim()) {
+          if (editing?.[name])
+            throw Error(
+              `${name === 'year' ? 'Year' : 'Asking price'} is required. Enter a value before saving this change.`,
+            );
+          return false;
+        }
+        return editing || value.trim() !== '';
+      }),
     );
     const data = await api(
       editing ? '/listings/' + editing.id : '/listings',
@@ -1094,9 +1110,11 @@ export default function SellerAuthPanel() {
       values,
       editing ? undefined : { 'Idempotency-Key': submission.current },
     );
+    if (generation !== editorGeneration.current) return data.listing as Listing;
     setEditing(data.listing);
     setMessage('Draft saved. Add media, then submit for review.');
     await load();
+    return data.listing as Listing;
   }
   async function status(l: Listing, next: string) {
     await api('/listing/' + l.id + '/status', 'POST', { status: next });
@@ -1294,19 +1312,6 @@ export default function SellerAuthPanel() {
       await openManualListing();
     }
   }
-  const row = (name: string, label: string, type = 'text') => (
-    <label key={name} className="seller-field">
-      {label}
-      <input
-        name={name}
-        type={type}
-        value={form[name] || ''}
-        onChange={(e) => setForm({ ...form, [name]: e.target.value })}
-        maxLength={300}
-        min={type === 'number' ? 1 : undefined}
-      />
-    </label>
-  );
   return (
     <>
       {clerkRouteStage && (
@@ -1718,6 +1723,7 @@ export default function SellerAuthPanel() {
                   if (savedDraft.intake) {
                     void jerry();
                   } else {
+                    editorGeneration.current += 1;
                     setEditing(null);
                     submission.current = crypto.randomUUID();
                     setForm(
@@ -1840,33 +1846,49 @@ export default function SellerAuthPanel() {
           </>
         )}
         {view === 'edit' && (
-          <>
-            <form onSubmit={onSubmit(save)}>
-              <p>
-                Save your work as a private draft. Changes to listing details or
-                media require a new review before publication.
-              </p>
-              <div className="seller-fields">
-                {inputs.map(([k, l, t]) => row(k, l, t))}
-              </div>
-              {longInputs.map(([k, l]) => (
-                <label key={k} className="seller-field">
-                  {l}
-                  <textarea
-                    rows={4}
-                    value={form[k] || ''}
-                    maxLength={10000}
-                    onChange={(e) => setForm({ ...form, [k]: e.target.value })}
-                  />
-                </label>
-              ))}
-              <button disabled={busy}>{busy ? 'Saving…' : 'Save Draft'}</button>
-            </form>
-            {editing ? (
-              <>
+          <ListingDraftWorkflow
+            key={session?.token}
+            values={form}
+            onChange={(name, value) =>
+              setForm((previous) => ({ ...previous, [name]: value }))
+            }
+            busy={busy}
+            saved={!!editing}
+            onSave={async () => {
+              let saved = false;
+              await perform(async () => {
+                await save();
+                saved = true;
+              });
+              return saved;
+            }}
+            onSubmitReview={async () => {
+              const generation = editorGeneration.current;
+              await perform(async () => {
+                const listing = await save();
+                if (generation !== editorGeneration.current) return;
+                await status(listing, 'pending');
+                if (generation === editorGeneration.current)
+                  setView('listings');
+              });
+            }}
+            mediaCounts={Object.fromEntries(
+              categories.map(([category]) => [
+                category,
+                category === 'photos'
+                  ? editing?.photos.length || 0
+                  : category === 'videos'
+                    ? editing?.videos.length || 0
+                    : editing?.logbooks[category]?.length || 0,
+              ]),
+            )}
+            renderMedia={(category) =>
+              editing && (
                 <SellerMedia
+                  key={category}
                   listing={editing}
                   session={session!}
+                  onlyCategory={category}
                   onBusy={setBusy}
                   onChange={async (stillCurrent) => {
                     if (!stillCurrent()) return;
@@ -1875,24 +1897,9 @@ export default function SellerAuthPanel() {
                     setEditing(list.find((l) => l.id === editing.id) || null);
                   }}
                 />
-                <button
-                  disabled={busy}
-                  onClick={() =>
-                    void perform(async () => {
-                      await status(editing, 'pending');
-                      setView('listings');
-                    })
-                  }
-                >
-                  Submit for Review
-                </button>
-              </>
-            ) : (
-              <p>
-                Save a draft before adding photos, video, or aircraft records.
-              </p>
-            )}
-          </>
+              )
+            }
+          />
         )}
         {view === 'account' && account && (
           <AccountWorkspace
@@ -2427,11 +2434,13 @@ export default function SellerAuthPanel() {
 function SellerMedia({
   listing,
   session,
+  onlyCategory,
   onChange,
   onBusy,
 }: {
   listing: Listing;
   session: Session;
+  onlyCategory?: string;
   onChange: (stillCurrent: () => boolean) => Promise<void>;
   onBusy: (busy: boolean) => void;
 }) {
@@ -2462,7 +2471,14 @@ function SellerMedia({
     const made: string[] = [];
     setUrls({});
     setPreviewError('');
-    const media = [...listing.photos, ...listing.videos];
+    const media =
+      onlyCategory === 'photos'
+        ? listing.photos
+        : onlyCategory === 'videos'
+          ? listing.videos
+          : onlyCategory
+            ? []
+            : [...listing.photos, ...listing.videos];
     void Promise.all(
       media.map(async (f) => {
         try {
@@ -2492,7 +2508,7 @@ function SellerMedia({
       controller.abort();
       made.forEach((url) => URL.revokeObjectURL(url));
     };
-  }, [listing, session]);
+  }, [listing, session, onlyCategory]);
   async function action(
     fn: (stillCurrent: () => boolean) => Promise<void>,
     upload = false,
@@ -2559,11 +2575,11 @@ function SellerMedia({
   }
   return (
     <section aria-label="Listing media">
-      <h3>Photos, video and records</h3>
+      {!onlyCategory && <h3>Photos, video and records</h3>}
       <p>
         Photos, video and aircraft records remain private to your account and
-        the RWAS review team during this intake launch. Accepted: JPG, PNG, GIF,
-        WebP; MP4/WebM; PDF. Up to 50 MB per file.
+        the RWAS review team during this intake launch. Attachments are
+        optional.
       </p>
       {error && <p role="alert">{error}</p>}
       {previewError && <p role="alert">{previewError}</p>}
@@ -2573,171 +2589,233 @@ function SellerMedia({
           Refresh saved media
         </button>
       )}
-      {categories.map(([category, label]) => {
-        const files =
-          category === 'photos'
-            ? listing.photos
-            : category === 'videos'
-              ? listing.videos
-              : listing.logbooks[category] || [];
-        return (
-          <fieldset
-            key={category}
-            style={{ padding: 16, margin: '16px 0', border: '1px solid #aaa' }}
-          >
-            <legend>
-              {label} ({files.length})
-            </legend>
-            <label>
-              Add {label.toLowerCase()}
-              <input
-                type="file"
-                multiple
-                disabled={busy || needsUploadRefresh}
-                accept={
-                  category === 'photos'
-                    ? 'image/jpeg,image/png,image/gif,image/webp'
-                    : category === 'videos'
-                      ? 'video/mp4,video/webm'
-                      : 'application/pdf'
-                }
-                onChange={(e) => {
-                  const selected = Array.from(e.target.files || []);
-                  e.target.value = '';
-                  void action(async (stillCurrent) => {
-                    if (typeof globalThis.crypto?.randomUUID !== 'function')
-                      throw Error(
-                        'This browser cannot securely identify uploads. Use a current browser to add files.',
-                      );
-                    // One identity per selected file, fixed before any request.
-                    // A later intentional selection creates new identities.
-                    const uploads = selected.map((file) => ({
-                      file,
-                      operationId:
-                        'rwas-upload-v1.' +
-                        Date.now() +
-                        '.' +
-                        crypto.randomUUID(),
-                    }));
-                    for (const { file: f, operationId } of uploads) {
-                      if (!stillCurrent()) return;
-                      if (f.size > 50 * 1024 * 1024)
-                        throw Error('50 MB per file limit.');
-                      setMessage('Uploading ' + f.name + '…');
-                      const headers = await sellerSessionHeaders(session);
-                      if (!stillCurrent()) return;
-                      const r = await fetch(
-                        SELLER_API +
-                          '/upload?listingId=' +
-                          listing.id +
-                          '&category=' +
-                          category +
-                          '&filename=' +
-                          encodeURIComponent(f.name),
-                        {
-                          method: 'POST',
-                          credentials: 'same-origin',
-                          headers: {
-                            ...headers,
-                            'Idempotency-Key': operationId,
-                          },
-                          body: f,
-                        },
-                      );
-                      const d = await r.json();
-                      if (!stillCurrent()) return;
-                      if (!r.ok) throw Error(d.error);
+      {categories
+        .filter(([category]) => !onlyCategory || onlyCategory === category)
+        .map(([category, label]) => {
+          const files =
+            category === 'photos'
+              ? listing.photos
+              : category === 'videos'
+                ? listing.videos
+                : listing.logbooks[category] || [];
+          return (
+            <fieldset
+              key={category}
+              style={{
+                padding: 16,
+                margin: '16px 0',
+                border: '1px solid #aaa',
+              }}
+            >
+              <legend>
+                {label} ({files.length})
+              </legend>
+              <p>{mediaLimits(category)}</p>
+              <label>
+                Add {label.toLowerCase()}
+                <input
+                  type="file"
+                  multiple
+                  disabled={busy || needsUploadRefresh}
+                  accept={
+                    category === 'photos'
+                      ? 'image/jpeg,image/png,image/gif,image/webp'
+                      : category === 'videos'
+                        ? 'video/mp4,video/webm'
+                        : 'application/pdf'
+                  }
+                  onChange={(e) => {
+                    const selected = Array.from(e.target.files || []);
+                    e.target.value = '';
+                    if (!selected.length) return;
+                    const invalid = selected
+                      .map((file) => validateUpload(file, category))
+                      .find(Boolean);
+                    if (invalid) {
+                      setError(invalid);
+                      setMessage('');
+                      return;
                     }
-                    setMessage(
-                      'Upload complete. Submit the updated draft for review.',
-                    );
-                  }, true);
-                }}
-              />
-            </label>
-            {files.map((f, i) => (
-              <div key={f.key} style={{ marginTop: 12 }}>
-                {category === 'photos' && urls[f.key] && (
-                  <img
-                    src={urls[f.key]}
-                    alt={f.name}
-                    style={{ maxWidth: '100%', maxHeight: 200 }}
-                  />
-                )}
-                {category === 'videos' && urls[f.key] && (
-                  <video
-                    src={urls[f.key]}
-                    controls
-                    preload="metadata"
-                    aria-label={f.name}
-                    style={{ maxWidth: '100%' }}
-                  />
-                )}
-                <p>{f.name}</p>
-                {!['photos', 'videos'].includes(category) && (
-                  <button
-                    disabled={busy}
-                    onClick={() =>
-                      void action(async () => {
+                    void action(async (stillCurrent) => {
+                      if (typeof globalThis.crypto?.randomUUID !== 'function')
+                        throw Error(
+                          'This browser cannot securely identify uploads. Use a current browser to add files.',
+                        );
+                      // One identity per selected file, fixed before any request.
+                      // A later intentional selection creates new identities.
+                      const uploads = selected.map((file) => ({
+                        file,
+                        operationId:
+                          'rwas-upload-v1.' +
+                          Date.now() +
+                          '.' +
+                          crypto.randomUUID(),
+                      }));
+                      for (const { file: f, operationId } of uploads) {
+                        if (!stillCurrent()) return;
+                        setMessage('Uploading ' + f.name + '…');
+                        const headers = await sellerSessionHeaders(session);
+                        if (!stillCurrent()) return;
                         const r = await fetch(
-                          SELLER_API + '/files/' + encodeURIComponent(f.key),
+                          SELLER_API +
+                            '/upload?listingId=' +
+                            listing.id +
+                            '&category=' +
+                            category +
+                            '&filename=' +
+                            encodeURIComponent(f.name),
                           {
+                            method: 'POST',
                             credentials: 'same-origin',
-                            headers: await sellerSessionHeaders(session),
+                            headers: {
+                              ...headers,
+                              'Idempotency-Key': operationId,
+                            },
+                            body: f,
                           },
                         );
-                        if (!r.ok)
-                          throw Error('Could not download this record.');
-                        const url = URL.createObjectURL(await r.blob()),
-                          a = document.createElement('a');
-                        a.href = url;
-                        a.download = f.name;
-                        a.click();
-                        setTimeout(() => URL.revokeObjectURL(url), 1000);
-                      })
-                    }
-                  >
-                    Download
-                  </button>
-                )}
-                {category === 'photos' && i > 0 && (
+                        const d = await r.json();
+                        if (!stillCurrent()) return;
+                        if (!r.ok) throw Error(d.error);
+                      }
+                      setMessage(
+                        'Upload complete. Submit the updated draft for review.',
+                      );
+                    }, true);
+                  }}
+                />
+              </label>
+              {files.map((f, i) => (
+                <div key={f.key} style={{ marginTop: 12 }}>
+                  {category === 'photos' && urls[f.key] && (
+                    <img
+                      src={urls[f.key]}
+                      alt={f.name}
+                      style={{ maxWidth: '100%', maxHeight: 200 }}
+                    />
+                  )}
+                  {category === 'videos' && urls[f.key] && (
+                    <video
+                      src={urls[f.key]}
+                      controls
+                      preload="metadata"
+                      aria-label={f.name}
+                      style={{ maxWidth: '100%' }}
+                    />
+                  )}
+                  <p>{f.name}</p>
+                  {!['photos', 'videos'].includes(category) && (
+                    <button
+                      disabled={busy}
+                      onClick={() =>
+                        void action(async () => {
+                          const r = await fetch(
+                            SELLER_API + '/files/' + encodeURIComponent(f.key),
+                            {
+                              credentials: 'same-origin',
+                              headers: await sellerSessionHeaders(session),
+                            },
+                          );
+                          if (!r.ok)
+                            throw Error('Could not download this record.');
+                          const url = URL.createObjectURL(await r.blob()),
+                            a = document.createElement('a');
+                          a.href = url;
+                          a.download = f.name;
+                          a.click();
+                          setTimeout(() => URL.revokeObjectURL(url), 1000);
+                        })
+                      }
+                    >
+                      Download
+                    </button>
+                  )}
+                  {category === 'photos' && i > 0 && (
+                    <button
+                      disabled={busy}
+                      onClick={() =>
+                        void action(async () => {
+                          const order = files.map((x) => x.key);
+                          [order[i - 1], order[i]] = [order[i], order[i - 1]];
+                          await request(
+                            '/listings/' + listing.id + '/photos/order',
+                            'PUT',
+                            { order },
+                          );
+                        })
+                      }
+                    >
+                      Move Earlier
+                    </button>
+                  )}
                   <button
                     disabled={busy}
-                    onClick={() =>
-                      void action(async () => {
-                        const order = files.map((x) => x.key);
-                        [order[i - 1], order[i]] = [order[i], order[i - 1]];
-                        await request(
-                          '/listings/' + listing.id + '/photos/order',
-                          'PUT',
-                          { order },
-                        );
-                      })
-                    }
-                  >
-                    Move Earlier
-                  </button>
-                )}
-                <button
-                  disabled={busy}
-                  onClick={() => {
-                    if (window.confirm('Delete ' + f.name + '?'))
-                      void action(async () => {
-                        await request('/delete-file', 'POST', {
-                          listingId: listing.id,
-                          category,
-                          fileKey: f.key,
+                    onClick={() => {
+                      if (window.confirm('Delete ' + f.name + '?'))
+                        void action(async () => {
+                          await request('/delete-file', 'POST', {
+                            listingId: listing.id,
+                            category,
+                            fileKey: f.key,
+                          });
                         });
-                      });
-                  }}
-                >
-                  Delete {f.name}
-                </button>
-              </div>
-            ))}
-          </fieldset>
-        );
-      })}
+                    }}
+                  >
+                    Delete {f.name}
+                  </button>
+                </div>
+              ))}
+            </fieldset>
+          );
+        })}
+      <style jsx>{`
+        section {
+          min-width: 0;
+        }
+        fieldset {
+          min-width: 0;
+          max-width: 100%;
+          box-sizing: border-box;
+        }
+        label {
+          display: block;
+        }
+        p {
+          overflow-wrap: anywhere;
+          line-height: 1.6;
+        }
+        input[type='file'] {
+          display: block;
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
+          font:
+            14px Arial,
+            sans-serif;
+        }
+        input::file-selector-button,
+        button {
+          min-height: 44px;
+          padding: 10px 12px;
+          border: 1px solid #555;
+          border-radius: 4px;
+          background: #fff;
+          color: #222;
+          font:
+            14px Arial,
+            sans-serif;
+          cursor: pointer;
+        }
+        input::file-selector-button {
+          margin-right: 8px;
+        }
+        button {
+          margin: 4px;
+        }
+        button:disabled {
+          opacity: 0.55;
+        }
+      `}</style>
     </section>
   );
 }

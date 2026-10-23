@@ -1,3 +1,4 @@
+import { openWorkflowItem, showWorkflowReview } from './listing-workflow-checks.mjs';
 import { build } from 'esbuild';
 import { createServer } from 'node:http';
 import { readFile, writeFile } from 'node:fs/promises';
@@ -192,6 +193,7 @@ try {
     .getByRole('heading', { name: 'Listing Draft', exact: true })
     .waitFor();
   assert.equal(requests.filter((r) => r.path.endsWith('/intake')).length, 8);
+  await openWorkflowItem(page, 'Model');
   assert.equal(
     await page.getByLabel('Model', { exact: true }).inputValue(),
     'Jerry Draft',
@@ -201,9 +203,7 @@ try {
     'PASS actual widget transfers draft to panel without create/publish',
   );
   await page.getByRole('button', { name: 'Save Draft', exact: true }).click();
-  await page
-    .getByRole('heading', { name: 'Photos, video and records' })
-    .waitFor();
+  await openWorkflowItem(page, 'Photos');
   let l = Object.values(f.state().listings)[0];
   assert.equal(l.status, 'draft');
   results.push('PASS draft saved before media or review');
@@ -221,19 +221,22 @@ try {
     requests.filter((r) => r.path.includes('/photos/order')).at(-1).status,
     200,
   );
-  await inputs.nth(1).setInputFiles({
+  await openWorkflowItem(page, 'Videos');
+  await inputs.nth(0).setInputFiles({
     name: 'clip.mp4',
     mimeType: 'video/mp4',
     buffer: Buffer.from(mp4),
   });
   await page.getByText('Videos (1)', { exact: true }).waitFor();
-  await inputs.nth(2).setInputFiles({
+  await openWorkflowItem(page, 'Airframe logbooks');
+  await inputs.nth(0).setInputFiles({
     name: 'log.pdf',
     mimeType: 'application/pdf',
     buffer: Buffer.from(pdf),
   });
   await page.getByText('Airframe logbooks (1)', { exact: true }).waitFor();
   results.push('PASS photos, reorder, video and PDF authenticated association');
+  await showWorkflowReview(page);
   await page
     .getByRole('button', { name: 'Submit for Review', exact: true })
     .click();
@@ -295,7 +298,9 @@ try {
     'PASS submit/revision review, pause/resume/sold/archive/restore',
   );
   await page.getByRole('button', { name: 'Edit', exact: true }).click();
+  await openWorkflowItem(page, 'Model');
   await page.getByLabel('Model', { exact: true }).fill('Changed');
+  await openWorkflowItem(page, 'Description');
   await page.getByRole('textbox', { name: /^Description/ }).fill('');
   await page.getByRole('button', { name: 'Save Draft', exact: true }).click();
   await page

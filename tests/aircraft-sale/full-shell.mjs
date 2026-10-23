@@ -1,3 +1,4 @@
+import { openWorkflowItem, showWorkflowReview } from './listing-workflow-checks.mjs';
 import { createServer } from 'node:http';
 import { stat, readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import assert from 'node:assert/strict';
@@ -344,6 +345,7 @@ try {
     .getByRole('heading', { name: 'Listing Draft', exact: true })
     .waitFor();
   assert.equal(requests.filter((r) => r.path.endsWith('/intake')).length, 8);
+  await openWorkflowItem(page, 'Model');
   assert.equal(
     await page.getByLabel('Model', { exact: true }).inputValue(),
     'Jerry Draft',
@@ -353,9 +355,7 @@ try {
     'PASS actual widget transfers draft to panel without create/publish',
   );
   await page.getByRole('button', { name: 'Save Draft', exact: true }).click();
-  await page
-    .getByRole('heading', { name: 'Photos, video and records' })
-    .waitFor();
+  await openWorkflowItem(page, 'Photos');
   let l = Object.values(f.state().listings)[0];
   assert.equal(l.status, 'draft');
   const privateBuyer = await context.newPage();
@@ -407,7 +407,8 @@ try {
     requests.filter((r) => r.path.includes('/photos/order')).at(-1).status,
     200,
   );
-  await inputs.nth(1).setInputFiles({
+  await openWorkflowItem(page, 'Videos');
+  await inputs.nth(0).setInputFiles({
     name: 'clip.mp4',
     mimeType: 'video/mp4',
     buffer: Buffer.from(mp4),
@@ -438,13 +439,15 @@ try {
   results.push(
     'PASS real uploaded H.264 video decodes metadata, seeks and plays in the seller preview',
   );
-  await inputs.nth(2).setInputFiles({
+  await openWorkflowItem(page, 'Airframe logbooks');
+  await inputs.nth(0).setInputFiles({
     name: 'log.pdf',
     mimeType: 'application/pdf',
     buffer: Buffer.from(pdf),
   });
   await page.getByText('Airframe logbooks (1)', { exact: true }).waitFor();
   results.push('PASS photos, reorder, video and PDF authenticated association');
+  await showWorkflowReview(page);
   await page
     .getByRole('button', { name: 'Submit for Review', exact: true })
     .click();
@@ -630,7 +633,9 @@ try {
     'PASS submit/revision review, pause/resume/sold/archive/restore',
   );
   await page.getByRole('button', { name: 'Edit', exact: true }).click();
+  await openWorkflowItem(page, 'Model');
   await page.getByLabel('Model', { exact: true }).fill('Changed');
+  await openWorkflowItem(page, 'Description');
   await page.getByRole('textbox', { name: /^Description/ }).fill('');
   await page.getByRole('button', { name: 'Save Draft', exact: true }).click();
   await page
@@ -718,12 +723,12 @@ try {
     ['Model', 'Mobile'],
     ['Year', '2000'],
     ['Asking price (USD)', '1'],
-  ])
+  ]) {
+    await openWorkflowItem(page, label);
     await page.getByLabel(label, { exact: true }).fill(value);
+  }
   await page.getByRole('button', { name: 'Save Draft', exact: true }).click();
-  await page
-    .getByRole('heading', { name: 'Photos, video and records' })
-    .waitFor();
+  await openWorkflowItem(page, 'Photos');
   const mobileFiles = page.locator('dialog input[type=file]');
   await mobileFiles.nth(0).setInputFiles({
     name: 'mobile.png',
@@ -731,7 +736,8 @@ try {
     buffer: Buffer.from(png),
   });
   await page.getByText('Photos (1)', { exact: true }).waitFor();
-  await mobileFiles.nth(2).setInputFiles({
+  await openWorkflowItem(page, 'Airframe logbooks');
+  await mobileFiles.nth(0).setInputFiles({
     name: 'invalid.pdf',
     mimeType: 'application/pdf',
     buffer: Buffer.from('not a PDF'),
@@ -740,12 +746,14 @@ try {
     .getByRole('alert')
     .filter({ hasText: 'Use a valid JPG' })
     .waitFor();
-  await mobileFiles.nth(2).setInputFiles({
+  await openWorkflowItem(page, 'Airframe logbooks');
+  await mobileFiles.nth(0).setInputFiles({
     name: 'mobile.pdf',
     mimeType: 'application/pdf',
     buffer: Buffer.from(pdf),
   });
   await page.getByText('Airframe logbooks (1)', { exact: true }).waitFor();
+  await showWorkflowReview(page);
   await page
     .getByRole('button', { name: 'Submit for Review', exact: true })
     .click();

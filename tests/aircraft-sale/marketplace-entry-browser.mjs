@@ -4,6 +4,7 @@ import { createServer } from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { extname, resolve } from 'node:path';
 import { fixture } from './fixture.mjs';
+import { checkListingWorkflow } from './listing-workflow-checks.mjs';
 
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
@@ -47,6 +48,12 @@ const server = createServer(async (request, response) => {
 await new Promise((done) => server.listen(0, '127.0.0.1', done));
 const origin =
   process.env.MARKETPLACE_ORIGIN || `http://127.0.0.1:${server.address().port}`;
+if (process.env.LIVE_PROOFREAD_SMOKE === 'true')
+  assert.equal(
+    origin,
+    'https://www.rogerwilcoaviation.com',
+    'Jerry live browser checks require the allowed public website origin.',
+  );
 const report = {
   origin,
   scope:
@@ -63,6 +70,13 @@ try {
       const token = await f.login('marketplace@example.test');
       const now = new Date().toISOString();
       let active = signedIn;
+      const proofreader = {
+        mode: 'success',
+        uploads: 0,
+        release: () => {},
+        liveSmoke:
+          process.env.LIVE_PROOFREAD_SMOKE === 'true' && width === 1440,
+      };
       if (signedIn)
         await f.call('/draft', 'PUT', { make: 'Saved manual details' }, token, {
           Origin: origin,
@@ -119,6 +133,48 @@ try {
       await context.route('**/*', async (route) => {
         const request = route.request();
         const url = new URL(request.url());
+        if (url.href === 'https://rogerwilcoaviation.com/api/chat') {
+          if (request.method() === 'OPTIONS')
+            return route.fulfill({
+              status: 204,
+              headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type, Accept',
+                'Access-Control-Allow-Methods': 'POST',
+              },
+            });
+          const payload = request.postDataJSON();
+          assert.equal(payload.listingUi, false);
+          assert.equal(payload.state, null);
+          assert.equal(request.headers().authorization, undefined);
+          assert.equal(request.headers()['x-rwas-csrf'], undefined);
+          const mode = proofreader.mode;
+          if (mode === 'live') return route.continue();
+          if (mode === 'network') return route.abort();
+          if (mode === 'slow')
+            await new Promise((done) => {
+              proofreader.release = done;
+            });
+          try {
+            return await route.fulfill({
+              status: mode === 'failure' ? 503 : 200,
+              contentType: 'application/json',
+              headers: { 'Access-Control-Allow-Origin': '*' },
+              json: {
+                ok: true,
+                reply: JSON.stringify({
+                  description:
+                    mode === 'numbers'
+                      ? 'Synthetic aircraft has 9999 hours. History is unknown.'
+                      : 'Synthetic aircraft has 1234 hours. History is unknown.',
+                }),
+              },
+            });
+          } catch (error) {
+            if (mode !== 'slow') throw error; // A changed source aborts its old request.
+            return;
+          }
+        }
         if (url.origin !== origin || request.resourceType() === 'media')
           return route.abort();
         const json = (value) =>
@@ -144,12 +200,22 @@ try {
         if (url.pathname.startsWith('/api/aircraft-sale/identity/'))
           throw Error('Unexpected identity operation: ' + url.pathname);
         if (url.pathname.startsWith('/api/aircraft-sale/')) {
+          if (url.pathname.endsWith('/upload')) proofreader.uploads++;
           const response = await f.call(
             url.pathname.replace('/api/aircraft-sale', '') + url.search,
             request.method(),
-            request.postData() ? JSON.parse(request.postData()) : undefined,
+            url.pathname.endsWith('/upload')
+              ? new Uint8Array(request.postDataBuffer())
+              : request.postData()
+                ? JSON.parse(request.postData())
+                : undefined,
             token,
-            { Origin: origin },
+            {
+              Origin: origin,
+              ...(request.headers()['idempotency-key']
+                ? { 'Idempotency-Key': request.headers()['idempotency-key'] }
+                : {}),
+            },
           );
           return route.fulfill({
             status: response.status,
@@ -239,7 +305,9 @@ try {
       if (signedIn) {
         // Wait for the deferred widget before installing the call observer.
         // Otherwise its network load can replace the observer mid-check.
-        await page.locator('.jerry-widget-panel').waitFor({ state: 'attached' });
+        await page
+          .locator('.jerry-widget-panel')
+          .waitFor({ state: 'attached' });
         await page.evaluate(() => {
           window.__jerryCalls = [];
           window.jerryChat = (message) => window.__jerryCalls.push(message);
@@ -291,6 +359,14 @@ try {
           await page.locator('.jerry-widget-panel').isVisible(),
           false,
         );
+        await checkListingWorkflow({
+          page,
+          dialog,
+          f,
+          width,
+          artifacts,
+          proofreader,
+        });
         await dialog
           .getByRole('button', { name: 'Close seller panel', exact: true })
           .click();
@@ -399,7 +475,17 @@ try {
           .getByRole('button', { name: 'Close seller panel', exact: true })
           .click();
       }
-      report.checks.push({ width, signedIn, controls: boxes.length });
+      report.checks.push({
+        width,
+        signedIn,
+        controls: boxes.length,
+        ...(signedIn
+          ? {
+              guidedWorkflow: 'passed',
+              liveProofreading: proofreader.liveResult || null,
+            }
+          : {}),
+      });
       await context.close();
     }
   }
