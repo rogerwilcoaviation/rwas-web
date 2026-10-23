@@ -170,7 +170,7 @@ export function ListingThumbnail({
     />
   ) : (
     <div className="admin-listing-thumbnail admin-listing-no-photo">
-      No photo
+      No preview
     </div>
   );
 }

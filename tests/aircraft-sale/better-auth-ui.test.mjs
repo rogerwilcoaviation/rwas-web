@@ -1694,7 +1694,7 @@ test('listing approval and management panels show readable grouped cards and pre
         sellerName: 'Synthetic Parts Seller',
         sellerLocation: 'Newnan, Georgia',
       },
-      photos: [],
+      photos: [{key:'fixture-part.webp',name:'Avionics.webp'}],
       videos: [],
       logbooks: {},
     };
@@ -1858,6 +1858,8 @@ test('listing approval and management panels show readable grouped cards and pre
         .getByRole('button', { name: 'Delete listing', exact: true })
         .click();
       await partCard.getByText('In trash', { exact: true }).waitFor();
+      assert.equal(await partCard.getByRole('img').count(),0);
+      await partCard.getByText('No preview',{exact:true}).waitFor();
       assert.equal(
         await partCard
           .getByRole('button', { name: 'Edit listing', exact: true })

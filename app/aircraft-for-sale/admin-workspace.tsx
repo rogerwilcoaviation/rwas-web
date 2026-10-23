@@ -319,7 +319,11 @@ function AdminListings({ request }: { request: Request }) {
                 aria-label={listingTitle(item.fields || item)}
               >
                 <div className="admin-listing-row">
-                  <ListingThumbnail photo={item.photos?.[0]} />
+                  <ListingThumbnail
+                    photo={
+                      item.status === 'deleted' ? undefined : item.photos?.[0]
+                    }
+                  />
                   <div>
                     <header className="admin-card-heading">
                       <div>
