@@ -199,12 +199,12 @@ async function bounded(promise) {
 try {
   browser = await chromium.launch({ headless: true });
   await run('Clerk authenticated category intake and saved draft retrieval stay private', {}, async ({ page, f, observed }) => {
-    for (const text of ['I want to create a listing', 'other', 'aviation-businesses', 'Synthetic business', 'Synthetic', 'Widget', 'skip', 'Used', 'sale', 'USD', 'amount', '1', 'Synthetic location', 'Synthetic other', 'skip'])
+    for (const text of ['I want to create a listing', 'other', 'aviation-businesses', 'Synthetic business', 'Synthetic', 'Widget', 'skip', 'Used', 'sale', 'USD', 'amount', '1', 'Synthetic location', 'Synthetic other', 'skip', 'skip'])
       await send(page, text);
     const ready = await state(page);
     assert.equal(ready.drafts.length, 1);
     assert.equal(ready.drafts[0].make, 'Synthetic');
-    assert.equal(ready.headerPaths.length, 15);
+    assert.equal(ready.headerPaths.length, 16);
     assert.equal(Object.keys(f.state().drafts).length, 1);
     assert.equal((await f.call('/browse')).status, 200);
     assert.deepEqual((await (await f.call('/browse')).json()).listings, []);
@@ -212,7 +212,7 @@ try {
     const saved = await state(page);
     assert.equal(saved.drafts.length, 2);
     assert.equal(saved.headerPaths.at(-1), '/api/aircraft-sale/draft');
-    assert.equal(observed.seller.length, 16);
+    assert.equal(observed.seller.length, 17);
     assert.equal(observed.chat, 0);
   });
   for (const [name, options, status] of [
