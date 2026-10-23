@@ -63,6 +63,10 @@ try {
       const token = await f.login('marketplace@example.test');
       const now = new Date().toISOString();
       let active = signedIn;
+      if (signedIn)
+        await f.call('/draft', 'PUT', { make: 'Saved manual details' }, token, {
+          Origin: origin,
+        });
       const identity = {
         user: {
           id: 'marketplace-user',
@@ -81,6 +85,19 @@ try {
         viewport: { width, height: 1000 },
         serviceWorkers: 'block',
       });
+      if (signedIn)
+        await context.addInitScript(() => {
+          sessionStorage.setItem(
+            'jerry-chat-history',
+            JSON.stringify([
+              { role: 'user', content: 'I want to list my aircraft for sale.' },
+              {
+                role: 'assistant',
+                content: 'Your private listing conversation.',
+              },
+            ]),
+          );
+        });
       if (signedIn)
         await context.addInitScript(
           ({ token }) => {
@@ -156,7 +173,7 @@ try {
       page.on('pageerror', (error) => report.pageErrors.push(error.message));
       await page.goto(origin + '/aircraft-for-sale');
       const list = page.getByRole('button', {
-        name: 'List Your Aircraft',
+        name: 'Create a Listing',
         exact: true,
       });
       const login = page.getByRole('button', {
@@ -220,6 +237,60 @@ try {
         ),
       });
       if (signedIn) {
+        await page.evaluate(() => {
+          window.__jerryCalls = [];
+          window.jerryChat = (message) => window.__jerryCalls.push(message);
+        });
+        await list.click();
+        const dialog = page.getByRole('dialog');
+        await dialog
+          .getByRole('button', { name: 'List manually', exact: false })
+          .waitFor();
+        assert.equal(await page.evaluate(() => window.__jerryCalls.length), 0);
+        await page.screenshot({
+          path: resolve(artifacts, 'listing-choice-' + width + '.png'),
+        });
+        await dialog
+          .getByRole('button', { name: 'List manually', exact: false })
+          .click();
+        await dialog.getByLabel('Make', { exact: true }).waitFor();
+        assert.equal(
+          await dialog.getByLabel('Make', { exact: true }).inputValue(),
+          'Saved manual details',
+        );
+        await dialog
+          .getByRole('button', { name: 'Close seller panel', exact: true })
+          .click();
+        await list.click();
+        await dialog
+          .getByRole('button', {
+            name: 'Use Jerry as a listing assistant',
+            exact: false,
+          })
+          .click();
+        assert.equal(await page.evaluate(() => window.__jerryCalls.length), 1);
+        await page
+          .getByRole('button', { name: 'Chat with Captain Jerry', exact: true })
+          .click();
+        await page
+          .getByRole('link', {
+            name: 'Prefer to fill out the form manually?',
+            exact: true,
+          })
+          .last()
+          .click();
+        await dialog.getByLabel('Make', { exact: true }).waitFor();
+        assert.equal(
+          await dialog.getByLabel('Make', { exact: true }).inputValue(),
+          'Saved manual details',
+        );
+        assert.equal(
+          await page.locator('.jerry-widget-panel').isVisible(),
+          false,
+        );
+        await dialog
+          .getByRole('button', { name: 'Close seller panel', exact: true })
+          .click();
         assert.equal(await login.count(), 0);
         assert.equal(await signup.count(), 0);
         await page

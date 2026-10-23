@@ -164,8 +164,9 @@ try {
   );
   results.push('PASS single-use fake-mail login and invalid-code UX');
   await page
-    .getByRole('button', { name: 'List Your Aircraft', exact: true })
+    .getByRole('button', { name: 'Create a Listing', exact: true })
     .click();
+  await page.getByRole('button',{name:'Use Jerry as a listing assistant',exact:true}).click();
   await page
     .getByText('What is your aircraft N-number?', { exact: false })
     .waitFor();

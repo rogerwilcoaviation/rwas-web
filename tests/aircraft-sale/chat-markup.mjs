@@ -5,37 +5,59 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const historicalRevision = 'a72e67eef602f647e3af833065a18697c29899c5';
-const historicalSha256 = '2b58df9c6660d30b9f44522576151eee5c6b7dd27e6e06bbd03b6ed6c324c6e0';
+const historicalSha256 =
+  '2b58df9c6660d30b9f44522576151eee5c6b7dd27e6e06bbd03b6ed6c324c6e0';
 const explicitBeforeSource = process.env.CHAT_MARKUP_BEFORE_SOURCE;
 if (process.env.CHAT_MARKUP_BEFORE_SOURCE_SHA256) {
-  assert.equal(process.env.CHAT_MARKUP_BEFORE_SOURCE_SHA256, historicalSha256,
-    'The before control must use the pinned historical public widget');
+  assert.equal(
+    process.env.CHAT_MARKUP_BEFORE_SOURCE_SHA256,
+    historicalSha256,
+    'The before control must use the pinned historical public widget',
+  );
 }
 let beforeBytes;
 try {
   beforeBytes = explicitBeforeSource
     ? await readFile(explicitBeforeSource)
-    : execFileSync('git', [
-        '-C', fileURLToPath(new URL('../..', import.meta.url)),
-        'show', historicalRevision + ':public/jerry-widget.js',
-      ], { maxBuffer: 256 * 1024, stdio: ['ignore', 'pipe', 'pipe'] });
+    : execFileSync(
+        'git',
+        [
+          '-C',
+          fileURLToPath(new URL('../..', import.meta.url)),
+          'show',
+          historicalRevision + ':public/jerry-widget.js',
+        ],
+        { maxBuffer: 256 * 1024, stdio: ['ignore', 'pipe', 'pipe'] },
+      );
 } catch {
   throw new Error(
     'Historical markup before control is unavailable. Supply CHAT_MARKUP_BEFORE_SOURCE ' +
-    'with the unmodified public/jerry-widget.js from ' + historicalRevision +
-    ' (SHA256 ' + historicalSha256 + '). The raw <em> regression control cannot be skipped.',
+      'with the unmodified public/jerry-widget.js from ' +
+      historicalRevision +
+      ' (SHA256 ' +
+      historicalSha256 +
+      '). The raw <em> regression control cannot be skipped.',
   );
 }
-assert.ok(beforeBytes.byteLength <= 256 * 1024, 'Historical public widget exceeds its source bound');
-assert.equal(createHash('sha256').update(beforeBytes).digest('hex'), historicalSha256,
-  'Historical markup before-source SHA256 mismatch');
+assert.ok(
+  beforeBytes.byteLength <= 256 * 1024,
+  'Historical public widget exceeds its source bound',
+);
+assert.equal(
+  createHash('sha256').update(beforeBytes).digest('hex'),
+  historicalSha256,
+  'Historical markup before-source SHA256 mismatch',
+);
 const before = beforeBytes.toString('utf8');
 
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
     '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs'
 );
-const widget = await readFile(new URL('../../public/jerry-widget.js', import.meta.url), 'utf8');
+const widget = await readFile(
+  new URL('../../public/jerry-widget.js', import.meta.url),
+  'utf8',
+);
 const origin = 'http://localhost';
 const note =
   'If you would like to list before the end of the intake, simply say "list it" at any time.';
@@ -170,13 +192,26 @@ try {
             0,
           );
           // The widget adds one trusted manual-form link after the response text.
-          const handlers = latest.locator('[onclick]');
+          assert.equal(await latest.locator('[onclick]').count(), 0);
+          const handlers = latest.getByRole('link', {
+            name: 'Prefer to fill out the form manually?',
+            exact: true,
+          });
           assert.equal(await handlers.count(), 1);
           assert.equal(
             await handlers.textContent(),
             'Prefer to fill out the form manually?',
           );
-          assert.equal(await handlers.getAttribute('href'), '#sell');
+          assert.equal(await handlers.getAttribute('href'), '#create-listing');
+          await page.evaluate(() => {
+            globalThis.__manualOpened = 0;
+            document.addEventListener(
+              'rwas:open-manual-form',
+              () => globalThis.__manualOpened++,
+            );
+          });
+          await handlers.click();
+          assert.equal(await page.evaluate(() => globalThis.__manualOpened), 1);
           assert.equal(await page.evaluate(() => globalThis.pwned), undefined);
         } else {
           assert.equal(await latest.locator('em').first().textContent(), note);
@@ -204,13 +239,17 @@ try {
         mode,
         result: 'PASS',
         scope: 'intercepted mobile browser; no live chat or account requests',
-        ...(mode === 'before' ? {
-          beforeControl: {
-            kind: explicitBeforeSource ? 'explicit-public-source' : 'local-git-object',
-            revision: historicalRevision,
-            sha256: historicalSha256,
-          },
-        } : {}),
+        ...(mode === 'before'
+          ? {
+              beforeControl: {
+                kind: explicitBeforeSource
+                  ? 'explicit-public-source'
+                  : 'local-git-object',
+                revision: historicalRevision,
+                sha256: historicalSha256,
+              },
+            }
+          : {}),
       });
       console.log('PASS ' + mode);
     } finally {

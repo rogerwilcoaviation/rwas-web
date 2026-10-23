@@ -344,8 +344,17 @@
           var esc = document.createElement('div');
           esc.style.cssText =
             'margin-top:6px;font-family:Arial,sans-serif;font-size:9px;';
-          esc.innerHTML =
-            '<a href="#sell" style="color:#888;text-decoration:underline;cursor:pointer" onclick="event.preventDefault();event.stopPropagation();document.dispatchEvent(new CustomEvent(&quot;rwas:open-manual-form&quot;));">Prefer to fill out the form manually?</a>';
+          var manualLink = document.createElement('a');
+          manualLink.href = '#create-listing';
+          manualLink.textContent = 'Prefer to fill out the form manually?';
+          manualLink.style.cssText = 'color:inherit;text-decoration:underline;cursor:pointer;font-size:14px;display:inline-block;padding:8px 0;';
+          manualLink.addEventListener('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            setOpen(false);
+            openManualFormModal();
+          });
+          esc.appendChild(manualLink);
           msg.appendChild(esc);
         }
       }

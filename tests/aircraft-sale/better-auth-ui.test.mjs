@@ -338,7 +338,7 @@ async function credentials(page) {
 test('marketplace entry offers signup and login, with listing actions only after sign-in', async () => {
   const f = await fixture({ parent: true });
   try {
-    const listingAction = f.page.getByRole('button', { name: 'List Your Aircraft', exact: true });
+    const listingAction = f.page.getByRole('button', { name: 'Create a Listing', exact: true });
     assert.equal(await listingAction.count(), 0);
     await f.page.getByRole('button', { name: 'Create Account', exact: true }).click();
     const dialog = f.page.getByRole('dialog');

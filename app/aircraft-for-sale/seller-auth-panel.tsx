@@ -211,6 +211,7 @@ export default function SellerAuthPanel() {
     | 'clerk'
     | 'clerk-owner'
     | 'listings'
+    | 'create'
     | 'edit'
     | 'account'
     | null
@@ -235,6 +236,7 @@ export default function SellerAuthPanel() {
   const dialog = useRef<HTMLDialogElement>(null),
     submission = useRef(crypto.randomUUID());
   const currentAuth = useRef<Session | null>(null);
+  const manualListingAction = useRef<() => Promise<void>>(async () => {});
   const authGeneration = useRef(0);
   const requestFacade = useRef<ReturnType<
     typeof createSellerRequestFacade
@@ -856,12 +858,15 @@ export default function SellerAuthPanel() {
       );
     };
     document.addEventListener('rwas:seller-draft', draft);
+    const manual = () => void manualListingAction.current();
+    document.addEventListener('rwas:open-manual-form', manual);
     document.addEventListener('rwas:open-seller-login', login);
     return () => {
       active = false;
       ownerGeneration.current += 1;
       document.removeEventListener('rwas:open-seller-login', login);
       document.removeEventListener('rwas:seller-draft', draft);
+      document.removeEventListener('rwas:open-manual-form', manual);
     };
   }, []);
   const closeSellerPanel = () => {
@@ -1050,6 +1055,35 @@ export default function SellerAuthPanel() {
     );
     setView('edit');
   }
+  function openCreateListing() {
+    setMessage('');
+    setError('');
+    setView(currentAuth.current ? 'create' : 'login');
+  }
+  async function openManualListing() {
+    const current = currentAuth.current;
+    if (!current) {
+      setView('login');
+      return;
+    }
+    await perform(async () => {
+      const saved = await api('/draft');
+      if (currentAuth.current !== current) return;
+      const details = saved.draft?.intake ? saved.draft.fields : saved.draft;
+      edit(null);
+      if (details)
+        setForm(
+          Object.fromEntries(
+            [...inputs, ...longInputs].map(([k]) => [
+              k,
+              String(details[k] ?? ''),
+            ]),
+          ),
+        );
+      setMessage('Enter your listing details and save a private draft.');
+    });
+  }
+  manualListingAction.current = openManualListing;
   async function save() {
     const values = Object.fromEntries(
       Object.entries(form).filter(([, v]) => editing || v.trim() !== ''),
@@ -1257,7 +1291,7 @@ export default function SellerAuthPanel() {
       w.jerryChat('I want to list my aircraft for sale.');
     } else {
       setMessage('Jerry is unavailable. You can start with the manual form.');
-      await openListings();
+      await openManualListing();
     }
   }
   const row = (name: string, label: string, type = 'text') => (
@@ -1288,8 +1322,8 @@ export default function SellerAuthPanel() {
         <div className="a4s-account-actions" aria-label="Marketplace account">
           {session ? (
             <>
-              <button className="a4s-cta-btn" onClick={() => void jerry()}>
-                List Your Aircraft
+              <button className="a4s-cta-btn" onClick={openCreateListing}>
+                Create a Listing
               </button>
               <button
                 className="a4s-cta-btn secondary"
@@ -1387,7 +1421,9 @@ export default function SellerAuthPanel() {
                       ? 'Your Account'
                       : view === 'edit'
                         ? 'Listing Draft'
-                        : 'My Listings'}
+                        : view === 'create'
+                          ? 'Create a Listing'
+                          : 'My Listings'}
           </h2>
           {session && (
             <button
@@ -1631,10 +1667,38 @@ export default function SellerAuthPanel() {
             )}
           </section>
         )}
+        {view === 'create' && (
+          <section
+            className="listing-start"
+            aria-label="Choose how to create your listing"
+          >
+            <p>How would you like to prepare your listing?</p>
+            <div className="listing-start-options">
+              <button
+                aria-label="Use Jerry as a listing assistant"
+                disabled={busy}
+                onClick={() => void jerry()}
+              >
+                <strong>Use Jerry as a listing assistant</strong>
+                <span>Answer guided questions, then review your draft.</span>
+              </button>
+              <button
+                aria-label="List manually"
+                disabled={busy}
+                onClick={() => void openManualListing()}
+              >
+                <strong>List manually</strong>
+                <span>Enter the details yourself in the listing form.</span>
+              </button>
+            </div>
+          </section>
+        )}
         {view === 'listings' && (
           <>
             <nav>
-              <button onClick={() => edit(null)}>New Manual Listing</button>
+              <button onClick={() => void openManualListing()}>
+                New Manual Listing
+              </button>
               <button onClick={() => void jerry()}>List with Jerry</button>
               <button
                 disabled={busy}
@@ -2224,6 +2288,32 @@ export default function SellerAuthPanel() {
         }
         .seller-auth-dialog {
           width: min(560px, 94vw);
+        }
+        .listing-start-options {
+          display: grid;
+          grid-template-columns: repeat(
+            auto-fit,
+            minmax(min(240px, 100%), 1fr)
+          );
+          gap: 16px;
+          margin-top: 20px;
+        }
+        .listing-start-options button {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+          margin: 0;
+          padding: 20px;
+          text-align: left;
+          min-height: 120px;
+        }
+        .listing-start-options strong {
+          font-size: 17px;
+        }
+        .listing-start-options span {
+          font-size: 14px;
+          line-height: 1.5;
         }
         .seller-auth-dialog header {
           flex-wrap: nowrap;

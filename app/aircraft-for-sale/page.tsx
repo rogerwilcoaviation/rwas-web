@@ -225,8 +225,8 @@ export default async function AircraftForSalePage() {
               <h3>1. Create your account</h3>
               <p>
                 Buying or selling? Create an account or choose User Login to get
-                started. Once signed in, sellers can choose List Your Aircraft
-                to prepare a listing.
+                started. Once signed in, sellers can choose Create a Listing to
+                prepare a listing.
               </p>
             </div>
             <div className="a4s-how-step">
