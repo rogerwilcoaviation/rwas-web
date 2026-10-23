@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
-  draftFields,
+  getDraftFields,
   mediaLimits,
-  mediaSteps,
+  getMediaSteps,
   validateDraftField,
 } from './listing-draft-fields';
 import { proofreadDescription } from './description-proofreader';
@@ -30,6 +30,8 @@ export function ListingDraftWorkflow({
   renderMedia,
   mediaCounts,
 }: Props) {
+  const draftFields = getDraftFields(values);
+  const mediaSteps = getMediaSteps(values);
   const [step, setStep] = useState(0);
   const [error, setError] = useState('');
   const heading = useRef<HTMLHeadingElement>(null);
@@ -40,6 +42,17 @@ export function ListingDraftWorkflow({
   const missing = draftFields.filter((item) =>
     validateDraftField(item, values[item.name]),
   );
+  const displayValue = (item: (typeof draftFields)[number]) => {
+    const value = values[item.name]?.trim();
+    const option = item.options?.find(
+      (option) =>
+        (typeof option === 'string' ? option : option.value) === value,
+    );
+    return (
+      (option && typeof option !== 'string' ? option.label : value) ||
+      (item.required ? 'Missing' : 'Not provided')
+    );
+  };
   useEffect(() => {
     heading.current?.focus();
   }, [step]);
@@ -84,9 +97,33 @@ export function ListingDraftWorkflow({
   return (
     <section className="listing-workflow" aria-label="Guided listing draft">
       <p className="workflow-intro">
-        One item at a time. Make, model, year and asking price are required
-        before submission. Other details and attachments are optional.
+        One item at a time. Required questions are marked. You can save an
+        incomplete private draft and skip optional specifications and
+        attachments.
       </p>
+      <label className="workflow-field">
+        Jump to an item
+        <select
+          aria-label="Listing step index"
+          disabled={busy}
+          value={Math.min(step, reviewStep)}
+          onChange={(event) => go(Number(event.target.value))}
+        >
+          {draftFields.map((item, index) => (
+            <option key={item.name} value={index}>
+              {index + 1}. {item.group ? item.group + ': ' : ''}
+              {item.label}
+              {item.required ? ' (Required)' : ''}
+            </option>
+          ))}
+          {mediaSteps.map(([, label], index) => (
+            <option key={label} value={draftFields.length + index}>
+              {label}
+            </option>
+          ))}
+          <option value={reviewStep}>Review your listing</option>
+        </select>
+      </label>
       <div className="workflow-progress" aria-label="Listing progress">
         <span>
           Step {step + 1} of {reviewStep + 1}
@@ -123,7 +160,33 @@ export function ListingDraftWorkflow({
               {field.label}{' '}
               <small>{field.required ? '(Required)' : '(Optional)'}</small>
             </span>
-            {field.multiline ? (
+            {field.options ? (
+              <select
+                key={field.name}
+                id="listing-step-input"
+                aria-label={field.label}
+                aria-describedby="listing-step-help"
+                aria-invalid={!!error}
+                required={field.required}
+                disabled={busy}
+                value={values[field.name] || ''}
+                onChange={(event) => {
+                  setError('');
+                  onChange(field.name, event.target.value);
+                }}
+              >
+                <option value="">Choose an option</option>
+                {field.options.map((option) => {
+                  const value =
+                    typeof option === 'string' ? option : option.value;
+                  return (
+                    <option key={value} value={value}>
+                      {typeof option === 'string' ? option : option.label}
+                    </option>
+                  );
+                })}
+              </select>
+            ) : field.multiline ? (
               <textarea
                 key={field.name}
                 id="listing-step-input"
@@ -170,7 +233,7 @@ export function ListingDraftWorkflow({
                   field.name === 'price'
                     ? 'any'
                     : field.type === 'number'
-                      ? 1
+                      ? 'any'
                       : undefined
                 }
                 value={values[field.name] || ''}
@@ -267,8 +330,7 @@ export function ListingDraftWorkflow({
                   {item.required ? ' · Required' : ''}
                 </dt>
                 <dd>
-                  {values[item.name]?.trim() ||
-                    (item.required ? 'Missing' : 'Not provided')}
+                  {displayValue(item)}
                   <button
                     disabled={busy}
                     onClick={() => go(index)}
@@ -391,10 +453,12 @@ export function ListingDraftWorkflow({
           font-size: 13px;
           font-weight: 400;
         }
+        select,
         input,
         textarea {
           box-sizing: border-box;
           width: 100%;
+          min-width: 0;
           min-height: 48px;
           border: 1px solid #7b7871;
           border-radius: 4px;

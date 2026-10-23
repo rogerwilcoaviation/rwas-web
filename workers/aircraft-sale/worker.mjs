@@ -73,6 +73,13 @@ import {
 } from './account-admin.mjs';
 import { hasProductSnippetEligibility } from '../../lib/product-snippet-eligibility.mjs';
 import {
+  listingTitle,
+  listingPrice,
+  categoryFields,
+  categoryFor,
+  newListingFields,
+} from '../../lib/marketplace/schema.mjs';
+import {
   ConservationCapture,
   ConservationError,
   isConservationRequest,
@@ -119,6 +126,7 @@ const empty = () => ({
   idempotency: {},
   audit: [],
   outbox: {},
+  supportTickets: {},
 });
 const clerkFailureStages = new Set([
   'runtime-config',
@@ -235,8 +243,25 @@ function publicListing(l) {
     reviewNote,
     ...p
   } = l;
+  const specs = { ...p.specifications };
+  if (specs['general-display-registration-with-this-listing'] === 'No')
+    delete p.nNumber;
+  if (specs['general-display-serial-number-with-this-listing'] === 'No') {
+    delete p.serialNumber;
+    for (const key of Object.keys(specs))
+      if (key.includes('serial-number') && !key.includes('display-'))
+        delete specs[key];
+  }
+  if (
+    specs['engine-program-display-engine-maint-program-hourly-rates'] === 'No'
+  )
+    for (const key of Object.keys(specs))
+      if (key.includes('hourly-rate')) delete specs[key];
+  if (specs['hangars-show-address'] !== 'Yes')
+    delete specs['hangars-street-address'];
   return {
     ...p,
+    ...(p.specifications ? { specifications: specs } : {}),
     logbooks: Object.fromEntries(
       Object.entries(p.logbooks || {}).map(([k, v]) => [
         k,
@@ -315,13 +340,18 @@ const escape = (s) =>
   );
 export function aircraftProductSchema(listing) {
   if (!['active', 'sold'].includes(listing.status)) return null;
+  if (
+    listing.listingType === 'hangars' ||
+    (listing.transactionType && listing.transactionType !== 'sale')
+  )
+    return null;
   const canonical =
     'https://www.rogerwilcoaviation.com/aircraft-for-sale/' +
     encodeURIComponent(listing.id);
   const product = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: [listing.year, listing.make, listing.model].filter(Boolean).join(' '),
+    name: listingTitle(listing),
     url: canonical,
   };
   if (
@@ -333,7 +363,7 @@ export function aircraftProductSchema(listing) {
       '@type': 'Offer',
       url: canonical,
       price: Number(listing.price),
-      priceCurrency: 'USD',
+      priceCurrency: listing.currency || 'USD',
       availability:
         listing.status === 'sold'
           ? 'https://schema.org/OutOfStock'
@@ -346,7 +376,7 @@ function publicPage(l) {
   const canonical =
     'https://www.rogerwilcoaviation.com/aircraft-for-sale/' +
     encodeURIComponent(l.id);
-  const title = [l.year, l.make, l.model].filter(Boolean).join(' '),
+  const title = listingTitle(l),
     media =
       l.photos
         .map(
@@ -381,15 +411,15 @@ function publicPage(l) {
           JSON.stringify(schema).replace(/</g, '\\u003c') +
           '</script>'
         : '') +
-      '<style>body{background:#f7f4ef;color:#222;max-width:1000px;margin:auto;padding:24px;font:18px Georgia,serif}h1{font-size:40px}a{color:inherit}img,video{width:100%;max-height:600px;object-fit:contain}main{display:grid;gap:20px}dl{display:grid;grid-template-columns:1fr 2fr}dd{margin:8px}dt{margin:8px}section{border-top:1px solid #aaa;padding:20px 0}</style></head><body><nav><a href="/aircraft-for-sale">← Aircraft for sale</a> · <a href="/">Roger Wilco Aviation</a></nav><main><header><p>RWAS Marketplace · ' +
+      '<style>body{background:#f7f4ef;color:#222;max-width:1000px;margin:auto;padding:24px;font:18px Arial,sans-serif}h1{font-size:40px}a{color:inherit}img,video{width:100%;max-height:600px;object-fit:contain}main{display:grid;gap:20px}dl{display:grid;grid-template-columns:1fr 2fr}dd{margin:8px}dt{margin:8px}section{border-top:1px solid #aaa;padding:20px 0}</style></head><body><nav><a href="/aircraft-for-sale">← Marketplace</a> · <a href="/">Roger Wilco Aviation</a></nav><main><header><p>RWAS Marketplace · ' +
       escape(l.status) +
       '</p><h1>' +
       escape(title) +
-      '</h1><p>Asking price: $' +
-      escape(Number(l.price).toLocaleString('en-US')) +
+      '</h1><p>' +
+      escape(listingPrice(l)) +
       '</p></header><section>' +
       media +
-      '</section><section><h2>Aircraft details</h2><dl>' +
+      '</section><section><h2>Listing details</h2><dl>' +
       [
         'nNumber',
         'serialNumber',
@@ -403,15 +433,47 @@ function publicPage(l) {
         .filter((k) => l[k])
         .map((k) => '<dt>' + escape(k) + '</dt><dd>' + escape(l[k]) + '</dd>')
         .join('') +
+      [
+        ['Category', categoryFor(l)?.label || l.category],
+        ['Condition', l.condition],
+        ['Part number', l.partNumber],
+        ['Quantity', l.quantity],
+        ['Unit of sale', l.unitOfSale],
+        ['Hangar type', l.hangarType],
+        ['Airport', l.airport],
+        ['Location', l.sellerLocation],
+        ['Transaction', l.transactionType],
+      ]
+        .filter(([, value]) => value)
+        .map(
+          ([label, value]) =>
+            '<dt>' + escape(label) + '</dt><dd>' + escape(value) + '</dd>',
+        )
+        .join('') +
+      categoryFields(l)
+        .filter((field) => l.specifications?.[field.name.slice(5)])
+        .map(
+          (field) =>
+            '<dt>' +
+            escape(field.group + ': ' + field.label) +
+            '</dt><dd>' +
+            escape(l.specifications[field.name.slice(5)]) +
+            '</dd>',
+        )
+        .join('') +
       '</dl><p>' +
       escape(l.description) +
-      '</p><h3>Avionics</h3><p>' +
-      escape(l.avionics) +
-      '</p><h3>Equipment</h3><p>' +
-      escape(l.equipmentList) +
-      '</p><h3>Damage history</h3><p>' +
-      escape(l.damageHistory || 'Ask seller') +
-      '</p></section><section><h2>Aircraft records</h2><p>' +
+      '</p>' +
+      (!l.listingType || l.listingType === 'aircraft'
+        ? '<h3>Avionics</h3><p>' +
+          escape(l.avionics) +
+          '</p><h3>Equipment</h3><p>' +
+          escape(l.equipmentList) +
+          '</p><h3>Damage history</h3><p>' +
+          escape(l.damageHistory || 'Ask seller') +
+          '</p>'
+        : '') +
+      '</section><section><h2>Documents and records</h2><p>' +
       records +
       ' private records held by the seller. Contact the seller to request records.</p></section><section><h2>Seller</h2><p>' +
       escape(l.sellerName) +
@@ -419,7 +481,7 @@ function publicPage(l) {
       escape(l.sellerLocation) +
       '</p><p>' +
       escape(l.sellerPhone) +
-      '</p><a href="/contact?topic=aircraft-sales">Contact RWAS about this aircraft</a></section></main></body></html>',
+      '</p><a href="/contact?topic=aircraft-sales">Contact RWAS about this listing</a></section></main></body></html>',
     {
       headers: {
         'Content-Type': 'text/html;charset=UTF-8',
@@ -698,7 +760,7 @@ export class SellerStore {
       );
     try {
       assertAccountOrigin(req, this.env, false);
-      const identity = await this.accountAdministrator(req, false);
+      const identity = await this.accountAdministrator(req, false, false);
       this.conservationCapture ||= new ConservationCapture({
         loadRows: () => loadConservationRows(this.ctx.storage),
         media: this.env.MEDIA,
@@ -908,9 +970,49 @@ export class SellerStore {
         401,
         'Sign in again before changing your email or deleting your account.',
       );
-    return { ...this.state.profiles[s.userId], sessionKey: key };
+    const profile = this.state.profiles[s.userId];
+    const adminIds = String(this.env.BETTER_AUTH_ADMIN_USER_IDS || '')
+      .split(',')
+      .map((id) => id.trim())
+      .filter(Boolean);
+    const accountRole =
+      s.method === 'better-auth' && adminIds.includes(s.subject)
+        ? 'admin'
+        : profile.email?.toLowerCase() === 'admin@rwas.team'
+          ? 'restricted-admin'
+          : 'seller';
+    return { ...profile, sessionKey: key, accountRole };
+  }
+  async businessAdministrator(req, recent = false) {
+    if (!this.state?.sessions) return null;
+    const raw = (req.headers.get('Authorization') || '').replace(
+      /^Bearer /,
+      '',
+    );
+    if (!raw || !this.state.sessions[await hash(raw)]) return null;
+    const user = await this.user(req, recent);
+    if (user.accountRole !== 'admin')
+      fail(403, 'Administrator access required.');
+    const session = this.state.sessions[user.sessionKey];
+    return {
+      actor: user.email,
+      scope: 'seller-accounts',
+      expiresAt: session.expiresAt,
+      authenticatedAt: session.providerSessionCreatedAt,
+      canManage: session.providerSessionCreatedAt >= Date.now() - 600000,
+      manageUntil: session.providerSessionCreatedAt + 600000,
+    };
   }
   async admin(req) {
+    const business = await this.businessAdministrator(
+      req,
+      !['GET', 'HEAD'].includes(req.method),
+    );
+    if (business) return business.actor;
+    // Media elements cannot send a bearer header. A current HttpOnly provider
+    // cookie may authorize reads only, after the same immutable-ID/MFA checks.
+    const cookieActor = await this.cookieAdministrator(req);
+    if (cookieActor) return cookieActor;
     const authorization = this.env.ADMIN_AUTH || {
       fetch: (request) => authorizeReviewer(request, this.env),
     };
@@ -931,6 +1033,46 @@ export class SellerStore {
           : 'Administrative review required.',
       );
     return (await result.json()).actor || 'admin';
+  }
+  async cookieAdministrator(req) {
+    if (
+      !['GET', 'HEAD'].includes(req.method) ||
+      !betterAuthEnabled(this.env) ||
+      !req.headers.get('Cookie')
+    )
+      return null;
+    const config = sellerAuthConfig(this.env);
+    if (
+      new URL(req.url).origin !== config.origin ||
+      req.headers.get('Sec-Fetch-Site') === 'cross-site'
+    )
+      return null;
+    const raw = await this.readBetterAuthIdentity(this.env, req);
+    if (!raw) return null;
+    const identity = validateBetterAuthIdentity(raw);
+    const ids = String(this.env.BETTER_AUTH_ADMIN_USER_IDS || '')
+      .split(',')
+      .map((id) => id.trim())
+      .filter(Boolean);
+    if (!ids.includes(identity.subject)) return null;
+    const key = await digest(identity.issuer + '|' + identity.subject),
+      link = this.state.identities[key],
+      security = this.state.identitySecurity[key];
+    const profile = link && this.state.profiles[link.userId];
+    if (
+      accountHeld(profile) ||
+      security?.blocked ||
+      security?.revokedProviderSessions?.[
+        await digest(identity.providerSessionId)
+      ] ||
+      identity.createdAt <=
+        Math.max(
+          security?.credentialsChangedAt || 0,
+          profile.sessionRevokedAt || 0,
+        )
+    )
+      return null;
+    return identity.email;
   }
   async operator(req) {
     const authorization = this.env.OPERATOR_AUTH || {
@@ -963,7 +1105,11 @@ export class SellerStore {
       fail(403, 'Recent security operator authorization required.');
     return identity.actor;
   }
-  async accountAdministrator(req, recent = false) {
+  async accountAdministrator(req, recent = false, allowBusiness = true) {
+    const business = allowBusiness
+      ? await this.businessAdministrator(req, recent)
+      : null;
+    if (business) return business;
     const authorization = this.env.ACCOUNT_ADMIN_AUTH || {
       fetch: (request) => authorizeAccountAdministrator(request, this.env),
     };
@@ -1007,6 +1153,8 @@ export class SellerStore {
     };
   }
   owned(id, u) {
+    if (u.accountRole && u.accountRole !== 'seller')
+      fail(403, 'Administrative accounts cannot use seller listing tools.');
     const l = this.state.listings[id];
     if (!l || l.ownerId !== u.id) fail(404, 'Listing not found.');
     return l;
@@ -1437,8 +1585,32 @@ export class SellerStore {
   }
   async route(req) {
     const url = new URL(req.url),
-      path = url.pathname.replace(/^\/api\/aircraft-sale/, '') || '/',
       method = req.method;
+    let path = url.pathname.replace(/^\/api\/aircraft-sale/, '') || '/';
+    // The legacy /admin paths retain their independent Access application.
+    // This namespace accepts only the current configured MFA administrator,
+    // never an Access reviewer credential or an email-only role claim.
+    if (path.startsWith('/staff/')) {
+      if (
+        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply))?)?|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
+          path,
+        )
+      )
+        fail(404, 'Staff action not found.');
+      const business = await this.businessAdministrator(
+        req,
+        !['GET', 'HEAD'].includes(method),
+      );
+      if (
+        !business &&
+        !(
+          path.startsWith('/staff/files/') &&
+          (await this.cookieAdministrator(req))
+        )
+      )
+        fail(403, 'Verified administrator sign-in required.');
+      path = path.replace(/^\/staff\//, '/admin/');
+    }
     if (path.startsWith('/_mail/') && method === 'POST')
       return this.mailRequest(req, path);
     if (method === 'OPTIONS') return new Response(null, { status: 204 }); // Same-origin service; no wildcard CORS.
@@ -2330,6 +2502,23 @@ export class SellerStore {
       if (method !== 'POST' || !action) fail(405, 'Method not allowed.');
       const body = await this.json(req),
         operation = accountOperation(body);
+      if (['delete-account', 'suspend'].includes(operation.operation)) {
+        const adminIds = String(this.env.BETTER_AUTH_ADMIN_USER_IDS || '')
+          .split(',')
+          .map((id) => id.trim());
+        if (
+          Object.values(this.state.identities).some(
+            (identity) =>
+              identity.userId === accountId &&
+              identity.issuer === 'rwas-better-auth' &&
+              adminIds.includes(identity.subject),
+          )
+        )
+          fail(
+            403,
+            'Protected administrator accounts cannot be deleted or suspended here.',
+          );
+      }
       const proposal = await accountProposal(
         this.state,
         accountId,
@@ -2720,6 +2909,90 @@ export class SellerStore {
         listing: published ? publicListing(this.hydrate(l)) : this.hydrate(l),
       });
     }
+    const adminListing = path.match(/^\/admin\/listings\/([^/]+)$/);
+    if (adminListing) {
+      const actor = await this.admin(req),
+        l = this.state.listings[adminListing[1]];
+      if (!l) fail(404, 'Listing not found.');
+      if (method === 'GET') return reply({ listing: this.hydrate(l) });
+      if (!['PUT', 'DELETE', 'POST'].includes(method))
+        fail(405, 'Method not allowed.');
+      const body = await this.json(req);
+      if (body.revision !== l.revision || l.purging)
+        fail(409, 'Listing changed. Reload before making changes.');
+      if (method === 'PUT') {
+        if (['deleted', 'archived'].includes(l.status))
+          fail(409, 'Restore the listing before editing.');
+        if (
+          body.submitForReview === true &&
+          this.media(l).some((file) => file.deleting)
+        )
+          fail(409, 'Finish pending file deletion before review.');
+        l.fields = clean(body.fields, body.submitForReview === true);
+        l.status = body.submitForReview === true ? 'pending' : 'draft';
+      } else if (method === 'DELETE') {
+        if (body.confirm !== l.id) fail(400, 'Confirm the listing ID.');
+        l.deleteFrom = l.status;
+        l.status = 'deleted';
+        l.deletedAt = Date.now();
+      } else {
+        if (body.action !== 'restore' || l.status !== 'deleted')
+          fail(409, 'This listing cannot be restored.');
+        l.status = 'draft';
+        delete l.deletedAt;
+      }
+      l.revision++;
+      l.updatedAt = Date.now();
+      l.approvedRevision = null;
+      delete l.acceptanceApprovedRevision;
+      delete l.acceptancePublicUntil;
+      for (const [key, value] of Object.entries(this.state.outbox))
+        if (value.listingId === l.id) delete this.state.outbox[key];
+      this.audit('admin-listing-' + method.toLowerCase(), actor, {
+        listingId: l.id,
+        revision: l.revision,
+        status: l.status,
+      });
+      return reply({ ok: true, listing: this.hydrate(l) });
+    }
+    if (path.startsWith('/admin/support')) {
+      const identity = await this.accountAdministrator(req, method !== 'GET');
+      assertAccountOrigin(req, this.env, method !== 'GET');
+      this.state.supportTickets ||= {};
+      if (path === '/admin/support' && method === 'GET')
+        return reply({
+          tickets: Object.values(this.state.supportTickets).sort(
+            (a, b) => b.updatedAt - a.updatedAt,
+          ),
+        });
+      const match = path.match(/^\/admin\/support\/([a-zA-Z0-9_-]+)$/);
+      if (!match || method !== 'PATCH') fail(405, 'Method not allowed.');
+      const ticket = this.state.supportTickets[match[1]],
+        body = await this.json(req);
+      if (!ticket) fail(404, 'Support request not found.');
+      if (body.revision !== ticket.revision)
+        fail(409, 'Support request changed. Reload it.');
+      if (
+        !['open', 'in-progress', 'resolved'].includes(body.status) ||
+        typeof body.reply !== 'string' ||
+        !body.reply.trim() ||
+        body.reply.length > 5000
+      )
+        fail(400, 'Enter a support reply and valid status.');
+      ticket.messages.push({
+        from: 'support',
+        text: body.reply.trim(),
+        at: Date.now(),
+      });
+      ticket.status = body.status;
+      ticket.updatedAt = Date.now();
+      ticket.revision++;
+      this.audit('support-reply', identity.actor, {
+        ticketId: ticket.id,
+        status: ticket.status,
+      });
+      return reply({ ok: true, ticket });
+    }
     if (path === '/admin/listings' && method === 'GET') {
       await this.admin(req);
       return reply({
@@ -2798,6 +3071,57 @@ export class SellerStore {
       return reply({ ok: true, listing: this.hydrate(l) });
     }
     const u = await this.user(req);
+    if (path === '/account/access' && method === 'GET')
+      return reply({ role: u.accountRole });
+    if (path === '/support') {
+      if (u.accountRole !== 'seller')
+        fail(403, 'Use the administrator support workspace.');
+      this.state.supportTickets ||= {};
+      if (method === 'GET')
+        return reply({
+          tickets: Object.values(this.state.supportTickets)
+            .filter((t) => t.ownerId === u.id)
+            .sort((a, b) => b.updatedAt - a.updatedAt),
+        });
+      if (method !== 'POST') fail(405, 'Method not allowed.');
+      const body = await this.json(req);
+      if (
+        typeof body.subject !== 'string' ||
+        !body.subject.trim() ||
+        body.subject.length > 200 ||
+        typeof body.message !== 'string' ||
+        !body.message.trim() ||
+        body.message.length > 5000
+      )
+        fail(400, 'Enter a subject and message.');
+      this.rate('support:' + u.id, 10);
+      const ticket = {
+        id: crypto.randomUUID(),
+        ownerId: u.id,
+        email: u.email,
+        subject: body.subject.trim(),
+        status: 'open',
+        revision: 1,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        messages: [
+          { from: 'customer', text: body.message.trim(), at: Date.now() },
+        ],
+      };
+      this.state.supportTickets[ticket.id] = ticket;
+      this.audit('support-created', u.id, { ticketId: ticket.id });
+      return reply({ ok: true, ticket }, 201);
+    }
+    if (
+      u.accountRole !== 'seller' &&
+      !['/logout', '/account', '/account/sessions'].includes(path)
+    )
+      fail(403, 'Administrative accounts cannot use seller tools.');
+    if (u.accountRole !== 'seller' && path === '/account' && method !== 'GET')
+      fail(
+        403,
+        'Administrative accounts are managed through the staff workspace.',
+      );
     if (path === '/intake' && method === 'POST') {
       const body = await this.json(req),
         last = body.messages?.filter((m) => m.role === 'user').at(-1);
@@ -2808,7 +3132,7 @@ export class SellerStore {
       )
         fail(400, 'A short seller message is required.');
       const text = last.content.split('\n\n[System context:')[0].trim();
-      const steps = [
+      const legacySteps = [
         ['nNumber', 'What is your aircraft N-number?'],
         ['make', 'Aircraft make?'],
         ['model', 'Aircraft model?'],
@@ -2817,6 +3141,36 @@ export class SellerStore {
         ['description', 'Describe the condition and history, or say skip.'],
         ['avionics', 'Avionics and equipment, or say skip.'],
       ];
+      const intakeFields = (fields) =>
+        newListingFields(fields, [
+          { name: 'make', label: 'Make', required: true },
+          { name: 'model', label: 'Model', required: true },
+          { name: 'year', label: 'Year', required: true, type: 'number' },
+          { name: 'sellerLocation', label: 'Location', required: true },
+          {
+            name: 'description',
+            label: 'Description',
+            required: true,
+            multiline: true,
+            maxLength: 10000,
+          },
+        ]);
+      const intakePrompt = (field) =>
+        field.label +
+        (field.required ? ' (required)' : ' (optional; say skip)') +
+        (field.options
+          ? '\n' +
+            field.options
+              .map(
+                (option, index) =>
+                  index +
+                  1 +
+                  '. ' +
+                  (typeof option === 'string' ? option : option.label),
+              )
+              .join('\n')
+          : '') +
+        (field.help ? '\n' + field.help : '');
       if (/^(cancel|stop|never mind)$/i.test(text))
         return reply({
           reply: 'Your progress is saved privately. You can continue later.',
@@ -2824,11 +3178,24 @@ export class SellerStore {
         });
       let progress = this.state.drafts[u.id];
       if (!progress?.intake) {
-        progress = { intake: true, step: 0, fields: { sellerName: u.name } };
+        progress = {
+          intake: true,
+          schemaVersion: 3,
+          step: 0,
+          fields: { sellerName: u.name, workflowVersion: '3' },
+        };
         this.state.drafts[u.id] = progress;
-        return reply({ reply: steps[0][1], state: { step: 0 } });
+        return reply({
+          reply: intakePrompt(intakeFields(progress.fields)[0]),
+          state: { step: 0 },
+        });
       }
-      if (/\b(list|sell) my|want to list/i.test(text))
+      const guidedFields =
+        progress.schemaVersion === 3 ? intakeFields(progress.fields) : null;
+      const steps = guidedFields
+        ? guidedFields.map((field) => [field.name, intakePrompt(field)])
+        : legacySteps;
+      if (/\b(list|sell) my|want to (list|create a listing)/i.test(text))
         return reply({
           reply:
             'Continuing your saved draft. ' +
@@ -2836,15 +3203,52 @@ export class SellerStore {
           state: { step: progress.step },
         });
       const [field] = steps[progress.step] || steps[0];
-      if (text.toLowerCase() === 'skip' && progress.step < 5)
+      if (
+        text.toLowerCase() === 'skip' &&
+        (guidedFields
+          ? guidedFields[progress.step]?.required
+          : progress.step < 5)
+      )
         fail(400, 'This field is required before submitting a listing.');
-      if (text.toLowerCase() !== 'skip')
-        Object.assign(progress.fields, clean({ [field]: text }));
+      if (text.toLowerCase() !== 'skip') {
+        const definition = guidedFields?.[progress.step];
+        let answer = text;
+        if (definition?.options) {
+          const choice = definition.options.find(
+            (option, index) =>
+              String(index + 1) === text ||
+              String(
+                typeof option === 'string' ? option : option.value,
+              ).toLowerCase() === text.toLowerCase() ||
+              (typeof option === 'object' &&
+                option.label.toLowerCase() === text.toLowerCase()),
+          );
+          if (!choice) fail(400, 'Choose one of the listed options.');
+          answer = typeof choice === 'string' ? choice : choice.value;
+        }
+        const update = field.startsWith('spec:')
+          ? {
+              specifications: {
+                ...progress.fields.specifications,
+                [field.slice(5)]: answer,
+              },
+            }
+          : { [field]: answer };
+        if (guidedFields)
+          progress.fields = clean({ ...progress.fields, ...update });
+        else Object.assign(progress.fields, clean(update));
+      }
       progress.step++;
       progress.updatedAt = Date.now();
-      if (progress.step < steps.length)
+      const nextSteps = guidedFields
+        ? intakeFields(progress.fields).map((field) => [
+            field.name,
+            intakePrompt(field),
+          ])
+        : steps;
+      if (progress.step < nextSteps.length)
         return reply({
-          reply: steps[progress.step][1],
+          reply: nextSteps[progress.step][1],
           state: { step: progress.step },
         });
       const draft = clean(progress.fields, true);
@@ -3102,8 +3506,8 @@ export class SellerStore {
       if (method === 'PUT') {
         if (['deleted', 'archived'].includes(l.status))
           fail(409, 'Restore the listing before editing.');
-        const b = clean(await this.json(req));
-        l.fields = { ...l.fields, ...b };
+        const b = clean({ ...l.fields, ...(await this.json(req)) });
+        l.fields = b;
         l.revision++;
         l.status = 'draft';
         l.updatedAt = Date.now();

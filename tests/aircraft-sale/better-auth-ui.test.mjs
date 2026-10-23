@@ -285,6 +285,15 @@ async function fixture(options = {}) {
             };
     } else if (path === '/redirected-methods')
       body={methods:['better-auth'],emailCode:false,betterAuth:{providers:['password'],legacyLink:false}};
+    else if (path === '/api/aircraft-sale/account/access') body={role:state.adminRole || 'seller'};
+    else if (path.startsWith('/api/aircraft-sale/staff/')) {
+      assert.equal(requestHeaders.authorization,'Bearer fixture-rwas-session');
+      assert.equal(requestHeaders['x-rwas-csrf'],'fixture-csrf');
+      if (path.endsWith('/listings')) body={listings:[]};
+      else if(path.endsWith('/support'))body={tickets:[]};
+      else if(path.endsWith('/accounts'))body={accounts:[],total:0,nextCursor:null,actor:'fixture-admin',canManage:true,expiresAt:Date.now()+86400000,manageUntil:Date.now()+600000};
+      else throw Error('Unexpected staff operation in fixture.');
+    }
     else if (path === '/api/aircraft-sale/account')
       body = {
         profile: {
@@ -1448,5 +1457,33 @@ test('legacy, unavailable, redirected and cross-origin discovery never activate 
       assert.equal(f.state.requests.some(r=>r.path.startsWith(base+'/')),false);
       assert.equal(f.state.bridge,0);
     }finally{await f.close();}
+  }
+});
+
+test('verified admin role opens a dedicated workspace with no seller actions on desktop and mobile', async () => {
+  for(const width of [1440,390]) {
+    const stored={provider:'better-auth',token:'fixture-rwas-session',csrf:'fixture-csrf',email:'admin@rwas.team',name:'Fixture Admin',identityUserId:'fixture-user',identitySessionId:'fixture-session'};
+    const f=await fixture({parent:true,active:true,stored,adminRole:'admin'});
+    try {
+      await f.page.setViewportSize({width,height:1000});
+      const dialog=f.page.getByRole('dialog');
+      await dialog.getByRole('heading',{name:'Administrator Workspace',exact:true}).waitFor();
+      const index=dialog.getByRole('tablist',{name:'Administrator index',exact:true});
+      for(const label of ['Approve listings','Edit and delete listings','User accounts','Customer support'])await index.getByRole('tab',{name:label,exact:true}).waitFor();
+      for(const label of ['Create a Listing','My Listings','Account'])assert.equal(await f.page.getByRole('button',{name:label,exact:true}).count(),0);
+      await index.getByRole('tab',{name:'Customer support',exact:true}).click();
+      await dialog.getByRole('heading',{name:'Customer support',exact:true}).waitFor();
+      await dialog.getByRole('button',{name:'Load support requests',exact:true}).click();
+      await f.page.waitForFunction(()=>true);
+      await index.getByRole('tab',{name:'Approve listings',exact:true}).click();
+      await dialog.getByRole('button',{name:'Load Review Queue',exact:true}).click();
+      await dialog.getByText('No listings are awaiting review.',{exact:true}).waitFor();
+      await index.getByRole('tab',{name:'User accounts',exact:true}).click();
+      await dialog.getByRole('button',{name:'Load accounts',exact:true}).click();
+      await dialog.getByText('Approved account administrator access is required.',{exact:true}).waitFor({state:'hidden'});
+      await f.page.evaluate(()=>document.dispatchEvent(new Event('rwas:open-manual-form')));
+      assert.equal(await dialog.getByLabel('What would you like to list?',{exact:true}).count(),0);
+      assert.equal(f.state.requests.some(r=>['/api/aircraft-sale/draft','/api/aircraft-sale/my-listings'].includes(r.path)),false);
+    } finally {await f.close();}
   }
 });

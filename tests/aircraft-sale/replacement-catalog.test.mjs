@@ -287,7 +287,7 @@ test('compiled replacement grid never paints placeholder props and shows newly a
       waitUntil: 'domcontentloaded',
     });
     await page
-      .getByText('No aircraft are listed for sale right now.', { exact: false })
+      .getByText('No listings are available right now.', { exact: false })
       .waitFor();
     assert.equal(
       await page.getByText('Old Placeholder', { exact: false }).count(),

@@ -75,7 +75,7 @@ async function setup(options = {}) {
     email: 'widget-owner@example.test', name: 'Synthetic Widget',
   };
   if (options.noCsrf) delete session.csrf;
-  const requestTokens = Array.from({ length: 12 }, jwt);
+  const requestTokens = Array.from({ length: 64 }, jwt);
   const context = await browser.newContext({ serviceWorkers: 'block' });
   const observed = { seller: [], chat: 0, deniedExternal: 0, errors: [] };
   let releaseResponse;
@@ -198,13 +198,13 @@ async function bounded(promise) {
 }
 try {
   browser = await chromium.launch({ headless: true });
-  await run('Clerk authenticated eight-step intake and saved draft retrieval stay private', {}, async ({ page, f, observed }) => {
-    for (const text of ['I want to list my aircraft', 'N123AB', 'Synthetic', 'Widget', '2000', '1', 'Synthetic aircraft only', 'Synthetic avionics'])
+  await run('Clerk authenticated category intake and saved draft retrieval stay private', {}, async ({ page, f, observed }) => {
+    for (const text of ['I want to create a listing', 'other', 'aviation-businesses', 'Synthetic business', 'Synthetic', 'Widget', 'skip', 'Used', 'sale', 'USD', 'amount', '1', 'Synthetic location', 'Synthetic other', 'skip'])
       await send(page, text);
     const ready = await state(page);
     assert.equal(ready.drafts.length, 1);
     assert.equal(ready.drafts[0].make, 'Synthetic');
-    assert.equal(ready.headerPaths.length, 8);
+    assert.equal(ready.headerPaths.length, 15);
     assert.equal(Object.keys(f.state().drafts).length, 1);
     assert.equal((await f.call('/browse')).status, 200);
     assert.deepEqual((await (await f.call('/browse')).json()).listings, []);
@@ -212,7 +212,7 @@ try {
     const saved = await state(page);
     assert.equal(saved.drafts.length, 2);
     assert.equal(saved.headerPaths.at(-1), '/api/aircraft-sale/draft');
-    assert.equal(observed.seller.length, 9);
+    assert.equal(observed.seller.length, 16);
     assert.equal(observed.chat, 0);
   });
   for (const [name, options, status] of [

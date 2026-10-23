@@ -2,6 +2,11 @@
 'use client';
 import { useState } from 'react';
 import { SELLER_API } from '@/lib/seller-api';
+import {
+  marketplaceStaffFetch,
+  marketplaceStaffMediaPath,
+} from '@/lib/marketplace-staff-fetch';
+import { listingTitle } from '@/lib/marketplace/schema.mjs';
 type Decision =
   | 'approve'
   | 'reject'
@@ -71,7 +76,7 @@ export default function SellerReview() {
       .then((d) => d?.publicListings === true)
       .catch(() => false);
     const [d, publicationAvailable] = await Promise.all([
-      fetch(SELLER_API + '/admin/listings', { cache: 'no-store' }).then(
+      marketplaceStaffFetch('/admin/listings', { cache: 'no-store' }).then(
         reviewResponse,
       ),
       availability,
@@ -150,7 +155,7 @@ export default function SellerReview() {
     setActivity('reviewing');
     setError('');
     try {
-      const r = await fetch(SELLER_API + '/admin/review', {
+      const r = await marketplaceStaffFetch('/admin/review', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -201,7 +206,7 @@ export default function SellerReview() {
         overflowWrap: 'anywhere',
       }}
     >
-      <h1>Aircraft listing review</h1>
+      <h1>Listing approvals</h1>
       <p>
         Staff access requires the approved identity service. Review details and
         media before deciding. A changed revision cannot be approved.
@@ -237,9 +242,7 @@ export default function SellerReview() {
       )}
       {items.map((l) => (
         <section key={l.id} style={{ borderTop: '1px solid', marginTop: 24 }}>
-          <h2>
-            {l.fields.year} {l.fields.make} {l.fields.model}
-          </h2>
+          <h2>{listingTitle(l.fields)}</h2>
           <p>Revision {l.revision}</p>
           <p>Status: {l.status}</p>
           {l.reviewActions?.includes('acceptance-unpublish') && (
@@ -252,7 +255,7 @@ export default function SellerReview() {
             {Object.entries(l.fields).map(([k, v]) => (
               <div key={k}>
                 <dt>{k}</dt>
-                <dd>{v}</dd>
+                <dd>{typeof v === 'object' ? JSON.stringify(v) : v}</dd>
               </div>
             ))}
           </dl>
@@ -262,7 +265,7 @@ export default function SellerReview() {
           {l.photos.map((f) => (
             <img
               key={f.key}
-              src={SELLER_API + '/admin/files/' + encodeURIComponent(f.key)}
+              src={marketplaceStaffMediaPath(f.key)}
               alt={f.name}
               style={{ maxWidth: '100%', maxHeight: 250 }}
             />
@@ -270,7 +273,7 @@ export default function SellerReview() {
           {l.videos.map((f) => (
             <video
               key={f.key}
-              src={SELLER_API + '/admin/files/' + encodeURIComponent(f.key)}
+              src={marketplaceStaffMediaPath(f.key)}
               controls
               preload="metadata"
               aria-label={f.name}
@@ -284,12 +287,7 @@ export default function SellerReview() {
               </h3>
               {files.map((f) => (
                 <p key={f.key}>
-                  <a
-                    href={
-                      SELLER_API + '/admin/files/' + encodeURIComponent(f.key)
-                    }
-                    download={f.name}
-                  >
+                  <a href={marketplaceStaffMediaPath(f.key)} download={f.name}>
                     {f.name}
                   </a>
                 </p>

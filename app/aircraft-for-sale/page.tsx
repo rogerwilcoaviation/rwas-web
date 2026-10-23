@@ -190,7 +190,7 @@ export default async function AircraftForSalePage() {
           </h1>
           <p className="bs-subhead">
             Connect with owners and buyers to buy or sell an aircraft or
-            aviation part.
+            aviation part, tool, or hangar.
           </p>
           <div className="bs-byline">
             Aircraft4Sale by Roger Wilco Aviation Services

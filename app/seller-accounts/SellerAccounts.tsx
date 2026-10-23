@@ -6,7 +6,7 @@ import {
   useState,
   type FormEvent,
 } from 'react';
-import { SELLER_API } from '@/lib/seller-api';
+import { marketplaceStaffFetch } from '@/lib/marketplace-staff-fetch';
 import {
   AccountSection,
   AccountWorkspace,
@@ -20,6 +20,7 @@ type Summary = {
   name: string;
   status: string;
   adminSuspended: boolean;
+  adminDeleted?: boolean;
   securityHeld: boolean;
   listingCount: number;
   activeSessions: number;
@@ -43,7 +44,13 @@ type Audit = {
   revokedSessions: number;
   at: number;
 };
-type Operation = 'update-profile' | 'suspend' | 'reinstate' | 'revoke-sessions';
+type Operation =
+  | 'update-profile'
+  | 'suspend'
+  | 'reinstate'
+  | 'revoke-sessions'
+  | 'delete-account'
+  | 'restore-account';
 type Input = {
   id: string;
   operation: Operation;
@@ -70,9 +77,11 @@ const labels: Record<Operation, string> = {
   suspend: 'Suspend sign-in',
   reinstate: 'Reinstate sign-in',
   'revoke-sessions': 'Revoke all sessions',
+  'delete-account': 'Delete user account',
+  'restore-account': 'Restore user account',
 };
 const reasons = {
-  'support-request': 'Seller support request',
+  'support-request': 'Customer support request',
   'contact-correction': 'Contact correction',
   'abuse-prevention': 'Abuse prevention',
   'account-recovery': 'Account recovery',
@@ -96,7 +105,7 @@ class AccountRequestError extends Error {
   }
 }
 async function request(path: string, input?: unknown) {
-  const r = await fetch(SELLER_API + '/admin/accounts' + path, {
+  const r = await marketplaceStaffFetch('/admin/accounts' + path, {
     cache: 'no-store',
     credentials: 'same-origin',
     ...(input
@@ -420,10 +429,8 @@ export default function SellerAccounts() {
     <main className="accounts-admin" id="main-content" tabIndex={-1}>
       <header>
         <p className="eyebrow">RWAS administration</p>
-        <h1>Seller accounts</h1>
-        <p>
-          Find a seller, review account activity, and manage sign-in access.
-        </p>
+        <h1>User accounts</h1>
+        <p>Find a user, review account activity, and manage sign-in access.</p>
       </header>
       {error ? <p role="alert">{error}</p> : null}
       {notice ? <p role="status">{notice}</p> : null}
@@ -449,7 +456,7 @@ export default function SellerAccounts() {
             label: 'Contact and access',
             disabled: !selected,
           },
-          { value: 'listings', label: 'Seller listings', disabled: !selected },
+          { value: 'listings', label: 'User listings', disabled: !selected },
           { value: 'sessions', label: 'Active sessions', disabled: !selected },
           {
             value: 'activity',
@@ -493,12 +500,12 @@ export default function SellerAccounts() {
           <section aria-label="Account directory">
             <h2>Account directory</h2>
             <p>{total} matching accounts</p>
-            <p>Choose View to open a seller in the account index.</p>
+            <p>Choose View to open a user in the account index.</p>
             <div className="table-scroll">
               <table>
                 <thead>
                   <tr>
-                    <th>Seller</th>
+                    <th>User</th>
                     <th>Status</th>
                     <th>Listings</th>
                     <th>Active sessions</th>
@@ -509,7 +516,7 @@ export default function SellerAccounts() {
                   {rows.map((r) => (
                     <tr key={r.id}>
                       <td>
-                        {r.name || 'Unnamed seller'}
+                        {r.name || 'Unnamed user'}
                         <br />
                         {r.email}
                       </td>
@@ -544,7 +551,7 @@ export default function SellerAccounts() {
             hidden={adminSection === 'directory' || adminSection === 'identity'}
           >
             <h2 ref={selectedHeading} tabIndex={-1}>
-              {selected.name || 'Unnamed seller'}
+              {selected.name || 'Unnamed user'}
             </h2>
             <p>{selected.email}</p>
             <p>Account ID: {selected.id}</p>
@@ -637,6 +644,25 @@ export default function SellerAccounts() {
                 >
                   Preview session revocation
                 </button>
+                <button
+                  onClick={(e) =>
+                    void preview(
+                      selected.adminDeleted
+                        ? 'restore-account'
+                        : 'delete-account',
+                      e.currentTarget,
+                    )
+                  }
+                >
+                  {selected.adminDeleted
+                    ? 'Preview account restoration'
+                    : 'Preview account deletion'}
+                </button>
+                <p>
+                  Deleting a user revokes sign-in and moves their listings to
+                  trash. Records remain recoverable; restoring the user does not
+                  republish listings.
+                </p>
               </fieldset>
               {pending ? (
                 <section
@@ -667,7 +693,13 @@ export default function SellerAccounts() {
                     {pending.preview.sessionsToRevoke} stored sessions will be
                     revoked.
                   </p>
-                  <p>Listings, media and ownership stay unchanged.</p>
+                  <p>
+                    {pending.input.operation === 'delete-account'
+                      ? 'This account will lose sign-in access and its listings will move to trash. Files are retained for recovery.'
+                      : pending.input.operation === 'restore-account'
+                        ? 'Sign-in access is restored subject to other security holds. Listings remain in trash.'
+                        : 'Listings, media and ownership stay unchanged.'}
+                  </p>
                   {pending.preview.securityHoldRemains ? (
                     <p>The separate security hold remains in effect.</p>
                   ) : null}

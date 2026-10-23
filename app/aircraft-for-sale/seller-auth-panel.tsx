@@ -46,7 +46,19 @@ import {
 } from './clerk-owner-reauth';
 import { createSellerRequestFacade } from './seller-request-facade';
 import { ListingDraftWorkflow } from './listing-draft-workflow';
-import { mediaLimits, validateUpload } from './listing-draft-fields';
+import {
+  draftFields,
+  getDraftFields,
+  mediaLimits,
+  validateUpload,
+} from './listing-draft-fields';
+import {
+  listingFormValues,
+  listingPayload,
+  listingTitle,
+} from '@/lib/marketplace/schema.mjs';
+import AdminWorkspace from './admin-workspace';
+import SupportDesk from './support-desk';
 
 type Auth0Session = {
   purpose?: never;
@@ -115,33 +127,6 @@ function clearSellerAuthRoute() {
     current.pathname + current.search + current.hash,
   );
 }
-const inputs: [string, string, string?][] = [
-  ['make', 'Make'],
-  ['model', 'Model'],
-  ['year', 'Year', 'number'],
-  ['price', 'Asking price (USD)', 'number'],
-  ['nNumber', 'N-number'],
-  ['serialNumber', 'Serial number'],
-  ['totalTime', 'Airframe total time'],
-  ['engineTime', 'Engine time'],
-  ['engineModel', 'Engine model'],
-  ['propTime', 'Propeller time'],
-  ['propModel', 'Propeller model'],
-  ['sellerName', 'Seller name'],
-  ['sellerPhone', 'Seller phone'],
-  ['sellerLocation', 'Location'],
-  ['annualDue', 'Annual due'],
-  ['usefulLoad', 'Useful load'],
-  ['fuelCapacity', 'Fuel capacity'],
-  ['cruiseSpeed', 'Cruise speed'],
-  ['range', 'Range'],
-];
-const longInputs: [string, string][] = [
-  ['description', 'Description'],
-  ['avionics', 'Avionics'],
-  ['equipmentList', 'Equipment list'],
-  ['damageHistory', 'Damage history'],
-];
 const categories: [string, string][] = [
   ['photos', 'Photos'],
   ['videos', 'Videos'],
@@ -216,6 +201,7 @@ export default function SellerAuthPanel() {
     | 'create'
     | 'edit'
     | 'account'
+    | 'admin'
     | null
   >(null);
   const [email, setEmail] = useState(''),
@@ -238,6 +224,8 @@ export default function SellerAuthPanel() {
   const dialog = useRef<HTMLDialogElement>(null),
     submission = useRef(crypto.randomUUID());
   const currentAuth = useRef<Session | null>(null);
+  const [access, setAccess] = useState('checking');
+  const accessRole = useRef('checking');
   const editorGeneration = useRef(0);
   const manualListingAction = useRef<() => Promise<void>>(async () => {});
   const authGeneration = useRef(0);
@@ -256,6 +244,8 @@ export default function SellerAuthPanel() {
       delete window.rwasSellerRequestHeaders;
       delete window.rwasSellerSessionRejected;
     }
+    accessRole.current = 'checking';
+    setAccess('checking');
     setSession(s);
     if (s) {
       setSignOutNotice('');
@@ -848,14 +838,8 @@ export default function SellerAuthPanel() {
       editorGeneration.current += 1;
       setEditing(null);
       submission.current = crypto.randomUUID();
-      setForm(
-        Object.fromEntries(
-          [...inputs, ...longInputs].map(([k]) => [
-            k,
-            String(details[k] ?? ''),
-          ]),
-        ),
-      );
+      if (accessRole.current !== 'seller') return;
+      setForm(listingFormValues(details, draftFields));
       setView('edit');
       setMessage(
         'Review these details from Jerry. Save a private draft, then submit it for review.',
@@ -905,7 +889,11 @@ export default function SellerAuthPanel() {
       throw Object.assign(Error('Your session changed. Please try again.'), {
         status: 401,
       });
-    const resp = await fetch(SELLER_API + path, {
+    const target =
+      captured?.provider === 'better-auth' && path.startsWith('/admin/')
+        ? path.replace(/^\/admin\//, '/staff/')
+        : path;
+    const resp = await fetch(SELLER_API + target, {
       method,
       signal,
       cache: 'no-store',
@@ -943,6 +931,37 @@ export default function SellerAuthPanel() {
     if (!data) throw Error('The request could not be completed.');
     return data;
   }
+  useEffect(() => {
+    if (!session) return;
+    let active = true;
+    void api('/account/access')
+      .then((data) => {
+        if (!active) return;
+        const role = ['admin', 'seller'].includes(data.role)
+          ? data.role
+          : 'restricted-admin';
+        accessRole.current = role;
+        setAccess(role);
+        if (role === 'admin') setView('admin');
+        else if (role === 'restricted-admin') {
+          setView(null);
+          setError(
+            'This reserved administrator account requires its configured staff identity and MFA.',
+          );
+        }
+      })
+      .catch(() => {
+        if (active) {
+          accessRole.current = 'unavailable';
+          setAccess('unavailable');
+        }
+      });
+    return () => {
+      active = false;
+    };
+    // api binds each request to the current authentication generation.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.token]);
   async function perform(fn: () => Promise<void>) {
     setBusy(true);
     setError('');
@@ -1041,6 +1060,10 @@ export default function SellerAuthPanel() {
     return data.listings as Listing[];
   }
   async function openListings() {
+    if (accessRole.current === 'admin') {
+      setView('admin');
+      return;
+    }
     if (!session) {
       setView('login');
       return;
@@ -1054,19 +1077,23 @@ export default function SellerAuthPanel() {
     editorGeneration.current += 1;
     setEditing(l);
     submission.current = crypto.randomUUID();
-    setForm(
-      Object.fromEntries(
-        [...inputs, ...longInputs].map(([k]) => [k, String(l?.[k] ?? '')]),
-      ),
-    );
+    setForm(listingFormValues(l, draftFields));
     setView('edit');
   }
   function openCreateListing() {
+    if (accessRole.current !== 'seller') {
+      if (accessRole.current === 'admin') setView('admin');
+      return;
+    }
     setMessage('');
     setError('');
     setView(currentAuth.current ? 'create' : 'login');
   }
   async function openManualListing() {
+    if (currentAuth.current && accessRole.current !== 'seller') {
+      if (accessRole.current === 'admin') setView('admin');
+      return;
+    }
     const current = currentAuth.current;
     if (!current) {
       setView('login');
@@ -1077,32 +1104,23 @@ export default function SellerAuthPanel() {
       if (currentAuth.current !== current) return;
       const details = saved.draft?.intake ? saved.draft.fields : saved.draft;
       edit(null);
-      if (details)
-        setForm(
-          Object.fromEntries(
-            [...inputs, ...longInputs].map(([k]) => [
-              k,
-              String(details[k] ?? ''),
-            ]),
-          ),
-        );
+      if (details) setForm(listingFormValues(details, draftFields));
       setMessage('Enter your listing details and save a private draft.');
     });
   }
   manualListingAction.current = openManualListing;
   async function save() {
     const generation = editorGeneration.current;
-    const values = Object.fromEntries(
-      Object.entries(form).filter(([name, value]) => {
-        if (['year', 'price'].includes(name) && !value.trim()) {
-          if (editing?.[name])
-            throw Error(
-              `${name === 'year' ? 'Year' : 'Asking price'} is required. Enter a value before saving this change.`,
-            );
-          return false;
-        }
-        return editing || value.trim() !== '';
-      }),
+    const visible = new Set(getDraftFields(form).map((field) => field.name));
+    const values = listingPayload(
+      Object.fromEntries(
+        Object.entries(form).filter(
+          ([name, value]) =>
+            (visible.has(name) || name === 'workflowVersion') &&
+            (value.trim() !== '' ||
+              (editing && !['year', 'price'].includes(name))),
+        ),
+      ),
     );
     const data = await api(
       editing ? '/listings/' + editing.id : '/listings',
@@ -1299,6 +1317,10 @@ export default function SellerAuthPanel() {
       window.location.assign(result.logoutUrl);
   }
   async function jerry() {
+    if (currentAuth.current && accessRole.current !== 'seller') {
+      if (accessRole.current === 'admin') setView('admin');
+      return;
+    }
     if (!session) {
       setView('login');
       return;
@@ -1306,7 +1328,7 @@ export default function SellerAuthPanel() {
     const w = window as unknown as { jerryChat?: (s: string) => void };
     if (w.jerryChat) {
       setView(null);
-      w.jerryChat('I want to list my aircraft for sale.');
+      w.jerryChat('I want to create a listing.');
     } else {
       setMessage('Jerry is unavailable. You can start with the manual form.');
       await openManualListing();
@@ -1321,27 +1343,44 @@ export default function SellerAuthPanel() {
         {!session && (
           <p>
             Buying or selling? Create an account or log in. After sign-in, you
-            can start and manage your aircraft listings.
+            can list aircraft, parts, tools and hangars.
           </p>
         )}
         <div className="a4s-account-actions" aria-label="Marketplace account">
           {session ? (
             <>
-              <button className="a4s-cta-btn" onClick={openCreateListing}>
-                Create a Listing
-              </button>
-              <button
-                className="a4s-cta-btn secondary"
-                onClick={() => void openListings()}
-              >
-                My Listings
-              </button>
-              <button
-                className="a4s-cta-btn secondary"
-                onClick={() => void openAccount()}
-              >
-                Account
-              </button>
+              {access === 'seller' ? (
+                <>
+                  <button className="a4s-cta-btn" onClick={openCreateListing}>
+                    Create a Listing
+                  </button>
+                  <button
+                    className="a4s-cta-btn secondary"
+                    onClick={() => void openListings()}
+                  >
+                    My Listings
+                  </button>
+                  <button
+                    className="a4s-cta-btn secondary"
+                    onClick={() => void openAccount()}
+                  >
+                    Account
+                  </button>
+                </>
+              ) : access === 'admin' ? (
+                <button
+                  className="a4s-cta-btn"
+                  onClick={() => setView('admin')}
+                >
+                  Administrator Workspace
+                </button>
+              ) : (
+                <p role="status">
+                  {access === 'checking'
+                    ? 'Checking account access…'
+                    : 'Staff access could not be verified. Sign out and sign in again with your approved account.'}
+                </p>
+              )}
               {!view && (
                 <button
                   className="a4s-cta-btn secondary"
@@ -1406,29 +1445,31 @@ export default function SellerAuthPanel() {
       )}
       <dialog
         ref={dialog}
-        className={`seller-dialog${view === 'account' ? ' seller-account-dialog' : view === 'login' || view === 'better-auth' ? ' seller-auth-dialog' : ''}`}
+        className={`seller-dialog${view === 'account' || view === 'admin' ? ' seller-account-dialog' : view === 'login' || view === 'better-auth' ? ' seller-auth-dialog' : ''}`}
         aria-labelledby="seller-title"
         onCancel={closeSellerPanel}
       >
         <header>
           <h2 id="seller-title">
-            {view === 'login'
-              ? authEntry === 'signup'
-                ? 'Create Your Account'
-                : 'User Login'
-              : view === 'better-auth'
-                ? 'Secure User Login'
-                : view === 'clerk'
+            {view === 'admin'
+              ? 'Administrator Workspace'
+              : view === 'login'
+                ? authEntry === 'signup'
+                  ? 'Create Your Account'
+                  : 'User Login'
+                : view === 'better-auth'
                   ? 'Secure User Login'
-                  : view === 'clerk-owner'
-                    ? 'Connect Existing Seller Account'
-                    : view === 'account'
-                      ? 'Your Account'
-                      : view === 'edit'
-                        ? 'Listing Draft'
-                        : view === 'create'
-                          ? 'Create a Listing'
-                          : 'My Listings'}
+                  : view === 'clerk'
+                    ? 'Secure User Login'
+                    : view === 'clerk-owner'
+                      ? 'Connect Existing Seller Account'
+                      : view === 'account'
+                        ? 'Your Account'
+                        : view === 'edit'
+                          ? 'Listing Draft'
+                          : view === 'create'
+                            ? 'Create a Listing'
+                            : 'My Listings'}
           </h2>
           {session && (
             <button
@@ -1672,7 +1713,7 @@ export default function SellerAuthPanel() {
             )}
           </section>
         )}
-        {view === 'create' && (
+        {view === 'create' && access === 'seller' && (
           <section
             className="listing-start"
             aria-label="Choose how to create your listing"
@@ -1698,7 +1739,7 @@ export default function SellerAuthPanel() {
             </div>
           </section>
         )}
-        {view === 'listings' && (
+        {view === 'listings' && access === 'seller' && (
           <>
             <nav>
               <button onClick={() => void openManualListing()}>
@@ -1726,14 +1767,7 @@ export default function SellerAuthPanel() {
                     editorGeneration.current += 1;
                     setEditing(null);
                     submission.current = crypto.randomUUID();
-                    setForm(
-                      Object.fromEntries(
-                        [...inputs, ...longInputs].map(([k]) => [
-                          k,
-                          String(savedDraft[k] ?? ''),
-                        ]),
-                      ),
-                    );
+                    setForm(listingFormValues(savedDraft, draftFields));
                     setView('edit');
                   }
                 }}
@@ -1746,10 +1780,7 @@ export default function SellerAuthPanel() {
             )}
             {items.map((l) => (
               <article className="seller-listing" key={l.id}>
-                <h3>
-                  {String(l.year || '')} {String(l.make || 'New')}{' '}
-                  {String(l.model || 'draft')}
-                </h3>
+                <h3>{listingTitle(l)}</h3>
                 <p>
                   Status: <strong>{l.status}</strong>
                 </p>
@@ -1845,12 +1876,23 @@ export default function SellerAuthPanel() {
             ))}
           </>
         )}
-        {view === 'edit' && (
+        {view === 'admin' && access === 'admin' && (
+          <AdminWorkspace request={api} />
+        )}
+        {view === 'edit' && access === 'seller' && (
           <ListingDraftWorkflow
             key={session?.token}
             values={form}
             onChange={(name, value) =>
-              setForm((previous) => ({ ...previous, [name]: value }))
+              setForm((previous) => {
+                const next = { ...previous, [name]: value };
+                if (['listingType', 'category'].includes(name)) {
+                  for (const key of Object.keys(next))
+                    if (key.startsWith('spec:')) delete next[key];
+                  if (name === 'listingType') next.category = '';
+                }
+                return next;
+              })
             }
             busy={busy}
             saved={!!editing}
@@ -1901,7 +1943,7 @@ export default function SellerAuthPanel() {
             }
           />
         )}
-        {view === 'account' && account && (
+        {view === 'account' && account && access === 'seller' && (
           <AccountWorkspace
             label="Account index"
             value={accountSection}
@@ -1912,9 +1954,13 @@ export default function SellerAuthPanel() {
               { value: 'email', label: 'Contact email' },
               { value: 'security', label: 'Sign-in and security' },
               { value: 'sessions', label: 'Active sessions' },
+              { value: 'support', label: 'Contact support' },
               { value: 'delete', label: 'Delete account' },
             ]}
           >
+            <AccountSection value="support">
+              <SupportDesk request={api} />
+            </AccountSection>
             <AccountSection value="profile">
               <form
                 onSubmit={onSubmit(async () => {

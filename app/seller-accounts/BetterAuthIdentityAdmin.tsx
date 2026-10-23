@@ -41,7 +41,7 @@ function failureMessage(error: unknown, mutation = false) {
   const status = (error as { status?: unknown })?.status;
   const code = (error as { code?: unknown })?.code;
   if (status === 401 || status === 403 || code === 'MFA_REQUIRED')
-    return 'Identity administration requires a separately authorized identity account and completed multi-factor verification. Sign in and verify under Seller Account, then load identity accounts again.';
+    return 'Identity administration requires a separately authorized identity account and completed multi-factor verification. Sign in and complete multi-factor verification, then load identity accounts again.';
   if (status === 429)
     return 'Too many requests. Wait before loading identity accounts again.';
   return mutation

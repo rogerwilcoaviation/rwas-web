@@ -16,6 +16,7 @@
 
 import { useEffect, useState } from 'react';
 import { ListingCard, type Listing } from './listing-card';
+import { listingTypes } from '@/lib/marketplace/schema.mjs';
 import {
   marketplaceListingKey,
   marketplaceInitialListings,
@@ -34,6 +35,7 @@ export function ListingsGrid({
     marketplaceInitialListings(initialListings),
   );
   const [refreshing, setRefreshing] = useState(false);
+  const [listingType, setListingType] = useState('all');
 
   useEffect(() => {
     let cancelled = false;
@@ -80,20 +82,54 @@ export function ListingsGrid({
   if (listings.length === 0) {
     return (
       <div className="a4s-empty">
-        No aircraft are listed for sale right now. Check back soon, or create an
-        account and log in to prepare your aircraft listing.
+        No listings are available right now. Check back soon, or create an
+        account and log in to list aircraft, parts, tools or hangars.
       </div>
     );
   }
 
   return (
-    <div
-      className="a4s-grid"
-      style={{ opacity: refreshing ? 0.88 : 1, transition: 'opacity 200ms' }}
-    >
-      {listings.map((l) => (
-        <ListingCard key={marketplaceListingKey(l)} listing={l} />
-      ))}
-    </div>
+    <>
+      <label
+        style={{
+          display: 'block',
+          marginBottom: 20,
+          fontFamily: 'Arial, sans-serif',
+        }}
+      >
+        Browse listings by type{' '}
+        <select
+          aria-label="Browse listing type"
+          value={listingType}
+          onChange={(event) => setListingType(event.target.value)}
+          style={{ padding: 10, maxWidth: '100%', font: 'inherit' }}
+        >
+          <option value="all">All listings</option>
+          {listingTypes.map(([value, label]) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </label>
+      <div
+        className="a4s-grid"
+        style={{ opacity: refreshing ? 0.88 : 1, transition: 'opacity 200ms' }}
+      >
+        {listings
+          .filter(
+            (listing) =>
+              listingType === 'all' ||
+              (listing.listingType || 'aircraft') === listingType,
+          )
+          .map((l) => (
+            <ListingCard key={marketplaceListingKey(l)} listing={l} />
+          ))}
+      </div>
+      {listingType !== 'all' &&
+        !listings.some(
+          (listing) => (listing.listingType || 'aircraft') === listingType,
+        ) && <p>No listings are available in this category.</p>}
+    </>
   );
 }

@@ -5,6 +5,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { extname, resolve } from 'node:path';
 import { fixture } from './fixture.mjs';
 import { checkListingWorkflow } from './listing-workflow-checks.mjs';
+import { checkCategoryWorkflows } from './category-workflow-checks.mjs';
 
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
@@ -367,6 +368,7 @@ try {
           artifacts,
           proofreader,
         });
+        await checkCategoryWorkflows({page,dialog,f,width,artifacts,token,origin});
         await dialog
           .getByRole('button', { name: 'Close seller panel', exact: true })
           .click();

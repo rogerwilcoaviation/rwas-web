@@ -1,0 +1,36 @@
+# Category workflows and administrative workspace
+
+The manual and Jerry listing workflows use a shared category schema in `lib/marketplace/schema.mjs` and `catalog.mjs`. It includes the 80 researched Controller leaf categories plus seven dedicated tool categories under five roots: Aircraft, Parts & Components, Tools & Ground Support, Hangars, and Other Aviation.
+
+Each question is shown individually. A step index permits returning to an item or reviewing the draft. Required/optional labels and validation are category-specific. Drafts can remain incomplete; submission and approval validate the complete schema on the service. Existing untyped aircraft drafts retain their original workflow; new drafts store `workflowVersion: 3`, including drafts saved before category selection.
+
+## Dedicated forms
+
+- Hangars: title, hangar type, airport, sale/lease and pricing, location, description, dimensions and door clearances with units, ownership/ground-lease terms, utilities, access, amenities, availability and permitted uses. Aircraft identity, engine and logbook questions are omitted. Street addresses remain private unless the seller explicitly chooses public display.
+- Parts: manufacturer, part number, condition, quantity/unit of sale, pricing, location and description; optional model/year/serial/SKU, alternate numbers, time/cycles/life, compatibility combinations, traceability/documentation, shipping, core/exchange and return terms. Compatibility permits one category/manufacturer/model combination per line; the external manufacturer/model catalogs are not imported.
+- Tools/ground support: title, condition, quantity/unit of sale, pricing, location and description; optional manufacturer/model/year/serial, part/SKU, power/fuel, ratings, hours, dimensions/weight, calibration, accessories and documentation.
+- Aircraft: retain the original aircraft identity questions and expose the applicable researched airframe, engine, propeller, rotor, avionics, equipment, interior and inspection modules. A numeric measurement requires its associated unit before submission. Unknown optional specifications can be skipped.
+
+Currency, sale/lease/fractional selection, price versus price-on-request, public listing titles, category browsing and public detail rendering support the new listing families. Fractional offerings require an ownership fraction. Rental/fractional prices and hangar property listings are excluded from ordinary product-offer structured data.
+
+Description proofreading retains the seller's original/accept/undo flow for every category. Files retain the enforced 50 MB per-file limits and format restrictions. Non-aircraft categories show photos, videos and documentation rather than aircraft logbook sections. Seller-provided information and records do not imply RWAS vetting or pre-buy inspection service.
+
+## Admin authority and separation
+
+`GET /account/access` returns the current role after the existing business-session, provider-session and CSRF checks. The configured immutable `BETTER_AUTH_ADMIN_USER_IDS` identifies administrators; the provider reader requires completed MFA for those IDs on every authorization. A matching email address alone does not grant authority. The reserved `admin@rwas.team` address is excluded from seller workflows even if its administrative identity cannot be verified.
+
+The verified admin UI provides four sections: listing approvals, listing editing/deletion, user accounts and customer support. It does not provide Create a Listing, My Listings or seller account tools. The service also denies seller listing creation, intake, drafts, ownership operations and seller-support submission for administrative sessions. The authenticated workspace uses `/staff/*` service routes gated by the verified immutable-ID/MFA business session. They do not accept a legacy Access reviewer credential as authority. Existing `/admin/*` routes retain their independent Cloudflare Access application and authorization fallback. Cookie-only access is limited to private-media reads and checks local profile holds and revocation fences. The conservation audit remains under its original separate Access audience and does not inherit the new business-session bridge.
+
+Admin writes require recent provider authentication (10 minutes), a current provider session/MFA and origin/CSRF checks. Listing writes require the current revision, clear approval, remove publication, and preserve ownership. Changes may be saved as a private draft or returned to the pending review queue. Deletion moves a listing to trash; restoration produces an unapproved draft. Private media reads can use the same verified admin provider cookie because native image/video elements cannot send a bearer header.
+
+User edits retain the existing preview/confirmation/replay protections and name/phone/location boundary. User deletion is recoverable: it marks the business account deleted, revokes sessions and pending authentication operations, removes saved drafts, and moves the user's listings to trash. Media and ownership records remain for recovery. Restoring the user does not republish or restore listings. Configured administrator identities cannot be deleted or suspended through these controls. Provider credentials and role assignments are not edited by business-account operations.
+
+## Customer support
+
+Customers can create a support request from their Account index and read replies there. The admin support workspace lists requests, records replies, and sets Open/In progress/Resolved status with revision checks. Messages remain in the authenticated account conversation; this feature does not send email or SMS. Requests are scoped to their owning account, rate-limited, and stored in the existing Durable Object's `supportTickets` bucket. No new database table or data migration is required.
+
+## Verification and release order
+
+Tests cover all 87 schemas; save/resume/submission/publication for every family; category and specification rejection; role separation; CSRF/session changes; approval invalidation and revision fences; support ownership/replies; and recoverable account deletion. Rendered checks exercise the real exported site at 1440, 390 and 320 pixels, with mocked identity APIs and the real isolated in-memory business service. These fixtures are distinct from live authentication or customer-record operations.
+
+Deploy the service before the website because the new UI requires `/account/access` and category-aware validation. Preserve settings, provider bindings, private storage and secrets. Record both prior Worker and Pages deployments; compare settings before/after. Verify the new public bundle and the already-authorized admin session without creating customer accounts, publishing QA listings, sending support replies or deleting live records. A Pages-only rollback may leave newer category records unsupported by the old editor; retain the compatible service and restore the matching interface promptly.

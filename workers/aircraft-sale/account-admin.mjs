@@ -5,7 +5,12 @@ const fail = (status, message) => {
 };
 export const accountHeld = (profile) =>
   !profile ||
-  !!(profile.disabled || profile.identityBlocked || profile.adminSuspended);
+  !!(
+    profile.disabled ||
+    profile.identityBlocked ||
+    profile.adminSuspended ||
+    profile.adminDeleted
+  );
 export const reasonCodes = [
   'support-request',
   'contact-correction',
@@ -18,6 +23,8 @@ const operations = [
   'suspend',
   'reinstate',
   'revoke-sessions',
+  'delete-account',
+  'restore-account',
 ];
 const safeId = (value) =>
   typeof value === 'string' &&
@@ -70,12 +77,15 @@ function summary(state, profile) {
     email: profile.email,
     name: profile.name || '',
     createdAt: profile.createdAt,
-    status: profile.adminSuspended
-      ? 'suspended'
-      : accountHeld(profile)
-        ? 'security-held'
-        : 'active',
+    status: profile.adminDeleted
+      ? 'deleted'
+      : profile.adminSuspended
+        ? 'suspended'
+        : accountHeld(profile)
+          ? 'security-held'
+          : 'active',
     adminSuspended: !!profile.adminSuspended,
+    adminDeleted: !!profile.adminDeleted,
     securityHeld: !!(profile.disabled || profile.identityBlocked),
     listingCount: listingRows(state, profile.id).length,
     activeSessions: sessionsFor(state, profile.id).filter(
@@ -96,7 +106,9 @@ export function accountDirectory(state, url) {
     cursor = url.searchParams.get('cursor');
   if (
     q.length > 100 ||
-    !['all', 'active', 'suspended', 'security-held'].includes(status) ||
+    !['all', 'active', 'suspended', 'security-held', 'deleted'].includes(
+      status,
+    ) ||
     !Number.isInteger(limit) ||
     limit < 1 ||
     limit > 50 ||
@@ -150,9 +162,11 @@ export function accountDetail(state, id) {
         id: l.id,
         status: l.status,
         revision: l.revision,
-        title: [l.fields.year, l.fields.make, l.fields.model]
-          .filter(Boolean)
-          .join(' '),
+        title:
+          l.fields.title ||
+          [l.fields.year, l.fields.make, l.fields.model]
+            .filter(Boolean)
+            .join(' '),
       })),
       hasSavedDraft: own(state.drafts, id),
       mediaCount: Object.values(state.files).filter((f) =>
@@ -246,8 +260,12 @@ function snapshot(state, p) {
       disabled: !!p.disabled,
       identityBlocked: !!p.identityBlocked,
       adminSuspended: !!p.adminSuspended,
+      adminDeleted: !!p.adminDeleted,
       sessionRevokedAt: p.sessionRevokedAt || 0,
     },
+    listings: listingRows(state, p.id)
+      .map((l) => ({ id: l.id, status: l.status, revision: l.revision }))
+      .sort((a, b) => a.id.localeCompare(b.id)),
     sessions: sessionsFor(state, p.id).sort(([a], [b]) => a.localeCompare(b)),
     links: Object.entries(state.identities)
       .filter(([, i]) => i.userId === p.id)
@@ -269,6 +287,11 @@ function snapshot(state, p) {
 }
 export async function accountProposal(state, accountId, operation, actor) {
   const p = profileFor(state, accountId);
+  if (
+    ['delete-account', 'suspend'].includes(operation.operation) &&
+    p.email.toLowerCase() === actor.toLowerCase()
+  )
+    fail(403, 'You cannot delete or suspend your own administrator account.');
   const inputHash = await digest(
     JSON.stringify({ accountId, operation, actor }),
   );
@@ -282,6 +305,10 @@ export async function accountProposal(state, accountId, operation, actor) {
       fail(409, 'Account operation identity changed.');
     return { previous, inputHash };
   }
+  if (operation.operation === 'delete-account' && p.adminDeleted)
+    fail(409, 'Account is already deleted.');
+  if (operation.operation === 'restore-account' && !p.adminDeleted)
+    fail(409, 'Account is not deleted.');
   if (operation.operation === 'suspend' && p.adminSuspended)
     fail(409, 'Account is already suspended.');
   if (operation.operation === 'reinstate' && !p.adminSuspended)
@@ -330,6 +357,25 @@ export function applyAccountOperation(
   else {
     if (operation.operation === 'suspend') p.adminSuspended = true;
     if (operation.operation === 'reinstate') p.adminSuspended = false;
+    if (operation.operation === 'delete-account') {
+      p.adminDeleted = true;
+      delete state.drafts[accountId];
+      for (const listing of listingRows(state, accountId)) {
+        if (listing.status !== 'deleted') {
+          listing.deleteFrom = listing.status;
+          listing.status = 'deleted';
+          listing.deletedAt = at;
+          listing.revision++;
+          listing.approvedRevision = null;
+          listing.updatedAt = at;
+        }
+        delete listing.acceptanceApprovedRevision;
+        delete listing.acceptancePublicUntil;
+        for (const [key, job] of Object.entries(state.outbox))
+          if (job.listingId === listing.id) delete state.outbox[key];
+      }
+    }
+    if (operation.operation === 'restore-account') p.adminDeleted = false;
     p.sessionRevokedAt = Math.max(p.sessionRevokedAt || 0, at);
     for (const [key, s] of sessionsFor(state, accountId)) {
       delete state.sessions[key];

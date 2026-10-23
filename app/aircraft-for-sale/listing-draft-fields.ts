@@ -1,9 +1,12 @@
+import { newListingFields } from '@/lib/marketplace/schema.mjs';
 export type DraftField = {
   name: string;
   label: string;
   help: string;
   required?: boolean;
-  type?: 'number' | 'tel';
+  type?: 'number' | 'tel' | 'text';
+  options?: (string | { value: string; label: string })[];
+  group?: string;
   multiline?: boolean;
   maxLength?: number;
 };
@@ -150,6 +153,35 @@ export const mediaSteps = [
   ['misc', 'Other records'],
 ] as const;
 
+export function getDraftFields(values: Record<string, string>): DraftField[] {
+  // Existing aircraft records remain editable without a forced migration.
+  if (
+    !values.listingType &&
+    (values.__legacyAircraft === 'true' ||
+      (!values.workflowVersion &&
+        (values.make || values.model || values.year || values.price)))
+  )
+    return draftFields;
+  return newListingFields(values, draftFields) as DraftField[];
+}
+export function getMediaSteps(values: Record<string, string>) {
+  return !values.listingType || values.listingType === 'aircraft'
+    ? mediaSteps
+    : mediaSteps
+        .filter(([id]) => ['photos', 'videos', 'misc'].includes(id))
+        .map(
+          ([id, label]) =>
+            [
+              id,
+              id === 'misc'
+                ? values.listingType === 'hangars'
+                  ? 'Floor plans and property documents'
+                  : 'Documentation and identification tags'
+                : label,
+            ] as readonly [string, string],
+        );
+}
+
 export const MAX_UPLOAD_BYTES = 50 * 1024 * 1024;
 export function mediaLimits(category: string) {
   return category === 'photos'
@@ -174,6 +206,25 @@ export function validateDraftField(field: DraftField, value = '') {
     )
       return `Enter a year from 1903 to ${new Date().getUTCFullYear() + 1}.`;
   }
+  if (
+    field.options &&
+    !field.options.some(
+      (option) => (typeof option === 'string' ? option : option.value) === text,
+    )
+  )
+    return 'Choose one of the listed options.';
+  if (
+    field.type === 'number' &&
+    field.name !== 'year' &&
+    (!Number.isFinite(Number(text)) ||
+      Number(text) < 0 ||
+      (field.name === 'quantity' && Number(text) <= 0))
+  )
+    return (
+      'Enter a valid ' +
+      (field.name === 'quantity' ? 'positive' : 'non-negative') +
+      ' number.'
+    );
   if (
     field.name === 'price' &&
     (!Number.isFinite(Number(text)) ||

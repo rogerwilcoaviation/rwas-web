@@ -13,9 +13,10 @@
 // next.config.js; plain <img loading="lazy"> is fine here).
 // ============================================================================
 
-"use client";
+'use client';
 
-import { useState } from "react";
+import { listingTitle, listingPrice } from '@/lib/marketplace/schema.mjs';
+import { useState } from 'react';
 import {
   marketplaceListingHref,
   marketplaceListingPhoto,
@@ -24,33 +25,23 @@ import {
 
 export type Listing = MarketplaceListing;
 
-function formatPrice(price: Listing["price"]): string {
-  if (price === undefined || price === null || price === "") {
-    return "Price on request";
-  }
+function formatHours(v: Listing['totalTime']): string | null {
+  if (v === undefined || v === null || v === '') return null;
   const n =
-    typeof price === "number" ? price : Number(String(price).replace(/[^0-9.]/g, ""));
-  if (!Number.isFinite(n) || n <= 0) return "Price on request";
-  return `$${n.toLocaleString()}`;
-}
-
-function formatHours(v: Listing["totalTime"]): string | null {
-  if (v === undefined || v === null || v === "") return null;
-  const n = typeof v === "number" ? v : Number(String(v).replace(/[^0-9.]/g, ""));
+    typeof v === 'number' ? v : Number(String(v).replace(/[^0-9.]/g, ''));
   if (!Number.isFinite(n) || n < 0) return null;
   return `${n.toLocaleString()} hrs`;
 }
 
 export function ListingCard({ listing }: { listing: Listing }) {
   const [imageBroken, setImageBroken] = useState(false);
-  const isSold = listing.status === "sold";
+  const isSold = listing.status === 'sold';
 
-  const { src: imageUrl, srcSet: imageSrcSet } = marketplaceListingPhoto(listing);
+  const { src: imageUrl, srcSet: imageSrcSet } =
+    marketplaceListingPhoto(listing);
 
-  const headline =
-    [listing.year, listing.make, listing.model].filter(Boolean).join(" ") ||
-    "Aircraft listing";
-  const priceLabel = formatPrice(listing.price);
+  const headline = listingTitle(listing);
+  const priceLabel = listingPrice(listing);
   const tt = formatHours(listing.totalTime);
   const et = formatHours(listing.engineTime);
 
@@ -224,62 +215,68 @@ export function ListingCard({ listing }: { listing: Listing }) {
       `}</style>
 
       <a
-        className={`a4s-card${isSold ? " a4s-card--sold" : ""}`}
+        className={`a4s-card${isSold ? ' a4s-card--sold' : ''}`}
         href={marketplaceListingHref(listing)}
-        aria-label={`${headline}, ${isSold ? "sold" : priceLabel}${listing.nNumber ? `, tail ${listing.nNumber}` : ''}`}
+        aria-label={`${headline}, ${isSold ? 'sold' : priceLabel}${listing.nNumber ? `, tail ${listing.nNumber}` : ''}`}
       >
         {isSold ? <div className="a4s-card-sold-ribbon">Sold</div> : null}
         <div className="a4s-card-photo">
-        {imageUrl && !imageBroken ? (
-          <img
-            src={imageUrl}
-            srcSet={imageSrcSet}
-            sizes="(max-width: 600px) 92vw, (max-width: 1024px) 45vw, 360px"
-            alt={`${headline} photo`}
-            loading="lazy"
-            decoding="async"
-            width={800}
-            height={600}
-            onError={() => setImageBroken(true)}
-          />
-        ) : (
-          <div className="a4s-card-nophoto">No photo</div>
-        )}
-      </div>
-
-        <div className="a4s-card-body">
-        {isSold ? <div className="a4s-card-sold-note">Sold - this aircraft has sold</div> : null}
-        <div className="a4s-card-head">
-          <h3 className="a4s-card-title">{headline}</h3>
-          <span className="a4s-card-price">{isSold ? "Sold" : priceLabel}</span>
+          {imageUrl && !imageBroken ? (
+            <img
+              src={imageUrl}
+              srcSet={imageSrcSet}
+              sizes="(max-width: 600px) 92vw, (max-width: 1024px) 45vw, 360px"
+              alt={`${headline} photo`}
+              loading="lazy"
+              decoding="async"
+              width={800}
+              height={600}
+              onError={() => setImageBroken(true)}
+            />
+          ) : (
+            <div className="a4s-card-nophoto">No photo</div>
+          )}
         </div>
 
-        <dl className="a4s-card-specs">
-          {listing.nNumber ? (
-            <>
-              <dt>Tail</dt>
-              <dd>{listing.nNumber}</dd>
-            </>
+        <div className="a4s-card-body">
+          {isSold ? (
+            <div className="a4s-card-sold-note">
+              Sold - this aircraft has sold
+            </div>
           ) : null}
-          {tt ? (
-            <>
-              <dt>Airframe</dt>
-              <dd>{tt}</dd>
-            </>
-          ) : null}
-          {et ? (
-            <>
-              <dt>Engine</dt>
-              <dd>{et}</dd>
-            </>
-          ) : null}
-          {listing.sellerLocation ? (
-            <>
-              <dt>Location</dt>
-              <dd>{listing.sellerLocation}</dd>
-            </>
-          ) : null}
-        </dl>
+          <div className="a4s-card-head">
+            <h3 className="a4s-card-title">{headline}</h3>
+            <span className="a4s-card-price">
+              {isSold ? 'Sold' : priceLabel}
+            </span>
+          </div>
+
+          <dl className="a4s-card-specs">
+            {listing.nNumber ? (
+              <>
+                <dt>Tail</dt>
+                <dd>{listing.nNumber}</dd>
+              </>
+            ) : null}
+            {tt ? (
+              <>
+                <dt>Airframe</dt>
+                <dd>{tt}</dd>
+              </>
+            ) : null}
+            {et ? (
+              <>
+                <dt>Engine</dt>
+                <dd>{et}</dd>
+              </>
+            ) : null}
+            {listing.sellerLocation ? (
+              <>
+                <dt>Location</dt>
+                <dd>{listing.sellerLocation}</dd>
+              </>
+            ) : null}
+          </dl>
         </div>
       </a>
     </>

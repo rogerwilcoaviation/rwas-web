@@ -121,14 +121,14 @@ async function run(options, body) {
 }
 
 test('Better Auth Jerry intake and saved draft use CSRF, same-origin cookie and no Clerk token', async () => run({}, async t => {
-  for (const text of ['I want to list my aircraft', 'N123AB', 'Synthetic', 'Widget', '2000', '1', 'Synthetic aircraft only', 'Synthetic avionics']) await send(t.page, text);
+  for (const text of ['I want to create a listing', 'other', 'aviation-businesses', 'Synthetic business', 'Synthetic', 'Widget', 'skip', 'Used', 'sale', 'USD', 'amount', '1', 'Synthetic location', 'Synthetic other', 'skip']) await send(t.page, text);
   assert.equal((await state(t.page)).drafts.length, 1);
   assert.equal(Object.keys(t.f.state().drafts).length, 1);
   await send(t.page, 'submit');
   const result = await state(t.page);
   assert.equal(result.drafts.length, 2);
   assert.equal(result.headerPaths.at(-1), '/api/aircraft-sale/draft');
-  assert.equal(t.observed.seller.length, 9);
+  assert.equal(t.observed.seller.length, 16);
   assert.equal(t.observed.chat, 0);
 }));
 

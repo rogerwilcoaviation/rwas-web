@@ -463,23 +463,25 @@ test('authenticated Jerry resumes durable progress; required fields cannot skip;
   assert.equal((await message('list my aircraft')).status, 200);
   assert.equal((await message('skip')).status, 400);
   assert.equal((await message('bad tail')).status, 400);
-  await message('N123AB');
+  await message('hangars');
   f.restart();
-  assert.match(
-    (await (await message('I want to list my aircraft')).json()).reply,
-    /Aircraft make/,
-  );
-  assert.match(
-    (await (await message('list my aircraft', b)).json()).reply,
-    /N-number/,
-  );
+  assert.match((await (await message('I want to list my aircraft')).json()).reply,/Listing category/);
+  assert.match((await (await message('list my aircraft', b)).json()).reply,/What would you like to list/);
   let r;
-  for (const text of ['Synthetic', 'Model', '2000', '1', 'skip', 'skip'])
-    r = await message(text);
-  const d = await r.json();
-  assert.equal(d.action.type, 'listing_draft');
-  assert.equal(d.action.draft.make, 'Synthetic');
-  assert.equal(Object.keys(f.state().listings).length, 0);
+  for (const text of ['hangars','Synthetic hangar','Box / rectangular','Synthetic Airport','skip','sale','USD','on-request','Synthetic location','Synthetic description']) {
+    r=await message(text);
+    assert.equal(r.status,200,await r.clone().text());
+  }
+  let d=await r.json();
+  for(let i=0;i<40 && !d.action;i++) {
+    assert.match(d.reply,/optional/);
+    r=await message('skip');assert.equal(r.status,200,await r.clone().text());d=await r.json();
+  }
+  assert.equal(d.action.type,'listing_draft');
+  assert.equal(d.action.draft.listingType,'hangars');
+  assert.equal(d.action.draft.airport,'Synthetic Airport');
+  assert.equal(d.action.draft.year,undefined);
+  assert.equal(Object.keys(f.state().listings).length,0);
 });
 test('metadata interruption compensates uploaded object; public HTML escapes strings and never caches', async () => {
   const f = fixture(),
