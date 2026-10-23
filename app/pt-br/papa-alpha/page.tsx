@@ -20,7 +20,12 @@ export const metadata = genPageMetadata({
     'Ferramentas de referência Papa-Alpha para rigagem de aeronaves Piper PA-28, PA-30, PA-31, PA-32, PA-34, PA-36, PA-39 e PA-44, conforme o produto específico.',
   canonical: pageUrl,
   locale: 'pt_BR',
-  languages: { 'en-US': englishUrl, 'pt-BR': pageUrl, 'x-default': englishUrl },
+  languages: {
+    'en-US': englishUrl,
+    'pt-BR': pageUrl,
+    es: 'https://www.rogerwilcoaviation.com/es/papa-alpha',
+    'x-default': englishUrl,
+  },
 });
 
 export default function PapaAlphaPortuguesePage() {

@@ -19,7 +19,12 @@ export const metadata = genPageMetadata({
     'Consulte a RWAS sobre aplicação, disponibilidade e envio das ferramentas Papa-Alpha para aeronaves Piper.',
   canonical: pageUrl,
   locale: 'pt_BR',
-  languages: { 'en-US': englishUrl, 'pt-BR': pageUrl, 'x-default': englishUrl },
+  languages: {
+    'en-US': englishUrl,
+    'pt-BR': pageUrl,
+    es: 'https://www.rogerwilcoaviation.com/es/contacto',
+    'x-default': englishUrl,
+  },
 });
 
 export default function PortugueseContactPage() {

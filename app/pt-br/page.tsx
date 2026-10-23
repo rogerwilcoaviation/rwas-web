@@ -21,6 +21,7 @@ export const metadata = genPageMetadata({
   languages: {
     'en-US': 'https://www.rogerwilcoaviation.com/',
     'pt-BR': pageUrl,
+    es: 'https://www.rogerwilcoaviation.com/es/',
     'x-default': 'https://www.rogerwilcoaviation.com/',
   },
 });

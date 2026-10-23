@@ -25,6 +25,7 @@ export const metadata = genPageMetadata({
   languages: {
     'en-US': pageUrl,
     'pt-BR': 'https://www.rogerwilcoaviation.com/pt-br/papa-alpha',
+    es: 'https://www.rogerwilcoaviation.com/es/papa-alpha',
     'x-default': pageUrl,
   },
 });

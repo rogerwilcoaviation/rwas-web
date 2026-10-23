@@ -22,6 +22,7 @@ export const metadata = genPageMetadata({
   languages: {
     'en-US': pageUrl,
     'pt-BR': 'https://www.rogerwilcoaviation.com/pt-br/contato',
+    es: 'https://www.rogerwilcoaviation.com/es/contacto',
     'x-default': pageUrl,
   },
 });
