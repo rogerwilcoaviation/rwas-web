@@ -237,6 +237,9 @@ try {
         ),
       });
       if (signedIn) {
+        // Wait for the deferred widget before installing the call observer.
+        // Otherwise its network load can replace the observer mid-check.
+        await page.locator('.jerry-widget-panel').waitFor({ state: 'attached' });
         await page.evaluate(() => {
           window.__jerryCalls = [];
           window.jerryChat = (message) => window.__jerryCalls.push(message);
