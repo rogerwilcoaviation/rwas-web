@@ -18,7 +18,7 @@ const pageUrl =
 export const metadata = genPageMetadata({
   title: 'Aircraft Maintenance in Yankton | RWAS',
   description:
-    'Aircraft maintenance at KYKN in Yankton: annual and 100-hour inspections, pre-buy support, AOG service, prop balancing, and aircraft weighing.',
+    'Aircraft maintenance at KYKN in Yankton: annual and 100-hour inspections, AOG service, prop balancing, and aircraft weighing.',
   canonical: pageUrl,
 });
 
@@ -48,7 +48,7 @@ export default function AircraftMaintenancePage() {
                   { '@type': 'State', name: 'North Dakota' },
                 ],
                 description:
-                  'Aircraft maintenance, annual inspections, 100-hour inspections, pre-buy support, AOG service, propeller balancing, aircraft weight certification, and logbook documentation at KYKN in Yankton, serving the Northern Plains.',
+                  'Aircraft maintenance, annual inspections, 100-hour inspections, AOG service, propeller balancing, aircraft weight certification, and logbook documentation at KYKN in Yankton, serving the Northern Plains.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'Aircraft maintenance services',
@@ -71,7 +71,7 @@ export default function AircraftMaintenancePage() {
                       '@type': 'Offer',
                       itemOffered: {
                         '@type': 'Service',
-                        name: 'Condition and Pre-Buy Inspections',
+                        name: 'Condition Inspections',
                       },
                     },
                     {
@@ -150,9 +150,8 @@ export default function AircraftMaintenancePage() {
             <em>documented like the airplane depends on it.</em>
           </h1>
           <p className="bs-subhead">
-            Annuals &middot; 100-hour inspections &middot; pre-buy support
-            &middot; AOG service &middot; prop balancing &middot; weight
-            certification
+            Annuals &middot; 100-hour inspections &middot; AOG service &middot;
+            prop balancing &middot; weight certification
           </p>
           <div className="bs-byline">
             RWAS Avionics Desk &middot; Serving SD &middot; NE &middot; IA
@@ -235,12 +234,10 @@ export default function AircraftMaintenancePage() {
                     </p>
                   </li>
                   <li className="bs-svc">
-                    <p className="bs-svc-name">
-                      Condition and pre-buy inspections
-                    </p>
+                    <p className="bs-svc-name">Condition inspections</p>
                     <p className="bs-svc-desc">
-                      Records review, physical inspection, and findings that
-                      help owners make decisions before money changes hands.
+                      Condition inspections, maintenance findings, and records
+                      documentation for aircraft owners.
                     </p>
                   </li>
                   <li className="bs-svc">
@@ -276,8 +273,7 @@ export default function AircraftMaintenancePage() {
                   controlled records, tooling expectations, traceability, and a
                   certificate holder accountable for the system. That difference
                   matters when the work involves avionics, structural questions,
-                  NDT findings, major repairs, recurring inspections, or
-                  sale-driven pre-buy decisions.
+                  NDT findings, major repairs, or recurring inspections.
                 </p>
                 <p>
                   RWAS operates under FAA Repair Station Certificate RWSR491E
@@ -310,11 +306,11 @@ export default function AircraftMaintenancePage() {
               <div className="bs-body">
                 <p>
                   Good maintenance planning starts with context. For
-                  inspections, pre-buy work, troubleshooting, or AOG support,
-                  send the aircraft make and model, N-number, current location,
-                  tach and total time, last annual or inspection date, known
-                  squawks, logbook photos, AD/service-bulletin concerns, and any
-                  deadline that matters.
+                  inspections, troubleshooting, or AOG support, send the
+                  aircraft make and model, N-number, current location, tach and
+                  total time, last annual or inspection date, known squawks,
+                  logbook photos, AD/service-bulletin concerns, and any deadline
+                  that matters.
                 </p>
                 <p>
                   RWAS will tell you what can be scoped from records, what needs
@@ -380,8 +376,6 @@ export default function AircraftMaintenancePage() {
                 <br />
                 100-hour inspections
                 <br />
-                Pre-buy support
-                <br />
                 Condition inspections
                 <br />
                 AOG support
@@ -428,7 +422,7 @@ export default function AircraftMaintenancePage() {
               <span className="bs-script-accent">
                 &mdash; maintenance desk &mdash;
               </span>
-              <h3>Need an annual or pre-buy?</h3>
+              <h3>Need an annual or maintenance?</h3>
               <p>
                 Send the N-number, records, timing, and the decision you need to
                 make.

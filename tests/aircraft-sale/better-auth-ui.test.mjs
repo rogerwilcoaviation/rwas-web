@@ -331,6 +331,33 @@ async function credentials(page) {
     .fill('Local fixture password 123!');
 }
 
+test('marketplace entry offers signup and login, with listing actions only after sign-in', async () => {
+  const f = await fixture({ parent: true });
+  try {
+    const listingAction = f.page.getByRole('button', { name: 'List Your Aircraft', exact: true });
+    assert.equal(await listingAction.count(), 0);
+    await f.page.getByRole('button', { name: 'Create Account', exact: true }).click();
+    const dialog = f.page.getByRole('dialog');
+    await dialog.getByLabel('Name', { exact: true }).waitFor();
+    await dialog.getByRole('button', { name: 'Create your account', exact: true }).waitFor();
+    assert.equal(f.state.requests.some((request) => request.path.endsWith('/sign-up/email')), false);
+    await dialog.getByRole('button', { name: 'Close seller panel', exact: true }).click();
+    await f.page.getByRole('button', { name: 'User Login', exact: true }).click();
+    assert.equal(await dialog.getByLabel('Name', { exact: true }).count(), 0);
+    await credentials(dialog);
+    await dialog.getByRole('button', { name: 'Sign in', exact: true }).click();
+    await listingAction.waitFor();
+    assert.equal(await f.page.getByRole('button', { name: 'User Login', exact: true }).count(), 0);
+    assert.equal(await f.page.getByRole('button', { name: 'Create Account', exact: true }).count(), 0);
+    await f.page.getByRole('button', { name: 'Sign Out', exact: true }).click();
+    await f.page.getByRole('button', { name: 'User Login', exact: true }).waitFor();
+    assert.equal(await listingAction.count(), 0);
+    assert.equal(f.state.bridge, 1);
+  } finally {
+    await f.close();
+  }
+});
+
 test('real client password login creates the bound RWAS session without loading Clerk', async () => {
   const f = await fixture();
   try {
@@ -362,7 +389,7 @@ test('unverified signup waits for email and never creates seller access', async 
     await f.page.getByLabel('Name', { exact: true }).fill('Fixture Seller');
     await credentials(f.page);
     await f.page
-      .getByRole('button', { name: 'Create a seller account', exact: true })
+      .getByRole('button', { name: 'Create your account', exact: true })
       .click();
     await f.page
       .getByRole('status')
@@ -1046,7 +1073,7 @@ test('ordinary and invalid QA entries retain Auth0 discovery and UI without iden
     const f = await fixture({ parent: true, qaGuard: true, search });
     try {
       await f.page
-        .getByRole('button', { name: 'Seller Login', exact: true })
+        .getByRole('button', { name: 'User Login', exact: true })
         .click();
       await f.page
         .getByRole('button', { name: 'Email and password', exact: true })
@@ -1056,7 +1083,7 @@ test('ordinary and invalid QA entries retain Auth0 discovery and UI without iden
         .waitFor();
       assert.equal(
         await f.page
-          .getByRole('region', { name: 'Seller secure sign-in', exact: true })
+          .getByRole('region', { name: 'User secure sign-in', exact: true })
           .count(),
         0,
       );
@@ -1083,10 +1110,10 @@ test('exact explicit QA entry opts into Better Auth discovery and can complete i
   });
   try {
     await f.page
-      .getByRole('button', { name: 'Seller Login', exact: true })
+      .getByRole('button', { name: 'User Login', exact: true })
       .click();
     await f.page
-      .getByRole('region', { name: 'Seller secure sign-in', exact: true })
+      .getByRole('region', { name: 'User secure sign-in', exact: true })
       .waitFor();
     await credentials(f.page);
     await f.page.getByRole('button', { name: 'Sign in', exact: true }).click();
@@ -1154,7 +1181,7 @@ test('QA signup verification, password recovery and social callbacks preserve on
         await f.page.getByLabel('Name', { exact: true }).fill('Fixture Seller');
         await credentials(f.page);
         await f.page
-          .getByRole('button', { name: 'Create a seller account', exact: true })
+          .getByRole('button', { name: 'Create your account', exact: true })
           .click();
         await f.page
           .getByRole('status')
@@ -1279,8 +1306,8 @@ test('an explicit QA reset callback enters only the reset flow and removes its U
 test('public mode uses advertised Better Auth without a QA marker and completes bound password sign-in', async () => {
   const f=await fixture({parent:true});
   try{
-    await f.page.getByRole('button',{name:'Seller Login',exact:true}).click();
-    await f.page.getByRole('region',{name:'Seller secure sign-in',exact:true}).waitFor();
+    await f.page.getByRole('button',{name:'User Login',exact:true}).click();
+    await f.page.getByRole('region',{name:'User secure sign-in',exact:true}).waitFor();
     const methods=f.state.requests.find(r=>r.path==='/api/aircraft-sale/auth/methods');
     assert.equal(methods.sellerQa,undefined);
     assert.equal(await f.page.getByRole('button',{name:'Continue with Google',exact:true}).count(),0);
@@ -1331,12 +1358,12 @@ test('legacy, unavailable, redirected and cross-origin discovery never activate 
     const f=await fixture({parent:true,search:'?seller-auth=identity',...options});
     try{
       if(options.legacyMode){
-        await f.page.getByRole('button',{name:'Seller Login',exact:true}).click();
+        await f.page.getByRole('button',{name:'User Login',exact:true}).click();
         await f.page.getByRole('button',{name:'Email and password',exact:true}).waitFor();
       }else{
         await f.page.waitForFunction(()=>!new URL(location.href).searchParams.has('seller-auth'));
       }
-      assert.equal(await f.page.getByRole('region',{name:'Seller secure sign-in',exact:true}).count(),0);
+      assert.equal(await f.page.getByRole('region',{name:'User secure sign-in',exact:true}).count(),0);
       assert.equal(f.state.requests.some(r=>r.path.startsWith(base+'/')),false);
       assert.equal(f.state.bridge,0);
     }finally{await f.close();}

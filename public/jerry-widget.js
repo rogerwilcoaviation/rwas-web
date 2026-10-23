@@ -622,7 +622,7 @@
   function hasListingIntent(text) {
     // Tight first-person seller-intent only. Mirrors LISTING_SELLER_INTENT_RE in
     // intake-bridge/worker.js so buyer queries ("how many do you have for sale?")
-    // don't trigger the Seller Login modal. Fixed 2026-04-17.
+    // don't trigger the User Login modal. Fixed 2026-04-17.
     return /\b(i (want|need|would like|wanna) to (list|sell|post)|i'?d like to (list|sell|post)|list my (aircraft|plane|airplane)|sell my (aircraft|plane|airplane)|post my (aircraft|plane|airplane)|put my (aircraft|plane|airplane) (up )?for sale|asking price for my|how (do|can) i list (my|an aircraft))\b/i.test(
       String(text || ''),
     );
@@ -723,7 +723,7 @@
       addAssistantMessage(
         (function () {
           openSellerLoginModal();
-          return 'Sign in through Seller Login, then come back to continue your private listing draft.';
+          return 'Sign in through User Login, then come back to continue your private listing draft.';
         })(),
       );
       input.focus();

@@ -58,9 +58,9 @@ const SERVICES = [
     'ADS-B equipment selection, compliance planning, installation, and testing.',
   ],
   [
-    'Pre-Buy Inspection',
+    'Pre-Buy Facility Recommendations',
     '/services/pre-buy-inspection',
-    'Independent aircraft pre-purchase inspection support.',
+    'Find an independent facility. RWAS does not perform pre-buy inspections.',
   ],
   [
     'NDT Inspection',

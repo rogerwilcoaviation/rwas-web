@@ -110,7 +110,10 @@ jobs:
         run: node tests/site-typography-browser.mjs
 
       - name: Verify SEO build artifact and catalog payload budgets
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/rwas-browser-runtime/node_modules/playwright/index.mjs
         run: |
+          node tests/aircraft-sale/marketplace-entry-browser.mjs
           npm run seo:artifact
           node scripts/catalog-payload-budget-test.mjs .vercel/output/static
 

@@ -140,7 +140,7 @@ try {
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('dialog', (d) => d.accept());
   await page.goto(origin + '/aircraft-for-sale');
-  await page.getByRole('button', { name: 'Seller Login', exact: true }).click();
+  await page.getByRole('button', { name: 'User Login', exact: true }).click();
   await page.getByLabel('Email', { exact: true }).fill('browser@example.test');
   await page.getByRole('button', { name: 'Send Code', exact: true }).click();
   await page.getByLabel('Verification code').waitFor();
@@ -375,7 +375,7 @@ try {
     .click();
   await page.getByRole('button', { name: 'Sign Out', exact: true }).click();
   await page
-    .getByRole('button', { name: 'Seller Login', exact: true })
+    .getByRole('button', { name: 'User Login', exact: true })
     .waitFor();
   assert.equal((await f.call('/account', 'GET', undefined, token)).status, 401);
   results.push('PASS UI logout revokes server token');

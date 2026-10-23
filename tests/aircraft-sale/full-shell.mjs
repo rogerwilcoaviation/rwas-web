@@ -281,7 +281,7 @@ try {
   results.push(
     'PASS current exported Next home-to-aircraft navigation, hydration and independent legacy card',
   );
-  await page.getByRole('button', { name: 'Seller Login', exact: true }).click();
+  await page.getByRole('button', { name: 'User Login', exact: true }).click();
   await page.getByLabel('Email', { exact: true }).fill('browser@example.test');
   const mailer = f.env.MAILER.fetch;
   f.env.MAILER.fetch = async () => new Response(null, { status: 503 });
@@ -777,7 +777,7 @@ try {
     .click();
   await page.getByRole('button', { name: 'Sign Out', exact: true }).click();
   await page
-    .getByRole('button', { name: 'Seller Login', exact: true })
+    .getByRole('button', { name: 'User Login', exact: true })
     .waitFor();
   assert.equal((await f.call('/account', 'GET', undefined, token)).status, 401);
   results.push('PASS UI logout revokes server token');

@@ -175,7 +175,7 @@ try {
     providerSubject = subject;
     providerEmail = email;
     await page
-      .getByRole('button', { name: 'Seller Login', exact: true })
+      .getByRole('button', { name: 'User Login', exact: true })
       .click();
     await page.getByRole('button', { name: method, exact: true }).click();
     await complete();
@@ -192,7 +192,7 @@ try {
   async function logout(token) {
     await page.getByRole('button', { name: 'Sign Out', exact: true }).click();
     await page
-      .getByRole('button', { name: 'Seller Login', exact: true })
+      .getByRole('button', { name: 'User Login', exact: true })
       .waitFor();
     assert.equal(
       (await f.call('/account', 'GET', undefined, token)).status,
@@ -308,7 +308,7 @@ try {
     .getByRole('button', { name: 'Close seller panel', exact: true })
     .click();
   await page
-    .getByRole('button', { name: 'Seller Login', exact: true })
+    .getByRole('button', { name: 'User Login', exact: true })
     .waitFor();
   results.push(
     'PASS authenticated synthetic reset event revokes browser session',

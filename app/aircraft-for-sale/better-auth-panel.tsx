@@ -117,18 +117,20 @@ export default function BetterAuthPanel({
   providers,
   linkOwner,
   onConnectExisting,
+  initialMode = 'login',
 }: {
   onSignedIn: (session: BetterAuthSellerSession) => void;
   providers: BetterAuthProvider[];
   linkOwner?: BetterAuthLinkOwner;
   onConnectExisting?: () => void;
+  initialMode?: 'login' | 'signup';
 }) {
   const [resetToken] = useState(consumeResetToken);
   const [mode, setMode] = useState<Mode>(() =>
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).get('seller-auth') === 'reset'
       ? 'reset'
-      : 'login',
+      : initialMode,
   );
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -383,7 +385,7 @@ export default function BetterAuthPanel({
   }
   const title = {
     login: 'Sign in',
-    signup: 'Create a seller account',
+    signup: 'Create your account',
     forgot: 'Reset your password',
     reset: 'Choose a new password',
     verify: 'Verify your email',
@@ -393,7 +395,7 @@ export default function BetterAuthPanel({
     'confirm-link': 'Confirm account connection',
   }[mode];
   return (
-    <section aria-label="Seller secure sign-in" data-rwas-better-auth="true">
+    <section aria-label="User secure sign-in" data-rwas-better-auth="true">
       <BetterAuthStyles />
       <h3>
         {linkOwner ? 'Connect secure sign-in to this seller account' : title}

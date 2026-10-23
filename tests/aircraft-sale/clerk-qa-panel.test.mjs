@@ -66,7 +66,7 @@ test('ordinary and invalid QA visitors keep baseline password/Google/email-code 
   for (const query of ['', '?seller-auth=sign-up', '?seller-qa-email=customer%40example.test&seller-auth=complete']) {
     const { page, calls } = await pageFixture(query);
     try {
-      await page.getByRole('button', { name: 'Seller Login', exact: true }).click();
+      await page.getByRole('button', { name: 'User Login', exact: true }).click();
       await page.getByRole('button', { name: 'Email and password', exact: true }).waitFor();
       assert.equal(await page.getByRole('button', { name: 'Continue with Google', exact: true }).count(), 1);
       assert.equal(await page.getByRole('button', { name: 'Send Code', exact: true }).count(), 1);
@@ -119,7 +119,7 @@ test('ordinary visitors discard a stale Clerk envelope without loading its SDK',
     await page.waitForFunction(() => sessionStorage.getItem('rwas_sale_v2') === null);
     assert.equal(await page.evaluate(() => globalThis.__qaSdkRequests), 0);
     assert.equal(await page.getByRole('button', { name: 'Account', exact: true }).count(), 0);
-    assert.equal(await page.getByRole('button', { name: 'Seller Login', exact: true }).count(), 1);
+    assert.equal(await page.getByRole('button', { name: 'User Login', exact: true }).count(), 1);
   } finally { await page.close(); }
 });
 

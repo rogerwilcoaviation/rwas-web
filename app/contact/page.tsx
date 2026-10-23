@@ -17,7 +17,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/contact';
 export const metadata = genPageMetadata({
   title: 'Contact RWAS — Yankton Avionics & Aircraft Service',
   description:
-    'Contact Roger Wilco Aviation Services at KYKN in Yankton for Garmin avionics, maintenance, NDT, fabrication, pre-buy inspections, and quotes.',
+    'Contact Roger Wilco Aviation Services at KYKN in Yankton for Garmin avionics, maintenance, NDT, fabrication, facility recommendations, and quotes.',
   canonical: pageUrl,
 });
 
@@ -40,7 +40,7 @@ export default function ContactPage() {
                 url: pageUrl,
                 name: 'Contact Roger Wilco Aviation Services',
                 description:
-                  'Contact Roger Wilco Aviation Services for aircraft maintenance, Garmin avionics installation, NDT, fabrication, pre-buy support, and general aircraft-service questions.',
+                  'Contact Roger Wilco Aviation Services for aircraft maintenance, Garmin avionics installation, NDT, fabrication, pre-buy facility recommendations, and general aircraft-service questions.',
                 about: {
                   '@id': 'https://www.rogerwilcoaviation.com#organization',
                 },

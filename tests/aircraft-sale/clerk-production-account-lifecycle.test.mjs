@@ -355,6 +355,8 @@ async function fixturePage(browser, bundle, options = {}) {
 }
 
 async function openSettings(page) {
+  const securityTab = page.getByRole('tab', { name: 'Sign-in and security', exact: true });
+  if (await page.getByRole('dialog').count()) await securityTab.click();
   await page
     .getByRole('button', { name: 'Manage sign-in and security' })
     .click();
@@ -371,7 +373,7 @@ test('existing password account recovery preserves the failed login latch and ke
     });
     const { page, calls } = fixture;
     await page
-      .getByRole('button', { name: 'Seller Login', exact: true })
+      .getByRole('button', { name: 'User Login', exact: true })
       .click();
     await page
       .getByRole('button', { name: 'Continue with RWAS secure sign-in' })
@@ -1137,6 +1139,7 @@ test('RWAS contact-email verification does not mutate the sign-in email', async 
     await page.getByRole('button', { name: 'Account', exact: true }).click();
     const dialog = page.getByRole('dialog');
     await openSettings(page);
+    await dialog.getByRole('tab', { name: 'Contact email', exact: true }).click();
     await dialog
       .getByRole('heading', { name: 'Change RWAS contact email' })
       .waitFor();
@@ -1146,6 +1149,7 @@ test('RWAS contact-email verification does not mutate the sign-in email', async 
     await dialog.getByRole('button', { name: 'Send New Email Code' }).click();
     await dialog.getByLabel('New email code', { exact: true }).fill('123456');
     await dialog.getByRole('button', { name: 'Verify New Email' }).click();
+    await dialog.getByRole('tab', { name: 'Contact profile', exact: true }).click();
     await dialog
       .getByText('Contact email: new-contact@example.test', { exact: true })
       .waitFor();
@@ -1626,6 +1630,7 @@ test('existing seller requires an explicit connection and retains its owner sess
     });
     const dialog = page.getByRole('dialog');
     await dialog.getByRole('button', { name: 'Open your account' }).click();
+    await dialog.getByRole('tab', { name: 'Sign-in and security', exact: true }).click();
     await dialog
       .getByRole('button', { name: 'Connect RWAS secure sign-in', exact: true })
       .waitFor();
@@ -1721,6 +1726,7 @@ test('connection intent survives the SDK handoff route without copying the owner
       initialProviderSession: false,
     });
     await page.getByRole('button', { name: 'Account', exact: true }).click();
+    await page.getByRole('tab', { name: 'Sign-in and security', exact: true }).click();
     await page
       .getByRole('dialog')
       .getByRole('button', { name: 'Connect RWAS secure sign-in', exact: true })
@@ -1770,6 +1776,7 @@ test('rejected connection preserves the owner account and terminal failure throu
       rejectLink: true,
     });
     await page.getByRole('button', { name: 'Account', exact: true }).click();
+    await page.getByRole('tab', { name: 'Sign-in and security', exact: true }).click();
     await page
       .getByRole('dialog')
       .getByRole('button', { name: 'Connect RWAS secure sign-in', exact: true })

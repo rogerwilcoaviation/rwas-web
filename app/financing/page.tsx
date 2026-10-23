@@ -51,7 +51,7 @@ export default function FinancingPage() {
           </p>
           <div className="bs-byline">
             Garmin upgrades &middot; Panel fabrication &middot; Major
-            maintenance &middot; AOG &amp; pre-buy work
+            maintenance &middot; AOG support
           </div>
         </section>
 

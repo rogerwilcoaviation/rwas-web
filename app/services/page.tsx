@@ -59,10 +59,10 @@ const serviceGroups = [
           'Annual inspections, 100-hour inspections, AOG coordination, prop balancing, aircraft weighing, and repair-station paperwork.',
       },
       {
-        name: 'Pre-buy inspection',
+        name: 'Pre-buy facility recommendations',
         href: '/services/pre-buy-inspection',
         description:
-          'Logbook review, physical condition checks, avionics review, NDT coordination, and practical buyer decision support.',
+          'RWAS can recommend an independent pre-buy facility. We do not perform pre-buy inspections.',
       },
       {
         name: 'Aircraft NDT inspection',
@@ -167,7 +167,7 @@ const allServices = serviceGroups.flatMap((group) => group.services);
 export const metadata = genPageMetadata({
   title: 'Aircraft Services in Yankton | RWAS',
   description:
-    'Aircraft services at KYKN in Yankton: Garmin avionics, annual inspections, NDT, fabrication, Rotax support, pre-buys, and Papa-Alpha tools.',
+    'Aircraft services at KYKN in Yankton: Garmin avionics, annual inspections, NDT, fabrication, Rotax support, and Papa-Alpha tools.',
   canonical: pageUrl,
 });
 
@@ -211,7 +211,7 @@ export default function ServicesPage() {
                   { '@type': 'State', name: 'Montana' },
                 ],
                 description:
-                  'FAA Part 145 aircraft services at KYKN in Yankton, serving the Northern Plains with Garmin avionics installation, maintenance, NDT inspection, fabrication, Rotax support, and pre-buy inspections.',
+                  'FAA Part 145 aircraft services at KYKN in Yankton, serving the Northern Plains with Garmin avionics installation, maintenance, NDT inspection, fabrication, Rotax support, and Papa-Alpha tools.',
                 hasOfferCatalog: {
                   '@type': 'OfferCatalog',
                   name: 'RWAS aircraft service catalog',
@@ -288,8 +288,7 @@ export default function ServicesPage() {
           </h1>
           <p className="bs-subhead">
             Garmin avionics &middot; aircraft maintenance &middot; NDT
-            inspection &middot; fabrication &middot; Rotax support &middot;
-            pre-buy inspections
+            inspection &middot; fabrication &middot; Rotax support
           </p>
           <div className="bs-byline">
             RWAS Avionics Desk &middot; KYKN, Yankton &middot; Serving the
@@ -348,8 +347,8 @@ export default function ServicesPage() {
                   station at KYKN in Yankton, serving aircraft owners across the
                   Northern Plains. This page is the front desk for the shop's
                   crawlable service pages: Garmin installation, aircraft
-                  maintenance, NDT, fabrication, Rotax support, pre-buy
-                  inspections, and RWAS-built Papa-Alpha tools.
+                  maintenance, NDT, fabrication, Rotax support, and RWAS-built
+                  Papa-Alpha tools.
                 </p>
                 <p>
                   If you already know the system or service you need, choose the

@@ -91,7 +91,7 @@ export const Footer = ({ className }: { className?: string }) => {
           Aircraft maintenance
         </LandingFooterLink>
         <LandingFooterLink href="/services/pre-buy-inspection">
-          Pre-buy inspections
+          Pre-buy facility recommendations
         </LandingFooterLink>
         <LandingFooterLink href="/services/ndt-inspection">
           NDT inspection

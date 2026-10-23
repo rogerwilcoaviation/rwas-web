@@ -107,7 +107,7 @@ export default function ShopCapabilitiesPage() {
                       '@type': 'Offer',
                       itemOffered: {
                         '@type': 'Service',
-                        name: 'Condition & Pre-Buy Inspections',
+                        name: 'Condition Inspections',
                       },
                     },
                     {
@@ -397,8 +397,8 @@ export default function ShopCapabilitiesPage() {
                   </li>
                   <li className="bs-svc">
                     <p className="bs-svc-name">
-                      <a href="/services/pre-buy-inspection">
-                        Condition &amp; Pre-Buy Inspections
+                      <a href="/services/aircraft-maintenance">
+                        Condition Inspections
                       </a>
                     </p>
                   </li>

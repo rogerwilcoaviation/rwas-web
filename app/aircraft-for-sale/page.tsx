@@ -39,7 +39,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: { absolute: 'Aircraft for Sale — RWAS Marketplace' },
   description:
-    'Aircraft listings from RWAS at KYKN in Yankton. Browse Cessna, Piper, Beechcraft, and more with repair-station and listing support.',
+    'Aircraft4Sale connects aircraft owners and buyers for aircraft and aviation part transactions. Browse aircraft, create an account, or log in to get started.',
   alternates: {
     canonical: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
   },
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     url: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
     title: 'Aircraft for Sale — RWAS Marketplace',
     description:
-      'Browse aircraft listings backed by an FAA Part 145 repair station at KYKN in Yankton.',
+      'Connect with aircraft owners and buyers. Create an account or log in to get started with Aircraft4Sale.',
     images: [
       {
         url: 'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg',
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Aircraft for Sale — RWAS Marketplace',
     description:
-      'Browse aircraft listings backed by an FAA Part 145 repair station at KYKN in Yankton.',
+      'Connect with aircraft owners and buyers. Create an account or log in to get started with Aircraft4Sale.',
     images: [
       'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg',
     ],
@@ -117,22 +117,40 @@ export default async function AircraftForSalePage() {
       {/* Page-scoped a4s styles. Only rules not already covered by
           broadsheet-tokens.css live here. */}
       <style>{`
-        .a4s-cta-row { display: flex; justify-content: center; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
-        .a4s-cta-btn {
-          display: inline-block;
-          padding: 10px 22px;
+        .a4s-cta-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-top: 24px; padding: 20px 0; border-top: 1px solid #111; flex-wrap: wrap; }
+        .a4s-user-entry { flex: 1 1 340px; min-width: 0; }
+        .a4s-user-entry p { margin: 0 0 12px; max-width: 640px; font-size: 15px; line-height: 1.5; }
+        .a4s-account-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .a4s-cta-row .a4s-cta-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 46px;
+          padding: 12px 20px;
           background: #C49A2A;
           color: #111;
           font-family: Arial, sans-serif;
-          font-size: 11px;
+          font-size: 13px;
           font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 0.12em;
+          letter-spacing: 0.04em;
           text-decoration: none;
           border: 1px solid #111;
+          border-radius: 0;
+          margin: 0;
+          line-height: 1.2;
+          cursor: pointer;
         }
-        .a4s-cta-btn.secondary { background: transparent; color: #111; }
-        .a4s-cta-btn:hover { background: #a88422; }
+        .a4s-cta-row .a4s-cta-btn.secondary { background: transparent; color: #111; }
+        .a4s-cta-row .a4s-cta-btn:hover { background: #a88422; }
+        .a4s-cta-row .a4s-cta-btn:focus-visible { outline: 3px solid #111; outline-offset: 3px; }
+        .a4s-marketplace-note { margin-top: 24px; padding-top: 18px; border-top: 1px solid #777; font-size: 14px; line-height: 1.6; }
+        @media (max-width: 600px) {
+          .a4s-cta-row { gap: 14px; }
+          .a4s-user-entry { flex-basis: 100%; }
+          .a4s-account-actions .a4s-cta-btn { flex: 1 1 130px; }
+          .a4s-browse { width: 100%; }
+        }
         .a4s-how {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -140,14 +158,14 @@ export default async function AircraftForSalePage() {
           margin: 8px 0 4px;
         }
         .a4s-how-step h3 {
-          font-family: Georgia, 'Times New Roman', serif;
-          font-size: 14px;
+          font-family: Arial, sans-serif;
+          font-size: 16px;
           font-weight: 700;
           margin: 0 0 6px;
           letter-spacing: 0.01em;
         }
         .a4s-how-step p {
-          font-size: 12px;
+          font-size: 14px;
           line-height: 1.55;
           margin: 0;
           color: #1a1a1a;
@@ -163,31 +181,25 @@ export default async function AircraftForSalePage() {
       <main id="main-content" tabIndex={-1} className="bs-stage">
         {/* ── HERO HEADLINE ─────────────────────────────────────────── */}
         <section className="hero-headline-group" aria-labelledby="a4s-hero">
-          <span className="bs-kicker">RWAS Marketplace</span>
-          <span className="bs-script-accent">
-            &mdash; vetted by a Part 145 shop &mdash;
+          <span className="bs-kicker">
+            Aircraft4Sale · The RWAS Marketplace
           </span>
+          <span className="bs-script-accent">Connect. Buy. Sell.</span>
           <h1 id="a4s-hero" className="bs-headline bs-headline--hero">
             Aircraft for Sale.
           </h1>
           <p className="bs-subhead">
-            Pre-owned aircraft listings vetted by a FAA Part 145 repair station.
-            Every listing comes with the option of a pre-buy inspection by the
-            RWAS team.
+            Connect with owners and buyers to buy or sell an aircraft or
+            aviation part.
           </p>
           <div className="bs-byline">
-            Call <strong>(605) 299-8178</strong> &nbsp;&middot;&nbsp; Ask
-            Captain Jerry &nbsp;&middot;&nbsp; RWAS Avionics Desk &middot; KYKN,
-            Yankton
+            Aircraft4Sale by Roger Wilco Aviation Services
           </div>
           <div className="a4s-cta-row">
-            <a className="a4s-cta-btn" href="#listings">
+            <SellerAuthPanelLoader />
+            <a className="a4s-cta-btn secondary a4s-browse" href="#listings">
               Browse Aircraft
             </a>
-            <a className="a4s-cta-btn" href="/services/pre-buy-inspection">
-              Pre-Buy Inspection
-            </a>
-            <SellerAuthPanelLoader />
           </div>
         </section>
 
@@ -205,43 +217,52 @@ export default async function AircraftForSalePage() {
         <Specimen variant="hero" as="section" className="a4s-how-section">
           <span className="bs-kicker">How It Works</span>
           <h2 className="bs-headline bs-headline--section">
-            Four Steps From Listing to Sale
+            Make Your Next Connection
           </h2>
           <hr className="section-rule" />
           <div className="a4s-how">
             <div className="a4s-how-step">
-              <h3>1. Tell Captain Jerry</h3>
+              <h3>1. Create your account</h3>
               <p>
-                Click <em>List Your Aircraft</em> and walk through a short
-                guided intake while signed in. Review and save the draft before
-                adding media.
+                Buying or selling? Create an account or choose User Login to get
+                started. Once signed in, sellers can choose List Your Aircraft
+                to prepare a listing.
               </p>
             </div>
             <div className="a4s-how-step">
-              <h3>2. Add photos &amp; logs</h3>
+              <h3>2. Prepare your listing</h3>
               <p>
-                Add photos, video and optional logbook PDFs to your saved draft.
-                Records stay private to you and the RWAS review team.
+                Tell Captain Jerry about your aircraft, save a draft, and add
+                photos, video, and optional logbook PDFs. You control the
+                information you provide.
               </p>
             </div>
             <div className="a4s-how-step">
-              <h3>3. RWAS reviews</h3>
+              <h3>3. Submit your draft</h3>
               <p>
-                Submit your draft for private RWAS review. New seller-intake
-                submissions remain non-public during this launch.
+                New submissions remain private during this launch. RWAS reviews
+                listing content for publication; this is not an inspection or
+                verification of the aircraft or its condition.
               </p>
             </div>
             <div className="a4s-how-step">
-              <h3>4. Buyers contact you</h3>
+              <h3>4. Connect directly</h3>
               <p>
-                Interested buyers reach out directly.{' '}
-                <a href="/services/pre-buy-inspection">
-                  Pre-buy inspections by RWAS
-                </a>{' '}
-                available &mdash; ask the buyer, not us; you decide.
+                Buyers and owners discuss the details and arrange their
+                transaction directly. Buyers arrange their own independent
+                inspections and confirm the information that matters to them.
               </p>
             </div>
           </div>
+          <p className="a4s-marketplace-note">
+            RWAS is an FAA Part 145 repair station. We do not vet seller
+            aircraft or offer pre-buy inspections. If you need an independent
+            pre-buy inspection, we can{' '}
+            <a href="/contact?reason=service&source=aircraft4sale-referral">
+              recommend a pre-buy facility
+            </a>
+            .
+          </p>
         </Specimen>
       </main>
 

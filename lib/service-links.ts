@@ -43,9 +43,9 @@ const links: SeoServiceLink[] = [
   },
   {
     href: '/services/pre-buy-inspection',
-    label: 'Pre-buy inspection support',
+    label: 'Pre-buy facility recommendations',
     description:
-      'Logbook review, physical inspection, avionics review, NDT coordination, and buyer decision support.',
+      'RWAS can recommend an independent facility; we do not perform pre-buy inspections.',
   },
   {
     href: '/services/ndt-inspection',

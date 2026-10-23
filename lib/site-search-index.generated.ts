@@ -45,9 +45,10 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Services',
-    title: 'Pre-Buy Inspection',
+    title: 'Pre-Buy Facility Recommendations',
     href: '/services/pre-buy-inspection',
-    description: 'Independent aircraft pre-purchase inspection support.',
+    description:
+      'Find an independent facility. RWAS does not perform pre-buy inspections.',
   },
   {
     group: 'Services',

@@ -16,7 +16,7 @@ const pageUrl = 'https://www.rogerwilcoaviation.com/locations/yankton';
 export const metadata = genPageMetadata({
   title: 'Aircraft Maintenance & Avionics Shop - Yankton, SD | RWAS',
   description:
-    'RWAS Repair Station Headquarters is at 3309 Douglas Avenue Unit #3 in Yankton, SD, supporting Garmin avionics, maintenance, NDT, fabrication, and pre-buys.',
+    'RWAS Repair Station Headquarters is at 3309 Douglas Avenue Unit #3 in Yankton, SD, supporting Garmin avionics, maintenance, NDT, and fabrication.',
   canonical: pageUrl,
 });
 
@@ -109,8 +109,7 @@ export default function YanktonLocationPage() {
           </h1>
           <p className="bs-subhead">
             Garmin installation &middot; annual inspections &middot; NDT
-            &middot; fabrication &middot; Papa-Alpha tools &middot; pre-buy
-            support
+            &middot; fabrication &middot; Papa-Alpha tools
           </p>
           <div className="bs-byline">
             Repair Station Headquarters &middot; 3309 Douglas Avenue Unit #3
@@ -194,8 +193,8 @@ export default function YanktonLocationPage() {
                       </Link>
                     </p>
                     <p className="bs-svc-desc">
-                      Annuals, 100-hour inspections, pre-buy support, AOG
-                      coordination, prop balancing, and weight certification.
+                      Annuals, 100-hour inspections, AOG coordination, prop
+                      balancing, and weight certification.
                     </p>
                   </li>
                   <li className="bs-svc">
@@ -247,8 +246,8 @@ export default function YanktonLocationPage() {
                   N-number, current location, known squawks, photos, logbook
                   context, desired downtime window, and the decision you are
                   trying to make. RWAS can then route the request to avionics,
-                  maintenance, NDT, fabrication, or pre-buy support without
-                  starting from a generic intake.
+                  maintenance, NDT, or fabrication without starting from a
+                  generic intake.
                 </p>
               </div>
               <p>

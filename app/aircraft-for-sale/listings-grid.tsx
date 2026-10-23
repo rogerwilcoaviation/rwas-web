@@ -80,9 +80,8 @@ export function ListingsGrid({
   if (listings.length === 0) {
     return (
       <div className="a4s-empty">
-        No aircraft are listed for sale right now. Check back soon — or click{' '}
-        <strong>List Your Aircraft</strong> above to get yours in front of
-        buyers.
+        No aircraft are listed for sale right now. Check back soon, or create an
+        account and log in to prepare your aircraft listing.
       </div>
     );
   }

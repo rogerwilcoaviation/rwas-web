@@ -203,6 +203,7 @@ export default function SellerAuthPanel() {
   const [clerkLinkOwner, setClerkLinkOwner] =
     useState<ClerkProductionLinkOwner | null>(null);
   const [emailCodeLogin, setEmailCodeLogin] = useState(false);
+  const [authEntry, setAuthEntry] = useState<'login' | 'signup'>('login');
   const [clerkRouteStage, setClerkRouteStage] = useState('');
   const [view, setView] = useState<
     | 'login'
@@ -1275,34 +1276,65 @@ export default function SellerAuthPanel() {
       {clerkRouteStage && (
         <span hidden data-rwas-clerk-route-stage={clerkRouteStage} />
       )}
-      <button className="a4s-cta-btn" onClick={() => void jerry()}>
-        List Your Aircraft
-      </button>
-      <button
-        className="a4s-cta-btn secondary"
-        onClick={() => void openListings()}
-      >
-        {session ? 'My Listings' : 'Seller Login'}
-      </button>
-      {session && (
-        <>
-          <button
-            className="a4s-cta-btn secondary"
-            onClick={() => void openAccount()}
-          >
-            Account
-          </button>
-          {!view && (
-            <button
-              className="a4s-cta-btn secondary"
-              disabled={busy}
-              onClick={() => void perform(signOutSeller)}
-            >
-              Sign Out
-            </button>
+      <div className="a4s-user-entry">
+        {!session && (
+          <p>
+            Buying or selling? Create an account or log in. After sign-in, you
+            can start and manage your aircraft listings.
+          </p>
+        )}
+        <div className="a4s-account-actions" aria-label="Marketplace account">
+          {session ? (
+            <>
+              <button className="a4s-cta-btn" onClick={() => void jerry()}>
+                List Your Aircraft
+              </button>
+              <button
+                className="a4s-cta-btn secondary"
+                onClick={() => void openListings()}
+              >
+                My Listings
+              </button>
+              <button
+                className="a4s-cta-btn secondary"
+                onClick={() => void openAccount()}
+              >
+                Account
+              </button>
+              {!view && (
+                <button
+                  className="a4s-cta-btn secondary"
+                  disabled={busy}
+                  onClick={() => void perform(signOutSeller)}
+                >
+                  Sign Out
+                </button>
+              )}
+            </>
+          ) : (
+            <>
+              <button
+                className="a4s-cta-btn"
+                onClick={() => {
+                  setAuthEntry('signup');
+                  setView('login');
+                }}
+              >
+                Create Account
+              </button>
+              <button
+                className="a4s-cta-btn secondary"
+                onClick={() => {
+                  setAuthEntry('login');
+                  setView('login');
+                }}
+              >
+                User Login
+              </button>
+            </>
           )}
-        </>
-      )}
+        </div>
+      </div>
       {!session && !view && signOutNotice && (
         <div role="status" className="seller-signout-status">
           <p>{signOutNotice}</p>
@@ -1340,11 +1372,13 @@ export default function SellerAuthPanel() {
         <header>
           <h2 id="seller-title">
             {view === 'login'
-              ? 'Seller Login'
+              ? authEntry === 'signup'
+                ? 'Create Your Account'
+                : 'User Login'
               : view === 'better-auth'
-                ? 'Secure Seller Login'
+                ? 'Secure User Login'
                 : view === 'clerk'
-                  ? 'Secure Seller Login'
+                  ? 'Secure User Login'
                   : view === 'clerk-owner'
                     ? 'Connect Existing Seller Account'
                     : view === 'account'
@@ -1393,6 +1427,7 @@ export default function SellerAuthPanel() {
             )}
             {betterAuthEnabled && !session && !betterSignOutPending && (
               <BetterAuthPanel
+                initialMode={authEntry}
                 providers={betterProviders}
                 onSignedIn={(next) => {
                   setAuth(next);
