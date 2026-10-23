@@ -49,7 +49,9 @@ import { ListingDraftWorkflow } from './listing-draft-workflow';
 import {
   draftFields,
   getDraftFields,
+  getMediaSteps,
   mediaLimits,
+  validateDraftField,
   validateUpload,
 } from './listing-draft-fields';
 import {
@@ -200,6 +202,7 @@ export default function SellerAuthPanel() {
     | 'clerk-owner'
     | 'listings'
     | 'create'
+    | 'resume'
     | 'edit'
     | 'account'
     | 'admin'
@@ -226,6 +229,8 @@ export default function SellerAuthPanel() {
     [editing, setEditing] = useState<Listing | null>(null);
   const [form, setForm] = useState<Record<string, string>>({}),
     [account, setAccount] = useState<Account | null>(null);
+  const [initialDraftStep, setInitialDraftStep] = useState(0);
+  const sourceDraftRevision = useRef<string | null>(null);
   const [accountSection, setAccountSection] = useState('profile');
   const [message, setMessage] = useState(''),
     [error, setError] = useState(''),
@@ -240,7 +245,9 @@ export default function SellerAuthPanel() {
   const [canManageAdministrators, setCanManageAdministrators] = useState(false);
   const accessRole = useRef('checking');
   const editorGeneration = useRef(0);
-  const manualListingAction = useRef<() => Promise<void>>(async () => {});
+  const manualListingAction = useRef<
+    (details?: Record<string, unknown>) => Promise<void>
+  >(async () => {});
   const authGeneration = useRef(0);
   const requestFacade = useRef<ReturnType<
     typeof createSellerRequestFacade
@@ -848,16 +855,8 @@ export default function SellerAuthPanel() {
         login();
         return;
       }
-      const details = (event as CustomEvent).detail || {};
-      editorGeneration.current += 1;
-      setEditing(null);
-      submission.current = crypto.randomUUID();
       if (accessRole.current !== 'seller') return;
-      setForm(listingFormValues(details, draftFields));
-      setView('edit');
-      setMessage(
-        'Review these details from Jerry. Save a private draft, then submit it for review.',
-      );
+      void manualListingAction.current((event as CustomEvent).detail || {});
     };
     document.addEventListener('rwas:seller-draft', draft);
     const manual = () => void manualListingAction.current();
@@ -1093,6 +1092,8 @@ export default function SellerAuthPanel() {
   }
   function edit(l: Listing | null) {
     editorGeneration.current += 1;
+    sourceDraftRevision.current = null;
+    setInitialDraftStep(0);
     setEditing(l);
     submission.current = crypto.randomUUID();
     setForm(listingFormValues(l, draftFields));
@@ -1107,7 +1108,21 @@ export default function SellerAuthPanel() {
     setError('');
     setView(currentAuth.current ? 'create' : 'login');
   }
-  async function openManualListing() {
+  async function openResumeListing() {
+    const generation = ++editorGeneration.current;
+    await perform(async () => {
+      const saved = await api('/draft');
+      if (generation !== editorGeneration.current) return;
+      if (!saved.draft)
+        throw Error('No saved draft is available. Refresh My Listings.');
+      setSavedDraft(saved.draft);
+      setView('resume');
+    });
+  }
+  async function openManualListing(
+    requireSaved = false,
+    fallbackDetails?: Record<string, unknown>,
+  ) {
     if (currentAuth.current && accessRole.current !== 'seller') {
       if (accessRole.current === 'admin') setView('admin');
       return;
@@ -1117,16 +1132,43 @@ export default function SellerAuthPanel() {
       setView('login');
       return;
     }
+    const generation = ++editorGeneration.current;
     await perform(async () => {
       const saved = await api('/draft');
-      if (currentAuth.current !== current) return;
-      const details = saved.draft?.intake ? saved.draft.fields : saved.draft;
+      if (
+        currentAuth.current !== current ||
+        generation !== editorGeneration.current
+      )
+        return;
+      if (requireSaved && !saved.draft)
+        throw Error('No saved draft is available. Refresh My Listings.');
+      const details =
+        (saved.draft?.intake ? saved.draft.fields : saved.draft) ||
+        fallbackDetails;
       edit(null);
-      if (details) setForm(listingFormValues(details, draftFields));
-      setMessage('Enter your listing details and save a private draft.');
+      sourceDraftRevision.current = saved.revision || null;
+      if (details) {
+        const values = listingFormValues(details, draftFields);
+        const fields = getDraftFields(values);
+        let next = fields.findIndex(
+          (field) =>
+            field.required && validateDraftField(field, values[field.name]),
+        );
+        if (next < 0)
+          next = fields.findIndex((field) => !values[field.name]?.trim());
+        setInitialDraftStep(
+          next < 0 ? fields.length + getMediaSteps(values).length : next,
+        );
+        setForm(values);
+      }
+      setMessage(
+        details
+          ? 'Your saved details are restored. Continue your listing below.'
+          : 'Enter your listing details and save a private draft.',
+      );
     });
   }
-  manualListingAction.current = openManualListing;
+  manualListingAction.current = (details) => openManualListing(false, details);
   async function save() {
     const generation = editorGeneration.current;
     const visible = new Set(getDraftFields(form).map((field) => field.name));
@@ -1144,10 +1186,18 @@ export default function SellerAuthPanel() {
       editing ? '/listings/' + editing.id : '/listings',
       editing ? 'PUT' : 'POST',
       values,
-      editing ? undefined : { 'Idempotency-Key': submission.current },
+      editing
+        ? undefined
+        : {
+            'Idempotency-Key': submission.current,
+            ...(sourceDraftRevision.current
+              ? { 'X-RWAS-Draft-Revision': sourceDraftRevision.current }
+              : {}),
+          },
     );
     if (generation !== editorGeneration.current) return data.listing as Listing;
     setEditing(data.listing);
+    sourceDraftRevision.current = null;
     setMessage('Draft saved. Add media, then submit for review.');
     await load();
     return data.listing as Listing;
@@ -1334,7 +1384,7 @@ export default function SellerAuthPanel() {
     if (result.ok === true && typeof result.logoutUrl === 'string')
       window.location.assign(result.logoutUrl);
   }
-  async function jerry() {
+  async function jerry(resume = false) {
     if (currentAuth.current && accessRole.current !== 'seller') {
       if (accessRole.current === 'admin') setView('admin');
       return;
@@ -1346,10 +1396,14 @@ export default function SellerAuthPanel() {
     const w = window as unknown as { jerryChat?: (s: string) => void };
     if (w.jerryChat) {
       setView(null);
-      w.jerryChat('I want to create a listing.');
+      w.jerryChat(
+        resume
+          ? 'I want to resume my saved listing.'
+          : 'I want to create a listing.',
+      );
     } else {
       setMessage('Jerry is unavailable. You can start with the manual form.');
-      await openManualListing();
+      await openManualListing(resume);
     }
   }
   return (
@@ -1487,8 +1541,10 @@ export default function SellerAuthPanel() {
                           ? 'Your Account'
                           : view === 'edit'
                             ? 'Listing Draft'
-                            : view === 'create'
-                              ? 'Create a Listing'
+                            : view === 'create' || view === 'resume'
+                              ? view === 'resume'
+                                ? 'Resume Saved Draft'
+                                : 'Create a Listing'
                               : 'My Listings'}
           </h2>
           {session && (
@@ -1768,6 +1824,37 @@ export default function SellerAuthPanel() {
             </div>
           </section>
         )}
+        {view === 'resume' && access === 'seller' && (
+          <section
+            className="listing-start"
+            aria-label="Choose how to resume your saved draft"
+          >
+            <p>
+              Continue your saved listing manually or with Jerry. Your saved
+              details will be kept with either option.
+            </p>
+            <div className="listing-start-options">
+              <button
+                aria-label="Resume manually"
+                disabled={busy}
+                onClick={() => void openManualListing(true)}
+              >
+                <strong>Resume manually</strong>
+                <span>
+                  Review your saved answers and continue the step-by-step form.
+                </span>
+              </button>
+              <button
+                aria-label="Resume with Jerry"
+                disabled={busy}
+                onClick={() => void jerry(true)}
+              >
+                <strong>Resume with Jerry</strong>
+                <span>Continue your saved listing with Jerry’s guidance.</span>
+              </button>
+            </div>
+          </section>
+        )}
         {view === 'listings' && access === 'seller' && (
           <>
             <nav>
@@ -1787,20 +1874,7 @@ export default function SellerAuthPanel() {
               </button>
             </nav>
             {savedDraft && (
-              <button
-                disabled={busy}
-                onClick={() => {
-                  if (savedDraft.intake) {
-                    void jerry();
-                  } else {
-                    editorGeneration.current += 1;
-                    setEditing(null);
-                    submission.current = crypto.randomUUID();
-                    setForm(listingFormValues(savedDraft, draftFields));
-                    setView('edit');
-                  }
-                }}
-              >
+              <button disabled={busy} onClick={() => void openResumeListing()}>
                 Resume Saved Draft
               </button>
             )}
@@ -1914,6 +1988,7 @@ export default function SellerAuthPanel() {
         {view === 'edit' && access === 'seller' && (
           <ListingDraftWorkflow
             key={session?.token}
+            initialStep={initialDraftStep}
             values={form}
             onChange={(name, value) =>
               setForm((previous) => {

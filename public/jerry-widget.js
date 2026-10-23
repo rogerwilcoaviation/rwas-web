@@ -347,7 +347,8 @@
           var manualLink = document.createElement('a');
           manualLink.href = '#create-listing';
           manualLink.textContent = 'Prefer to fill out the form manually?';
-          manualLink.style.cssText = 'color:inherit;text-decoration:underline;cursor:pointer;font-size:14px;display:inline-block;padding:8px 0;';
+          manualLink.style.cssText =
+            'color:inherit;text-decoration:underline;cursor:pointer;font-size:14px;display:inline-block;padding:8px 0;';
           manualLink.addEventListener('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -515,7 +516,9 @@
       sessionStorage.removeItem('rwas_sale_v2');
     } catch (_) {}
     window.rwasSaleSession = null;
-    document.dispatchEvent(new CustomEvent('rwas:session-changed', { detail: null }));
+    document.dispatchEvent(
+      new CustomEvent('rwas:session-changed', { detail: null }),
+    );
   }
 
   async function sellerRequest(path, options, request) {
@@ -629,11 +632,18 @@
   }
 
   function hasListingIntent(text) {
+    if (wantsSavedDraft(text)) return true;
     // Tight first-person seller-intent only. Mirrors LISTING_SELLER_INTENT_RE in
     // intake-bridge/worker.js so buyer queries ("how many do you have for sale?")
     // don't trigger the User Login modal. Fixed 2026-04-17.
     return /\b(i (want|need|would like|wanna) to (list|sell|post|create a listing)|i'?d like to (list|sell|post)|list my (aircraft|plane|airplane)|sell my (aircraft|plane|airplane)|post my (aircraft|plane|airplane)|put my (aircraft|plane|airplane) (up )?for sale|asking price for my|how (do|can) i list (my|an aircraft))\b/i.test(
       String(text || ''),
+    );
+  }
+
+  function wantsSavedDraft(text) {
+    return /^I want to resume my saved listing\.?$/i.test(
+      String(text || '').trim(),
     );
   }
 
@@ -848,6 +858,7 @@
           messages: apiMessages,
           state: intakeState,
           listingUi: listingActive,
+          ...(wantsSavedDraft(text) ? { resume: true } : {}),
         }),
       };
       var response = listingActive

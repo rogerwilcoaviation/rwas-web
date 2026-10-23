@@ -18,6 +18,7 @@ type Props = {
   onSubmitReview: () => Promise<void>;
   renderMedia: (category: string) => ReactNode;
   mediaCounts: Record<string, number>;
+  initialStep?: number;
 };
 
 export function ListingDraftWorkflow({
@@ -29,10 +30,11 @@ export function ListingDraftWorkflow({
   onSubmitReview,
   renderMedia,
   mediaCounts,
+  initialStep = 0,
 }: Props) {
   const draftFields = getDraftFields(values);
   const mediaSteps = getMediaSteps(values);
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(initialStep);
   const [error, setError] = useState('');
   const heading = useRef<HTMLHeadingElement>(null);
   const field = draftFields[step];

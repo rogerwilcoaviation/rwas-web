@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { deferUntilIdle } from './deferUntilIdle';
 
-const JERRY_WIDGET_SRC = '/jerry-widget.js?v=20261004-safe-markdown-emphasis';
+const JERRY_WIDGET_SRC = '/jerry-widget.js?v=20261023-saved-draft-resume';
 
 export default function DeferredJerryWidget() {
   useEffect(() => {

@@ -6,6 +6,7 @@ import { extname, resolve } from 'node:path';
 import { fixture } from './fixture.mjs';
 import { checkListingWorkflow } from './listing-workflow-checks.mjs';
 import { checkCategoryWorkflows } from './category-workflow-checks.mjs';
+import { checkSavedDraftResume } from './saved-draft-resume-checks.mjs';
 
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
@@ -47,8 +48,11 @@ const server = createServer(async (request, response) => {
   }
 });
 await new Promise((done) => server.listen(0, '127.0.0.1', done));
+const localOrigin = `http://127.0.0.1:${server.address().port}`;
+// Secure widget requests require the canonical origin. Offline runs fulfill all
+// public assets from the local export while account operations stay intercepted.
 const origin =
-  process.env.MARKETPLACE_ORIGIN || `http://127.0.0.1:${server.address().port}`;
+  process.env.MARKETPLACE_ORIGIN || 'https://www.rogerwilcoaviation.com';
 if (process.env.LIVE_PROOFREAD_SMOKE === 'true')
   assert.equal(
     origin,
@@ -213,6 +217,12 @@ try {
             token,
             {
               Origin: origin,
+              ...(request.headers()['x-rwas-draft-revision']
+                ? {
+                    'X-RWAS-Draft-Revision':
+                      request.headers()['x-rwas-draft-revision'],
+                  }
+                : {}),
               ...(request.headers()['idempotency-key']
                 ? { 'Idempotency-Key': request.headers()['idempotency-key'] }
                 : {}),
@@ -234,6 +244,12 @@ try {
           'GET',
           'Only public GET requests may leave the browser fixture',
         );
+        if (!process.env.MARKETPLACE_ORIGIN)
+          return route.fulfill({
+            response: await route.fetch({
+              url: localOrigin + url.pathname + url.search,
+            }),
+          });
         return route.continue();
       });
       const page = await context.newPage();
@@ -310,6 +326,7 @@ try {
           .locator('.jerry-widget-panel')
           .waitFor({ state: 'attached' });
         await page.evaluate(() => {
+          window.__realJerryChat = window.jerryChat;
           window.__jerryCalls = [];
           window.jerryChat = (message) => window.__jerryCalls.push(message);
         });
@@ -325,6 +342,9 @@ try {
         await dialog
           .getByRole('button', { name: 'List manually', exact: false })
           .click();
+        await dialog
+          .getByLabel('Listing step index', { exact: true })
+          .selectOption('0');
         await dialog.getByLabel('Make', { exact: true }).waitFor();
         assert.equal(
           await dialog.getByLabel('Make', { exact: true }).inputValue(),
@@ -351,6 +371,9 @@ try {
           })
           .last()
           .click();
+        await dialog
+          .getByLabel('Listing step index', { exact: true })
+          .selectOption('0');
         await dialog.getByLabel('Make', { exact: true }).waitFor();
         assert.equal(
           await dialog.getByLabel('Make', { exact: true }).inputValue(),
@@ -368,7 +391,24 @@ try {
           artifacts,
           proofreader,
         });
-        await checkCategoryWorkflows({page,dialog,f,width,artifacts,token,origin});
+        await checkCategoryWorkflows({
+          page,
+          dialog,
+          f,
+          width,
+          artifacts,
+          token,
+          origin,
+        });
+        await checkSavedDraftResume({
+          page,
+          dialog,
+          f,
+          width,
+          artifacts,
+          token,
+          origin,
+        });
         await dialog
           .getByRole('button', { name: 'Close seller panel', exact: true })
           .click();
@@ -484,6 +524,11 @@ try {
         ...(signedIn
           ? {
               guidedWorkflow: 'passed',
+              savedDraftResume: {
+                categories: 4,
+                formats: 2,
+                manualAndJerry: 'passed',
+              },
               liveProofreading: proofreader.liveResult || null,
             }
           : {}),

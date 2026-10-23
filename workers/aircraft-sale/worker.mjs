@@ -3583,19 +3583,61 @@ export class SellerStore {
           state: { cancelled: true },
         });
       let progress = this.state.drafts[u.id];
+      const resuming = body.resume === true;
+      if (resuming && !progress)
+        fail(404, 'No saved draft is available. Refresh My Listings.');
       if (!progress?.intake) {
+        const savedFields = resuming
+          ? clean(
+              Object.fromEntries(
+                Object.entries(progress).filter(([key]) => key !== 'updatedAt'),
+              ),
+            )
+          : null;
         progress = {
           intake: true,
-          schemaVersion: 3,
+          schemaVersion:
+            savedFields &&
+            !savedFields.workflowVersion &&
+            !savedFields.listingType
+              ? 1
+              : 3,
           aircraftContactFieldsVersion: 1,
           step: 0,
-          fields: { sellerName: u.name, workflowVersion: '3' },
+          fields: savedFields || { sellerName: u.name, workflowVersion: '3' },
         };
+        if (resuming) {
+          const fields =
+            progress.schemaVersion === 3
+              ? intakeFields(progress.fields)
+              : legacySteps.map(([name, label]) => ({
+                  name,
+                  label,
+                  required: !['description', 'avionics'].includes(name),
+                }));
+          let next = fields.findIndex(
+            (field) =>
+              field.required &&
+              !String(progress.fields[field.name] ?? '').trim(),
+          );
+          if (next < 0)
+            next = fields.findIndex(
+              (field) =>
+                !String(
+                  field.name.startsWith('spec:')
+                    ? (progress.fields.specifications?.[field.name.slice(5)] ??
+                        '')
+                    : (progress.fields[field.name] ?? ''),
+                ).trim(),
+            );
+          progress.step = next < 0 ? fields.length : next;
+        }
         this.state.drafts[u.id] = progress;
-        return reply({
-          reply: intakePrompt(intakeFields(progress.fields)[0]),
-          state: { step: 0 },
-        });
+        if (!resuming)
+          return reply({
+            reply: intakePrompt(intakeFields(progress.fields)[0]),
+            state: { step: 0 },
+          });
       }
       const guidedFields =
         progress.schemaVersion === 3 ? intakeFields(progress.fields) : null;
@@ -3621,6 +3663,19 @@ export class SellerStore {
       const steps = guidedFields
         ? guidedFields.map((field) => [field.name, intakePrompt(field)])
         : legacySteps;
+      if (resuming) {
+        if (progress.step >= steps.length)
+          return reply({
+            reply:
+              'Your saved details are ready. Review your listing in the seller panel, then save and submit for review.',
+            action: { type: 'listing_draft', draft: clean(progress.fields) },
+            state: { completed: true },
+          });
+        return reply({
+          reply: 'Continuing your saved draft. ' + steps[progress.step][1],
+          state: { step: progress.step },
+        });
+      }
       if (/\b(list|sell) my|want to (list|create a listing)/i.test(text))
         return reply({
           reply:
@@ -3837,8 +3892,13 @@ export class SellerStore {
       return reply({ ok: true });
     }
     if (path === '/draft') {
-      if (method === 'GET')
-        return reply({ draft: this.state.drafts[u.id] || null });
+      if (method === 'GET') {
+        const draft = this.state.drafts[u.id] || null;
+        return reply({
+          draft,
+          revision: draft ? await hash(JSON.stringify(draft)) : null,
+        });
+      }
       if (method === 'PUT') {
         const b = clean(await this.json(req));
         this.state.drafts[u.id] = { ...b, updatedAt: Date.now() };
@@ -3880,6 +3940,17 @@ export class SellerStore {
           },
         });
       }
+      const sourceDraftRevision = req.headers.get('X-RWAS-Draft-Revision');
+      if (
+        sourceDraftRevision &&
+        (!this.state.drafts[u.id] ||
+          sourceDraftRevision !==
+            (await hash(JSON.stringify(this.state.drafts[u.id]))))
+      )
+        fail(
+          409,
+          'Your saved draft changed. Reopen it from My Listings before saving.',
+        );
       const id = crypto.randomUUID(),
         l = {
           id,
@@ -3895,10 +3966,11 @@ export class SellerStore {
       const saved = this.state.drafts[u.id];
       if (
         saved &&
-        !saved.intake &&
-        ['make', 'model', 'year', 'price'].every(
-          (k) => String(saved[k]) === String(b[k]),
-        )
+        (sourceDraftRevision ||
+          (!saved.intake &&
+            ['make', 'model', 'year', 'price'].every(
+              (k) => String(saved[k]) === String(b[k]),
+            )))
       )
         delete this.state.drafts[u.id];
       this.state.idempotency[key] = { digest, id };

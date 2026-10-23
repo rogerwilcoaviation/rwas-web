@@ -1,8 +1,10 @@
 # Guided manual listing drafts
 
+“Resume Saved Draft” offers “Resume manually” and “Resume with Jerry.” Both reload the authenticated seller’s saved answers, including category and specifications. The manual path opens an unfinished item; Jerry resumes the stored conversation cursor without treating the resume request as an answer. A manual draft can also be resumed with Jerry without resetting its fields. The chat’s manual link restores the same saved draft. When the seller saves it as a listing, an opaque source-draft revision lets the service consume that intake atomically; a changed source returns a conflict instead of overwriting newer progress. Replays return the same listing.
+
 The signed-in manual editor presents one field or attachment category at a time, followed by a review screen. Back keeps the current entries. Optional items can be skipped. Review links reopen individual items for correction.
 
-Make, model, year and asking price are required before submission, matching the seller service. Year must be from 1903 through next year. Price must be positive and no more than $1 billion. Other current aircraft fields and all attachments are optional. Dedicated component and tool forms remain a separate task.
+Required questions depend on the listing type and category. Aircraft require make, model, year, N-number and location; hangars, parts and tools use their own relevant fields. Optional specifications and attachments are labeled. Year must be from 1903 through next year. An amount-based price must be positive and no more than $1 billion; supported categories also allow price on request.
 
 Save Draft can retain incomplete entries; the final details step also saves the draft before attachments. Existing saved numeric values cannot be cleared to an invalid value. The review action saves the current details before submitting the returned listing revision for private staff review. It never publishes a listing. Closing or replacing an editor prevents an older save response from replacing the newly opened draft.
 
