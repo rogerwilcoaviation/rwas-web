@@ -341,7 +341,7 @@ export class ActivityLog {
         now - ACTIVITY_RETENTION_DAYS * DAY,
       );
       this.storage.sql.exec(
-        'DELETE FROM exchange_activity WHERE seq <= (SELECT seq FROM exchange_activity ORDER BY seq DESC LIMIT 1 OFFSET ?)',
+        'DELETE FROM exchange_activity WHERE seq <= (SELECT max(seq) FROM exchange_activity) - ?',
         ACTIVITY_MAX_ROWS,
       );
     } else {
