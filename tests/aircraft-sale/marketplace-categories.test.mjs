@@ -217,6 +217,7 @@ async function adminFixture() {
       expiresAt: Date.now() + 86400000,
     });
   const store = new SellerStore(f.ctx, f.env, {
+    administratorIdentity: async (_env, id) => ({ id, role: identities.get(id === 'seller-id' ? 'seller' : 'reserved')?.isAdministrator ? 'admin' : 'user' }),
     readBetterAuthIdentity: async (_env, req) =>
       identities.get(req.headers.get('Cookie')) || null,
   });

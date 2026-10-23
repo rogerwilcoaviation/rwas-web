@@ -1,4 +1,11 @@
 import {
+  administratorDirectory,
+  administratorIdentity,
+  administratorRole,
+  changeAdministratorRole,
+  superAdministratorIds,
+} from './administrator-roles.mjs';
+import {
   CLERK_QA_COHORT,
   clerkQaEmail,
   clerkQaOnlyEnabled as configuredClerkQaOnlyEnabled,
@@ -523,6 +530,12 @@ export class SellerStore {
     // Durable Objects receive only ctx/env and always use the real DB reader.
     this.readBetterAuthIdentity =
       dependencies.readBetterAuthIdentity || readBetterAuthIdentity;
+    this.administratorIdentity =
+      dependencies.administratorIdentity || administratorIdentity;
+    this.administratorDirectory =
+      dependencies.administratorDirectory || administratorDirectory;
+    this.changeAdministratorRole =
+      dependencies.changeAdministratorRole || changeAdministratorRole;
   }
   fetch(req) {
     const operation = this.queue.then(() => this.run(req));
@@ -829,6 +842,7 @@ export class SellerStore {
     this.state.audit.push({ at: Date.now(), action, actor, ...details });
   }
   async user(req, recent = false) {
+    let delegatedAdministrator = false;
     const raw = (req.headers.get('Authorization') || '').replace(
       /^Bearer /,
       '',
@@ -867,6 +881,7 @@ export class SellerStore {
         await this.readBetterAuthIdentity(this.env, req, { recent }),
         recent,
       );
+      delegatedAdministrator = current.isAdministrator === true;
       assertBetterAuthQaEmail(this.env, current.email);
       if (
         betterAuthQaEnabled(this.env) &&
@@ -976,12 +991,19 @@ export class SellerStore {
       .map((id) => id.trim())
       .filter(Boolean);
     const accountRole =
-      s.method === 'better-auth' && adminIds.includes(s.subject)
+      s.method === 'better-auth' &&
+      (adminIds.includes(s.subject) || delegatedAdministrator)
         ? 'admin'
         : profile.email?.toLowerCase() === 'admin@rwas.team'
           ? 'restricted-admin'
           : 'seller';
-    return { ...profile, sessionKey: key, accountRole };
+    return {
+      ...profile,
+      sessionKey: key,
+      accountRole,
+      superAdministrator:
+        s.method === 'better-auth' && adminIds.includes(s.subject),
+    };
   }
   async businessAdministrator(req, recent = false) {
     if (!this.state?.sessions) return null;
@@ -996,6 +1018,9 @@ export class SellerStore {
     const session = this.state.sessions[user.sessionKey];
     return {
       actor: user.email,
+      subject: session.subject,
+      canManageAdministrators: user.superAdministrator === true,
+      canManageIdentities: user.superAdministrator === true,
       scope: 'seller-accounts',
       expiresAt: session.expiresAt,
       authenticatedAt: session.providerSessionCreatedAt,
@@ -1054,7 +1079,8 @@ export class SellerStore {
       .split(',')
       .map((id) => id.trim())
       .filter(Boolean);
-    if (!ids.includes(identity.subject)) return null;
+    if (!ids.includes(identity.subject) && identity.isAdministrator !== true)
+      return null;
     const key = await digest(identity.issuer + '|' + identity.subject),
       link = this.state.identities[key],
       security = this.state.identitySecurity[key];
@@ -1588,11 +1614,11 @@ export class SellerStore {
       method = req.method;
     let path = url.pathname.replace(/^\/api\/aircraft-sale/, '') || '/';
     // The legacy /admin paths retain their independent Access application.
-    // This namespace accepts only the current configured MFA administrator,
+    // This namespace accepts only current MFA-verified business administrators,
     // never an Access reviewer credential or an email-only role claim.
     if (path.startsWith('/staff/')) {
       if (
-        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply))?)?|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
+        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply))?)?|administrators|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
           path,
         )
       )
@@ -2486,6 +2512,59 @@ export class SellerStore {
         stream: receipt.stream,
       });
     }
+    if (path === '/admin/administrators') {
+      const authority = await this.businessAdministrator(req, method !== 'GET');
+      if (!authority?.canManageAdministrators)
+        fail(403, 'Super administrator access required.');
+      assertAccountOrigin(req, this.env, method !== 'GET');
+      if (method === 'GET')
+        return reply({
+          ...(await this.administratorDirectory(
+            this.env,
+            url.searchParams.get('email') || '',
+          )),
+          canManage: authority.canManage,
+          manageUntil: authority.manageUntil,
+        });
+      if (method !== 'POST') fail(405, 'Method not allowed.');
+      const input = await this.json(req);
+      if (input?.action === 'grant') {
+        const links = Object.values(this.state.identities).filter(
+          (link) =>
+            link.issuer === 'rwas-better-auth' && link.subject === input.id,
+        );
+        if (links.some((link) => accountHeld(this.state.profiles[link.userId])))
+          fail(
+            409,
+            'Reinstate the customer account before granting administrator access.',
+          );
+      }
+      // Commit the request audit before crossing into D1. An unavailable
+      // business store must never permit an unaudited role change. If the
+      // completion save fails, this durable intent still identifies the change.
+      const operationId = crypto.randomUUID();
+      this.audit('administrator-role-change-requested', authority.actor, {
+        operationId,
+        subject: typeof input?.id === 'string' ? input.id.slice(0, 128) : '',
+        operation: ['grant', 'revoke'].includes(input?.action)
+          ? input.action
+          : 'unknown',
+      });
+      await this.saveState(this.state);
+      this.rollbackState = structuredClone(this.state);
+      const administrator = await this.changeAdministratorRole(
+        this.env,
+        authority.subject,
+        input,
+      );
+      this.audit('administrator-role-changed', authority.actor, {
+        operationId,
+        subject: administrator.id,
+        operation: input.action,
+        role: administrator.role,
+      });
+      return reply({ administrator });
+    }
     if (/^\/admin\/accounts(?:\/|$)/.test(path)) {
       const write = method !== 'GET',
         identity = await this.accountAdministrator(req, write);
@@ -2502,22 +2581,32 @@ export class SellerStore {
       if (method !== 'POST' || !action) fail(405, 'Method not allowed.');
       const body = await this.json(req),
         operation = accountOperation(body);
-      if (['delete-account', 'suspend'].includes(operation.operation)) {
-        const adminIds = String(this.env.BETTER_AUTH_ADMIN_USER_IDS || '')
-          .split(',')
-          .map((id) => id.trim());
+      for (const link of Object.values(this.state.identities).filter(
+        (link) =>
+          link.userId === accountId && link.issuer === 'rwas-better-auth',
+      )) {
+        const root = superAdministratorIds(this.env).includes(link.subject);
         if (
-          Object.values(this.state.identities).some(
-            (identity) =>
-              identity.userId === accountId &&
-              identity.issuer === 'rwas-better-auth' &&
-              adminIds.includes(identity.subject),
-          )
+          root &&
+          (!identity.canManageAdministrators ||
+            ['delete-account', 'suspend'].includes(operation.operation))
         )
-          fail(
-            403,
-            'Protected administrator accounts cannot be deleted or suspended here.',
+          fail(403, 'The original super administrator account is protected.');
+        if (!root) {
+          const target = await this.administratorIdentity(
+            this.env,
+            link.subject,
           );
+          if (
+            administratorRole(target?.role) &&
+            (!identity.canManageAdministrators ||
+              ['delete-account', 'suspend'].includes(operation.operation))
+          )
+            fail(
+              403,
+              'Only the super administrator can manage administrators. Remove administrator access before suspending or deleting this account.',
+            );
+        }
       }
       const proposal = await accountProposal(
         this.state,
@@ -3072,7 +3161,10 @@ export class SellerStore {
     }
     const u = await this.user(req);
     if (path === '/account/access' && method === 'GET')
-      return reply({ role: u.accountRole });
+      return reply({
+        role: u.accountRole,
+        canManageAdministrators: u.superAdministrator === true,
+      });
     if (path === '/support') {
       if (u.accountRole !== 'seller')
         fail(403, 'Use the administrator support workspace.');

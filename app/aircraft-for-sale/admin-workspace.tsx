@@ -14,6 +14,7 @@ import {
   listingTitle,
 } from '@/lib/marketplace/schema.mjs';
 import SupportDesk from './support-desk';
+import AdministratorManagement from './administrator-management';
 type ManagedListing = {
   id: string;
   status: string;
@@ -28,7 +29,13 @@ type Request = (
   method?: string,
   body?: unknown,
 ) => Promise<unknown>;
-export default function AdminWorkspace({ request }: { request: Request }) {
+export default function AdminWorkspace({
+  request,
+  canManageAdministrators = false,
+}: {
+  request: Request;
+  canManageAdministrators?: boolean;
+}) {
   const [section, setSection] = useState('review');
   return (
     <AccountWorkspace
@@ -40,6 +47,9 @@ export default function AdminWorkspace({ request }: { request: Request }) {
         { value: 'listings', label: 'Edit and delete listings' },
         { value: 'users', label: 'User accounts' },
         { value: 'support', label: 'Customer support' },
+        ...(canManageAdministrators
+          ? [{ value: 'administrators', label: 'Administrators' }]
+          : []),
       ]}
     >
       <AccountSection value="review">
@@ -49,11 +59,16 @@ export default function AdminWorkspace({ request }: { request: Request }) {
         <AdminListings request={request} />
       </AccountSection>
       <AccountSection value="users">
-        <SellerAccounts />
+        <SellerAccounts allowIdentityAdministration={canManageAdministrators} />
       </AccountSection>
       <AccountSection value="support">
         <SupportDesk request={request} admin />
       </AccountSection>
+      {canManageAdministrators && (
+        <AccountSection value="administrators">
+          <AdministratorManagement request={request} />
+        </AccountSection>
+      )}
     </AccountWorkspace>
   );
 }

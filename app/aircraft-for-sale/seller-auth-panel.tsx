@@ -225,6 +225,7 @@ export default function SellerAuthPanel() {
     submission = useRef(crypto.randomUUID());
   const currentAuth = useRef<Session | null>(null);
   const [access, setAccess] = useState('checking');
+  const [canManageAdministrators, setCanManageAdministrators] = useState(false);
   const accessRole = useRef('checking');
   const editorGeneration = useRef(0);
   const manualListingAction = useRef<() => Promise<void>>(async () => {});
@@ -246,6 +247,7 @@ export default function SellerAuthPanel() {
     }
     accessRole.current = 'checking';
     setAccess('checking');
+    setCanManageAdministrators(false);
     setSession(s);
     if (s) {
       setSignOutNotice('');
@@ -940,6 +942,9 @@ export default function SellerAuthPanel() {
         const role = ['admin', 'seller'].includes(data.role)
           ? data.role
           : 'restricted-admin';
+        setCanManageAdministrators(
+          role === 'admin' && data.canManageAdministrators === true,
+        );
         accessRole.current = role;
         setAccess(role);
         if (role === 'admin') setView('admin');
@@ -1877,7 +1882,10 @@ export default function SellerAuthPanel() {
           </>
         )}
         {view === 'admin' && access === 'admin' && (
-          <AdminWorkspace request={api} />
+          <AdminWorkspace
+            request={api}
+            canManageAdministrators={canManageAdministrators}
+          />
         )}
         {view === 'edit' && access === 'seller' && (
           <ListingDraftWorkflow

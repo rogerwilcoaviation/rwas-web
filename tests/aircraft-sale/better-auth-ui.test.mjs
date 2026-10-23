@@ -285,11 +285,23 @@ async function fixture(options = {}) {
             };
     } else if (path === '/redirected-methods')
       body={methods:['better-auth'],emailCode:false,betterAuth:{providers:['password'],legacyLink:false}};
-    else if (path === '/api/aircraft-sale/account/access') body={role:state.adminRole || 'seller'};
+    else if (path === '/api/aircraft-sale/account/access') body={role:state.adminRole || 'seller',canManageAdministrators:!!state.superAdmin};
     else if (path.startsWith('/api/aircraft-sale/staff/')) {
       assert.equal(requestHeaders.authorization,'Bearer fixture-rwas-session');
       assert.equal(requestHeaders['x-rwas-csrf'],'fixture-csrf');
-      if (path.endsWith('/listings')) body={listings:[]};
+      if (path.endsWith('/administrators')) {
+        assert.equal(state.superAdmin,true,'Only owner UI may call role management.');
+        state.adminCandidate ||= {id:'candidate',email:'staff@example.test',name:'Synthetic Staff',role:'user',verified:true,suspended:false,mfaEnabled:false,revision:'candidate-v1'};
+        const root={id:'root',email:'admin@rwas.team',name:'Owner',role:'super-admin',verified:true,suspended:false,mfaEnabled:true,revision:'root-v1'};
+        if(request.method()==='POST') {
+          const input=request.postDataJSON();
+          assert.equal(input.confirmEmail,state.adminCandidate.email);
+          assert.equal(input.revision,state.adminCandidate.revision);
+          state.adminCandidate={...state.adminCandidate,role:input.action==='grant'?'admin':'user',revision:state.adminCandidate.revision+'-next'};
+          body={administrator:state.adminCandidate};
+        } else body={administrators:[root,...(state.adminCandidate.role==='admin'?[state.adminCandidate]:[])],candidate:url.searchParams.has('email')?state.adminCandidate:null,canManage:!state.adminReadOnly,manageUntil:Date.now()+600000};
+      }
+      else if (path.endsWith('/listings')) body={listings:[]};
       else if(path.endsWith('/support'))body={tickets:[]};
       else if(path.endsWith('/accounts'))body={accounts:[],total:0,nextCursor:null,actor:'fixture-admin',canManage:true,expiresAt:Date.now()+86400000,manageUntil:Date.now()+600000};
       else throw Error('Unexpected staff operation in fixture.');
@@ -1470,6 +1482,7 @@ test('verified admin role opens a dedicated workspace with no seller actions on 
       await dialog.getByRole('heading',{name:'Administrator Workspace',exact:true}).waitFor();
       const index=dialog.getByRole('tablist',{name:'Administrator index',exact:true});
       for(const label of ['Approve listings','Edit and delete listings','User accounts','Customer support'])await index.getByRole('tab',{name:label,exact:true}).waitFor();
+      assert.equal(await index.getByRole('tab',{name:'Administrators',exact:true}).count(),0);
       for(const label of ['Create a Listing','My Listings','Account'])assert.equal(await f.page.getByRole('button',{name:label,exact:true}).count(),0);
       await index.getByRole('tab',{name:'Customer support',exact:true}).click();
       await dialog.getByRole('heading',{name:'Customer support',exact:true}).waitFor();
@@ -1485,5 +1498,113 @@ test('verified admin role opens a dedicated workspace with no seller actions on 
       assert.equal(await dialog.getByLabel('What would you like to list?',{exact:true}).count(),0);
       assert.equal(f.state.requests.some(r=>['/api/aircraft-sale/draft','/api/aircraft-sale/my-listings'].includes(r.path)),false);
     } finally {await f.close();}
+  }
+});
+
+
+test('only the super administrator can find, confirm adding and remove administrators on desktop and mobile', async () => {
+  for (const width of [1440, 390]) {
+    const stored = {
+      provider: 'better-auth',
+      token: 'fixture-rwas-session',
+      csrf: 'fixture-csrf',
+      email: 'admin@rwas.team',
+      name: 'Fixture Admin',
+      identityUserId: 'fixture-user',
+      identitySessionId: 'fixture-session',
+    };
+    const f = await fixture({
+      parent: true,
+      active: true,
+      stored,
+      adminRole: 'admin',
+      superAdmin: true,
+    });
+    try {
+      await f.page.setViewportSize({ width, height: 1000 });
+      const dialog = f.page.getByRole('dialog');
+      const index = dialog.getByRole('tablist', {
+        name: 'Administrator index',
+        exact: true,
+      });
+      await index
+        .getByRole('tab', { name: 'Administrators', exact: true })
+        .click();
+      await dialog
+        .getByRole('button', { name: 'Load administrators', exact: true })
+        .click();
+      await dialog
+        .getByText('Super administrator · Protected owner account', {
+          exact: true,
+        })
+        .waitFor();
+      assert.equal(
+        await dialog
+          .getByRole('button', {
+            name: 'Remove administrator access',
+            exact: true,
+          })
+          .count(),
+        0,
+      );
+      await dialog
+        .getByLabel('Find a registered user by email', { exact: true })
+        .fill('staff@example.test');
+      await dialog
+        .getByRole('button', { name: 'Find account', exact: true })
+        .click();
+      await dialog
+        .getByRole('button', { name: 'Add administrator', exact: true })
+        .click();
+      const confirm = dialog.getByRole('form', {
+        name: 'Confirm administrator change',
+        exact: true,
+      });
+      const apply = confirm.getByRole('button', {
+        name: 'Confirm add administrator',
+        exact: true,
+      });
+      assert.equal(await apply.isDisabled(), true);
+      await confirm
+        .getByLabel('Type the account email to confirm', { exact: true })
+        .fill('wrong@example.test');
+      assert.equal(await apply.isDisabled(), true);
+      await confirm
+        .getByLabel('Type the account email to confirm', { exact: true })
+        .fill('staff@example.test');
+      await apply.click();
+      await dialog
+        .getByText('Administrator added.', { exact: false })
+        .waitFor();
+      await dialog
+        .getByRole('button', {
+          name: 'Remove administrator access',
+          exact: true,
+        })
+        .click();
+      await confirm
+        .getByLabel('Type the account email to confirm', { exact: true })
+        .fill('staff@example.test');
+      await confirm
+        .getByRole('button', { name: 'Confirm remove access', exact: true })
+        .click();
+      await dialog
+        .getByText('Administrator access removed.', { exact: false })
+        .waitFor();
+      assert.equal(
+        f.state.requests.filter(
+          (r) => r.path.endsWith('/administrators') && r.method === 'POST',
+        ).length,
+        2,
+      );
+      assert.equal(
+        await f.page.evaluate(
+          () => document.documentElement.scrollWidth > innerWidth,
+        ),
+        false,
+      );
+    } finally {
+      await f.close();
+    }
   }
 });

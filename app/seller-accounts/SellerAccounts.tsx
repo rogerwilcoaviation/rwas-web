@@ -129,7 +129,11 @@ async function request(path: string, input?: unknown) {
   }
 }
 const time = (value: number) => new Date(value).toLocaleString();
-export default function SellerAccounts() {
+export default function SellerAccounts({
+  allowIdentityAdministration = true,
+}: {
+  allowIdentityAdministration?: boolean;
+}) {
   const [adminSection, setAdminSection] = useState('directory');
   const [rows, setRows] = useState<Summary[]>([]),
     [selected, setSelected] = useState<Account | null>(null),
@@ -463,11 +467,15 @@ export default function SellerAccounts() {
             label: 'Administrator activity',
             disabled: !selected,
           },
-          {
-            value: 'identity',
-            label: 'Identity accounts',
-            disabled: !authority,
-          },
+          ...(allowIdentityAdministration
+            ? [
+                {
+                  value: 'identity',
+                  label: 'Identity accounts',
+                  disabled: !authority,
+                },
+              ]
+            : []),
         ]}
       >
         <AccountSection value="directory">
@@ -761,7 +769,7 @@ export default function SellerAccounts() {
           </div>
         ) : null}
         <AccountSection value="identity">
-          {authority ? (
+          {authority && allowIdentityAdministration ? (
             <BetterAuthIdentityAdmin
               key={`${authority.actor}:${authority.expiresAt}`}
               canManage={authority.canManage}

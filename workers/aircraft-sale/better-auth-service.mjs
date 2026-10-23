@@ -1,3 +1,7 @@
+import {
+  administratorRole,
+  superAdministratorIds,
+} from './administrator-roles.mjs';
 import { betterAuth } from 'better-auth';
 import { admin, twoFactor } from 'better-auth/plugins';
 import {
@@ -693,6 +697,13 @@ export function createSellerAuth(env, options = {}) {
             return;
           const current = await getAuthoritativeSessionFromCtx(ctx);
           if (
+            path === '/admin/ban-user' &&
+            superAdministratorIds(env).includes(ctx.body?.userId)
+          )
+            throw new APIError('FORBIDDEN', {
+              message: 'The original super administrator cannot be suspended.',
+            });
+          if (
             path.startsWith('/admin/') &&
             (!current || !adminUserIds.includes(current.user.id))
           )
@@ -854,6 +865,7 @@ export async function readBetterAuthIdentity(
     providerSessionId: result.session.id,
     email: result.user.email,
     emailVerified: true,
+    isAdministrator: administratorRole(result.user.role),
     name: result.user.name || '',
     createdAt,
     expiresAt,

@@ -1,3 +1,6 @@
+import { SellerStore } from '../../workers/aircraft-sale/worker.mjs';
+import { fixture as businessFixture } from './fixture.mjs';
+import { administratorDirectory, changeAdministratorRole } from '../../workers/aircraft-sale/administrator-roles.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
@@ -1521,6 +1524,271 @@ test('QA cohort gates the actual OAuth identity-token handler and returning non-
         )
         .first('count'),
       2,
+    );
+  } finally {
+    await f.close();
+  }
+});
+
+
+test('super administrator grants and revokes delegated access with real D1, mandatory MFA and protected hierarchy', async () => {
+  const f = await fixture();
+  const b = businessFixture();
+  try {
+    const root = await f.verifiedUser('admin@rwas.team');
+    const staff = await f.verifiedUser('staff@example.test');
+    const customer = await f.verifiedUser('customer@example.test');
+    f.env.BETTER_AUTH_ADMIN_USER_IDS = root.user.id;
+    f.env.ACCOUNT_ADMIN_SITE_ORIGIN = 'http://localhost';
+    f.refresh();
+    Object.assign(b.env, f.env);
+    const store = new SellerStore(b.ctx, b.env);
+    const call = async (path, who, method = 'GET', body, overrides = {}) =>
+      store.fetch(
+        b.request(path, method, body, who.business?.session, {
+          ...Object.fromEntries(
+            new Headers({
+              Origin: 'http://localhost',
+              Cookie: [...who.cookies].map(([k, v]) => k + '=' + v).join('; '),
+              'X-RWAS-CSRF': who.business?.csrf || '',
+            }),
+          ),
+          ...overrides,
+        }),
+      );
+    const checked = async (response, status = 200) => {
+      assert.equal(response.status, status, await response.clone().text());
+      return response.headers.get('content-type')?.includes('json')
+        ? response.json()
+        : null;
+    };
+    async function bridge(who) {
+      who.business = await checked(
+        await call('/auth/better-auth', who, 'POST', {}),
+      );
+    }
+    async function mfa(who) {
+      const enrolled = await checked(
+        await f.call(
+          '/two-factor/enable',
+          { password: fixturePassword, method: 'totp' },
+          who.cookies,
+        ),
+      );
+      const secret = new TextDecoder().decode(
+        base32.decode(new URL(enrolled.totpURI).searchParams.get('secret')),
+      );
+      await checked(
+        await f.call(
+          '/two-factor/verify-totp',
+          { code: await createOTP(secret).totp() },
+          who.cookies,
+        ),
+      );
+      await bridge(who);
+    }
+    await mfa(root);
+    await bridge(staff);
+    await bridge(customer);
+    const authority = await checked(await call('/account/access', root));
+    assert.equal(authority.canManageAdministrators, true);
+    for (const who of [staff, customer])
+      await checked(await call('/staff/administrators', who), 403);
+    let directory = await checked(
+      await call('/staff/administrators?email=staff@example.test', root),
+    );
+    assert.equal(
+      directory.administrators.find((u) => u.id === root.user.id).role,
+      'super-admin',
+    );
+    let candidate = directory.candidate;
+    const change = (action, user = candidate) => ({
+      id: user.id,
+      action,
+      revision: user.revision,
+      confirmEmail: user.email,
+    });
+    await checked(
+      await call('/staff/administrators', staff, 'POST', change('grant')),
+      403,
+    );
+    await checked(
+      await call('/staff/administrators', root, 'POST', {
+        ...change('grant'),
+        role: 'super-admin',
+      }),
+      400,
+    );
+    await checked(
+      await call('/staff/administrators', root, 'POST', {
+        ...change('grant'),
+        confirmEmail: 'wrong@example.test',
+      }),
+      400,
+    );
+    await checked(
+      await call('/staff/administrators', root, 'POST', change('grant'), {
+        'X-RWAS-CSRF': 'wrong',
+      }),
+      403,
+    );
+    await checked(
+      await call('/staff/administrators', root, 'POST', change('grant'), {
+        Origin: 'https://wrong.example',
+      }),
+      403,
+    );
+    await checked(
+      await call(
+        '/staff/administrators',
+        root,
+        'POST',
+        change(
+          'revoke',
+          directory.administrators.find((u) => u.id === root.user.id),
+        ),
+      ),
+      403,
+    );
+    b.storageFailure(true);
+    await checked(
+      await call('/staff/administrators', root, 'POST', change('grant')),
+      503,
+    );
+    assert.equal(
+      (await administratorDirectory(f.env, staff.user.email)).candidate.role,
+      'user',
+    );
+    b.storageFailure(false);
+    await checked(
+      await call('/staff/administrators', root, 'POST', change('grant')),
+    );
+    await checked(
+      await call('/staff/administrators', root, 'POST', change('grant')),
+      409,
+    );
+    await assert.rejects(f.identity(staff.cookies), {
+      status: 403,
+      code: 'TWO_FACTOR_REQUIRED',
+    });
+    assert.equal(
+      (
+        await f
+          .call('/get-session', undefined, staff.cookies)
+          .then((r) => r.json())
+      ).session.requiresMfa,
+      true,
+    );
+    await checked(await call('/staff/listings', staff), 403);
+    await mfa(staff);
+    const staffAuthority = await checked(await call('/account/access', staff));
+    assert.equal(staffAuthority.role, 'admin');
+    assert.equal(staffAuthority.canManageAdministrators, false);
+    for (const path of ['/staff/listings', '/staff/accounts', '/staff/support'])
+      await checked(await call(path, staff));
+    await checked(await call('/staff/administrators', staff), 403);
+    await checked(await call('/draft', staff, 'POST', { fields: {} }), 403);
+    await checked(
+      await f.call('/admin/list-users', undefined, staff.cookies),
+      403,
+    );
+    await checked(
+      await f.call(
+        '/admin/set-role',
+        { userId: customer.user.id, role: 'admin' },
+        staff.cookies,
+      ),
+      404,
+    );
+    const rootProfile = Object.values(b.state().identities).find(
+      (link) => link.subject === root.user.id,
+    ).userId;
+    const staffProfile = Object.values(b.state().identities).find(
+      (link) => link.subject === staff.user.id,
+    ).userId;
+    for (const target of [rootProfile, staffProfile])
+      await checked(
+        await call('/staff/accounts/' + target + '/preview', staff, 'POST', {
+          id: crypto.randomUUID(),
+          operation: 'revoke-sessions',
+          reasonCode: 'maintenance',
+        }),
+        403,
+      );
+    await checked(
+      await call('/staff/accounts/' + staffProfile + '/preview', root, 'POST', {
+        id: crypto.randomUUID(),
+        operation: 'suspend',
+        reasonCode: 'maintenance',
+      }),
+      403,
+    );
+    const providerBan = await f.call(
+      '/admin/ban-user',
+      { userId: root.user.id, banReason: 'fixture' },
+      root.cookies,
+    );
+    await checked(providerBan, 403);
+    // Provider role data is read on every request, including already open staff sessions.
+    directory = await checked(
+      await call('/staff/administrators?email=staff@example.test', root),
+    );
+    candidate = directory.candidate;
+    await checked(
+      await call('/staff/administrators', root, 'POST', change('revoke')),
+    );
+    await checked(await call('/staff/listings', staff), 403);
+    assert.equal(
+      (await checked(await call('/account/access', staff))).role,
+      'seller',
+    );
+    assert.equal((await f.identity(staff.cookies)).isAdministrator, false);
+    assert.equal(
+      b.state().audit.filter((a) => a.action === 'administrator-role-changed')
+        .length,
+      2,
+    );
+    // A cross-store completion failure retains the already committed intent.
+    directory = await checked(await call('/staff/administrators?email=staff@example.test', root));
+    candidate = directory.candidate;
+    const originalChange = store.changeAdministratorRole;
+    store.changeAdministratorRole = async (...args) => {
+      const result = await originalChange(...args);
+      b.storageFailure(true);
+      return result;
+    };
+    await checked(await call('/staff/administrators', root, 'POST', change('grant')), 503);
+    b.storageFailure(false);
+    store.changeAdministratorRole = originalChange;
+    assert.equal((await administratorDirectory(f.env, staff.user.email)).candidate.role, 'admin');
+    assert.equal(b.state().audit.at(-1).action, 'administrator-role-change-requested');
+    await checked(await call('/staff/administrators', root, 'POST', change('grant')), 409);
+    candidate = (await administratorDirectory(f.env, staff.user.email)).candidate;
+    await checked(await call('/staff/administrators', root, 'POST', change('revoke')));
+    // An old owner session remains read-only for role changes.
+    await f.db
+      .prepare('UPDATE session SET createdAt=? WHERE userId=?')
+      .bind(Date.now() - 700000, root.user.id)
+      .run();
+    await checked(
+      await call('/staff/administrators', root, 'POST', change('grant')),
+      401,
+    );
+    // Direct private role helper still checks immutable owner, verified status and revisions.
+    await assert.rejects(
+      changeAdministratorRole(f.env, staff.user.id, change('grant')),
+      { status: 403 },
+    );
+    await f.db
+      .prepare('UPDATE user SET emailVerified=0 WHERE id=?')
+      .bind(customer.user.id)
+      .run();
+    const unverified = (
+      await administratorDirectory(f.env, customer.user.email)
+    ).candidate;
+    await assert.rejects(
+      changeAdministratorRole(f.env, root.user.id, change('grant', unverified)),
+      { status: 409 },
     );
   } finally {
     await f.close();
