@@ -113,7 +113,8 @@ try {
         if (url.pathname === '/api/aircraft-sale/auth/methods')
           return json({
             methods: ['better-auth'],
-            betterAuth: { providers: ['password'], legacyLink: false },
+            betterAuth: { providers: ['password'], legacyLink: true },
+            legacyMethods: ['password'],
           });
         if (url.pathname === '/api/aircraft-sale/browse')
           return json({ listings: [] });
@@ -231,6 +232,7 @@ try {
         await signup.click();
         const dialog = page.getByRole('dialog');
         await dialog.getByLabel('Name', { exact: true }).waitFor();
+        assert.equal(await dialog.getByText('Access an older RWAS account', { exact: true }).count(), 0);
         await dialog
           .getByRole('button', { name: 'Close seller panel', exact: true })
           .click();
@@ -238,6 +240,8 @@ try {
         await dialog
           .getByRole('button', { name: 'Sign in', exact: true })
           .waitFor();
+        await dialog.getByText('Access an older RWAS account', { exact: true }).waitFor();
+        assert.equal(await dialog.getByRole('button', { name: 'Older account: Email and password', exact: true }).isVisible(), false);
         assert.equal(
           await dialog.getByLabel('Name', { exact: true }).count(),
           0,

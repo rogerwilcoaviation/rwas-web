@@ -23,8 +23,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Arial', 'sans-serif'],
-        display: ['Arial', 'sans-serif'],
-        serif: ['Arial', 'sans-serif'],
+        display: ['Source Serif 4', 'Georgia', 'serif'],
+        serif: ['Source Serif 4', 'Georgia', 'serif'],
         mono: ['Arial', 'sans-serif'],
         cursive: ['Arial', 'sans-serif'],
       },

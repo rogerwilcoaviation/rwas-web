@@ -188,6 +188,7 @@ export default function SellerReview() {
   }
   return (
     <main
+      className="seller-review"
       id="main-content"
       tabIndex={-1}
       style={{

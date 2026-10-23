@@ -45,7 +45,7 @@
   --specimen-pad-flat: 18px 20px;
 
   /* ─────────────────────────── Typography stack tokens */
-  --font-display: Arial, sans-serif;
+  --font-display: 'Source Serif 4', Georgia, serif;
   --font-body: Arial, sans-serif;
   --font-ui: Arial, sans-serif;
   --font-script: Arial, sans-serif;

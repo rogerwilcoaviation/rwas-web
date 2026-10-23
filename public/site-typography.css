@@ -1,18 +1,74 @@
 /* Shared by Next pages, standalone tools, and server-rendered listing pages. */
+@font-face {
+  font-family: 'Source Serif 4';
+  src: url('/fonts/source-serif-4/source-serif-4-roman.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Source Serif 4';
+  src: url('/fonts/source-serif-4/source-serif-4-italic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+}
+
 :root {
   --font-sans: Arial, sans-serif;
-  --font-display: Arial, sans-serif;
+  --font-display: 'Source Serif 4', Georgia, serif;
   --font-body: Arial, sans-serif;
   --font-ui: Arial, sans-serif;
   --font-script: Arial, sans-serif;
 }
 
-/* Font family is a site-wide rule, including legacy inline component styles.
-   Keep each component's size, weight, spacing, and emphasis. */
 html,
-body,
+body {
+  font-family: Arial, sans-serif !important;
+}
+
+/* Inherit the editorial or interface family through legacy inline styles. */
 body *,
 body *::before,
 body *::after {
+  font-family: inherit !important;
+}
+
+body :is(h1, h2, h3, h4, h5, h6, .bs-headline, .bs-masthead__brand) {
+  font-family: 'Source Serif 4', Georgia, serif !important;
+  font-optical-sizing: auto;
+}
+
+body :is(button, input, select, textarea, nav, [role='button'], [role='tab']) {
+  font-family: Arial, sans-serif !important;
+}
+
+/* Account and staff interfaces stay in Arial, including their headings. */
+body
+  :is(
+    nav,
+    .seller-dialog,
+    .accounts-admin,
+    .seller-review,
+    .account-workspace,
+    [data-rwas-better-auth],
+    [data-rwas-better-auth-account],
+    [data-rwas-better-auth-delete],
+    [data-rwas-interface]
+  ),
+body
+  :is(
+    nav,
+    .seller-dialog,
+    .accounts-admin,
+    .seller-review,
+    .account-workspace,
+    [data-rwas-better-auth],
+    [data-rwas-better-auth-account],
+    [data-rwas-better-auth-delete],
+    [data-rwas-interface]
+  )
+  :is(h1, h2, h3, h4, h5, h6, .bs-headline) {
   font-family: Arial, sans-serif !important;
 }

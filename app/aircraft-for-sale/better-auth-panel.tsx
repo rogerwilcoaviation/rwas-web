@@ -1,6 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from 'react';
 import AuthenticatorSetup from './authenticator-setup';
 import {
   connectBetterAuthSeller,
@@ -118,12 +124,14 @@ export default function BetterAuthPanel({
   linkOwner,
   onConnectExisting,
   initialMode = 'login',
+  legacyAccess,
 }: {
   onSignedIn: (session: BetterAuthSellerSession) => void;
   providers: BetterAuthProvider[];
   linkOwner?: BetterAuthLinkOwner;
   onConnectExisting?: () => void;
   initialMode?: 'login' | 'signup';
+  legacyAccess?: ReactNode;
 }) {
   const [resetToken] = useState(consumeResetToken);
   const [mode, setMode] = useState<Mode>(() =>
@@ -588,6 +596,7 @@ export default function BetterAuthPanel({
               Use an existing RWAS login
             </button>
           )}
+          {legacyAccess}
         </>
       )}
       {mode !== 'login' &&

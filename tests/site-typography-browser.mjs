@@ -51,10 +51,7 @@ async function verifyExport(directory) {
             )
               return;
             rule.walkDecls('font-family', (declaration) => {
-              if (
-                declaration.important &&
-                /^Arial,\s*sans-serif$/.test(declaration.value)
-              )
+              if (declaration.important && declaration.value === 'inherit')
                 found = true;
             });
           });
@@ -64,7 +61,7 @@ async function verifyExport(directory) {
       }
       assert.ok(
         hasPolicy,
-        relative(exported, path) + ': shared Arial policy must be linked',
+        relative(exported, path) + ': shared typography policy must be linked',
       );
       assert.ok(
         !/<link[^>]+as=["']font["']/.test(html),
@@ -274,11 +271,29 @@ try {
         textElements: elements.length,
         mediaOnly:
           elements.length === 0 && !!document.querySelector('video,canvas'),
-        nonArial: elements
-          .filter(
-            (element) =>
-              !/^Arial(?:,|$)/.test(getComputedStyle(element).fontFamily),
-          )
+        editorialElements: elements.filter(
+          (element) =>
+            element.closest(
+              'h1,h2,h3,h4,h5,h6,.bs-headline,.bs-masthead__brand',
+            ) &&
+            !element.closest(
+              'button,input,select,textarea,nav,[role="button"],[role="tab"],.seller-dialog,.accounts-admin,.seller-review,.account-workspace,[data-rwas-better-auth],[data-rwas-better-auth-account],[data-rwas-better-auth-delete],[data-rwas-interface]',
+            ),
+        ).length,
+        sourceSerifLoaded: document.fonts.check('700 24px "Source Serif 4"'),
+        fontMismatches: elements
+          .filter((element) => {
+            const editorial = element.closest(
+              'h1,h2,h3,h4,h5,h6,.bs-headline,.bs-masthead__brand',
+            );
+            const application = element.closest(
+              'button,input,select,textarea,nav,[role="button"],[role="tab"],.seller-dialog,.accounts-admin,.seller-review,.account-workspace,[data-rwas-better-auth],[data-rwas-better-auth-account],[data-rwas-better-auth-delete],[data-rwas-interface]',
+            );
+            const font = getComputedStyle(element).fontFamily;
+            return editorial && !application
+              ? !/^"?Source Serif 4"?(?:,|$)/.test(font)
+              : !/^Arial(?:,|$)/.test(font);
+          })
           .map((element) => ({
             tag: element.tagName,
             text: element.textContent.trim().slice(0, 70),
@@ -293,10 +308,16 @@ try {
       path + ': rendered text or media exists',
     );
     assert.deepEqual(
-      result.nonArial,
+      result.fontMismatches,
       [],
-      path + ': every visible text element and control uses Arial',
+      path +
+        ': editorial headings use Source Serif 4; reading and application controls use Arial',
     );
+    if (result.editorialElements > 0)
+      assert.ok(
+        result.sourceSerifLoaded,
+        path + ': the actual Source Serif 4 font loaded',
+      );
     if (checkOverflow)
       assert.ok(
         result.documentWidth <= width + 1,

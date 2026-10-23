@@ -1271,6 +1271,32 @@ export default function SellerAuthPanel() {
       />
     </label>
   );
+  const identitySignIn = identityMethods.length > 0 && (
+    <nav
+      aria-label={
+        betterAuthEnabled ? 'Older RWAS account access' : 'Sign-in methods'
+      }
+    >
+      <p>
+        {betterAuthEnabled
+          ? 'Only for accounts created with our previous sign-in service. This opens the previous login provider. For a new account, use the sign-in form above.'
+          : 'Create an account or recover your password on the secure sign-in page.'}
+      </p>
+      {identityMethods.map((method) => (
+        <button
+          key={method}
+          disabled={busy}
+          onClick={() => void beginIdentity(method)}
+        >
+          {betterAuthEnabled
+            ? 'Older account: ' + methodLabels[method]
+            : method === 'password'
+              ? methodLabels[method]
+              : 'Continue with ' + methodLabels[method]}
+        </button>
+      ))}
+    </nav>
+  );
   return (
     <>
       {clerkRouteStage && (
@@ -1429,6 +1455,14 @@ export default function SellerAuthPanel() {
               <BetterAuthPanel
                 initialMode={authEntry}
                 providers={betterProviders}
+                legacyAccess={
+                  identitySignIn ? (
+                    <details className="seller-legacy-access">
+                      <summary>Access an older RWAS account</summary>
+                      {identitySignIn}
+                    </details>
+                  ) : undefined
+                }
                 onSignedIn={(next) => {
                   setAuth(next);
                   setMessage('Signed in.');
@@ -1455,30 +1489,7 @@ export default function SellerAuthPanel() {
                 </p>
               </nav>
             )}
-            {identityMethods.length > 0 && (
-              <nav
-                aria-label={
-                  betterAuthEnabled ? 'Existing RWAS login' : 'Sign-in methods'
-                }
-              >
-                {identityMethods.map((method) => (
-                  <button
-                    key={method}
-                    disabled={busy}
-                    onClick={() => void beginIdentity(method)}
-                  >
-                    {method === 'password'
-                      ? methodLabels[method]
-                      : 'Continue with ' + methodLabels[method]}
-                  </button>
-                ))}
-                <p>
-                  {betterAuthEnabled
-                    ? 'For an existing seller account only. After signing in, use Account to connect the new secure sign-in.'
-                    : 'Create an account or recover your password on the secure sign-in page.'}
-                </p>
-              </nav>
-            )}
+            {!betterAuthEnabled && identitySignIn}
             {clerkOwnerReauthEnabled && !clerkSignOutPending && (
               <button disabled={busy} onClick={beginClerkOwnerConnection}>
                 Connect existing seller account
@@ -2224,6 +2235,16 @@ export default function SellerAuthPanel() {
         }
         .seller-dialog::backdrop {
           background: #0008;
+        }
+        .seller-legacy-access {
+          border-top: 1px solid #aaa;
+          margin-top: 20px;
+          padding-top: 14px;
+        }
+        .seller-legacy-access summary {
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 700;
         }
         header {
           display: flex;

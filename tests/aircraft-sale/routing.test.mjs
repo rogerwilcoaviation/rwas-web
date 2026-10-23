@@ -263,6 +263,9 @@ test('default UUID canonical routes preserve real seller publication, unpublish 
     assert.match(html,/Synthetic Fixture/);
     assert.match(html, /<style data-rwas-typography>/);
     assert.match(html, /font-family: Arial, sans-serif !important/);
+    assert.match(html, /font-family: 'Source Serif 4', Georgia, serif !important/);
+    assert.match(html, /\/fonts\/source-serif-4\/source-serif-4-roman\.woff2/);
+    assert.match(policy, /default-src 'self'/, 'The listing CSP permits same-origin fonts');
     assert.ok(!html.includes('href="/site-typography.css"'), 'Listing typography respects its inline-only style CSP');
     const head = await mf.dispatchFetch(canonical,{method:'HEAD'});
     assert.equal(head.status,200);

@@ -277,7 +277,8 @@ async function fixture(options = {}) {
           : {
               methods: ['better-auth'],
               emailCode: false,
-              betterAuth: { providers: ['password'], legacyLink: false },
+              betterAuth: { providers: ['password'], legacyLink: !!state.modernLegacy },
+              legacyMethods: state.modernLegacy ? ['password'] : [],
             };
     } else if (path === '/redirected-methods')
       body={methods:['better-auth'],emailCode:false,betterAuth:{providers:['password'],legacyLink:false}};
@@ -356,6 +357,31 @@ test('marketplace entry offers signup and login, with listing actions only after
   } finally {
     await f.close();
   }
+});
+
+test('new account signup and verification never offer the older Auth0 password route', async () => {
+  const f = await fixture({ parent: true, modernLegacy: true });
+  try {
+    await f.page.getByRole('button', { name: 'User Login', exact: true }).click();
+    const dialog = f.page.getByRole('dialog');
+    const older = dialog.getByRole('button', { name: 'Older account: Email and password', exact: true });
+    await dialog.getByRole('button', { name: 'Sign in', exact: true }).waitFor();
+    assert.equal(await older.isVisible(), false);
+    assert.equal(await dialog.getByRole('button', { name: 'Email and password', exact: true }).count(), 0);
+    await dialog.getByText('Access an older RWAS account', { exact: true }).click();
+    await older.waitFor();
+    await dialog.getByRole('region', { name: 'User secure sign-in', exact: true }).getByRole('button', { name: 'Create account', exact: true }).click();
+    assert.equal(await older.count(), 0);
+    assert.equal(await dialog.getByText('Access an older RWAS account', { exact: true }).count(), 0);
+    await dialog.getByLabel('Name', { exact: true }).fill('New Fixture User');
+    await credentials(dialog);
+    await dialog.getByRole('button', { name: 'Create your account', exact: true }).click();
+    await dialog.getByRole('status').filter({ hasText: 'Check your email' }).waitFor();
+    assert.equal(await older.count(), 0);
+    assert.equal(await dialog.getByText('Access an older RWAS account', { exact: true }).count(), 0);
+    assert.equal(f.state.requests.some((request) => request.path === '/api/aircraft-sale/auth/start'), false);
+    assert.equal(f.state.bridge, 0);
+  } finally { await f.close(); }
 });
 
 test('real client password login creates the bound RWAS session without loading Clerk', async () => {

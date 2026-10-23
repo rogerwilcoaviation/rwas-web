@@ -103,7 +103,7 @@ jobs:
           NEXT_PUBLIC_SELLER_CLERK_PRODUCTION: 'false'
           NEXT_PUBLIC_SELLER_REPLACE_LEGACY_CATALOG: 'true'
 
-      - name: Arial typography across exported pages and browser views
+      - name: Editorial and interface typography across exported pages and browser views
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/rwas-browser-runtime/node_modules/playwright/index.mjs
           TEST_EXPORT_DIR: .vercel/output/static
