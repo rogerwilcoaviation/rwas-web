@@ -110,7 +110,7 @@ async function fixture(options = {}) {
     if (url.pathname === '/aircraft-for-sale')
       return route.fulfill({
         contentType: 'text/html',
-        body: '<div id="root"></div><script src="/fixture.js"></script>',
+        body: '<style>.account-body.fixture h4{margin:24px 0 8px}.account-body.fixture form+form{margin-top:24px}</style><div id="root" class="account-body fixture"></div><script src="/fixture.js"></script>',
       });
     const path = url.pathname;
     let body = {};
@@ -2016,6 +2016,7 @@ test('seller security sections, fields and session rows remain readable on deskt
    assert.equal(await f.page.getByRole('listitem').filter({hasText:'This sign-in'}).getByRole('button',{name:'Revoke sign-in',exact:true}).count(),0,'Current session cannot revoke itself through a row action');
    const body=await f.page.locator('body').innerText();for(const token of ['fixture-secret-current-token','fixture-secret-other-token'])assert.equal(body.includes(token),false);
    assert.equal(await f.page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
+   if(width===1440){const forms=await f.page.locator('.security-grid > form').evaluateAll(nodes=>nodes.map(node=>({top:node.getBoundingClientRect().top,headingOffset:node.querySelector('h4').getBoundingClientRect().top-node.getBoundingClientRect().top})));assert.ok(Math.abs(forms[0].top-forms[1].top)<=1,'Inherited account form margins must not misalign cards');assert.ok(forms.every(form=>form.headingOffset<35),'Inherited heading margins must not override card spacing');}
    const sizes=await f.page.locator('[data-rwas-better-auth-account] input').evaluateAll(nodes=>nodes.map(node=>({height:node.getBoundingClientRect().height,font:getComputedStyle(node).fontFamily})));assert.ok(sizes.every(item=>item.height>=44&&item.font.includes('Arial')));
    if(process.env.SELLER_SECURITY_ARTIFACT_DIR){await mkdir(process.env.SELLER_SECURITY_ARTIFACT_DIR,{recursive:true});await f.page.screenshot({path:join(process.env.SELLER_SECURITY_ARTIFACT_DIR,'security-'+width+'.png'),fullPage:true});}
    assert.equal(f.state.requests.some(r=>r.path.includes('revoke')||r.path.includes('change-password')||r.path.includes('two-factor/enable')),false);
@@ -2028,6 +2029,7 @@ test('a stale security session shows a clear reauthentication prompt and waits f
  try {
   await f.page.getByText('A recent sign-in is required',{exact:true}).waitFor();
   assert.equal(await f.page.getByRole('alert').count(),0);
+  const bannerStyle=await f.page.locator('.security-reauth').evaluate(node=>({padding:parseFloat(getComputedStyle(node).paddingTop),background:getComputedStyle(node).backgroundColor}));assert.ok(bannerStyle.padding>=16);assert.equal(bannerStyle.background,'rgb(251, 248, 238)');
   for(const label of ['Verify new sign-in email','Change password','Set up authenticator','Sign out other devices'])assert.equal(await f.page.getByRole('button',{name:label,exact:true}).isDisabled(),true);
   assert.equal(f.state.requests.some(r=>r.path===base+'/sign-out'),false,'A stale session never automatically signs the seller out');
   await f.page.getByRole('button',{name:'Refresh settings',exact:true}).click();

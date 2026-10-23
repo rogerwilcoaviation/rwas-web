@@ -951,6 +951,7 @@ export function BetterAuthAccountPanel({
     <section
       aria-label="Sign-in and security"
       data-rwas-better-auth-account="true"
+      className="seller-security"
       aria-busy={busy || loading}
     >
       <BetterAuthStyles />
