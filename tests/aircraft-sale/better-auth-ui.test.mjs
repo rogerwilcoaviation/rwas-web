@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { build } from 'esbuild';
-import { mkdtemp, readFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
@@ -38,6 +38,7 @@ await build({
   },
 });
 const bundle = await readFile(output, 'utf8');
+const layoutPhoto = await readFile(new URL('../../public/newspaper/images/r182_panel.webp',import.meta.url));
 const googleLogo=await readFile(new URL('../../public/auth/google-g.png',import.meta.url));
 const origin = 'https://www.rogerwilcoaviation.com';
 const base = '/api/aircraft-sale/identity';
@@ -282,10 +283,12 @@ async function fixture(options = {}) {
               emailCode: false,
               betterAuth: { providers: state.providers || ['password'], legacyLink: !!state.modernLegacy },
               legacyMethods: state.modernLegacy ? ['password'] : [],
+              publicListings: state.publicListings === true,
             };
     } else if (path === '/redirected-methods')
       body={methods:['better-auth'],emailCode:false,betterAuth:{providers:['password'],legacyLink:false}};
     else if (path === '/api/aircraft-sale/account/access') body={role:state.adminRole || 'seller',canManageAdministrators:!!state.superAdmin};
+    else if (path.startsWith('/api/aircraft-sale/staff/files/')) return route.fulfill({contentType:'image/webp',body:layoutPhoto});
     else if (path.startsWith('/api/aircraft-sale/staff/')) {
       assert.equal(requestHeaders.authorization,'Bearer fixture-rwas-session');
       assert.equal(requestHeaders['x-rwas-csrf'],'fixture-csrf');
@@ -301,7 +304,25 @@ async function fixture(options = {}) {
           body={administrator:state.adminCandidate};
         } else body={administrators:[root,...(state.adminCandidate.role==='admin'?[state.adminCandidate]:[])],candidate:url.searchParams.has('email')?state.adminCandidate:null,canManage:!state.adminReadOnly,manageUntil:Date.now()+600000};
       }
-      else if (path.endsWith('/listings')) body={listings:[]};
+      else if (path.endsWith('/listings')) body={listings:state.marketplaceListings || []};
+      else if (/\/listings\/[^/]+$/.test(path)) {
+        const item=state.marketplaceListings.find(item=>item.id===path.split('/').at(-1));
+        assert.ok(item);
+        const input=request.postDataJSON();
+        assert.equal(input.revision,item.revision);
+        if(request.method()==='DELETE') {assert.equal(input.confirm,item.id);item.status='deleted';}
+        else if(request.method()==='POST') {assert.equal(input.action,'restore');item.status='draft';}
+        else {assert.equal(request.method(),'PUT');item.fields=input.fields;item.status=input.submitForReview?'pending':'draft';}
+        item.revision++;body={listing:item};
+      }
+      else if (path.endsWith('/review')) {
+        const input=request.postDataJSON();
+        const item=state.marketplaceListings.find(item=>item.id===input.listingId);
+        assert.equal(input.revision,item.revision);
+        assert.equal(input.decision,'reject');
+        item.status='draft';item.revision++;item.reviewActions=[];
+        body={ok:true};
+      }
       else if(path.endsWith('/support'))body={tickets:[]};
       else if(path.endsWith('/accounts'))body={accounts:[],total:0,nextCursor:null,actor:'fixture-admin',canManage:true,expiresAt:Date.now()+86400000,manageUntil:Date.now()+600000};
       else throw Error('Unexpected staff operation in fixture.');
@@ -1603,6 +1624,260 @@ test('only the super administrator can find, confirm adding and remove administr
         ),
         false,
       );
+    } finally {
+      await f.close();
+    }
+  }
+});
+
+
+test('listing approval and management panels show readable grouped cards and preserve actions on desktop and mobile', async () => {
+  const artifacts =
+    process.env.ADMIN_LAYOUT_ARTIFACT_DIR || '/tmp/rwas-admin-listing-layout';
+  await mkdir(artifacts, { recursive: true });
+  for (const width of [1440, 390, 320]) {
+    const stored = {
+      provider: 'better-auth',
+      token: 'fixture-rwas-session',
+      csrf: 'fixture-csrf',
+      email: 'admin@rwas.team',
+      name: 'Fixture Admin',
+      identityUserId: 'fixture-user',
+      identitySessionId: 'fixture-session',
+    };
+    const fields = {
+      make: 'Cessna',
+      model: 'R182',
+      year: 1980,
+      price: 350000,
+      nNumber: 'N123EX',
+      totalTime: '6,500 hours',
+      sellerName: 'Synthetic Seller',
+      sellerLocation: 'Yankton, South Dakota',
+      description:
+        'Well-equipped aircraft with a clear listing description.\nBuyer to verify condition and records.',
+      avionics: 'Garmin flight deck',
+      damageHistory: 'History available on request',
+    };
+    const pending = {
+      id: 'fixture-aircraft',
+      revision: 5,
+      status: 'pending',
+      reviewActions: ['approve', 'reject'],
+      fields,
+      photos: [{ key: 'fixture-photo.webp', name: 'Instrument panel.webp' }],
+      videos: [],
+      logbooks: {
+        powerplant: [
+          { key: 'fixture-logbook.pdf', name: 'Engine logbook.pdf' },
+        ],
+        airframe: [],
+        misc: [],
+      },
+    };
+    const part = {
+      id: 'fixture-part',
+      revision: 2,
+      status: 'approved',
+      reviewActions: [],
+      fields: {
+        workflowVersion: 3,
+        listingType: 'parts',
+        category: 'avionics-gps-panel-mount',
+        title: 'Garmin GNS 430',
+        partNumber: 'PN-430',
+        condition: 'Serviceable',
+        quantity: 1,
+        unitOfSale: 'each',
+        price: 3250,
+        currency: 'USD',
+        sellerName: 'Synthetic Parts Seller',
+        sellerLocation: 'Newnan, Georgia',
+      },
+      photos: [],
+      videos: [],
+      logbooks: {},
+    };
+    const f = await fixture({
+      parent: true,
+      active: true,
+      stored,
+      adminRole: 'admin',
+      superAdmin: true,
+      publicListings: true,
+      marketplaceListings: [pending, part],
+    });
+    try {
+      await f.page.setViewportSize({ width, height: 1100 });
+      const errors = [];
+      f.page.on('pageerror', (error) => errors.push(error.message));
+      f.page.on('dialog', (dialog) => dialog.accept());
+      const dialog = f.page.getByRole('dialog');
+      const index = dialog.getByRole('tablist', {
+        name: 'Administrator index',
+        exact: true,
+      });
+      await dialog
+        .getByRole('button', { name: 'Load Review Queue', exact: true })
+        .click();
+      const card = dialog.getByRole('region', {
+        name: '1980 Cessna R182',
+        exact: true,
+      });
+      await card.waitFor();
+      await card.getByText('Awaiting review', { exact: true }).waitFor();
+      assert.equal(
+        await card
+          .locator('dt')
+          .filter({ hasText: /^Airframe total time$/ })
+          .count(),
+        1,
+      );
+      assert.equal(
+        await card
+          .locator('dt')
+          .filter({ hasText: /^N-number$/ })
+          .count(),
+        1,
+      );
+      assert.equal(
+        await card.getByText('totalTime', { exact: true }).count(),
+        0,
+      );
+      assert.equal(
+        await card.getByText('[object Object]', { exact: true }).count(),
+        0,
+      );
+      assert.equal(
+        await card.getByText('Airframe logbooks (0)', { exact: true }).count(),
+        0,
+      );
+      assert.equal(
+        await card
+          .getByRole('button', { name: 'Approve and Publish', exact: true })
+          .isEnabled(),
+        true,
+      );
+      await card.getByText('Powerplant logbooks (1)', { exact: true }).click();
+      assert.equal(
+        await card
+          .getByRole('link', { name: 'Engine logbook.pdf', exact: true })
+          .getAttribute('href'),
+        '/api/aircraft-sale/staff/files/fixture-logbook.pdf',
+      );
+      const note = card.getByRole('textbox', {
+        name: 'Review note',
+        exact: true,
+      });
+      await note.fill('Please confirm the engine details.');
+      assert.ok((await note.boundingBox()).height >= 90);
+      await dialog.evaluate((node) => (node.scrollTop = 0));
+      await f.page.screenshot({
+        path: join(artifacts, 'approvals-' + width + '.png'),
+        fullPage: true,
+      });
+      assert.equal(
+        await f.page.evaluate(
+          () => document.documentElement.scrollWidth > innerWidth,
+        ),
+        false,
+      );
+      const style = await card.evaluate((node) => ({
+        family: getComputedStyle(node).fontFamily,
+        padding: getComputedStyle(node).padding,
+        margin: getComputedStyle(node.closest('.seller-review')).marginTop,
+      }));
+      assert.match(style.family, /Arial/);
+      assert.equal(style.margin, '0px');
+      await card
+        .getByRole('button', { name: 'Request Changes', exact: true })
+        .click();
+      await card.waitFor({ state: 'detached' });
+      const review = f.state.requests.find(
+        (r) => r.path.endsWith('/review') && r.method === 'POST',
+      );
+      assert.deepEqual(review.body, {
+        listingId: 'fixture-aircraft',
+        revision: 5,
+        decision: 'reject',
+        note: 'Please confirm the engine details.',
+      });
+      await index
+        .getByRole('tab', { name: 'Edit and delete listings', exact: true })
+        .click();
+      await dialog
+        .getByRole('button', { name: 'Load all listings', exact: true })
+        .click();
+      await dialog
+        .getByText('Showing 2 of 2 listings', { exact: true })
+        .waitFor();
+      const search = dialog.getByRole('searchbox', {
+        name: 'Search listings',
+        exact: true,
+      });
+      await search.fill('PN-430');
+      await dialog
+        .getByText('Showing 1 of 2 listings', { exact: true })
+        .waitFor();
+      const partCard = dialog.getByRole('article', {
+        name: 'Garmin GNS 430',
+        exact: true,
+      });
+      await partCard.waitFor();
+      await dialog
+        .getByLabel('Listing status', { exact: true })
+        .selectOption('draft');
+      await dialog
+        .getByText('No listings match your search.', { exact: true })
+        .waitFor();
+      await dialog
+        .getByLabel('Listing status', { exact: true })
+        .selectOption('all');
+      await search.fill('');
+      await dialog.evaluate((node) => (node.scrollTop = 0));
+      await f.page.screenshot({
+        path: join(artifacts, 'management-' + width + '.png'),
+        fullPage: true,
+      });
+      assert.equal(
+        await f.page.evaluate(
+          () => document.documentElement.scrollWidth > innerWidth,
+        ),
+        false,
+      );
+      await partCard
+        .getByRole('button', { name: 'Edit listing', exact: true })
+        .click();
+      await dialog
+        .getByRole('heading', { name: 'Garmin GNS 430', exact: true })
+        .waitFor();
+      await dialog
+        .getByRole('button', { name: 'Back to all listings', exact: true })
+        .click();
+      await partCard
+        .getByRole('button', { name: 'Delete listing', exact: true })
+        .click();
+      await partCard.getByText('In trash', { exact: true }).waitFor();
+      assert.equal(
+        await partCard
+          .getByRole('button', { name: 'Edit listing', exact: true })
+          .count(),
+        0,
+      );
+      await partCard
+        .getByRole('button', { name: 'Restore to draft', exact: true })
+        .click();
+      await partCard
+        .getByRole('button', { name: 'Edit listing', exact: true })
+        .waitFor();
+      assert.equal(
+        f.state.requests.filter(
+          (r) =>
+            r.path.endsWith('/listings/fixture-part') && r.method === 'DELETE',
+        ).length,
+        1,
+      );
+      assert.deepEqual(errors, []);
     } finally {
       await f.close();
     }

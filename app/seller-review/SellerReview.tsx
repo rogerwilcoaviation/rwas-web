@@ -7,6 +7,14 @@ import {
   marketplaceStaffMediaPath,
 } from '@/lib/marketplace-staff-fetch';
 import { listingTitle } from '@/lib/marketplace/schema.mjs';
+import {
+  AdminListingStyles,
+  ListingDetails,
+  ListingFacts,
+  ListingStatus,
+  fieldLabel,
+} from '../aircraft-for-sale/admin-listing-presentation';
+import { mediaSteps } from '../aircraft-for-sale/listing-draft-fields';
 type Decision =
   | 'approve'
   | 'reject'
@@ -26,7 +34,7 @@ type Review = {
   status: string;
   reviewActions?: Decision[];
   acceptancePublicUntil?: number;
-  fields: Record<string, string | number>;
+  fields: Record<string, unknown>;
   photos: { key: string; name: string }[];
   videos: { key: string; name: string }[];
   logbooks: Record<string, { key: string; name: string }[]>;
@@ -56,7 +64,15 @@ async function reviewResponse(r: Response) {
   }
 }
 const noteKey = (l: Review) => `${l.id}:${l.revision}`;
-export default function SellerReview() {
+export default function SellerReview({
+  embedded = false,
+}: {
+  embedded?: boolean;
+}) {
+  const Container = embedded ? 'div' : 'main';
+  const Heading = embedded ? 'h2' : 'h1';
+  const CardHeading = embedded ? 'h3' : 'h2';
+  const DetailHeading = embedded ? 'h4' : 'h3';
   const [items, setItems] = useState<Review[]>([]),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false),
@@ -192,164 +208,240 @@ export default function SellerReview() {
     }
   }
   return (
-    <main
-      className="seller-review"
-      id="main-content"
+    <Container
+      className={
+        'admin-listing-panel seller-review' +
+        (embedded ? '' : ' admin-review-standalone')
+      }
+      id={embedded ? undefined : 'main-content'}
       tabIndex={-1}
-      style={{
-        width: '100%',
-        minWidth: 0,
-        maxWidth: 1000,
-        boxSizing: 'border-box',
-        margin: '40px auto',
-        padding: 24,
-        overflowWrap: 'anywhere',
-      }}
     >
-      <h1>Listing approvals</h1>
-      <p>
-        Staff access requires the approved identity service. Review details and
-        media before deciding. A changed revision cannot be approved.
-      </p>
-      <button
-        type="button"
-        onClick={() => void load()}
-        disabled={busy}
-        aria-busy={activity === 'loading'}
-      >
-        {activity === 'loading' ? 'Loading Review Queue…' : 'Load Review Queue'}
-      </button>
-      {activity === 'loading' && <p role="status">Loading review queue…</p>}
-      {activity === 'reviewing' && (
-        <p role="status">Submitting review decision…</p>
+      <AdminListingStyles />
+      <header className="admin-panel-heading">
+        <div>
+          <Heading>Listing approvals</Heading>
+          <p>
+            Review the listing details, photos and documents, then approve
+            publication or request changes from the seller.
+          </p>
+        </div>
+        <button
+          className="admin-button"
+          type="button"
+          onClick={() => void load()}
+          disabled={busy}
+          aria-busy={activity === 'loading'}
+        >
+          {activity === 'loading'
+            ? 'Loading Review Queue…'
+            : 'Load Review Queue'}
+        </button>
+      </header>
+      {!queueLoaded && !busy && !error && (
+        <p className="admin-empty">
+          Load the review queue to see listings awaiting your decision.
+        </p>
       )}
-      {error && <p role="alert">{error}</p>}
+      {activity === 'loading' && (
+        <p className="admin-feedback" role="status">
+          Loading review queue…
+        </p>
+      )}
+      {activity === 'reviewing' && (
+        <p className="admin-feedback" role="status">
+          Submitting review decision…
+        </p>
+      )}
+      {error && (
+        <p className="admin-feedback" role="alert">
+          {error}
+        </p>
+      )}
       {queueLoaded && !publicationAllowed && (
-        <p role="status">
+        <p className="admin-feedback" role="status">
           Ordinary publication is unavailable. You can still request changes.
         </p>
       )}
       {queueLoaded && !error && items.every((l) => l.status !== 'pending') && (
-        <p role="status">No listings are awaiting review.</p>
+        <p className="admin-feedback" role="status">
+          No listings are awaiting review.
+        </p>
       )}
       {queueLoaded && !error && items.some((l) => l.status === 'pending') && (
-        <p role="status">
+        <p className="admin-feedback" role="status">
           {items.filter((l) => l.status === 'pending').length === 1
             ? '1 listing is awaiting review.'
             : items.filter((l) => l.status === 'pending').length +
               ' listings are awaiting review.'}
         </p>
       )}
-      {items.map((l) => (
-        <section key={l.id} style={{ borderTop: '1px solid', marginTop: 24 }}>
-          <h2>{listingTitle(l.fields)}</h2>
-          <p>Revision {l.revision}</p>
-          <p>Status: {l.status}</p>
-          {l.reviewActions?.includes('acceptance-unpublish') && (
-            <p>
-              QA publication expiry:{' '}
-              {new Date(l.acceptancePublicUntil!).toLocaleString()}.
-            </p>
-          )}
-          <dl>
-            {Object.entries(l.fields).map(([k, v]) => (
-              <div key={k}>
-                <dt>{k}</dt>
-                <dd>{typeof v === 'object' ? JSON.stringify(v) : v}</dd>
-              </div>
-            ))}
-          </dl>
-          <p>
-            {l.photos.length} photos · {l.videos.length} videos
-          </p>
-          {l.photos.map((f) => (
-            <img
-              key={f.key}
-              src={marketplaceStaffMediaPath(f.key)}
-              alt={f.name}
-              style={{ maxWidth: '100%', maxHeight: 250 }}
-            />
-          ))}
-          {l.videos.map((f) => (
-            <video
-              key={f.key}
-              src={marketplaceStaffMediaPath(f.key)}
-              controls
-              preload="metadata"
-              aria-label={f.name}
-              style={{ maxWidth: '100%' }}
-            />
-          ))}
-          {Object.entries(l.logbooks || {}).map(([category, files]) => (
-            <div key={category}>
-              <h3>
-                {category} records ({files.length})
-              </h3>
-              {files.map((f) => (
-                <p key={f.key}>
-                  <a href={marketplaceStaffMediaPath(f.key)} download={f.name}>
-                    {f.name}
-                  </a>
+      <div className="admin-listing-list">
+        {items.map((l) => (
+          <section
+            className="admin-listing-card"
+            key={l.id}
+            aria-label={listingTitle(l.fields)}
+          >
+            <header className="admin-card-heading">
+              <div>
+                <CardHeading className="admin-card-title">
+                  {listingTitle(l.fields)}
+                </CardHeading>
+                <p className="admin-card-revision">
+                  Revision {l.revision}
+                  {l.fields.sellerName
+                    ? ' · Seller: ' + String(l.fields.sellerName)
+                    : ''}
                 </p>
-              ))}
+              </div>
+              <ListingStatus status={l.status} />
+            </header>
+            {l.reviewActions?.includes('acceptance-unpublish') && (
+              <p className="admin-feedback">
+                QA publication expiry:{' '}
+                {new Date(l.acceptancePublicUntil!).toLocaleString()}.
+              </p>
+            )}
+            <ListingFacts fields={l.fields} />
+            <ListingDetails fields={l.fields} headingLevel={embedded ? 4 : 3} />
+            <div className="admin-review-media">
+              <DetailHeading>Photos and videos</DetailHeading>
+              <p className="admin-muted">
+                {l.photos.length} photos · {l.videos.length} videos. Select a
+                photo to open the full image.
+              </p>
+              <div className="admin-photo-grid">
+                {l.photos.map((f) => (
+                  <a
+                    key={f.key}
+                    href={marketplaceStaffMediaPath(f.key)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={marketplaceStaffMediaPath(f.key)}
+                      alt={f.name}
+                      loading="lazy"
+                    />
+                    <span className="admin-photo-caption">{f.name}</span>
+                  </a>
+                ))}
+                {l.videos.map((f) => (
+                  <div key={f.key}>
+                    <video
+                      src={marketplaceStaffMediaPath(f.key)}
+                      controls
+                      preload="metadata"
+                      aria-label={f.name}
+                    />
+                    <span className="admin-photo-caption">{f.name}</span>
+                  </div>
+                ))}
+              </div>
+              {!l.photos.length && !l.videos.length && (
+                <p className="admin-muted">No photos or videos attached.</p>
+              )}
             </div>
-          ))}
-          {l.status === 'pending' && (
-            <label>
-              Review note
-              <textarea
-                value={notes[noteKey(l)] || ''}
-                onChange={(e) =>
-                  setNotes((previous) => ({
-                    ...previous,
-                    [noteKey(l)]: e.target.value,
-                  }))
-                }
-                maxLength={1000}
-                style={{ maxWidth: '100%', boxSizing: 'border-box' }}
-              />
-            </label>
-          )}
-          {l.status === 'pending' && (
-            <>
-              <button
-                disabled={
-                  busy ||
-                  !publicationAllowed ||
-                  !l.reviewActions?.includes('approve')
-                }
-                onClick={() => void review(l, 'approve')}
-              >
-                Approve and Publish
-              </button>
-              <button disabled={busy} onClick={() => void review(l, 'reject')}>
-                Request Changes
-              </button>
-            </>
-          )}
-          {l.reviewActions?.includes('acceptance-approve') && (
-            <button
-              disabled={busy}
-              onClick={() => void review(l, 'acceptance-approve')}
-            >
-              Publish QA Test Temporarily
-            </button>
-          )}
-          {l.reviewActions?.includes('acceptance-unpublish') && (
-            <button
-              disabled={busy}
-              onClick={() => void review(l, 'acceptance-unpublish')}
-            >
-              Unpublish QA Test
-            </button>
-          )}
-          {l.reviewActions?.includes('unpublish') && (
-            <button disabled={busy} onClick={() => void review(l, 'unpublish')}>
-              Unpublish Listing
-            </button>
-          )}
-        </section>
-      ))}
-    </main>
+            <div className="admin-documents">
+              <DetailHeading>Documents</DetailHeading>
+              {Object.entries(l.logbooks || {})
+                .filter(([, files]) => files.length)
+                .map(([category, files]) => (
+                  <details className="admin-document-group" key={category}>
+                    <summary>
+                      {mediaSteps.find(([key]) => key === category)?.[1] ||
+                        fieldLabel(category)}{' '}
+                      ({files.length})
+                    </summary>
+                    {files.map((f) => (
+                      <p key={f.key}>
+                        <a
+                          href={marketplaceStaffMediaPath(f.key)}
+                          download={f.name}
+                        >
+                          {f.name}
+                        </a>
+                      </p>
+                    ))}
+                  </details>
+                ))}
+              {!Object.values(l.logbooks || {}).some(
+                (files) => files.length,
+              ) && <p className="admin-muted">No documents attached.</p>}
+            </div>
+            <div className="admin-review-footer">
+              {l.status === 'pending' && (
+                <label className="admin-review-note">
+                  Review note
+                  <textarea
+                    value={notes[noteKey(l)] || ''}
+                    onChange={(e) =>
+                      setNotes((previous) => ({
+                        ...previous,
+                        [noteKey(l)]: e.target.value,
+                      }))
+                    }
+                    maxLength={1000}
+                    rows={3}
+                    placeholder="Add feedback for the seller, if needed."
+                  />
+                </label>
+              )}
+              <div className="admin-action-row">
+                {l.status === 'pending' && (
+                  <>
+                    <button
+                      className="admin-button admin-primary"
+                      disabled={
+                        busy ||
+                        !publicationAllowed ||
+                        !l.reviewActions?.includes('approve')
+                      }
+                      onClick={() => void review(l, 'approve')}
+                    >
+                      Approve and Publish
+                    </button>
+                    <button
+                      className="admin-button"
+                      disabled={busy}
+                      onClick={() => void review(l, 'reject')}
+                    >
+                      Request Changes
+                    </button>
+                  </>
+                )}
+                {l.reviewActions?.includes('acceptance-approve') && (
+                  <button
+                    className="admin-button"
+                    disabled={busy}
+                    onClick={() => void review(l, 'acceptance-approve')}
+                  >
+                    Publish QA Test Temporarily
+                  </button>
+                )}
+                {l.reviewActions?.includes('acceptance-unpublish') && (
+                  <button
+                    className="admin-button"
+                    disabled={busy}
+                    onClick={() => void review(l, 'acceptance-unpublish')}
+                  >
+                    Unpublish QA Test
+                  </button>
+                )}
+                {l.reviewActions?.includes('unpublish') && (
+                  <button
+                    className="admin-button admin-danger"
+                    disabled={busy}
+                    onClick={() => void review(l, 'unpublish')}
+                  >
+                    Unpublish Listing
+                  </button>
+                )}
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+    </Container>
   );
 }

@@ -15,12 +15,18 @@ import {
 } from '@/lib/marketplace/schema.mjs';
 import SupportDesk from './support-desk';
 import AdministratorManagement from './administrator-management';
+import {
+  AdminListingStyles,
+  ListingFacts,
+  ListingStatus,
+  ListingThumbnail,
+} from './admin-listing-presentation';
 type ManagedListing = {
   id: string;
   status: string;
   revision: number;
   fields: Record<string, unknown>;
-  photos: { key: string }[];
+  photos: { key: string; name?: string }[];
   videos: { key: string }[];
   logbooks: Record<string, { key: string }[]>;
 };
@@ -53,7 +59,7 @@ export default function AdminWorkspace({
       ]}
     >
       <AccountSection value="review">
-        <SellerReview />
+        <SellerReview embedded />
       </AccountSection>
       <AccountSection value="listings">
         <AdminListings request={request} />
@@ -78,12 +84,16 @@ function AdminListings({ request }: { request: Request }) {
     [values, setValues] = useState<Record<string, string>>({}),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(''),
-    [notice, setNotice] = useState('');
+    [notice, setNotice] = useState(''),
+    [loaded, setLoaded] = useState(false),
+    [query, setQuery] = useState(''),
+    [status, setStatus] = useState('all');
   async function load() {
     setItems(
       ((await request('/admin/listings')) as { listings: ManagedListing[] })
         .listings,
     );
+    setLoaded(true);
   }
   async function run(action: () => Promise<void>) {
     setBusy(true);
@@ -123,29 +133,75 @@ function AdminListings({ request }: { request: Request }) {
         : 'Changes saved privately. Review is required before publication.',
     );
   }
+  const filtered = items.filter(
+    (item) =>
+      (status === 'all' || item.status === status) &&
+      [
+        listingTitle(item.fields || item),
+        item.id,
+        item.fields?.sellerName,
+        item.fields?.sellerLocation,
+        item.fields?.nNumber,
+        item.fields?.partNumber,
+      ].some((value) =>
+        String(value || '')
+          .toLowerCase()
+          .includes(query.trim().toLowerCase()),
+      ),
+  );
   return (
-    <section aria-label="Manage marketplace listings">
-      <h3>Edit and delete listings</h3>
-      <p>
-        Edits remove approval and save privately. Deletion moves a listing to
-        trash and preserves its files for recovery.
-      </p>
-      <button disabled={busy} onClick={() => void run(load)}>
-        Load all listings
-      </button>
-      {error && <p role="alert">{error}</p>}
-      {notice && <p role="status">{notice}</p>}
+    <section
+      className="admin-listing-panel"
+      aria-label="Manage marketplace listings"
+    >
+      <AdminListingStyles />
+      <header className="admin-panel-heading">
+        <div>
+          <h3>Edit and delete listings</h3>
+          <p>
+            Find a listing to update its details or move it to trash. Saved
+            edits require approval before they appear publicly.
+          </p>
+        </div>
+        <button
+          className="admin-button"
+          disabled={busy}
+          onClick={() => void run(load)}
+        >
+          Load all listings
+        </button>
+      </header>
+      {error && (
+        <p className="admin-feedback" role="alert">
+          {error}
+        </p>
+      )}
+      {notice && (
+        <p className="admin-feedback" role="status">
+          {notice}
+        </p>
+      )}
       {editing ? (
         <>
-          <button
-            disabled={busy}
-            onClick={() => {
-              setEditing(null);
-              setNotice('');
-            }}
-          >
-            Back to all listings
-          </button>
+          <div className="admin-editor-heading">
+            <div className="admin-action-row">
+              <ListingStatus status={editing.status} />
+              <span className="admin-muted">Revision {editing.revision}</span>
+            </div>
+            <h4>{listingTitle(editing.fields || editing)}</h4>
+            <div>
+              <button
+                className="admin-button"
+                disabled={busy}
+                onClick={() => {
+                  setEditing(null);
+                  setNotice('');
+                }}
+              >
+                Back to all listings
+              </button>
+            </div>
+          </div>
           <ListingDraftWorkflow
             key={editing.id}
             values={values}
@@ -201,81 +257,158 @@ function AdminListings({ request }: { request: Request }) {
           />
         </>
       ) : (
-        items.map((item) => (
-          <article key={item.id}>
-            <h4>{listingTitle(item.fields || item)}</h4>
-            <p>
-              {item.status} · Revision {item.revision}
+        <>
+          {loaded ? (
+            <>
+              <div className="admin-listing-toolbar">
+                <label>
+                  Search listings
+                  <input
+                    type="search"
+                    placeholder="Title, seller, registration or part number"
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                  />
+                </label>
+                <label>
+                  Listing status
+                  <select
+                    aria-label="Listing status"
+                    value={status}
+                    onChange={(event) => setStatus(event.target.value)}
+                  >
+                    <option value="all">All statuses</option>
+                    {Array.from(new Set(items.map((item) => item.status)))
+                      .sort()
+                      .map((value) => (
+                        <option key={value} value={value}>
+                          {(
+                            {
+                              pending: 'Awaiting review',
+                              deleted: 'In trash',
+                              rejected: 'Changes requested',
+                            } as Record<string, string>
+                          )[value] ||
+                            value.charAt(0).toUpperCase() + value.slice(1)}
+                        </option>
+                      ))}
+                  </select>
+                </label>
+              </div>
+              <p className="admin-muted" role="status">
+                Showing {filtered.length} of {items.length} listings
+              </p>
+            </>
+          ) : (
+            <p className="admin-empty">
+              Load all listings to choose one to edit, remove or restore.
             </p>
-            {!['deleted', 'archived'].includes(item.status) && (
-              <button
-                disabled={busy}
-                onClick={() => {
-                  setEditing(item);
-                  setValues(
-                    listingFormValues(item.fields || item, draftFields),
-                  );
-                  setNotice('');
-                }}
+          )}
+          {loaded && !filtered.length && (
+            <p className="admin-empty">
+              {items.length
+                ? 'No listings match your search.'
+                : 'No listings are available.'}
+            </p>
+          )}
+          <div className="admin-listing-list">
+            {filtered.map((item) => (
+              <article
+                className="admin-listing-card"
+                key={item.id}
+                aria-label={listingTitle(item.fields || item)}
               >
-                Edit listing
-              </button>
-            )}
-            {item.status !== 'deleted' ? (
-              <button
-                disabled={busy}
-                onClick={() => {
-                  if (
-                    confirm(
-                      'Move this listing to trash and remove it from public view?',
-                    )
-                  )
-                    void run(async () => {
-                      await request('/admin/listings/' + item.id, 'DELETE', {
-                        revision: item.revision,
-                        confirm: item.id,
-                      });
-                      await load();
-                    });
-                }}
-              >
-                Delete listing
-              </button>
-            ) : (
-              <button
-                disabled={busy}
-                onClick={() =>
-                  void run(async () => {
-                    await request('/admin/listings/' + item.id, 'POST', {
-                      revision: item.revision,
-                      action: 'restore',
-                    });
-                    await load();
-                  })
-                }
-              >
-                Restore to draft
-              </button>
-            )}
-          </article>
-        ))
+                <div className="admin-listing-row">
+                  <ListingThumbnail photo={item.photos?.[0]} />
+                  <div>
+                    <header className="admin-card-heading">
+                      <div>
+                        <h4 className="admin-card-title">
+                          {listingTitle(item.fields || item)}
+                        </h4>
+                        <p className="admin-card-revision">
+                          Revision {item.revision}
+                          {item.fields?.sellerName
+                            ? ' · Seller: ' + String(item.fields.sellerName)
+                            : ''}
+                        </p>
+                      </div>
+                      <ListingStatus status={item.status} />
+                    </header>
+                    <ListingFacts fields={item.fields || item} />
+                    <div className="admin-management-actions">
+                      {!['deleted', 'archived'].includes(item.status) && (
+                        <button
+                          className="admin-button admin-primary"
+                          disabled={busy}
+                          onClick={() => {
+                            setEditing(item);
+                            setValues(
+                              listingFormValues(
+                                item.fields || item,
+                                draftFields,
+                              ),
+                            );
+                            setNotice('');
+                          }}
+                        >
+                          Edit listing
+                        </button>
+                      )}
+                      {item.status !== 'deleted' ? (
+                        <button
+                          className="admin-button admin-danger"
+                          disabled={busy}
+                          onClick={() => {
+                            if (
+                              confirm(
+                                'Move this listing to trash and remove it from public view?',
+                              )
+                            )
+                              void run(async () => {
+                                await request(
+                                  '/admin/listings/' + item.id,
+                                  'DELETE',
+                                  {
+                                    revision: item.revision,
+                                    confirm: item.id,
+                                  },
+                                );
+                                await load();
+                              });
+                          }}
+                        >
+                          Delete listing
+                        </button>
+                      ) : (
+                        <button
+                          className="admin-button"
+                          disabled={busy}
+                          onClick={() =>
+                            void run(async () => {
+                              await request(
+                                '/admin/listings/' + item.id,
+                                'POST',
+                                {
+                                  revision: item.revision,
+                                  action: 'restore',
+                                },
+                              );
+                              await load();
+                            })
+                          }
+                        >
+                          Restore to draft
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
       )}
-      <style jsx>{`
-        section {
-          font-family: Arial, sans-serif;
-        }
-        article {
-          padding: 16px 0;
-          border-top: 1px solid #aaa;
-        }
-        button {
-          padding: 10px 14px;
-          margin: 6px;
-        }
-        h4 {
-          font-size: 18px;
-        }
-      `}</style>
     </section>
   );
 }
