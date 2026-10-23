@@ -122,6 +122,11 @@ jobs:
           SELLER_PAGES_ARTIFACT_DIR: .vercel/output/static
         run: node --test --test-name-pattern='default UUID canonical routes' tests/aircraft-sale/routing.test.mjs
 
+      - name: Exported administrator account workflow and checkbox visibility
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/rwas-browser-runtime/node_modules/playwright/index.mjs
+        run: node tests/aircraft-sale/account-admin-browser.mjs
+
       - name: AXIS funnel smoke
         run: node scripts/axis-funnel-smoke.mjs
 

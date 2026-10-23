@@ -244,7 +244,7 @@ export default function PermanentAccountRemoval({
             600 14px/1.5 Arial,
             sans-serif;
         }
-        .removal-panel input,
+        .removal-panel input:not([type='checkbox']),
         .removal-panel select {
           box-sizing: border-box;
           width: 100%;
@@ -266,12 +266,17 @@ export default function PermanentAccountRemoval({
           display: flex;
           align-items: flex-start;
           gap: 12px;
+          cursor: pointer;
         }
         .removal-panel .removal-option input {
+          appearance: auto;
           width: 20px;
           height: 20px;
-          margin-top: 2px;
+          margin: 2px 0 0;
+          padding: 0;
+          accent-color: #222;
           flex-shrink: 0;
+          cursor: pointer;
         }
       `}</style>
     </section>

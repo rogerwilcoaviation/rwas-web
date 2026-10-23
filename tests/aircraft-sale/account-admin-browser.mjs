@@ -257,6 +257,23 @@ try {
   await page.getByRole('button', {name:'Load user listings',exact:true}).click();
   await selected.getByText(/Account Ownership Fixture/).first().waitFor();
   await page.getByRole('tab', { name: 'Contact and access', exact: true }).click();
+  const bulkOption = selected.getByRole('checkbox', {name:'Also permanently delete all of this user’s listings and files',exact:true});
+  for (const width of [1440,390,320]) {
+    await page.setViewportSize({width,height:1000});
+    await bulkOption.check();await bulkOption.evaluate(node=>node.blur());
+    const checkedImage=await bulkOption.screenshot();
+    await bulkOption.uncheck();await bulkOption.evaluate(node=>node.blur());
+    const uncheckedImage=await bulkOption.screenshot();
+    assert.equal(checkedImage.equals(uncheckedImage),false,'The exported site CSS must display a different checked state at '+width+'px');
+    await selected.getByText('Also permanently delete all of this user’s listings and files',{exact:true}).click();
+    assert.equal(await bulkOption.isChecked(),true,'The label toggles the option');
+    await bulkOption.focus();await page.keyboard.press('Space');
+    assert.equal(await bulkOption.isChecked(),false,'Space toggles the focused option');
+    if(process.env.ADMIN_CHECKBOX_ARTIFACT_DIR){await mkdir(process.env.ADMIN_CHECKBOX_ARTIFACT_DIR,{recursive:true});await writeFile(join(process.env.ADMIN_CHECKBOX_ARTIFACT_DIR,'checkbox-checked-'+width+'.png'),checkedImage);await writeFile(join(process.env.ADMIN_CHECKBOX_ARTIFACT_DIR,'checkbox-unchecked-'+width+'.png'),uncheckedImage);}
+  }
+  assert.equal(operations.length,0,'Checking an option never submits a deletion');
+  await page.setViewportSize({width:1440,height:1000});
+  checkpoints.push('Bulk-delete checkbox has a visible checkmark under the real exported site styles and supports pointer, label and keyboard input at 1440/390/320px without submitting');
   const ownerId = (
     await (await f.call('/account', 'GET', undefined, owner)).json()
   ).profile.id;
