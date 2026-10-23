@@ -173,6 +173,8 @@ export default function AdministratorManagement({
           Find a registered user by email
           <input
             type="email"
+            name="administrator-search-email"
+            autoComplete="off"
             required
             maxLength={254}
             value={email}
@@ -264,6 +266,24 @@ export default function AdministratorManagement({
         button {
           padding: 10px 14px;
           margin: 8px 8px 8px 0;
+          border: 1px solid #292820;
+          border-radius: 3px;
+          background: #fff;
+          color: #292820;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        form > button:not([type='button']) {
+          background: #b99727;
+        }
+        button:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+        button:focus-visible,
+        input:focus-visible {
+          outline: 3px solid #8b6c0a;
+          outline-offset: 3px;
         }
         p {
           overflow-wrap: anywhere;

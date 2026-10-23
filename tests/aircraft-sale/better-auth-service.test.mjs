@@ -1681,6 +1681,8 @@ test('super administrator grants and revokes delegated access with real D1, mand
     );
     await checked(await call('/staff/listings', staff), 403);
     await mfa(staff);
+    const cookieMediaRead = () => store.fetch(b.request('/staff/files/missing.png', 'GET', undefined, undefined, { Cookie: [...staff.cookies].map(([k,v]) => k+'='+v).join('; ') }));
+    await checked(await cookieMediaRead(), 404); // Authorized cookie reaches file lookup.
     const staffAuthority = await checked(await call('/account/access', staff));
     assert.equal(staffAuthority.role, 'admin');
     assert.equal(staffAuthority.canManageAdministrators, false);
@@ -1738,6 +1740,7 @@ test('super administrator grants and revokes delegated access with real D1, mand
       await call('/staff/administrators', root, 'POST', change('revoke')),
     );
     await checked(await call('/staff/listings', staff), 403);
+    await checked(await cookieMediaRead(), 403); // Revoked role also loses media authority.
     assert.equal(
       (await checked(await call('/account/access', staff))).role,
       'seller',
