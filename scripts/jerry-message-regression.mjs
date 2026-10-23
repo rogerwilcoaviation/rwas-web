@@ -25,7 +25,7 @@ assert.ok(
 );
 assert.ok(
   read('components/shared/DeferredJerryWidget.tsx').includes(
-    '20261023-saved-draft-resume',
+    '20261023-jerry-log-details',
   ),
 );
 class Node {

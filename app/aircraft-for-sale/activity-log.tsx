@@ -1,23 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-type Event = {
-  id: string;
-  at: number;
-  clientAt?: number;
-  requestId: string;
-  relatedRequestId?: string;
-  actor: { type: string; id: string; email: string };
-  action: string;
-  result: string;
-  source: string;
-  status?: number;
-  method?: string;
-  route: string;
-  resourceId?: string;
-  durationMs?: number;
-  details: Record<string, unknown>;
-};
+import ActivityDetail, {
+  type ActivityEvent as Event,
+  type ActivityDetailData,
+} from './activity-detail';
 type Response = {
   events: Event[];
   nextCursor: string | null;
@@ -31,6 +18,7 @@ type Filters = {
   source: string;
   from: string;
   to: string;
+  type: string;
 };
 const defaults: Filters = {
   q: '',
@@ -38,6 +26,7 @@ const defaults: Filters = {
   source: 'all',
   from: '',
   to: '',
+  type: 'all',
 };
 function actionLabel(event: Event) {
   const labels: Record<string, string> = {
@@ -79,6 +68,22 @@ export default function ActivityLog({
     [history, setHistory] = useState<(string | null)[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null),
     [refresh, setRefresh] = useState(0);
+  const [detail, setDetail] = useState<ActivityDetailData | null>(null),
+    [detailBusy, setDetailBusy] = useState(false),
+    [detailError, setDetailError] = useState('');
+  const [reports, setReports] = useState<Event[]>([]),
+    [reportsBusy, setReportsBusy] = useState(false),
+    [reportsError, setReportsError] = useState(''),
+    [reportsLoaded, setReportsLoaded] = useState(false);
+  const detailGeneration = useRef(0),
+    reportsGeneration = useRef(0);
+  useEffect(
+    () => () => {
+      detailGeneration.current++;
+      reportsGeneration.current++;
+    },
+    [],
+  );
   const requestRef = useRef(request);
   requestRef.current = request;
   useEffect(() => {
@@ -86,10 +91,20 @@ export default function ActivityLog({
     setBusy(true);
     setError('');
     setExpanded(null);
+    setDetailBusy(false);
+    setReports([]);
+    setReportsBusy(false);
+    setReportsError('');
+    setReportsLoaded(false);
+    reportsGeneration.current++;
+    setDetail(null);
+    setDetailError('');
+    detailGeneration.current++;
     const query = new URLSearchParams({
       limit: '50',
       result: applied.result,
       source: applied.source,
+      type: applied.type,
     });
     if (applied.q.trim()) query.set('q', applied.q.trim());
     if (applied.from) query.set('from', applied.from + 'T00:00:00.000Z');
@@ -122,6 +137,63 @@ export default function ActivityLog({
     setCursor(null);
     setHistory([]);
     setApplied({ ...filters });
+  }
+  async function openDetails(event: Event) {
+    if (expanded === event.id) {
+      closeDetails();
+      return;
+    }
+    const generation = ++detailGeneration.current;
+    setExpanded(event.id);
+    setDetail(null);
+    setDetailError('');
+    setDetailBusy(true);
+    try {
+      const value = (await requestRef.current(
+        '/admin/activity/' + event.id,
+      )) as ActivityDetailData;
+      if (generation === detailGeneration.current) setDetail(value);
+    } catch (reason) {
+      if (generation === detailGeneration.current)
+        setDetailError(
+          reason instanceof Error
+            ? reason.message
+            : 'Activity details could not be loaded.',
+        );
+    } finally {
+      if (generation === detailGeneration.current) setDetailBusy(false);
+    }
+  }
+  function closeDetails() {
+    detailGeneration.current++;
+    setExpanded(null);
+    setDetail(null);
+    setDetailError('');
+    setDetailBusy(false);
+  }
+  async function loadReports() {
+    const generation = ++reportsGeneration.current;
+    setReportsBusy(true);
+    setReportsError('');
+    setReportsLoaded(false);
+    try {
+      const value = (await requestRef.current(
+        '/admin/activity/current?q=' + encodeURIComponent(filters.q.trim()),
+      )) as { reports: Event[] };
+      if (generation === reportsGeneration.current) {
+        setReports(value.reports);
+        setReportsLoaded(true);
+      }
+    } catch (reason) {
+      if (generation === reportsGeneration.current)
+        setReportsError(
+          reason instanceof Error
+            ? reason.message
+            : 'Research reports could not be loaded.',
+        );
+    } finally {
+      if (generation === reportsGeneration.current) setReportsBusy(false);
+    }
   }
   const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return (
@@ -172,6 +244,18 @@ export default function ActivityLog({
                 {v === 'all' ? 'All results' : v[0].toUpperCase() + v.slice(1)}
               </option>
             ))}
+          </select>
+        </label>
+        <label>
+          Event type
+          <select
+            aria-label="Event type"
+            value={filters.type}
+            onChange={(e) => setFilters({ ...filters, type: e.target.value })}
+          >
+            <option value="all">All activity</option>
+            <option value="conversation">Jerry conversations</option>
+            <option value="review">Jerry recommendations</option>
           </select>
         </label>
         <label>
@@ -226,6 +310,52 @@ export default function ActivityLog({
           {error} Use Refresh log to retry.
         </p>
       )}
+      <div className="saved-reports">
+        <button
+          type="button"
+          disabled={reportsBusy}
+          onClick={() => void loadReports()}
+        >
+          Load existing Jerry reports
+        </button>
+        <span>
+          Uses the account / record search above. Shows up to 20 current account
+          and listing reports.
+        </span>
+      </div>
+      {reportsError && <p role="alert">{reportsError}</p>}
+      {!!reports.length && (
+        <ul className="report-list" aria-label="Current Jerry reports">
+          {reports.map((report) => (
+            <li key={report.id}>
+              <span>
+                <strong>{report.actor.email || 'Account not recorded'}</strong>{' '}
+                · {report.details.kind === 'account' ? 'Account' : 'Listing'} ·{' '}
+                {report.resourceId}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  detailGeneration.current++;
+                  setExpanded(report.id);
+                  setDetail({ event: report });
+                  setDetailBusy(false);
+                  setDetailError('');
+                }}
+              >
+                View current recommendation
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      {!reportsBusy &&
+        reports.length === 0 &&
+        reportsLoaded &&
+        !reportsError && <p>No saved reports match this search.</p>}
+      {detailBusy && <p role="status">Loading activity details…</p>}
+      {detailError && <p role="alert">{detailError}</p>}
+      {detail && <ActivityDetail data={detail} onClose={closeDetails} />}
       <p role="status" aria-live="polite">
         {busy
           ? 'Loading activity…'
@@ -273,10 +403,14 @@ export default function ActivityLog({
                       <strong>
                         {event.actor.email ||
                           (event.actor.type === 'anonymous'
-                            ? 'Signed-out visitor'
-                            : event.actor.type === 'system'
-                              ? 'Jerry / system'
-                              : 'Account')}
+                            ? event.source === 'browser'
+                              ? 'Account not recorded'
+                              : 'Signed-out visitor'
+                            : event.actor.type === 'unresolved'
+                              ? 'Account not verified'
+                              : event.actor.type === 'system'
+                                ? 'Jerry / system'
+                                : 'Account')}
                       </strong>
                       {event.actor.id && <small>{event.actor.id}</small>}
                     </td>
@@ -309,44 +443,16 @@ export default function ActivityLog({
                         type="button"
                         className="detail-toggle"
                         aria-expanded={expanded === event.id}
-                        aria-controls={`log-${event.id}`}
-                        onClick={() =>
-                          setExpanded(expanded === event.id ? null : event.id)
-                        }
+                        onClick={() => void openDetails(event)}
                       >
                         {expanded === event.id
                           ? 'Hide details'
-                          : 'View details'}
+                          : event.hasConversation
+                            ? 'View conversation'
+                            : event.hasReview
+                              ? 'View recommendation'
+                              : 'View details'}
                       </button>
-                      {expanded === event.id && (
-                        <div id={`log-${event.id}`} className="log-detail">
-                          <dl>
-                            <dt>Request ID</dt>
-                            <dd>{event.requestId}</dd>
-                            {event.relatedRequestId && (
-                              <>
-                                <dt>Related request</dt>
-                                <dd>{event.relatedRequestId}</dd>
-                              </>
-                            )}
-                            <dt>UTC timestamp</dt>
-                            <dd>{new Date(event.at).toISOString()}</dd>
-                            {event.resourceId && (
-                              <>
-                                <dt>Listing / record</dt>
-                                <dd>{event.resourceId}</dd>
-                              </>
-                            )}
-                          </dl>
-                          <pre>{JSON.stringify(event.details, null, 2)}</pre>
-                          {event.source === 'browser' && (
-                            <p>
-                              Reported by the browser; this is not proof that a
-                              server operation completed.
-                            </p>
-                          )}
-                        </div>
-                      )}
                     </td>
                   </tr>
                 ))}
@@ -382,10 +488,12 @@ export default function ActivityLog({
           <p className="log-note">
             Logging starts with this update. Retention: {data.retentionDays}{' '}
             days or the latest {data.maxRows.toLocaleString()} events, whichever
-            is smaller. Passwords, verification codes, messages and listing
-            contents are excluded. Browser actions require JavaScript and a
-            working connection; signed-out activity has no verified account.
-            Opening an email app does not confirm email delivery.
+            is smaller. Sign-in credentials and verification codes are excluded.
+            Marketplace conversations and Jerry review snapshots are retained
+            for authorized troubleshooting. Older chat text cannot be
+            reconstructed. Browser actions require JavaScript and a working
+            connection; signed-out activity has no verified account. Opening an
+            email app does not confirm email delivery.
           </p>
         </>
       )}
@@ -430,6 +538,37 @@ export default function ActivityLog({
         }
         .exchange-log button {
           cursor: pointer;
+        }
+        .saved-reports {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          margin-top: 16px;
+          flex-wrap: wrap;
+        }
+        .saved-reports span {
+          font-size: 12px;
+          color: #6b665c;
+          flex: 1 1 220px;
+        }
+        .report-list {
+          padding: 0;
+          list-style: none;
+          border: 1px solid #ddd8ce;
+          border-radius: 6px;
+        }
+        .report-list li {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          justify-content: space-between;
+          padding: 12px;
+          border-bottom: 1px solid #e7e2d9;
+          flex-wrap: wrap;
+        }
+        .report-list span {
+          font-size: 13px;
+          overflow-wrap: anywhere;
         }
         .exchange-log button:disabled {
           opacity: 0.5;

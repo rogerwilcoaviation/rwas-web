@@ -299,6 +299,9 @@ export default function SellerAuthPanel() {
     // Compatibility envelope shared with the listing widget; no token logging.
     (window as unknown as { rwasSaleSession: Session | null }).rwasSaleSession =
       s;
+    (
+      window as unknown as { rwasSellerAuthReady: boolean }
+    ).rwasSellerAuthReady = true;
     document.dispatchEvent(
       new CustomEvent('rwas:session-changed', { detail: s }),
     );

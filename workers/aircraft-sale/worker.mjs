@@ -1,3 +1,4 @@
+import { conversationTurn, reviewSnapshot } from './activity-content.mjs';
 import {
   ActivityLog,
   activityRoute,
@@ -523,7 +524,7 @@ function publicPage(l) {
           encodeURIComponent(l.id) +
           '">Email seller</a><p>Sign in or create an account to email the seller for more information. Your email app will open with the listing details included.</p>'
         : '<p>This listing is not currently accepting seller inquiries.</p>') +
-      '</section></main><script src="/aviation-exchange-activity.js?v=20261023-activity-log" defer></script></body></html>',
+      '</section></main><script src="/aviation-exchange-activity.js?v=20261023-activity-content" defer></script></body></html>',
     {
       headers: {
         'Content-Type': 'text/html;charset=UTF-8',
@@ -613,6 +614,24 @@ export class SellerStore {
             req.headers.get('Cookie')
           )
             this.activityContext.actor = await this.browserActivityActor(req);
+          let conversation;
+          if (this.activityContext.conversation) {
+            let assistant;
+            if (response?.ok) {
+              try {
+                assistant = (await response.clone().json()).reply;
+              } catch {}
+            }
+            conversation = conversationTurn({
+              ...this.activityContext.conversation,
+              assistant,
+              error: response?.ok
+                ? undefined
+                : 'Listing assistant request failed (HTTP ' +
+                  (response?.status || 503) +
+                  ')',
+            });
+          }
           await this.activityLog.append([
             {
               at: started,
@@ -625,6 +644,7 @@ export class SellerStore {
               durationMs: Date.now() - started,
               actor: this.activityContext.actor,
               details: {
+                ...(conversation ? { conversation } : {}),
                 changes: this.activityContext.changes,
                 changeCount: this.activityContext.changeCount,
                 changesTruncated:
@@ -830,7 +850,11 @@ export class SellerStore {
               at: Date.now(),
               source: 'system',
               requestId: crypto.randomUUID(),
-              actor: { type: 'system', id: 'jerry', email: '' },
+              actor: activityActor(
+                job.kind === 'account'
+                  ? state.profiles[job.id]
+                  : state.profiles[state.listings[job.id]?.ownerId],
+              ),
               action: 'jerry.research',
               route: '/research',
               resourceId: job.id,
@@ -841,6 +865,9 @@ export class SellerStore {
                 kind: job.kind,
                 recommendation: result.recommendation,
                 applied: true,
+                initiatedBy: 'jerry',
+                review: reviewSnapshot(result),
+                reviewScope: 'historical-snapshot',
               },
             },
           ]);
@@ -873,6 +900,13 @@ export class SellerStore {
     this.rollbackState = structuredClone(this.state);
     try {
       const result = await this.route(req);
+      if (
+        this.activityContext?.listingConversationId &&
+        this.activityContext.actor.id &&
+        this.state.drafts[this.activityContext.actor.id]
+      )
+        this.state.drafts[this.activityContext.actor.id].conversationId =
+          this.activityContext.listingConversationId;
       if (this.env.JERRY_REVIEW_ENABLED === 'true')
         planResearch(this.state, this.rollbackState);
       await this.saveState(this.state);
@@ -1034,36 +1068,69 @@ export class SellerStore {
     if (this.activityContext)
       this.activityContext.actor = activityActor(profile);
   }
-  async browserActivityActor(req) {
-    // Account attribution is resolved on the server, never accepted from JSON.
-    if (req.headers.get('Authorization'))
-      return activityActor(await this.user(req));
+  async browserActivityIdentity(req) {
+    // Verified server identity is the authority; browser references only bind time/account.
+    if (req.headers.get('Authorization')) {
+      const user = await this.user(req),
+        session = this.state.sessions[user.sessionKey];
+      return {
+        actor: activityActor(user),
+        subject: session.subject || '',
+        createdAt: session.providerSessionCreatedAt || session.createdAt,
+      };
+    }
     if (!betterAuthEnabled(this.env) || !req.headers.get('Cookie'))
-      return activityActor();
+      return { actor: activityActor() };
     try {
       const raw = await this.readBetterAuthIdentity(this.env, req);
-      if (!raw) return activityActor();
+      if (!raw) return { actor: activityActor() };
       const identity = validateBetterAuthIdentity(raw);
       const key = await digest(identity.issuer + '|' + identity.subject);
-      const profile = this.state.profiles[this.state.identities[key]?.userId];
-      const security = this.state.identitySecurity[key];
+      const profile = this.state.profiles[this.state.identities[key]?.userId],
+        security = this.state.identitySecurity[key];
       if (
-        accountHeld(profile) ||
         security?.blocked ||
+        (profile && accountHeld(profile)) ||
         security?.revokedProviderSessions?.[
           await digest(identity.providerSessionId)
         ] ||
         identity.createdAt <=
           Math.max(
             security?.credentialsChangedAt || 0,
-            profile.sessionRevokedAt || 0,
+            profile?.sessionRevokedAt || 0,
           )
       )
-        return activityActor();
-      return activityActor(profile);
+        return { actor: { type: 'unresolved', id: '', email: '' } };
+      return {
+        actor: activityActor(profile || identity),
+        subject: identity.subject,
+        createdAt: identity.createdAt,
+      };
     } catch {
-      return activityActor();
+      return { actor: { type: 'unresolved', id: '', email: '' } };
     }
+  }
+  async browserActivityActor(req) {
+    return (await this.browserActivityIdentity(req)).actor;
+  }
+  activityEventActor(identity, event) {
+    if (event.accountRef === '') return activityActor();
+    if (
+      event.accountRef !== undefined &&
+      event.accountRef !== identity.subject &&
+      event.accountRef !== identity.actor.id
+    )
+      return { type: 'unresolved', id: '', email: '' };
+    // During hydration there is no client reference yet. An existing verified
+    // cookie identifies it; a newly-created session cannot claim earlier events.
+    if (
+      event.accountRef === undefined &&
+      identity.createdAt &&
+      Number.isFinite(event.clientAt) &&
+      identity.createdAt > event.clientAt
+    )
+      return { type: 'unresolved', id: '', email: '' };
+    return identity.actor;
   }
   audit(action, actor, details = {}) {
     if (this.activityContext) {
@@ -1860,7 +1927,7 @@ export class SellerStore {
     // never an Access reviewer credential or an email-only role claim.
     if (path.startsWith('/staff/')) {
       if (
-        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|activity|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply|research))?)?|administrators|removals(?:\/(?:preview|apply))?|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
+        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|activity(?:\/(?:current|[a-fA-F0-9-]{36}))?|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply|research))?)?|administrators|removals(?:\/(?:preview|apply))?|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
           path,
         )
       )
@@ -1922,7 +1989,10 @@ export class SellerStore {
       ]);
       return reply({ ok: true });
     }
-    if (path === '/activity' && method === 'POST') {
+    if (
+      ['/activity', '/activity/conversation'].includes(path) &&
+      method === 'POST'
+    ) {
       const site =
         this.env.ACCOUNT_ADMIN_SITE_ORIGIN ||
         (this.env.AUTH_REDIRECT_URI &&
@@ -1950,32 +2020,186 @@ export class SellerStore {
       )
         fail(429, 'Activity rate limit.');
       this.activityRates.set(rateKey, rate);
-      const events = browserActivity(await this.json(req));
-      const actor = await this.browserActivityActor(req);
-      await this.activityLog.append(
-        events.map(({ accountRef, ...event }) => ({
-          ...event,
-          actor:
-            accountRef === undefined ||
-            (accountRef &&
-              Object.values(this.state.identities).some(
-                (identity) =>
-                  identity.userId === actor.id &&
-                  identity.issuer === 'rwas-better-auth' &&
-                  identity.subject === accountRef,
-              ))
-              ? actor
-              : activityActor(),
-          requestId: crypto.randomUUID(),
-        })),
-      );
+      const body = await this.json(req);
+      const identity = await this.browserActivityIdentity(req);
+      if (path === '/activity/conversation') {
+        if (
+          !body ||
+          Object.keys(body).some(
+            (key) =>
+              ![
+                'page',
+                'accountRef',
+                'clientAt',
+                'id',
+                'user',
+                'assistant',
+                'status',
+                'requestId',
+                'truncated',
+              ].includes(key),
+          ) ||
+          typeof body.user !== 'string' ||
+          body.user.length > 6000 ||
+          typeof body.assistant !== 'string' ||
+          body.assistant.length > 14000 ||
+          !/^[a-f0-9-]{36}$/i.test(body.id || '') ||
+          (body.truncated !== undefined &&
+            typeof body.truncated !== 'boolean') ||
+          !Number.isInteger(body.status) ||
+          (body.status !== 0 && body.status < 100) ||
+          body.status > 599
+        )
+          fail(400, 'Invalid conversation exchange.');
+        // Reuse strict marketplace page/reference/timestamp validation.
+        const validated = browserActivity({
+          events: [
+            {
+              action: 'chat.request',
+              page: body.page,
+              accountRef: body.accountRef,
+              clientAt: body.clientAt,
+              status: body.status,
+              requestId: body.requestId,
+            },
+          ],
+        })[0];
+        const actor = this.activityEventActor(identity, validated);
+        if (identity.actor.type === 'account' && actor.type === 'unresolved')
+          fail(409, 'Conversation account changed.');
+        await this.activityLog.append([
+          {
+            at: Date.now(),
+            clientAt: validated.clientAt,
+            requestId: crypto.randomUUID(),
+            relatedRequestId: validated.relatedRequestId,
+            actor,
+            action: 'Jerry conversation',
+            route: validated.route,
+            source: 'browser',
+            result:
+              body.status === 0 || body.status >= 400 ? 'failure' : 'success',
+            status: body.status || null,
+            details: {
+              conversation: conversationTurn({
+                id: body.id,
+                mode: 'general',
+                user: body.user,
+                assistant: body.assistant,
+                truncated: body.truncated,
+                error:
+                  body.status === 0
+                    ? 'Chat request failed before an HTTP response.'
+                    : body.status >= 400
+                      ? 'Chat request failed (HTTP ' + body.status + ')'
+                      : undefined,
+              }),
+            },
+          },
+        ]);
+      } else {
+        const events = browserActivity(body);
+        await this.activityLog.append(
+          events.map(({ accountRef, ...event }) => ({
+            ...event,
+            actor: this.activityEventActor(identity, { ...event, accountRef }),
+            requestId: crypto.randomUUID(),
+          })),
+        );
+      }
       return reply({ ok: true }, 202);
     }
-    if (path === '/admin/activity') {
+    if (path === '/admin/activity/current') {
+      assertAccountOrigin(req, this.env, false);
+      await this.accountAdministrator(req, false);
+      if (method !== 'GET') fail(405, 'Research reports are read-only.');
+      if (
+        [...url.searchParams.keys()].some((key) => key !== 'q') ||
+        (url.searchParams.get('q') || '').length > 100
+      )
+        fail(400, 'Invalid report search.');
+      const q = (url.searchParams.get('q') || '').trim().toLowerCase();
+      const records = [
+        ...Object.values(this.state.profiles).map((record) => ({
+          kind: 'account',
+          record,
+          profile: record,
+        })),
+        ...Object.values(this.state.listings).map((record) => ({
+          kind: 'listing',
+          record,
+          profile: this.state.profiles[record.ownerId],
+        })),
+      ]
+        .filter(
+          ({ record, profile }) =>
+            record.jerryReview &&
+            (!q ||
+              [record.id, profile?.email, profile?.id].some((value) =>
+                String(value || '')
+                  .toLowerCase()
+                  .includes(q),
+              )),
+        )
+        .sort(
+          (a, b) =>
+            (b.record.jerryReview.completedAt ||
+              b.record.jerryReview.queuedAt ||
+              0) -
+            (a.record.jerryReview.completedAt ||
+              a.record.jerryReview.queuedAt ||
+              0),
+        );
+      return reply({
+        total: records.length,
+        reports: records.slice(0, 20).map(({ kind, record, profile }) => ({
+          id: 'current-' + kind + '-' + record.id,
+          at:
+            record.jerryReview.completedAt ||
+            record.jerryReview.queuedAt ||
+            Date.now(),
+          requestId: 'Current saved report',
+          actor: activityActor(profile),
+          action: 'Jerry ' + kind + ' recommendation',
+          route: '/research',
+          resourceId: record.id,
+          source: 'system',
+          result: record.jerryReview.aiUnavailable ? 'failure' : 'success',
+          details: {
+            kind,
+            review: reviewSnapshot(record.jerryReview),
+            reviewScope: 'current-report',
+          },
+        })),
+      });
+    }
+    const activityDetail = /^\/admin\/activity\/([a-f0-9-]{36})$/i.exec(path);
+    if (path === '/admin/activity' || activityDetail) {
       assertAccountOrigin(req, this.env, false);
       await this.accountAdministrator(req, false);
       if (method !== 'GET') fail(405, 'Activity log is read-only.');
-      return reply(await this.activityLog.query(url));
+      if (!activityDetail) return reply(await this.activityLog.query(url));
+      const event = await this.activityLog.get(activityDetail[1]);
+      if (event.action === 'jerry.research' && !event.details?.review) {
+        const record =
+          event.details?.kind === 'account'
+            ? this.state.profiles[event.resourceId]
+            : this.state.listings[event.resourceId];
+        const review = reviewSnapshot(record?.jerryReview);
+        if (review)
+          event.details = {
+            ...event.details,
+            review,
+            reviewScope: 'current-report',
+          };
+      }
+      const exchanges = event.details?.conversation?.id
+        ? await this.activityLog.conversation(
+            event.details.conversation.id,
+            event.actor.id,
+          )
+        : [];
+      return reply({ event, exchanges });
     }
     if (path.startsWith('/_mail/') && method === 'POST')
       return this.mailRequest(req, path);
@@ -3869,6 +4093,18 @@ export class SellerStore {
       )
         fail(400, 'A short seller message is required.');
       const text = last.content.split('\n\n[System context:')[0].trim();
+      if (this.activityContext) {
+        const draft = this.state.drafts[u.id];
+        // A saved private draft is the stable conversation identity; no token
+        // or client-provided account is used to select it.
+        const conversationId = draft?.conversationId || crypto.randomUUID();
+        this.activityContext.conversation = {
+          id: conversationId,
+          mode: 'listing',
+          user: text,
+        };
+        this.activityContext.listingConversationId = conversationId;
+      }
       const legacySteps = [
         ['nNumber', 'What is your aircraft N-number?'],
         ['make', 'Aircraft make?'],

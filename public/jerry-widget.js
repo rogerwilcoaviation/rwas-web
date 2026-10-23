@@ -175,7 +175,7 @@
     '<button type="button" class="jerry-service-open" style="min-height:44px;flex-shrink:0">Request service — review and submit</button>' +
     '<div class="jerry-widget-chat"></div>' +
     '<div class="jerry-widget-error" role="alert"></div>' +
-    '<p class="jerry-widget-privacy" style="margin:0;padding:6px 12px;font:11px/1.4 Arial,sans-serif;color:#333;background:#f7f4ef">Messages are processed by our AI chat service and stored in this tab. Avoid sensitive details. <a href="/privacy" target="_blank" rel="noopener noreferrer" style="color:#17466b;text-decoration:underline">Privacy and retention</a>. Chat alone does not submit a service request.</p>' +
+    '<p class="jerry-widget-privacy" style="margin:0;padding:6px 12px;font:11px/1.4 Arial,sans-serif;color:#333;background:#f7f4ef">' + (LISTING_UI_ENABLED ? 'Aviation Exchange conversations are retained for up to 90 days (or the latest 100,000 activity events) and available to authorized administrators for troubleshooting. Avoid passwords and verification codes.' : 'Messages are processed by our AI chat service and stored in this tab. Avoid sensitive details.') + ' <a href="/privacy" target="_blank" rel="noopener noreferrer" style="color:#17466b;text-decoration:underline">Privacy and retention</a>. Chat alone does not submit a service request.</p>' +
     '<div class="jerry-widget-input">' +
     '<button type="button" class="jerry-widget-attach" title="Attach photos or documents">📎</button>' +
     '<input type="file" class="jerry-file-input" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx" style="display:none" />' +

@@ -27,7 +27,7 @@ export function activityRoute(request) {
   const path = new URL(request.url).pathname
     .replace(/^\/api\/aircraft-sale/, '')
     .replace(/^\/staff\//, '/admin/');
-  if (/^\/(?:_|health$|activity$)/.test(path)) return null;
+  if (/^\/(?:_|health$|activity(?:\/|$))/.test(path)) return null;
   const parts = path.split('/').filter(Boolean).slice(0, 8);
   const staticParts = new Set([
     'auth',
@@ -66,6 +66,7 @@ export function activityRoute(request) {
     'email-code',
     'admin',
     'activity',
+    'current',
     'review',
     'accounts',
     'preview',
@@ -84,9 +85,14 @@ export function activityRoute(request) {
         if (staticParts.has(part)) return part;
         if (
           index > 0 &&
-          ['listing', 'listings', 'accounts', 'support', 'contact'].includes(
-            parts[index - 1],
-          ) &&
+          [
+            'listing',
+            'listings',
+            'accounts',
+            'support',
+            'contact',
+            'activity',
+          ].includes(parts[index - 1]) &&
           id(part)
         ) {
           resourceId = part;
@@ -118,6 +124,8 @@ export function activityRoute(request) {
     'POST /auth/better-auth': 'Connect verified sign-in',
     'POST /admin/review': 'Review listing',
     'GET /admin/activity': 'Read activity log',
+    'GET /admin/activity/current': 'Read saved Jerry reports',
+    'GET /admin/activity/:id': 'Read activity details',
     'GET /admin/accounts': 'Search user accounts',
     'GET /admin/accounts/:id': 'Open user account',
     'POST /admin/accounts/:id/apply': 'Manage user account',
@@ -319,6 +327,12 @@ export class ActivityLog {
     this.storage.sql.exec(
       'CREATE INDEX IF NOT EXISTS exchange_activity_at ON exchange_activity(at)',
     );
+    this.storage.sql.exec(
+      "CREATE UNIQUE INDEX IF NOT EXISTS exchange_activity_id ON exchange_activity(json_extract(value,'$.id'))",
+    );
+    this.storage.sql.exec(
+      "CREATE INDEX IF NOT EXISTS exchange_activity_conversation ON exchange_activity(json_extract(value,'$.details.conversation.id'), json_extract(value,'$.actor.id'))",
+    );
     this.ready = true;
   }
   async append(events, now = Date.now()) {
@@ -354,14 +368,73 @@ export class ActivityLog {
       );
     }
   }
+  async get(eventId, now = Date.now()) {
+    if (!uuid(eventId)) fail(400, 'Invalid activity event.');
+    this.init();
+    const event = this.storage.sql
+      ? this.storage.sql
+          .exec(
+            "SELECT value FROM exchange_activity WHERE json_extract(value,'$.id') = ? AND at >= ? LIMIT 1",
+            eventId,
+            now - ACTIVITY_RETENTION_DAYS * DAY,
+          )
+          .toArray()
+          .map((row) => JSON.parse(row.value))[0]
+      : ((await this.storage.get('exchange-activity')) || []).find(
+          (row) =>
+            row.id === eventId && row.at >= now - ACTIVITY_RETENTION_DAYS * DAY,
+        );
+    if (!event) fail(404, 'This activity event is no longer retained.');
+    return event;
+  }
+  async conversation(conversationId, actorId, now = Date.now()) {
+    this.init();
+    const rows = this.storage.sql
+      ? this.storage.sql
+          .exec(
+            "SELECT value FROM exchange_activity WHERE json_extract(value,'$.details.conversation.id') = ? AND json_extract(value,'$.actor.id') = ? AND at >= ? ORDER BY seq DESC LIMIT 100",
+            conversationId,
+            actorId,
+            now - ACTIVITY_RETENTION_DAYS * DAY,
+          )
+          .toArray()
+          .map((row) => JSON.parse(row.value))
+          .reverse()
+      : ((await this.storage.get('exchange-activity')) || [])
+          .filter(
+            (row) =>
+              row.details?.conversation?.id === conversationId &&
+              row.actor.id === actorId &&
+              row.at >= now - ACTIVITY_RETENTION_DAYS * DAY,
+          )
+          .slice(-100);
+    return rows.map((row) => ({
+      id: row.id,
+      at: row.at,
+      requestId: row.requestId,
+      source: row.source,
+      result: row.result,
+      ...row.details.conversation,
+    }));
+  }
   async query(url, now = Date.now()) {
-    const allowed = ['q', 'result', 'source', 'from', 'to', 'cursor', 'limit'];
+    const allowed = [
+      'q',
+      'result',
+      'source',
+      'from',
+      'to',
+      'cursor',
+      'limit',
+      'type',
+    ];
     if ([...url.searchParams.keys()].some((k) => !allowed.includes(k)))
       fail(400, 'Invalid activity filter.');
     const p = url.searchParams,
       q = (p.get('q') || '').trim().toLowerCase(),
       result = p.get('result') || 'all',
-      source = p.get('source') || 'all';
+      source = p.get('source') || 'all',
+      type = p.get('type') || 'all';
     const limit = Number(p.get('limit') || 50),
       cursor = Number(p.get('cursor') || Number.MAX_SAFE_INTEGER);
     const date = (key, fallback) =>
@@ -372,6 +445,7 @@ export class ActivityLog {
       q.length > 100 ||
       !['all', 'success', 'failure', 'redirect', 'observed'].includes(result) ||
       !['all', 'server', 'browser', 'system'].includes(source) ||
+      !['all', 'conversation', 'review'].includes(type) ||
       !Number.isSafeInteger(limit) ||
       limit < 1 ||
       limit > 100 ||
@@ -399,6 +473,12 @@ export class ActivityLog {
         where.push("json_extract(value,'$.source') = ?");
         args.push(source);
       }
+      if (type === 'conversation')
+        where.push("json_type(value,'$.details.conversation') = 'object'");
+      if (type === 'review')
+        where.push(
+          "(json_type(value,'$.details.review') = 'object' OR json_extract(value,'$.action') = 'jerry.research')",
+        );
       if (q) {
         where.push(
           "instr(lower(json_extract(value,'$.action') || ' ' || json_extract(value,'$.actor.id') || ' ' || json_extract(value,'$.actor.email') || ' ' || json_extract(value,'$.requestId') || ' ' || coalesce(json_extract(value,'$.resourceId'),'') || ' ' || json_extract(value,'$.details')), ?) > 0",
@@ -426,6 +506,10 @@ export class ActivityLog {
             row.at <= to &&
             (result === 'all' || row.result === result) &&
             (source === 'all' || row.source === source) &&
+            (type === 'all' ||
+              (type === 'conversation' && !!row.details?.conversation) ||
+              (type === 'review' &&
+                (!!row.details?.review || row.action === 'jerry.research'))) &&
             (!q ||
               [
                 row.action,
@@ -442,7 +526,15 @@ export class ActivityLog {
         .slice(0, limit + 1);
     }
     return {
-      events: rows.slice(0, limit).map(({ seq, ...row }) => row),
+      events: rows.slice(0, limit).map(({ seq, ...row }) => {
+        const { conversation, review, ...details } = row.details || {};
+        return {
+          ...row,
+          details,
+          hasConversation: !!conversation,
+          hasReview: !!review || row.action === 'jerry.research',
+        };
+      }),
       nextCursor: rows.length > limit ? String(rows[limit - 1].seq) : null,
       retentionDays: ACTIVITY_RETENTION_DAYS,
       maxRows: ACTIVITY_MAX_ROWS,

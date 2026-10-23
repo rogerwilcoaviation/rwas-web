@@ -34,7 +34,12 @@ export function createSellerRequestFacade({
 }) {
   const requestHeaders: SellerRequestHeaders = async (path) => {
     if (
-      !['/api/aircraft-sale/draft', '/api/aircraft-sale/intake'].includes(path)
+      ![
+        '/api/aircraft-sale/draft',
+        '/api/aircraft-sale/intake',
+        '/api/aircraft-sale/activity',
+        '/api/aircraft-sale/activity/conversation',
+      ].includes(path)
     )
       throw denied(403);
     const captured = read();

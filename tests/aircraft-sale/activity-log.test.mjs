@@ -285,7 +285,7 @@ test('current verified staff identity is required and browser cookie attribution
     .at(-1);
   assert.equal(
     mismatched.actor.type,
-    'anonymous',
+    'unresolved',
     'Queued actions cannot be attributed to a different signed-in account',
   );
   current = { ...current, providerSessionId: 'replacement-provider-session' };

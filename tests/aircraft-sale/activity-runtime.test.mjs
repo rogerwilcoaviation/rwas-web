@@ -108,6 +108,60 @@ test('activity table survives real SQLite DO restart, filters safely and preserv
       (await call('/_activity/identity', 'POST', { subject: 'forged' })).status,
       404,
     );
+    const intake = await call(
+      '/intake',
+      'POST',
+      { messages: [{ role: 'user', content: 'I want to create a listing' }] },
+      session,
+    );
+    assert.equal(intake.status, 200);
+    const chatRows = await (
+      await call(
+        '/admin/activity?type=conversation',
+        'GET',
+        undefined,
+        'runtime-admin',
+      )
+    ).json();
+    assert.equal(chatRows.events.length, 1);
+    assert.equal(chatRows.events[0].hasConversation, true);
+    assert.equal(chatRows.events[0].details.conversation, undefined);
+    const transcript = await (
+      await call(
+        '/admin/activity/' + chatRows.events[0].id,
+        'GET',
+        undefined,
+        'runtime-admin',
+      )
+    ).json();
+    assert.equal(transcript.exchanges.length, 1);
+    assert.equal(transcript.event.actor.email, 'runtime@example.test');
+    assert.equal(
+      transcript.exchanges[0].messages[0].content,
+      'I want to create a listing',
+    );
+    assert.equal(
+      (
+        await call(
+          '/admin/activity/' + chatRows.events[0].id,
+          'GET',
+          undefined,
+          session,
+        )
+      ).status,
+      403,
+    );
+    assert.equal(
+      (
+        await call(
+          '/admin/activity?type=review',
+          'GET',
+          undefined,
+          'runtime-admin',
+        )
+      ).status,
+      200,
+    );
     // Entry point identity result is logged without credentials, even with auth disabled.
     const identity = await call('/identity/sign-in/email', 'POST', {
       email: 'PRIVATE-EMAIL',

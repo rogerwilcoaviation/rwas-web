@@ -5,7 +5,7 @@ export default function ActivityTracker() {
     if (document.querySelector('script[data-exchange-activity]')) return;
     const script = document.createElement('script');
     script.dataset.exchangeActivity = 'true';
-    script.src = '/aviation-exchange-activity.js?v=20261023-activity-log';
+    script.src = '/aviation-exchange-activity.js?v=20261023-activity-content';
     script.async = true;
     document.head.appendChild(script);
   }, []);
