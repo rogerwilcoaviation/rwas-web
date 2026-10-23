@@ -674,7 +674,7 @@ export default function BetterAuthPanel({
             </div>
           </form>
         )}
-      {mode === 'login' && (
+      {(mode === 'login' || mode === 'signup') && (
         <>
           {providers.some(
             (provider) => provider === 'google' || provider === 'apple',
@@ -715,13 +715,14 @@ export default function BetterAuthPanel({
                       />
                     )}
                     <span>
-                      Continue with {provider === 'google' ? 'Google' : 'Apple'}
+                      {mode === 'signup' ? 'Sign up with ' : 'Continue with '}
+                      {provider === 'google' ? 'Google' : 'Apple'}
                     </span>
                   </button>
                 ))}
             </div>
           )}
-          {onConnectExisting && (
+          {mode === 'login' && onConnectExisting && (
             <button disabled={busy} onClick={onConnectExisting}>
               Use an existing RWAS login
             </button>

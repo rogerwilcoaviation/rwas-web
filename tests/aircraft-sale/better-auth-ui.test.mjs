@@ -427,6 +427,45 @@ test('real client password login creates the bound RWAS session without loading 
     await f.close();
   }
 });
+test('Google signup starts the existing social flow without submitting empty email signup fields', async () => {
+  const f = await fixture({
+    initialMode: 'signup',
+    providers: ['password', 'google'],
+  });
+  try {
+    const button = f.page.getByRole('button', {
+      name: 'Sign up with Google',
+      exact: true,
+    });
+    await button.waitFor();
+    assert.equal(await button.getAttribute('type'), 'button');
+    assert.equal(
+      await button.locator('img').getAttribute('src'),
+      '/auth/google-g.png',
+    );
+    await Promise.all([
+      f.page.waitForResponse((response) =>
+        response.url().endsWith('/sign-in/social'),
+      ),
+      button.click(),
+    ]);
+    const request = f.state.requests.find(
+      (item) => item.path === base + '/sign-in/social',
+    );
+    assert.equal(request.body.provider, 'google');
+    assert.equal(
+      request.body.callbackURL,
+      origin + '/aircraft-for-sale?seller-auth=identity',
+    );
+    assert.equal(
+      f.state.requests.some((item) => item.path === base + '/sign-up/email'),
+      false,
+    );
+  } finally {
+    await f.close();
+  }
+});
+
 test('unverified signup waits for email and never creates seller access', async () => {
   const f = await fixture({initialMode:'signup'});
   try {

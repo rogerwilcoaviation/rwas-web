@@ -232,6 +232,18 @@ try {
         await signup.click();
         const dialog = page.getByRole('dialog');
         await dialog.getByLabel('Name', { exact: true }).waitFor();
+        const googleSignup = dialog.getByRole('button', {
+          name: 'Sign up with Google',
+          exact: true,
+        });
+        await googleSignup.waitFor();
+        await page.waitForFunction(
+          () => document.querySelector('.auth-provider img')?.naturalWidth > 0,
+        );
+        assert.equal(await googleSignup.getAttribute('type'), 'button');
+        await page.screenshot({
+          path: resolve(artifacts, 'signup-' + width + '.png'),
+        });
         assert.equal(
           await dialog
             .getByText('Access an older RWAS account', { exact: true })
