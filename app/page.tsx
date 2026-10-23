@@ -225,11 +225,11 @@ export default function Home() {
               </div>
             </Specimen>
 
-            {/* Aircraft 4 Sale feed (hydrated client-side) */}
+            {/* Aviation Exchange feed (hydrated client-side) */}
             <Specimen variant="hero" as="section">
               <span className="bs-kicker">Classifieds</span>
               <h2 className="bs-headline bs-headline--section">
-                Aircraft 4 Sale
+                Aviation Exchange
               </h2>
               <hr className="section-rule" />
 

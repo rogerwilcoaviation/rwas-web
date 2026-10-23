@@ -13,6 +13,7 @@ keep_vars = true
 cpu_ms = 30000
 
 [vars]
+JERRY_REVIEW_ENABLED = "true"
 ACCESS_AUD = "7af12c6b5590fb8587bf05051942c48da7a93677b2f8918cbb550afa48d22f97"
 ACCESS_TEAM_DOMAIN = "john-08c.cloudflareaccess.com"
 ACCOUNT_ADMIN_ACCESS_AUD = "8538aaf1a79d7dde5d3253090705ad039e09db558b9c9f4cfc33788df2518bec"
@@ -77,3 +78,6 @@ invocation_logs = false
 enabled = false
 head_sampling_rate = 1
 persist = true
+
+[ai]
+binding = "AI"

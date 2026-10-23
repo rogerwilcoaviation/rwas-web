@@ -44,7 +44,7 @@ export default function ContactSeller({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingId]);
   const subject = contact
-    ? 'Aircraft4Sale inquiry: ' +
+    ? 'Aviation Exchange inquiry: ' +
       contact.title +
       (contact.tailNumber ? ' (' + contact.tailNumber + ')' : '')
     : '';

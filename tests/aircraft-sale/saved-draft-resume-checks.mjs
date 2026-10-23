@@ -38,9 +38,14 @@ export async function checkSavedDraftResume({
       .waitFor();
   }
   async function reviewAnswers(saved) {
-    await dialog
-      .getByRole('button', { name: 'Review draft', exact: true })
-      .click();
+    if (
+      await dialog
+        .getByRole('button', { name: 'Review draft', exact: true })
+        .count()
+    )
+      await dialog
+        .getByRole('button', { name: 'Review draft', exact: true })
+        .click();
     const details = await dialog.innerText();
     for (const value of [
       ...(saved.listingType === 'aircraft' ? [] : [saved.title]),
@@ -107,6 +112,12 @@ export async function checkSavedDraftResume({
         .click();
       await dialog
         .getByRole('button', { name: 'Review draft', exact: true })
+        .or(
+          dialog.getByRole('heading', {
+            name: 'Review your listing',
+            exact: true,
+          }),
+        )
         .waitFor();
       assert.notEqual(
         await dialog.getByLabel('Listing step index').inputValue(),
@@ -166,9 +177,27 @@ export async function checkSavedDraftResume({
         })
         .last()
         .click();
-      await dialog
-        .getByRole('button', { name: 'Review draft', exact: true })
-        .waitFor();
+      try {
+        await dialog
+          .getByRole('button', { name: 'Review draft', exact: true })
+          .or(
+            dialog.getByRole('heading', {
+              name: 'Review your listing',
+              exact: true,
+            }),
+          )
+          .waitFor();
+      } catch (error) {
+        console.error(
+          JSON.stringify({
+            type,
+            intake,
+            dialog: await dialog.innerText(),
+            saved: await savedDraft(),
+          }),
+        );
+        throw error;
+      }
       await reviewAnswers(answers);
       assert.equal(
         await page.locator('.jerry-widget-panel').isVisible(),

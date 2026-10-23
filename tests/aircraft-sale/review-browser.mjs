@@ -4,6 +4,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { resolve, extname } from 'node:path';
 import assert from 'node:assert/strict';
 import { fixture, create, fields, submit, approve } from './fixture.mjs';
+import { advisoryResearch } from './jerry-research-fixture.mjs';
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
     '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs'
@@ -46,6 +47,9 @@ const first = await create(f, owner, { ...fields, model: 'First Review' });
 const second = await create(f, owner, { ...fields, model: 'Second Review' });
 for (const listing of [first, second])
   assert.equal((await submit(f, owner, listing)).status, 200);
+const seeded = f.state();
+seeded.listings[first.id].jerryReview = advisoryResearch;
+f.durable.set('state', seeded);
 let browser;
 const checkpoints = [],
   blocked = [],
@@ -188,6 +192,19 @@ try {
   await firstCard.waitFor();
   await page.getByText('2 listings are awaiting review.').waitFor();
   checkpoints.push('Successful pending queue reports its count');
+  await firstCard
+    .getByText(advisoryResearch.summary, { exact: true })
+    .waitFor();
+  assert.equal(
+    await firstCard
+      .getByRole('link', { name: 'Open research source 1', exact: true })
+      .getAttribute('href'),
+    advisoryResearch.evidence.faa.sources[0],
+  );
+  assert.equal(f.state().listings[first.id].status, 'pending');
+  checkpoints.push(
+    'Jerry advisory evidence and FAA sources render without approving a listing',
+  );
   for (const availability of [
     { publicListings: false },
     {},

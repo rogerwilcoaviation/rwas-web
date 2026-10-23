@@ -11,6 +11,9 @@ import {
   marketplaceStaffRequest,
 } from '@/lib/marketplace-staff-fetch';
 import AdminListings from '../aircraft-for-sale/admin-listings';
+import JerryResearchPanel, {
+  type JerryResearch,
+} from '../aircraft-for-sale/jerry-research-panel';
 import PermanentAccountRemoval, {
   PendingAccountRemovals,
 } from './PermanentAccountRemoval';
@@ -34,6 +37,7 @@ type Summary = {
   createdAt: number;
 };
 type Account = Summary & {
+  jerryReview?: JerryResearch;
   phone: string;
   location: string;
   loginMethods: string[];
@@ -218,6 +222,24 @@ export default function SellerAccounts({
       focus.trigger.focus();
     }
   }, [authority, busy, pending, selected?.id]);
+  useEffect(() => {
+    if (
+      !selected ||
+      busy ||
+      pending ||
+      !['queued', 'researching'].includes(selected.jerryReview?.status || '')
+    )
+      return;
+    const id = selected.id,
+      g = generation.current;
+    const timer = setTimeout(
+      () => void detail(id, g, true).catch(failure),
+      5000,
+    );
+    return () => clearTimeout(timer);
+    // The timer is scoped to this selected record and preserves unsaved contact edits.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected?.id, selected?.jerryReview, busy, pending]);
   function clearPrivate() {
     setAdminSection('directory');
     focusSelected.current = null;
@@ -611,6 +633,26 @@ export default function SellerAccounts({
                 : 'No saved intake draft'}
             </p>
             <AccountSection value="details">
+              <JerryResearchPanel
+                review={selected.jerryReview}
+                disabled={busy || !authority?.canManage || !!pending}
+                onRefresh={() =>
+                  void (async () => {
+                    setBusy(true);
+                    try {
+                      await request(
+                        '/' + encodeURIComponent(selected.id) + '/research',
+                        {},
+                      );
+                      await detail(selected.id, generation.current, true);
+                    } catch (error) {
+                      failure(error);
+                    } finally {
+                      setBusy(false);
+                    }
+                  })()
+                }
+              />
               <h3>Contact details</h3>
               <fieldset disabled={busy || !authority?.canManage || !!pending}>
                 <label>

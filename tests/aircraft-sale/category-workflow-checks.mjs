@@ -71,6 +71,12 @@ export async function checkCategoryWorkflows({
       .getByRole('button', { name: 'Close seller panel', exact: true })
       .click();
     await f.call('/draft', 'DELETE', undefined, token, { Origin: origin });
+    // Each category is a new independent fixture: discard its device recovery copy too.
+    await page.evaluate(() =>
+      Object.keys(localStorage)
+        .filter((key) => key.startsWith('rwas-listing-recovery-v1:'))
+        .forEach((key) => localStorage.removeItem(key)),
+    );
     await page
       .getByRole('button', { name: 'Create a Listing', exact: true })
       .click();

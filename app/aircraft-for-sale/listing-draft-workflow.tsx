@@ -19,6 +19,10 @@ type Props = {
   renderMedia: (category: string) => ReactNode;
   mediaCounts: Record<string, number>;
   initialStep?: number;
+  onStepChange?: (step: number) => void;
+  autosaveNotice?: string;
+  autosaveIssue?: boolean;
+  onRetryAutosave?: () => void;
 };
 
 export function ListingDraftWorkflow({
@@ -31,6 +35,10 @@ export function ListingDraftWorkflow({
   renderMedia,
   mediaCounts,
   initialStep = 0,
+  onStepChange,
+  autosaveNotice,
+  autosaveIssue,
+  onRetryAutosave,
 }: Props) {
   const draftFields = getDraftFields(values);
   const mediaSteps = getMediaSteps(values);
@@ -62,6 +70,7 @@ export function ListingDraftWorkflow({
   function go(next: number) {
     setError('');
     setStep(next);
+    onStepChange?.(next);
   }
   function validateSavedValues() {
     const invalid = draftFields.findIndex(
@@ -71,6 +80,7 @@ export function ListingDraftWorkflow({
     );
     if (invalid < 0) return true;
     setStep(invalid);
+    onStepChange?.(invalid);
     setError(
       validateDraftField(
         draftFields[invalid],
@@ -103,6 +113,16 @@ export function ListingDraftWorkflow({
         incomplete private draft and skip optional specifications and
         attachments.
       </p>
+      {autosaveNotice && (
+        <div role="status" aria-live="polite">
+          <p>{autosaveNotice}</p>
+          {autosaveIssue && (
+            <button type="button" onClick={onRetryAutosave}>
+              Retry saving online
+            </button>
+          )}
+        </div>
+      )}
       <label className="workflow-field">
         Jump to an item
         <select
@@ -388,9 +408,9 @@ export function ListingDraftWorkflow({
           </button>
         )}
         <p className="workflow-hint">
-          You can save an incomplete private draft at any step. Choose Save
-          Draft before closing; moving between steps keeps your entries in this
-          window.
+          Changes save automatically as you type and move between steps. Check
+          the save status before closing. If syncing is interrupted, a recovery
+          copy stays on this device. Files are saved when their upload finishes.
         </p>
       </div>
       <style jsx>{`

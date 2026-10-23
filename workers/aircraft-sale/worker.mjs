@@ -53,6 +53,16 @@ import {
   listingFields as fields,
   cleanListing as clean,
 } from './listing-fields.mjs';
+import { manualDraft, manualIntakeFields } from './manual-draft.mjs';
+import { researchSubmission } from './jerry-review.mjs';
+import {
+  planResearch,
+  queueResearch,
+  nextResearchAt,
+  takeResearchJob,
+  applyResearch,
+} from './research-jobs.mjs';
+import { validateDraftField } from '../../lib/marketplace/draft-validation.mjs';
 import {
   deliverCode,
   authorizeReviewer,
@@ -258,6 +268,7 @@ function publicListing(l) {
     deleteFrom,
     deletedAt,
     reviewNote,
+    jerryReview,
     ...p
   } = l;
   const specs = { ...p.specifications };
@@ -691,20 +702,65 @@ export class SellerStore {
           receipt.cleanupAfter || 0,
         ),
       ),
+      ...(this.env.JERRY_REVIEW_ENABLED === 'true'
+        ? [nextResearchAt(state)]
+        : []),
     );
     if (Number.isFinite(next)) await this.ctx.storage.setAlarm(next);
   }
-  alarm() {
+  async alarm() {
     const operation = this.queue.then(() => this.runAlarm());
     this.queue = operation.catch(() => {});
-    return operation;
+    const job = await operation;
+    if (!job) return;
+    let result;
+    try {
+      result = await researchSubmission(
+        job,
+        this.env.JERRY_RESEARCH?.fetch?.bind(this.env.JERRY_RESEARCH) || fetch,
+        this.env.AI,
+      );
+    } catch {
+      result = {
+        status: 'completed',
+        completedAt: Date.now(),
+        recommendation: 'needs_attention',
+        summary: 'Research is unavailable. Administrator review is required.',
+        findings: [],
+        evidence: {},
+        aiUnavailable: true,
+        authority: 'Advisory only; administrator decision required.',
+      };
+    }
+    const apply = this.queue.then(async () => {
+      const state = await this.loadState();
+      const accepted = await applyResearch(state, job, result);
+      if (accepted)
+        state.audit.push({
+          action: 'jerry-research',
+          actor: 'jerry-research',
+          at: Date.now(),
+          kind: job.kind,
+          targetId: job.id,
+          recommendation: result.recommendation,
+        });
+      await this.saveState(state);
+      await this.scheduleAuth0ReceiptExpiry(state);
+    });
+    this.queue = apply.catch(() => {});
+    await apply;
   }
   async runAlarm() {
     const state = await this.loadState();
     this.purgeAuth0EventReceipts(state);
     await this.expireUploadReceipts(state);
+    const job =
+      this.env.JERRY_REVIEW_ENABLED === 'true'
+        ? await takeResearchJob(state)
+        : null;
     await this.saveState(state);
     await this.scheduleAuth0ReceiptExpiry(state);
+    return job;
   }
   async run(req) {
     // Wider account/business digests require the separately scoped account-read
@@ -716,7 +772,11 @@ export class SellerStore {
     this.rollbackState = structuredClone(this.state);
     try {
       const result = await this.route(req);
+      if (this.env.JERRY_REVIEW_ENABLED === 'true')
+        planResearch(this.state, this.rollbackState);
       await this.saveState(this.state);
+      if (this.env.JERRY_REVIEW_ENABLED === 'true')
+        await this.scheduleAuth0ReceiptExpiry(this.state);
       return result;
     } catch (e) {
       if (
@@ -1649,7 +1709,7 @@ export class SellerStore {
     // never an Access reviewer credential or an email-only role claim.
     if (path.startsWith('/staff/')) {
       if (
-        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply))?)?|administrators|removals(?:\/(?:preview|apply))?|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
+        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply|research))?)?|administrators|removals(?:\/(?:preview|apply))?|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
           path,
         )
       )
@@ -2835,13 +2895,26 @@ export class SellerStore {
       if (path === '/admin/accounts' && method === 'GET')
         return reply({ ...accountDirectory(this.state, url), ...identity });
       const match = path.match(
-        /^\/admin\/accounts\/([A-Za-z0-9_-]{1,128})(?:\/(preview|apply))?$/,
+        /^\/admin\/accounts\/([A-Za-z0-9_-]{1,128})(?:\/(preview|apply|research))?$/,
       );
       if (!match) fail(404, 'Account administration action not found.');
       const [, accountId, action] = match;
       if (method === 'GET' && !action)
         return reply({ ...accountDetail(this.state, accountId), ...identity });
       if (method !== 'POST' || !action) fail(405, 'Method not allowed.');
+      if (action === 'research') {
+        if (this.env.JERRY_REVIEW_ENABLED !== 'true')
+          fail(503, 'Jerry research is not enabled.');
+        const profile = this.state.profiles[accountId];
+        if (!profile) fail(404, 'Account not found.');
+        profile.jerryReview = queueResearch(profile.jerryReview);
+        this.audit('jerry-research-requested', identity.actor, { accountId });
+        return reply({
+          ok: true,
+          ...accountDetail(this.state, accountId),
+          ...identity,
+        });
+      }
       const body = await this.json(req),
         operation = accountOperation(body);
       for (const link of Object.values(this.state.identities).filter(
@@ -3393,6 +3466,18 @@ export class SellerStore {
         return reply({ ok: true, listing: this.hydrate(l) });
       }
       if (l.purging) fail(409, 'Permanent deletion is in progress.');
+      if (b.decision === 'research') {
+        if (this.env.JERRY_REVIEW_ENABLED !== 'true')
+          fail(503, 'Jerry research is not enabled.');
+        if (l.status !== 'pending')
+          fail(409, 'Submit the listing for review first.');
+        l.jerryReview = queueResearch(l.jerryReview);
+        this.audit('jerry-research-requested', actor, {
+          listingId: l.id,
+          revision: l.revision,
+        });
+        return reply({ ok: true, listing: this.hydrate(l) });
+      }
       if (b.decision === 'unpublish') {
         if (!['active', 'paused', 'sold'].includes(l.status))
           fail(409, 'Listing is not published or approved.');
@@ -3444,6 +3529,7 @@ export class SellerStore {
     const u = await this.user(req);
     if (path === '/account/access' && method === 'GET')
       return reply({
+        profileId: u.id,
         role: u.accountRole,
         canManageAdministrators: u.superAdministrator === true,
       });
@@ -3560,6 +3646,7 @@ export class SellerStore {
             multiline: true,
             maxLength: 10000,
           },
+          { name: 'sellerWebsite', label: 'Business website', required: false },
         ]);
       const intakePrompt = (field) =>
         field.label +
@@ -3588,11 +3675,15 @@ export class SellerStore {
         fail(404, 'No saved draft is available. Refresh My Listings.');
       if (!progress?.intake) {
         const savedFields = resuming
-          ? clean(
-              Object.fromEntries(
-                Object.entries(progress).filter(([key]) => key !== 'updatedAt'),
-              ),
-            )
+          ? progress.manual
+            ? manualIntakeFields(progress)
+            : clean(
+                Object.fromEntries(
+                  Object.entries(progress).filter(
+                    ([key]) => key !== 'updatedAt',
+                  ),
+                ),
+              )
           : null;
         progress = {
           intake: true,
@@ -3605,6 +3696,14 @@ export class SellerStore {
           aircraftContactFieldsVersion: 1,
           step: 0,
           fields: savedFields || { sellerName: u.name, workflowVersion: '3' },
+          ...(progress?.manual
+            ? {
+                fromManual: true,
+                listingId: progress.listingId,
+                listingRevision: progress.listingRevision,
+                listingFieldsFingerprint: progress.listingFieldsFingerprint,
+              }
+            : {}),
         };
         if (resuming) {
           const fields =
@@ -3617,8 +3716,15 @@ export class SellerStore {
                 }));
           let next = fields.findIndex(
             (field) =>
-              field.required &&
-              !String(progress.fields[field.name] ?? '').trim(),
+              !!validateDraftField(
+                field,
+                String(
+                  field.name.startsWith('spec:')
+                    ? (progress.fields.specifications?.[field.name.slice(5)] ??
+                        '')
+                    : (progress.fields[field.name] ?? ''),
+                ),
+              ),
           );
           if (next < 0)
             next = fields.findIndex(
@@ -3717,14 +3823,40 @@ export class SellerStore {
         const update = field.startsWith('spec:')
           ? {
               specifications: {
-                ...progress.fields.specifications,
+                ...(!progress.fromManual ? progress.fields.specifications : {}),
                 [field.slice(5)]: answer,
               },
             }
           : { [field]: answer };
-        if (guidedFields)
+        if (guidedFields && progress.fromManual) {
+          const validated = clean({
+            ...(progress.fields.listingType
+              ? { listingType: progress.fields.listingType }
+              : {}),
+            ...(progress.fields.category
+              ? { category: progress.fields.category }
+              : {}),
+            ...update,
+          });
+          progress.fields = {
+            ...progress.fields,
+            ...validated,
+            ...(validated.specifications
+              ? {
+                  specifications: {
+                    ...progress.fields.specifications,
+                    ...validated.specifications,
+                  },
+                }
+              : {}),
+          };
+        } else if (guidedFields)
           progress.fields = clean({ ...progress.fields, ...update });
         else Object.assign(progress.fields, clean(update));
+      } else if (progress.fromManual) {
+        if (field.startsWith('spec:'))
+          delete progress.fields.specifications?.[field.slice(5)];
+        else delete progress.fields[field];
       }
       progress.step++;
       progress.updatedAt = Date.now();
@@ -3740,7 +3872,14 @@ export class SellerStore {
           state: { step: progress.step },
         });
       const draft = clean(progress.fields, true);
-      this.state.drafts[u.id] = { ...draft, updatedAt: Date.now() };
+      this.state.drafts[u.id] = progress.listingId
+        ? {
+            ...progress,
+            fields: draft,
+            step: nextSteps.length,
+            updatedAt: Date.now(),
+          }
+        : { ...draft, updatedAt: Date.now() };
       return reply({
         reply:
           'Review your details in the seller panel. Save the draft, add media, then submit for review.',
@@ -3764,7 +3903,7 @@ export class SellerStore {
       const b = await this.json(req);
       for (const k of Object.keys(b))
         if (
-          !['name', 'phone', 'location'].includes(k) ||
+          !['name', 'phone', 'location', 'website'].includes(k) ||
           typeof b[k] !== 'string' ||
           b[k].length > 200
         )
@@ -3891,12 +4030,42 @@ export class SellerStore {
       this.audit('account-delete', u.id);
       return reply({ ok: true });
     }
+    if (path === '/draft/autosave' && method === 'PUT') {
+      const body = await this.json(req);
+      const current = this.state.drafts[u.id];
+      const revision = current ? await hash(JSON.stringify(current)) : null;
+      if (body.expectedRevision !== revision)
+        fail(
+          409,
+          'Your saved draft changed in another window. Reopen it before syncing; this device’s recovery copy is retained.',
+        );
+      const draft = manualDraft(body, (id) => this.owned(id, u));
+      if (draft.listingId)
+        draft.listingFieldsFingerprint = await hash(
+          JSON.stringify(this.owned(draft.listingId, u).fields),
+        );
+      this.state.drafts[u.id] = draft;
+      return reply({
+        ok: true,
+        draft,
+        revision: await hash(JSON.stringify(draft)),
+      });
+    }
     if (path === '/draft') {
       if (method === 'GET') {
         const draft = this.state.drafts[u.id] || null;
         return reply({
           draft,
           revision: draft ? await hash(JSON.stringify(draft)) : null,
+          listingConflict: !!(
+            draft?.listingId &&
+            this.state.listings[draft.listingId] &&
+            draft.listingFieldsFingerprint &&
+            draft.listingFieldsFingerprint !==
+              (await hash(
+                JSON.stringify(this.state.listings[draft.listingId].fields),
+              ))
+          ),
         });
       }
       if (method === 'PUT') {
@@ -3941,6 +4110,11 @@ export class SellerStore {
         });
       }
       const sourceDraftRevision = req.headers.get('X-RWAS-Draft-Revision');
+      if (sourceDraftRevision && this.state.drafts[u.id]?.listingId)
+        fail(
+          409,
+          'Resume the existing saved listing instead of creating another one.',
+        );
       if (
         sourceDraftRevision &&
         (!this.state.drafts[u.id] ||
@@ -4011,11 +4185,27 @@ export class SellerStore {
       if (method === 'PUT') {
         if (['deleted', 'archived'].includes(l.status))
           fail(409, 'Restore the listing before editing.');
+        const source = req.headers.get('X-RWAS-Draft-Revision');
+        const draft = this.state.drafts[u.id];
+        if (
+          source &&
+          (!draft ||
+            draft.listingId !== l.id ||
+            source !== (await hash(JSON.stringify(draft))) ||
+            (draft.listingRevision !== l.revision &&
+              draft.listingFieldsFingerprint !==
+                (await hash(JSON.stringify(l.fields)))))
+        )
+          fail(
+            409,
+            'The saved listing changed. Reopen its latest version before saving.',
+          );
         const b = clean({ ...l.fields, ...(await this.json(req)) });
         l.fields = b;
         l.revision++;
         l.status = 'draft';
         l.updatedAt = Date.now();
+        if (source) delete this.state.drafts[u.id];
         this.audit('edit', u.id, { listingId: l.id });
         return reply({
           ok: true,

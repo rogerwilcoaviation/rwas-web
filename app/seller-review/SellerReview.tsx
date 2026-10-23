@@ -1,6 +1,9 @@
 /* eslint-disable @next/next/no-img-element -- Staff media uses the authenticated service. */
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import JerryResearchPanel, {
+  type JerryResearch,
+} from '../aircraft-for-sale/jerry-research-panel';
 import { SELLER_API } from '@/lib/seller-api';
 import {
   marketplaceStaffFetch,
@@ -32,6 +35,7 @@ type Review = {
   id: string;
   revision: number;
   status: string;
+  jerryReview?: JerryResearch;
   reviewActions?: Decision[];
   acceptancePublicUntil?: number;
   fields: Record<string, unknown>;
@@ -82,6 +86,28 @@ export default function SellerReview({
       'idle',
     ),
     [notes, setNotes] = useState<Record<string, string>>({});
+  useEffect(() => {
+    if (
+      busy ||
+      !items.some((item) =>
+        ['queued', 'researching'].includes(item.jerryReview?.status || ''),
+      )
+    )
+      return;
+    const timer = setTimeout(
+      () =>
+        void loadQueue().catch((error) =>
+          setError(
+            error instanceof Error
+              ? error.message
+              : 'Research could not be refreshed.',
+          ),
+        ),
+      5000,
+    );
+    return () => clearTimeout(timer);
+    // Refresh advisory reports only while research is in flight.
+  }, [items, busy]);
   async function loadQueue() {
     setPublicationAllowed(false);
     const availability = fetch(SELLER_API + '/auth/methods', {
@@ -302,6 +328,35 @@ export default function SellerReview({
                 {new Date(l.acceptancePublicUntil!).toLocaleString()}.
               </p>
             )}
+            <JerryResearchPanel
+              review={l.jerryReview}
+              disabled={busy || l.status !== 'pending'}
+              onRefresh={() =>
+                void (async () => {
+                  setBusy(true);
+                  try {
+                    await marketplaceStaffFetch('/admin/review', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        listingId: l.id,
+                        revision: l.revision,
+                        decision: 'research',
+                      }),
+                    }).then(reviewResponse);
+                    await loadQueue();
+                  } catch (error) {
+                    setError(
+                      error instanceof Error
+                        ? error.message
+                        : 'Research could not be requested.',
+                    );
+                  } finally {
+                    setBusy(false);
+                  }
+                })()
+              }
+            />
             <ListingFacts fields={l.fields} />
             <ListingDetails fields={l.fields} headingLevel={embedded ? 4 : 3} />
             <div className="admin-review-media">

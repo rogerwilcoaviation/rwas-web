@@ -37,18 +37,18 @@ import SellerAuthPanelLoader from './seller-auth-panel-loader';
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: { absolute: 'Aircraft for Sale — RWAS Marketplace' },
+  title: { absolute: 'Aviation Exchange — RWAS' },
   description:
-    'Aircraft4Sale connects aircraft owners and buyers for aircraft and aviation part transactions. Browse aircraft, create an account, or log in to get started.',
+    'Aviation Exchange connects aircraft owners and buyers for aircraft and aviation part transactions. Browse aircraft, create an account, or log in to get started.',
   alternates: {
     canonical: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
   },
   openGraph: {
     type: 'website',
     url: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
-    title: 'Aircraft for Sale — RWAS Marketplace',
+    title: 'Aviation Exchange — RWAS',
     description:
-      'Connect with aircraft owners and buyers. Create an account or log in to get started with Aircraft4Sale.',
+      'Connect with aircraft owners and buyers. Create an account or log in to get started with Aviation Exchange.',
     images: [
       {
         url: 'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg',
@@ -60,9 +60,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Aircraft for Sale — RWAS Marketplace',
+    title: 'Aviation Exchange — RWAS',
     description:
-      'Connect with aircraft owners and buyers. Create an account or log in to get started with Aircraft4Sale.',
+      'Connect with aircraft owners and buyers. Create an account or log in to get started with Aviation Exchange.',
     images: [
       'https://www.rogerwilcoaviation.com/newspaper/images/r182_panel.jpg',
     ],
@@ -90,7 +90,7 @@ export default async function AircraftForSalePage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     '@id': 'https://www.rogerwilcoaviation.com/aircraft-for-sale#itemlist',
-    name: 'Aircraft for Sale at Roger Wilco Aviation Services',
+    name: 'Aviation Exchange at Roger Wilco Aviation Services',
     url: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
     numberOfItems: listings.length,
     itemListElement: listings.map((listing, index) => ({
@@ -182,23 +182,23 @@ export default async function AircraftForSalePage() {
         {/* ── HERO HEADLINE ─────────────────────────────────────────── */}
         <section className="hero-headline-group" aria-labelledby="a4s-hero">
           <span className="bs-kicker">
-            Aircraft4Sale · The RWAS Marketplace
+            Aviation Exchange · The RWAS Marketplace
           </span>
           <span className="bs-script-accent">Connect. Buy. Sell.</span>
           <h1 id="a4s-hero" className="bs-headline bs-headline--hero">
-            Aircraft for Sale.
+            Aviation Exchange.
           </h1>
           <p className="bs-subhead">
             Connect with owners and buyers to buy or sell an aircraft or
             aviation part, tool, or hangar.
           </p>
           <div className="bs-byline">
-            Aircraft4Sale by Roger Wilco Aviation Services
+            Aviation Exchange by Roger Wilco Aviation Services
           </div>
           <div className="a4s-cta-row">
             <SellerAuthPanelLoader />
             <a className="a4s-cta-btn secondary a4s-browse" href="#listings">
-              Browse Aircraft
+              Browse Listings
             </a>
           </div>
         </section>

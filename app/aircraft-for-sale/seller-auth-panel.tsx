@@ -47,6 +47,12 @@ import {
 import { createSellerRequestFacade } from './seller-request-facade';
 import { ListingDraftWorkflow } from './listing-draft-workflow';
 import {
+  useListingAutosave,
+  readRecovery,
+  recoveryKey,
+  type RecoveryDraft,
+} from './listing-autosave';
+import {
   draftFields,
   getDraftFields,
   getMediaSteps,
@@ -96,7 +102,13 @@ const methodLabels: Record<IdentityMethod, string> = {
 };
 type Account = {
   loginMethods?: IdentityMethod[];
-  profile: { email: string; name: string; phone: string; location: string };
+  profile: {
+    email: string;
+    name: string;
+    phone: string;
+    location: string;
+    website?: string;
+  };
   sessions: {
     id: string;
     current: boolean;
@@ -230,6 +242,11 @@ export default function SellerAuthPanel() {
   const [form, setForm] = useState<Record<string, string>>({}),
     [account, setAccount] = useState<Account | null>(null);
   const [initialDraftStep, setInitialDraftStep] = useState(0);
+  const [workflowStep, setWorkflowStep] = useState(0);
+  const [draftOwner, setDraftOwner] = useState('');
+  const [deviceRecovery, setDeviceRecovery] = useState<RecoveryDraft | null>(
+    null,
+  );
   const sourceDraftRevision = useRef<string | null>(null);
   const [accountSection, setAccountSection] = useState('profile');
   const [message, setMessage] = useState(''),
@@ -871,6 +888,7 @@ export default function SellerAuthPanel() {
     };
   }, []);
   const closeSellerPanel = () => {
+    if (view === 'edit') void autosave.flush().catch(() => {});
     editorGeneration.current += 1;
     ownerGeneration.current += 1;
     sessionStorage.removeItem(CLERK_OWNER_FLOW_KEY);
@@ -908,6 +926,8 @@ export default function SellerAuthPanel() {
         : path;
     const resp = await fetch(SELLER_API + target, {
       method,
+      keepalive:
+        path === '/draft/autosave' && JSON.stringify(body).length < 60000,
       signal,
       cache: 'no-store',
       credentials: 'same-origin',
@@ -944,6 +964,35 @@ export default function SellerAuthPanel() {
     if (!data) throw Error('The request could not be completed.');
     return data;
   }
+  const autosaveSession = currentAuth.current;
+  const autosave = useListingAutosave({
+    owner: draftOwner,
+    enabled: view === 'edit' && access === 'seller' && !!draftOwner,
+    editor: editorGeneration.current,
+    values: form,
+    step: workflowStep,
+    listingId: editing?.id || null,
+    listingRevision: editing?.revision || null,
+    revision: sourceDraftRevision,
+    request: (body) => {
+      if (currentAuth.current !== autosaveSession)
+        return Promise.reject(
+          Error(
+            'Your sign-in changed. Reopen this draft under its original account.',
+          ),
+        );
+      return api('/draft/autosave', 'PUT', body);
+    },
+  });
+  useEffect(() => {
+    if (view !== 'edit' || !busy) return;
+    const unfinished = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', unfinished);
+    return () => window.removeEventListener('beforeunload', unfinished);
+  }, [view, busy]);
   useEffect(() => {
     if (!session) return;
     let active = true;
@@ -957,6 +1006,7 @@ export default function SellerAuthPanel() {
           role === 'admin' && data.canManageAdministrators === true,
         );
         accessRole.current = role;
+        setDraftOwner(typeof data.profileId === 'string' ? data.profileId : '');
         setAccess(role);
         if (role === 'seller' && contactListing.current) setView('contact');
         else if (role === 'admin') setView('admin');
@@ -1073,7 +1123,9 @@ export default function SellerAuthPanel() {
   async function load() {
     const data = await api('/my-listings');
     setItems(data.listings);
-    setSavedDraft((await api('/draft')).draft);
+    const saved = (await api('/draft')).draft;
+    const recovery = draftOwner ? readRecovery(draftOwner) : null;
+    setSavedDraft(saved || (recovery ? { manual: true, ...recovery } : null));
     return data.listings as Listing[];
   }
   async function openListings() {
@@ -1094,6 +1146,8 @@ export default function SellerAuthPanel() {
     editorGeneration.current += 1;
     sourceDraftRevision.current = null;
     setInitialDraftStep(0);
+    setWorkflowStep(0);
+    setDeviceRecovery(null);
     setEditing(l);
     submission.current = crypto.randomUUID();
     setForm(listingFormValues(l, draftFields));
@@ -1113,9 +1167,11 @@ export default function SellerAuthPanel() {
     await perform(async () => {
       const saved = await api('/draft');
       if (generation !== editorGeneration.current) return;
-      if (!saved.draft)
+      if (!saved.draft && !readRecovery(draftOwner))
         throw Error('No saved draft is available. Refresh My Listings.');
-      setSavedDraft(saved.draft);
+      setSavedDraft(
+        saved.draft || { manual: true, ...readRecovery(draftOwner) },
+      );
       setView('resume');
     });
   }
@@ -1140,15 +1196,43 @@ export default function SellerAuthPanel() {
         generation !== editorGeneration.current
       )
         return;
-      if (requireSaved && !saved.draft)
+      const recovery = draftOwner ? readRecovery(draftOwner) : null;
+      if (saved.listingConflict)
+        throw Error(
+          'This listing was edited elsewhere. Open its latest version from My Listings; your saved recovery copy is retained.',
+        );
+      if (requireSaved && !saved.draft && !recovery)
         throw Error('No saved draft is available. Refresh My Listings.');
+      let snapshot = saved.draft;
+      const canRecover =
+        recovery &&
+        (!snapshot ||
+          (recovery.listingId === (snapshot.listingId || null) &&
+            recovery.expectedRevision === saved.revision));
+      if (canRecover) snapshot = { manual: true, ...recovery };
       const details =
-        (saved.draft?.intake ? saved.draft.fields : saved.draft) ||
-        fallbackDetails;
-      edit(null);
+        (snapshot?.manual
+          ? snapshot.values
+          : snapshot?.intake
+            ? snapshot.fields
+            : snapshot) || fallbackDetails;
+      let linked = null;
+      if (snapshot?.listingId) {
+        const result = await api('/my-listings');
+        linked = result.listings.find(
+          (listing: Listing) => listing.id === snapshot.listingId,
+        );
+        if (!linked)
+          throw Error(
+            'This saved listing is unavailable. Refresh My Listings.',
+          );
+      }
+      edit(linked);
       sourceDraftRevision.current = saved.revision || null;
       if (details) {
-        const values = listingFormValues(details, draftFields);
+        const values = snapshot?.manual
+          ? details
+          : listingFormValues(details, draftFields);
         const fields = getDraftFields(values);
         let next = fields.findIndex(
           (field) =>
@@ -1156,11 +1240,24 @@ export default function SellerAuthPanel() {
         );
         if (next < 0)
           next = fields.findIndex((field) => !values[field.name]?.trim());
-        setInitialDraftStep(
-          next < 0 ? fields.length + getMediaSteps(values).length : next,
-        );
+        const resumeStep = snapshot?.manual
+          ? Math.min(
+              snapshot.step,
+              fields.length + getMediaSteps(values).length,
+            )
+          : next < 0
+            ? fields.length + getMediaSteps(values).length
+            : next;
+        setInitialDraftStep(resumeStep);
+        setWorkflowStep(resumeStep);
         setForm(values);
       }
+      if (
+        recovery &&
+        !canRecover &&
+        recovery.listingId === (snapshot?.listingId || null)
+      )
+        setDeviceRecovery(recovery);
       setMessage(
         details
           ? 'Your saved details are restored. Continue your listing below.'
@@ -1170,6 +1267,7 @@ export default function SellerAuthPanel() {
   }
   manualListingAction.current = (details) => openManualListing(false, details);
   async function save() {
+    await autosave.flush();
     const generation = editorGeneration.current;
     const visible = new Set(getDraftFields(form).map((field) => field.name));
     const values = listingPayload(
@@ -1186,18 +1284,17 @@ export default function SellerAuthPanel() {
       editing ? '/listings/' + editing.id : '/listings',
       editing ? 'PUT' : 'POST',
       values,
-      editing
-        ? undefined
-        : {
-            'Idempotency-Key': submission.current,
-            ...(sourceDraftRevision.current
-              ? { 'X-RWAS-Draft-Revision': sourceDraftRevision.current }
-              : {}),
-          },
+      {
+        ...(!editing ? { 'Idempotency-Key': submission.current } : {}),
+        ...(sourceDraftRevision.current
+          ? { 'X-RWAS-Draft-Revision': sourceDraftRevision.current }
+          : {}),
+      },
     );
     if (generation !== editorGeneration.current) return data.listing as Listing;
     setEditing(data.listing);
     sourceDraftRevision.current = null;
+    autosave.markSaved();
     setMessage('Draft saved. Add media, then submit for review.');
     await load();
     return data.listing as Listing;
@@ -1395,12 +1492,43 @@ export default function SellerAuthPanel() {
     }
     const w = window as unknown as { jerryChat?: (s: string) => void };
     if (w.jerryChat) {
-      setView(null);
-      w.jerryChat(
-        resume
-          ? 'I want to resume my saved listing.'
-          : 'I want to create a listing.',
-      );
+      await perform(async () => {
+        const saved = await api('/draft');
+        const recovery = draftOwner ? readRecovery(draftOwner) : null;
+        let continuing = resume || !!saved.draft;
+        if (recovery) {
+          const sameValues =
+            saved.draft?.manual &&
+            JSON.stringify(saved.draft.values) ===
+              JSON.stringify(recovery.values) &&
+            saved.draft.step === recovery.step;
+          if (!sameValues) {
+            if (saved.draft && recovery.expectedRevision !== saved.revision)
+              throw Error(
+                'A device recovery copy differs from the online draft. Resume manually to choose which copy to keep before continuing with Jerry.',
+              );
+            const synced = await api('/draft/autosave', 'PUT', {
+              ...recovery,
+              expectedRevision: saved.revision || null,
+            });
+            localStorage.setItem(
+              recoveryKey(draftOwner),
+              JSON.stringify({
+                ...recovery,
+                expectedRevision: synced.revision,
+              }),
+            );
+          }
+          continuing = true;
+        }
+        if (resume && !continuing) throw Error('No saved draft is available.');
+        setView(null);
+        w.jerryChat!(
+          continuing
+            ? 'I want to resume my saved listing.'
+            : 'I want to create a listing.',
+        );
+      });
     } else {
       setMessage('Jerry is unavailable. You can start with the manual form.');
       await openManualListing(resume);
@@ -1986,69 +2114,108 @@ export default function SellerAuthPanel() {
           />
         )}
         {view === 'edit' && access === 'seller' && (
-          <ListingDraftWorkflow
-            key={session?.token}
-            initialStep={initialDraftStep}
-            values={form}
-            onChange={(name, value) =>
-              setForm((previous) => {
-                const next = { ...previous, [name]: value };
-                if (['listingType', 'category'].includes(name)) {
-                  for (const key of Object.keys(next))
-                    if (key.startsWith('spec:')) delete next[key];
-                  if (name === 'listingType') next.category = '';
-                }
-                return next;
-              })
-            }
-            busy={busy}
-            saved={!!editing}
-            onSave={async () => {
-              let saved = false;
-              await perform(async () => {
-                await save();
-                saved = true;
-              });
-              return saved;
-            }}
-            onSubmitReview={async () => {
-              const generation = editorGeneration.current;
-              await perform(async () => {
-                const listing = await save();
-                if (generation !== editorGeneration.current) return;
-                await status(listing, 'pending');
-                if (generation === editorGeneration.current)
-                  setView('listings');
-              });
-            }}
-            mediaCounts={Object.fromEntries(
-              categories.map(([category]) => [
-                category,
-                category === 'photos'
-                  ? editing?.photos.length || 0
-                  : category === 'videos'
-                    ? editing?.videos.length || 0
-                    : editing?.logbooks[category]?.length || 0,
-              ]),
-            )}
-            renderMedia={(category) =>
-              editing && (
-                <SellerMedia
-                  key={category}
-                  listing={editing}
-                  session={session!}
-                  onlyCategory={category}
-                  onBusy={setBusy}
-                  onChange={async (stillCurrent) => {
-                    if (!stillCurrent()) return;
-                    const list = await load();
-                    if (!stillCurrent()) return;
-                    setEditing(list.find((l) => l.id === editing.id) || null);
+          <>
+            {deviceRecovery && (
+              <aside role="status">
+                <p>
+                  A recovery copy is available on this device. Restore it to
+                  review those entries, or keep the online draft.
+                </p>
+                <button
+                  onClick={() => {
+                    editorGeneration.current += 1;
+                    setForm(deviceRecovery.values);
+                    setInitialDraftStep(deviceRecovery.step);
+                    setWorkflowStep(deviceRecovery.step);
+                    setDeviceRecovery(null);
                   }}
-                />
-              )
-            }
-          />
+                >
+                  Restore device copy
+                </button>
+                <button
+                  onClick={() => {
+                    localStorage.removeItem(recoveryKey(draftOwner));
+                    setDeviceRecovery(null);
+                  }}
+                >
+                  Keep online draft
+                </button>
+              </aside>
+            )}
+            <ListingDraftWorkflow
+              key={session?.token + ':' + editorGeneration.current}
+              initialStep={initialDraftStep}
+              autosaveNotice={
+                busy ? 'Saving changes or uploading files…' : autosave.notice
+              }
+              autosaveIssue={autosave.issue}
+              onRetryAutosave={() => void autosave.flush().catch(() => {})}
+              onStepChange={(step) => {
+                autosave.capture(form, step);
+                setWorkflowStep(step);
+              }}
+              values={form}
+              onChange={(name, value) =>
+                setForm((previous) => {
+                  const next = { ...previous, [name]: value };
+                  if (['listingType', 'category'].includes(name)) {
+                    for (const key of Object.keys(next))
+                      if (key.startsWith('spec:')) delete next[key];
+                    if (name === 'listingType') next.category = '';
+                  }
+                  autosave.capture(next, workflowStep);
+                  return next;
+                })
+              }
+              busy={busy}
+              saved={!!editing}
+              onSave={async () => {
+                let saved = false;
+                await perform(async () => {
+                  await save();
+                  saved = true;
+                });
+                return saved;
+              }}
+              onSubmitReview={async () => {
+                const generation = editorGeneration.current;
+                await perform(async () => {
+                  const listing = await save();
+                  if (generation !== editorGeneration.current) return;
+                  await status(listing, 'pending');
+                  if (generation === editorGeneration.current)
+                    setView('listings');
+                });
+              }}
+              mediaCounts={Object.fromEntries(
+                categories.map(([category]) => [
+                  category,
+                  category === 'photos'
+                    ? editing?.photos.length || 0
+                    : category === 'videos'
+                      ? editing?.videos.length || 0
+                      : editing?.logbooks[category]?.length || 0,
+                ]),
+              )}
+              renderMedia={(category) =>
+                editing && (
+                  <SellerMedia
+                    key={category}
+                    listing={editing}
+                    session={session!}
+                    onlyCategory={category}
+                    onBusy={setBusy}
+                    onChange={async (stillCurrent) => {
+                      if (!stillCurrent()) return;
+                      const list = await load();
+                      if (!stillCurrent()) return;
+                      setEditing(list.find((l) => l.id === editing.id) || null);
+                    }}
+                  />
+                )
+              }
+            />
+          </>
         )}
         {view === 'account' && account && access === 'seller' && (
           <AccountWorkspace
@@ -2079,6 +2246,7 @@ export default function SellerAuthPanel() {
                           name: account.profile.name,
                           phone: account.profile.phone,
                           location: account.profile.location,
+                          website: account.profile.website || '',
                         }
                       : {},
                   );
@@ -2096,21 +2264,26 @@ export default function SellerAuthPanel() {
                 ) : (
                   <p>Signed in as {account.profile.email}</p>
                 )}
-                {(['name', 'phone', 'location'] as const).map((k) => (
-                  <label className="seller-field" key={k}>
-                    {k}
-                    <input
-                      value={account.profile[k]}
-                      onChange={(e) =>
-                        setAccount({
-                          ...account,
-                          profile: { ...account.profile, [k]: e.target.value },
-                        })
-                      }
-                      maxLength={200}
-                    />
-                  </label>
-                ))}
+                {(['name', 'phone', 'location', 'website'] as const).map(
+                  (k) => (
+                    <label className="seller-field" key={k}>
+                      {k}
+                      <input
+                        value={account.profile[k] || ''}
+                        onChange={(e) =>
+                          setAccount({
+                            ...account,
+                            profile: {
+                              ...account.profile,
+                              [k]: e.target.value,
+                            },
+                          })
+                        }
+                        maxLength={200}
+                      />
+                    </label>
+                  ),
+                )}
                 <button disabled={busy}>Save Profile</button>
               </form>
             </AccountSection>

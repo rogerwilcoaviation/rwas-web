@@ -23,7 +23,7 @@ const DEFAULT_ITEMS: NavItem[] = [
   { href: '/panel-planner', label: 'Panel Layout Planner', accent: true },
   { href: '/collections', label: 'Garmin' },
   { href: '/collections/papa-alpha-tools', label: 'Papa-Alpha Tools' },
-  { href: '/aircraft-for-sale', label: 'Aircraft 4 Sale' },
+  { href: '/aircraft-for-sale', label: 'Aviation Exchange' },
   { href: '/financing', label: 'Financing' },
   { href: '/services', label: 'Services' },
   {

@@ -13,6 +13,7 @@ const fail = (status, message) => {
 export const listingFields = [
   'sellerName',
   'sellerPhone',
+  'sellerWebsite',
   'sellerLocation',
   'make',
   'model',

@@ -25,7 +25,7 @@ const collectionLinks = [
   },
   {
     href: '/aircraft-for-sale',
-    label: 'Aircraft 4 Sale',
+    label: 'Aviation Exchange',
   },
 ];
 

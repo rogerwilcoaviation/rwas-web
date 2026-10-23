@@ -70,7 +70,7 @@ export default function PreBuyReferralPage() {
               You arrange the inspection directly with that facility.
             </p>
             <p>
-              RWAS is an FAA Part 145 repair station. Our Aircraft4Sale
+              RWAS is an FAA Part 145 repair station. Our Aviation Exchange
               marketplace helps owners and buyers connect; a listing is not an
               RWAS inspection, condition assessment, or endorsement of an
               aircraft. Buyers should verify listing details and arrange their
@@ -87,7 +87,7 @@ export default function PreBuyReferralPage() {
           </p>
           <p>
             Call <a href="tel:+16052998178">(605) 299-8178</a> or{' '}
-            <Link href="/aircraft-for-sale">browse Aircraft4Sale</Link>.
+            <Link href="/aircraft-for-sale">browse Aviation Exchange</Link>.
           </p>
         </Specimen>
       </main>

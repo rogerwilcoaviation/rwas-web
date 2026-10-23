@@ -5,6 +5,7 @@ import { resolve, extname, join } from 'node:path';
 import { tmpdir } from 'node:os';
 import assert from 'node:assert/strict';
 import { fixture, create, fields } from './fixture.mjs';
+import { advisoryResearch } from './jerry-research-fixture.mjs';
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
     '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs'
@@ -63,7 +64,12 @@ f.env.ACCOUNT_ADMIN_AUTH = {
         })
       : new Response(null, { status: 403 }),
 };
-f.env.ADMIN_AUTH={fetch:async req=>req.headers.get('Authorization')==='Bearer synthetic-admin'?Response.json({actor:'admin@example.test'}):new Response(null,{status:403})};
+f.env.ADMIN_AUTH = {
+  fetch: async (req) =>
+    req.headers.get('Authorization') === 'Bearer synthetic-admin'
+      ? Response.json({ actor: 'admin@example.test' })
+      : new Response(null, { status: 403 }),
+};
 const owner = await f.login('owner@example.test'),
   other = await f.login('other@example.test');
 await f.call(
@@ -81,6 +87,9 @@ const listing = await create(f, owner, {
   model: 'Account Ownership Fixture',
 });
 const seeded = f.state();
+Object.values(seeded.profiles).find(
+  (profile) => profile.email === 'owner@example.test',
+).jerryReview = advisoryResearch;
 for (let i = 0; i < 25; i++) {
   const id = crypto.randomUUID();
   seeded.profiles[id] = {
@@ -184,7 +193,9 @@ try {
     contentType: 'text/html',
     body: '<html>Access login</html>',
   };
-  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
+  await page
+    .getByRole('tab', { name: 'Account directory', exact: true })
+    .click();
   await load.click();
   await page.locator('main').getByRole('alert').waitFor();
   await privacyCleared();
@@ -198,7 +209,9 @@ try {
     contentType: 'application/json',
     body: '{"error":"PRIVATE-DIAGNOSTIC"}',
   };
-  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
+  await page
+    .getByRole('tab', { name: 'Account directory', exact: true })
+    .click();
   await load.click();
   await page
     .locator('main')
@@ -212,7 +225,9 @@ try {
   checkpoints.push(
     'Service failure shows bounded diagnostics and clears private state',
   );
-  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
+  await page
+    .getByRole('tab', { name: 'Account directory', exact: true })
+    .click();
   await load.click();
   await page.getByText('27 matching accounts', { exact: true }).waitFor();
   assert.equal(await page.locator('main tbody tr').count(), 25);
@@ -233,47 +248,114 @@ try {
   await page
     .getByRole('textbox', { name: 'Search accounts' })
     .fill('owner@example.test');
-  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
+  await page
+    .getByRole('tab', { name: 'Account directory', exact: true })
+    .click();
   await load.click();
   await page.getByText('1 matching accounts', { exact: true }).waitFor();
   await page
     .getByRole('button', { name: 'View account owner@example.test' })
     .click();
   await selected.waitFor();
-  const adminTabs = page.getByRole('tablist', { name: 'Admin index', exact: true });
+  await page.getByText(advisoryResearch.summary, { exact: true }).waitFor();
+  const adminTabs = page.getByRole('tablist', {
+    name: 'Admin index',
+    exact: true,
+  });
   assert.equal(await page.getByRole('tabpanel').count(), 1);
-  assert.equal(await adminTabs.getByRole('tab', { name: 'Contact and access', exact: true }).getAttribute('aria-selected'), 'true');
+  assert.equal(
+    await adminTabs
+      .getByRole('tab', { name: 'Contact and access', exact: true })
+      .getAttribute('aria-selected'),
+    'true',
+  );
   const indexBox = await adminTabs.boundingBox();
   const panelBox = await page.getByRole('tabpanel').boundingBox();
-  assert.ok(indexBox.y + indexBox.height <= panelBox.y + 1, 'Account sections sit above the full-width selected panel');
+  assert.ok(
+    indexBox.y + indexBox.height <= panelBox.y + 1,
+    'Account sections sit above the full-width selected panel',
+  );
   assert.equal(
-
     await selected
       .getByRole('textbox', { name: 'Phone', exact: true })
       .inputValue(),
     'PRIVATE-PHONE',
   );
   await page.getByRole('tab', { name: 'User listings', exact: true }).click();
-  await page.getByRole('button', {name:'Load user listings',exact:true}).click();
-  await selected.getByText(/Account Ownership Fixture/).first().waitFor();
-  await page.getByRole('tab', { name: 'Contact and access', exact: true }).click();
-  const bulkOption = selected.getByRole('checkbox', {name:'Also permanently delete all of this user’s listings and files',exact:true});
-  for (const width of [1440,390,320]) {
-    await page.setViewportSize({width,height:1000});
-    await bulkOption.check();await bulkOption.evaluate(node=>node.blur());
-    const checkedImage=await bulkOption.screenshot();
-    await bulkOption.uncheck();await bulkOption.evaluate(node=>node.blur());
-    const uncheckedImage=await bulkOption.screenshot();
-    assert.equal(checkedImage.equals(uncheckedImage),false,'The exported site CSS must display a different checked state at '+width+'px');
-    await selected.getByText('Also permanently delete all of this user’s listings and files',{exact:true}).click();
-    assert.equal(await bulkOption.isChecked(),true,'The label toggles the option');
-    await bulkOption.focus();await page.keyboard.press('Space');
-    assert.equal(await bulkOption.isChecked(),false,'Space toggles the focused option');
-    if(process.env.ADMIN_CHECKBOX_ARTIFACT_DIR){await mkdir(process.env.ADMIN_CHECKBOX_ARTIFACT_DIR,{recursive:true});await writeFile(join(process.env.ADMIN_CHECKBOX_ARTIFACT_DIR,'checkbox-checked-'+width+'.png'),checkedImage);await writeFile(join(process.env.ADMIN_CHECKBOX_ARTIFACT_DIR,'checkbox-unchecked-'+width+'.png'),uncheckedImage);}
+  await page
+    .getByRole('button', { name: 'Load user listings', exact: true })
+    .click();
+  await selected
+    .getByText(/Account Ownership Fixture/)
+    .first()
+    .waitFor();
+  await page
+    .getByRole('tab', { name: 'Contact and access', exact: true })
+    .click();
+  const bulkOption = selected.getByRole('checkbox', {
+    name: 'Also permanently delete all of this user’s listings and files',
+    exact: true,
+  });
+  for (const width of [1440, 390, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await bulkOption.check();
+    await bulkOption.evaluate((node) => node.blur());
+    const checkedImage = await bulkOption.screenshot();
+    await bulkOption.uncheck();
+    await bulkOption.evaluate((node) => node.blur());
+    const uncheckedImage = await bulkOption.screenshot();
+    assert.equal(
+      checkedImage.equals(uncheckedImage),
+      false,
+      'The exported site CSS must display a different checked state at ' +
+        width +
+        'px',
+    );
+    await selected
+      .getByText(
+        'Also permanently delete all of this user’s listings and files',
+        { exact: true },
+      )
+      .click();
+    assert.equal(
+      await bulkOption.isChecked(),
+      true,
+      'The label toggles the option',
+    );
+    await bulkOption.focus();
+    await page.keyboard.press('Space');
+    assert.equal(
+      await bulkOption.isChecked(),
+      false,
+      'Space toggles the focused option',
+    );
+    if (process.env.ADMIN_CHECKBOX_ARTIFACT_DIR) {
+      await mkdir(process.env.ADMIN_CHECKBOX_ARTIFACT_DIR, { recursive: true });
+      await writeFile(
+        join(
+          process.env.ADMIN_CHECKBOX_ARTIFACT_DIR,
+          'checkbox-checked-' + width + '.png',
+        ),
+        checkedImage,
+      );
+      await writeFile(
+        join(
+          process.env.ADMIN_CHECKBOX_ARTIFACT_DIR,
+          'checkbox-unchecked-' + width + '.png',
+        ),
+        uncheckedImage,
+      );
+    }
   }
-  assert.equal(operations.length,0,'Checking an option never submits a deletion');
-  await page.setViewportSize({width:1440,height:1000});
-  checkpoints.push('Bulk-delete checkbox has a visible checkmark under the real exported site styles and supports pointer, label and keyboard input at 1440/390/320px without submitting');
+  assert.equal(
+    operations.length,
+    0,
+    'Checking an option never submits a deletion',
+  );
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  checkpoints.push(
+    'Bulk-delete checkbox has a visible checkmark under the real exported site styles and supports pointer, label and keyboard input at 1440/390/320px without submitting',
+  );
   const ownerId = (
     await (await f.call('/account', 'GET', undefined, owner)).json()
   ).profile.id;
@@ -400,8 +482,17 @@ try {
     ),
     true,
   );
-  const fonts = await page.locator('main').evaluate(root => [...root.querySelectorAll('h1,h2,h3,p,label,button,input,select')].filter(element => element.getClientRects().length).map(element => getComputedStyle(element).fontFamily));
-  assert.ok(fonts.every(font => /^Arial(?:,|$)/.test(font)), JSON.stringify(fonts));
+  const fonts = await page
+    .locator('main')
+    .evaluate((root) =>
+      [...root.querySelectorAll('h1,h2,h3,p,label,button,input,select')]
+        .filter((element) => element.getClientRects().length)
+        .map((element) => getComputedStyle(element).fontFamily),
+    );
+  assert.ok(
+    fonts.every((font) => /^Arial(?:,|$)/.test(font)),
+    JSON.stringify(fonts),
+  );
   assert.equal(await page.getByRole('tabpanel').count(), 1);
   const artifacts =
     process.env.TEST_ARTIFACT_DIR ||
@@ -422,12 +513,16 @@ try {
     'Desktop and mobile layouts expose labeled controls without horizontal page overflow',
   );
   failure = { status: 403, contentType: 'application/json', body: '{}' };
-  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
+  await page
+    .getByRole('tab', { name: 'Account directory', exact: true })
+    .click();
   await load.click();
   await page.locator('main').getByRole('alert').waitFor();
   await privacyCleared();
   fresh = Date.now() - 700000;
-  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
+  await page
+    .getByRole('tab', { name: 'Account directory', exact: true })
+    .click();
   await load.click();
   await page
     .getByRole('button', { name: 'View account owner@example.test' })
@@ -450,7 +545,9 @@ try {
   );
   fresh = Date.now();
   expiry = Date.now() + 1500;
-  await page.getByRole('tab', { name: 'Account directory', exact: true }).click();
+  await page
+    .getByRole('tab', { name: 'Account directory', exact: true })
+    .click();
   await load.click();
   await page
     .getByRole('button', { name: 'View account owner@example.test' })

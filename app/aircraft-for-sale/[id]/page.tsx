@@ -291,7 +291,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
       {
         '@type': 'ListItem',
         position: 2,
-        name: 'Aircraft for Sale',
+        name: 'Aviation Exchange',
         item: 'https://www.rogerwilcoaviation.com/aircraft-for-sale',
       },
       { '@type': 'ListItem', position: 3, name: h, item: canonicalUrl },

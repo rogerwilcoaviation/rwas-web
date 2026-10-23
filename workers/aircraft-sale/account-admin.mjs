@@ -141,6 +141,7 @@ export function accountDetail(state, id) {
   return {
     account: {
       ...summary(state, p),
+      jerryReview: p.jerryReview,
       phone: p.phone || '',
       location: p.location || '',
       loginMethods: [

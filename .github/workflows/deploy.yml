@@ -125,7 +125,9 @@ jobs:
       - name: Exported administrator account workflow and checkbox visibility
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/rwas-browser-runtime/node_modules/playwright/index.mjs
-        run: node tests/aircraft-sale/account-admin-browser.mjs
+        run: |
+          node tests/aircraft-sale/account-admin-browser.mjs
+          node tests/aircraft-sale/review-browser.mjs
 
       - name: AXIS funnel smoke
         run: node scripts/axis-funnel-smoke.mjs

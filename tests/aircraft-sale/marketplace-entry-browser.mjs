@@ -7,6 +7,7 @@ import { fixture } from './fixture.mjs';
 import { checkListingWorkflow } from './listing-workflow-checks.mjs';
 import { checkCategoryWorkflows } from './category-workflow-checks.mjs';
 import { checkSavedDraftResume } from './saved-draft-resume-checks.mjs';
+import { checkAutosave } from './autosave-browser-checks.mjs';
 
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
@@ -204,6 +205,14 @@ try {
         }
         if (url.pathname.startsWith('/api/aircraft-sale/identity/'))
           throw Error('Unexpected identity operation: ' + url.pathname);
+        if (
+          url.pathname === '/api/aircraft-sale/draft/autosave' &&
+          proofreader.autosaveOffline
+        )
+          return route.fulfill({
+            status: 503,
+            json: { error: 'Draft sync temporarily unavailable.' },
+          });
         if (url.pathname.startsWith('/api/aircraft-sale/')) {
           if (url.pathname.endsWith('/upload')) proofreader.uploads++;
           const response = await f.call(
@@ -252,18 +261,18 @@ try {
           });
         return route.continue();
       });
-      const page = await context.newPage();
+      let page = await context.newPage();
       page.on('pageerror', (error) => report.pageErrors.push(error.message));
       await page.goto(origin + '/aircraft-for-sale');
-      const list = page.getByRole('button', {
+      let list = page.getByRole('button', {
         name: 'Create a Listing',
         exact: true,
       });
-      const login = page.getByRole('button', {
+      let login = page.getByRole('button', {
         name: 'User Login',
         exact: true,
       });
-      const signup = page.getByRole('button', {
+      let signup = page.getByRole('button', {
         name: 'Create Account',
         exact: true,
       });
@@ -331,7 +340,16 @@ try {
           window.jerryChat = (message) => window.__jerryCalls.push(message);
         });
         await list.click();
-        const dialog = page.getByRole('dialog');
+        let dialog = page.getByRole('dialog');
+        list = page.getByRole('button', {
+          name: 'Create a Listing',
+          exact: true,
+        });
+        login = page.getByRole('button', { name: 'User Login', exact: true });
+        signup = page.getByRole('button', {
+          name: 'Create Account',
+          exact: true,
+        });
         await dialog
           .getByRole('button', { name: 'List manually', exact: false })
           .waitFor();
@@ -360,6 +378,7 @@ try {
             exact: false,
           })
           .click();
+        await page.waitForFunction(() => window.__jerryCalls.length === 1);
         assert.equal(await page.evaluate(() => window.__jerryCalls.length), 1);
         await page
           .getByRole('button', { name: 'Chat with Captain Jerry', exact: true })
@@ -408,6 +427,26 @@ try {
           artifacts,
           token,
           origin,
+        });
+        page = await checkAutosave({
+          page,
+          f,
+          token,
+          origin,
+          width,
+          artifacts,
+          proofreader,
+          onPageError: (error) => report.pageErrors.push(error.message),
+        });
+        dialog = page.getByRole('dialog');
+        list = page.getByRole('button', {
+          name: 'Create a Listing',
+          exact: true,
+        });
+        login = page.getByRole('button', { name: 'User Login', exact: true });
+        signup = page.getByRole('button', {
+          name: 'Create Account',
+          exact: true,
         });
         await dialog
           .getByRole('button', { name: 'Close seller panel', exact: true })
@@ -524,6 +563,7 @@ try {
         ...(signedIn
           ? {
               guidedWorkflow: 'passed',
+              autosaveRecovery: 'passed',
               savedDraftResume: {
                 categories: 4,
                 formats: 2,

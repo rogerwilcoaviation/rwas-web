@@ -17,3 +17,10 @@ Verification:
 - `node tests/aircraft-sale/marketplace-entry-browser.mjs` uses the exported application with intercepted, disposable account, listing, upload and proofreading services at 1440, 390 and 320 pixels. It covers required-field validation, incomplete save/resume, optional skips, media types/limits, proofreading acceptance/rejection/undo/stale responses, review edits, and private submission.
 - `node tests/aircraft-sale/browser.mjs` covers the existing seller, media, staff review and account lifecycle with the guided editor.
 - `LIVE_PROOFREAD_SMOKE=true MARKETPLACE_ORIGIN=https://www.rogerwilcoaviation.com node tests/aircraft-sale/marketplace-entry-browser.mjs` additionally makes one real Jerry proofreading request using synthetic text from the allowed website origin. All account and listing operations remain intercepted.
+
+
+## Automatic saving and recovery
+
+The manual workflow writes a recovery copy synchronously as a field or step changes, and debounces authenticated account syncing by 600ms. Recovery is keyed by the immutable RWAS profile ID; no access tokens or passwords are kept in that copy. The save-status panel distinguishes synced, syncing, and failed states and provides a retry. Pending requests are bound to their original session and editor. A device copy is offered separately if it conflicts with a newer online version.
+
+Private autosave snapshots retain incomplete/invalid text, whitespace, category specifications, and the current step; they do not create or publish listings. Explicit Save Draft and submission retain validation. A linked snapshot records the listing ID, base revision and content fingerprint. Resume edits that same listing, preserves uploaded media, rejects changed content, and consumes the matching recovery buffer atomically. Another tab cannot silently overwrite a saved buffer without its revision. Closing a page before a sync finishes can recover its last keystrokes on the same device; other devices receive the last acknowledged online save. Files must finish uploading before leaving.

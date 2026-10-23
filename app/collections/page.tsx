@@ -234,7 +234,7 @@ export default async function CollectionsPage() {
               See Papa-Alpha tools
             </Link>
             <Link href="/aircraft-for-sale" className="bs-cta-secondary">
-              Aircraft 4 Sale
+              Aviation Exchange
             </Link>
           </div>
         </section>
