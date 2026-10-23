@@ -113,7 +113,7 @@ try {
         if (url.pathname === '/api/aircraft-sale/auth/methods')
           return json({
             methods: ['better-auth'],
-            betterAuth: { providers: ['password'], legacyLink: true },
+            betterAuth: { providers: ['password', 'google'], legacyLink: true },
             legacyMethods: ['password'],
           });
         if (url.pathname === '/api/aircraft-sale/browse')
@@ -232,7 +232,12 @@ try {
         await signup.click();
         const dialog = page.getByRole('dialog');
         await dialog.getByLabel('Name', { exact: true }).waitFor();
-        assert.equal(await dialog.getByText('Access an older RWAS account', { exact: true }).count(), 0);
+        assert.equal(
+          await dialog
+            .getByText('Access an older RWAS account', { exact: true })
+            .count(),
+          0,
+        );
         await dialog
           .getByRole('button', { name: 'Close seller panel', exact: true })
           .click();
@@ -240,8 +245,66 @@ try {
         await dialog
           .getByRole('button', { name: 'Sign in', exact: true })
           .waitFor();
-        await dialog.getByText('Access an older RWAS account', { exact: true }).waitFor();
-        assert.equal(await dialog.getByRole('button', { name: 'Older account: Email and password', exact: true }).isVisible(), false);
+        assert.equal(
+          await dialog
+            .getByText('Access an older RWAS account', { exact: true })
+            .count(),
+          0,
+        );
+        assert.equal(
+          await dialog
+            .getByRole('button', {
+              name: 'Older account: Email and password',
+              exact: true,
+            })
+            .isVisible(),
+          false,
+        );
+        assert.equal(
+          await dialog
+            .getByRole('button', { name: /create.*account/i })
+            .count(),
+          0,
+        );
+        const signIn = dialog.getByRole('button', {
+          name: 'Sign in',
+          exact: true,
+        });
+        const forgot = dialog.getByRole('link', {
+          name: 'Forgot password?',
+          exact: true,
+        });
+        const google = dialog.getByRole('button', {
+          name: 'Continue with Google',
+          exact: true,
+        });
+        const logo = google.locator('img');
+        await logo.waitFor();
+        await page.waitForFunction(
+          () => document.querySelector('.auth-provider img')?.naturalWidth > 0,
+        );
+        const a = await signIn.boundingBox(),
+          b = await forgot.boundingBox();
+        assert.ok(
+          Math.abs(a.y - b.y) < 3,
+          'Password recovery sits beside Sign In',
+        );
+        assert.equal(
+          await forgot.evaluate((e) => getComputedStyle(e).textDecorationLine),
+          'underline',
+        );
+        const recoveryUrl = new URL(await forgot.getAttribute('href'));
+        assert.equal(recoveryUrl.searchParams.get('seller-auth'), 'forgot');
+        assert.ok((await dialog.boundingBox()).width <= 560);
+        await page.screenshot({
+          path: resolve(artifacts, 'login-' + width + '.png'),
+        });
+        await forgot.click();
+        await dialog
+          .getByRole('button', { name: 'Send reset email', exact: true })
+          .waitFor();
+        assert.equal(await google.count(), 0);
+
         assert.equal(
           await dialog.getByLabel('Name', { exact: true }).count(),
           0,

@@ -22,7 +22,7 @@ const parent = new URL(
 ).pathname;
 await build({
   stdin: {
-    contents: `import React from 'react'; import {createRoot} from 'react-dom/client'; import Panel,{BetterAuthAccountPanel,BetterAuthDeleteAccount} from ${JSON.stringify(panel)}; import Seller from ${JSON.stringify(parent)}; const state=globalThis.__TEST__; const Component=state.parent?Seller:state.deletion?BetterAuthDeleteAccount:state.account?BetterAuthAccountPanel:Panel; const target=state.expectedTarget||{userId:'fixture-user',sessionId:'fixture-session'}; const props=state.deletion?{expectedTarget:target,identityOnly:!!state.identityOnly,deleteBusiness:async()=>{state.businessDeletes=(state.businessDeletes||0)+1},onComplete:()=>state.deleted=true}:state.account?{expectedTarget:target,onIdentityEnded:()=>state.ended=true}:{providers:state.providers||['password'],linkOwner:state.linkOwner,onSignedIn:value=>state.signedIn=value}; const root=createRoot(document.getElementById('root')); state.unmount=()=>root.unmount(); root.render(React.createElement(Component,props));`,
+    contents: `import React from 'react'; import {createRoot} from 'react-dom/client'; import Panel,{BetterAuthAccountPanel,BetterAuthDeleteAccount} from ${JSON.stringify(panel)}; import Seller from ${JSON.stringify(parent)}; const state=globalThis.__TEST__; const Component=state.parent?Seller:state.deletion?BetterAuthDeleteAccount:state.account?BetterAuthAccountPanel:Panel; const target=state.expectedTarget||{userId:'fixture-user',sessionId:'fixture-session'}; const props=state.deletion?{expectedTarget:target,identityOnly:!!state.identityOnly,deleteBusiness:async()=>{state.businessDeletes=(state.businessDeletes||0)+1},onComplete:()=>state.deleted=true}:state.account?{expectedTarget:target,onIdentityEnded:()=>state.ended=true}:{providers:state.providers||['password'],linkOwner:state.linkOwner,onSignedIn:value=>state.signedIn=value}; const root=createRoot(document.getElementById('root')); state.unmount=()=>root.unmount(); root.render(React.createElement(Component,{...props,initialMode:state.initialMode}));`,
     resolveDir: process.cwd(),
     loader: 'tsx',
   },
@@ -38,6 +38,7 @@ await build({
   },
 });
 const bundle = await readFile(output, 'utf8');
+const googleLogo=await readFile(new URL('../../public/auth/google-g.png',import.meta.url));
 const origin = 'https://www.rogerwilcoaviation.com';
 const base = '/api/aircraft-sale/identity';
 function identity(state) {
@@ -78,6 +79,7 @@ async function fixture(options = {}) {
     },
     {
       parent: !!options.parent,
+      initialMode: options.initialMode,
       account: !!options.account,
       providers: options.providers,
       stored: options.stored,
@@ -99,6 +101,7 @@ async function fixture(options = {}) {
       origin,
       'No external provider request is allowed in this fixture.',
     );
+    if(url.pathname==='/auth/google-g.png')return route.fulfill({contentType:'image/png',body:googleLogo});
     if (url.pathname === '/fixture.js')
       return route.fulfill({ contentType: 'text/javascript', body: bundle });
     if (url.pathname === '/rwas-analytics.js')
@@ -277,7 +280,7 @@ async function fixture(options = {}) {
           : {
               methods: ['better-auth'],
               emailCode: false,
-              betterAuth: { providers: ['password'], legacyLink: !!state.modernLegacy },
+              betterAuth: { providers: state.providers || ['password'], legacyLink: !!state.modernLegacy },
               legacyMethods: state.modernLegacy ? ['password'] : [],
             };
     } else if (path === '/redirected-methods')
@@ -359,29 +362,47 @@ test('marketplace entry offers signup and login, with listing actions only after
   }
 });
 
-test('new account signup and verification never offer the older Auth0 password route', async () => {
+test('User Login excludes signup and legacy access', async () => {
   const f = await fixture({ parent: true, modernLegacy: true });
   try {
-    await f.page.getByRole('button', { name: 'User Login', exact: true }).click();
-    const dialog = f.page.getByRole('dialog');
-    const older = dialog.getByRole('button', { name: 'Older account: Email and password', exact: true });
-    await dialog.getByRole('button', { name: 'Sign in', exact: true }).waitFor();
-    assert.equal(await older.isVisible(), false);
-    assert.equal(await dialog.getByRole('button', { name: 'Email and password', exact: true }).count(), 0);
-    await dialog.getByText('Access an older RWAS account', { exact: true }).click();
-    await older.waitFor();
-    await dialog.getByRole('region', { name: 'User secure sign-in', exact: true }).getByRole('button', { name: 'Create account', exact: true }).click();
-    assert.equal(await older.count(), 0);
-    assert.equal(await dialog.getByText('Access an older RWAS account', { exact: true }).count(), 0);
-    await dialog.getByLabel('Name', { exact: true }).fill('New Fixture User');
-    await credentials(dialog);
-    await dialog.getByRole('button', { name: 'Create your account', exact: true }).click();
-    await dialog.getByRole('status').filter({ hasText: 'Check your email' }).waitFor();
-    assert.equal(await older.count(), 0);
-    assert.equal(await dialog.getByText('Access an older RWAS account', { exact: true }).count(), 0);
-    assert.equal(f.state.requests.some((request) => request.path === '/api/aircraft-sale/auth/start'), false);
-    assert.equal(f.state.bridge, 0);
-  } finally { await f.close(); }
+    await f.page
+      .getByRole('button', { name: 'User Login', exact: true })
+      .click();
+    const d = f.page.getByRole('dialog');
+    await d.getByRole('button', { name: 'Sign in', exact: true }).waitFor();
+    assert.equal(
+      await d.getByRole('button', { name: /create.*account/i }).count(),
+      0,
+    );
+    assert.equal(
+      await d
+        .getByText('Access an older RWAS account', { exact: true })
+        .count(),
+      0,
+    );
+    await d
+      .getByRole('link', { name: 'Forgot password?', exact: true })
+      .click();
+    await d
+      .getByRole('button', { name: 'Send reset email', exact: true })
+      .waitFor();
+    assert.equal(
+      f.state.requests.some((r) => r.path === '/api/aircraft-sale/auth/start'),
+      false,
+    );
+  } finally {
+    await f.close();
+  }
+});
+test('recovery hyperlink destination opens recovery directly', async () => {
+  const f = await fixture({ parent: true, search: '?seller-auth=forgot' });
+  try {
+    await f.page
+      .getByRole('button', { name: 'Send reset email', exact: true })
+      .waitFor();
+  } finally {
+    await f.close();
+  }
 });
 
 test('real client password login creates the bound RWAS session without loading Clerk', async () => {
@@ -407,11 +428,8 @@ test('real client password login creates the bound RWAS session without loading 
   }
 });
 test('unverified signup waits for email and never creates seller access', async () => {
-  const f = await fixture();
+  const f = await fixture({initialMode:'signup'});
   try {
-    await f.page
-      .getByRole('button', { name: 'Create account', exact: true })
-      .click();
     await f.page.getByLabel('Name', { exact: true }).fill('Fixture Seller');
     await credentials(f.page);
     await f.page
@@ -1198,12 +1216,10 @@ test('QA signup verification, password recovery and social callbacks preserve on
     const f = await fixture({
       providers: ['password', 'google'],
       search: '?seller-auth-qa=better-auth',
+      initialMode: flow === 'signup' ? 'signup' : 'login',
     });
     try {
       if (flow === 'signup') {
-        await f.page
-          .getByRole('button', { name: 'Create account', exact: true })
-          .click();
         await f.page.getByLabel('Name', { exact: true }).fill('Fixture Seller');
         await credentials(f.page);
         await f.page
@@ -1238,7 +1254,7 @@ test('QA signup verification, password recovery and social callbacks preserve on
         }
       } else if (flow === 'forgot') {
         await f.page
-          .getByRole('button', { name: 'Forgot password?', exact: true })
+          .getByRole('link', { name: 'Forgot password?', exact: true })
           .click();
         await f.page
           .getByLabel('Email', { exact: true })

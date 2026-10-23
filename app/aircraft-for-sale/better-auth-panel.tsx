@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  useEffect,
-  useRef,
-  useState,
-  type FormEvent,
-  type ReactNode,
-} from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import AuthenticatorSetup from './authenticator-setup';
 import {
   connectBetterAuthSeller,
@@ -104,6 +98,103 @@ function BetterAuthStyles() {
       [data-rwas-better-auth-delete] [role='alert'] {
         color: #9b2222;
       }
+      [data-rwas-better-auth] {
+        width: 100%;
+        max-width: 480px;
+        margin: 16px auto 0;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      [data-rwas-better-auth] > h3 {
+        margin: 0 0 16px;
+        font-size: 20px;
+      }
+      [data-rwas-better-auth] .seller-field {
+        gap: 7px;
+        margin: 0 0 18px;
+        font-weight: 600;
+      }
+      [data-rwas-better-auth] input {
+        min-height: 46px;
+        font-size: 16px;
+        font-weight: 400;
+      }
+      [data-rwas-better-auth] button {
+        min-height: 44px;
+        margin: 0;
+        font-size: 14px;
+      }
+      [data-rwas-better-auth] > button {
+        margin-top: 18px;
+      }
+      [data-rwas-better-auth] .auth-submit-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px 20px;
+        margin-top: 4px;
+      }
+      [data-rwas-better-auth] .auth-primary {
+        min-width: 104px;
+        padding: 11px 20px;
+        background: #c49a2a;
+        border-color: #222;
+        font-weight: 700;
+      }
+      [data-rwas-better-auth] .auth-primary:hover:not(:disabled) {
+        background: #b28a21;
+      }
+      [data-rwas-better-auth] .auth-forgot-link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        color: #333;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      [data-rwas-better-auth] .auth-forgot-link[aria-disabled='true'] {
+        opacity: 0.6;
+        cursor: wait;
+      }
+      [data-rwas-better-auth] .auth-providers {
+        display: grid;
+        gap: 12px;
+        margin-top: 22px;
+      }
+      [data-rwas-better-auth] .auth-divider {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: #666;
+        font-size: 13px;
+      }
+      [data-rwas-better-auth] .auth-divider::before,
+      [data-rwas-better-auth] .auth-divider::after {
+        content: '';
+        flex: 1;
+        border-top: 1px solid #bcb7ae;
+      }
+      [data-rwas-better-auth] .auth-provider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 12px;
+        border-color: #747775;
+        background: #fff;
+        color: #1f1f1f;
+        font-weight: 500;
+      }
+      [data-rwas-better-auth] .auth-provider:hover:not(:disabled) {
+        background: #f5f5f5;
+      }
+      [data-rwas-better-auth] .auth-provider img {
+        flex: 0 0 20px;
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+      }
     `}</style>
   );
 }
@@ -124,21 +215,23 @@ export default function BetterAuthPanel({
   linkOwner,
   onConnectExisting,
   initialMode = 'login',
-  legacyAccess,
 }: {
   onSignedIn: (session: BetterAuthSellerSession) => void;
   providers: BetterAuthProvider[];
   linkOwner?: BetterAuthLinkOwner;
   onConnectExisting?: () => void;
   initialMode?: 'login' | 'signup';
-  legacyAccess?: ReactNode;
 }) {
   const [resetToken] = useState(consumeResetToken);
   const [mode, setMode] = useState<Mode>(() =>
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).get('seller-auth') === 'reset'
       ? 'reset'
-      : initialMode,
+      : typeof window !== 'undefined' &&
+          new URLSearchParams(window.location.search).get('seller-auth') ===
+            'forgot'
+        ? 'forgot'
+        : initialMode,
   );
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -537,66 +630,102 @@ export default function BetterAuthPanel({
                 </button>
               </>
             )}
-            <button disabled={busy || (mode === 'reset' && !resetToken)}>
-              {busy
-                ? 'Please wait…'
-                : mode === 'verify'
-                  ? 'Resend verification email'
-                  : mode === 'forgot'
-                    ? 'Send reset email'
-                    : mode === 'mfa'
-                      ? 'Verify'
-                      : title}
-            </button>
+            <div className="auth-submit-row">
+              <button
+                className="auth-primary"
+                disabled={busy || (mode === 'reset' && !resetToken)}
+              >
+                {busy
+                  ? 'Please wait…'
+                  : mode === 'verify'
+                    ? 'Resend verification email'
+                    : mode === 'forgot'
+                      ? 'Send reset email'
+                      : mode === 'mfa'
+                        ? 'Verify'
+                        : title}
+              </button>
+              {mode === 'login' && (
+                <a
+                  className="auth-forgot-link"
+                  href={sellerIdentityReturnUrl('forgot')}
+                  aria-disabled={busy}
+                  onClick={(event) => {
+                    if (busy) {
+                      event.preventDefault();
+                      return;
+                    }
+                    if (
+                      event.metaKey ||
+                      event.ctrlKey ||
+                      event.shiftKey ||
+                      event.altKey
+                    )
+                      return;
+                    event.preventDefault();
+                    setMode('forgot');
+                    setError('');
+                    setPassword('');
+                  }}
+                >
+                  Forgot password?
+                </a>
+              )}
+            </div>
           </form>
         )}
       {mode === 'login' && (
         <>
-          {(['google', 'apple'] as const)
-            .filter((provider) => providers.includes(provider))
-            .map((provider) => (
-              <button
-                key={provider}
-                disabled={busy}
-                onClick={() =>
-                  void run(async () => {
-                    const result =
-                      await getSellerIdentityClient().signIn.social({
-                        provider,
-                        callbackURL: sellerIdentityReturnUrl(),
-                        errorCallbackURL: sellerIdentityReturnUrl(),
-                      });
-                    sellerIdentityError(result);
-                  })
-                }
-              >
-                Continue with {provider === 'google' ? 'Google' : 'Apple'}
-              </button>
-            ))}
-          <button
-            disabled={busy}
-            onClick={() => {
-              setMode('signup');
-              setError('');
-            }}
-          >
-            Create account
-          </button>
-          <button
-            disabled={busy}
-            onClick={() => {
-              setMode('forgot');
-              setError('');
-            }}
-          >
-            Forgot password?
-          </button>
+          {providers.some(
+            (provider) => provider === 'google' || provider === 'apple',
+          ) && (
+            <div className="auth-providers" aria-label="Other sign-in options">
+              <div className="auth-divider" aria-hidden="true">
+                or
+              </div>
+              {(['google', 'apple'] as const)
+                .filter((provider) => providers.includes(provider))
+                .map((provider) => (
+                  <button
+                    type="button"
+                    className="auth-provider"
+                    key={provider}
+                    disabled={busy}
+                    onClick={() =>
+                      void run(async () => {
+                        const result =
+                          await getSellerIdentityClient().signIn.social({
+                            provider,
+                            callbackURL: sellerIdentityReturnUrl(),
+                            errorCallbackURL: sellerIdentityReturnUrl(),
+                          });
+                        sellerIdentityError(result);
+                      })
+                    }
+                  >
+                    {provider === 'google' && (
+                      // The provider's unmodified brand asset is served locally.
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src="/auth/google-g.png"
+                        width={20}
+                        height={20}
+                        alt=""
+                        aria-hidden="true"
+                      />
+                    )}
+                    <span>
+                      Continue with {provider === 'google' ? 'Google' : 'Apple'}
+                    </span>
+                  </button>
+                ))}
+            </div>
+          )}
           {onConnectExisting && (
             <button disabled={busy} onClick={onConnectExisting}>
               Use an existing RWAS login
             </button>
           )}
-          {legacyAccess}
         </>
       )}
       {mode !== 'login' &&
