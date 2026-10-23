@@ -74,6 +74,7 @@ import {
   removeManagedIdentity,
   fenceAccountRemoval,
   finishAccountRemoval,
+  assertRemovableIdentity,
 } from './account-removal.mjs';
 import { auth0EventConfig, auth0BlockNotification } from './auth0-events.mjs';
 import {
@@ -530,7 +531,20 @@ const worker = {
     if (!env.SELLER_STORE)
       return reply({ error: 'Seller service is not configured.' }, 503);
     const id = env.SELLER_STORE.idFromName('seller-v2');
-    return env.SELLER_STORE.get(id).fetch(request);
+    try {
+      return await env.SELLER_STORE.get(id).fetch(request);
+    } catch {
+      // A transport failure can happen after a mutation committed. Never
+      // replay writes here; clients retain their existing operation identity.
+      return reply(
+        {
+          error:
+            'The marketplace connection was interrupted. Please try again.',
+          code: 'SELLER_SERVICE_UNAVAILABLE',
+        },
+        503,
+      );
+    }
   },
 };
 export default worker;
@@ -2616,8 +2630,11 @@ export class SellerStore {
               'operationId',
               'confirmation',
               'confirmEmail',
+              'includeListings',
             ].includes(key),
-        )
+        ) ||
+        (body.includeListings !== undefined &&
+          typeof body.includeListings !== 'boolean')
       )
         fail(400, 'Review the deletion target and reason.');
       if (target.identityId && !authority.canManageIdentities)
@@ -2655,6 +2672,7 @@ export class SellerStore {
           target,
           authority.actor,
           this.administratorIdentity,
+          body.includeListings === true,
         );
         return reply({
           ...plan.public,
@@ -2681,6 +2699,7 @@ export class SellerStore {
           operationId: body.operationId,
           confirmation: body.confirmation,
           confirmEmail: body.confirmEmail,
+          ...(body.includeListings === true ? { includeListings: true } : {}),
         }),
       );
       if (intent) {
@@ -2704,6 +2723,7 @@ export class SellerStore {
           target,
           authority.actor,
           this.administratorIdentity,
+          body.includeListings === true,
         );
         if (!plan.public.ready) fail(409, plan.public.blockers.join(' '));
         if (body.confirmation !== plan.public.confirmation)
@@ -2739,8 +2759,44 @@ export class SellerStore {
           target: plan.target,
           identityIds: identities.map((identity) => identity.id),
           identityCount: identities.length,
+          listingIds: intent.listingIds,
+          includeListings: intent.includeListings,
           reasonCode: body.reasonCode,
         });
+        await this.saveState(this.state);
+        this.rollbackState = structuredClone(this.state);
+      }
+      // Recheck protected identities before the first irreversible media
+      // operation, including retries after a partially completed R2 purge.
+      for (const identity of intent.identities)
+        assertRemovableIdentity(
+          this.env,
+          await this.administratorIdentity(this.env, identity.id),
+          authority.actor,
+        );
+      for (const listingId of intent.listingIds || []) {
+        const listing = this.state.listings[listingId];
+        if (!listing) continue; // A previous chunk already committed.
+        if (
+          listing.ownerId !== intent.accountId ||
+          listing.status !== 'deleted' ||
+          !listing.purging
+        )
+          fail(
+            409,
+            'Listing cleanup changed. Contact the super administrator.',
+          );
+        await this.purge(listing);
+        for (const [key, job] of Object.entries(this.state.outbox))
+          if (job.listingId === listingId) delete this.state.outbox[key];
+        delete this.state.listings[listingId];
+        this.audit('admin-listing-purge', authority.actor, {
+          listingId,
+          revision: listing.revision,
+          accountRemovalOperationId: body.operationId,
+        });
+        // Persist each listing's progress, so retries never depend on an R2
+        // object still existing after a request interruption.
         await this.saveState(this.state);
         this.rollbackState = structuredClone(this.state);
       }
@@ -2751,6 +2807,7 @@ export class SellerStore {
         ok: true,
         accountId: intent.accountId,
         identitiesDeleted: intent.identities.length,
+        listingsDeleted: (intent.listingIds || []).length,
         operationId: body.operationId,
       };
       operations[body.operationId] = {
@@ -2766,6 +2823,7 @@ export class SellerStore {
         target: intent.target,
         identityIds: intent.identities.map((identity) => identity.id),
         identityCount: result.identitiesDeleted,
+        listingIds: intent.listingIds || [],
         reasonCode: intent.reasonCode,
       });
       return reply(result);

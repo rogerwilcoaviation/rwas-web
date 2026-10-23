@@ -44,6 +44,7 @@ export async function accountRemovalPlan(
   target,
   actor,
   readIdentity = administratorIdentity,
+  includeListings = false,
 ) {
   removalTarget(target);
   const links = Object.entries(state.identities).filter(([, link]) =>
@@ -99,25 +100,30 @@ export async function accountRemovalPlan(
   const receipts = Object.entries(state.idempotency).filter(
     ([, r]) => accountId && r?.kind === 'upload-v1' && r.ownerId === accountId,
   );
+  const includedIds = new Set(includeListings ? listings.map((l) => l.id) : []);
   const unfinished = receipts.filter(
     ([, r]) =>
       r.status !== 'complete' ||
       r.file?.ownerId !== accountId ||
       !r.file?.key ||
       !r.file?.listingId ||
-      state.files[r.file.key] ||
-      state.listings[r.file.listingId],
+      (!includedIds.has(r.file.listingId) &&
+        (state.files[r.file.key] || state.listings[r.file.listingId])),
   );
   const blockers = [];
   if (profile && !profile.adminDeleted)
     blockers.push(
       'Move this user account to trash first. This revokes access and moves its listings to trash.',
     );
-  if (listings.length)
+  if (listings.length && !includeListings)
     blockers.push(
       `Permanently delete the user’s ${listings.length} listing(s) in User listings first.`,
     );
-  if (files.length || unfinished.length)
+  if (includeListings && listings.some((l) => l.status !== 'deleted'))
+    blockers.push(
+      'Move all of this user’s listings to trash before deleting them with the account.',
+    );
+  if (files.some((f) => !includedIds.has(f.listingId)) || unfinished.length)
     blockers.push(
       'Pending media or upload cleanup must finish before deleting this account.',
     );
@@ -170,13 +176,18 @@ export async function accountRemovalPlan(
       target,
       accountId,
       email,
+      includeListings,
       identityCount: identities.length,
       listingCount: listings.length,
       supportCount: support.length,
       ready: blockers.length === 0,
       blockers,
-      confirmation: await digest(JSON.stringify({ actor, target, snapshot })),
+      confirmation: await digest(
+        JSON.stringify({ actor, target, includeListings, snapshot }),
+      ),
     },
+    includeListings,
+    listingIds: [...includedIds],
   };
 }
 // D1 atomically deletes the sign-in and its dependent sessions, credentials
@@ -226,6 +237,17 @@ export function fenceAccountRemoval(state, intent) {
   const at = Date.now(),
     id = intent.accountId;
   if (id && state.profiles[id]) state.profiles[id].adminPurging = true;
+  // Fence every confirmed listing in the same durable commit as the account
+  // intent, before any external media deletion. Restore/edit/upload cannot
+  // change the scope of a resumable bulk deletion.
+  for (const listingId of intent.listingIds || []) {
+    const listing = state.listings[listingId];
+    if (!listing || listing.ownerId !== id || listing.status !== 'deleted')
+      fail(409, 'The user’s listings changed. Review account deletion again.');
+    listing.purging = true;
+    for (const file of Object.values(state.files))
+      if (file.listingId === listingId) file.deleting = true;
+  }
   for (const [key] of intent.accountLinks)
     state.identitySecurity[key] = {
       ...state.identitySecurity[key],

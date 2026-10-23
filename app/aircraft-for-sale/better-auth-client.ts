@@ -159,10 +159,19 @@ export async function connectBetterAuthSeller(
   const value = await response.json().catch(() => null);
   if (!response.ok)
     throw Object.assign(
-      new Error(value?.error || 'Your seller sign-in could not be completed.'),
+      new Error(
+        response.status >= 500
+          ? 'The marketplace connection was interrupted. Your secure sign-in is still active. Retry the account connection below.'
+          : value?.error || 'Your seller sign-in could not be completed.',
+      ),
       {
         status: response.status,
-        code: value?.code === 'ACCOUNT_DELETION_PENDING' ? value.code : '',
+        code:
+          response.status >= 500
+            ? 'SELLER_SERVICE_UNAVAILABLE'
+            : value?.code === 'ACCOUNT_DELETION_PENDING'
+              ? value.code
+              : '',
       },
     );
   if (

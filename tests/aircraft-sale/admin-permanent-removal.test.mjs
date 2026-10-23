@@ -12,12 +12,15 @@ const fixtureIssuedAt=Date.now()-1000;
 export class RemovalFixtureStore extends SellerStore {
  constructor(ctx,env) {super(ctx,env,{readBetterAuthIdentity:async(_env,req)=>{
   const id=req.headers.get('Cookie');
-  if(!['root','customer','orphan','delegate'].includes(id))return null;
+  if(!['root','customer','orphan','delegate','bulk','other'].includes(id))return null;
   const row=await env.SELLER_AUTH_DB.prepare('SELECT * FROM "user" WHERE id = ?').bind(id).first();
   return row?{issuer:'rwas-better-auth',subject:id,providerSessionId:id+'-session',email:row.email,emailVerified:true,name:row.name,isAdministrator:row.role==='admin',createdAt:fixtureIssuedAt-(this.fixtureOldRoot&&id==='root'?700000:0),expiresAt:fixtureIssuedAt+86400000}:null;
  }});}
+ async purge(listing) {if(this.fixtureFailPurge===listing.id)throw Error('Synthetic R2 interruption');return super.purge(listing);}
  async fetch(req) {
   const path=new URL(req.url).pathname;
+  if(path==='/fixture/fail-purge'){this.fixtureFailPurge=await req.json();return Response.json({ok:true});}
+  if(path==='/fixture/allow-purge'){this.fixtureFailPurge=null;return Response.json({ok:true});}
   if(path==='/fixture/age-root'){this.fixtureOldRoot=true;return Response.json({ok:true});}
   if(path==='/fixture/fresh-root'){this.fixtureOldRoot=false;return Response.json({ok:true});}
   if(path==='/fixture/fail-final-save') {this.ctx.storage.sql.exec("CREATE TRIGGER fixture_removal_abort BEFORE UPDATE ON seller_records WHEN OLD.bucket='accountRemovalOperations' AND json_extract(NEW.value,'$.stage')='complete' BEGIN SELECT RAISE(ABORT,'Synthetic final-save interruption'); END");return Response.json({ok:true});}
@@ -43,7 +46,7 @@ for(const cascade of [true,false])test('permanent administrator deletion with '+
   let db=await mf.getD1Database('SELLER_AUTH_DB');
   let schema=await readFile('workers/aircraft-sale/migrations/0001_seller_auth.sql','utf8');if(!cascade)schema=schema.replaceAll('references \"user\" (\"id\") on delete cascade','');
   for(const statement of schema.split(';').map(s=>s.trim()).filter(Boolean))await db.prepare(statement).run();
-  for(const id of ['root','customer','orphan','delegate']) {
+  for(const id of ['root','customer','orphan','delegate','bulk','other']) {
    await db.prepare('INSERT INTO "user"(id,name,email,"emailVerified","createdAt","updatedAt",role,"twoFactorEnabled") VALUES(?,?,?,1,?,?,?,0)').bind(id,'Synthetic '+id,id+'@example.test',new Date().toISOString(),new Date().toISOString(),id==='delegate'?'admin':'user').run();
    await db.prepare('INSERT INTO account(id,"accountId","providerId","userId",password,"createdAt","updatedAt") VALUES(?,?,\'credential\',?,\'synthetic-not-a-password\',?,?)').bind(id+'-account',id,id,new Date().toISOString(),new Date().toISOString()).run();
    await db.prepare('INSERT INTO session(id,"userId",token,"expiresAt","createdAt","updatedAt") VALUES(?,?,?,?,?,?)').bind(id+'-stored-session',id,'synthetic-'+id,new Date(Date.now()+86400000).toISOString(),new Date().toISOString(),new Date().toISOString()).run();
@@ -89,7 +92,7 @@ for(const cascade of [true,false])test('permanent administrator deletion with '+
   assert.equal((await json(await rootCall('/staff/removals'))).removals.length,0);
   assert.equal((await json(await rootCall('/staff/removals/apply','POST',input))).replayed,true);
   for(const table of ['user','session','account','twoFactor'])assert.equal((await db.prepare('SELECT count(*) AS count FROM "'+table+'" WHERE '+(table==='user'?'id':'"userId"')+' = ?').bind('customer').first()).count,0,table+' scoped cleanup');
-  assert.equal((await db.prepare('SELECT count(*) AS count FROM "user"').first()).count,3,'Unrelated users are preserved');
+  assert.equal((await db.prepare('SELECT count(*) AS count FROM "user"').first()).count,5,'Unrelated users are preserved');
   assert.equal((await call('/auth/better-auth','POST',{},undefined,'customer')).status,401);
   let orphanPlan=await json(await rootCall('/staff/removals/preview','POST',{target:{identityId:'orphan'},reasonCode:'maintenance'}));assert.equal(orphanPlan.ready,true);
   await db.prepare('UPDATE \"user\" SET name=\'Updated orphan\' WHERE id=\'orphan\'').run();
@@ -97,5 +100,49 @@ for(const cascade of [true,false])test('permanent administrator deletion with '+
   orphanPlan=await json(await rootCall('/staff/removals/preview','POST',{target:{identityId:'orphan'},reasonCode:'maintenance'}));
   await json(await rootCall('/staff/removals/apply','POST',{target:orphanPlan.target,reasonCode:orphanPlan.reasonCode,operationId:orphanPlan.operationId,confirmation:orphanPlan.confirmation,confirmEmail:orphanPlan.email}));
   assert.equal(await db.prepare('SELECT id FROM "user" WHERE id=\'orphan\'').first(),null);
+  const bulk=await login('bulk'),other=await login('other');
+  const bulkProfile=(await json(await call('/account','GET',undefined,bulk,'bulk'))).profile;
+  const bulkTarget={accountId:bulkProfile.id};
+  const create=async(auth,cookie)=> (await json(await call('/listings','POST',fields,auth,cookie,{'Idempotency-Key':crypto.randomUUID()}),201)).listing;
+  const [first,second]=[await create(bulk,'bulk'),await create(bulk,'bulk')].sort((a,b)=>a.id.localeCompare(b.id));const untouched=await create(other,'other');
+  for(const [item,auth,cookie] of [[first,bulk,'bulk'],[second,bulk,'bulk'],[untouched,other,'other']])await json(await call('/upload?listingId='+item.id+'&category=photos&filename=synthetic.png','POST',png,auth,cookie,{'Idempotency-Key':'rwas-upload-v1.'+Date.now()+'.'+crypto.randomUUID()}));
+  const trash={id:crypto.randomUUID(),operation:'delete-account',reasonCode:'maintenance'};
+  const trashPreview=await json(await rootCall('/staff/accounts/'+bulkProfile.id+'/preview','POST',trash));
+  await json(await rootCall('/staff/accounts/'+bulkProfile.id+'/apply','POST',{...trash,confirmation:trashPreview.confirmation}));
+  const planFor=(includeListings)=>rootCall('/staff/removals/preview','POST',{target:bulkTarget,reasonCode:'maintenance',includeListings}).then(r=>json(r));
+  const narrow=await planFor(false);assert.equal(narrow.ready,false);assert.equal(narrow.listingCount,2);
+  assert.equal((await rootCall('/staff/removals/preview','POST',{target:bulkTarget,reasonCode:'maintenance',includeListings:'yes'})).status,400);
+  let wide=await planFor(true);assert.equal(wide.ready,true);assert.equal(wide.includeListings,true);assert.equal(wide.listingCount,2);
+  const bodyFor=plan=>({target:plan.target,reasonCode:plan.reasonCode,operationId:plan.operationId,confirmation:plan.confirmation,confirmEmail:plan.email,includeListings:plan.includeListings});
+  assert.equal((await rootCall('/staff/removals/apply','POST',{...bodyFor(wide),includeListings:false})).status,409,'Bulk scope cannot be dropped after preview');
+  await db.prepare('UPDATE "user" SET role=\'admin\' WHERE id=\'bulk\'').run();
+  assert.equal((await rootCall('/staff/removals/apply','POST',bodyFor(wide))).status,403,'Promotion after preview protects listings as well as identity');
+  assert.equal((await (await mf.getR2Bucket('MEDIA')).list()).objects.length,3);
+  await db.prepare('UPDATE "user" SET role=\'user\' WHERE id=\'bulk\'').run();
+  // A listing revision change invalidates the complete confirmed scope.
+  let edited=(await json(await rootCall('/staff/listings/'+first.id))).listing;
+  edited=(await json(await rootCall('/staff/listings/'+first.id,'POST',{action:'restore',revision:edited.revision}))).listing;
+  await json(await rootCall('/staff/listings/'+first.id,'DELETE',{confirm:first.id,revision:edited.revision}));
+  assert.equal((await rootCall('/staff/removals/apply','POST',bodyFor(wide))).status,409);
+  wide=await planFor(true);
+  // Fail the second purge after the first listing/media commit, then restart.
+  await call('/fixture/fail-purge','POST',second.id);
+  await json(await rootCall('/staff/removals/apply','POST',bodyFor(wide)),503);
+  assert.equal((await rootCall('/staff/listings/'+first.id)).status,404);
+  assert.equal((await rootCall('/staff/listings/'+second.id)).status,200);
+  assert.equal((await rootCall('/staff/listings/'+second.id,'POST',{action:'restore',revision:(await json(await rootCall('/staff/listings/'+second.id))).listing.revision})).status,409,'Bulk-fenced listings cannot be restored');
+  assert.ok(await db.prepare('SELECT id FROM "user" WHERE id=\'bulk\'').first(),'Identity stays fenced until all media cleanup settles');
+  assert.equal((await (await mf.getR2Bucket('MEDIA')).list()).objects.length,2);
+  await mf.dispose();mf=new Miniflare(options);db=await mf.getD1Database('SELLER_AUTH_DB');root=await login('root');
+  const resumed=await planFor(false);assert.equal(resumed.includeListings,true);assert.equal(resumed.resuming,true);assert.equal(resumed.listingCount,2);
+  assert.equal((await rootCall('/staff/removals/apply','POST',{...bodyFor(resumed),includeListings:false})).status,409,'A retry cannot change frozen deletion scope');
+  const done=await json(await rootCall('/staff/removals/apply','POST',bodyFor(resumed)));assert.equal(done.listingsDeleted,2);
+  assert.equal((await rootCall('/staff/accounts/'+bulkProfile.id)).status,404);
+  assert.equal((await rootCall('/staff/listings/'+second.id)).status,404);
+  assert.equal((await rootCall('/staff/listings/'+untouched.id)).status,200);
+  assert.equal((await (await mf.getR2Bucket('MEDIA')).list()).objects.length,1,'Unrelated seller media is preserved');
+  for(const table of ['user','session','account','twoFactor'])assert.equal((await db.prepare('SELECT count(*) AS count FROM "'+table+'" WHERE '+(table==='user'?'id':'"userId"')+' = ?').bind('bulk').first()).count,0);
+  assert.equal((await json(await rootCall('/staff/removals/apply','POST',bodyFor(resumed)))).replayed,true);
+
  } finally {await mf.dispose();await rm(directory,{recursive:true,force:true});}
 });

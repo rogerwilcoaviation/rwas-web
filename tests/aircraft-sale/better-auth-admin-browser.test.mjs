@@ -106,7 +106,7 @@ async function fixture(run, initial = {}) {
         assert.equal(body.action,'purge');assert.equal(body.confirm,'customer-listing');assert.equal(body.revision,3);state.listings=[];return json({ok:true});
       }
       if(url.pathname===base+'/admin/removals')return json({removals:state.pendingRemovals||[]});
-      if(url.pathname===base+'/admin/removals/preview')return json({target:body.target,email:body.target.identityId?'target@example.test':'customer@example.test',ready:true,blockers:[],identityCount:1,listingCount:0,supportCount:2,operationId:'removal-one',reasonCode:body.reasonCode,confirmation:'fixture-confirmation'});
+      if(url.pathname===base+'/admin/removals/preview')return json({target:body.target,email:body.target.identityId?'target@example.test':'customer@example.test',ready:true,blockers:[],includeListings:body.includeListings===true,identityCount:1,listingCount:body.includeListings?(state.listings||[]).length:0,supportCount:2,operationId:'removal-one',reasonCode:body.reasonCode,confirmation:'fixture-confirmation'});
       if(url.pathname===base+'/admin/removals/apply') {
         assert.equal(body.confirmation,'fixture-confirmation');assert.equal(body.operationId,'removal-one');
         assert.equal(body.confirmEmail,body.target.identityId?'target@example.test':'customer@example.test');state.removed=true;state.account=null;state.pendingRemovals=[];return json({ok:true});
@@ -687,4 +687,28 @@ test('unfinished deletion controls remain discoverable after the identity row is
   await region.getByText('No unfinished account deletions.',{exact:true}).waitFor();
   assert.equal(state.removed,true);
  },{pendingRemovals:[{operationId:'interrupted',target:{identityId:'identity-gone'},email:'target@example.test'}]});
+});
+
+
+test('bulk account deletion is optional, previews the listing count and binds the confirmed scope at desktop and mobile widths',async()=>{
+ for(const width of [1440,390,320])await fixture(async({page,requests})=>{
+  await page.setViewportSize({width,height:1000});
+  await page.getByRole('button',{name:'Load accounts',exact:true}).click();
+  await page.getByRole('button',{name:'View account customer@example.test',exact:true}).click();
+  const option=page.getByRole('checkbox',{name:'Also permanently delete all of this user’s listings and files',exact:true});
+  assert.equal(await option.isChecked(),false);
+  await option.check();
+  await page.getByRole('button',{name:'Review permanent account deletion',exact:true}).click();
+  await page.getByText(/All 2 listing\(s\) owned by this user/).waitFor();
+  assert.equal(requests.findLast(r=>r.path.endsWith('/removals/preview')).body.includeListings,true);
+  await page.getByRole('button',{name:'Cancel permanent deletion',exact:true}).click();
+  assert.equal(requests.some(r=>r.path.endsWith('/removals/apply')),false);
+  await page.getByRole('button',{name:'Review permanent account deletion',exact:true}).click();
+  const confirm=page.getByRole('button',{name:'Confirm permanent account deletion',exact:true});
+  assert.equal(await confirm.isDisabled(),true);
+  await page.getByLabel('Type account email to permanently delete',{exact:true}).fill('customer@example.test');
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
+  await confirm.click();await page.getByRole('tab',{name:'Account directory',exact:true}).waitFor();
+  assert.equal(requests.findLast(r=>r.path.endsWith('/removals/apply')).body.includeListings,true);
+ },{account:{id:'customer-account',name:'Synthetic Customer',email:'customer@example.test',phone:'',location:'',status:'deleted',adminDeleted:true,adminSuspended:false,securityHeld:false,listingCount:2,activeSessions:0,createdAt:Date.now(),loginMethods:['better-auth'],sessions:[],listings:[],hasSavedDraft:false,mediaCount:0},listings:[{id:'one'},{id:'two'}]});
 });

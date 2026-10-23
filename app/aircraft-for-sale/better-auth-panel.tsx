@@ -248,6 +248,7 @@ export default function BetterAuthPanel({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [connectionInterrupted, setConnectionInterrupted] = useState(false);
   const generation = useRef(0);
   const mounted = useRef(true);
   const completing = useRef(false);
@@ -323,6 +324,16 @@ export default function BetterAuthPanel({
           caught &&
           typeof caught === 'object' &&
           'code' in caught &&
+          caught.code === 'SELLER_SERVICE_UNAVAILABLE'
+        ) {
+          if (mounted.current && current === generation.current)
+            setConnectionInterrupted(true);
+          throw caught;
+        }
+        if (
+          caught &&
+          typeof caught === 'object' &&
+          'code' in caught &&
           caught.code === 'ACCOUNT_DELETION_PENDING'
         ) {
           if (mounted.current && current === generation.current)
@@ -331,7 +342,10 @@ export default function BetterAuthPanel({
         }
         throw caught;
       }
-      if (current === generation.current) signedIn.current(next);
+      if (current === generation.current) {
+        setConnectionInterrupted(false);
+        signedIn.current(next);
+      }
     } finally {
       completing.current = false;
     }
@@ -356,9 +370,13 @@ export default function BetterAuthPanel({
         };
         await complete();
       })
-      .catch(() => {
+      .catch((caught) => {
         if (current === generation.current)
-          setError('Secure sign-in could not be completed. Please try again.');
+          setError(
+            caught instanceof Error
+              ? caught.message
+              : 'Secure sign-in could not be completed. Please try again.',
+          );
       });
     return () => {
       mounted.current = false;
@@ -508,6 +526,15 @@ export default function BetterAuthPanel({
         </p>
       )}
       {error && <p role="alert">{error}</p>}
+      {connectionInterrupted && (
+        <button
+          className="auth-primary"
+          disabled={busy}
+          onClick={() => void run(complete)}
+        >
+          Retry account connection
+        </button>
+      )}
       {notice && <p role="status">{notice}</p>}
       {mode === 'setup-mfa' && (
         <>

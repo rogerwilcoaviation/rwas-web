@@ -316,3 +316,14 @@ test('default UUID canonical routes preserve real seller publication, unpublish 
     await rm(root,{recursive:true,force:true});
   }
 });
+
+
+test('Durable Object transport exceptions return a safe retry message without replaying mutations',async()=>{
+ const {default:worker}=await import('../../workers/aircraft-sale/worker.mjs');
+ let calls=0;
+ const env={SELLER_STORE:{idFromName:()=> 'store',get:()=>({fetch:async()=>{calls++;throw Error('private transport diagnostic');}})}};
+ const result=await worker.fetch(new Request('https://www.rogerwilcoaviation.com/api/aircraft-sale/auth/better-auth',{method:'POST',body:'{}'}),env);
+ assert.equal(result.status,503);assert.equal(calls,1);
+ const value=await result.json();assert.equal(value.code,'SELLER_SERVICE_UNAVAILABLE');assert.equal(JSON.stringify(value).includes('private transport diagnostic'),false);
+ assert.equal(result.headers.get('cache-control'),'no-store');
+});

@@ -263,6 +263,9 @@ async function fixture(options = {}) {
         identityUserId: state.subject || 'fixture-user',
         identitySessionId: state.sessionId || 'fixture-session',
       };
+      if (state.bridgeUnavailable) {
+        status=503;body={error:'The marketplace connection was interrupted.',code:'SELLER_SERVICE_UNAVAILABLE'};
+      }
       if (state.deletionPending) {
         status = 409;
         body = {
@@ -1978,4 +1981,21 @@ test('Google sign-in preserves the listing inquiry in its same-origin return URL
     assert.equal(callback.pathname,'/aircraft-for-sale');
     assert.equal(callback.searchParams.get('emailSeller'),'synthetic-listing');
   } finally {await f.close();}
+});
+
+
+test('an interrupted seller handoff can retry its existing secure sign-in without another password submission',async()=>{
+ const f=await fixture({bridgeUnavailable:true});
+ try {
+  await credentials(f.page);
+  await f.page.getByRole('button',{name:'Sign in',exact:true}).click();
+  const retry=f.page.getByRole('button',{name:'Retry account connection',exact:true});await retry.waitFor();
+  await f.page.getByRole('alert').filter({hasText:'Your secure sign-in is still active'}).waitFor();
+  assert.equal(f.state.requests.filter(r=>r.path===base+'/sign-in/email').length,1);
+  assert.equal(f.state.bridge,1,'No automatic replay of the handoff');
+  f.state.bridgeUnavailable=false;
+  await retry.click();await f.page.waitForFunction(()=>!!globalThis.__TEST__.signedIn);
+  assert.equal(f.state.bridge,2);
+  assert.equal(f.state.requests.filter(r=>r.path===base+'/sign-in/email').length,1);
+ } finally {await f.close();}
 });

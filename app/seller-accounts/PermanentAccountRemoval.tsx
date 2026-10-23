@@ -15,6 +15,7 @@ type Plan = {
   operationId: string;
   reasonCode: string;
   resuming?: boolean;
+  includeListings?: boolean;
 };
 export default function PermanentAccountRemoval({
   target,
@@ -29,6 +30,7 @@ export default function PermanentAccountRemoval({
     [typed, setTyped] = useState(''),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(''),
+    [includeListings, setIncludeListings] = useState(false),
     [reason, setReason] = useState('support-request');
   const generation = useRef(0);
   useEffect(() => {
@@ -63,12 +65,24 @@ export default function PermanentAccountRemoval({
       <h3>Permanently delete user account</h3>
       <p>
         Remove the account, linked RWAS sign-in credentials, saved draft and
-        support conversations. Move the account to trash and permanently delete
-        its listings first. This cannot be undone. A minimal administrator audit
-        record is retained.
+        support conversations. Move the account to trash first. You can include
+        all of its listings and their photos, videos and documents in this
+        deletion. This cannot be undone. A minimal administrator audit record is
+        retained.
       </p>
       {!plan ? (
         <>
+          <label className="removal-option">
+            <input
+              type="checkbox"
+              checked={includeListings}
+              disabled={busy || !canManage}
+              onChange={(e) => setIncludeListings(e.target.checked)}
+            />
+            <span>
+              Also permanently delete all of this user’s listings and files
+            </span>
+          </label>
           <label>
             Deletion reason
             <select
@@ -90,7 +104,7 @@ export default function PermanentAccountRemoval({
                 const result = await marketplaceStaffRequest(
                   '/admin/removals/preview',
                   'POST',
-                  { target, reasonCode: reason },
+                  { target, reasonCode: reason, includeListings },
                 );
                 if (g === generation.current) {
                   setPlan(result);
@@ -131,6 +145,14 @@ export default function PermanentAccountRemoval({
                 {plan.supportCount} support conversation(s) will be permanently
                 removed.
               </p>
+              {plan.includeListings && (
+                <p role="note">
+                  All {plan.listingCount} listing(s) owned by this user,
+                  including their photos, videos and documents, will also be
+                  permanently deleted. Other users’ listings will remain
+                  unchanged.
+                </p>
+              )}
               {plan.resuming && (
                 <p>
                   Cleanup previously started. Confirm the email again to resume
@@ -161,6 +183,7 @@ export default function PermanentAccountRemoval({
                           operationId: plan.operationId,
                           confirmation: plan.confirmation,
                           confirmEmail: typed,
+                          includeListings: plan.includeListings === true,
                         },
                       );
                       if (g === generation.current) {
@@ -238,6 +261,17 @@ export default function PermanentAccountRemoval({
         .removal-panel select:focus-visible {
           outline: 3px solid #8b6c0a;
           outline-offset: 3px;
+        }
+        .removal-panel .removal-option {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+        }
+        .removal-panel .removal-option input {
+          width: 20px;
+          height: 20px;
+          margin-top: 2px;
+          flex-shrink: 0;
         }
       `}</style>
     </section>
