@@ -1,5 +1,4 @@
 // @ts-check
-const { fontFamily } = require('tailwindcss/defaultTheme');
 const { colors: customColors } = require('./data/config/colors');
 
 /** @type {import("tailwindcss").Config } */
@@ -23,9 +22,11 @@ module.exports = {
         14: '3.5rem',
       },
       fontFamily: {
-        sans: ['var(--font-inter)', ...fontFamily.sans],
-        display: ['var(--font-space-display)', ...fontFamily.sans],
-        cursive: ['cursive'],
+        sans: ['Arial', 'sans-serif'],
+        display: ['Arial', 'sans-serif'],
+        serif: ['Arial', 'sans-serif'],
+        mono: ['Arial', 'sans-serif'],
+        cursive: ['Arial', 'sans-serif'],
       },
       colors: {
         primary: {

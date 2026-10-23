@@ -9,33 +9,75 @@ export default function LoanCalc() {
 
   const monthlyRate = rate / 100 / 12;
   const numPayments = years * 12;
-  const monthly = monthlyRate > 0
-    ? (amount * monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1)
-    : amount / numPayments;
+  const monthly =
+    monthlyRate > 0
+      ? (amount * monthlyRate * Math.pow(1 + monthlyRate, numPayments)) /
+        (Math.pow(1 + monthlyRate, numPayments) - 1)
+      : amount / numPayments;
   const totalCost = monthly * numPayments;
   const totalInterest = totalCost - amount;
 
-  const fmt = (n: number) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 });
+  const fmt = (n: number) =>
+    n.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+    });
 
   return (
-    <div style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
-
+    <div style={{ fontFamily: 'Arial, sans-serif' }}>
       {/* Inputs */}
       <div style={{ marginBottom: '12px' }}>
-        <label style={{ display: 'block', fontFamily: 'Arial, sans-serif', fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, marginBottom: '4px', color: '#555' }}>
+        <label
+          style={{
+            display: 'block',
+            fontFamily: 'Arial, sans-serif',
+            fontSize: '9.5px',
+            fontWeight: 700,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase' as const,
+            marginBottom: '4px',
+            color: '#555',
+          }}
+        >
           Loan Amount
         </label>
         <input
           type="number"
           value={amount}
           onChange={(e) => setAmount(Number(e.target.value))}
-          style={{ width: '100%', border: '1px solid #1a1a1a', padding: '5px 7px', fontFamily: 'Georgia, serif', fontSize: '13px', background: '#fff' }}
+          style={{
+            width: '100%',
+            border: '1px solid #1a1a1a',
+            padding: '5px 7px',
+            fontFamily: 'Arial, sans-serif',
+            fontSize: '13px',
+            background: '#fff',
+          }}
         />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '12px' }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gap: '8px',
+          marginBottom: '12px',
+        }}
+      >
         <div>
-          <label style={{ display: 'block', fontFamily: 'Arial, sans-serif', fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, marginBottom: '4px', color: '#555' }}>
+          <label
+            style={{
+              display: 'block',
+              fontFamily: 'Arial, sans-serif',
+              fontSize: '9.5px',
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase' as const,
+              marginBottom: '4px',
+              color: '#555',
+            }}
+          >
             Interest Rate (%)
           </label>
           <input
@@ -43,11 +85,29 @@ export default function LoanCalc() {
             step="0.1"
             value={rate}
             onChange={(e) => setRate(Number(e.target.value))}
-            style={{ width: '100%', border: '1px solid #1a1a1a', padding: '5px 7px', fontFamily: 'Georgia, serif', fontSize: '13px', background: '#fff' }}
+            style={{
+              width: '100%',
+              border: '1px solid #1a1a1a',
+              padding: '5px 7px',
+              fontFamily: 'Arial, sans-serif',
+              fontSize: '13px',
+              background: '#fff',
+            }}
           />
         </div>
         <div>
-          <label style={{ display: 'block', fontFamily: 'Arial, sans-serif', fontSize: '9.5px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, marginBottom: '4px', color: '#555' }}>
+          <label
+            style={{
+              display: 'block',
+              fontFamily: 'Arial, sans-serif',
+              fontSize: '9.5px',
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase' as const,
+              marginBottom: '4px',
+              color: '#555',
+            }}
+          >
             Term (Years)
           </label>
           <div style={{ display: 'flex', gap: '4px' }}>
@@ -76,24 +136,106 @@ export default function LoanCalc() {
 
       {/* Results */}
       <div style={{ border: '2px solid #1a1a1a', background: '#f7f4ef' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', borderBottom: '1px solid #1a1a1a' }}>
-          <div style={{ padding: '8px', textAlign: 'center' as const, borderRight: '1px solid #1a1a1a' }}>
-            <div style={{ fontFamily: 'Arial, sans-serif', fontSize: '8px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: '#555', marginBottom: '2px' }}>Monthly Payment</div>
-            <div style={{ fontSize: '18px', fontWeight: 700, color: '#0a0a0a' }}>{fmt(monthly)}</div>
-          </div>
-          <div style={{ padding: '8px', textAlign: 'center' as const, borderRight: '1px solid #1a1a1a' }}>
-            <div style={{ fontFamily: 'Arial, sans-serif', fontSize: '8px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: '#555', marginBottom: '2px' }}>Total Interest</div>
-            <div style={{ fontSize: '18px', fontWeight: 700, color: '#0a0a0a' }}>{fmt(totalInterest)}</div>
+        <div
+          className="loan-results"
+          style={{ borderBottom: '1px solid #1a1a1a' }}
+        >
+          <div style={{ padding: '8px', textAlign: 'center' as const }}>
+            <div
+              style={{
+                fontFamily: 'Arial, sans-serif',
+                fontSize: '8px',
+                fontWeight: 700,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase' as const,
+                color: '#555',
+                marginBottom: '2px',
+              }}
+            >
+              Monthly Payment
+            </div>
+            <div
+              style={{ fontSize: '18px', fontWeight: 700, color: '#0a0a0a' }}
+            >
+              {fmt(monthly)}
+            </div>
           </div>
           <div style={{ padding: '8px', textAlign: 'center' as const }}>
-            <div style={{ fontFamily: 'Arial, sans-serif', fontSize: '8px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: '#555', marginBottom: '2px' }}>Total Cost</div>
-            <div style={{ fontSize: '18px', fontWeight: 700, color: '#0a0a0a' }}>{fmt(totalCost)}</div>
+            <div
+              style={{
+                fontFamily: 'Arial, sans-serif',
+                fontSize: '8px',
+                fontWeight: 700,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase' as const,
+                color: '#555',
+                marginBottom: '2px',
+              }}
+            >
+              Total Interest
+            </div>
+            <div
+              style={{ fontSize: '18px', fontWeight: 700, color: '#0a0a0a' }}
+            >
+              {fmt(totalInterest)}
+            </div>
+          </div>
+          <div style={{ padding: '8px', textAlign: 'center' as const }}>
+            <div
+              style={{
+                fontFamily: 'Arial, sans-serif',
+                fontSize: '8px',
+                fontWeight: 700,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase' as const,
+                color: '#555',
+                marginBottom: '2px',
+              }}
+            >
+              Total Cost
+            </div>
+            <div
+              style={{ fontSize: '18px', fontWeight: 700, color: '#0a0a0a' }}
+            >
+              {fmt(totalCost)}
+            </div>
           </div>
         </div>
-        <div style={{ padding: '6px 8px', fontFamily: 'Georgia, serif', fontSize: '10px', fontStyle: 'italic' as const, color: '#666', textAlign: 'center' as const }}>
-          Estimate only &mdash; contact RWAS for actual financing terms and rates
+        <div
+          style={{
+            padding: '6px 8px',
+            fontFamily: 'Arial, sans-serif',
+            fontSize: '10px',
+            fontStyle: 'italic' as const,
+            color: '#666',
+            textAlign: 'center' as const,
+          }}
+        >
+          Estimate only &mdash; contact RWAS for actual financing terms and
+          rates
         </div>
       </div>
+      <style jsx>{`
+        input {
+          min-width: 0;
+        }
+        .loan-results {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        .loan-results > div:not(:last-child) {
+          border-right: 1px solid #1a1a1a;
+        }
+        @media (max-width: 420px) {
+          .loan-results {
+            grid-template-columns: minmax(0, 1fr);
+          }
+          .loan-results > div:not(:last-child) {
+            border-right: 0;
+            border-bottom: 1px solid #1a1a1a;
+          }
+        }
+      `}</style>
     </div>
   );
 }

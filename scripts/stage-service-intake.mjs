@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 // Pages advanced mode ignores /functions. Bundle the actual handlers explicitly;
 // do not duplicate their implementation inside the existing generated application.
 const root = resolve(process.argv[2] || '.vercel/output/static');
+const typographyCss = readFileSync(resolve('public/site-typography.css'), 'utf8');
 const directory = resolve(root, '_worker.js');
 await build({
   stdin: {
@@ -34,6 +35,12 @@ export default { ...app, async fetch(request, env, ctx) {
  const url = new URL(request.url);
  const path = url.pathname;
  const isolated = env.INTAKE_STAGING_MODE === 'true' || url.origin === STAGING_ORIGIN;
+ const withTypography = (response) => {
+   if (!(response.headers.get('Content-Type') || '').includes('text/html')) return response;
+   return new HTMLRewriter().on('head', { element(head) {
+     head.append(${JSON.stringify('<style data-rwas-typography>' + typographyCss + '</style>')}, { html: true });
+   }}).transform(response);
+ };
  const protect = (response) => {
    if (!isolated) return response;
    const result = new Response(response.body, response);
@@ -57,14 +64,14 @@ export default { ...app, async fetch(request, env, ctx) {
    const target = new URL(request.url); target.pathname = '/api/aircraft-sale/listing/' + sellerDetail[1];
    const headers = new Headers(request.headers); headers.set('Accept','text/html');
    const response = await env.SELLER_API.fetch(new Request(target, {method:'GET',headers}));
-   return protect(request.method === 'HEAD' ? new Response(null, response) : response);
+   return protect(request.method === 'HEAD' ? new Response(null, response) : withTypography(response));
  }
  if (path === '/api/aircraft-sale' || path.startsWith('/api/aircraft-sale/')) {
    if (!sellerDestinationAllowed(request, env, STAGING_ORIGIN)) return protect(new Response('Staging destination not allowed', {status:503}));
    if (!env.SELLER_API) return protect(Response.json({error:'Seller service is not configured.'},{status:503}));
    const mailed = await sellerMail(request, env);
    if (mailed) return protect(mailed);
-   return protect(await env.SELLER_API.fetch(request));
+   return protect(withTypography(await env.SELLER_API.fetch(request)));
  }
 
  const routes = { '/api/service-intake-config': ['GET', config], '/api/service-intake': ['POST', intake], '/api/service-receipt': ['GET', receipt], '/api/intake-dispatch': ['POST', dispatch] };

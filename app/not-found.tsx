@@ -29,7 +29,7 @@ export default function NotFound() {
         justifyContent: 'center',
         padding: '4rem 1.5rem',
         textAlign: 'center',
-        fontFamily: 'Georgia, "Times New Roman", Times, serif',
+        fontFamily: 'Arial, sans-serif',
         background: '#f2ece1',
         color: '#1f1a16',
       }}

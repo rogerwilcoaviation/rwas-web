@@ -1,4 +1,3 @@
-import { Playfair_Display, Source_Serif_4, Inter } from 'next/font/google';
 import { siteConfig } from '@/data/config/site.settings';
 import { ThemeProviders } from './theme-providers';
 import { Metadata } from 'next';
@@ -13,31 +12,8 @@ import { colors } from '@/data/config/colors.js';
 import '@/css/globals.css';
 import './broadsheet-tokens.css';
 import './broadsheet-chrome.css';
+import '../public/site-typography.css';
 import { AnalyticsWrapper } from '@/components/shared/Analytics';
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['700', '900'],
-  display: 'optional',
-  preload: true,
-  variable: '--font-playfair',
-});
-
-const sourceSerif = Source_Serif_4({
-  subsets: ['latin'],
-  weight: ['400', '600', '700'],
-  display: 'optional',
-  preload: false,
-  variable: '--font-source-serif',
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'optional',
-  preload: false,
-  variable: '--font-inter',
-});
 
 const globalColors = colors;
 const style: string[] = [];
@@ -108,7 +84,7 @@ export default function RootLayout({
   return (
     <html
       lang={siteConfig.language}
-      className={`${playfair.variable} ${sourceSerif.variable} ${inter.variable} scroll-smooth`}
+      className="scroll-smooth"
       suppressHydrationWarning
     >
       <head>

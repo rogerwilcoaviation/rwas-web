@@ -103,6 +103,12 @@ jobs:
           NEXT_PUBLIC_SELLER_CLERK_PRODUCTION: 'false'
           NEXT_PUBLIC_SELLER_REPLACE_LEGACY_CATALOG: 'true'
 
+      - name: Arial typography across exported pages and browser views
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/rwas-browser-runtime/node_modules/playwright/index.mjs
+          TEST_EXPORT_DIR: .vercel/output/static
+        run: node tests/site-typography-browser.mjs
+
       - name: Verify SEO build artifact and catalog payload budgets
         run: |
           npm run seo:artifact

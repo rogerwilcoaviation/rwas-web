@@ -1,0 +1,18 @@
+/* Shared by Next pages, standalone tools, and server-rendered listing pages. */
+:root {
+  --font-sans: Arial, sans-serif;
+  --font-display: Arial, sans-serif;
+  --font-body: Arial, sans-serif;
+  --font-ui: Arial, sans-serif;
+  --font-script: Arial, sans-serif;
+}
+
+/* Font family is a site-wide rule, including legacy inline component styles.
+   Keep each component's size, weight, spacing, and emphasis. */
+html,
+body,
+body *,
+body *::before,
+body *::after {
+  font-family: Arial, sans-serif !important;
+}

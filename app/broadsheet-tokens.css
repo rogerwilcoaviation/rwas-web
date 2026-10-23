@@ -10,14 +10,7 @@
  * over to the tokens one ship at a time.
  */
 
-/* ─────────────────────────────────────────────────────────────────────────
- * Typography — Google Fonts import
- * Playfair Display: display serif (masthead brand, headlines, figure numerals)
- * Source Serif 4:   body serif (paragraphs, bylines, subheads, disclaimers)
- * Inter:            UI sans (kickers, labels, nav, buttons, badges)
- * Caveat:           script (photo captions, pull-quote attribution, signoffs)
- * ───────────────────────────────────────────────────────────────────────── */
-/* Fonts self-hosted via next/font/google — see app/layout.tsx */
+/* All typography roles use Arial under the site-wide typography policy. */
 
 :root {
   /* ─────────────────────────── Ink ramp (the dark surface — never navy) */
@@ -52,13 +45,13 @@
   --specimen-pad-flat: 18px 20px;
 
   /* ─────────────────────────── Typography stack tokens */
-  --font-display: var(--font-playfair), 'Playfair Display', Georgia, serif;
-  --font-body: var(--font-source-serif), 'Source Serif 4', Georgia, serif;
-  --font-ui: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
-  --font-script: var(--font-source-serif), 'Source Serif 4', Georgia, serif;
+  --font-display: Arial, sans-serif;
+  --font-body: Arial, sans-serif;
+  --font-ui: Arial, sans-serif;
+  --font-script: Arial, sans-serif;
 
   /* ─────────────────────────── Type scale (sampled from D2 PDP) */
-  --fs-brand: 40px; /* masthead brand (Playfair 900) */
+  --fs-brand: 40px; /* masthead brand (Arial 900) */
   --fs-hero: 34px; /* product/page hero headline */
   --fs-headline: 22px; /* section headline */
   --fs-subhead: 18px; /* subheads, captions */
@@ -67,7 +60,7 @@
   --fs-label: 12px; /* uppercase UI labels, CTAs */
   --fs-micro: 11px; /* credentials, timestamps */
 
-  /* UI tracking (Inter is used with wide letterspacing for label/kicker work) */
+  /* UI tracking (Arial is used with wide letterspacing for label/kicker work) */
   --tracking-ui: 0.22em;
   --tracking-kicker: 0.18em;
 

@@ -209,6 +209,8 @@ test('default UUID canonical routes preserve real seller publication, unpublish 
     const productionRoot = join(root, 'production-build');
     const productionOutput = join(productionRoot, '.vercel/output/static');
     await mkdir(join(productionRoot, 'scripts'), { recursive: true });
+    await mkdir(join(productionRoot, 'public'), { recursive: true });
+    await copyFile('public/site-typography.css', join(productionRoot, 'public/site-typography.css'));
     await mkdir(join(productionOutput, '_worker.js'), { recursive: true });
     await copyFile('scripts/stage-service-intake.mjs', join(productionRoot, 'scripts/stage-service-intake.mjs'));
     await symlink(resolve('functions'), join(productionRoot, 'functions'), 'dir');
@@ -257,7 +259,11 @@ test('default UUID canonical routes preserve real seller publication, unpublish 
     assert.equal(live.headers.get('Cache-Control'),'no-store');
     const policy = live.headers.get('Content-Security-Policy');
     assert.ok(policy);
-    assert.match(await live.text(),/Synthetic Fixture/);
+    const html = await live.text();
+    assert.match(html,/Synthetic Fixture/);
+    assert.match(html, /<style data-rwas-typography>/);
+    assert.match(html, /font-family: Arial, sans-serif !important/);
+    assert.ok(!html.includes('href="/site-typography.css"'), 'Listing typography respects its inline-only style CSP');
     const head = await mf.dispatchFetch(canonical,{method:'HEAD'});
     assert.equal(head.status,200);
     assert.equal(head.headers.get('Content-Security-Policy'),policy);
