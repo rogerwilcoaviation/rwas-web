@@ -15,7 +15,7 @@ import '../custom-finishing.css';
 export const metadata = genPageMetadata({
   title: 'Powder Coating in Yankton, SD | RWAS',
   description:
-    'Request powder coating in Yankton, SD for fabricated metal parts, shop pieces, and decorative hardware. Preparation, dimensions, and finish reviewed before quoting.',
+    'Request powder coating in Yankton, SD for fabricated metal parts, shop pieces, and decorative hardware. Preparation, size, and finish reviewed before quoting.',
   canonical:
     'https://www.rogerwilcoaviation.com/services/custom-printing-finishing/powder-coating',
 });
