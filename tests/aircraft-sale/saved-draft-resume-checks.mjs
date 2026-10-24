@@ -134,49 +134,45 @@ export async function checkSavedDraftResume({
         .getByRole('button', { name: 'Close seller panel', exact: true })
         .click();
       await openResume();
-      const response = page.waitForResponse(
-        (r) =>
-          new URL(r.url()).pathname.endsWith('/intake') &&
-          r.request().postDataJSON()?.resume === true,
-      );
-      await dialog
-        .getByRole('button', { name: 'Resume with Jerry', exact: true })
-        .click();
+      // This exported journey deliberately keeps website chat disabled. A
+      // Resume-with-Jerry intent must show unavailability, not resurrect the
+      // legacy intake/relay or consume an answer. The real seller panel may
+      // explicitly sync its existing manual recovery snapshot before opening
+      // chat; verify that complete snapshot, not an obsolete storage format.
+      const recoveryBefore = await page.evaluate(() => {
+        const entries = Object.keys(localStorage).filter((key) => key.startsWith('rwas-listing-recovery-v1:'));
+        if (entries.length > 1) throw Error('Expected one disposable account recovery snapshot');
+        return entries.length ? JSON.parse(localStorage.getItem(entries[0])) : null;
+      });
+      const chatRequests = [];
+      const observe = (request) => {
+        if (['/api/chat', '/api/aircraft-sale/intake', '/api/jerry/website']
+          .includes(new URL(request.url()).pathname)) chatRequests.push(request.url());
+      };
+      page.on('request', observe);
       try {
-        assert.equal((await response).status(), 200);
-      } catch (error) {
-        console.error(
-          JSON.stringify({
-            type,
-            intake,
-            widget: await page.locator('.jerry-widget-panel').innerText(),
-            calls: await page.evaluate(() => window.__jerryCalls),
-            errors: await page.locator('[role=alert]').allTextContents(),
-          }),
-        );
-        throw error;
+        await dialog
+          .getByRole('button', { name: 'Resume with Jerry', exact: true })
+          .click();
+        await page.getByText('CHAT TEMPORARILY UNAVAILABLE', { exact: true }).waitFor();
+        assert.equal(await page.locator('.jerry-widget-text-input').isVisible(), false);
+        const after = await savedDraft();
+        if (recoveryBefore) {
+          assert.equal(after.manual, true);
+          assert.deepEqual(after.values, recoveryBefore.values, 'Explicit recovery sync preserves every field, including empty and category-specific values');
+          assert.equal(after.step, recoveryBefore.step, 'Opening disabled Jerry cannot advance the saved step');
+          assert.equal(after.listingId, recoveryBefore.listingId);
+          assert.equal(after.listingRevision, recoveryBefore.listingRevision);
+        } else {
+          assert.deepEqual(after, before, 'Without recovery there is no saved-draft mutation');
+        }
+        await page
+          .getByRole('button', { name: 'Continue listing manually', exact: true })
+          .click();
+        assert.deepEqual(chatRequests, [], 'Disabled resume/manual fallback must not invoke any chat or intake endpoint');
+      } finally {
+        page.off('request', observe);
       }
-      await page
-        .locator('.jerry-widget-msg')
-        .filter({ hasText: 'Continuing your saved draft.' })
-        .last()
-        .waitFor();
-      const withJerry = await savedDraft();
-      for (const [key, value] of Object.entries(answers))
-        assert.deepEqual(withJerry.fields[key], value);
-      if (intake)
-        assert.equal(
-          withJerry.step,
-          before.step,
-          'Opening Jerry does not answer the next question',
-        );
-      await page
-        .getByRole('link', {
-          name: 'Prefer to fill out the form manually?',
-          exact: true,
-        })
-        .last()
-        .click();
       try {
         await dialog
           .getByRole('button', { name: 'Review draft', exact: true })

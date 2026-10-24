@@ -136,10 +136,12 @@ try {
           },
           { token },
         );
+      let legacyChatCalls = 0;
       await context.route('**/*', async (route) => {
         const request = route.request();
         const url = new URL(request.url());
         if (url.href === 'https://rogerwilcoaviation.com/api/chat') {
+          legacyChatCalls++;
           if (request.method() === 'OPTIONS')
             return route.fulfill({
               status: 204,
@@ -189,6 +191,8 @@ try {
             contentType: 'application/json',
             json: value,
           });
+        if (url.pathname === '/api/jerry/context')
+          return json({ enabled: false });
         if (url.pathname === '/api/aircraft-sale/auth/methods')
           return json({
             methods: ['better-auth'],
@@ -328,6 +332,23 @@ try {
           `marketplace-${width}-${signedIn ? 'signed-in' : 'signed-out'}.png`,
         ),
       });
+      // Real exported widget -> real seller-panel listener. The disabled chat
+      // must neither send text to the old relay nor bypass account/manual entry.
+      await page.getByRole('button', { name: 'Chat with Captain Jerry', exact: true }).click();
+      await page.getByText('CHAT TEMPORARILY UNAVAILABLE', { exact: true }).waitFor();
+      assert.equal(await page.locator('.jerry-widget-text-input').isVisible(), false);
+      await page.getByRole('button', { name: 'Continue listing manually', exact: true }).click();
+      let fallbackDialog = page.getByRole('dialog');
+      if (signedIn) {
+        await fallbackDialog.getByLabel('Listing step index', { exact: true }).selectOption('0');
+        assert.equal(await fallbackDialog.getByLabel('Make', { exact: true }).inputValue(), 'Saved manual details');
+      } else {
+        await fallbackDialog.getByRole('button', { name: 'Sign in', exact: true }).waitFor();
+        assert.equal(await fallbackDialog.getByLabel('Make', { exact: true }).count(), 0);
+      }
+      assert.equal(await page.locator('.jerry-widget-panel').isVisible(), false);
+      assert.equal(legacyChatCalls, 0, 'Disabled chat/manual entry must not call the legacy relay');
+      await fallbackDialog.getByRole('button', { name: 'Close seller panel', exact: true }).click();
       if (signedIn) {
         // Wait for the deferred widget before installing the call observer.
         // Otherwise its network load can replace the observer mid-check.
@@ -384,8 +405,8 @@ try {
           .getByRole('button', { name: 'Chat with Captain Jerry', exact: true })
           .click();
         await page
-          .getByRole('link', {
-            name: 'Prefer to fill out the form manually?',
+          .getByRole('button', {
+            name: 'Continue listing manually',
             exact: true,
           })
           .last()
@@ -560,6 +581,8 @@ try {
         width,
         signedIn,
         controls: boxes.length,
+        disabledChatManualEntry: 'passed',
+        legacyChatCallsBeforeOtherWorkflows: 0,
         ...(signedIn
           ? {
               guidedWorkflow: 'passed',

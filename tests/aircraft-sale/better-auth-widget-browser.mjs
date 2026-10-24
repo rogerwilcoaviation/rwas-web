@@ -7,6 +7,9 @@ import { fixture } from './fixture.mjs';
 
 // Real widget DOM + real in-memory business Worker. Only the provider identity
 // reader is injected; no D1/provider/network credentials or hosted acceptance.
+// These identity/race contracts target the still-shipped Shopify branch, NOT
+// canonical website chat. The website fails closed instead; its disabled gate
+// and manual handoff are covered by clerk-widget-browser and jerry-browser.
 globalThis.crypto ||= webcrypto;
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ||
   '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs');
@@ -45,6 +48,9 @@ async function setup(options = {}) {
   const context = await browser.newContext({ serviceWorkers: 'block' });
   await context.addCookies([{ name: 'rwas-seller.session_token', value: 'fixture-cookie-a', url: origin, secure: true, httpOnly: true }]);
   await context.addInitScript(({ session, options }) => {
+    // Explicit test-only selection of the retained integration. Never mutate
+    // widget source or re-enable the canonical website's legacy relay path.
+    window.Shopify = {};
     window.rwasSaleSession = session;
     sessionStorage.setItem('rwas_sale_v2', JSON.stringify(session));
     window.__widgetFixture = { headerPaths: [], rejected: 0, drafts: [], loginPrompts: 0 };
@@ -180,7 +186,7 @@ test('real business Worker rejects changed provider session and widget clears on
   assert.equal((await state(t.page)).drafts.length, 0);
 }));
 
-test('general chat remains free of seller credentials and legacy email-code intake still works', async () => {
+test('retained Shopify general chat has no seller credentials and legacy email-code intake still works', async () => {
   await run({}, async t => { await send(t.page, 'Hello'); assert.equal(t.observed.chat, 1); assert.equal((await state(t.page)).headerPaths.length, 0); });
   await run({ legacy: true, noFacade: true }, async t => {
     await send(t.page, 'I want to list my aircraft');

@@ -6,6 +6,9 @@ import { CLERK_PRODUCTION } from '../../workers/aircraft-sale/clerk-production.m
 
 // Synthetic UI + real in-memory Worker contract. This is neither a live Clerk
 // SDK/provider test nor acceptance evidence for a production seller account.
+// Canonical website cases exercise the unmodified fail-closed bootstrap. The
+// retained identity/race contracts explicitly use the separate Shopify branch;
+// that branch is still shipped, but is NOT reachable as a website fallback.
 globalThis.crypto ||= webcrypto;
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ||
   '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs');
@@ -77,14 +80,21 @@ async function setup(options = {}) {
   if (options.noCsrf) delete session.csrf;
   const requestTokens = Array.from({ length: 64 }, jwt);
   const context = await browser.newContext({ serviceWorkers: 'block' });
-  const observed = { seller: [], chat: 0, deniedExternal: 0, errors: [] };
+  const observed = { seller: [], chat: 0, context: 0, deniedExternal: 0, errors: [] };
   let releaseResponse;
   let markResponsePaused;
   const responsePaused = new Promise((resolve) => { markResponsePaused = resolve; });
   await context.addInitScript(({ session, requestTokens, options }) => {
-    window.rwasSaleSession = session;
-    sessionStorage.setItem('rwas_sale_v2', JSON.stringify(session));
-    window.__widgetFixture = { headerPaths: [], rejected: 0, drafts: [], loginPrompts: 0, writesContainJwt: false };
+    // Test only: choose the genuinely retained integration, never strip or
+    // rewrite production bootstrap code to re-enable website chat.
+    if (!options.canonicalWebsite) window.Shopify = {};
+    window.rwasSaleSession = options.signedOut ? null : session;
+    if (!options.signedOut) sessionStorage.setItem('rwas_sale_v2', JSON.stringify(session));
+    sessionStorage.setItem('jerry-chat-history', JSON.stringify([
+      { role: 'assistant', content: 'PRIVATE LEGACY HISTORY MUST STAY HIDDEN' },
+    ]));
+    window.__widgetFixture = { headerPaths: [], rejected: 0, drafts: [], loginPrompts: 0, manualOpens: 0, writesContainJwt: false };
+    document.addEventListener('rwas:open-manual-form', () => window.__widgetFixture.manualOpens++);
     const originalSetItem = Storage.prototype.setItem;
     Storage.prototype.setItem = function (key, value) {
       if (requestTokens.some((token) => String(value).includes(token)))
@@ -121,6 +131,16 @@ async function setup(options = {}) {
       await route.fulfill({ contentType: 'text/html', body: '<!doctype html><html><head><link rel="icon" href="data:,"></head><body><script src="/jerry-widget.js"></script></body></html>' });
     } else if (url.href === pageOrigin + '/jerry-widget.js') {
       await route.fulfill({ contentType: 'application/javascript', body: widget });
+    } else if (url.href === pageOrigin + '/api/jerry/context') {
+      assert.equal(options.canonicalWebsite, true, 'Retained Shopify branch must not discover website authority');
+      assert.equal(request.method(), 'GET');
+      const headers = await request.allHeaders();
+      for (const field of ['authorization', 'x-rwas-csrf', 'x-clerk-session-token']) assert.equal(headers[field], undefined);
+      observed.context++;
+      if (options.gate === 'network') return route.abort();
+      return route.fulfill(options.gate === 'missing'
+        ? { status: 404, body: 'Not found' }
+        : { json: { enabled: false } });
     } else if (url.origin === origin && ['/api/aircraft-sale/intake', '/api/aircraft-sale/draft'].includes(url.pathname)) {
       const headers = await request.allHeaders();
       assert.equal(headers.authorization, 'Bearer ' + session.token);
@@ -184,7 +204,9 @@ async function run(name, options, assertions) {
     assert.equal((await state(t.page)).writesContainJwt, false);
     assert.deepEqual(t.observed.errors, []);
     assert.equal(t.observed.deniedExternal, 0);
-    results.push({ case: name, result: 'PASS', scope: 'synthetic canonical UI and in-memory Worker; no live provider' });
+    results.push({ case: name, result: 'PASS', scope: options.canonicalWebsite
+      ? 'canonical website fail-closed UI; no live provider'
+      : 'retained Shopify widget identity contract and in-memory Worker; NOT canonical website acceptance' });
     console.log('PASS ' + name);
   } finally { await t.context.close(); }
 }
@@ -198,7 +220,37 @@ async function bounded(promise) {
 }
 try {
   browser = await chromium.launch({ headless: true });
-  await run('Clerk authenticated category intake and saved draft retrieval stay private', {}, async ({ page, f, observed }) => {
+  for (const gate of ['disabled', 'missing', 'network']) {
+    for (const signedOut of [false, true]) {
+      await run(`canonical website ${gate}, ${signedOut ? 'signed out' : 'Clerk envelope present'}: no legacy chat; manual entry remains available`,
+        { canonicalWebsite: true, gate, signedOut }, async ({ page, observed, session }) => {
+          await page.getByRole('button', { name: 'Chat with Captain Jerry' }).click();
+          await page.getByText('CHAT TEMPORARILY UNAVAILABLE', { exact: true }).waitFor();
+          assert.equal(await page.locator('.jerry-widget-text-input').isVisible(), false);
+          assert.equal(await page.locator('.jerry-widget-send').isVisible(), false);
+          assert.equal(await page.locator('.jerry-service-open').isVisible(), false);
+          assert.equal(await page.getByText('PRIVATE LEGACY HISTORY MUST STAY HIDDEN', { exact: true }).count(), 0);
+          await page.getByText('No chat messages are sent while this service is unavailable.', { exact: true }).waitFor();
+          // Both compatibility entry points must stay fail-closed, even when
+          // given seller intent; neither can silently invoke the old relay.
+          await page.evaluate(() => { window.jerryChat('I want to list my aircraft'); window.openJerryChat(); });
+          await page.getByRole('button', { name: 'Continue listing manually', exact: true }).click();
+          assert.equal(await page.locator('.jerry-widget-panel').isVisible(), false);
+          const captured = await state(page);
+          assert.equal(captured.manualOpens, 1);
+          assert.equal(captured.currentToken, signedOut ? null : session.token);
+          assert.equal(captured.rejected, 0);
+          assert.equal(captured.loginPrompts, 0);
+          assert.deepEqual(captured.headerPaths, []);
+          assert.deepEqual(captured.drafts, []);
+          assert.deepEqual(captured.history, [{ role: 'assistant', content: 'PRIVATE LEGACY HISTORY MUST STAY HIDDEN' }]);
+          assert.equal(observed.context, 1);
+          assert.deepEqual(observed.seller, []);
+          assert.equal(observed.chat, 0);
+        });
+    }
+  }
+  await run('retained Shopify: Clerk authenticated category intake and saved draft retrieval stay private', {}, async ({ page, f, observed }) => {
     for (const text of ['I want to create a listing', 'other', 'aviation-businesses', 'Synthetic business', 'Synthetic', 'Widget', 'skip', 'Used', 'sale', 'USD', 'amount', '1', 'Synthetic location', 'Synthetic other', 'skip', 'skip'])
       await send(page, text);
     const ready = await state(page);
@@ -245,7 +297,7 @@ try {
     assert.equal(observed.seller.length, 1);
     assert.equal(captured.drafts.length, 0);
   });
-  await run('general chat never receives seller headers or draft handoff', {}, async ({ page, observed }) => {
+  await run('retained Shopify general chat never receives seller headers or draft handoff', {}, async ({ page, observed }) => {
     await send(page, 'Hello');
     const captured = await state(page);
     assert.equal(captured.headerPaths.length, 0);
