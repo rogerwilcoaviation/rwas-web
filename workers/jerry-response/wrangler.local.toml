@@ -5,7 +5,16 @@ compatibility_date = "2026-09-01"
 workers_dev = false
 preview_urls = false
 
-# OPENAI_API_KEY and JERRY_MODEL must be configured separately for an approved
+[[durable_objects.bindings]]
+name = "JERRY_ADMISSION"
+class_name = "JerryAdmission"
+
+[[migrations]]
+tag = "website-response-local-admission-v1"
+new_sqlite_classes = ["JerryAdmission"]
+
+# OPENAI_API_KEY, OPENAI_PROJECT_ID, JERRY_MODEL, and JERRY_PROMPT_CACHE_RETENTION
+# must be configured separately for an approved
 # release. Local tests inject a synthetic provider; no credentials are committed.
 [observability]
 enabled = false

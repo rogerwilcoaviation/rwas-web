@@ -294,7 +294,14 @@ export class JerryConversations {
           };
         }
         if (path === '/finalize' || path === '/fail') {
-          jerryKeys(body, ['id', 'generation', 'turnId', 'lease', 'result']);
+          jerryKeys(body, [
+            'id',
+            'generation',
+            'turnId',
+            'lease',
+            'result',
+            'failure',
+          ]);
           const meta = await this.live(tx, body.id, body.generation),
             key = 't:' + meta.id + ':' + body.turnId,
             turn = await tx.get(key);
@@ -309,6 +316,20 @@ export class JerryConversations {
           );
           if (path === '/fail') {
             turn.status = 'failed';
+            const failure = body.failure || {
+              status: 503,
+              code: 'JERRY_REQUEST_FAILED',
+            };
+            jerryKeys(failure, ['status', 'code']);
+            jerryAssert(
+              Number.isInteger(failure.status) &&
+                failure.status >= 400 &&
+                failure.status <= 599 &&
+                /^JERRY_[A-Z_]{1,50}$/.test(failure.code),
+              400,
+              'Invalid failure metadata.',
+            );
+            turn.failure = failure;
             const binding = await tx.get('binding');
             if (binding.surface === 'exchange') {
               meta.logsToWrite = {
@@ -317,6 +338,7 @@ export class JerryConversations {
                   at: Date.now() + 1000,
                   turnId: body.turnId,
                   failed: true,
+                  ...failure,
                 },
               };
               await tx.put('c:' + meta.id, meta);
@@ -506,6 +528,9 @@ export class JerryConversations {
                 eventId,
                 turnId: typeof value === 'number' ? eventId : value.turnId,
                 failed: typeof value === 'number' ? false : value.failed,
+                ...(typeof value === 'object' && value.failed
+                  ? { status: value.status, code: value.code }
+                  : {}),
               })),
           ),
       };
@@ -528,7 +553,7 @@ export class JerryConversations {
           ),
         );
         if (!response.ok) throw Error('Copy cleanup pending');
-        await this.fetch(
+        const completed = await this.fetch(
           new Request('https://jerry.internal/cleanup-complete', {
             method: 'POST',
             headers: {
@@ -539,6 +564,7 @@ export class JerryConversations {
             body: JSON.stringify({ id: job.id }),
           }),
         );
+        if (!completed.ok) throw Error('Copy cleanup acknowledgment pending');
       } catch {
         const task = this.queue.then(() =>
           this.tx(async (tx) => {
@@ -570,16 +596,21 @@ export class JerryConversations {
         );
         if (!response.ok && response.status !== 410)
           throw Error('Activity reference pending');
-        await this.fetch(
+        const completed = await this.fetch(
           new Request('https://jerry.internal/log-complete', {
             method: 'POST',
             headers: {
               'X-Jerry-Owner': binding.owner,
               'X-Jerry-Surface': binding.surface,
             },
-            body: JSON.stringify(job),
+            body: JSON.stringify({
+              id: job.id,
+              turnId: job.turnId,
+              eventId: job.eventId,
+            }),
           }),
         );
+        if (!completed.ok) throw Error('Activity acknowledgment pending');
       } catch {
         const task = this.queue.then(() =>
           this.tx(async (tx) => {

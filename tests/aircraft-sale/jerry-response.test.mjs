@@ -8,6 +8,8 @@ import { serviceFixture } from './jerry-fixture.mjs';
 const env = {
   OPENAI_API_KEY: 'synthetic-key-not-real',
   JERRY_MODEL: 'synthetic-model',
+  OPENAI_PROJECT_ID: 'proj_synthetic',
+  JERRY_PROMPT_CACHE_RETENTION: 'in_memory',
 };
 test('responder rejects oversized/forged context and translation uses the same stateless provider contract', async () => {
   const valid = {
@@ -109,10 +111,46 @@ test('stateless website provider uses fixed destination, no tools or persistent 
     'background',
   ])
     assert.equal(body[key], undefined);
-  assert.equal(captured.init.redirect, 'error');
+  assert.equal(captured.init.redirect, 'manual');
+  assert.equal(captured.init.headers['OpenAI-Project'], 'proj_synthetic');
+  assert.equal(body.prompt_cache_retention, 'in_memory');
+});
+test('provider redirects are rejected and a named project/cache policy is required', async () => {
+  const payload = {
+    history: [],
+    input: { message: 'Synthetic question', page: '/', locale: 'en' },
+  };
+  let calls = 0;
+  await assert.rejects(
+    websiteResponse(env, payload, async () => {
+      calls++;
+      return new Response('', {
+        status: 302,
+        headers: { Location: 'https://unapproved.invalid' },
+      });
+    }),
+    /unavailable/,
+  );
+  assert.equal(calls, 1);
+  for (const missing of [
+    'OPENAI_PROJECT_ID',
+    'JERRY_PROMPT_CACHE_RETENTION',
+    'JERRY_MODEL',
+  ]) {
+    const candidate = { ...env };
+    delete candidate[missing];
+    await assert.rejects(
+      websiteResponse(candidate, payload, () => {
+        throw Error('Must not invoke provider');
+      }),
+      { code: 'JERRY_PROVIDER_UNCONFIGURED' },
+    );
+  }
 });
 test('provider configuration and incomplete responses fail closed; no fallback to internal Jerry', async () => {
-  await assert.rejects(websiteResponse({}, {}), /not configured/);
+  await assert.rejects(websiteResponse({}, {}), {
+    code: 'JERRY_PROVIDER_UNCONFIGURED',
+  });
   const payload = {
     history: [],
     input: { message: 'Question', page: '/', locale: 'en' },

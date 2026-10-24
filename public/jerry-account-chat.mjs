@@ -30,6 +30,8 @@ const strings = {
     'No conversation selected.',
     'Sign in to continue your saved listing.',
     'A message is awaiting a result. Retry it before sending another.',
+    'Send as a new request',
+    'The earlier reply cannot be recovered from the response service. Resending starts a new request.',
   ],
   es: [
     'Conversaciones guardadas',
@@ -54,6 +56,8 @@ const strings = {
     'No hay conversación seleccionada.',
     'Inicie sesión para retomar su anuncio guardado.',
     'Hay un mensaje pendiente. Reinténtelo antes de enviar otro.',
+    'Enviar como nueva solicitud',
+    'La respuesta anterior no se conserva en el servicio. Reenviar inicia una nueva solicitud.',
   ],
   'pt-BR': [
     'Conversas salvas',
@@ -78,6 +82,8 @@ const strings = {
     'Nenhuma conversa selecionada.',
     'Entre para retomar seu anúncio salvo.',
     'Uma mensagem aguarda resposta. Tente novamente antes de enviar outra.',
+    'Enviar como nova solicitação',
+    'A resposta anterior não é mantida no serviço. Reenviar inicia uma nova solicitação.',
   ],
 };
 export async function mountJerryAccountChat({
@@ -265,6 +271,17 @@ export async function mountJerryAccountChat({
     );
   }
   let guests = get('rwas-jerry-v1:guest:' + surface + ':history', []);
+  let guestPending = null;
+  const terminalAttempts = new Set([
+    'JERRY_ATTEMPT_COMPLETED',
+    'JERRY_ATTEMPT_FAILED',
+    'JERRY_ATTEMPT_UNCERTAIN',
+    'JERRY_ATTEMPT_EXPIRED',
+    'JERRY_REPLAY_CONFLICT',
+  ]);
+  function recovery() {
+    return context?.identity ? pending : guestPending;
+  }
   function fail(error) {
     errorBox.textContent = typeof error === 'string' ? error : error.message;
     errorBox.style.display = 'block';
@@ -382,14 +399,21 @@ export async function mountJerryAccountChat({
       row.append(text('div', message.content, 'jerry-widget-msg'));
       chat.append(row);
     }
-    if (pending) {
-      const retry = text('button', s(8), 'jerry-retry');
+    const waiting = recovery();
+    if (waiting) {
+      if (!context?.identity) {
+        const row = text('div', '', 'jerry-widget-row user');
+        row.append(text('div', waiting.input.message, 'jerry-widget-msg'));
+        chat.append(row);
+      }
+      if (waiting.needsNew) chat.append(text('p', s(23), 'jerry-account-note'));
+      const retry = text('button', s(waiting.needsNew ? 22 : 8), 'jerry-retry');
       retry.onclick = () => void submit('', null, true);
       chat.append(retry);
-      if (pending.input.page !== path) {
+      if (waiting.input.page !== path) {
         retry.disabled = true;
         const back = text('a', 'Return to the message’s original page');
-        back.href = pending.input.page;
+        back.href = waiting.input.page;
         chat.append(back);
       }
     }
@@ -560,6 +584,7 @@ export async function mountJerryAccountChat({
     pending = null;
     turns = [];
     items = [];
+    guestPending = null;
     listingActive = false;
     render();
     try {
@@ -584,6 +609,9 @@ export async function mountJerryAccountChat({
       }
       errorBox.style.display = 'none';
       guests = get('rwas-jerry-v1:guest:' + surface + ':history', []);
+      guestPending = get('rwas-jerry-v1:guest:' + surface + ':pending', null);
+      if (guestPending && guestPending.issuedAt + 86400000 <= Date.now())
+        guestPending.needsNew = true;
       render();
       if (context.identity) {
         await list();
@@ -605,11 +633,15 @@ export async function mountJerryAccountChat({
       fail(s(17));
       return;
     }
-    if (pending && !retry) {
+    const waiting = recovery();
+    if (retry && !waiting) return;
+    if (waiting && !retry) {
       fail(s(21));
       return;
     }
-    const value = (message || input.value).trim();
+    const value = (
+      retry ? waiting?.input.message : message || input.value || ''
+    ).trim();
     if (!retry && !value) return;
     const listingIntent =
       surface === 'exchange' &&
@@ -647,30 +679,31 @@ export async function mountJerryAccountChat({
     }
     const mode =
       forcedMode || (listingIntent || listingActive ? 'listing' : 'chat');
-    const request = retry
-      ? {
-          id: active.id,
-          generation: active.generation,
-          turnId: pending.id,
-          input: pending.input,
-        }
-      : {
-          id: active?.id,
-          generation: active?.generation,
-          turnId: crypto.randomUUID(),
-          input: {
-            message: value,
-            mode,
-            locale: language,
-            page: path,
-            ...(mode === 'listing'
-              ? {
-                  resume: /resume my saved listing/i.test(value),
-                  draftStamp: context.draftStamp,
-                }
-              : {}),
-          },
-        };
+    const request =
+      retry && context.identity && !waiting.needsNew
+        ? {
+            id: active.id,
+            generation: active.generation,
+            turnId: pending.id,
+            input: pending.input,
+          }
+        : {
+            id: active?.id,
+            generation: active?.generation,
+            turnId: crypto.randomUUID(),
+            input: {
+              message: value,
+              mode,
+              locale: language,
+              page: path,
+              ...(mode === 'listing'
+                ? {
+                    resume: /resume my saved listing/i.test(value),
+                    draftStamp: context.draftStamp,
+                  }
+                : {}),
+            },
+          };
     const t = token();
     busy = true;
     send.disabled = true;
@@ -678,6 +711,7 @@ export async function mountJerryAccountChat({
     const signal = controller.signal;
     errorBox.style.display = 'none';
     if (!retry) input.value = '';
+    let guestRequest;
     if (context.identity) {
       pending = {
         id: request.turnId,
@@ -685,6 +719,29 @@ export async function mountJerryAccountChat({
         createdAt: Date.now(),
       };
       put(key('pending:' + active.id), pending);
+    } else {
+      guestRequest =
+        retry && !waiting.needsNew
+          ? waiting
+          : {
+              operationId: crypto.randomUUID(),
+              issuedAt: Date.now(),
+              input: {
+                message: value,
+                mode: 'chat',
+                locale: language,
+                page: path,
+              },
+              history: retry
+                ? waiting.history
+                : guests.slice(-6).map((m) => ({
+                    role: m.role,
+                    content: m.content.slice(0, 4000),
+                  })),
+            };
+      guestPending = guestRequest;
+      put(key('pending'), guestPending);
+      render();
     }
     try {
       const result = await api(
@@ -692,10 +749,14 @@ export async function mountJerryAccountChat({
         context.identity
           ? request
           : {
-              input: { message: value, mode: 'chat', locale: language },
-              history: guests
-                .slice(-6)
-                .map((m) => ({ role: m.role, content: m.content })),
+              operationId: guestRequest.operationId,
+              issuedAt: guestRequest.issuedAt,
+              input: {
+                message: guestRequest.input.message,
+                mode: 'chat',
+                locale: guestRequest.input.locale,
+              },
+              history: guestRequest.history,
             },
         signal,
       );
@@ -711,6 +772,8 @@ export async function mountJerryAccountChat({
           !result.result.state.cancelled;
         await read(active.id);
       } else {
+        guestPending = null;
+        put(key('pending'), null);
         guests.push(
           { role: 'user', content: value },
           {
@@ -726,6 +789,16 @@ export async function mountJerryAccountChat({
       }
     } catch (error) {
       if (valid(t)) {
+        if (terminalAttempts.has(error.code)) {
+          const current = recovery();
+          if (current && (!context.identity || current.input.mode === 'chat')) {
+            current.needsNew = true;
+            put(
+              context.identity ? key('pending:' + active.id) : key('pending'),
+              current,
+            );
+          }
+        }
         if (error.status === 410) {
           put(key('pending:' + active.id), null);
           pending = null;

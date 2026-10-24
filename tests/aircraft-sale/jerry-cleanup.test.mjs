@@ -6,8 +6,17 @@ test('failed response attempts retain a content-free troubleshooting reference e
   const f = await serviceFixture(),
     c = await f.create(),
     input = f.message(c);
-  f.relay(async () => new Response('', { status: 503 }));
-  await assert.rejects(f.call('message', input), { status: 503 });
+  f.relay(async () =>
+    Response.json(
+      {
+        error: 'Synthetic capacity limit',
+        status: 429,
+        code: 'JERRY_ADMISSION_CAPACITY',
+      },
+      { status: 429 },
+    ),
+  );
+  await assert.rejects(f.call('message', input), { status: 429 });
   const object = f.objects.get(f.owner + ':exchange'),
     meta = object.existing.get('c:' + c.id);
   for (const item of Object.values(meta.logsToWrite))
@@ -20,6 +29,9 @@ test('failed response attempts retain a content-free troubleshooting reference e
   assert.equal(log.events.length, 1);
   assert.equal(log.events[0].details.conversationRef.turnId, input.turnId);
   assert.equal(log.events[0].actor.email, f.profile.email);
+  assert.equal(log.events[0].status, 429);
+  assert.equal(log.events[0].details.failureCode, 'JERRY_ADMISSION_CAPACITY');
+  assert.deepEqual(object.existing.get('c:' + c.id).logsToWrite, {});
   assert.ok(!JSON.stringify(log).includes(input.input.message));
 });
 test('expiry alarm erases content without any further user traffic, including imported/log/receipt copies', async () => {
@@ -72,6 +84,30 @@ test('expiry alarm erases content without any further user traffic, including im
   );
   assert.deepEqual(f.f.state().drafts, saved);
 });
+test('an unsuccessful local outbox acknowledgment backs off and recovers after restart', async () => {
+  const f = await serviceFixture(),
+    c = await f.create(),
+    input = f.message(c);
+  await f.call('message', input);
+  const fixture = f.objects.get(f.owner + ':exchange'),
+    object = fixture.object(),
+    meta = fixture.existing.get('c:' + c.id);
+  meta.logsToWrite[input.turnId] = Date.now() - 1;
+  fixture.existing.set('c:' + c.id, meta);
+  const originalFetch = object.fetch.bind(object);
+  object.fetch = (request) =>
+    new URL(request.url).pathname === '/log-complete'
+      ? new Response(null, { status: 503 })
+      : originalFetch(request);
+  await object.alarm();
+  const pending = fixture.existing.get('c:' + c.id);
+  assert.ok(pending.logsToWrite[input.turnId] >= Date.now() + 59000);
+  pending.logsToWrite[input.turnId] = Date.now() - 1;
+  fixture.existing.set('c:' + c.id, pending);
+  fixture.restart();
+  await fixture.object().alarm();
+  assert.deepEqual(fixture.existing.get('c:' + c.id).logsToWrite, {});
+});
 const internal = (f, path, body) =>
   f.store.fetch(
     new Request(
@@ -115,6 +151,7 @@ test('content-free log outbox retries outage without cookies and admin read reso
   broken = false;
   await object.object().alarm();
   const event = await f.store.activityLog.get(input.turnId);
+  assert.deepEqual(object.existing.get('c:' + c.id).logsToWrite, {});
   assert.equal(event.details.conversation, undefined);
   assert.equal(event.details.conversationRef.conversationId, c.id);
   assert.equal(event.actor.email, f.profile.email);

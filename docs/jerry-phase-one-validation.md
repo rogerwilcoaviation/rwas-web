@@ -1,5 +1,7 @@
 # Jerry phase-one local validation — October 24, 2026
 
+This is the original phase-one snapshot. See the [later local readiness continuation](jerry-readiness-validation-20261024.md) for subsequent admission controls, final candidate checks and remaining hosted/provider gates.
+
 The approved scope was source edits and local tests only. This candidate is not deployed; its feature gates remain off in production. No customer login, transcript, listing, account, provider credential or production configuration was modified for these tests. Big D supplied an independent architecture review, and this implementation addresses the concrete publication, translation-boundary, cleanup and responder-validation findings.
 
 ## Results

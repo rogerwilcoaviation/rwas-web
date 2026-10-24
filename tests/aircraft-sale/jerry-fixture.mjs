@@ -101,6 +101,8 @@ export async function serviceFixture() {
   const objects = new Map();
   const env = f.env;
   env.JERRY_CONVERSATIONS_ENABLED = 'true';
+  env.BETTER_AUTH_SECRET =
+    'synthetic-admission-fixture-secret-not-a-credential';
   env.SELLER_STORE = {
     idFromName: (name) => name,
     get: () => ({ fetch: (request) => store.fetch(request) }),
@@ -117,9 +119,11 @@ export async function serviceFixture() {
       relayCalls++;
       const response = await relay(payload);
       if (!response.ok)
-        throw Object.assign(Error('Synthetic response service unavailable'), {
-          status: 503,
-        });
+        return {
+          error: 'Synthetic response service unavailable',
+          status: response.status,
+          ...(await response.json().catch(() => ({}))),
+        };
       return response.json();
     },
   };
@@ -127,6 +131,7 @@ export async function serviceFixture() {
     origin: 'http://localhost',
     cookie: 'synthetic-cookie=1',
     authorization: 'Bearer ' + token,
+    admissionAddress: '192.0.2.1',
   };
   const context = await jerryWebsite(env, { operation: 'context', proof });
   const base = {

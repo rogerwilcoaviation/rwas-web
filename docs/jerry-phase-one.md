@@ -2,6 +2,8 @@
 
 Status: implemented for local review and synthetic testing. Not deployed or activated. Production Worker configuration, records, identity access, and the running relay have not been changed.
 
+The [October 24 readiness continuation](jerry-readiness-validation-20261024.md) adds durable provider admission and full candidate wiring qualification. The [provider assessment](jerry-provider-readiness-20261024.md) records the exact remaining project, model, data-handling and hosted-release inputs. Those notes supplement the original phase-one evidence below.
+
 ## Approved behavior
 
 - Signed-in, email-verified accounts can save and reopen conversations across devices. The server resolves the current provider session, stable owner, revocation fences, account holds and current role. Browser claims never grant identity or permissions.

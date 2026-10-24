@@ -474,7 +474,7 @@ test('actual workerd service-binding RPC completes private Pages mail delivery i
         write: false,
         format: 'esm',
         platform: 'browser',
-        external: ['cloudflare:workers'],
+        external: ['cloudflare:workers', 'node:*'],
       })
     ).outputFiles[0].text;
   const pagesScript = (
@@ -515,6 +515,7 @@ test('actual workerd service-binding RPC completes private Pages mail delivery i
         modules: true,
         script: await buildScript('workers/aircraft-sale/entry.mjs'),
         compatibilityDate: '2026-09-01',
+        compatibilityFlags: ['nodejs_compat'],
         bindings: {
           MAIL_VIA_PAGES: 'true',
           EMAIL_CODE_LOGIN_ENABLED: 'true',

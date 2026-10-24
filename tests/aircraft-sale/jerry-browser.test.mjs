@@ -99,6 +99,131 @@ const send = async (page, text) => {
     .fill(text);
   await page.locator('.jerry-widget-input button').click();
 };
+test('guest retry keeps its operation ID across reload and only an explicit resend starts new work', async () =>
+  fixture(async ({ f, page }) => {
+    f.signedIn(false);
+    const respond = f.env.JERRY_RESPONSE.respond,
+      seen = new Set();
+    f.env.JERRY_RESPONSE.respond = async (payload) => {
+      const id = payload.admission.operationId;
+      if (seen.has(id))
+        return {
+          error: 'The earlier reply is not retained.',
+          status: 409,
+          code: 'JERRY_ATTEMPT_COMPLETED',
+        };
+      seen.add(id);
+      return respond(payload);
+    };
+    let drop = true;
+    await page.route('**/api/jerry/website', async (route) => {
+      const data = JSON.parse(route.request().postData());
+      if (drop && data.operation === 'message') {
+        drop = false;
+        await jerryWebsite(f.env, { ...data, proof: f.proof });
+        return route.fulfill({
+          status: 503,
+          json: { error: 'Synthetic lost reply' },
+        });
+      }
+      return route.fallback();
+    });
+    await open(page);
+    await send(page, 'Guest recovery question');
+    await page
+      .getByRole('button', { name: 'Retry this message', exact: true })
+      .waitFor();
+    assert.equal(f.relayCalls(), 1);
+    await page.reload();
+    await page.locator('.jerry-widget-bubble').click();
+    await page
+      .getByRole('button', { name: 'Retry this message', exact: true })
+      .click();
+    await page
+      .getByRole('button', { name: 'Send as a new request', exact: true })
+      .waitFor();
+    assert.equal(f.relayCalls(), 1);
+    assert.equal(seen.size, 1);
+    await page
+      .getByRole('button', { name: 'Send as a new request', exact: true })
+      .click();
+    await page
+      .getByText('Synthetic reply N123AB, 145.', { exact: true })
+      .waitFor();
+    assert.equal(f.relayCalls(), 2);
+    assert.equal(seen.size, 2);
+    const saved = await page.evaluate(() =>
+      JSON.parse(
+        sessionStorage.getItem('rwas-jerry-v1:guest:exchange:history'),
+      ),
+    );
+    assert.equal(saved.filter((m) => m.role === 'user').length, 1);
+    assert.equal(
+      await page.evaluate(() =>
+        sessionStorage.getItem('rwas-jerry-v1:guest:exchange:pending'),
+      ),
+      null,
+    );
+    assert.ok(
+      !JSON.stringify(f.f.durable.get('exchange-activity')).includes(
+        'Guest recovery question',
+      ),
+    );
+    assert.equal(Object.keys(f.f.state().drafts).length, 0);
+  }));
+test('long guest replies stay complete in the tab while the next inference context remains bounded', async () =>
+  fixture(async ({ f, page }) => {
+    f.signedIn(false);
+    let count = 0;
+    f.relay(async (payload) => {
+      count++;
+      if (count === 1) return Response.json({ reply: 'S'.repeat(6000) });
+      assert.ok(payload.history.every((m) => m.content.length <= 4055));
+      return Response.json({ reply: 'Second reply' });
+    });
+    await open(page);
+    await send(page, 'First guest question');
+    await page.getByText('S'.repeat(6000), { exact: true }).waitFor();
+    await send(page, 'Second guest question');
+    await page.getByText('Second reply', { exact: true }).waitFor();
+    const history = await page.evaluate(() =>
+      JSON.parse(
+        sessionStorage.getItem('rwas-jerry-v1:guest:exchange:history'),
+      ),
+    );
+    assert.equal(history[1].content.length, 6000);
+    assert.equal(f.relayCalls(), 2);
+  }));
+test('feature-off widget never loads account chat or copies canonical history into the legacy store', async () =>
+  fixture(async ({ f, page, requests }) => {
+    await page.route('**/api/jerry/context', (route) =>
+      route.fulfill({ json: { enabled: false } }),
+    );
+    await page.addInitScript(() =>
+      sessionStorage.setItem(
+        'rwas-jerry-v1:guest:exchange:history',
+        JSON.stringify([
+          {
+            role: 'assistant',
+            content: 'CANONICAL HISTORY MUST STAY SEPARATE',
+          },
+        ]),
+      ),
+    );
+    await page.goto('http://localhost/aircraft-for-sale');
+    await page.locator('.jerry-widget-bubble').click();
+    await page
+      .getByText('LEGACY PRIVATE MUST NOT IMPORT', { exact: true })
+      .waitFor();
+    assert.equal(
+      await page
+        .getByText('CANONICAL HISTORY MUST STAY SEPARATE', { exact: true })
+        .count(),
+      0,
+    );
+    assert.ok(!requests.includes('/jerry-account-chat.mjs'));
+    assert.equal(f.relayCalls(), 0);
+  }));
 test('account switch during conversation creation cannot submit the first account’s text under the second account', async () =>
   fixture(async ({ f, page }) => {
     await open(page);

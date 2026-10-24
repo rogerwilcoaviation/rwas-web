@@ -5,6 +5,7 @@ import {
   jerryPage,
   JERRY_LOCALES,
 } from './jerry-protocol.mjs';
+import { responseAdmission } from './jerry-admission-context.mjs';
 
 // Only these website operations cross the service binding. Browser input never
 // selects a seller route, remote host, identity, role, or authorization policy.
@@ -87,7 +88,7 @@ async function current(env, proof, expected) {
     );
   return context;
 }
-async function localized(env, result, locale) {
+async function localized(env, result, locale, admissionContext) {
   if (locale === 'en') return result;
   try {
     jerryAssert(
@@ -96,9 +97,14 @@ async function localized(env, result, locale) {
       'Translation is unavailable.',
     );
     const source = result.reply;
+    const payload = { text: source, locale };
     const translated = await env.JERRY_RESPONSE.translate({
-      text: source,
-      locale,
+      ...payload,
+      admission: await responseAdmission(env, {
+        ...admissionContext,
+        payload,
+        kind: 'translate',
+      }),
     });
     const reply = translated.reply;
     const tokens = (text) =>
@@ -124,7 +130,14 @@ async function localized(env, result, locale) {
     };
   }
 }
-async function relay(env, history, input, reference, pageContext) {
+async function relay(
+  env,
+  history,
+  input,
+  reference,
+  pageContext,
+  admissionContext,
+) {
   // No cookies, email addresses, private operational data or business credentials
   // are forwarded to the public website chat service. Its actions are discarded.
   jerryAssert(
@@ -132,12 +145,26 @@ async function relay(env, history, input, reference, pageContext) {
     503,
     'The website response service is unavailable. Your message is saved; retry it from this conversation.',
   );
-  const body = await env.JERRY_RESPONSE.respond({
+  const payload = {
     history,
     input,
     reference,
     pageContext: pageContext || '',
+  };
+  const body = await env.JERRY_RESPONSE.respond({
+    ...payload,
+    admission: await responseAdmission(env, {
+      ...admissionContext,
+      payload,
+      kind: 'respond',
+    }),
   });
+  if (body.error)
+    throw Object.assign(Error(body.error), {
+      status: body.status || 503,
+      code: body.code || 'JERRY_RESPONSE_UNAVAILABLE',
+      retryAfterMs: body.retryAfterMs,
+    });
   jerryAssert(
     typeof body.reply === 'string' &&
       body.reply.trim() &&
@@ -176,7 +203,13 @@ export async function jerryWebsite(env, request) {
   );
   const proof = request.proof || {},
     body = request.body || {};
-  jerryKeys(proof, ['cookie', 'origin', 'authorization', 'csrf']);
+  jerryKeys(proof, [
+    'cookie',
+    'origin',
+    'authorization',
+    'csrf',
+    'admissionAddress',
+  ]);
   const context = await current(env, proof, request.expected),
     identity = context.identity;
   if (request.operation === 'context')
@@ -204,7 +237,12 @@ export async function jerryWebsite(env, request) {
       401,
       'Sign in to access saved conversations.',
     );
-    jerryKeys(body, ['input', 'history']);
+    jerryKeys(body, ['input', 'history', 'operationId', 'issuedAt']);
+    jerryAssert(
+      jerryUuid(body.operationId) && Number.isSafeInteger(body.issuedAt),
+      400,
+      'A stable guest request ID and timestamp are required.',
+    );
     jerryKeys(body.input, ['message', 'locale', 'mode']);
     jerryAssert(
       body.input.mode === 'chat' &&
@@ -238,6 +276,13 @@ export async function jerryWebsite(env, request) {
       { ...body.input, page },
       reference,
       request.pageContext,
+      {
+        identity: null,
+        proof,
+        surface: request.surface,
+        operationId: body.operationId,
+        issuedAt: body.issuedAt,
+      },
     );
     jerryAssert(
       !(await current(env, proof)).identity,
@@ -392,9 +437,22 @@ export async function jerryWebsite(env, request) {
         body.input,
         reference,
         request.pageContext,
+        {
+          identity,
+          proof,
+          surface: request.surface,
+          operationId: body.turnId,
+          issuedAt: reservation.turn.createdAt,
+        },
       );
     if (body.input.mode !== 'chat')
-      result = await localized(env, result, body.input.locale);
+      result = await localized(env, result, body.input.locale, {
+        identity,
+        proof,
+        surface: request.surface,
+        operationId: body.turnId,
+        issuedAt: reservation.turn.createdAt,
+      });
     await current(env, proof, authenticated);
     const finalized = await call('finalize', {
       id: body.id,
@@ -423,6 +481,17 @@ export async function jerryWebsite(env, request) {
       generation: body.generation,
       turnId: body.turnId,
       lease: reservation.turn.lease,
+      failure: {
+        status:
+          Number.isInteger(error.status) &&
+          error.status >= 400 &&
+          error.status <= 599
+            ? error.status
+            : 503,
+        code: /^JERRY_[A-Z_]{1,50}$/.test(error.code || '')
+          ? error.code
+          : 'JERRY_REQUEST_FAILED',
+      },
     }).catch(() => {});
     throw error;
   }
@@ -470,6 +539,16 @@ export async function jerryActivity(env, { proof, eventId, staff = false }) {
         source: 'server',
         mode: turn.input?.mode || 'guest-import',
         result: turn.status,
+        ...(turn.failure
+          ? {
+              error:
+                'Request failed (' +
+                turn.failure.status +
+                '; ' +
+                turn.failure.code +
+                ').',
+            }
+          : {}),
         messages:
           turn.status === 'imported'
             ? [turn.message]

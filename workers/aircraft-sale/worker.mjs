@@ -2126,8 +2126,17 @@ export class SellerStore {
               action: 'Jerry conversation',
               route: '/aircraft-for-sale',
               result: body.failed ? 'failure' : 'success',
-              status: body.failed ? 503 : 200,
+              status: body.failed
+                ? Number.isInteger(body.status) &&
+                  body.status >= 400 &&
+                  body.status <= 599
+                  ? body.status
+                  : 503
+                : 200,
               details: {
+                ...(body.failed && /^JERRY_[A-Z_]{1,50}$/.test(body.code || '')
+                  ? { failureCode: body.code }
+                  : {}),
                 conversationRef: jerryLogReference(
                   reference.owner,
                   'exchange',

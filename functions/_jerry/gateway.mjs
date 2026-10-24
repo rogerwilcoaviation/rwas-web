@@ -7,7 +7,6 @@ import {
 } from '../../workers/aircraft-sale/jerry-protocol.mjs';
 import { pageKey, LANGUAGE_VERSION } from '../../lib/site-language.mjs';
 
-const limits = new Map();
 export async function handleJerry(request, env) {
   try {
     const url = new URL(request.url);
@@ -101,30 +100,6 @@ export async function handleJerry(request, env) {
         .join('\n')
         .slice(0, 12000);
     }
-    // Best-effort edge abuse limit complements the relay's own controls. It is
-    // not authorization and stores neither IP addresses nor message content.
-    if (body.operation === 'message') {
-      const bytes = new TextEncoder().encode(
-        request.headers.get('CF-Connecting-IP') || 'local',
-      );
-      const key = Array.from(
-        new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)),
-      ).join(',');
-      const now = Date.now(),
-        old = limits.get(key);
-      const count = old?.until > now ? old.count + 1 : 1;
-      jerryAssert(
-        count <= 40,
-        429,
-        'Please wait before sending more messages.',
-      );
-      if (limits.size > 2000)
-        for (const [k, v] of limits) if (v.until <= now) limits.delete(k);
-      limits.set(key, {
-        count,
-        until: old?.until > now ? old.until : now + 300000,
-      });
-    }
     const result = await env.SELLER_API.jerryWebsite({
       ...body,
       page: path,
@@ -134,6 +109,7 @@ export async function handleJerry(request, env) {
         origin: url.origin,
         authorization: request.headers.get('Authorization') || '',
         csrf: request.headers.get('X-RWAS-CSRF') || '',
+        admissionAddress: request.headers.get('CF-Connecting-IP') || '',
       },
     });
     if (result.error) return jerryResult(result, result.status || 503);

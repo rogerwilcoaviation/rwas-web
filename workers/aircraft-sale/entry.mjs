@@ -20,6 +20,11 @@ export default class SellerService extends WorkerEntrypoint {
         error: error.status ? error.message : 'Jerry is unavailable.',
         code: error.code || 'JERRY_UNAVAILABLE',
         status: error.status || 503,
+        ...(Number.isSafeInteger(error.retryAfterMs) &&
+        error.retryAfterMs > 0 &&
+        error.retryAfterMs <= 300000
+          ? { retryAfterMs: error.retryAfterMs }
+          : {}),
       };
     }
   }
