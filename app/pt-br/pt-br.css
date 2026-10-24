@@ -34,10 +34,6 @@
 }
 
 @media (max-width: 640px) {
-  /* The language switcher occupies the dateline action slot on PT-BR phones. */
-  body:has(.ptbr-site) .bs-dateline__cta {
-    visibility: hidden;
-  }
   .ptbr-site .bs-masthead__inner {
     grid-template-columns: 44px minmax(0, 1fr);
   }

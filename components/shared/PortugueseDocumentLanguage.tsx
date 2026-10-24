@@ -9,9 +9,17 @@ export default function PortugueseDocumentLanguage({
 }) {
   useEffect(() => {
     const previous = document.documentElement.lang;
-    document.documentElement.lang = language;
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem('rwas-language');
+    } catch {}
+    document.documentElement.lang =
+      saved && ['en', 'pt-BR', 'es'].includes(saved) ? saved : language;
     return () => {
-      document.documentElement.lang = previous || 'en';
+      document.documentElement.lang =
+        saved && ['en', 'pt-BR', 'es'].includes(saved)
+          ? saved
+          : previous || 'en';
     };
   }, [language]);
 

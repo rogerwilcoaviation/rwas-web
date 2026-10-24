@@ -89,6 +89,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <meta name="rwas-react-language" content="true" />
         <style>
           {`
           :root, :before, :after {

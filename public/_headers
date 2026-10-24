@@ -28,3 +28,7 @@
 
 /newspaper/index.html
   X-Robots-Tag: noindex, nofollow, noarchive
+
+# Content-addressed public translation dictionaries never contain user content.
+/_site-language/common.*.json
+  Cache-Control: public, max-age=31536000, immutable

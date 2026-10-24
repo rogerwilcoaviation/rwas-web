@@ -4,7 +4,10 @@ import { resolve } from 'node:path';
 // Pages advanced mode ignores /functions. Bundle the actual handlers explicitly;
 // do not duplicate their implementation inside the existing generated application.
 const root = resolve(process.argv[2] || '.vercel/output/static');
-const typographyCss = readFileSync(resolve('public/site-typography.css'), 'utf8');
+const typographyCss = readFileSync(
+  resolve('public/site-typography.css'),
+  'utf8',
+);
 const directory = resolve(root, '_worker.js');
 await build({
   stdin: {
@@ -15,6 +18,7 @@ import { onRequestPost as dispatch } from './functions/api/intake-dispatch';
 import { onRequestGet as config } from './functions/api/service-intake-config';
 import { STAGING_ORIGIN } from './functions/_intake/core';
 import { sellerMail, sellerDestinationAllowed } from './functions/_seller/mail.mjs';
+export { handleSiteLanguage } from './functions/_site-language/translate.mjs';
 export { intake, receipt, dispatch, config, STAGING_ORIGIN, sellerMail, sellerDestinationAllowed };`,
     resolveDir: process.cwd(),
     sourcefile: 'intake-entry.ts',
@@ -30,7 +34,7 @@ renameSync(index, resolve(directory, 'rwas-csp-wrapper.js'));
 writeFileSync(
   index,
   `import app from './rwas-csp-wrapper.js';
-import { intake, receipt, dispatch, config, STAGING_ORIGIN, sellerMail, sellerDestinationAllowed } from './rwas-intake.js';
+import { intake, receipt, dispatch, config, STAGING_ORIGIN, sellerMail, sellerDestinationAllowed, handleSiteLanguage } from './rwas-intake.js';
 export default { ...app, async fetch(request, env, ctx) {
  const url = new URL(request.url);
  const path = url.pathname;
@@ -40,6 +44,11 @@ export default { ...app, async fetch(request, env, ctx) {
    return new HTMLRewriter().on('head', { element(head) {
      head.append(${JSON.stringify('<style data-rwas-typography>' + typographyCss + '</style>')}, { html: true });
    }}).transform(response);
+ };
+ const withLanguage = (response) => {
+   if (!['GET','HEAD'].includes(request.method) || path.startsWith('/api/') || /^\\/(?:ops|work-order-system)(?:\\/|$)/.test(path) || !(response.headers.get('Content-Type') || '').includes('text/html')) return response;
+   let react = false;
+   return new HTMLRewriter().on('meta[name="rwas-react-language"]', {element(){react=true;}}).on('body', {element(body){body.onEndTag(end=>{if(!react)end.before('<link rel="stylesheet" href="/site-language.css?v=20261024"><script data-site-language-runtime defer src="/site-language.js?v=20261024-sitewide"></script>',{html:true});});}}).transform(response);
  };
  const protect = (response) => {
    if (!isolated) return response;
@@ -64,7 +73,7 @@ export default { ...app, async fetch(request, env, ctx) {
    const target = new URL(request.url); target.pathname = '/api/aircraft-sale/listing/' + sellerDetail[1];
    const headers = new Headers(request.headers); headers.set('Accept','text/html');
    const response = await env.SELLER_API.fetch(new Request(target, {method:'GET',headers}));
-   return protect(request.method === 'HEAD' ? new Response(null, response) : withTypography(response));
+   return protect(request.method === 'HEAD' ? new Response(null, response) : withLanguage(withTypography(response)));
  }
  if (path === '/api/aircraft-sale' || path.startsWith('/api/aircraft-sale/')) {
    if (!sellerDestinationAllowed(request, env, STAGING_ORIGIN)) return protect(new Response('Staging destination not allowed', {status:503}));
@@ -74,6 +83,7 @@ export default { ...app, async fetch(request, env, ctx) {
    return protect(withTypography(await env.SELLER_API.fetch(request)));
  }
 
+ if (path === '/api/site-language' || path === '/api/site-language/catalog') return protect(await handleSiteLanguage(request, env, ctx));
  const routes = { '/api/service-intake-config': ['GET', config], '/api/service-intake': ['POST', intake], '/api/service-receipt': ['GET', receipt], '/api/intake-dispatch': ['POST', dispatch] };
  if (Object.prototype.hasOwnProperty.call(routes, path)) {
    if (env.INTAKE_STAGING_MODE === 'true' && url.origin !== STAGING_ORIGIN) return protect(new Response('Staging destination not allowed', {status:503}));
@@ -81,13 +91,15 @@ export default { ...app, async fetch(request, env, ctx) {
    if (request.method !== method) return protect(new Response(JSON.stringify({error:'Method not allowed.'}), {status:405, headers:{'Content-Type':'application/json','Cache-Control':'no-store'}}));
    return protect(await handler({request, env}));
  }
- return protect(await app.fetch(request, env, ctx));
+ return protect(withLanguage(await app.fetch(request, env, ctx)));
 }};
 `,
 );
 const routesPath = resolve(root, '_routes.json');
 const routes = JSON.parse(readFileSync(routesPath, 'utf8'));
 for (const path of [
+  '/api/site-language',
+  '/api/site-language/*',
   '/api/service-intake',
   '/api/service-receipt',
   '/api/intake-dispatch',

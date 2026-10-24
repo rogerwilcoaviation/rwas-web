@@ -1,0 +1,1922 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "id": "f51047ac76862de305cec3a095a18c7213dce410621ccdceead938846a8385fa",
+      "text": "100-Hour Inspections",
+      "language": "en",
+      "translations": {
+        "es": "100- Inspecciones Horarias",
+        "pt-BR": "Inspeções de 100- Horas"
+      }
+    },
+    {
+      "id": "82677b53553221dfa1f436b833629d1e8476278c8d7da431490148a0a820feb3",
+      "text": "ADS-B Out Compliance",
+      "language": "en",
+      "translations": {
+        "es": "ADS-B Cumplimiento Out",
+        "pt-BR": "ADS-B Conformidade Externa"
+      }
+    },
+    {
+      "id": "244915e38b29600dc3bda6e6c69b48a2e49545de92ec2600641431fdc3cfc6e7",
+      "text": "AEA Member",
+      "language": "en",
+      "translations": {
+        "es": "Miembro de AEA",
+        "pt-BR": "Membro AEA"
+      }
+    },
+    {
+      "id": "e57cd69b9f7dc408b564b253152db6165c5d63aa5e0119c3453e91797b706b14",
+      "text": "AXIS System Builder",
+      "language": "en",
+      "translations": {
+        "es": "AXIS System Builder",
+        "pt-BR": "Construtor de Sistema AXIS"
+      }
+    },
+    {
+      "id": "bc7a824fc6159f8f906655e9f147833108c81f15af8b14c0bce015cd788fefc0",
+      "text": "About",
+      "language": "en",
+      "translations": {
+        "es": "Acerca de",
+        "pt-BR": "Sobre"
+      }
+    },
+    {
+      "id": "810300df70f1e1ad947e273f6c098c6db28f69d41e65c3b99ca5ebd4564f1bca",
+      "text": "Advertisement",
+      "language": "en",
+      "translations": {
+        "es": "Publicidad",
+        "pt-BR": "Anúncio"
+      }
+    },
+    {
+      "id": "b8429fd00832a4ce79c5723eb32ef7e80f1b9de25b2d60ffb90fdc64147b6f4e",
+      "text": "Airframe & Powerplant",
+      "language": "en",
+      "translations": {
+        "es": "Estructura y Motor",
+        "pt-BR": "Fuselagem & Motor"
+      }
+    },
+    {
+      "id": "f5bdc7f7f7fd630acb7fb700dec6df9d22984168c636b4d296da48fc5a139d2d",
+      "text": "Annual Inspections",
+      "language": "en",
+      "translations": {
+        "es": "Inspecciones Anuales",
+        "pt-BR": "Inspeções Anuais"
+      }
+    },
+    {
+      "id": "8313671dd2074b6c99e43c478652ebbf3f1fce9d660e13abf4a76053343c98f0",
+      "text": "Ask Jerry",
+      "language": "en",
+      "translations": {
+        "es": "Preguntar a Jerry",
+        "pt-BR": "Pergunte Jerry"
+      }
+    },
+    {
+      "id": "57e24d65a8ebadf87b62277db1e622d0a0d7472f906c666d76e2448c1695dfe4",
+      "text": "Authorized",
+      "language": "en",
+      "translations": {
+        "es": "Autorizado",
+        "pt-BR": "Autorizado"
+      }
+    },
+    {
+      "id": "a21beb8dfa97c01f4f88e7bdc58192f9573de8e5325699d7710ab62b16612952",
+      "text": "Available At",
+      "language": "en",
+      "translations": {
+        "es": "Disponible en",
+        "pt-BR": "Disponível Em"
+      }
+    },
+    {
+      "id": "250dac53b1f5d0446f0aa3b280dc6257eb2a98204abb5271a6346a62d930f2b0",
+      "text": "Aviation Exchange",
+      "language": "en",
+      "translations": {
+        "es": "Aviation Exchange",
+        "pt-BR": "Aviation Exchange"
+      }
+    },
+    {
+      "id": "bb0311eb902de9b6e19ed5dd8adb514c0d21b19f4afb84ec9c15aa6d7042cfb3",
+      "text": "Avionics",
+      "language": "en",
+      "translations": {
+        "es": "Aviónica",
+        "pt-BR": "Aviónica"
+      }
+    },
+    {
+      "id": "ec066671860d622ec984b350b88858c2cc2a5c09d4f6eef99dbebf485ac39574",
+      "text": "Avionics & Connected Aircraft",
+      "language": "en",
+      "translations": {
+        "es": "Aviónica y Aeronaves Conectadas",
+        "pt-BR": "Aviónica & Aeronaves Conectadas"
+      }
+    },
+    {
+      "id": "6f7734a54e8c535556c479c81a26ad18e9595c637e88c7ad7214e5c8721f3b0e",
+      "text": "Avionics desk: (605) 299-8178 · avionics@rwas.team",
+      "language": "en",
+      "translations": {
+        "es": "Mostrador de aviónica: (605) 299-8178 · avionics@rwas.team",
+        "pt-BR": "Balcão de aviônicos: (605) 299-8178 · avionics@rwas.team"
+      }
+    },
+    {
+      "id": "6b8e156f38715d446b2fac6dd4b55400faea3a0774f6413c9328ba7a5a780b20",
+      "text": "Blog Articles",
+      "language": "en",
+      "translations": {
+        "es": "Artículos del Blog",
+        "pt-BR": "Artigos do Blog"
+      }
+    },
+    {
+      "id": "55ae10dbca291133cd938d8c08ebf43d6cc9c9437d9f7c54de334ce4f7c100ca",
+      "text": "Book Service",
+      "language": "en",
+      "translations": {
+        "es": "Reservar servicio",
+        "pt-BR": "Agendar Serviço"
+      }
+    },
+    {
+      "id": "8c35fc9e4abea894f92a19d8f8fff2f0ba6d074ad0aa647f693bde16be58974b",
+      "text": "Browse All Listings →",
+      "language": "en",
+      "translations": {
+        "es": "Explorar Todos los Listados →",
+        "pt-BR": "Navegar por Todas as Listagens →"
+      }
+    },
+    {
+      "id": "15e687095a2770c2ee7541289f201b8bc4e06154ffaae86b74c8381ed02e2323",
+      "text": "Build My Panel",
+      "language": "en",
+      "translations": {
+        "es": "Construir Mi Panel",
+        "pt-BR": "Construir Meu Painel"
+      }
+    },
+    {
+      "id": "e6eed97731cfb4851c8261691b7e2b8d24a5b9d7c447936d5bf789bfc4bf392a",
+      "text": "Build a Certified AXIS System",
+      "language": "en",
+      "translations": {
+        "es": "Construir un Sistema AXIS Certificado",
+        "pt-BR": "Construir um Sistema AXIS Certificado"
+      }
+    },
+    {
+      "id": "78e84cca7e9a5cb1f13be5e688179960a9e4b71f2e88aa83bff0773bad15a972",
+      "text": "Build an Experimental AXIS System",
+      "language": "en",
+      "translations": {
+        "es": "Construir un Sistema AXIS Experimental",
+        "pt-BR": "Construir um Sistema AXIS Experimental"
+      }
+    },
+    {
+      "id": "c999d4cf091c08f54fe4973fa1c5d993df618016646c91171539dfcff00ad3b3",
+      "text": "Bulletin",
+      "language": "en",
+      "translations": {
+        "es": "Boletín",
+        "pt-BR": "Boletim"
+      }
+    },
+    {
+      "id": "cbafb338e0c55c06610c5928168ca093817a4f4c2932082e51e881ff8eb78599",
+      "text": "Call (605) 299-8178",
+      "language": "en",
+      "translations": {
+        "es": "Llama (605) 299-8178",
+        "pt-BR": "Ligue (605) 299-8178"
+      }
+    },
+    {
+      "id": "872e666e77560caba44ec021420c18ae21a699b1bc66a313a33e0bdd21c08bf5",
+      "text": "Cart",
+      "language": "en",
+      "translations": {
+        "es": "Carrito",
+        "pt-BR": "Carrinho"
+      }
+    },
+    {
+      "id": "36eda0a2eb0df64552fb17cf4dc16768a7a88331fa4ecdc998ddfe2713cf0909",
+      "text": "Cert. No. RWSR491E",
+      "language": "en",
+      "translations": {
+        "es": "Cert. No. RWSR491E",
+        "pt-BR": "Cert. Nº RWSR491E"
+      }
+    },
+    {
+      "id": "e77df0f1e7817817cfcfd617b8f43be90eb612d68e4c68be866aa7a522dac9b4",
+      "text": "Certified Repair Station",
+      "language": "en",
+      "translations": {
+        "es": "Estación de reparación certificada",
+        "pt-BR": "Estação de Reparo Certificada"
+      }
+    },
+    {
+      "id": "d3dfba9c769e4b1f6a2d2df7165335cd48a32d0d5e039f1f9a373e921a999005",
+      "text": "Choose equipment, preview panel finishes, and submit a concept sketch to RWAS for avionics review.",
+      "language": "en",
+      "translations": {
+        "es": "Elija el equipamiento, previsualice los acabados del panel y envíe un boceto conceptual a RWAS para la revisión de aviónica.",
+        "pt-BR": "Escolha os equipamentos, visualize os acabamentos do painel e envie um esboço conceitual para RWAS para revisão de aviónica."
+      }
+    },
+    {
+      "id": "5b42f5baf1a5997ec2205ee31571024a2695a7c6aa08e88b69e45dc9fe4db66d",
+      "text": "Classifieds",
+      "language": "en",
+      "translations": {
+        "es": "Clasificados",
+        "pt-BR": "Classificados"
+      }
+    },
+    {
+      "id": "8df6125956b630bde7382ccd901b08aa54e646bc787c2d3a8663869a121f7914",
+      "text": "Click the Jerry bubble — our AI concierge will walk you through listing your aircraft step by step.",
+      "language": "en",
+      "translations": {
+        "es": "Haga clic en la burbuja Jerry — nuestro conserje de IA lo guiará paso a paso para listar su aeronave.",
+        "pt-BR": "Clique na bolha Jerry — nosso concierge de IA o guiará passo a passo para listar sua aeronave."
+      }
+    },
+    {
+      "id": "e23d8a7343170863bdb4d8486c4167fa14f1d82c383965c2480f47186470eb4c",
+      "text": "Coating reviews for fabricated metal parts, shop items, decorative hardware, and combined coat-and-print work.",
+      "language": "en",
+      "translations": {
+        "es": "Revisiones de recubrimiento para piezas metálicas fabricadas, artículos de taller, herrajes decorativos y trabajos combinados de recubrimiento e impresión.",
+        "pt-BR": "Revisões de revestimento para peças metálicas fabricadas, itens de oficina, ferragens decorativas e trabalhos combinados de revestimento e impressão."
+      }
+    },
+    {
+      "id": "c384877bd058cdaa22ec62c757e3ae93c6a466674dc76452b78429994f4385fc",
+      "text": "Complete Rigging Kit",
+      "language": "en",
+      "translations": {
+        "es": "Kit de aparejo completo",
+        "pt-BR": "Kit de Rigging Completo"
+      }
+    },
+    {
+      "id": "663f01acc30c7e526443bb01292b45a6c3d56594657f62972fb578042e0737dd",
+      "text": "Contact",
+      "language": "en",
+      "translations": {
+        "es": "Contacto",
+        "pt-BR": "Contato"
+      }
+    },
+    {
+      "id": "d08ac78d20b171d94fbfffeabfa5a429f21ea0e1078d7998cf49b9b28ab8c477",
+      "text": "Cookies",
+      "language": "en",
+      "translations": {
+        "es": "Cookies",
+        "pt-BR": "Cookies"
+      }
+    },
+    {
+      "id": "0060896dd86efbc2b3d2748a7c631d492ca49cdee2bca1fe67e2bc8f82d29c6b",
+      "text": "Current Edition",
+      "language": "en",
+      "translations": {
+        "es": "Edición actual",
+        "pt-BR": "Edição Atual"
+      }
+    },
+    {
+      "id": "0b2c506120ba6eecb9f7a4050812f6d19b34b26c6bb0b4cbc9aab14c5c5688af",
+      "text": "Customer portal and employee workbench",
+      "language": "en",
+      "translations": {
+        "es": "Portal del cliente y banco de trabajo del empleado",
+        "pt-BR": "Portal do cliente e bancada de funcionários"
+      }
+    },
+    {
+      "id": "3cd3a550b5046225ebad605520630d5d9cbf97c589381a7701da4ede2d542029",
+      "text": "Cutting, welding, marking, and fabrication support in-house.",
+      "language": "en",
+      "translations": {
+        "es": "Corte, soldadura, marcado y soporte de fabricación internos.",
+        "pt-BR": "Corte, soldagem, marcação e suporte de fabricação internamente."
+      }
+    },
+    {
+      "id": "0f3203a13c484a47283ec42793da1cce302c803c7cc0b2f684f4fff8e641ea5f",
+      "text": "Dealer",
+      "language": "en",
+      "translations": {
+        "es": "Distribuidor",
+        "pt-BR": "Distribuidor"
+      }
+    },
+    {
+      "id": "c7636b3d04d29ae552abc03023b19b8ae9ff8d17f38a6beda65d81302d495135",
+      "text": "Dye Penetrant Testing",
+      "language": "en",
+      "translations": {
+        "es": "Ensayo de penetrante de color",
+        "pt-BR": "Teste de Penetração de Corante"
+      }
+    },
+    {
+      "id": "dcedd482de5f5d2c5179a8de902cc439b54f82661c9d096072d4c0de3483f1c3",
+      "text": "Each preliminary build can be submitted directly to Roger Wilco Aviation Services for compatibility review and an aircraft-specific equipment and installation quote. RWAS will review the aircraft, mission, certification path, installation requirements, and selected equipment before preparing the next step.",
+      "language": "en",
+      "translations": {
+        "es": "Cada construcción preliminar puede enviarse directamente a Roger Wilco Aviation Services para revisión de compatibilidad y una cotización de equipamiento e instalación específica de la aeronave. RWAS revisará la aeronave, la misión, la ruta de certificación, los requisitos de instalación y el equipamiento seleccionado antes de preparar el siguiente paso.",
+        "pt-BR": "Cada montagem preliminar pode ser enviada diretamente para Roger Wilco Aviation Services para revisão de compatibilidade e um orçamento de equipamento e instalação específico da aeronave. RWAS revisará a aeronave, missão, caminho de certificação, requisitos de instalação e equipamento selecionado antes de preparar a próxima etapa."
+      }
+    },
+    {
+      "id": "272719c701bb5271d936488f6fdcc4bc484ed7a72a64496cb4fca0cb0e817c6f",
+      "text": "Eddy Current Inspection",
+      "language": "en",
+      "translations": {
+        "es": "Inspección por corrientes de Eddy",
+        "pt-BR": "Inspeção por Corrente de Eddy"
+      }
+    },
+    {
+      "id": "ad220b318097b1c2b658a580fd46c1c60206ff5c207b996e0adec62eaf5e220c",
+      "text": "FAA CERT. REPAIR STATION · AVIONICS · AIRFRAME & POWERPLANT · NDT · FABRICATION",
+      "language": "en",
+      "translations": {
+        "es": "FAA CERT. ESTACIÓN DE REPARACIÓN · AVIÓNICA · ESTRUCTURA Y MOTOR · NDT · FABRICACIÓN",
+        "pt-BR": "FAA ESTAÇÃO DE REPARO CERT. · AVIONICS · ESTRUTURA & PROPULSOR · NDT · FABRICAÇÃO"
+      }
+    },
+    {
+      "id": "09f185ad034b921704c57fda46b715d469f8778218afa33a1aca830bd6838ced",
+      "text": "FAA Certificate RWSR491E. All work by certificated mechanics with full logbook documentation.",
+      "language": "en",
+      "translations": {
+        "es": "FAA Certificado RWSR491E. Todo el trabajo realizado por mecánicos certificados con documentación completa del libro de registro.",
+        "pt-BR": "FAA Certificate RWSR491E. Todo o trabalho realizado por mecânicos certificados com documentação completa de registro de manutenção."
+      }
+    },
+    {
+      "id": "4b0931f94803e4555c328f2b3f532382ba39c001fa1eaa7ad16df5fe5d640f7d",
+      "text": "FAA Part 145 Repair Station · Cert. RWSR491E",
+      "language": "en",
+      "translations": {
+        "es": "Estación de reparación FAA Parte 145 · Cert. RWSR491E",
+        "pt-BR": "Estação de manutenção FAA Parte 145 · Cert. RWSR491E"
+      }
+    },
+    {
+      "id": "e47d5173ce22c94361210b46044c6c29d921d2e8e42077db10dfd8cf43d0f6ac",
+      "text": "FAR 91.227 compliant installations. Transponder upgrades and system certification.",
+      "language": "en",
+      "translations": {
+        "es": "Instalaciones compatibles con FAR 91.227. Actualizaciones de transpondedor y certificación del sistema.",
+        "pt-BR": "Instalações compatíveis com FAR 91.227. Atualizações de transponder e certificação de sistema."
+      }
+    },
+    {
+      "id": "112dd0bfd671faa53f15fb9d9bfdf044804d8eb43103e68722cb979cae92a722",
+      "text": "FIG. 01",
+      "language": "en",
+      "translations": {
+        "es": "FIG. 01",
+        "pt-BR": "FIG. 01"
+      }
+    },
+    {
+      "id": "18cd97b73ed0ac0183ba10c59256b55598d0782f2acf8d9d37aa4ed86c1688ba",
+      "text": "FIG. 02",
+      "language": "en",
+      "translations": {
+        "es": "FIG. 02",
+        "pt-BR": "FIG. 02"
+      }
+    },
+    {
+      "id": "700263a77f929c08fbf8fa6c77aef031ae0fb2156becfd5d111f556522ed01d8",
+      "text": "FIG. 03",
+      "language": "en",
+      "translations": {
+        "es": "FIG. 03",
+        "pt-BR": "FIG. 03"
+      }
+    },
+    {
+      "id": "19d4449b0ab9b2fcc4559d4289efc0f09536047f04ced282814c2f1e60291766",
+      "text": "Featured Tool",
+      "language": "en",
+      "translations": {
+        "es": "Herramienta Destacada",
+        "pt-BR": "Ferramenta em Destaque"
+      }
+    },
+    {
+      "id": "46f4dcb57a6b4049890789f1cb2831f867d396ad3eb259b22d56534bd94897e1",
+      "text": "Financing",
+      "language": "en",
+      "translations": {
+        "es": "Financiamiento",
+        "pt-BR": "Financiamento"
+      }
+    },
+    {
+      "id": "a9e51dfa330c70b37283eff2302d482a692eeac1f0253a8610e76e359957ade4",
+      "text": "Footer navigation",
+      "language": "en",
+      "translations": {
+        "es": "Navegación del pie de página",
+        "pt-BR": "Navegação do rodapé"
+      }
+    },
+    {
+      "id": "77588ffbdcf6fe4a4b2979efbb5a9f179579c623a994b17e3aa38f82e245f06a",
+      "text": "For aircraft operated for hire under 14 C.F.R. Part 91 and Part 135 requirements.",
+      "language": "en",
+      "translations": {
+        "es": "Para aeronaves operadas bajo contrato según 14 C.F.R. Parte 91 y Parte 135.",
+        "pt-BR": "Para aeronaves operadas para aluguel sob requisitos do 14 C.F.R. Parte 91 e Parte 135."
+      }
+    },
+    {
+      "id": "6f436cf2757ad60498581dfa7b60ad4796f6b48d1eb7974ca28552801968c226",
+      "text": "Full Panel Planner",
+      "language": "en",
+      "translations": {
+        "es": "Planificador de panel completo",
+        "pt-BR": "Planejador de Painel Completo"
+      }
+    },
+    {
+      "id": "8c04bf7cf03972394a9d6a8279a45c164ee79ac51ddfb97a268feccbe732e69b",
+      "text": "Full aircraft panel upgrades begin with the dedicated panel planning workflow.",
+      "language": "en",
+      "translations": {
+        "es": "Las actualizaciones completas de paneles de aeronaves comienzan con el flujo de trabajo dedicado a la planificación de paneles.",
+        "pt-BR": "Atualizações completas de painéis de aeronaves começam com o fluxo de trabalho dedicado ao planejamento de painéis."
+      }
+    },
+    {
+      "id": "52869a74c8a04dad7a03cd47ae1e5aca5535973360f9efe4e242462efbf07d4e",
+      "text": "Full-color graphics, labels, personalization, and markings on primarily flat parts and samples.",
+      "language": "en",
+      "translations": {
+        "es": "Gráficos a todo color, etiquetas, personalización y marcas en piezas y muestras principalmente planas.",
+        "pt-BR": "Gráficos em cores completas, etiquetas, personalização e marcações em peças e amostras principalmente planas."
+      }
+    },
+    {
+      "id": "e2ef910ec19b722955b0964fb72297de071491c6b40e1825071c3e177bfa35f0",
+      "text": "G3X Touch Suite",
+      "language": "en",
+      "translations": {
+        "es": "G3X Suite Táctil",
+        "pt-BR": "G3X Touch Suite"
+      }
+    },
+    {
+      "id": "ed364dc1aa2a639491018ffbfb8491752fcb02ed9e65704de1f5c08eb1c86f65",
+      "text": "GFC 500 Autopilot",
+      "language": "en",
+      "translations": {
+        "es": "GFC 500 Autopiloto",
+        "pt-BR": "GFC 500 Piloto Automático"
+      }
+    },
+    {
+      "id": "a6273dcf5a05af9c233b4323a08915ba538202cb65b2613a97f0a511618b5a4d",
+      "text": "GFC 500 installs: Bonanza, Mooney, Cessna — same-day quote",
+      "language": "en",
+      "translations": {
+        "es": "GFC 500 inpuestos: Bonanza, Mooney, Cessna — cotización el mismo día",
+        "pt-BR": "GFC 500 inbaias: Bonanza, Mooney, Cessna — cotação no mesmo dia"
+      }
+    },
+    {
+      "id": "3aace6c0065c091b852167114acad644bf88d1a41983f6cb4620c4f168173fc1",
+      "text": "GPS/NAV/COMM with WAAS LPV approaches, IFR certification, and flight-plan integration.",
+      "language": "en",
+      "translations": {
+        "es": "GPS/NAV/COMM con aproximaciones WAAS LPV, certificación IFR, e integración del plan de vuelo.",
+        "pt-BR": "GPS/NAV/COMM com abordagens WAAS LPV, certificação IFR, e integração de plano de voo."
+      }
+    },
+    {
+      "id": "a4c05c010595597614776c21c1be43542e15568c4a915d13b0ce241fdb5e2317",
+      "text": "GTN 650Xi / 750Xi",
+      "language": "en",
+      "translations": {
+        "es": "GTN 650Xi / 750Xi",
+        "pt-BR": "GTN 650Xi / 750Xi"
+      }
+    },
+    {
+      "id": "cf5db0a72faa74373c50f48fb364d18bf37cf391212ca1b4a1dfe247a52afd56",
+      "text": "Garmin",
+      "language": "en",
+      "translations": {
+        "es": "Garmin",
+        "pt-BR": "Garmin"
+      }
+    },
+    {
+      "id": "24f783c737b923e269721e0acda218db1adbe3bf774bf88a6114d2b77c7000d9",
+      "text": "Garmin AXIS 8-inch portrait, 11.6-inch, and 8-inch landscape flight displays",
+      "language": "en",
+      "translations": {
+        "es": "Garmin AXIS 8-inch retrato, 11.6-inch, y 8-inch paisaje pantallas de vuelo",
+        "pt-BR": "Garmin AXIS 8-inch retrato, 11.6-inch e 8-inch paisagem exibições de voo"
+      }
+    },
+    {
+      "id": "a94ad61007c3fd054717106a0778e309edd4effd7c2a57f4bac664c303a6f735",
+      "text": "Garmin AXIS flight displays — available for certified and experimental panel builds through RWAS.",
+      "language": "en",
+      "translations": {
+        "es": "Garmin pantallas de vuelo AXIS — disponibles para construcciones de paneles certificadas y experimentales a través de RWAS.",
+        "pt-BR": "Garmin displays de voo AXIS — disponíveis para construções de painéis certificados e experimentais através de RWAS."
+      }
+    },
+    {
+      "id": "44eeae6e123ff0fcbe619f90e33ee22ae85b3dbaf6fc26d2f616e1ff4d5bc3a8",
+      "text": "Garmin Adds Class A and Coflyt Flight Log Integrations",
+      "language": "en",
+      "translations": {
+        "es": "Garmin Añade Integraciones de Registro de Vuelo Clase A y Coflyt",
+        "pt-BR": "Garmin adiciona integrações de registro de voo Class A e Coflyt"
+      }
+    },
+    {
+      "id": "a4529c8ef775b7242ed77317bd486e5a6de6b7bf135239d673a9972b19627033",
+      "text": "Garmin Aviation Pricing Changes Take Effect December 21, 2026",
+      "language": "en",
+      "translations": {
+        "es": "Garmin Cambios en los Precios de Aviación Entrarán en Vigor en Diciembre 21, 2026",
+        "pt-BR": "Garmin Alterações de Preços de Aviação Entram em Vigor em Dezembro 21, 2026"
+      }
+    },
+    {
+      "id": "e8c04207012ca495de36472dc1ea8aad12ca31f63e91e6940ef8f9b55c0ce5c9",
+      "text": "Garmin Avionics & Aircraft Maintenance — Yankton, SD",
+      "language": "en",
+      "translations": {
+        "es": "Garmin Aviónica y Mantenimiento de Aeronaves — Yankton, SD",
+        "pt-BR": "Garmin Aviónica e Manutenção de Aeronaves — Yankton, SD"
+      }
+    },
+    {
+      "id": "be8286abf54382a3fac8090e93a672d388257993d9c86bca01ac430e6bb5ef8c",
+      "text": "Garmin Installation Planning",
+      "language": "en",
+      "translations": {
+        "es": "Planificación de instalación Garmin",
+        "pt-BR": "Garmin Planejamento de Instalação"
+      }
+    },
+    {
+      "id": "ea77cfbe4f5b08c1b0479fc2c4c6ef88a418db769eabe72c6213e2302e668ce9",
+      "text": "Garmin Store",
+      "language": "en",
+      "translations": {
+        "es": "Garmin Tienda",
+        "pt-BR": "Garmin Loja"
+      }
+    },
+    {
+      "id": "26c3530645133103ea05ef6b51d4d814b9c72b399d2d43e2c4fe683182654d8d",
+      "text": "Garmin announced FAA supplemental type certification for an all-Garmin avionics retrofit for the original Cessna CitationJet on September 22, 2026. The announcement expands on Garmin’s existing CJ1 an…",
+      "language": "en",
+      "translations": {
+        "es": "Garmin anunció la certificación de tipo suplementario FAA para una actualización de aviónica totalmente Garmin del CitationJet original Cessna en septiembre 22, 2026.. El anuncio amplía la CJ1 existente de Garmin an…",
+        "pt-BR": "Garmin anunciou FAA certificação suplementar de tipo para um retrofit de aviônicos totalmente Garmin para o CitationJet original Cessna em setembro 22, 2026. O anúncio expande o Garmin existente CJ1 an…"
+      }
+    },
+    {
+      "id": "b4e65e7d99a6ad91e4d5ea4a651b7fc26cd48d03e853314d6be7a317c83e904c",
+      "text": "Garmin has added Class A and Coflyt to the analysis services that can receive compatible aircraft flight logs through flyGarmin. The update broadens the ways owners can use recorded flight data withou…",
+      "language": "en",
+      "translations": {
+        "es": "Garmin ha añadido Class A y Coflyt a los servicios de análisis que pueden recibir registros de vuelo de aeronaves compatibles a través de flyGarmin. La actualización amplía las formas en que los propietarios pueden usar los datos de vuelo registrados sin…",
+        "pt-BR": "Garmin adicionou Class A e Coflyt aos serviços de análise que podem receber registros de voo de aeronaves compatíveis através do flyGarmin. A atualização amplia as maneiras que os proprietários podem usar os dados de voo gravados sem…"
+      }
+    },
+    {
+      "id": "f2f1215b64221a287d8e6bad5299c5d36fa511e4afd634806b07e1c667beac45",
+      "text": "Garmin has notified authorized dealers that updated aviation pricing will take effect December 21, 2026. Customers considering a panel upgrade, autopilot, display, audio panel, weather radar, traffic …",
+      "language": "en",
+      "translations": {
+        "es": "Garmin ha notificado a los distribuidores autorizados que los precios de aviación actualizados entrarán en vigor en Diciembre 21, 2026.. Clientes que consideren una actualización de panel, piloto automático, pantalla, panel de audio, radar meteorológico, tráfico …",
+        "pt-BR": "Garmin notificou os revendedores autorizados que os preços de aviação atualizados entrarão em vigor em dezembro 21, 2026. Clientes que consideram uma atualização de painel, piloto automático, display, painel de áudio, radar meteorológico, tráfego …"
+      }
+    },
+    {
+      "id": "1a458b066f2461768e59ae141ae17020794f6483e8bbda05776a0603e45d1e41",
+      "text": "Glass cockpit planning with display layout, EIS, ADAHRS, connectivity, and panel fabrication.",
+      "language": "en",
+      "translations": {
+        "es": "Planificación de cabina de cristal con disposición de pantallas, EIS, ADAHRS, conectividad y fabricación de paneles.",
+        "pt-BR": "Planejamento de cockpit de vidro com layout de exibição, EIS, ADAHRS, conectividade e fabricação de painel."
+      }
+    },
+    {
+      "id": "bf3fb545afb76a1508f792147c0e3d2ff0ca7e9a874a0a5b603e2c2a9d98c0b1",
+      "text": "Home",
+      "language": "en",
+      "translations": {
+        "es": "Inicio",
+        "pt-BR": "Início"
+      }
+    },
+    {
+      "id": "e61139ce3e7fee63a874d7b112786951c2803bcbcacb98465176c6b807ffa9bb",
+      "text": "Individual Tools",
+      "language": "en",
+      "translations": {
+        "es": "Herramientas individuales",
+        "pt-BR": "Ferramentas Individuais"
+      }
+    },
+    {
+      "id": "c6ad63a272f6fcaef7a04dd3060e10d492f1879362f5d4eb62131fcaffd1a1b0",
+      "text": "Industrial fiber laser cutting at Roger Wilco Aviation Services",
+      "language": "en",
+      "translations": {
+        "es": "Corte industrial con láser de fibra en Roger Wilco Aviation Services",
+        "pt-BR": "Corte industrial com laser de fibra em Roger Wilco Aviation Services"
+      }
+    },
+    {
+      "id": "0ba5c41cf923fe81abe254aa45495a2df1012bc52ea44724af69d8d591366910",
+      "text": "Introducing the AXIS Build-A-System Planner",
+      "language": "en",
+      "translations": {
+        "es": "Presentando el Planificador AXIS Build-A-System",
+        "pt-BR": "Apresentando o Planejador AXIS Build-A-System"
+      }
+    },
+    {
+      "id": "10e97f00fc635aabe96ce3d3fc1aef5beecd84089ad8abbada666af1b9f18442",
+      "text": "Latest From Garmin",
+      "language": "en",
+      "translations": {
+        "es": "Lo último de Garmin",
+        "pt-BR": "Últimas de Garmin"
+      }
+    },
+    {
+      "id": "4e2676b10505ab8d55fa10ff246f58088ada57c4768d56465678fa5676155b30",
+      "text": "Loading current aircraft inventory…",
+      "language": "en",
+      "translations": {
+        "es": "Cargando inventario actual de aeronaves…",
+        "pt-BR": "Carregando inventário atual de aeronaves…"
+      }
+    },
+    {
+      "id": "8c2da2c8468db621f370753ab9d9c62705f6ef89566ec4bd779b796bcd0ff7eb",
+      "text": "Menu",
+      "language": "en",
+      "translations": {
+        "es": "Menú",
+        "pt-BR": "Menu"
+      }
+    },
+    {
+      "id": "bef9d44d7b6e7d99569b997812edec9bff450aced32d13aaa0f6f1058970a1a1",
+      "text": "NBAA Member",
+      "language": "en",
+      "translations": {
+        "es": "Miembro de NBAA",
+        "pt-BR": "Membro NBAA"
+      }
+    },
+    {
+      "id": "600f147519848484307ebf79e318904fb42c46db730840faa76612fc17d236dc",
+      "text": "NDT & Certification",
+      "language": "en",
+      "translations": {
+        "es": "NDT & Certificación",
+        "pt-BR": "NDT & Certificação"
+      }
+    },
+    {
+      "id": "5c29945b9ac769ee3410a189bc9039596ab08ffaf26df7e4978cac0bb1a46b59",
+      "text": "NDT Services",
+      "language": "en",
+      "translations": {
+        "es": "NDT Servicios",
+        "pt-BR": "NDT Serviços"
+      }
+    },
+    {
+      "id": "24a87c89a33818c6fc0e4cd5ab72954d107b8dc14f3246e5dc63b8d078e08011",
+      "text": "New capability — fiber laser cutting, welding, and scaling.",
+      "language": "en",
+      "translations": {
+        "es": "Nueva capacidad — corte láser de fibra, soldadura y escalado.",
+        "pt-BR": "Nova capacidade — corte, soldagem e dimensionamento a laser de fibra."
+      }
+    },
+    {
+      "id": "e05068f8690609f4500e8fd12789fb2e9e0bf19fb6dd7c23c2707a12e80d7935",
+      "text": "New shop capability",
+      "language": "en",
+      "translations": {
+        "es": "Nueva capacidad de tienda",
+        "pt-BR": "Nova capacidade da loja"
+      }
+    },
+    {
+      "id": "0f4a2906eef62a3614b091e64707f56e274aca6d5939ce228213e90515e10eee",
+      "text": "Now booking Garmin install slots — schedule early",
+      "language": "en",
+      "translations": {
+        "es": "Ahora reservando ranuras de instalación Garmin — programa con anticipación",
+        "pt-BR": "Agora reservando slots de instalação Garmin — agende cedo"
+      }
+    },
+    {
+      "id": "3c86d81ca62bf7292a20bfac20e6345154e63e929d407373d1e7fed0d80377b7",
+      "text": "Open Portal",
+      "language": "en",
+      "translations": {
+        "es": "Abrir Portal",
+        "pt-BR": "Abrir Portal"
+      }
+    },
+    {
+      "id": "1516509493cd69482977f0e13546eebb1c0ff410b08537f70df0b9aa7b48d99d",
+      "text": "Order Papa-Alpha",
+      "language": "en",
+      "translations": {
+        "es": "Ordenar Papa-Alpha",
+        "pt-BR": "Encomendar Papa-Alpha"
+      }
+    },
+    {
+      "id": "b33f27bc4ce9d27d89ce75347def9b86d89783411215f27d7bd8825423d79830",
+      "text": "Original CitationJet: What Garmin’s New Retrofit Certification Means for Owners",
+      "language": "en",
+      "translations": {
+        "es": "CitationJet original: lo que la nueva certificación de retrofit de Garmin significa para los propietarios",
+        "pt-BR": "CitationJet Original: O que a Nova Certificação de Retrofit da Garmin Significa para os Proprietários"
+      }
+    },
+    {
+      "id": "4fd6de34a51c5dab5469e2803e306f0fb774adf7beaebfd7076f01046341ec45",
+      "text": "Panel Layout Planner",
+      "language": "en",
+      "translations": {
+        "es": "Planificador de disposición de paneles",
+        "pt-BR": "Planejador de Layout de Painel"
+      }
+    },
+    {
+      "id": "55c6cd0799e6ea9e42aa077534c3ed88f6ba8b968db9d416176d2079441e27fb",
+      "text": "Papa-Alpha Depot",
+      "language": "en",
+      "translations": {
+        "es": "Papa-Alpha Depot",
+        "pt-BR": "Depósito Papa-Alpha"
+      }
+    },
+    {
+      "id": "e6dd00f7f39a1c0083a0b0578bd9d2b19aa835a0d401a669656464d79bb68252",
+      "text": "Papa-Alpha Depot advertisement",
+      "language": "en",
+      "translations": {
+        "es": "Anuncio del Depósito Papa-Alpha",
+        "pt-BR": "Anúncio do Depósito Papa-Alpha"
+      }
+    },
+    {
+      "id": "43ac8e24072ce1df8b504b5de557088021f1518e996778b7cc9b653dca07fd52",
+      "text": "Papa-Alpha Tools",
+      "language": "en",
+      "translations": {
+        "es": "Papa-Alpha Tools",
+        "pt-BR": "Papa-Alpha Tools"
+      }
+    },
+    {
+      "id": "f455187f55dbe78f0a534a614a988f3d36e72f681d28280c4131abe705b8d9a2",
+      "text": "Papa-Alpha rigging reference tools",
+      "language": "en",
+      "translations": {
+        "es": "Herramientas de referencia de aparejo Papa-Alpha",
+        "pt-BR": "Ferramentas de referência de rigging Papa-Alpha"
+      }
+    },
+    {
+      "id": "50aea7a5e5b55bf60c658fc14fcef7aabd47699e5e181b4a206572c3409d405d",
+      "text": "Papa-Alpha rigging reference tools — CNC-machined aircraft-grade aluminum.",
+      "language": "en",
+      "translations": {
+        "es": "Herramientas de referencia de izado Papa-Alpha — Aluminio de grado aeronáutico mecanizado CNC.",
+        "pt-BR": "Ferramentas de referência de içamento Papa-Alpha — alumínio de grau aeronáutico usinado CNC."
+      }
+    },
+    {
+      "id": "adf26cd06c771a939ec8123cb2b16c042c8e91baf641e3a0bb43abe91a9ef5ec",
+      "text": "Papa-Alpha tools ship same day from the RWAS shop",
+      "language": "en",
+      "translations": {
+        "es": "Herramientas Papa-Alpha se envían el mismo día desde el taller RWAS",
+        "pt-BR": "Ferramentas Papa-Alpha enviam no mesmo dia da loja RWAS"
+      }
+    },
+    {
+      "id": "638324bd66a20ce19d434a72e1c65ff0b2fe14878494d7b3a5791f21fe01aeac",
+      "text": "Piper Rigging Reference Tools",
+      "language": "en",
+      "translations": {
+        "es": "Herramientas de referencia de aparejo Piper",
+        "pt-BR": "Piper Ferramentas de Referência de Rigging"
+      }
+    },
+    {
+      "id": "b94c831ea467a65c76ee27577029ff923d6c59e060d2b4d4c6d5442f3a521b50",
+      "text": "Portal →",
+      "language": "en",
+      "translations": {
+        "es": "Portal →",
+        "pt-BR": "Portal →"
+      }
+    },
+    {
+      "id": "1ba3eebd88d78c312f04d08d8213f13ae5a07edb54730305f82e8332f16b8fff",
+      "text": "Powder Coating",
+      "language": "en",
+      "translations": {
+        "es": "Recubrimiento en polvo",
+        "pt-BR": "Revestimento em Pó"
+      }
+    },
+    {
+      "id": "939e084c04fdfd47afe5f8c244bedd54a734be4ac373cc2701a7d48a95643eae",
+      "text": "Powerplant diagnostics, mag checks, compression testing, and engine runs.",
+      "language": "en",
+      "translations": {
+        "es": "Diagnósticos del motor, verificaciones magnéticas, pruebas de compresión y pruebas de motor.",
+        "pt-BR": "Diagnósticos de motor, verificações de magnetos, teste de compressão e testes de motor."
+      }
+    },
+    {
+      "id": "53b2134170b73e94255abb2250ccccb2b22b287f82224901f4d99988e7d55427",
+      "text": "Precision Piper rigging tools · Tiered pricing",
+      "language": "en",
+      "translations": {
+        "es": "Herramientas de izado de precisión Piper · Precios escalonados",
+        "pt-BR": "Ferramentas de içamento de precisão Piper · Preços escalonados"
+      }
+    },
+    {
+      "id": "c8bd70f7c2e9e934c35484340885ba8ab411c593bdbaa219b07cd091a09dd80c",
+      "text": "Precision flight-control rigging for PA-28, PA-30, PA-31, PA-36. CNC-machined aluminum, powder coated, UV printed. Sold worldwide.",
+      "language": "en",
+      "translations": {
+        "es": "Aparejo de control de vuelo de precisión para PA-28, PA-30, PA-31, PA-36. de aluminio mecanizado CNC, recubierto en polvo, impreso en UV. Vendido a nivel mundial.",
+        "pt-BR": "Rigging de controle de voo de precisão para PA-28, PA-30, PA-31, PA-36. alumínio usinado CNC, revestido com pó, impresso em UV. Vendido mundialmente."
+      }
+    },
+    {
+      "id": "86c0958bb929b6fb47faa4772fb8cb4e2485980c328f85134712f1230d79fc68",
+      "text": "Press Release",
+      "language": "en",
+      "translations": {
+        "es": "Comunicado de prensa",
+        "pt-BR": "Comunicado de Imprensa"
+      }
+    },
+    {
+      "id": "d26f756716f0052a432643a477b4b1da4cf18c2ddbf40588a6db503147285fbe",
+      "text": "Primary",
+      "language": "en",
+      "translations": {
+        "es": "Principal",
+        "pt-BR": "Principal"
+      }
+    },
+    {
+      "id": "a81693de5518f309c1d65480ec8d3292c9cbb6e8a999ff11817e0ccd2b2f5f88",
+      "text": "Printing & Coating",
+      "language": "en",
+      "translations": {
+        "es": "Impresión y Recubrimiento",
+        "pt-BR": "Impressão & Revestimento"
+      }
+    },
+    {
+      "id": "5d92c85054cbd413fb79711b7ed6508e565d3257fee170034d8c5d49c647f7e2",
+      "text": "Printing & Coating Overview",
+      "language": "en",
+      "translations": {
+        "es": "Resumen de Impresión y Recubrimiento",
+        "pt-BR": "Visão Geral de Impressão & Pintura"
+      }
+    },
+    {
+      "id": "bda7eca6f210f643769ff8c2f5e56980617eb232f55e2399ec464da1f5853880",
+      "text": "Printing & Powder Coating",
+      "language": "en",
+      "translations": {
+        "es": "Impresión y Recubrimiento en Polvo",
+        "pt-BR": "Impressão & Pintura em Pó"
+      }
+    },
+    {
+      "id": "2fc391cf8c1c380d94f3e0d8d7da9eaa29ecf7643f42276ebce9f54b05d13a73",
+      "text": "Privacy",
+      "language": "en",
+      "translations": {
+        "es": "Privacidad",
+        "pt-BR": "Privacidade"
+      }
+    },
+    {
+      "id": "c8d0850757388f808104dedcda06681c4bfdb70af547bb92fbf97917e318ee16",
+      "text": "Product Update",
+      "language": "en",
+      "translations": {
+        "es": "Actualización de Producto",
+        "pt-BR": "Atualização de Produto"
+      }
+    },
+    {
+      "id": "0fed0a73acb04a745f2b8cb1cf3f51c3edd2e58e6783f016283e8299318f403d",
+      "text": "RWAS Avionics Desk · KYKN · Yankton, SD",
+      "language": "en",
+      "translations": {
+        "es": "RWAS Mostrador de aviónica · KYKN · Yankton, SD",
+        "pt-BR": "RWAS Balcão de Avionics · KYKN · Yankton, SD"
+      }
+    },
+    {
+      "id": "d2f95e0ad28d637a6d56148cca7e6401fa84a8f35034eee2cc8cf1e2805aa546",
+      "text": "RWAS Work Order System",
+      "language": "en",
+      "translations": {
+        "es": "RWAS Sistema de Orden de Trabajo",
+        "pt-BR": "RWAS Sistema de Ordem de Serviço"
+      }
+    },
+    {
+      "id": "bc70fb18389695e5be8e963f2c8e9bcb78bba8e74a5d3ae636c0f31526ec637e",
+      "text": "RWAS Work Order System access",
+      "language": "en",
+      "translations": {
+        "es": "RWAS acceso al Sistema de Órdenes de Trabajo",
+        "pt-BR": "RWAS Acesso ao Sistema de Ordem de Serviço"
+      }
+    },
+    {
+      "id": "fd4891a808723cf00be111d459d1b50f0a7224794cabaa22900376dc5dc0c3f3",
+      "text": "RWAS fiber laser fabrication video",
+      "language": "en",
+      "translations": {
+        "es": "RWAS video de fabricación con láser de fibra",
+        "pt-BR": "RWAS vídeo de fabricação com laser de fibra"
+      }
+    },
+    {
+      "id": "bb0f137f7012a7ddce70d839c559f80bf6fed4c16156786f98892e7ff033dca2",
+      "text": "Request a Quote",
+      "language": "en",
+      "translations": {
+        "es": "Solicitar una cotización",
+        "pt-BR": "Solicitar um Orçamento"
+      }
+    },
+    {
+      "id": "40195a3ff2951e642b568869c5346e588417a24bc930705a27336b2636e261cc",
+      "text": "Retrofit digital autopilot with GPSS steering, altitude hold, and vertical-speed modes.",
+      "language": "en",
+      "translations": {
+        "es": "Retroinstale autopiloto digital con dirección GPSS, mantenimiento de altitud y modos de velocidad vertical.",
+        "pt-BR": "Retrofit de piloto automático digital com direção GPSS, manutenção de altitude e modos de velocidade vertical."
+      }
+    },
+    {
+      "id": "bbbb315584fc52f92409e6412500f7d8fa5067f9999aacf2f626568c20b5000a",
+      "text": "Review specialized shop services, project requirements, and the inquiry process before requesting a quote.",
+      "language": "en",
+      "translations": {
+        "es": "Revise los servicios especializados del taller, los requisitos del proyecto y el proceso de consulta antes de solicitar una cotización.",
+        "pt-BR": "Revise serviços especializados de oficina, requisitos de projeto e o processo de consulta antes de solicitar um orçamento."
+      }
+    },
+    {
+      "id": "50c466c4c0ca9915986366f22bc875ef0b419b20631df2332eb6630c6615d952",
+      "text": "Roger Wilco Aviation Services",
+      "language": "en",
+      "translations": {
+        "es": "Roger Wilco Aviation Services",
+        "pt-BR": "Roger Wilco Aviation Services"
+      }
+    },
+    {
+      "id": "c89d3586e7028beb2e0ecd15d6540cd7d537deb4d1b4a0ae530741d3cbca72ef",
+      "text": "Rotax Engine Support",
+      "language": "en",
+      "translations": {
+        "es": "Soporte de Motor Rotax",
+        "pt-BR": "Suporte ao Motor Rotax"
+      }
+    },
+    {
+      "id": "113be2db3f5f17d81cd6ce7730b6a64a990b073a0641952046282543edd93ac8",
+      "text": "Schedule your inspection",
+      "language": "en",
+      "translations": {
+        "es": "Programa tu inspección",
+        "pt-BR": "Agende sua inspeção"
+      }
+    },
+    {
+      "id": "3b9e7dc134e61d64c2e8936755cd9f0d94351764498315559c0ce76e6d2ae7f6",
+      "text": "Schedule your inspection today",
+      "language": "en",
+      "translations": {
+        "es": "Programa tu inspección hoy",
+        "pt-BR": "Agende sua inspeção hoje"
+      }
+    },
+    {
+      "id": "3c5e4003f4c1525a2ce1b58bed42d36f00ddacc80480f19d5e13a1b7904fb353",
+      "text": "Scheduling",
+      "language": "en",
+      "translations": {
+        "es": "Programación",
+        "pt-BR": "Agendamento"
+      }
+    },
+    {
+      "id": "098efb65a8b3693383fa67683819fc9c80e6e29cea0127f353216c7889f27d96",
+      "text": "Search services, products, articles & part numbers",
+      "language": "en",
+      "translations": {
+        "es": "Buscar servicios, productos, artículos y números de pieza",
+        "pt-BR": "Pesquisar serviços, produtos, artigos e números de peça"
+      }
+    },
+    {
+      "id": "6b3f3bdda538280bfda661fd9f71fc45aeff5bb5506c7c319b0a1e5bcda5880e",
+      "text": "Secure Access",
+      "language": "en",
+      "translations": {
+        "es": "Acceso Seguro",
+        "pt-BR": "Acesso Seguro"
+      }
+    },
+    {
+      "id": "d9038f0d5faa0b1f61bd9cddc171a3f34284ac7f2c3eefb2d2a14f8043d7fbb5",
+      "text": "Security",
+      "language": "en",
+      "translations": {
+        "es": "Seguridad",
+        "pt-BR": "Segurança"
+      }
+    },
+    {
+      "id": "d1841dd18ba333ccbedb99e26c71795d0fcaa94129c44fdce254c361d2049e36",
+      "text": "Selling?",
+      "language": "en",
+      "translations": {
+        "es": "¿Vende?",
+        "pt-BR": "Vendendo?"
+      }
+    },
+    {
+      "id": "f20d820d1244c365260d2b03cf8bc8cfcc8375a72b81d041336bfe1af580dffb",
+      "text": "Services",
+      "language": "en",
+      "translations": {
+        "es": "Servicios",
+        "pt-BR": "Serviços"
+      }
+    },
+    {
+      "id": "37b7cf0cfb4572d20230d6b26a398eee5526dc48dfec08cd1f10fb6b5a3c736c",
+      "text": "Services & Capabilities",
+      "language": "en",
+      "translations": {
+        "es": "Servicios y capacidades",
+        "pt-BR": "Serviços e Capacidades"
+      }
+    },
+    {
+      "id": "f4fbb4271cd3008bfdb2ca14135a5a08094fde6835a2af0161760d00a1af2c9c",
+      "text": "Services · Store · Contact",
+      "language": "en",
+      "translations": {
+        "es": "Servicios · Tienda · Contacto",
+        "pt-BR": "Serviços · Loja · Contato"
+      }
+    },
+    {
+      "id": "cf653dd59b7154292132befb2b3c87ea75f0fb602ba4b8d2aa0790b7cf33e286",
+      "text": "Sheet Metal & Fabrication",
+      "language": "en",
+      "translations": {
+        "es": "Chapa y Fabricación",
+        "pt-BR": "Metal de Chapas & Fabricação"
+      }
+    },
+    {
+      "id": "dbc98b946f6655c2f782a4539384f082ac472c402eb71ad253856e015b8e680d",
+      "text": "Shop bulletin",
+      "language": "en",
+      "translations": {
+        "es": "Boletín de la tienda",
+        "pt-BR": "Boletim da loja"
+      }
+    },
+    {
+      "id": "6ca9672a9f0364d456772611b81e3401c8ccce457871399130884ff84268d739",
+      "text": "Shopping cart",
+      "language": "en",
+      "translations": {
+        "es": "Carrito de compras",
+        "pt-BR": "Carrinho de compras"
+      }
+    },
+    {
+      "id": "3fbfc4c42e219a2ace1008fbae8ace679c38f8682ffad1791f8de67193cfd151",
+      "text": "Skip to main content",
+      "language": "en",
+      "translations": {
+        "es": "Saltar al contenido principal",
+        "pt-BR": "Pular para o conteúdo principal"
+      }
+    },
+    {
+      "id": "5183433eef2e944528401f967af94c9c3cffeb052090228660d01335d43ac471",
+      "text": "Stabilator, rudder, aileron & flap, bell crank, PA-31/PA-36 specifics. From $59.99.",
+      "language": "en",
+      "translations": {
+        "es": "Estabilizador, timón, alerón y flap, manivela de campana, especificaciones PA-31/PA-36. De $59.99.",
+        "pt-BR": "Estabilizador, leme, aileron e flap, manivela, especificações PA-31/PA-36. De $59.99."
+      }
+    },
+    {
+      "id": "f87f2fa8637c1cc858e6028ba695b3e60fc9b517db928aeceaf6e580cd3e7405",
+      "text": "Stabilator, rudder, aileron, flap, and bell crank in one case. From $264.",
+      "language": "en",
+      "translations": {
+        "es": "Estabilizador, timón, alerón, flap y manivela de campana en una sola caja. De $264.",
+        "pt-BR": "Estabilizador, leme, aileron, flap e manivela em um único estojo. De $264."
+      }
+    },
+    {
+      "id": "61fd353400fdea5e2b456f63bc5f7401d7c4e91f5eef1358ac83cab530940192",
+      "text": "Staff Login",
+      "language": "en",
+      "translations": {
+        "es": "Inicio de sesión del personal",
+        "pt-BR": "Login da Equipe"
+      }
+    },
+    {
+      "id": "02349af68599f20f917f4153ec95c223c7a1d7b5496d15036a6dd54fcce15c60",
+      "text": "Status",
+      "language": "en",
+      "translations": {
+        "es": "Estado",
+        "pt-BR": "Status"
+      }
+    },
+    {
+      "id": "60c18e76791499cd33bf3a9348f0acfa95c24e6179a9a15a374e932737da77cb",
+      "text": "Structural repair, skin replacement, custom fabrication in aircraft-grade aluminum alloys.",
+      "language": "en",
+      "translations": {
+        "es": "Reparación estructural, reemplazo de piel, fabricación personalizada en aleaciones de aluminio de grado aeronáutico.",
+        "pt-BR": "Reparo estrutural, substituição de pele, fabricação personalizada em ligas de alumínio de grau aeronáutico."
+      }
+    },
+    {
+      "id": "94779493e81bd8114961196cae2dc7e9d30f2d3e04b798af35076771477d7c85",
+      "text": "Subsurface crack and corrosion detection in aluminum and ferrous components — without disassembly.",
+      "language": "en",
+      "translations": {
+        "es": "Detección de grietas y corrosión subsuperficial en componentes de aluminio y ferrosos — sin desmontaje.",
+        "pt-BR": "Detecção de fissuras e corrosão sub-superficiais em componentes de alumínio e ferroso — sem desmontagem."
+      }
+    },
+    {
+      "id": "226a53afdaa609c87a2f37bad99720d1beeb70d9f44d72a8f5df7dd7b9ac5162",
+      "text": "Surface crack detection per ASTM E1417 for engine components, castings, and structural parts.",
+      "language": "en",
+      "translations": {
+        "es": "Detección de grietas superficiales según ASTM E1417 para componentes de motor, fundiciones y piezas estructurales.",
+        "pt-BR": "Detecção de fissuras superficiais conforme ASTM E1417 para componentes de motor, fundições e peças estruturais."
+      }
+    },
+    {
+      "id": "819f13f9cce992cae85982dc360fd9c8c87b169409a6f531328839b0ade784b7",
+      "text": "Terms",
+      "language": "en",
+      "translations": {
+        "es": "Términos",
+        "pt-BR": "Termos"
+      }
+    },
+    {
+      "id": "c9d20b822a093708be06771781538403def33a3d36cd16c592ee9d18e1e440b1",
+      "text": "The fiber laser has landed.",
+      "language": "en",
+      "translations": {
+        "es": "El láser de fibra ha llegado.",
+        "pt-BR": "O laser de fibra chegou."
+      }
+    },
+    {
+      "id": "03986fbe84a14bd2aa83cc95bf7c8da44c7c66ed3f12ee9fdc36bb53360774c6",
+      "text": "The new RWAS AXIS Build-A-System Planner gives aircraft owners a guided way to design a Garmin AXIS panel before requesting a formal quote. Choose the certified or experimental path, work through Garmin’s recommended build sequence, compare compatible displays and supporting hardware, and watch the manufacturer list-price total update as the system takes shape.",
+      "language": "en",
+      "translations": {
+        "es": "El nuevo RWAS AXIS Build-A-System Planner brinda a los propietarios de aeronaves una forma guiada de diseñar un panel Garmin AXIS antes de solicitar una cotización formal. Elija la ruta certificada o experimental, siga la secuencia de construcción recomendada por Garmin, compare pantallas compatibles y hardware de soporte, y observe cómo se actualiza el total del precio de lista del fabricante a medida que el sistema toma forma.",
+        "pt-BR": "O novo Planejador RWAS AXIS Build-A-System oferece aos proprietários de aeronaves uma maneira guiada de projetar um painel Garmin AXIS antes de solicitar um orçamento formal. Escolha o caminho certificado ou experimental, siga a sequência de montagem recomendada por Garmin, compare displays compatíveis e hardware de suporte, e veja o total de preço de lista do fabricante atualizar à medida que o sistema ganha forma."
+      }
+    },
+    {
+      "id": "4f2f651974ff8207db8dbcab72d837ec146af0b5b91e4e7234c541626721cffd",
+      "text": "Thorough airworthiness inspections per FAR 43. Discrepancy reports and return-to-service documentation.",
+      "language": "en",
+      "translations": {
+        "es": "Inspecciones exhaustivas de aeronavegabilidad según FAR 43.. Informes de discrepancias y documentación de retorno a servicio.",
+        "pt-BR": "Inspeções de aeronavegabilidade completas conforme FAR 43. Relatórios de discrepância e documentação de retorno ao serviço."
+      }
+    },
+    {
+      "id": "2f9e006a34d19fe8513851cc01b82a1aa636c93a80ab3b1dea3bbde0f350ac4c",
+      "text": "Today’s Edition",
+      "language": "en",
+      "translations": {
+        "es": "Edición de Hoy",
+        "pt-BR": "Edição de Hoje"
+      }
+    },
+    {
+      "id": "3804d04bba0f493662c9580b4c3f2f863b4c3f4ec94da2409706b4ca65061bd0",
+      "text": "Tool Procurement",
+      "language": "en",
+      "translations": {
+        "es": "Adquisición de Herramientas",
+        "pt-BR": "Aquisição de Ferramentas"
+      }
+    },
+    {
+      "id": "886c81ede73f0a1f8f0909560f9b64cc9016aebe8200b7bf2359206d24723075",
+      "text": "UV Printing",
+      "language": "en",
+      "translations": {
+        "es": "Impresión UV",
+        "pt-BR": "Impressão UV"
+      }
+    },
+    {
+      "id": "3e90caea9f1d607afcff5a30b824e42de44dde6928af7fa4c2827378712ed385",
+      "text": "UV Printing & Powder Coating",
+      "language": "en",
+      "translations": {
+        "es": "Impresión UV y Recubrimiento en Polvo",
+        "pt-BR": "Impressão UV & Pintura em Pó"
+      }
+    },
+    {
+      "id": "c8fa42cbf021f25ce4ce4900892c78b10f146b1fbbc867a930e93d612ffbd65b",
+      "text": "Vol. XL · No. 1",
+      "language": "en",
+      "translations": {
+        "es": "Vol. XL · No. 1",
+        "pt-BR": "Vol. XL · Nº 1"
+      }
+    },
+    {
+      "id": "70a7a67b41e5d43ce0aa70a8318c8bd2ea25c44875cf2160f7ce6430cc437d9d",
+      "text": "Work Order Login",
+      "language": "en",
+      "translations": {
+        "es": "Inicio de Sesión de Orden de Trabajo",
+        "pt-BR": "Login de Ordem de Serviço"
+      }
+    },
+    {
+      "id": "aad1f9786d7fe1a34e83fb14789cbbedfd3f2a05eb8c906ded8b26b3d0f99892",
+      "text": "Yankton Location",
+      "language": "en",
+      "translations": {
+        "es": "Ubicación Yankton",
+        "pt-BR": "Localização de Yankton"
+      }
+    },
+    {
+      "id": "83a8584df2fac7b652e2d9c3d98cb23e4437984abe786deb8c469d15a36d0f94",
+      "text": "rogerwilcoaviation.com",
+      "language": "en",
+      "translations": {
+        "es": "rogerwilcoaviation.com",
+        "pt-BR": "rogerwilcoaviation.com"
+      }
+    },
+    {
+      "id": "8b79ea0686ade3fdeef00c33f77233bd6343c5977cfe7a9f4d50377c71aa25f6",
+      "text": "rogerwilcoaviation.com, Aircraft Spruce, Amazon (coming soon). Made by mechanics, for mechanics.",
+      "language": "en",
+      "translations": {
+        "es": "rogerwilcoaviation.com, Aircraft Spruce, Amazon (próximamente). Hecho por mecánicos, para mecánicos.",
+        "pt-BR": "rogerwilcoaviation.com, Aircraft Spruce, Amazon (em breve). Feito por mecânicos, para mecânicos."
+      }
+    },
+    {
+      "id": "d760ed6d182ef51e6dc31a06e762f6e8f38c1032d732745d14fe7dcafdec1368",
+      "text": "wheels-up since 2022",
+      "language": "en",
+      "translations": {
+        "es": "en vuelo desde 2022",
+        "pt-BR": "decolando desde 2022"
+      }
+    },
+    {
+      "id": "302f3dd7f58ab5899ae79ad5d571af47373de29a1559c44840db85085a6dfc6d",
+      "text": "© 2026 Roger Wilco Aviation Services · KYKN · Yankton, SD",
+      "language": "en",
+      "translations": {
+        "es": "© 2026 Roger Wilco Aviation Services · KYKN · Yankton, SD",
+        "pt-BR": "© 2026 Roger Wilco Aviation Services · KYKN · Yankton, SD"
+      }
+    },
+    {
+      "id": "687ce0409b8bd52890c6f885522358ccf9a753305360c0cc1c83704cbc8c256e",
+      "text": "“Don’t fly single-pilot, Roger Wilco is your trusted copilot”",
+      "language": "en",
+      "translations": {
+        "es": "“No vueles solo, Roger Wilco es tu copiloto de confianza”",
+        "pt-BR": "“Não voe solo, Roger Wilco é seu copiloto de confiança”"
+      }
+    },
+    {
+      "id": "fe7fe0b59a1f333c7f9529a09fd239589a22cb5bc166697d04b1c92665b419c7",
+      "text": ". Direct avionics questions may also use",
+      "language": "en",
+      "translations": {
+        "es": ". Las preguntas directas de aviónica también pueden usar",
+        "pt-BR": ". Perguntas diretas sobre aviônicos também podem usar"
+      }
+    },
+    {
+      "id": "65477a3e2acddd40f8f923297709c6a802423bf1752697b8097a70fe0928187d",
+      "text": ". RWAS does not sell your private information, including your email address or phone number. See our",
+      "language": "en",
+      "translations": {
+        "es": ". RWAS no vende su información privada, incluido su correo electrónico o número de teléfono. Consulte nuestro",
+        "pt-BR": ". RWAS não vende suas informações privadas, incluindo seu endereço de e‑mail ou número de telefone. Veja nosso"
+      }
+    },
+    {
+      "id": "f24071b4c8b0c6c5e315f1aeb57ca1172e1ed239e70a3f15ef37907c14f0d63e",
+      "text": "3309 Douglas Avenue Unit #3",
+      "language": "en",
+      "translations": {
+        "es": "3309 Douglas Avenue Unidad #3",
+        "pt-BR": "3309 Douglas Avenue Unidade #3"
+      }
+    },
+    {
+      "id": "9217db7f8c1403b5491b9223c3d7579a8affd2b6350404b3b838e0120ae70635",
+      "text": "Aircraft for sale",
+      "language": "en",
+      "translations": {
+        "es": "Aeronave en venta",
+        "pt-BR": "Aeronaves à venda"
+      }
+    },
+    {
+      "id": "a1b5d1118433e5768c817e5f6255bcbe61bece2702215bc31fba2fa3a540b955",
+      "text": "Aircraft make",
+      "language": "en",
+      "translations": {
+        "es": "Marca de la aeronave",
+        "pt-BR": "Fabricante da aeronave"
+      }
+    },
+    {
+      "id": "50fabf145d6031ffb723cdd1bbc45543cd3f4189991bcf69edddc30a256f3c38",
+      "text": "Aircraft model",
+      "language": "en",
+      "translations": {
+        "es": "Modelo de la aeronave",
+        "pt-BR": "Modelo da aeronave"
+      }
+    },
+    {
+      "id": "04f9c4c8119602fc0ab8ca888e407e9a96c1226f2d7846f4aad4fc5af2115281",
+      "text": "Aircraft serial number",
+      "language": "en",
+      "translations": {
+        "es": "Número de serie de la aeronave",
+        "pt-BR": "Número de série da aeronave"
+      }
+    },
+    {
+      "id": "b873ca56fa56436d8792a8178150324a56cb2bf154c3b51750796b291f485ece",
+      "text": "Aircraft status",
+      "language": "en",
+      "translations": {
+        "es": "Estado de la aeronave",
+        "pt-BR": "Status da aeronave"
+      }
+    },
+    {
+      "id": "3da7bec4140d339f15dc8ef2443d91094a25a09ec6a629e79798145a18384555",
+      "text": "Aircraft year",
+      "language": "en",
+      "translations": {
+        "es": "Año de la aeronave",
+        "pt-BR": "Ano da aeronave"
+      }
+    },
+    {
+      "id": "dfe70f9f92a96f1f0c5564e4b9536a265e10c7d72368e249b3d540d5c1eceb74",
+      "text": "Avionics email",
+      "language": "en",
+      "translations": {
+        "es": "Correo electrónico de aviónica",
+        "pt-BR": "E‑mail de aviônicos"
+      }
+    },
+    {
+      "id": "a38a89ee6891617d61f3a3d18236eb9c8e3c083f4ee41d495681b9e27bad53a4",
+      "text": "Best time to call",
+      "language": "en",
+      "translations": {
+        "es": "Mejor hora para llamar",
+        "pt-BR": "Melhor horário para ligar"
+      }
+    },
+    {
+      "id": "12d8ed7a151a6806a22f79bd2ae383eef7fc14f0b75a16f75a28ee7fb3dc8165",
+      "text": "Contact RWAS — Yankton Avionics & Aircraft Service",
+      "language": "en",
+      "translations": {
+        "es": "Contactar RWAS — Yankton Avionics & Aircraft Service",
+        "pt-BR": "Contato RWAS — Yankton Avionics & Aircraft Service"
+      }
+    },
+    {
+      "id": "e3a9c6e53340ff1b855d988fa8c4cbdd209872d4f2173fcc69bf4932e523f676",
+      "text": "Contact RWAS.",
+      "language": "en",
+      "translations": {
+        "es": "Contacte a RWAS.",
+        "pt-BR": "Contate RWAS."
+      }
+    },
+    {
+      "id": "62b7fc8a1498d151aa05fe5262d3621e5eb211e8b9db9d67536cb7c9e0e0599e",
+      "text": "Email",
+      "language": "en",
+      "translations": {
+        "es": "Correo electrónico",
+        "pt-BR": "Email"
+      }
+    },
+    {
+      "id": "989c70dfb2ff28eb8542a9a5c0e535e292a3f0f46884f5b40e60d0d755b2b3cf",
+      "text": "Email *",
+      "language": "en",
+      "translations": {
+        "es": "Correo electrónico *",
+        "pt-BR": "E‑mail *"
+      }
+    },
+    {
+      "id": "fdaf4a2d0babff3575da6c15be7037f6723fb7528bb0b096fe7e8bb97da1dd48",
+      "text": "Email or phone",
+      "language": "en",
+      "translations": {
+        "es": "Correo electrónico o teléfono",
+        "pt-BR": "Email ou telefone"
+      }
+    },
+    {
+      "id": "3e82776b9ce5e6048bc5dae4db3eae6b3182799cdd2981e411f43ee43921cb97",
+      "text": "Enter the manufacturer serial number",
+      "language": "en",
+      "translations": {
+        "es": "Introduzca el número de serie del fabricante",
+        "pt-BR": "Insira o número de série do fabricante"
+      }
+    },
+    {
+      "id": "0bb1c06d502cc8c47920dc7414df6b03f0b4a3ec2a7047470d3e30feb47540da",
+      "text": "Every message below lands at",
+      "language": "en",
+      "translations": {
+        "es": "Cada mensaje a continuación llega a",
+        "pt-BR": "Cada mensagem abaixo chega a"
+      }
+    },
+    {
+      "id": "6772033807fe6125a2c1a1bb0f0177f0ebb3fd248e54f1acbd51183e204a7bc5",
+      "text": "General / service",
+      "language": "en",
+      "translations": {
+        "es": "General / servicio",
+        "pt-BR": "Geral / serviço"
+      }
+    },
+    {
+      "id": "2fc13e2ed39da4f0ba9d9b1dbfd851849420d1aee2e0ce944f02e03ca528b30a",
+      "text": "General inquiry",
+      "language": "en",
+      "translations": {
+        "es": "Consulta general",
+        "pt-BR": "Consulta geral"
+      }
+    },
+    {
+      "id": "7cd3aef48b1d641f96b64de7043578f85bee1f64541be48c8fc1211745ba9584",
+      "text": "Message *",
+      "language": "en",
+      "translations": {
+        "es": "Mensaje *",
+        "pt-BR": "Mensagem *"
+      }
+    },
+    {
+      "id": "476f17a26117ef04fad4fcbb3817233e13723bf44fb28b02e14a1b8ef0271f27",
+      "text": "Mon–Fri, 7:00a–5:00p CT",
+      "language": "en",
+      "translations": {
+        "es": "Lun–Vie, 7:00a–5:00p CT",
+        "pt-BR": "Seg–Sex, 7:00a–5:00p CT"
+      }
+    },
+    {
+      "id": "cca7879435f06803826ef636f50e16d87e2d3fb0e81f81f5c7a1f1d8ff8041a6",
+      "text": "N-number",
+      "language": "en",
+      "translations": {
+        "es": "N-number",
+        "pt-BR": "N-number"
+      }
+    },
+    {
+      "id": "4a19358ce8bd5cd6c24f1b9801a73c5327fe2874edd1358fae253ed49ef9ea12",
+      "text": "Name *",
+      "language": "en",
+      "translations": {
+        "es": "Nombre *",
+        "pt-BR": "Nome *"
+      }
+    },
+    {
+      "id": "eedf1d6d5063bee997cecf14db05b5ff3c6660afd4a29edc0e24806e2640316b",
+      "text": "Not specified",
+      "language": "en",
+      "translations": {
+        "es": "No especificado",
+        "pt-BR": "Não especificado"
+      }
+    },
+    {
+      "id": "b5feed4967643c86527c624ecc4d1b057f0e1354a2eea2e2796e9cf109ca8886",
+      "text": "Optional",
+      "language": "en",
+      "translations": {
+        "es": "Opcional",
+        "pt-BR": "Opcional"
+      }
+    },
+    {
+      "id": "9bb4c2e27dd5b36e20ef9700a1fa505e57901b856c3887213621e6f8c554a310",
+      "text": "Other ways to reach us",
+      "language": "en",
+      "translations": {
+        "es": "Otras formas de contactarnos",
+        "pt-BR": "Outras formas de nos contatar"
+      }
+    },
+    {
+      "id": "1452dc60b05b0668884e62aa933f78f92c9f686bc3019195fafe700f92ca5c1d",
+      "text": "Papa-Alpha tool inquiry",
+      "language": "en",
+      "translations": {
+        "es": "Consulta de herramienta Papa-Alpha",
+        "pt-BR": "Consulta de ferramenta Papa-Alpha"
+      }
+    },
+    {
+      "id": "988b7f52ae4534e8531abc72db0465f9654547919ade413f1385ea5acf4693a2",
+      "text": "Phone",
+      "language": "en",
+      "translations": {
+        "es": "Teléfono",
+        "pt-BR": "Telefone"
+      }
+    },
+    {
+      "id": "63b7bf5a17ea27b3b9ca6926d788b50febf72e6c15984874e5054acb1da76975",
+      "text": "Preferred contact",
+      "language": "en",
+      "translations": {
+        "es": "Contacto preferido",
+        "pt-BR": "Contato preferido"
+      }
+    },
+    {
+      "id": "01767fbc87289385075f58955057ee1cbb9e2dbed312a4d86e2aa71866c7d1bb",
+      "text": "Privacy Policy",
+      "language": "en",
+      "translations": {
+        "es": "Política de privacidad",
+        "pt-BR": "Política de Privacidade"
+      }
+    },
+    {
+      "id": "027cee23d0a7d7a997c2e3ad209c114826c028315bbd7b29141f378914728ebb",
+      "text": "RWAS Avionics Desk · KYKN, Yankton · (605) 299-8178",
+      "language": "en",
+      "translations": {
+        "es": "RWAS Mostrador de Aviónica · KYKN, Yankton · (605) 299-8178",
+        "pt-BR": "RWAS Avionics Desk · KYKN, Yankton · (605) 299-8178"
+      }
+    },
+    {
+      "id": "5126e6b0cd2c60ecc3a278cbba10e8e1ad12c088d9698e0e8342015e966e05db",
+      "text": "Registered / operational",
+      "language": "en",
+      "translations": {
+        "es": "Registrado / operativo",
+        "pt-BR": "Registrada / operacional"
+      }
+    },
+    {
+      "id": "5efbf3fa9506a717a9224c1b4394fc332a64d665b7eff129a78372709505596d",
+      "text": "Registration / identifiers not assigned",
+      "language": "en",
+      "translations": {
+        "es": "Registro / identificadores no asignados",
+        "pt-BR": "Registro / identificadores não atribuídos"
+      }
+    },
+    {
+      "id": "c6ab678ced1ec7fd09b9bec4be3ca7f1268219e2f5f4b32b0bc1de2f484e6d4a",
+      "text": "Repair Station Headquarters",
+      "language": "en",
+      "translations": {
+        "es": "Sede de la Estación de Reparación",
+        "pt-BR": "Sede da Estação de Reparos"
+      }
+    },
+    {
+      "id": "99c5b02969fd3e3129432c89f2994c76eb9265e7b4489943d543d53e7ef23481",
+      "text": "Request a quote",
+      "language": "en",
+      "translations": {
+        "es": "Solicitar una cotización",
+        "pt-BR": "Solicitar um orçamento"
+      }
+    },
+    {
+      "id": "cae982840a80333dc9878fc81ba149d88f049ea292f8fd8f25ee95b6b61d44d6",
+      "text": "Routed to",
+      "language": "en",
+      "translations": {
+        "es": "Enrutado a",
+        "pt-BR": "Encaminhado para"
+      }
+    },
+    {
+      "id": "f7229150d5c6e7b6e903b4bdc46db97c5c0bd64e404d887bc8f74f2d858c2a7c",
+      "text": "Send to RWAS",
+      "language": "en",
+      "translations": {
+        "es": "Enviar a RWAS",
+        "pt-BR": "Enviar para RWAS"
+      }
+    },
+    {
+      "id": "98b8518ee920c77d44aee04af3c6aed995350af9f18fc21f7476a6ada52353d0",
+      "text": "Service / maintenance",
+      "language": "en",
+      "translations": {
+        "es": "Servicio / mantenimiento",
+        "pt-BR": "Serviço / manutenção"
+      }
+    },
+    {
+      "id": "79effacd0a87bf619c76a4a54825377a474474ab000ec945ac71a643cb8887f1",
+      "text": "Tell us what you need.",
+      "language": "en",
+      "translations": {
+        "es": "Díganos lo que necesita.",
+        "pt-BR": "Diga-nos o que você precisa."
+      }
+    },
+    {
+      "id": "11c5f4b9abd66fc3c23e44bacdc3d39fbc0110ce7cc97fd9fe730d063b8893d9",
+      "text": "The Correspondence Desk",
+      "language": "en",
+      "translations": {
+        "es": "El Escritorio de Correspondencia",
+        "pt-BR": "Balcão de Correspondência"
+      }
+    },
+    {
+      "id": "8818d5fddf509475f83520bc72fc317627fc8f591d335219d07c49e91e372727",
+      "text": "Under construction",
+      "language": "en",
+      "translations": {
+        "es": "En construcción",
+        "pt-BR": "Em construção"
+      }
+    },
+    {
+      "id": "a04745d3505435abf6384dde50cb5f83976669dee9550e6a9629a26ee286b5f3",
+      "text": "Website",
+      "language": "en",
+      "translations": {
+        "es": "Sitio web",
+        "pt-BR": "Site"
+      }
+    },
+    {
+      "id": "0c422d1a8b37eea919afcf282849e5d2903ce7253e13e6c8804f2cd0257a4c8f",
+      "text": "What can we help with?",
+      "language": "en",
+      "translations": {
+        "es": "¿En qué podemos ayudar?",
+        "pt-BR": "Como podemos ajudar?"
+      }
+    },
+    {
+      "id": "c5fb9aaaa6cbcf943cd3b93891e526bfe2993ccb88bbd93e8e389a02b0fd49d1",
+      "text": "Yankton, SD 57078",
+      "language": "en",
+      "translations": {
+        "es": "Yankton, SD 57078",
+        "pt-BR": "Yankton, SD 57078"
+      }
+    },
+    {
+      "id": "1c728aacda2dfec2b7f815c2d167e3500457028c4391eac157236f88f2a88e38",
+      "text": "e.g. Cessna",
+      "language": "en",
+      "translations": {
+        "es": "e.g. Cessna",
+        "pt-BR": "e.g. Cessna"
+      }
+    },
+    {
+      "id": "6834c06a1633d160937d001523eaa2845967befb7440d69cde06d33bf0718678",
+      "text": "e.g. Weekday mornings, CT",
+      "language": "en",
+      "translations": {
+        "es": "p. ej. Mañanas de semana, CT",
+        "pt-BR": "ex.: manhãs de dias úteis, CT"
+      }
+    },
+    {
+      "id": "7e1864a3fdb55c0f8d64deda75b79e0ce4b689727888b5f18a601f30acb41362",
+      "text": "— quote requests & inquiries —",
+      "language": "en",
+      "translations": {
+        "es": "— solicitudes de cotización y consultas —",
+        "pt-BR": "— solicitações de cotação e consultas —"
+      }
+    },
+    {
+      "id": "9056146ed5cd8b83f78587a3b1476082c055d4003965f2bccab1a860dbace724",
+      "text": "— read by the shop, not by a phone tree. For quote requests, include your aircraft make / model; registered-aircraft quotes also need the year, serial number, and N-number.",
+      "language": "en",
+      "translations": {
+        "es": "— leído por el taller, no por un sistema telefónico automatizado. Para solicitudes de cotización, incluya la marca / modelo de su aeronave; las cotizaciones de aeronaves registradas también requieren el año, número de serie y N-number.",
+        "pt-BR": "— lida pela loja, não por um sistema automático. Para solicitações de cotação, inclua a marca / modelo da sua aeronave; cotações de aeronaves registradas também precisam do ano, número de série e N-number."
+      }
+    },
+    {
+      "id": "d7dcb58ebaa9e163d544cf1ff697298c134ea2ab2b8367606d4e9ad5cb60238c",
+      "text": "Account",
+      "language": "en",
+      "translations": {
+        "es": "Cuenta",
+        "pt-BR": "Conta"
+      }
+    },
+    {
+      "id": "fff55f4fa0620006e7c326124e89e28cb913096b198ebbc1fe5468c50f171702",
+      "text": "Back",
+      "language": "en",
+      "translations": {
+        "es": "Atrás",
+        "pt-BR": "Voltar"
+      }
+    },
+    {
+      "id": "27078f338e1ca079ebd7c062cdee2c542be324b62e3008f378d97d54c559b823",
+      "text": "Cancel",
+      "language": "en",
+      "translations": {
+        "es": "Cancelar",
+        "pt-BR": "Cancelar"
+      }
+    },
+    {
+      "id": "293ea1434678d2b2861383a62d030d6f91b731ae2c01c736ac555380f2316114",
+      "text": "Close",
+      "language": "en",
+      "translations": {
+        "es": "Cerrar",
+        "pt-BR": "Fechar"
+      }
+    },
+    {
+      "id": "15c92a7041e898fa0865b51abd636d34092957eadc70aa106f11d46b477cd048",
+      "text": "Create a Listing",
+      "language": "en",
+      "translations": {
+        "es": "Crear un anuncio",
+        "pt-BR": "Criar um anúncio"
+      }
+    },
+    {
+      "id": "bdff78cfb3ed41de78385b949ea7dca1acbd282d5956eea9123a5be0a7187612",
+      "text": "Create your account",
+      "language": "en",
+      "translations": {
+        "es": "Crear su cuenta",
+        "pt-BR": "Crie sua conta"
+      }
+    },
+    {
+      "id": "c02d59613f35a2354bc2512a7c1923a80da672c4fa5e735967ad5c714b38223d",
+      "text": "Forgot password?",
+      "language": "en",
+      "translations": {
+        "es": "¿Olvidó la contraseña?",
+        "pt-BR": "Esqueceu a senha?"
+      }
+    },
+    {
+      "id": "8d37aa85a459f6a05d130d1d4c8de9145e210ffd11fd7a90f10a30ec86425f4d",
+      "text": "Next",
+      "language": "en",
+      "translations": {
+        "es": "Siguiente",
+        "pt-BR": "Próximo"
+      }
+    },
+    {
+      "id": "6c63f1e544de4bcd12d49a757fc0b5e8b6b56fb7c868958c98328c036cce52a8",
+      "text": "Password",
+      "language": "en",
+      "translations": {
+        "es": "Contraseña",
+        "pt-BR": "Senha"
+      }
+    },
+    {
+      "id": "131d9853d90dd5310c26f1f130d2368290a397f1f548b80042a94d4c5c6a2f7b",
+      "text": "Sign Out",
+      "language": "en",
+      "translations": {
+        "es": "Cerrar sesión",
+        "pt-BR": "Sair"
+      }
+    },
+    {
+      "id": "5770f7c92d058346073eb5e770e80e8c33a1382b76c7df097e2f366a41ea6fc1",
+      "text": "User Login",
+      "language": "en",
+      "translations": {
+        "es": "Inicio de sesión de usuario",
+        "pt-BR": "Login do usuário"
+      }
+    }
+  ]
+}

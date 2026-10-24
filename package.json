@@ -14,7 +14,7 @@
     "appinfo": "node ./scripts/generateAppInfo.mjs && node ./scripts/generate-blog-image-dimensions.mjs",
     "pages:build": "npm run build:cloudflare",
     "pages:deploy:preview": "npm run pages:build && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview",
-    "build:cloudflare": "npm run appinfo && npm run build:analytics && npx @cloudflare/next-on-pages && node scripts/inject-cloudflare-collection-redirects.mjs && node scripts/inject-wos-routes.mjs && node scripts/stage-csp.mjs && node scripts/stage-service-intake.mjs",
+    "build:cloudflare": "npm run appinfo && npm run build:analytics && npx @cloudflare/next-on-pages && node scripts/inject-cloudflare-collection-redirects.mjs && node scripts/inject-wos-routes.mjs && node scripts/stage-csp.mjs && node scripts/stage-service-intake.mjs && node scripts/build-language-catalog.mjs",
     "deploy:preview": "npm run build:cloudflare && npx wrangler pages deploy .vercel/output/static --project-name rwas-web --branch preview",
     "seo:smoke": "node scripts/seo-smoke-check.mjs",
     "seo:artifact": "node scripts/seo-build-artifact-check.mjs",
@@ -36,7 +36,8 @@
     "test:seller:review-browser": "node tests/aircraft-sale/review-browser.mjs",
     "test:seller:accounts-browser": "node tests/aircraft-sale/account-admin-browser.mjs",
     "test:seller:media-browser": "node tests/aircraft-sale/full-shell.mjs",
-    "test:seller:better-auth": "node --test --test-concurrency=1 tests/aircraft-sale/better-auth-service.test.mjs tests/aircraft-sale/better-auth-bridge.test.mjs tests/aircraft-sale/better-auth-mail-context.test.mjs tests/aircraft-sale/better-auth-runtime.test.mjs tests/aircraft-sale/better-auth-ui.test.mjs tests/aircraft-sale/better-auth-admin-browser.test.mjs tests/aircraft-sale/replacement-catalog.test.mjs tests/aircraft-sale/authenticator-qr.test.mjs"
+    "test:seller:better-auth": "node --test --test-concurrency=1 tests/aircraft-sale/better-auth-service.test.mjs tests/aircraft-sale/better-auth-bridge.test.mjs tests/aircraft-sale/better-auth-mail-context.test.mjs tests/aircraft-sale/better-auth-runtime.test.mjs tests/aircraft-sale/better-auth-ui.test.mjs tests/aircraft-sale/better-auth-admin-browser.test.mjs tests/aircraft-sale/replacement-catalog.test.mjs tests/aircraft-sale/authenticator-qr.test.mjs",
+    "test:language": "node --test tests/site-language.test.mjs"
   },
   "dependencies": {
     "@clerk/clerk-js": "^6.38.1",
@@ -134,6 +135,7 @@
     "jsqr": "1.4.0",
     "lint-staged": "^16.1.6",
     "minimatch": "9.0.7",
+    "parse5": "^7.3.0",
     "postcss": "8.5.16",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
