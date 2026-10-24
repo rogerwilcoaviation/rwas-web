@@ -252,6 +252,11 @@ test('advanced Pages wrapper injects raw HTML only after hydration marker check 
       `export default {fetch(request){return new Response('<html><head>'+ (new URL(request.url).pathname==='/react'?'<meta name="rwas-react-language" content="true">':'')+'</head><body><h1>Test</h1></body></html>',{headers:{'Content-Type':'text/html','Content-Security-Policy-Report-Only':'preserved'}})}}`,
     );
     execFileSync(process.execPath, ['scripts/stage-service-intake.mjs', root]);
+    assert.ok(
+      JSON.parse(
+        await readFile(join(root, '_routes.json'), 'utf8'),
+      ).exclude.includes('/_site-language/*'),
+    );
     mf = new Miniflare({
       modules: true,
       modulesRules: [{ type: 'ESModule', include: ['**/*.js'] }],

@@ -37,7 +37,7 @@ test('advanced Pages routing reaches actual handlers and preserves existing app'
      assert.equal(rejected.status,503);assert.equal(rejected.headers.get('X-Robots-Tag'),'noindex, nofollow');
    }
  }
- const routes=JSON.parse(await readFile(join(root,'_routes.json'),'utf8'));assert.deepEqual(routes.exclude,['/ops/*']);assert.deepEqual(routes.include,['/*']);
+ const routes=JSON.parse(await readFile(join(root,'_routes.json'),'utf8'));assert.deepEqual(routes.exclude,['/ops/*','/_site-language/*']);assert.deepEqual(routes.include,['/*']);
  } finally {await mf?.dispose();await rm(root,{recursive:true,force:true});}
 });
 

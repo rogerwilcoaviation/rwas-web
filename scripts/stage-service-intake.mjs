@@ -124,6 +124,10 @@ for (const path of [
       'An existing wildcard exclusion would bypass intake or seller API',
     );
 }
+// Translation dictionaries are generated after Next's asset manifest. Serve
+// this public, content-addressed directory directly from Pages static assets.
+if (!(routes.exclude || []).includes('/_site-language/*'))
+  (routes.exclude ||= []).push('/_site-language/*');
 writeFileSync(routesPath, JSON.stringify(routes, null, 2));
 console.log(
   'Staged four explicit intake routes; existing application and CSP preserved.',

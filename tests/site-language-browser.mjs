@@ -1,6 +1,12 @@
 import assert from 'node:assert/strict';
 import { mkdir, readFile, writeFile, readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
+assert.ok(
+  JSON.parse(
+    await readFile(resolve('.vercel/output/static/_routes.json'), 'utf8'),
+  ).exclude.includes('/_site-language/*'),
+  'Generated translation dictionaries must bypass the Next application router.',
+);
 const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
     '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs'
