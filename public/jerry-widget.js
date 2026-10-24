@@ -1,5 +1,5 @@
 // jerry-widget.js v3 — structured intake protocol (state/action out of reply text)
-(function () {
+(async function () {
   var widgetScriptUrl = document.currentScript && document.currentScript.src;
   if (window.__jerryWidgetLoaded) return;
   window.__jerryWidgetLoaded = true;
@@ -175,7 +175,11 @@
     '<button type="button" class="jerry-service-open" style="min-height:44px;flex-shrink:0">Request service — review and submit</button>' +
     '<div class="jerry-widget-chat"></div>' +
     '<div class="jerry-widget-error" role="alert"></div>' +
-    '<p class="jerry-widget-privacy" style="margin:0;padding:6px 12px;font:11px/1.4 Arial,sans-serif;color:#333;background:#f7f4ef">' + (LISTING_UI_ENABLED ? 'Aviation Exchange conversations are retained for up to 90 days (or the latest 100,000 activity events) and available to authorized administrators for troubleshooting. Avoid passwords and verification codes.' : 'Messages are processed by our AI chat service and stored in this tab. Avoid sensitive details.') + ' <a href="/privacy" target="_blank" rel="noopener noreferrer" style="color:#17466b;text-decoration:underline">Privacy and retention</a>. Chat alone does not submit a service request.</p>' +
+    '<p class="jerry-widget-privacy" style="margin:0;padding:6px 12px;font:11px/1.4 Arial,sans-serif;color:#333;background:#f7f4ef">' +
+    (LISTING_UI_ENABLED
+      ? 'Aviation Exchange conversations are retained for up to 90 days (or the latest 100,000 activity events) and available to authorized administrators for troubleshooting. Avoid passwords and verification codes.'
+      : 'Messages are processed by our AI chat service and stored in this tab. Avoid sensitive details.') +
+    ' <a href="/privacy" target="_blank" rel="noopener noreferrer" style="color:#17466b;text-decoration:underline">Privacy and retention</a>. Chat alone does not submit a service request.</p>' +
     '<div class="jerry-widget-input">' +
     '<button type="button" class="jerry-widget-attach" title="Attach photos or documents">📎</button>' +
     '<input type="file" class="jerry-file-input" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.pdf,.doc,.docx,.xls,.xlsx" style="display:none" />' +
@@ -186,6 +190,46 @@
   document.body.appendChild(backdrop);
   document.body.appendChild(panel);
   document.body.appendChild(bubble);
+
+  // The gated account controller owns all state when enabled. It never reads
+  // the legacy, unbound transcript key above; rollback retains that key intact.
+  if (!isShopify) {
+    try {
+      var gateResponse = await fetch('/api/jerry/context', {
+        credentials: 'same-origin',
+        cache: 'no-store',
+      });
+      if (gateResponse.status !== 404) {
+        var gate = await gateResponse.json();
+        if (gate.enabled !== false) {
+          var accountChat = await import(
+            '/jerry-account-chat.mjs?v=20261024-phase-one'
+          );
+          if (
+            await accountChat.mountJerryAccountChat({
+              panel: panel,
+              bubble: bubble,
+              backdrop: backdrop,
+              initialContext: gateResponse.ok
+                ? gate
+                : {
+                    error:
+                      gate.error || 'Jerry account service is unavailable.',
+                  },
+            })
+          )
+            return;
+        }
+      }
+    } catch (accountError) {
+      panel.textContent =
+        'Jerry account chat is unavailable. Refresh the page to try again.';
+      bubble.onclick = function () {
+        panel.style.display = 'flex';
+      };
+      return;
+    }
+  }
 
   var chat = panel.querySelector('.jerry-widget-chat');
   var errorBox = panel.querySelector('.jerry-widget-error');

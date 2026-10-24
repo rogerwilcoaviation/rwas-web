@@ -86,6 +86,81 @@ export default function ActivityLog({
   );
   const requestRef = useRef(request);
   requestRef.current = request;
+  const canonicalId = (
+    detail?.event.details.conversationRef as
+      | { conversationId?: string }
+      | undefined
+  )?.conversationId;
+  useEffect(() => {
+    if (!canonicalId || !expanded) return;
+    let active = true,
+      epoch = 0,
+      deletedHere = false;
+    const generation = detailGeneration.current;
+    const clear = (reason: string) => {
+      epoch++;
+      setDetail((current) =>
+        current
+          ? { ...current, exchanges: [], conversationUnavailable: reason }
+          : current,
+      );
+    };
+    const check = async () => {
+      if (deletedHere) return;
+      const captured = epoch;
+      try {
+        const current = (await requestRef.current(
+          '/admin/activity/' + expanded,
+        )) as ActivityDetailData;
+        if (
+          active &&
+          captured === epoch &&
+          generation === detailGeneration.current
+        )
+          setDetail(current);
+      } catch {
+        if (
+          active &&
+          captured === epoch &&
+          generation === detailGeneration.current
+        )
+          clear('Refresh required; current access could not be verified.');
+      }
+    };
+    const visibility = () => {
+      if (document.visibilityState === 'hidden')
+        clear('Hidden while this page is inactive.');
+      else void check();
+    };
+    const deleted = (event: {
+      data?: { id?: string };
+      detail?: { id?: string };
+    }) => {
+      if ((event.data?.id || event.detail?.id) === canonicalId) {
+        deletedHere = true;
+        clear('Deleted or expired.');
+      }
+    };
+    const channel =
+      typeof BroadcastChannel !== 'undefined'
+        ? new BroadcastChannel('rwas-jerry-v1')
+        : null;
+    channel?.addEventListener('message', deleted);
+    const onDeleted = (event: unknown) =>
+      deleted(event as unknown as { detail?: { id?: string } });
+    window.addEventListener('rwas:jerry-deleted', onDeleted);
+    document.addEventListener('visibilitychange', visibility);
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === 'visible') void check();
+    }, 10000);
+    return () => {
+      active = false;
+      channel?.close();
+      window.clearInterval(timer);
+      window.removeEventListener('rwas:jerry-deleted', onDeleted);
+      document.removeEventListener('visibilitychange', visibility);
+    };
+  }, [canonicalId, expanded]);
   useEffect(() => {
     let active = true;
     setBusy(true);

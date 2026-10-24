@@ -319,6 +319,19 @@ export class ActivityLog {
   constructor(storage) {
     this.storage = storage;
   }
+  async has(eventId) {
+    this.init();
+    return this.storage.sql
+      ? !!this.storage.sql
+          .exec(
+            "SELECT 1 FROM exchange_activity WHERE json_extract(value,'$.id')=? LIMIT 1",
+            eventId,
+          )
+          .toArray().length
+      : ((await this.storage.get('exchange-activity')) || []).some(
+          (row) => row.id === eventId,
+        );
+  }
   init() {
     if (!this.storage.sql || this.ready) return;
     this.storage.sql.exec(
@@ -386,6 +399,42 @@ export class ActivityLog {
         );
     if (!event) fail(404, 'This activity event is no longer retained.');
     return event;
+  }
+  async redactConversation(conversationId, owner, profileId) {
+    this.init();
+    const redact = (row) => {
+      const reference = row.details?.conversationRef;
+      const canonical =
+        reference?.conversationId === conversationId &&
+        reference.owner === owner;
+      const legacy =
+        row.details?.conversation?.id === conversationId &&
+        (!profileId || row.actor?.id === profileId);
+      if (!canonical && !legacy) return row;
+      const details = { ...row.details, conversationDeleted: true };
+      delete details.conversation;
+      return { ...row, details };
+    };
+    if (this.storage.sql) {
+      const rows = this.storage.sql
+        .exec(
+          "SELECT seq,value FROM exchange_activity WHERE json_extract(value,'$.details.conversationRef.conversationId')=? OR json_extract(value,'$.details.conversation.id')=?",
+          conversationId,
+          conversationId,
+        )
+        .toArray();
+      this.storage.transactionSync(() => {
+        for (const row of rows)
+          this.storage.sql.exec(
+            'UPDATE exchange_activity SET value=? WHERE seq=?',
+            JSON.stringify(redact(JSON.parse(row.value))),
+            row.seq,
+          );
+      });
+    } else {
+      const rows = (await this.storage.get('exchange-activity')) || [];
+      await this.storage.put('exchange-activity', rows.map(redact));
+    }
   }
   async conversation(conversationId, actorId, now = Date.now()) {
     this.init();
@@ -474,7 +523,9 @@ export class ActivityLog {
         args.push(source);
       }
       if (type === 'conversation')
-        where.push("json_type(value,'$.details.conversation') = 'object'");
+        where.push(
+          "(json_type(value,'$.details.conversation') = 'object' OR json_type(value,'$.details.conversationRef') = 'object')",
+        );
       if (type === 'review')
         where.push(
           "(json_type(value,'$.details.review') = 'object' OR json_extract(value,'$.action') = 'jerry.research')",
@@ -507,7 +558,9 @@ export class ActivityLog {
             (result === 'all' || row.result === result) &&
             (source === 'all' || row.source === source) &&
             (type === 'all' ||
-              (type === 'conversation' && !!row.details?.conversation) ||
+              (type === 'conversation' &&
+                (!!row.details?.conversation ||
+                  !!row.details?.conversationRef)) ||
               (type === 'review' &&
                 (!!row.details?.review || row.action === 'jerry.research'))) &&
             (!q ||
@@ -531,7 +584,7 @@ export class ActivityLog {
         return {
           ...row,
           details,
-          hasConversation: !!conversation,
+          hasConversation: !!conversation || !!row.details?.conversationRef,
           hasReview: !!review || row.action === 'jerry.research',
         };
       }),

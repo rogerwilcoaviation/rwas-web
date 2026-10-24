@@ -54,12 +54,72 @@ export default function PrivacyPolicyPage() {
           </div>
         </section>
 
-        <section className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8" aria-labelledby="browser-analytics-notice">
-          <h2 id="browser-analytics-notice" className="text-lg font-semibold mb-4">Website analytics and Captain Jerry</h2>
-          <p>Our first-party analytics associates visits and performance measurements with a random browser identifier stored as <code>rwas_anon_session</code> in localStorage. The identifier has no script-set expiry. Analytics includes page paths, referrers, device categories, interactions, and performance measurements. Activity records are stored in Cloudflare D1; performance records are emitted to runtime logs and may include browser information. A fixed server-retention period for these records has not been established.</p>
-          <p>Captain Jerry keeps recent conversation history in your tab’s sessionStorage. Sending a message transmits your conversation through our Cloudflare-hosted service and RWAS-operated relay to our AI response service, configured to request OpenAI GPT models. Server-side processing can create conversation records and operational logs; a fixed retention period covering those records has not been established. Do not enter passwords, payment-card details, or sensitive personal information. Clearing browser data does not delete information already received by our services.</p>
-          <p>Aviation Exchange has a separate administrator activity log for marketplace troubleshooting. It includes marketplace conversation text, account and listing review recommendations, and interaction metadata. Authorized administrators can view these records. This activity log retains up to 90 days or the latest 100,000 events, whichever is smaller. Sign-in form passwords and verification codes are not collected by the activity log. This retention limit applies to that log separately from other service records described above.</p>
-          <p>Our <a href="/cookies">Cookie Policy and browser-data controls</a> explain these storage keys and how to remove the first-party identifier. For questions about retention or requests to delete information held by us, contact <a href="mailto:avionics@rwas.team">avionics@rwas.team</a>. Deleting a local identifier is not an analytics opt-out or a server-record deletion.</p>
+        <section
+          className="max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8"
+          aria-labelledby="browser-analytics-notice"
+        >
+          <h2
+            id="browser-analytics-notice"
+            className="text-lg font-semibold mb-4"
+          >
+            Website analytics and Captain Jerry
+          </h2>
+          <p>
+            Our first-party analytics associates visits and performance
+            measurements with a random browser identifier stored as{' '}
+            <code>rwas_anon_session</code> in localStorage. The identifier has
+            no script-set expiry. Analytics includes page paths, referrers,
+            device categories, interactions, and performance measurements.
+            Activity records are stored in Cloudflare D1; performance records
+            are emitted to runtime logs and may include browser information. A
+            fixed server-retention period for these records has not been
+            established.
+          </p>
+          <p>
+            Captain Jerry keeps recent conversation history in your tab’s
+            sessionStorage. Sending a message transmits your conversation
+            through our Cloudflare-hosted service and RWAS-operated relay to our
+            AI response service, configured to request OpenAI GPT models.
+            Server-side processing can create conversation records and
+            operational logs; a fixed retention period covering those records
+            has not been established. Do not enter passwords, payment-card
+            details, or sensitive personal information. Clearing browser data
+            does not delete information already received by our services.
+          </p>
+          <p>
+            Where saved account chat is enabled, public website and Aviation
+            Exchange conversations are stored separately under your verified
+            account. Guest chat stays in the current tab unless you explicitly
+            choose to attach it after signing in. Saved conversations expire 90
+            days after the last message. Deleting a conversation removes its
+            content and summaries from our active conversation storage and
+            related transcript copies; independently saved drafts, listings,
+            uploads and support records remain. Content-free deletion and
+            troubleshooting records may remain. This saved-chat path does not
+            create internal Jerry operational sessions. AI providers may retain
+            data under their own processing, abuse-monitoring or legal policies;
+            disabling provider response storage does not guarantee zero provider
+            retention.
+          </p>
+          <p>
+            Aviation Exchange has a separate administrator activity log for
+            marketplace troubleshooting. It includes marketplace conversation
+            text, account and listing review recommendations, and interaction
+            metadata. Authorized administrators can view these records. This
+            activity log retains up to 90 days or the latest 100,000 events,
+            whichever is smaller. Sign-in form passwords and verification codes
+            are not collected by the activity log. This retention limit applies
+            to that log separately from other service records described above.
+          </p>
+          <p>
+            Our <a href="/cookies">Cookie Policy and browser-data controls</a>{' '}
+            explain these storage keys and how to remove the first-party
+            identifier. For questions about retention or requests to delete
+            information held by us, contact{' '}
+            <a href="mailto:avionics@rwas.team">avionics@rwas.team</a>. Deleting
+            a local identifier is not an analytics opt-out or a server-record
+            deletion.
+          </p>
         </section>
 
         <div className="mt-12 max-w-screen-md mx-auto policy-card rounded shadow-md p-6 mb-8">

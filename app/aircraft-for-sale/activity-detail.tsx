@@ -30,7 +30,12 @@ type Turn = {
   truncated?: boolean;
   error?: string;
 };
-export type ActivityDetailData = { event: ActivityEvent; exchanges?: Turn[] };
+export type ActivityDetailData = {
+  event: ActivityEvent;
+  exchanges?: Turn[];
+  conversationUnavailable?: string;
+  conversationExpiresAt?: number;
+};
 export default function ActivityDetail({
   data,
   onClose,
@@ -99,6 +104,11 @@ export default function ActivityDetail({
           </div>
         )}
       </dl>
+      {data.conversationUnavailable && (
+        <p className="note">
+          Conversation unavailable: {data.conversationUnavailable}
+        </p>
+      )}
       {!!turns.length && (
         <section aria-label="Jerry conversation transcript">
           <h3>Conversation</h3>

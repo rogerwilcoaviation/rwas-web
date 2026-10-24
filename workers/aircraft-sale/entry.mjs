@@ -1,15 +1,40 @@
 import { WorkerEntrypoint } from 'cloudflare:workers';
 import worker from './worker.mjs';
 import { readBetterAuthIdentity } from './better-auth-service.mjs';
+import { jerryWebsite, jerryActivity } from './jerry-service.mjs';
 import {
   handleSellerIdentityRequest,
   isSellerIdentityRequest,
 } from './better-auth-router.mjs';
 export { SellerStore } from './worker.mjs';
+export { JerryConversations } from './jerry-conversations.mjs';
 
 // No public endpoint returns a verification code. Pages alone invokes these
 // methods over its service binding; the backend has no public route in staging.
 export default class SellerService extends WorkerEntrypoint {
+  async jerryWebsite(request) {
+    try {
+      return await jerryWebsite(this.env, request);
+    } catch (error) {
+      return {
+        error: error.status ? error.message : 'Jerry is unavailable.',
+        code: error.code || 'JERRY_UNAVAILABLE',
+        status: error.status || 503,
+      };
+    }
+  }
+  async jerryActivity(request) {
+    try {
+      return await jerryActivity(this.env, request);
+    } catch (error) {
+      return {
+        error: error.status
+          ? error.message
+          : 'Conversation details are unavailable.',
+        status: error.status || 503,
+      };
+    }
+  }
   async fetch(request) {
     if (isSellerIdentityRequest(request)) {
       const started = Date.now(),

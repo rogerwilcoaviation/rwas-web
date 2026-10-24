@@ -1,0 +1,54 @@
+# LOCAL CANDIDATE ONLY. Never deploy this fixture configuration.
+name = "rwas-jerry-phase-one-local-only"
+main = "entry.mjs"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+workers_dev = false
+preview_urls = false
+
+[vars]
+JERRY_CONVERSATIONS_ENABLED = "true"
+BETTER_AUTH_ENABLED = "true"
+BETTER_AUTH_LOCAL = "true"
+BETTER_AUTH_URL = "http://localhost:8787"
+BETTER_AUTH_SECRET = "rwas-local-fixture-only-not-a-production-credential"
+BETTER_AUTH_GOOGLE_ENABLED = "false"
+BETTER_AUTH_APPLE_ENABLED = "false"
+BETTER_AUTH_LEGACY_LINK_ENABLED = "false"
+CLERK_PRODUCTION_ENABLED = "false"
+EMAIL_CODE_LOGIN_ENABLED = "false"
+PUBLIC_LISTINGS_ENABLED = "false"
+ACCOUNT_ADMIN_SITE_ORIGIN = "http://localhost:8787"
+
+[[durable_objects.bindings]]
+name = "SELLER_STORE"
+class_name = "SellerStore"
+
+[[durable_objects.bindings]]
+name = "JERRY_CONVERSATIONS"
+class_name = "JerryConversations"
+
+[[migrations]]
+tag = "jerry-local-fixture-v1"
+new_sqlite_classes = ["SellerStore", "JerryConversations"]
+
+[[d1_databases]]
+binding = "SELLER_AUTH_DB"
+database_name = "rwas-jerry-identity-local-only"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "rwas-jerry-media-local-only"
+
+[[services]]
+binding = "JERRY_RESPONSE"
+service = "rwas-jerry-website-response-local-only"
+
+[observability]
+enabled = false
+
+[observability.logs]
+enabled = false
+invocation_logs = false

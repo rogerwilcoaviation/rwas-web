@@ -19,6 +19,7 @@ import { onRequestGet as config } from './functions/api/service-intake-config';
 import { STAGING_ORIGIN } from './functions/_intake/core';
 import { sellerMail, sellerDestinationAllowed } from './functions/_seller/mail.mjs';
 export { handleSiteLanguage } from './functions/_site-language/translate.mjs';
+export { handleJerry } from './functions/_jerry/gateway.mjs';
 export { intake, receipt, dispatch, config, STAGING_ORIGIN, sellerMail, sellerDestinationAllowed };`,
     resolveDir: process.cwd(),
     sourcefile: 'intake-entry.ts',
@@ -34,7 +35,7 @@ renameSync(index, resolve(directory, 'rwas-csp-wrapper.js'));
 writeFileSync(
   index,
   `import app from './rwas-csp-wrapper.js';
-import { intake, receipt, dispatch, config, STAGING_ORIGIN, sellerMail, sellerDestinationAllowed, handleSiteLanguage } from './rwas-intake.js';
+import { intake, receipt, dispatch, config, STAGING_ORIGIN, sellerMail, sellerDestinationAllowed, handleSiteLanguage, handleJerry } from './rwas-intake.js';
 export default { ...app, async fetch(request, env, ctx) {
  const url = new URL(request.url);
  const path = url.pathname;
@@ -75,9 +76,18 @@ export default { ...app, async fetch(request, env, ctx) {
    const response = await env.SELLER_API.fetch(new Request(target, {method:'GET',headers}));
    return protect(request.method === 'HEAD' ? new Response(null, response) : withLanguage(withTypography(response)));
  }
+ if (path.startsWith('/api/jerry/')) {
+   if (!sellerDestinationAllowed(request, env, STAGING_ORIGIN)) return protect(new Response('Destination not allowed',{status:503}));
+   return protect(await handleJerry(request, env));
+ }
  if (path === '/api/aircraft-sale' || path.startsWith('/api/aircraft-sale/')) {
    if (!sellerDestinationAllowed(request, env, STAGING_ORIGIN)) return protect(new Response('Staging destination not allowed', {status:503}));
    if (!env.SELLER_API) return protect(Response.json({error:'Seller service is not configured.'},{status:503}));
+   const activityId = /^\\/api\\/aircraft-sale\\/(?:admin|staff)\\/activity\\/([A-Za-z0-9_-]{1,128})$/.exec(path);
+   if (activityId && request.method === 'GET' && env.JERRY_CONVERSATIONS_ENABLED === 'true' && env.SELLER_API.jerryActivity) {
+     const result = await env.SELLER_API.jerryActivity({eventId:activityId[1],staff:path.includes('/staff/'),proof:{cookie:request.headers.get('Cookie')||'',origin:url.origin,authorization:request.headers.get('Authorization')||'',csrf:request.headers.get('X-RWAS-CSRF')||''}});
+     return protect(Response.json(result,{status:result.status||200,headers:{'Cache-Control':'no-store'}}));
+   }
    const mailed = await sellerMail(request, env);
    if (mailed) return protect(mailed);
    return protect(withTypography(await env.SELLER_API.fetch(request)));
@@ -98,6 +108,7 @@ export default { ...app, async fetch(request, env, ctx) {
 const routesPath = resolve(root, '_routes.json');
 const routes = JSON.parse(readFileSync(routesPath, 'utf8'));
 for (const path of [
+  '/api/jerry/*',
   '/api/site-language',
   '/api/site-language/*',
   '/api/service-intake',

@@ -1,3 +1,10 @@
+import {
+  jerryAuthority,
+  jerryDraftStamp,
+  jerrySnapshot,
+  jerryLogReference,
+} from './jerry-authority.mjs';
+import { jerryAssert, jerryUuid, jerryHash } from './jerry-protocol.mjs';
 import { conversationTurn, reviewSnapshot } from './activity-content.mjs';
 import {
   ActivityLog,
@@ -160,6 +167,8 @@ const empty = () => ({
   drafts: {},
   files: {},
   idempotency: {},
+  jerryConversationRefs: {},
+  jerryDeletedConversations: {},
   audit: [],
   outbox: {},
   supportTickets: {},
@@ -354,6 +363,11 @@ const acceptancePublished = (listing, env, now = Date.now()) => {
     listing.acceptancePublicUntil === scope.expiresAt
   );
 };
+const publishedListing = (listing, env) =>
+  !!listing &&
+  (acceptancePublished(listing, env) ||
+    (sellerPublicListingsEnabled(env) &&
+      ['active', 'sold'].includes(listing.status)));
 const staffReviewActions = (listing, env) => {
   const actions = [];
   if (listing.status === 'pending' && !listing.purging) {
@@ -540,7 +554,7 @@ const worker = {
   async fetch(request, env) {
     // Mail tickets/codes are available only through private service-binding RPC.
     if (
-      /^\/(?:api\/aircraft-sale\/)?_(?:mail|activity)(?:\/|$)/.test(
+      /^\/(?:api\/aircraft-sale\/)?_(?:mail|activity|jerry)(?:\/|$)/.test(
         new URL(request.url).pathname,
       ) ||
       /^\/(?:api\/aircraft-sale\/)?_identity-deletion-intent(?:\/|$)/.test(
@@ -645,6 +659,9 @@ export class SellerStore {
               actor: this.activityContext.actor,
               details: {
                 ...(conversation ? { conversation } : {}),
+                ...(this.activityContext.conversationRef
+                  ? { conversationRef: this.activityContext.conversationRef }
+                  : {}),
                 changes: this.activityContext.changes,
                 changeCount: this.activityContext.changeCount,
                 changesTruncated:
@@ -803,6 +820,14 @@ export class SellerStore {
       ...(this.env.JERRY_REVIEW_ENABLED === 'true'
         ? [nextResearchAt(state)]
         : []),
+      ...Object.values(state.jerryConversationRefs || {})
+        .filter(
+          (ref) =>
+            !ref.cleanupComplete &&
+            ((ref.profileId && !state.profiles[ref.profileId]) ||
+              state.identitySecurity[ref.owner]?.deletedAt),
+        )
+        .map((ref) => Math.max(Date.now() + 1000, ref.cleanupAfter || 0)),
     );
     if (Number.isFinite(next)) await this.ctx.storage.setAlarm(next);
   }
@@ -810,6 +835,7 @@ export class SellerStore {
     const operation = this.queue.then(() => this.runAlarm());
     this.queue = operation.catch(() => {});
     const job = await operation;
+    await this.cleanupJerryAccounts();
     if (!job) return;
     let result;
     try {
@@ -895,6 +921,8 @@ export class SellerStore {
     // administrator. Keep this on the queue, outside BOTH persistence paths:
     // normal loadState drops unknown buckets and normal error handling saves.
     if (isConservationRequest(req)) return this.readConservation(req);
+    if (new URL(req.url).pathname.includes('/_jerry/'))
+      return this.runJerry(req);
     this.state = await this.loadState();
     this.state.auth0EventReceipts ||= {};
     this.rollbackState = structuredClone(this.state);
@@ -910,7 +938,10 @@ export class SellerStore {
       if (this.env.JERRY_REVIEW_ENABLED === 'true')
         planResearch(this.state, this.rollbackState);
       await this.saveState(this.state);
-      if (this.env.JERRY_REVIEW_ENABLED === 'true')
+      if (
+        this.env.JERRY_REVIEW_ENABLED === 'true' ||
+        this.env.JERRY_CONVERSATIONS_ENABLED === 'true'
+      )
         await this.scheduleAuth0ReceiptExpiry(this.state);
       return result;
     } catch (e) {
@@ -976,7 +1007,12 @@ export class SellerStore {
           error: e.status
             ? e.message
             : 'The request could not be saved. Please retry.',
-          ...(['TWO_FACTOR_REQUIRED', 'QA_ACCOUNT_REQUIRED'].includes(e.code)
+          ...([
+            'TWO_FACTOR_REQUIRED',
+            'QA_ACCOUNT_REQUIRED',
+            'JERRY_DRAFT_CHANGED',
+            'JERRY_GONE',
+          ].includes(e.code)
             ? { code: e.code }
             : {}),
         },
@@ -1736,6 +1772,20 @@ export class SellerStore {
       .filter((f) => f.listingId === l.id)
       .map(({ ownerId, ...f }) => f);
   }
+  jerryPublicListing(listing) {
+    if (
+      !publishedListing(listing, this.env) ||
+      listing.purging ||
+      accountHeld(this.state.profiles[listing.ownerId])
+    )
+      return null;
+    if (
+      !acceptancePublished(listing, this.env) &&
+      listing.approvedRevision !== listing.revision
+    )
+      return null;
+    return publicListing(this.hydrate(listing));
+  }
   hydrate(l) {
     const media = this.media(l);
     return {
@@ -1918,6 +1968,644 @@ export class SellerStore {
     this.state.authEvents[body.id] = Date.now();
     return reply({ ok: true });
   }
+  async cleanupJerryAccounts() {
+    if (!this.env.JERRY_CONVERSATIONS || !this.env.SELLER_STORE) return;
+    const internal = (path, body = {}) =>
+      this.fetch(
+        new Request(
+          'https://seller-service.internal/api/aircraft-sale/_jerry/' + path,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          },
+        ),
+      );
+    const response = await internal('cleanup-jobs');
+    if (!response.ok) return;
+    for (const job of (await response.json()).jobs) {
+      try {
+        const stub = this.env.JERRY_CONVERSATIONS.get(
+          this.env.JERRY_CONVERSATIONS.idFromName(
+            job.owner + ':' + job.surface,
+          ),
+        );
+        const call = (path, body) =>
+          stub.fetch(
+            new Request('https://jerry.internal/' + path, {
+              method: 'POST',
+              headers: {
+                'X-Jerry-Owner': job.owner,
+                'X-Jerry-Surface': job.surface,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(body),
+            }),
+          );
+        if (
+          !(await call('delete', { id: job.id, generation: job.generation })).ok
+        )
+          throw Error('Conversation fence pending');
+        if (!(await internal('erase', job)).ok)
+          throw Error('Conversation copy cleanup pending');
+        if (!(await call('cleanup-complete', { id: job.id })).ok)
+          throw Error('Conversation cleanup pending');
+      } catch {
+        await internal('cleanup-retry', { id: job.id });
+      }
+    }
+  }
+  async runJerry(req) {
+    const url = new URL(req.url),
+      path = url.pathname.split('/_jerry/')[1];
+    if (
+      url.origin !== 'https://seller-service.internal' ||
+      req.method !== 'POST'
+    )
+      return reply({ error: 'Not found.' }, 404);
+    this.state = await this.loadState();
+    this.state.jerryConversationRefs ||= {};
+    this.state.jerryDeletedConversations ||= {};
+    try {
+      if (path === 'cleanup-jobs')
+        return reply({
+          jobs: Object.entries(this.state.jerryConversationRefs)
+            .filter(
+              ([, ref]) =>
+                !ref.cleanupComplete &&
+                (ref.cleanupAfter || 0) <= Date.now() &&
+                ((ref.profileId && !this.state.profiles[ref.profileId]) ||
+                  this.state.identitySecurity[ref.owner]?.deletedAt),
+            )
+            .map(([id, ref]) => ({ id, ...ref })),
+        });
+      if (path === 'cleanup-retry') {
+        const body = await this.json(req),
+          ref = this.state.jerryConversationRefs[body.id];
+        if (ref) ref.cleanupAfter = Date.now() + 60000;
+        await this.saveState(this.state);
+        await this.scheduleAuth0ReceiptExpiry(this.state);
+        return reply({ ok: true });
+      }
+      if (path === 'erase') {
+        jerryAssert(
+          url.origin === 'https://seller-service.internal' &&
+            req.method === 'POST',
+          404,
+          'Not found.',
+        );
+        const body = await this.json(req),
+          reference = this.state.jerryConversationRefs[body.id];
+        jerryAssert(
+          jerryUuid(body.id) &&
+            /^[a-f0-9]{64}$/.test(body.owner || '') &&
+            ['public', 'exchange'].includes(body.surface) &&
+            (!reference ||
+              (reference.owner === body.owner &&
+                reference.surface === body.surface)),
+          403,
+          'Conversation cleanup owner mismatch.',
+        );
+        this.state.jerryDeletedConversations[body.id] = {
+          owner: body.owner,
+          surface: body.surface,
+          at: Date.now(),
+        };
+        for (const receipt of Object.values(this.state.idempotency))
+          if (
+            receipt.kind === 'jerry-intake' &&
+            receipt.conversationId === body.id
+          ) {
+            delete receipt.result;
+            receipt.deleted = true;
+          }
+        if (reference) reference.deleted = true;
+        await this.saveState(this.state);
+        await this.activityLog.redactConversation(
+          body.id,
+          body.owner,
+          reference?.profileId,
+        );
+        if (reference) {
+          reference.cleanupComplete = true;
+          await this.saveState(this.state);
+        }
+        return reply({ ok: true });
+      }
+      if (path === 'log-committed') {
+        const body = await this.json(req),
+          reference = this.state.jerryConversationRefs[body.id];
+        jerryAssert(
+          reference &&
+            reference.owner === body.owner &&
+            reference.surface === 'exchange' &&
+            body.surface === 'exchange' &&
+            !reference.deleted &&
+            !this.state.jerryDeletedConversations[body.id],
+          410,
+          'Conversation unavailable.',
+        );
+        const eventId = body.eventId || body.turnId;
+        jerryAssert(
+          jerryUuid(body.turnId) && jerryUuid(eventId),
+          400,
+          'Invalid message reference.',
+        );
+        if (!(await this.activityLog.has(eventId)))
+          await this.activityLog.append([
+            {
+              id: eventId,
+              at: Date.now(),
+              source: 'server',
+              requestId: body.turnId,
+              actor: activityActor(
+                this.state.profiles[reference.profileId] || {
+                  id: reference.owner,
+                },
+              ),
+              action: 'Jerry conversation',
+              route: '/aircraft-for-sale',
+              result: body.failed ? 'failure' : 'success',
+              status: body.failed ? 503 : 200,
+              details: {
+                conversationRef: jerryLogReference(
+                  reference.owner,
+                  'exchange',
+                  body.id,
+                  body.turnId,
+                ),
+              },
+            },
+          ]);
+        return reply({ ok: true });
+      }
+      jerryAssert(
+        this.env.JERRY_CONVERSATIONS_ENABLED === 'true',
+        404,
+        'Jerry conversations are not enabled.',
+      );
+      const identity = await jerryAuthority(this, req);
+      if (path === 'context')
+        return reply({
+          identity,
+          draftStamp: identity?.profileId
+            ? await jerryDraftStamp(this.state.drafts[identity.profileId])
+            : await jerryDraftStamp(null),
+        });
+      const body = await this.json(req);
+      if (path === 'reference')
+        return reply(await jerrySnapshot(this, identity, body.resource));
+      jerryAssert(
+        identity &&
+          identity.owner === body.owner &&
+          identity.sessionRef === body.sessionRef,
+        401,
+        'Your account session changed.',
+        'JERRY_SESSION_CHANGED',
+      );
+      if (path === 'snapshot')
+        return reply(await jerrySnapshot(this, identity));
+      if (path === 'register') {
+        jerryAssert(
+          jerryUuid(body.id) && ['public', 'exchange'].includes(body.surface),
+          400,
+          'Invalid conversation reference.',
+        );
+        jerryAssert(
+          !this.state.jerryDeletedConversations[body.id],
+          410,
+          'Conversation deleted.',
+        );
+        const old = this.state.jerryConversationRefs[body.id];
+        jerryAssert(
+          !old ||
+            (old.owner === identity.owner && old.surface === body.surface),
+          409,
+          'Conversation reference changed.',
+        );
+        this.state.jerryConversationRefs[body.id] = {
+          owner: identity.owner,
+          profileId: identity.profileId,
+          surface: body.surface,
+          generation: body.generation,
+        };
+        await this.saveState(this.state);
+        return reply({ ok: true });
+      }
+      if (path === 'log') {
+        const reference = this.state.jerryConversationRefs[body.id];
+        jerryAssert(
+          reference &&
+            !reference.deleted &&
+            reference.owner === identity.owner &&
+            reference.surface === 'exchange' &&
+            !this.state.jerryDeletedConversations[body.id],
+          410,
+          'Conversation deleted or unavailable.',
+        );
+        jerryAssert(jerryUuid(body.turnId), 400, 'Invalid message reference.');
+        const eventId = body.turnId;
+        if (!(await this.activityLog.has(eventId)))
+          await this.activityLog.append([
+            {
+              id: eventId,
+              at: Date.now(),
+              source: 'server',
+              requestId: body.turnId,
+              actor: activityActor(
+                this.state.profiles[identity.profileId] || {
+                  id: identity.owner,
+                },
+              ),
+              action: 'Jerry conversation',
+              route: '/aircraft-for-sale',
+              result: body.failed ? 'failure' : 'success',
+              status: body.failed ? 503 : 200,
+              details: {
+                conversationRef: jerryLogReference(
+                  identity.owner,
+                  'exchange',
+                  body.id,
+                  body.turnId,
+                ),
+              },
+            },
+          ]);
+        return reply({ ok: true });
+      }
+      return reply({ error: 'Unknown Jerry operation.' }, 404);
+    } catch (error) {
+      return reply(
+        {
+          error: error.status
+            ? error.message
+            : 'Jerry account context is unavailable.',
+          code: error.code || 'JERRY_CONTEXT_UNAVAILABLE',
+        },
+        error.status || 503,
+      );
+    }
+  }
+  async jerryIntake(u, body) {
+    if (!body.jerry) return this.intakeAnswer(u, body);
+    const operation = body.jerry,
+      reference = this.state.jerryConversationRefs?.[operation.conversationId];
+    jerryAssert(
+      jerryUuid(operation.operationId) &&
+        jerryUuid(operation.conversationId) &&
+        Number.isSafeInteger(operation.generation) &&
+        typeof operation.expectedDraft === 'string',
+      400,
+      'Invalid guided message identity.',
+    );
+    jerryAssert(
+      reference &&
+        reference.profileId === u.id &&
+        reference.surface === 'exchange' &&
+        !reference.deleted &&
+        !this.state.jerryDeletedConversations?.[operation.conversationId] &&
+        reference.generation === operation.generation,
+      410,
+      'This conversation is no longer available.',
+    );
+    const key = 'jerry:' + u.id + ':' + operation.operationId,
+      fingerprint = await jerryHash({
+        conversationId: operation.conversationId,
+        generation: operation.generation,
+        expectedDraft: operation.expectedDraft,
+        resume: body.resume === true,
+        messages: body.messages,
+      });
+    const old = this.state.idempotency[key];
+    if (old) {
+      jerryAssert(!old.deleted, 410, 'This conversation was deleted.');
+      jerryAssert(
+        old.fingerprint === fingerprint,
+        409,
+        'Guided message identity was reused.',
+      );
+      return reply(old.result);
+    }
+    jerryAssert(
+      operation.expectedDraft ===
+        (await jerryDraftStamp(this.state.drafts[u.id])),
+      409,
+      'Your draft changed. Refresh or resume it before answering.',
+      'JERRY_DRAFT_CHANGED',
+    );
+    jerryAssert(
+      !this.state.drafts[u.id] ||
+        this.state.drafts[u.id].intake ||
+        body.resume === true,
+      409,
+      'You already have a saved draft. Choose Resume with Jerry to keep its answers.',
+      'JERRY_DRAFT_CHANGED',
+    );
+    const response = await this.intakeAnswer(u, body),
+      result = await response.json();
+    if (this.state.drafts[u.id])
+      this.state.drafts[u.id].conversationId = operation.conversationId;
+    if (result.action) result.action = { type: 'resume_saved_draft' };
+    result.draftStamp = await jerryDraftStamp(this.state.drafts[u.id]);
+    this.state.idempotency[key] = {
+      kind: 'jerry-intake',
+      conversationId: operation.conversationId,
+      fingerprint,
+      result,
+      at: Date.now(),
+    };
+    if (this.activityContext)
+      this.activityContext.conversationRef = jerryLogReference(
+        reference.owner,
+        'exchange',
+        operation.conversationId,
+        operation.operationId,
+      );
+    return reply(result);
+  }
+  async intakeAnswer(u, body) {
+    const last = body.messages?.filter((m) => m.role === 'user').at(-1);
+    if (!last || typeof last.content !== 'string' || last.content.length > 2000)
+      fail(400, 'A short seller message is required.');
+    const text = last.content.split('\n\n[System context:')[0].trim();
+    if (this.activityContext && !body.jerry) {
+      const draft = this.state.drafts[u.id];
+      // A saved private draft is the stable conversation identity; no token
+      // or client-provided account is used to select it.
+      const conversationId = draft?.conversationId || crypto.randomUUID();
+      this.activityContext.conversation = {
+        id: conversationId,
+        mode: 'listing',
+        user: text,
+      };
+      this.activityContext.listingConversationId = conversationId;
+    }
+    const legacySteps = [
+      ['nNumber', 'What is your aircraft N-number?'],
+      ['make', 'Aircraft make?'],
+      ['model', 'Aircraft model?'],
+      ['year', 'Aircraft year?'],
+      ['price', 'Asking price in USD?'],
+      ['description', 'Describe the condition and history, or say skip.'],
+      ['avionics', 'Avionics and equipment, or say skip.'],
+      [
+        'sellerLocation',
+        'Where is the aircraft located? Include its city, state or country, and airport if known.',
+      ],
+    ];
+    const intakeFields = (fields) =>
+      newListingFields(fields, [
+        { name: 'make', label: 'Make', required: true },
+        { name: 'model', label: 'Model', required: true },
+        { name: 'year', label: 'Year', required: true, type: 'number' },
+        { name: 'nNumber', label: 'N-number (tail number)', required: true },
+        { name: 'sellerLocation', label: 'Location', required: true },
+        {
+          name: 'description',
+          label: 'Description',
+          required: true,
+          multiline: true,
+          maxLength: 10000,
+        },
+        { name: 'sellerWebsite', label: 'Business website', required: false },
+      ]);
+    const intakePrompt = (field) =>
+      field.label +
+      (field.required ? ' (required)' : ' (optional; say skip)') +
+      (field.options
+        ? '\n' +
+          field.options
+            .map(
+              (option, index) =>
+                index +
+                1 +
+                '. ' +
+                (typeof option === 'string' ? option : option.label),
+            )
+            .join('\n')
+        : '') +
+      (field.help ? '\n' + field.help : '');
+    if (/^(cancel|stop|never mind)$/i.test(text))
+      return reply({
+        reply: 'Your progress is saved privately. You can continue later.',
+        state: { cancelled: true },
+      });
+    let progress = this.state.drafts[u.id];
+    const resuming = body.resume === true;
+    if (resuming && !progress)
+      fail(404, 'No saved draft is available. Refresh My Listings.');
+    if (!progress?.intake) {
+      const savedFields = resuming
+        ? progress.manual
+          ? manualIntakeFields(progress)
+          : clean(
+              Object.fromEntries(
+                Object.entries(progress).filter(([key]) => key !== 'updatedAt'),
+              ),
+            )
+        : null;
+      progress = {
+        intake: true,
+        schemaVersion:
+          savedFields &&
+          !savedFields.workflowVersion &&
+          !savedFields.listingType
+            ? 1
+            : 3,
+        aircraftContactFieldsVersion: 1,
+        step: 0,
+        fields: savedFields || { sellerName: u.name, workflowVersion: '3' },
+        ...(progress?.manual
+          ? {
+              fromManual: true,
+              listingId: progress.listingId,
+              listingRevision: progress.listingRevision,
+              listingFieldsFingerprint: progress.listingFieldsFingerprint,
+            }
+          : {}),
+      };
+      if (resuming) {
+        const fields =
+          progress.schemaVersion === 3
+            ? intakeFields(progress.fields)
+            : legacySteps.map(([name, label]) => ({
+                name,
+                label,
+                required: !['description', 'avionics'].includes(name),
+              }));
+        let next = fields.findIndex(
+          (field) =>
+            !!validateDraftField(
+              field,
+              String(
+                field.name.startsWith('spec:')
+                  ? (progress.fields.specifications?.[field.name.slice(5)] ??
+                      '')
+                  : (progress.fields[field.name] ?? ''),
+              ),
+            ),
+        );
+        if (next < 0)
+          next = fields.findIndex(
+            (field) =>
+              !String(
+                field.name.startsWith('spec:')
+                  ? (progress.fields.specifications?.[field.name.slice(5)] ??
+                      '')
+                  : (progress.fields[field.name] ?? ''),
+              ).trim(),
+          );
+        progress.step = next < 0 ? fields.length : next;
+      }
+      this.state.drafts[u.id] = progress;
+      if (!resuming)
+        return reply({
+          reply: intakePrompt(intakeFields(progress.fields)[0]),
+          state: { step: 0 },
+        });
+    }
+    const guidedFields =
+      progress.schemaVersion === 3 ? intakeFields(progress.fields) : null;
+    // Older saved aircraft conversations used a numeric cursor without the
+    // tail-number question. Re-prompt before interpreting the next answer.
+    if (
+      guidedFields &&
+      progress.fields.listingType === 'aircraft' &&
+      progress.aircraftContactFieldsVersion !== 1
+    ) {
+      const tailIndex = guidedFields.findIndex(
+        (field) => field.name === 'nNumber',
+      );
+      if (tailIndex >= 0) {
+        progress.step = Math.min(progress.step, tailIndex);
+        progress.aircraftContactFieldsVersion = 1;
+        return reply({
+          reply: intakePrompt(guidedFields[progress.step]),
+          state: { step: progress.step },
+        });
+      }
+    }
+    const steps = guidedFields
+      ? guidedFields.map((field) => [field.name, intakePrompt(field)])
+      : legacySteps;
+    if (resuming) {
+      if (progress.step >= steps.length)
+        return reply({
+          reply:
+            'Your saved details are ready. Review your listing in the seller panel, then save and submit for review.',
+          action: { type: 'listing_draft', draft: clean(progress.fields) },
+          state: { completed: true },
+        });
+      return reply({
+        reply: 'Continuing your saved draft. ' + steps[progress.step][1],
+        state: { step: progress.step },
+      });
+    }
+    if (/\b(list|sell) my|want to (list|create a listing)/i.test(text))
+      return reply({
+        reply:
+          'Continuing your saved draft. ' +
+          steps[Math.min(progress.step, steps.length - 1)][1],
+        state: { step: progress.step },
+      });
+    const [field] = steps[progress.step] || steps[0];
+    if (
+      text.toLowerCase() === 'skip' &&
+      (guidedFields
+        ? guidedFields[progress.step]?.required
+        : [
+            'nNumber',
+            'make',
+            'model',
+            'year',
+            'price',
+            'sellerLocation',
+          ].includes(field))
+    )
+      fail(400, 'This field is required before submitting a listing.');
+    if (text.toLowerCase() !== 'skip') {
+      const definition = guidedFields?.[progress.step];
+      let answer = text;
+      if (definition?.options) {
+        const choice = definition.options.find(
+          (option, index) =>
+            String(index + 1) === text ||
+            String(
+              typeof option === 'string' ? option : option.value,
+            ).toLowerCase() === text.toLowerCase() ||
+            (typeof option === 'object' &&
+              option.label.toLowerCase() === text.toLowerCase()),
+        );
+        if (!choice) fail(400, 'Choose one of the listed options.');
+        answer = typeof choice === 'string' ? choice : choice.value;
+      }
+      const update = field.startsWith('spec:')
+        ? {
+            specifications: {
+              ...(!progress.fromManual ? progress.fields.specifications : {}),
+              [field.slice(5)]: answer,
+            },
+          }
+        : { [field]: answer };
+      if (guidedFields && progress.fromManual) {
+        const validated = clean({
+          ...(progress.fields.listingType
+            ? { listingType: progress.fields.listingType }
+            : {}),
+          ...(progress.fields.category
+            ? { category: progress.fields.category }
+            : {}),
+          ...update,
+        });
+        progress.fields = {
+          ...progress.fields,
+          ...validated,
+          ...(validated.specifications
+            ? {
+                specifications: {
+                  ...progress.fields.specifications,
+                  ...validated.specifications,
+                },
+              }
+            : {}),
+        };
+      } else if (guidedFields)
+        progress.fields = clean({ ...progress.fields, ...update });
+      else Object.assign(progress.fields, clean(update));
+    } else if (progress.fromManual) {
+      if (field.startsWith('spec:'))
+        delete progress.fields.specifications?.[field.slice(5)];
+      else delete progress.fields[field];
+    }
+    progress.step++;
+    progress.updatedAt = Date.now();
+    const nextSteps = guidedFields
+      ? intakeFields(progress.fields).map((field) => [
+          field.name,
+          intakePrompt(field),
+        ])
+      : steps;
+    if (progress.step < nextSteps.length)
+      return reply({
+        reply: nextSteps[progress.step][1],
+        state: { step: progress.step },
+      });
+    const draft = clean(progress.fields, true);
+    this.state.drafts[u.id] = progress.listingId
+      ? {
+          ...progress,
+          fields: draft,
+          step: nextSteps.length,
+          updatedAt: Date.now(),
+        }
+      : { ...draft, updatedAt: Date.now() };
+    return reply({
+      reply:
+        'Review your details in the seller panel. Save the draft, add media, then submit for review.',
+      action: { type: 'listing_draft', draft },
+      state: { completed: true },
+    });
+  }
   async route(req) {
     const url = new URL(req.url),
       method = req.method;
@@ -2023,6 +2711,11 @@ export class SellerStore {
       const body = await this.json(req);
       const identity = await this.browserActivityIdentity(req);
       if (path === '/activity/conversation') {
+        if (
+          this.state.jerryConversationRefs?.[body.id] ||
+          this.state.jerryDeletedConversations?.[body.id]
+        )
+          fail(409, 'Canonical conversations are recorded by the server.');
         if (
           !body ||
           Object.keys(body).some(
@@ -3790,10 +4483,7 @@ export class SellerStore {
     if (path.startsWith('/listing/') && method === 'GET') {
       const l = this.state.listings[path.slice(9)];
       if (!l) fail(404, 'Listing not found.');
-      const published =
-        acceptancePublished(l, this.env) ||
-        (sellerPublicListingsEnabled(this.env) &&
-          ['active', 'sold'].includes(l.status));
+      const published = publishedListing(l, this.env);
       if (!published && (req.headers.get('Accept') || '').includes('text/html'))
         fail(404, 'Listing not found.');
       if (!published) {
@@ -4083,296 +4773,8 @@ export class SellerStore {
         403,
         'Administrative accounts are managed through the staff workspace.',
       );
-    if (path === '/intake' && method === 'POST') {
-      const body = await this.json(req),
-        last = body.messages?.filter((m) => m.role === 'user').at(-1);
-      if (
-        !last ||
-        typeof last.content !== 'string' ||
-        last.content.length > 2000
-      )
-        fail(400, 'A short seller message is required.');
-      const text = last.content.split('\n\n[System context:')[0].trim();
-      if (this.activityContext) {
-        const draft = this.state.drafts[u.id];
-        // A saved private draft is the stable conversation identity; no token
-        // or client-provided account is used to select it.
-        const conversationId = draft?.conversationId || crypto.randomUUID();
-        this.activityContext.conversation = {
-          id: conversationId,
-          mode: 'listing',
-          user: text,
-        };
-        this.activityContext.listingConversationId = conversationId;
-      }
-      const legacySteps = [
-        ['nNumber', 'What is your aircraft N-number?'],
-        ['make', 'Aircraft make?'],
-        ['model', 'Aircraft model?'],
-        ['year', 'Aircraft year?'],
-        ['price', 'Asking price in USD?'],
-        ['description', 'Describe the condition and history, or say skip.'],
-        ['avionics', 'Avionics and equipment, or say skip.'],
-        [
-          'sellerLocation',
-          'Where is the aircraft located? Include its city, state or country, and airport if known.',
-        ],
-      ];
-      const intakeFields = (fields) =>
-        newListingFields(fields, [
-          { name: 'make', label: 'Make', required: true },
-          { name: 'model', label: 'Model', required: true },
-          { name: 'year', label: 'Year', required: true, type: 'number' },
-          { name: 'nNumber', label: 'N-number (tail number)', required: true },
-          { name: 'sellerLocation', label: 'Location', required: true },
-          {
-            name: 'description',
-            label: 'Description',
-            required: true,
-            multiline: true,
-            maxLength: 10000,
-          },
-          { name: 'sellerWebsite', label: 'Business website', required: false },
-        ]);
-      const intakePrompt = (field) =>
-        field.label +
-        (field.required ? ' (required)' : ' (optional; say skip)') +
-        (field.options
-          ? '\n' +
-            field.options
-              .map(
-                (option, index) =>
-                  index +
-                  1 +
-                  '. ' +
-                  (typeof option === 'string' ? option : option.label),
-              )
-              .join('\n')
-          : '') +
-        (field.help ? '\n' + field.help : '');
-      if (/^(cancel|stop|never mind)$/i.test(text))
-        return reply({
-          reply: 'Your progress is saved privately. You can continue later.',
-          state: { cancelled: true },
-        });
-      let progress = this.state.drafts[u.id];
-      const resuming = body.resume === true;
-      if (resuming && !progress)
-        fail(404, 'No saved draft is available. Refresh My Listings.');
-      if (!progress?.intake) {
-        const savedFields = resuming
-          ? progress.manual
-            ? manualIntakeFields(progress)
-            : clean(
-                Object.fromEntries(
-                  Object.entries(progress).filter(
-                    ([key]) => key !== 'updatedAt',
-                  ),
-                ),
-              )
-          : null;
-        progress = {
-          intake: true,
-          schemaVersion:
-            savedFields &&
-            !savedFields.workflowVersion &&
-            !savedFields.listingType
-              ? 1
-              : 3,
-          aircraftContactFieldsVersion: 1,
-          step: 0,
-          fields: savedFields || { sellerName: u.name, workflowVersion: '3' },
-          ...(progress?.manual
-            ? {
-                fromManual: true,
-                listingId: progress.listingId,
-                listingRevision: progress.listingRevision,
-                listingFieldsFingerprint: progress.listingFieldsFingerprint,
-              }
-            : {}),
-        };
-        if (resuming) {
-          const fields =
-            progress.schemaVersion === 3
-              ? intakeFields(progress.fields)
-              : legacySteps.map(([name, label]) => ({
-                  name,
-                  label,
-                  required: !['description', 'avionics'].includes(name),
-                }));
-          let next = fields.findIndex(
-            (field) =>
-              !!validateDraftField(
-                field,
-                String(
-                  field.name.startsWith('spec:')
-                    ? (progress.fields.specifications?.[field.name.slice(5)] ??
-                        '')
-                    : (progress.fields[field.name] ?? ''),
-                ),
-              ),
-          );
-          if (next < 0)
-            next = fields.findIndex(
-              (field) =>
-                !String(
-                  field.name.startsWith('spec:')
-                    ? (progress.fields.specifications?.[field.name.slice(5)] ??
-                        '')
-                    : (progress.fields[field.name] ?? ''),
-                ).trim(),
-            );
-          progress.step = next < 0 ? fields.length : next;
-        }
-        this.state.drafts[u.id] = progress;
-        if (!resuming)
-          return reply({
-            reply: intakePrompt(intakeFields(progress.fields)[0]),
-            state: { step: 0 },
-          });
-      }
-      const guidedFields =
-        progress.schemaVersion === 3 ? intakeFields(progress.fields) : null;
-      // Older saved aircraft conversations used a numeric cursor without the
-      // tail-number question. Re-prompt before interpreting the next answer.
-      if (
-        guidedFields &&
-        progress.fields.listingType === 'aircraft' &&
-        progress.aircraftContactFieldsVersion !== 1
-      ) {
-        const tailIndex = guidedFields.findIndex(
-          (field) => field.name === 'nNumber',
-        );
-        if (tailIndex >= 0) {
-          progress.step = Math.min(progress.step, tailIndex);
-          progress.aircraftContactFieldsVersion = 1;
-          return reply({
-            reply: intakePrompt(guidedFields[progress.step]),
-            state: { step: progress.step },
-          });
-        }
-      }
-      const steps = guidedFields
-        ? guidedFields.map((field) => [field.name, intakePrompt(field)])
-        : legacySteps;
-      if (resuming) {
-        if (progress.step >= steps.length)
-          return reply({
-            reply:
-              'Your saved details are ready. Review your listing in the seller panel, then save and submit for review.',
-            action: { type: 'listing_draft', draft: clean(progress.fields) },
-            state: { completed: true },
-          });
-        return reply({
-          reply: 'Continuing your saved draft. ' + steps[progress.step][1],
-          state: { step: progress.step },
-        });
-      }
-      if (/\b(list|sell) my|want to (list|create a listing)/i.test(text))
-        return reply({
-          reply:
-            'Continuing your saved draft. ' +
-            steps[Math.min(progress.step, steps.length - 1)][1],
-          state: { step: progress.step },
-        });
-      const [field] = steps[progress.step] || steps[0];
-      if (
-        text.toLowerCase() === 'skip' &&
-        (guidedFields
-          ? guidedFields[progress.step]?.required
-          : [
-              'nNumber',
-              'make',
-              'model',
-              'year',
-              'price',
-              'sellerLocation',
-            ].includes(field))
-      )
-        fail(400, 'This field is required before submitting a listing.');
-      if (text.toLowerCase() !== 'skip') {
-        const definition = guidedFields?.[progress.step];
-        let answer = text;
-        if (definition?.options) {
-          const choice = definition.options.find(
-            (option, index) =>
-              String(index + 1) === text ||
-              String(
-                typeof option === 'string' ? option : option.value,
-              ).toLowerCase() === text.toLowerCase() ||
-              (typeof option === 'object' &&
-                option.label.toLowerCase() === text.toLowerCase()),
-          );
-          if (!choice) fail(400, 'Choose one of the listed options.');
-          answer = typeof choice === 'string' ? choice : choice.value;
-        }
-        const update = field.startsWith('spec:')
-          ? {
-              specifications: {
-                ...(!progress.fromManual ? progress.fields.specifications : {}),
-                [field.slice(5)]: answer,
-              },
-            }
-          : { [field]: answer };
-        if (guidedFields && progress.fromManual) {
-          const validated = clean({
-            ...(progress.fields.listingType
-              ? { listingType: progress.fields.listingType }
-              : {}),
-            ...(progress.fields.category
-              ? { category: progress.fields.category }
-              : {}),
-            ...update,
-          });
-          progress.fields = {
-            ...progress.fields,
-            ...validated,
-            ...(validated.specifications
-              ? {
-                  specifications: {
-                    ...progress.fields.specifications,
-                    ...validated.specifications,
-                  },
-                }
-              : {}),
-          };
-        } else if (guidedFields)
-          progress.fields = clean({ ...progress.fields, ...update });
-        else Object.assign(progress.fields, clean(update));
-      } else if (progress.fromManual) {
-        if (field.startsWith('spec:'))
-          delete progress.fields.specifications?.[field.slice(5)];
-        else delete progress.fields[field];
-      }
-      progress.step++;
-      progress.updatedAt = Date.now();
-      const nextSteps = guidedFields
-        ? intakeFields(progress.fields).map((field) => [
-            field.name,
-            intakePrompt(field),
-          ])
-        : steps;
-      if (progress.step < nextSteps.length)
-        return reply({
-          reply: nextSteps[progress.step][1],
-          state: { step: progress.step },
-        });
-      const draft = clean(progress.fields, true);
-      this.state.drafts[u.id] = progress.listingId
-        ? {
-            ...progress,
-            fields: draft,
-            step: nextSteps.length,
-            updatedAt: Date.now(),
-          }
-        : { ...draft, updatedAt: Date.now() };
-      return reply({
-        reply:
-          'Review your details in the seller panel. Save the draft, add media, then submit for review.',
-        action: { type: 'listing_draft', draft },
-        state: { completed: true },
-      });
-    }
+    if (path === '/intake' && method === 'POST')
+      return this.jerryIntake(u, await this.json(req));
     if (path === '/account' && method === 'GET')
       return reply({
         profile: this.state.profiles[u.id],

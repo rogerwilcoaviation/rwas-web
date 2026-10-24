@@ -37,7 +37,9 @@
     "test:seller:accounts-browser": "node tests/aircraft-sale/account-admin-browser.mjs",
     "test:seller:media-browser": "node tests/aircraft-sale/full-shell.mjs",
     "test:seller:better-auth": "node --test --test-concurrency=1 tests/aircraft-sale/better-auth-service.test.mjs tests/aircraft-sale/better-auth-bridge.test.mjs tests/aircraft-sale/better-auth-mail-context.test.mjs tests/aircraft-sale/better-auth-runtime.test.mjs tests/aircraft-sale/better-auth-ui.test.mjs tests/aircraft-sale/better-auth-admin-browser.test.mjs tests/aircraft-sale/replacement-catalog.test.mjs tests/aircraft-sale/authenticator-qr.test.mjs",
-    "test:language": "node --test tests/site-language.test.mjs"
+    "test:language": "node --test tests/site-language.test.mjs",
+    "test:jerry": "node --test --test-concurrency=1 tests/aircraft-sale/jerry-conversations.test.mjs tests/aircraft-sale/jerry-intake.test.mjs tests/aircraft-sale/jerry-cleanup.test.mjs tests/aircraft-sale/jerry-native.test.mjs tests/aircraft-sale/jerry-response.test.mjs tests/aircraft-sale/jerry-authorization.test.mjs tests/aircraft-sale/jerry-pages.test.mjs",
+    "test:jerry:browser": "node --test tests/aircraft-sale/jerry-browser.test.mjs"
   },
   "dependencies": {
     "@clerk/clerk-js": "^6.38.1",

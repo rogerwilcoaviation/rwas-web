@@ -1,0 +1,15 @@
+# Local candidate only. No deployment or provider credential is authorized here.
+name = "rwas-jerry-website-response-local-only"
+main = "entry.mjs"
+compatibility_date = "2026-09-01"
+workers_dev = false
+preview_urls = false
+
+# OPENAI_API_KEY and JERRY_MODEL must be configured separately for an approved
+# release. Local tests inject a synthetic provider; no credentials are committed.
+[observability]
+enabled = false
+
+[observability.logs]
+enabled = false
+invocation_logs = false
