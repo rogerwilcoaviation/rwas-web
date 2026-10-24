@@ -6,8 +6,8 @@
       "text": "100-Hour Inspections",
       "language": "en",
       "translations": {
-        "es": "100- Inspecciones Horarias",
-        "pt-BR": "Inspeções de 100- Horas"
+        "es": "Inspecciones de 100-Hour",
+        "pt-BR": "Inspeções de 100 Horas"
       }
     },
     {
@@ -15,8 +15,8 @@
       "text": "ADS-B Out Compliance",
       "language": "en",
       "translations": {
-        "es": "ADS-B Cumplimiento Out",
-        "pt-BR": "ADS-B Conformidade Externa"
+        "es": "Cumplimiento de ADS-B Out",
+        "pt-BR": "Conformidade ADS-B Out"
       }
     },
     {
@@ -33,7 +33,7 @@
       "text": "AXIS System Builder",
       "language": "en",
       "translations": {
-        "es": "AXIS System Builder",
+        "es": "Constructor de Sistema AXIS",
         "pt-BR": "Construtor de Sistema AXIS"
       }
     },
@@ -51,7 +51,7 @@
       "text": "Advertisement",
       "language": "en",
       "translations": {
-        "es": "Publicidad",
+        "es": "Anuncio",
         "pt-BR": "Anúncio"
       }
     },
@@ -60,8 +60,8 @@
       "text": "Airframe & Powerplant",
       "language": "en",
       "translations": {
-        "es": "Estructura y Motor",
-        "pt-BR": "Fuselagem & Motor"
+        "es": "Estructura y motor",
+        "pt-BR": "Estrutura e Motor"
       }
     },
     {
@@ -69,7 +69,7 @@
       "text": "Annual Inspections",
       "language": "en",
       "translations": {
-        "es": "Inspecciones Anuales",
+        "es": "Inspecciones anuales",
         "pt-BR": "Inspeções Anuais"
       }
     },
@@ -78,8 +78,8 @@
       "text": "Ask Jerry",
       "language": "en",
       "translations": {
-        "es": "Preguntar a Jerry",
-        "pt-BR": "Pergunte Jerry"
+        "es": "Pregunte a Jerry",
+        "pt-BR": "Pergunte a Jerry"
       }
     },
     {
@@ -133,7 +133,7 @@
       "language": "en",
       "translations": {
         "es": "Mostrador de aviónica: (605) 299-8178 · avionics@rwas.team",
-        "pt-BR": "Balcão de aviônicos: (605) 299-8178 · avionics@rwas.team"
+        "pt-BR": "Balcão de Aviónica: (605) 299-8178 · avionics@rwas.team"
       }
     },
     {
@@ -151,7 +151,7 @@
       "language": "en",
       "translations": {
         "es": "Reservar servicio",
-        "pt-BR": "Agendar Serviço"
+        "pt-BR": "Agendar serviço"
       }
     },
     {
@@ -159,8 +159,8 @@
       "text": "Browse All Listings →",
       "language": "en",
       "translations": {
-        "es": "Explorar Todos los Listados →",
-        "pt-BR": "Navegar por Todas as Listagens →"
+        "es": "Explorar Todos los Anuncios →",
+        "pt-BR": "Ver Todos os Anúncios →"
       }
     },
     {
@@ -204,8 +204,8 @@
       "text": "Call (605) 299-8178",
       "language": "en",
       "translations": {
-        "es": "Llama (605) 299-8178",
-        "pt-BR": "Ligue (605) 299-8178"
+        "es": "Llamar (605) 299-8178",
+        "pt-BR": "Ligar (605) 299-8178"
       }
     },
     {
@@ -232,7 +232,7 @@
       "language": "en",
       "translations": {
         "es": "Estación de reparación certificada",
-        "pt-BR": "Estação de Reparo Certificada"
+        "pt-BR": "Estação de Reparação Certificada"
       }
     },
     {
@@ -240,8 +240,8 @@
       "text": "Choose equipment, preview panel finishes, and submit a concept sketch to RWAS for avionics review.",
       "language": "en",
       "translations": {
-        "es": "Elija el equipamiento, previsualice los acabados del panel y envíe un boceto conceptual a RWAS para la revisión de aviónica.",
-        "pt-BR": "Escolha os equipamentos, visualize os acabamentos do painel e envie um esboço conceitual para RWAS para revisão de aviónica."
+        "es": "Elija el equipo, previsualice los acabados de los paneles y envíe un boceto conceptual a RWAS para la revisión de aviónica.",
+        "pt-BR": "Escolha o equipamento, visualize os acabamentos dos painéis e envie um esboço conceitual para a RWAS para revisão de aviônicos."
       }
     },
     {
@@ -258,8 +258,8 @@
       "text": "Click the Jerry bubble — our AI concierge will walk you through listing your aircraft step by step.",
       "language": "en",
       "translations": {
-        "es": "Haga clic en la burbuja Jerry — nuestro conserje de IA lo guiará paso a paso para listar su aeronave.",
-        "pt-BR": "Clique na bolha Jerry — nosso concierge de IA o guiará passo a passo para listar sua aeronave."
+        "es": "Haga clic en la burbuja de Jerry — nuestro conserje de IA lo guiará paso a paso para anunciar su avión.",
+        "pt-BR": "Clique na bolha do Jerry — nosso concierge de IA o guiará passo a passo ao anunciar sua aeronave."
       }
     },
     {
@@ -267,8 +267,8 @@
       "text": "Coating reviews for fabricated metal parts, shop items, decorative hardware, and combined coat-and-print work.",
       "language": "en",
       "translations": {
-        "es": "Revisiones de recubrimiento para piezas metálicas fabricadas, artículos de taller, herrajes decorativos y trabajos combinados de recubrimiento e impresión.",
-        "pt-BR": "Revisões de revestimento para peças metálicas fabricadas, itens de oficina, ferragens decorativas e trabalhos combinados de revestimento e impressão."
+        "es": "Revisiones de recubrimientos para piezas metálicas fabricadas, artículos de taller, herrajes decorativos y trabajos combinados de recubrido e impresión.",
+        "pt-BR": "Revisões de revestimento para peças metálicas fabricadas, itens de oficina, ferragens decorativas e trabalhos combinados de pintura e impressão."
       }
     },
     {
@@ -277,7 +277,7 @@
       "language": "en",
       "translations": {
         "es": "Kit de aparejo completo",
-        "pt-BR": "Kit de Rigging Completo"
+        "pt-BR": "Kit de Cabos Completo"
       }
     },
     {
@@ -313,7 +313,7 @@
       "language": "en",
       "translations": {
         "es": "Portal del cliente y banco de trabajo del empleado",
-        "pt-BR": "Portal do cliente e bancada de funcionários"
+        "pt-BR": "Portal do cliente e bancada de trabalho dos funcionários"
       }
     },
     {
@@ -321,8 +321,8 @@
       "text": "Cutting, welding, marking, and fabrication support in-house.",
       "language": "en",
       "translations": {
-        "es": "Corte, soldadura, marcado y soporte de fabricación internos.",
-        "pt-BR": "Corte, soldagem, marcação e suporte de fabricação internamente."
+        "es": "Corte, soldadura, marcado y soporte de fabricación interno.",
+        "pt-BR": "Corte, soldagem, marcação e suporte à fabricação internamente."
       }
     },
     {
@@ -331,7 +331,7 @@
       "language": "en",
       "translations": {
         "es": "Distribuidor",
-        "pt-BR": "Distribuidor"
+        "pt-BR": "Revendedor"
       }
     },
     {
@@ -339,7 +339,7 @@
       "text": "Dye Penetrant Testing",
       "language": "en",
       "translations": {
-        "es": "Ensayo de penetrante de color",
+        "es": "Prueba de Penetrante de Color",
         "pt-BR": "Teste de Penetração de Corante"
       }
     },
@@ -348,8 +348,8 @@
       "text": "Each preliminary build can be submitted directly to Roger Wilco Aviation Services for compatibility review and an aircraft-specific equipment and installation quote. RWAS will review the aircraft, mission, certification path, installation requirements, and selected equipment before preparing the next step.",
       "language": "en",
       "translations": {
-        "es": "Cada construcción preliminar puede enviarse directamente a Roger Wilco Aviation Services para revisión de compatibilidad y una cotización de equipamiento e instalación específica de la aeronave. RWAS revisará la aeronave, la misión, la ruta de certificación, los requisitos de instalación y el equipamiento seleccionado antes de preparar el siguiente paso.",
-        "pt-BR": "Cada montagem preliminar pode ser enviada diretamente para Roger Wilco Aviation Services para revisão de compatibilidade e um orçamento de equipamento e instalação específico da aeronave. RWAS revisará a aeronave, missão, caminho de certificação, requisitos de instalação e equipamento selecionado antes de preparar a próxima etapa."
+        "es": "Cada construcción preliminar puede enviarse directamente a Roger Wilco Aviation Services para la revisión de compatibilidad y una cotización de equipamiento e instalación específicos para la aeronave. RWAS revisará la aeronave, la misión, la ruta de certificación, los requisitos de instalación y el equipamiento seleccionado antes de preparar el siguiente paso.",
+        "pt-BR": "Cada construção preliminar pode ser enviada diretamente para Roger Wilco Aviation Services para revisão de compatibilidade e cotação de equipamento e instalação específicos da aeronave. RWAS revisará a aeronave, a missão, o caminho de certificação, os requisitos de instalação e o equipamento selecionado antes de preparar a próxima etapa."
       }
     },
     {
@@ -357,7 +357,7 @@
       "text": "Eddy Current Inspection",
       "language": "en",
       "translations": {
-        "es": "Inspección por corrientes de Eddy",
+        "es": "Inspección por Corriente de Eddy",
         "pt-BR": "Inspeção por Corrente de Eddy"
       }
     },
@@ -367,7 +367,7 @@
       "language": "en",
       "translations": {
         "es": "FAA CERT. ESTACIÓN DE REPARACIÓN · AVIÓNICA · ESTRUCTURA Y MOTOR · NDT · FABRICACIÓN",
-        "pt-BR": "FAA ESTAÇÃO DE REPARO CERT. · AVIONICS · ESTRUTURA & PROPULSOR · NDT · FABRICAÇÃO"
+        "pt-BR": "FAA CERT. REPAIR STATION · AVIONICS · AIRFRAME & POWERPLANT · NDT · FABRICAÇÃO"
       }
     },
     {
@@ -376,7 +376,7 @@
       "language": "en",
       "translations": {
         "es": "FAA Certificado RWSR491E. Todo el trabajo realizado por mecánicos certificados con documentación completa del libro de registro.",
-        "pt-BR": "FAA Certificate RWSR491E. Todo o trabalho realizado por mecânicos certificados com documentação completa de registro de manutenção."
+        "pt-BR": "FAA Certificate RWSR491E. Todo o trabalho por mecânicos certificados com documentação completa de registro."
       }
     },
     {
@@ -393,8 +393,8 @@
       "text": "FAR 91.227 compliant installations. Transponder upgrades and system certification.",
       "language": "en",
       "translations": {
-        "es": "Instalaciones compatibles con FAR 91.227. Actualizaciones de transpondedor y certificación del sistema.",
-        "pt-BR": "Instalações compatíveis com FAR 91.227. Atualizações de transponder e certificação de sistema."
+        "es": "Instalaciones conformes a FAR 91.227. Actualizaciones de transpondedor y certificación del sistema.",
+        "pt-BR": "Instalações em conformidade com FAR 91.227. Atualizações de transponder e certificação de sistema."
       }
     },
     {
@@ -456,8 +456,8 @@
       "text": "For aircraft operated for hire under 14 C.F.R. Part 91 and Part 135 requirements.",
       "language": "en",
       "translations": {
-        "es": "Para aeronaves operadas bajo contrato según 14 C.F.R. Parte 91 y Parte 135.",
-        "pt-BR": "Para aeronaves operadas para aluguel sob requisitos do 14 C.F.R. Parte 91 e Parte 135."
+        "es": "Para aeronaves operadas bajo contrato según los requisitos de la Parte 91 y Parte 135 del 14 C.F.R.",
+        "pt-BR": "Para aeronaves operadas para aluguel sob os requisitos da 14 C.F.R. Part 91 e Part 135."
       }
     },
     {
@@ -474,8 +474,8 @@
       "text": "Full aircraft panel upgrades begin with the dedicated panel planning workflow.",
       "language": "en",
       "translations": {
-        "es": "Las actualizaciones completas de paneles de aeronaves comienzan con el flujo de trabajo dedicado a la planificación de paneles.",
-        "pt-BR": "Atualizações completas de painéis de aeronaves começam com o fluxo de trabalho dedicado ao planejamento de painéis."
+        "es": "Las actualizaciones completas de paneles de aeronaves comienzan con el flujo de trabajo dedicado de planificación de paneles.",
+        "pt-BR": "Atualizações completas de painéis de aeronaves começam com o fluxo de trabalho dedicado de planejamento de painéis."
       }
     },
     {
@@ -483,7 +483,7 @@
       "text": "Full-color graphics, labels, personalization, and markings on primarily flat parts and samples.",
       "language": "en",
       "translations": {
-        "es": "Gráficos a todo color, etiquetas, personalización y marcas en piezas y muestras principalmente planas.",
+        "es": "Gráficos a todo color, etiquetas, personalización y marcados en piezas y muestras principalmente planas.",
         "pt-BR": "Gráficos em cores completas, etiquetas, personalização e marcações em peças e amostras principalmente planas."
       }
     },
@@ -492,7 +492,7 @@
       "text": "G3X Touch Suite",
       "language": "en",
       "translations": {
-        "es": "G3X Suite Táctil",
+        "es": "Suite G3X Touch",
         "pt-BR": "G3X Touch Suite"
       }
     },
@@ -501,8 +501,8 @@
       "text": "GFC 500 Autopilot",
       "language": "en",
       "translations": {
-        "es": "GFC 500 Autopiloto",
-        "pt-BR": "GFC 500 Piloto Automático"
+        "es": "Autopiloto GFC 500",
+        "pt-BR": "GFC 500 Autopilot"
       }
     },
     {
@@ -510,8 +510,8 @@
       "text": "GFC 500 installs: Bonanza, Mooney, Cessna — same-day quote",
       "language": "en",
       "translations": {
-        "es": "GFC 500 inpuestos: Bonanza, Mooney, Cessna — cotización el mismo día",
-        "pt-BR": "GFC 500 inbaias: Bonanza, Mooney, Cessna — cotação no mesmo dia"
+        "es": "Instalaciones de GFC 500: Bonanza, Mooney, Cessna — cotización el mismo día",
+        "pt-BR": "Instalações de GFC 500: Bonanza, Mooney, Cessna — orçamento no mesmo dia"
       }
     },
     {
@@ -519,8 +519,8 @@
       "text": "GPS/NAV/COMM with WAAS LPV approaches, IFR certification, and flight-plan integration.",
       "language": "en",
       "translations": {
-        "es": "GPS/NAV/COMM con aproximaciones WAAS LPV, certificación IFR, e integración del plan de vuelo.",
-        "pt-BR": "GPS/NAV/COMM com abordagens WAAS LPV, certificação IFR, e integração de plano de voo."
+        "es": "GPS/NAV/COMM con aproximaciones WAAS LPV, certificación IFR e integración del plan de vuelo.",
+        "pt-BR": "GPS/NAV/COMM com abordagens WAAS LPV, certificação IFR e integração de plano de voo."
       }
     },
     {
@@ -546,8 +546,8 @@
       "text": "Garmin AXIS 8-inch portrait, 11.6-inch, and 8-inch landscape flight displays",
       "language": "en",
       "translations": {
-        "es": "Garmin AXIS 8-inch retrato, 11.6-inch, y 8-inch paisaje pantallas de vuelo",
-        "pt-BR": "Garmin AXIS 8-inch retrato, 11.6-inch e 8-inch paisagem exibições de voo"
+        "es": "Garmin AXIS pantallas de vuelo de 8-inch retrato, 11.6-inch y 8-inch paisaje",
+        "pt-BR": "Garmin AXIS 8-inch portrait, 11.6-inch e 8-inch landscape flight displays"
       }
     },
     {
@@ -555,8 +555,8 @@
       "text": "Garmin AXIS flight displays — available for certified and experimental panel builds through RWAS.",
       "language": "en",
       "translations": {
-        "es": "Garmin pantallas de vuelo AXIS — disponibles para construcciones de paneles certificadas y experimentales a través de RWAS.",
-        "pt-BR": "Garmin displays de voo AXIS — disponíveis para construções de painéis certificados e experimentais através de RWAS."
+        "es": "Garmin AXIS pantallas de vuelo — disponibles para construcciones de paneles certificadas y experimentales a través de RWAS.",
+        "pt-BR": "Garmin AXIS flight displays — disponíveis para construções de painéis certificados e experimentais através da RWAS."
       }
     },
     {
@@ -564,7 +564,7 @@
       "text": "Garmin Adds Class A and Coflyt Flight Log Integrations",
       "language": "en",
       "translations": {
-        "es": "Garmin Añade Integraciones de Registro de Vuelo Clase A y Coflyt",
+        "es": "Garmin añade integraciones de registro de vuelo Class A y Coflyt",
         "pt-BR": "Garmin adiciona integrações de registro de voo Class A e Coflyt"
       }
     },
@@ -573,8 +573,8 @@
       "text": "Garmin Aviation Pricing Changes Take Effect December 21, 2026",
       "language": "en",
       "translations": {
-        "es": "Garmin Cambios en los Precios de Aviación Entrarán en Vigor en Diciembre 21, 2026",
-        "pt-BR": "Garmin Alterações de Preços de Aviação Entram em Vigor em Dezembro 21, 2026"
+        "es": "Garmin cambios de precios de aviación entran en vigor 21, 2026",
+        "pt-BR": "Alterações nos preços da Garmin Aviation entram em vigor em 21 de dezembro de 2026"
       }
     },
     {
@@ -583,7 +583,7 @@
       "language": "en",
       "translations": {
         "es": "Garmin Aviónica y Mantenimiento de Aeronaves — Yankton, SD",
-        "pt-BR": "Garmin Aviónica e Manutenção de Aeronaves — Yankton, SD"
+        "pt-BR": "Garmin Avionics & Aircraft Maintenance — Yankton, SD"
       }
     },
     {
@@ -591,8 +591,8 @@
       "text": "Garmin Installation Planning",
       "language": "en",
       "translations": {
-        "es": "Planificación de instalación Garmin",
-        "pt-BR": "Garmin Planejamento de Instalação"
+        "es": "Garmin planificación de instalación",
+        "pt-BR": "Planejamento de instalação Garmin"
       }
     },
     {
@@ -600,8 +600,8 @@
       "text": "Garmin Store",
       "language": "en",
       "translations": {
-        "es": "Garmin Tienda",
-        "pt-BR": "Garmin Loja"
+        "es": "Tienda Garmin",
+        "pt-BR": "Loja Garmin"
       }
     },
     {
@@ -609,8 +609,8 @@
       "text": "Garmin announced FAA supplemental type certification for an all-Garmin avionics retrofit for the original Cessna CitationJet on September 22, 2026. The announcement expands on Garmin’s existing CJ1 an…",
       "language": "en",
       "translations": {
-        "es": "Garmin anunció la certificación de tipo suplementario FAA para una actualización de aviónica totalmente Garmin del CitationJet original Cessna en septiembre 22, 2026.. El anuncio amplía la CJ1 existente de Garmin an…",
-        "pt-BR": "Garmin anunciou FAA certificação suplementar de tipo para um retrofit de aviônicos totalmente Garmin para o CitationJet original Cessna em setembro 22, 2026. O anúncio expande o Garmin existente CJ1 an…"
+        "es": "Garmin anunció la certificación suplementaria de tipo de la FAA para una modernización de aviónica totalmente Garmin del Cessna CitationJet original el 22, 2026. El anuncio amplía la CJ1 existente de Garmin…",
+        "pt-BR": "Garmin anunciou certificação suplementar de tipo da FAA para uma retrofit de aviônicos totalmente Garmin para o Cessna CitationJet original em 22 de setembro de 2026. O anúncio amplia a existente CJ1 da Garmin…"
       }
     },
     {
@@ -619,7 +619,7 @@
       "language": "en",
       "translations": {
         "es": "Garmin ha añadido Class A y Coflyt a los servicios de análisis que pueden recibir registros de vuelo de aeronaves compatibles a través de flyGarmin. La actualización amplía las formas en que los propietarios pueden usar los datos de vuelo registrados sin…",
-        "pt-BR": "Garmin adicionou Class A e Coflyt aos serviços de análise que podem receber registros de voo de aeronaves compatíveis através do flyGarmin. A atualização amplia as maneiras que os proprietários podem usar os dados de voo gravados sem…"
+        "pt-BR": "Garmin adicionou Class A e Coflyt aos serviços de análise que podem receber registros de voo de aeronaves compatíveis através do flyGarmin. A atualização amplia as formas como os proprietários podem usar os dados de voo registrados…"
       }
     },
     {
@@ -627,8 +627,8 @@
       "text": "Garmin has notified authorized dealers that updated aviation pricing will take effect December 21, 2026. Customers considering a panel upgrade, autopilot, display, audio panel, weather radar, traffic …",
       "language": "en",
       "translations": {
-        "es": "Garmin ha notificado a los distribuidores autorizados que los precios de aviación actualizados entrarán en vigor en Diciembre 21, 2026.. Clientes que consideren una actualización de panel, piloto automático, pantalla, panel de audio, radar meteorológico, tráfico …",
-        "pt-BR": "Garmin notificou os revendedores autorizados que os preços de aviação atualizados entrarão em vigor em dezembro 21, 2026. Clientes que consideram uma atualização de painel, piloto automático, display, painel de áudio, radar meteorológico, tráfego …"
+        "es": "Garmin ha notificado a los distribuidores autorizados que los precios de aviación actualizados entrarán en vigor 21, 2026. Los clientes que consideren una actualización de panel, piloto automático, pantalla, panel de audio, radar meteorológico, tráfico …",
+        "pt-BR": "Garmin notificou os revendedores autorizados que os preços atualizados de aviação entrarão em vigor em 21 de dezembro de 2026. Clientes que consideram upgrade de painel, piloto automático, display, painel de áudio, radar meteorológico, tráfego…"
       }
     },
     {
@@ -637,7 +637,7 @@
       "language": "en",
       "translations": {
         "es": "Planificación de cabina de cristal con disposición de pantallas, EIS, ADAHRS, conectividad y fabricación de paneles.",
-        "pt-BR": "Planejamento de cockpit de vidro com layout de exibição, EIS, ADAHRS, conectividade e fabricação de painel."
+        "pt-BR": "Planejamento de cockpit de vidro com layout de display, EIS, ADAHRS, conectividade e fabricação de painéis."
       }
     },
     {
@@ -664,7 +664,7 @@
       "language": "en",
       "translations": {
         "es": "Corte industrial con láser de fibra en Roger Wilco Aviation Services",
-        "pt-BR": "Corte industrial com laser de fibra em Roger Wilco Aviation Services"
+        "pt-BR": "Corte industrial a laser de fibra na Roger Wilco Aviation Services"
       }
     },
     {
@@ -672,7 +672,7 @@
       "text": "Introducing the AXIS Build-A-System Planner",
       "language": "en",
       "translations": {
-        "es": "Presentando el Planificador AXIS Build-A-System",
+        "es": "Presentamos el planificador AXIS Build-A-System",
         "pt-BR": "Apresentando o Planejador AXIS Build-A-System"
       }
     },
@@ -682,7 +682,7 @@
       "language": "en",
       "translations": {
         "es": "Lo último de Garmin",
-        "pt-BR": "Últimas de Garmin"
+        "pt-BR": "Novidades da Garmin"
       }
     },
     {
@@ -708,8 +708,8 @@
       "text": "NBAA Member",
       "language": "en",
       "translations": {
-        "es": "Miembro de NBAA",
-        "pt-BR": "Membro NBAA"
+        "es": "Miembro NBAA",
+        "pt-BR": "Membro da NBAA"
       }
     },
     {
@@ -717,7 +717,7 @@
       "text": "NDT & Certification",
       "language": "en",
       "translations": {
-        "es": "NDT & Certificación",
+        "es": "NDT y certificación",
         "pt-BR": "NDT & Certificação"
       }
     },
@@ -726,8 +726,8 @@
       "text": "NDT Services",
       "language": "en",
       "translations": {
-        "es": "NDT Servicios",
-        "pt-BR": "NDT Serviços"
+        "es": "Servicios NDT",
+        "pt-BR": "Serviços NDT"
       }
     },
     {
@@ -735,8 +735,8 @@
       "text": "New capability — fiber laser cutting, welding, and scaling.",
       "language": "en",
       "translations": {
-        "es": "Nueva capacidad — corte láser de fibra, soldadura y escalado.",
-        "pt-BR": "Nova capacidade — corte, soldagem e dimensionamento a laser de fibra."
+        "es": "Nueva capacidad — corte con láser de fibra, soldadura y escalado.",
+        "pt-BR": "Nova capacidade — corte a laser de fibra, soldagem e dimensionamento."
       }
     },
     {
@@ -744,8 +744,8 @@
       "text": "New shop capability",
       "language": "en",
       "translations": {
-        "es": "Nueva capacidad de tienda",
-        "pt-BR": "Nova capacidade da loja"
+        "es": "Nueva capacidad del taller",
+        "pt-BR": "Nova capacidade da oficina"
       }
     },
     {
@@ -753,8 +753,8 @@
       "text": "Now booking Garmin install slots — schedule early",
       "language": "en",
       "translations": {
-        "es": "Ahora reservando ranuras de instalación Garmin — programa con anticipación",
-        "pt-BR": "Agora reservando slots de instalação Garmin — agende cedo"
+        "es": "Ahora reservando espacios de instalación Garmin — programe temprano",
+        "pt-BR": "Agora reservando vagas de instalação da Garmin — agende cedo"
       }
     },
     {
@@ -798,7 +798,7 @@
       "text": "Papa-Alpha Depot",
       "language": "en",
       "translations": {
-        "es": "Papa-Alpha Depot",
+        "es": "Depósito Papa-Alpha",
         "pt-BR": "Depósito Papa-Alpha"
       }
     },
@@ -807,7 +807,7 @@
       "text": "Papa-Alpha Depot advertisement",
       "language": "en",
       "translations": {
-        "es": "Anuncio del Depósito Papa-Alpha",
+        "es": "Anuncio del depósito Papa-Alpha",
         "pt-BR": "Anúncio do Depósito Papa-Alpha"
       }
     },
@@ -816,8 +816,8 @@
       "text": "Papa-Alpha Tools",
       "language": "en",
       "translations": {
-        "es": "Papa-Alpha Tools",
-        "pt-BR": "Papa-Alpha Tools"
+        "es": "Herramientas Papa-Alpha",
+        "pt-BR": "Ferramentas Papa-Alpha"
       }
     },
     {
@@ -834,8 +834,8 @@
       "text": "Papa-Alpha rigging reference tools — CNC-machined aircraft-grade aluminum.",
       "language": "en",
       "translations": {
-        "es": "Herramientas de referencia de izado Papa-Alpha — Aluminio de grado aeronáutico mecanizado CNC.",
-        "pt-BR": "Ferramentas de referência de içamento Papa-Alpha — alumínio de grau aeronáutico usinado CNC."
+        "es": "Herramientas de referencia de aparejo Papa-Alpha — aluminio de grado aeronáutico mecanizado CNC.",
+        "pt-BR": "Ferramentas de referência de rigging Papa-Alpha — Alumínio de grau aeronáutico usinado CNC."
       }
     },
     {
@@ -843,8 +843,8 @@
       "text": "Papa-Alpha tools ship same day from the RWAS shop",
       "language": "en",
       "translations": {
-        "es": "Herramientas Papa-Alpha se envían el mismo día desde el taller RWAS",
-        "pt-BR": "Ferramentas Papa-Alpha enviam no mesmo dia da loja RWAS"
+        "es": "Las herramientas Papa-Alpha se envían el mismo día desde la tienda RWAS",
+        "pt-BR": "Ferramentas Papa-Alpha são enviadas no mesmo dia da loja RWAS"
       }
     },
     {
@@ -853,7 +853,7 @@
       "language": "en",
       "translations": {
         "es": "Herramientas de referencia de aparejo Piper",
-        "pt-BR": "Piper Ferramentas de Referência de Rigging"
+        "pt-BR": "Ferramentas de Referência de Rigging Piper"
       }
     },
     {
@@ -879,8 +879,8 @@
       "text": "Powerplant diagnostics, mag checks, compression testing, and engine runs.",
       "language": "en",
       "translations": {
-        "es": "Diagnósticos del motor, verificaciones magnéticas, pruebas de compresión y pruebas de motor.",
-        "pt-BR": "Diagnósticos de motor, verificações de magnetos, teste de compressão e testes de motor."
+        "es": "Diagnósticos del motor, revisiones magnéticas, pruebas de compresión y pruebas de motor.",
+        "pt-BR": "Diagnósticos de motor, verificações magnéticas, teste de compressão e testes de funcionamento do motor."
       }
     },
     {
@@ -888,8 +888,8 @@
       "text": "Precision Piper rigging tools · Tiered pricing",
       "language": "en",
       "translations": {
-        "es": "Herramientas de izado de precisión Piper · Precios escalonados",
-        "pt-BR": "Ferramentas de içamento de precisão Piper · Preços escalonados"
+        "es": "Herramientas de aparejo de precisión Piper · Precios escalonados",
+        "pt-BR": "Ferramentas de rigging de precisão Piper · Preços escalonados"
       }
     },
     {
@@ -897,8 +897,8 @@
       "text": "Precision flight-control rigging for PA-28, PA-30, PA-31, PA-36. CNC-machined aluminum, powder coated, UV printed. Sold worldwide.",
       "language": "en",
       "translations": {
-        "es": "Aparejo de control de vuelo de precisión para PA-28, PA-30, PA-31, PA-36. de aluminio mecanizado CNC, recubierto en polvo, impreso en UV. Vendido a nivel mundial.",
-        "pt-BR": "Rigging de controle de voo de precisão para PA-28, PA-30, PA-31, PA-36. alumínio usinado CNC, revestido com pó, impresso em UV. Vendido mundialmente."
+        "es": "Aparejo de control de vuelo de precisión para PA-28, PA-30, PA-31, PA-36. Aluminio mecanizado CNC, recubrimiento en polvo, impreso UV. Vendido en todo el mundo.",
+        "pt-BR": "Rigging de controle de voo de precisão para PA-28, PA-30, PA-31, PA-36. Alumínio usinado em CNC, revestido em pó, impresso em UV. Vendido mundialmente."
       }
     },
     {
@@ -924,7 +924,7 @@
       "text": "Printing & Coating",
       "language": "en",
       "translations": {
-        "es": "Impresión y Recubrimiento",
+        "es": "Impresión y recubrimiento",
         "pt-BR": "Impressão & Revestimento"
       }
     },
@@ -933,8 +933,8 @@
       "text": "Printing & Coating Overview",
       "language": "en",
       "translations": {
-        "es": "Resumen de Impresión y Recubrimiento",
-        "pt-BR": "Visão Geral de Impressão & Pintura"
+        "es": "Resumen de impresión y recubrimiento",
+        "pt-BR": "Visão Geral de Impressão & Revestimento"
       }
     },
     {
@@ -942,8 +942,8 @@
       "text": "Printing & Powder Coating",
       "language": "en",
       "translations": {
-        "es": "Impresión y Recubrimiento en Polvo",
-        "pt-BR": "Impressão & Pintura em Pó"
+        "es": "Impresión y recubrimiento en polvo",
+        "pt-BR": "Impressão & Revestimento em Pó"
       }
     },
     {
@@ -960,7 +960,7 @@
       "text": "Product Update",
       "language": "en",
       "translations": {
-        "es": "Actualización de Producto",
+        "es": "Actualización de producto",
         "pt-BR": "Atualização de Produto"
       }
     },
@@ -969,8 +969,8 @@
       "text": "RWAS Avionics Desk · KYKN · Yankton, SD",
       "language": "en",
       "translations": {
-        "es": "RWAS Mostrador de aviónica · KYKN · Yankton, SD",
-        "pt-BR": "RWAS Balcão de Avionics · KYKN · Yankton, SD"
+        "es": "RWAS Avionics Desk · KYKN · Yankton, SD",
+        "pt-BR": "RWAS Avionics Desk · KYKN · Yankton, SD"
       }
     },
     {
@@ -978,8 +978,8 @@
       "text": "RWAS Work Order System",
       "language": "en",
       "translations": {
-        "es": "RWAS Sistema de Orden de Trabajo",
-        "pt-BR": "RWAS Sistema de Ordem de Serviço"
+        "es": "RWAS Sistema de Órdenes de Trabajo",
+        "pt-BR": "RWAS Sistema de Ordem de Trabalho"
       }
     },
     {
@@ -987,8 +987,8 @@
       "text": "RWAS Work Order System access",
       "language": "en",
       "translations": {
-        "es": "RWAS acceso al Sistema de Órdenes de Trabajo",
-        "pt-BR": "RWAS Acesso ao Sistema de Ordem de Serviço"
+        "es": "Acceso al RWAS Sistema de Órdenes de Trabajo",
+        "pt-BR": "Acesso ao RWAS Sistema de Ordem de Trabalho"
       }
     },
     {
@@ -996,8 +996,8 @@
       "text": "RWAS fiber laser fabrication video",
       "language": "en",
       "translations": {
-        "es": "RWAS video de fabricación con láser de fibra",
-        "pt-BR": "RWAS vídeo de fabricação com laser de fibra"
+        "es": "Video de fabricación con láser de fibra RWAS",
+        "pt-BR": "Vídeo de fabricação de laser de fibra RWAS"
       }
     },
     {
@@ -1006,7 +1006,7 @@
       "language": "en",
       "translations": {
         "es": "Solicitar una cotización",
-        "pt-BR": "Solicitar um Orçamento"
+        "pt-BR": "Solicitar uma Cotação"
       }
     },
     {
@@ -1014,7 +1014,7 @@
       "text": "Retrofit digital autopilot with GPSS steering, altitude hold, and vertical-speed modes.",
       "language": "en",
       "translations": {
-        "es": "Retroinstale autopiloto digital con dirección GPSS, mantenimiento de altitud y modos de velocidad vertical.",
+        "es": "Retrofit de piloto automático digital con dirección GPSS, mantenimiento de altitud y modos de velocidad vertical.",
         "pt-BR": "Retrofit de piloto automático digital com direção GPSS, manutenção de altitude e modos de velocidade vertical."
       }
     },
@@ -1024,7 +1024,7 @@
       "language": "en",
       "translations": {
         "es": "Revise los servicios especializados del taller, los requisitos del proyecto y el proceso de consulta antes de solicitar una cotización.",
-        "pt-BR": "Revise serviços especializados de oficina, requisitos de projeto e o processo de consulta antes de solicitar um orçamento."
+        "pt-BR": "Revise os serviços especializados da oficina, requisitos do projeto e o processo de consulta antes de solicitar uma cotação."
       }
     },
     {
@@ -1041,7 +1041,7 @@
       "text": "Rotax Engine Support",
       "language": "en",
       "translations": {
-        "es": "Soporte de Motor Rotax",
+        "es": "Soporte de motor Rotax",
         "pt-BR": "Suporte ao Motor Rotax"
       }
     },
@@ -1104,7 +1104,7 @@
       "text": "Selling?",
       "language": "en",
       "translations": {
-        "es": "¿Vende?",
+        "es": "¿Vendiendo?",
         "pt-BR": "Vendendo?"
       }
     },
@@ -1122,7 +1122,7 @@
       "text": "Services & Capabilities",
       "language": "en",
       "translations": {
-        "es": "Servicios y capacidades",
+        "es": "Servicios y Capacidades",
         "pt-BR": "Serviços e Capacidades"
       }
     },
@@ -1140,8 +1140,8 @@
       "text": "Sheet Metal & Fabrication",
       "language": "en",
       "translations": {
-        "es": "Chapa y Fabricación",
-        "pt-BR": "Metal de Chapas & Fabricação"
+        "es": "Metalistería y Fabricación",
+        "pt-BR": "Chapa Metálica & Fabricação"
       }
     },
     {
@@ -1150,7 +1150,7 @@
       "language": "en",
       "translations": {
         "es": "Boletín de la tienda",
-        "pt-BR": "Boletim da loja"
+        "pt-BR": "Boletim da Loja"
       }
     },
     {
@@ -1159,7 +1159,7 @@
       "language": "en",
       "translations": {
         "es": "Carrito de compras",
-        "pt-BR": "Carrinho de compras"
+        "pt-BR": "Carrinho de Compras"
       }
     },
     {
@@ -1176,8 +1176,8 @@
       "text": "Stabilator, rudder, aileron & flap, bell crank, PA-31/PA-36 specifics. From $59.99.",
       "language": "en",
       "translations": {
-        "es": "Estabilizador, timón, alerón y flap, manivela de campana, especificaciones PA-31/PA-36. De $59.99.",
-        "pt-BR": "Estabilizador, leme, aileron e flap, manivela, especificações PA-31/PA-36. De $59.99."
+        "es": "Estabilizador, timón, alerón & flap, balancín, PA-31/PA-36 específicos. Desde $59.99.",
+        "pt-BR": "Estabilizador, leme, aileron & flap, manivela em forma de sino, especificações PA-31/PA-36. A partir de $59.99."
       }
     },
     {
@@ -1185,8 +1185,8 @@
       "text": "Stabilator, rudder, aileron, flap, and bell crank in one case. From $264.",
       "language": "en",
       "translations": {
-        "es": "Estabilizador, timón, alerón, flap y manivela de campana en una sola caja. De $264.",
-        "pt-BR": "Estabilizador, leme, aileron, flap e manivela em um único estojo. De $264."
+        "es": "Estabilizador, timón, alerón, flap y balancín en un solo caso. Desde $264.",
+        "pt-BR": "Estabilizador, leme, aileron, flap e manivela em forma de sino em um único caso. A partir de $264."
       }
     },
     {
@@ -1194,7 +1194,7 @@
       "text": "Staff Login",
       "language": "en",
       "translations": {
-        "es": "Inicio de sesión del personal",
+        "es": "Acceso del personal",
         "pt-BR": "Login da Equipe"
       }
     },
@@ -1221,8 +1221,8 @@
       "text": "Subsurface crack and corrosion detection in aluminum and ferrous components — without disassembly.",
       "language": "en",
       "translations": {
-        "es": "Detección de grietas y corrosión subsuperficial en componentes de aluminio y ferrosos — sin desmontaje.",
-        "pt-BR": "Detecção de fissuras e corrosão sub-superficiais em componentes de alumínio e ferroso — sem desmontagem."
+        "es": "Detección de grietas subsuperficiales y corrosión en componentes de aluminio y ferrosos — sin desmontaje.",
+        "pt-BR": "Detecção de fissuras sub-superficiais e corrosão em componentes de alumínio e ferroso — sem desmontagem."
       }
     },
     {
@@ -1257,8 +1257,8 @@
       "text": "The new RWAS AXIS Build-A-System Planner gives aircraft owners a guided way to design a Garmin AXIS panel before requesting a formal quote. Choose the certified or experimental path, work through Garmin’s recommended build sequence, compare compatible displays and supporting hardware, and watch the manufacturer list-price total update as the system takes shape.",
       "language": "en",
       "translations": {
-        "es": "El nuevo RWAS AXIS Build-A-System Planner brinda a los propietarios de aeronaves una forma guiada de diseñar un panel Garmin AXIS antes de solicitar una cotización formal. Elija la ruta certificada o experimental, siga la secuencia de construcción recomendada por Garmin, compare pantallas compatibles y hardware de soporte, y observe cómo se actualiza el total del precio de lista del fabricante a medida que el sistema toma forma.",
-        "pt-BR": "O novo Planejador RWAS AXIS Build-A-System oferece aos proprietários de aeronaves uma maneira guiada de projetar um painel Garmin AXIS antes de solicitar um orçamento formal. Escolha o caminho certificado ou experimental, siga a sequência de montagem recomendada por Garmin, compare displays compatíveis e hardware de suporte, e veja o total de preço de lista do fabricante atualizar à medida que o sistema ganha forma."
+        "es": "El nuevo RWAS AXIS Build-A-System Planner brinda a los propietarios de aeronaves una forma guiada de diseñar un panel Garmin AXIS antes de solicitar una cotización formal. Elija la ruta certificada o experimental, siga la secuencia de montaje recomendada por Garmin, compare pantallas compatibles y hardware de soporte, y observe cómo se actualiza el total del precio de lista del fabricante a medida que el sistema toma forma.",
+        "pt-BR": "O novo RWAS AXIS Build-A-System Planner oferece aos proprietários de aeronaves uma maneira guiada de projetar um painel Garmin AXIS antes de solicitar um orçamento formal. Escolha o caminho certificado ou experimental, siga a sequência de montagem recomendada pela Garmin, compare displays compatíveis e hardware de suporte, e observe a atualização do total de preço de lista do fabricante à medida que o sistema ganha forma."
       }
     },
     {
@@ -1266,8 +1266,8 @@
       "text": "Thorough airworthiness inspections per FAR 43. Discrepancy reports and return-to-service documentation.",
       "language": "en",
       "translations": {
-        "es": "Inspecciones exhaustivas de aeronavegabilidad según FAR 43.. Informes de discrepancias y documentación de retorno a servicio.",
-        "pt-BR": "Inspeções de aeronavegabilidade completas conforme FAR 43. Relatórios de discrepância e documentação de retorno ao serviço."
+        "es": "Inspecciones exhaustivas de aeronavegabilidad según FAR 43. Informes de discrepancias y documentación de retorno a servicio.",
+        "pt-BR": "Inspeções completas de aeronavegabilidade conforme FAR 43. Relatórios de discrepância e documentação de retorno ao serviço."
       }
     },
     {
@@ -1275,7 +1275,7 @@
       "text": "Today’s Edition",
       "language": "en",
       "translations": {
-        "es": "Edición de Hoy",
+        "es": "Edición de hoy",
         "pt-BR": "Edição de Hoje"
       }
     },
@@ -1284,7 +1284,7 @@
       "text": "Tool Procurement",
       "language": "en",
       "translations": {
-        "es": "Adquisición de Herramientas",
+        "es": "Adquisición de herramientas",
         "pt-BR": "Aquisição de Ferramentas"
       }
     },
@@ -1303,7 +1303,7 @@
       "language": "en",
       "translations": {
         "es": "Impresión UV y Recubrimiento en Polvo",
-        "pt-BR": "Impressão UV & Pintura em Pó"
+        "pt-BR": "Impressão UV & Revestimento em Pó"
       }
     },
     {
@@ -1312,7 +1312,7 @@
       "language": "en",
       "translations": {
         "es": "Vol. XL · No. 1",
-        "pt-BR": "Vol. XL · Nº 1"
+        "pt-BR": "Vol. XL · No. 1"
       }
     },
     {
@@ -1320,8 +1320,8 @@
       "text": "Work Order Login",
       "language": "en",
       "translations": {
-        "es": "Inicio de Sesión de Orden de Trabajo",
-        "pt-BR": "Login de Ordem de Serviço"
+        "es": "Inicio de sesión de orden de trabajo",
+        "pt-BR": "Login da Ordem de Serviço"
       }
     },
     {
@@ -1330,7 +1330,7 @@
       "language": "en",
       "translations": {
         "es": "Ubicación Yankton",
-        "pt-BR": "Localização de Yankton"
+        "pt-BR": "Localização em Yankton"
       }
     },
     {
@@ -1357,7 +1357,7 @@
       "language": "en",
       "translations": {
         "es": "en vuelo desde 2022",
-        "pt-BR": "decolando desde 2022"
+        "pt-BR": "Operando desde 2022"
       }
     },
     {
@@ -1384,7 +1384,7 @@
       "language": "en",
       "translations": {
         "es": ". Las preguntas directas de aviónica también pueden usar",
-        "pt-BR": ". Perguntas diretas sobre aviônicos também podem usar"
+        "pt-BR": ". Perguntas diretas de aviônicos também podem ser usadas"
       }
     },
     {
@@ -1392,7 +1392,7 @@
       "text": ". RWAS does not sell your private information, including your email address or phone number. See our",
       "language": "en",
       "translations": {
-        "es": ". RWAS no vende su información privada, incluido su correo electrónico o número de teléfono. Consulte nuestro",
+        "es": ". RWAS no vende su información privada, incluyendo su dirección de correo electrónico o número de teléfono. Consulte nuestro",
         "pt-BR": ". RWAS não vende suas informações privadas, incluindo seu endereço de e‑mail ou número de telefone. Veja nosso"
       }
     },
@@ -1411,7 +1411,7 @@
       "language": "en",
       "translations": {
         "es": "Aeronave en venta",
-        "pt-BR": "Aeronaves à venda"
+        "pt-BR": "Aeronave à venda"
       }
     },
     {
@@ -1420,7 +1420,7 @@
       "language": "en",
       "translations": {
         "es": "Marca de la aeronave",
-        "pt-BR": "Fabricante da aeronave"
+        "pt-BR": "Marca da aeronave"
       }
     },
     {
@@ -1483,7 +1483,7 @@
       "language": "en",
       "translations": {
         "es": "Contactar RWAS — Yankton Avionics & Aircraft Service",
-        "pt-BR": "Contato RWAS — Yankton Avionics & Aircraft Service"
+        "pt-BR": "Contate RWAS — Yankton Avionics & Aircraft Service"
       }
     },
     {
@@ -1491,7 +1491,7 @@
       "text": "Contact RWAS.",
       "language": "en",
       "translations": {
-        "es": "Contacte a RWAS.",
+        "es": "Contactar RWAS.",
         "pt-BR": "Contate RWAS."
       }
     },
@@ -1501,7 +1501,7 @@
       "language": "en",
       "translations": {
         "es": "Correo electrónico",
-        "pt-BR": "Email"
+        "pt-BR": "E‑mail"
       }
     },
     {
@@ -1519,7 +1519,7 @@
       "language": "en",
       "translations": {
         "es": "Correo electrónico o teléfono",
-        "pt-BR": "Email ou telefone"
+        "pt-BR": "E‑mail ou telefone"
       }
     },
     {
@@ -1537,7 +1537,7 @@
       "language": "en",
       "translations": {
         "es": "Cada mensaje a continuación llega a",
-        "pt-BR": "Cada mensagem abaixo chega a"
+        "pt-BR": "Cada mensagem abaixo chega em"
       }
     },
     {
@@ -1662,7 +1662,7 @@
       "text": "RWAS Avionics Desk · KYKN, Yankton · (605) 299-8178",
       "language": "en",
       "translations": {
-        "es": "RWAS Mostrador de Aviónica · KYKN, Yankton · (605) 299-8178",
+        "es": "RWAS Avionics Mostrador · KYKN, Yankton · (605) 299-8178",
         "pt-BR": "RWAS Avionics Desk · KYKN, Yankton · (605) 299-8178"
       }
     },
@@ -1672,7 +1672,7 @@
       "language": "en",
       "translations": {
         "es": "Registrado / operativo",
-        "pt-BR": "Registrada / operacional"
+        "pt-BR": "Registrado / operacional"
       }
     },
     {
@@ -1689,8 +1689,8 @@
       "text": "Repair Station Headquarters",
       "language": "en",
       "translations": {
-        "es": "Sede de la Estación de Reparación",
-        "pt-BR": "Sede da Estação de Reparos"
+        "es": "Sede de la estación de reparación",
+        "pt-BR": "Sede da Estação de Reparação"
       }
     },
     {
@@ -1699,7 +1699,7 @@
       "language": "en",
       "translations": {
         "es": "Solicitar una cotización",
-        "pt-BR": "Solicitar um orçamento"
+        "pt-BR": "Solicitar uma cotação"
       }
     },
     {
@@ -1734,8 +1734,8 @@
       "text": "Tell us what you need.",
       "language": "en",
       "translations": {
-        "es": "Díganos lo que necesita.",
-        "pt-BR": "Diga-nos o que você precisa."
+        "es": "Díganos qué necesita.",
+        "pt-BR": "Diga‑nos o que você precisa."
       }
     },
     {
@@ -1744,7 +1744,7 @@
       "language": "en",
       "translations": {
         "es": "El Escritorio de Correspondencia",
-        "pt-BR": "Balcão de Correspondência"
+        "pt-BR": "A Mesa de Correspondência"
       }
     },
     {
@@ -1788,8 +1788,8 @@
       "text": "e.g. Cessna",
       "language": "en",
       "translations": {
-        "es": "e.g. Cessna",
-        "pt-BR": "e.g. Cessna"
+        "es": "p.ej. Cessna",
+        "pt-BR": "ex. Cessna"
       }
     },
     {
@@ -1797,8 +1797,8 @@
       "text": "e.g. Weekday mornings, CT",
       "language": "en",
       "translations": {
-        "es": "p. ej. Mañanas de semana, CT",
-        "pt-BR": "ex.: manhãs de dias úteis, CT"
+        "es": "p.ej. mañanas entre semana, CT",
+        "pt-BR": "ex. Manhãs de dias úteis, CT"
       }
     },
     {
@@ -1807,7 +1807,7 @@
       "language": "en",
       "translations": {
         "es": "— solicitudes de cotización y consultas —",
-        "pt-BR": "— solicitações de cotação e consultas —"
+        "pt-BR": "— solicitações de cotação e dúvidas —"
       }
     },
     {
@@ -1815,8 +1815,8 @@
       "text": "— read by the shop, not by a phone tree. For quote requests, include your aircraft make / model; registered-aircraft quotes also need the year, serial number, and N-number.",
       "language": "en",
       "translations": {
-        "es": "— leído por el taller, no por un sistema telefónico automatizado. Para solicitudes de cotización, incluya la marca / modelo de su aeronave; las cotizaciones de aeronaves registradas también requieren el año, número de serie y N-number.",
-        "pt-BR": "— lida pela loja, não por um sistema automático. Para solicitações de cotação, inclua a marca / modelo da sua aeronave; cotações de aeronaves registradas também precisam do ano, número de série e N-number."
+        "es": "— leído por el taller, no por un sistema telefónico. Para solicitudes de cotización, incluya la marca / modelo de su aircraft; las cotizaciones de aircraft registrados también requieren el año, número de serie y N-number.",
+        "pt-BR": "— lido pela oficina, não por um sistema automático. Para solicitações de cotação, inclua a marca / modelo da sua aeronave; cotações de aeronaves registradas também precisam do ano, número de série e N-number."
       }
     },
     {
@@ -1915,7 +1915,7 @@
       "language": "en",
       "translations": {
         "es": "Inicio de sesión de usuario",
-        "pt-BR": "Login do usuário"
+        "pt-BR": "Login do Usuário"
       }
     }
   ]

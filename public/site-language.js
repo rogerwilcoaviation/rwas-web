@@ -37,7 +37,7 @@
   let translations = {};
   try {
     translations = JSON.parse(
-      localStorage.getItem('rwas-public-translations-v1') || '{}',
+      localStorage.getItem('rwas-public-translations-v2') || '{}',
     );
   } catch {}
   const key = (id) => language + ':' + id;
@@ -54,7 +54,7 @@
     try {
       const entries = Object.entries(translations);
       localStorage.setItem(
-        'rwas-public-translations-v1',
+        'rwas-public-translations-v2',
         JSON.stringify(Object.fromEntries(entries.slice(-2000))),
       );
     } catch {}
@@ -243,7 +243,7 @@
       if (!commonCatalogs.has(data.commonPath))
         commonCatalogs.set(
           data.commonPath,
-          fetch(data.commonPath, { credentials: 'omit', cache: 'force-cache' })
+          fetch(data.commonPath, { credentials: 'omit', cache: 'default' })
             .then(async (response) => {
               if (!response.ok) throw Error('catalog');
               return response.json();

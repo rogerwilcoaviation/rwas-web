@@ -92,7 +92,7 @@ test('only published IDs reach inference, with no cookies or arbitrary browser t
   );
   assert.equal(f.calls.length, 1);
   assert.doesNotMatch(JSON.stringify(f.calls), /private=session/);
-  assert.match(JSON.stringify(f.calls), /__RWAS_KEEP/);
+  assert.match(JSON.stringify(f.calls), /protected_terms/);
   assert.equal((await f.send({ text: 'private conversation' })).status, 400);
   assert.equal((await f.send({ ids: ['a'.repeat(64)] })).status, 400);
   assert.equal(f.calls.length, 1);
@@ -155,8 +155,8 @@ test('prepared public translations retain source hashes, numbers and key navigat
     assert.equal(entry.id, await sourceId(entry.text, entry.language));
     for (const value of Object.values(entry.translations))
       assert.deepEqual(
-        value.match(/\d+(?:[.,:/-]\d+)*/g) || [],
-        entry.text.match(/\d+(?:[.,:/-]\d+)*/g) || [],
+        (value.match(/\d+(?:[.,:/-]\d+)*/g) || []).sort(),
+        (entry.text.match(/\d+(?:[.,:/-]\d+)*/g) || []).sort(),
       );
   }
   assert.equal(
@@ -168,6 +168,40 @@ test('prepared public translations retain source hashes, numbers and key navigat
     prepared.entries.find((entry) => entry.text === 'Book Service')
       .translations['pt-BR'],
     /Agendar/,
+  );
+});
+test('measurement protection does not consume the beginning of ordinary words', () => {
+  const result = protectText(
+    'GFC 500 installs, 8-inch portrait and 10.6-inch landscape.',
+  );
+  assert.ok(result.values.includes('500'));
+  assert.ok(result.values.includes('8'));
+  assert.ok(result.values.includes('10.6'));
+  assert.ok(!result.values.includes('500 in'));
+  assert.ok(!result.values.includes('8-'));
+});
+test('a changed technical value gets one constrained retry, with no changed value cached', async () => {
+  const f = await fixture('GFC 500 installs');
+  let calls = 0;
+  f.env.SITE_AI.run = async (model, input) => {
+    calls++;
+    const row = JSON.parse(input.input[1].content)[0];
+    return {
+      response: JSON.stringify({
+        translations: [
+          calls === 1
+            ? 'Instalaciones de GFC 999'
+            : 'Instalaciones de ' + row.text.replace(' installs', ''),
+        ],
+      }),
+    };
+  };
+  const response = await f.send();
+  assert.equal(response.status, 200);
+  assert.equal(calls, 2);
+  assert.equal(
+    (await response.json()).translations[f.entry.id],
+    'Instalaciones de GFC 500',
   );
 });
 test('unavailable inference and corrupted identifiers fail closed', async () => {
