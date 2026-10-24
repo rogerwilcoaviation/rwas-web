@@ -32,12 +32,13 @@
     timer,
     failed = false;
   const commonCatalogs = new Map();
+  const retained = new Set();
   const texts = new Map(),
     attributes = new Map();
   let translations = {};
   try {
     translations = JSON.parse(
-      localStorage.getItem('rwas-public-translations-v2') || '{}',
+      localStorage.getItem('rwas-public-translations-v3') || '{}',
     );
   } catch {}
   const key = (id) => language + ':' + id;
@@ -54,7 +55,7 @@
     try {
       const entries = Object.entries(translations);
       localStorage.setItem(
-        'rwas-public-translations-v2',
+        'rwas-public-translations-v3',
         JSON.stringify(Object.fromEntries(entries.slice(-2000))),
       );
     } catch {}
@@ -151,7 +152,8 @@
       }
       if (
         record.entry.language !== language &&
-        !translations[key(record.entry.id)]
+        !translations[key(record.entry.id)] &&
+        !retained.has(key(record.entry.id))
       )
         missing.set(record.entry.id, record.entry);
     };
@@ -327,6 +329,8 @@
             });
             if (!response.ok) throw Error('translation');
             const data = await response.json();
+            for (const id of data.preserved || [])
+              retained.add(target + ':' + id);
             for (const [id, text] of Object.entries(data.translations || {}))
               if (typeof text === 'string')
                 translations[target + ':' + id] = text;
@@ -338,11 +342,17 @@
       }
       if (revision === generation)
         status(
-          language === 'en'
-            ? ''
-            : language === 'es'
-              ? 'Traducción automática'
-              : 'Tradução automática',
+          retained.size
+            ? language === 'es'
+              ? 'Traducción automática. Algunos detalles técnicos conservan el texto original.'
+              : language === 'pt-BR'
+                ? 'Tradução automática. Alguns detalhes técnicos mantêm o texto original.'
+                : 'Some technical details retain their original text.'
+            : language === 'en'
+              ? ''
+              : language === 'es'
+                ? 'Traducción automática'
+                : 'Tradução automática',
         );
     } catch {
       if (revision === generation) {
@@ -364,6 +374,7 @@
   }
   function changed() {
     generation++;
+    retained.clear();
     status('');
     failed = false;
     language = preference();

@@ -79,6 +79,7 @@ try {
     });
     const entries = new Map();
     let posts = [];
+    let preservedTestId = null;
     await page.route('**/api/site-language/catalog?*', async (route) => {
       const response = await route.fetch();
       const data = await response.json();
@@ -96,14 +97,22 @@ try {
       posts.push(body);
       assert.deepEqual(Object.keys(body).sort(), ['ids', 'language', 'path']);
       assert.ok(body.ids.every((id) => entries.has(id)));
+      const preserved =
+        width === 1440 && body.language === 'pt-BR' && !preservedTestId
+          ? [body.ids[0]]
+          : [];
+      if (preserved.length) preservedTestId = preserved[0];
       await route.fulfill({
         json: {
           language: body.language,
+          preserved,
           translations: Object.fromEntries(
-            body.ids.map((id) => [
-              id,
-              body.language.toUpperCase() + ' • ' + entries.get(id).text,
-            ]),
+            body.ids
+              .filter((id) => !preserved.includes(id))
+              .map((id) => [
+                id,
+                body.language.toUpperCase() + ' • ' + entries.get(id).text,
+              ]),
           ),
         },
       });
@@ -195,16 +204,25 @@ try {
         }),
       );
     });
-    await page.waitForFunction(
-      () =>
-        document.querySelector('[data-site-language-control] [role="status"]')
-          ?.textContent === 'Tradução automática',
+    await page.waitForFunction(() =>
+      document
+        .querySelector('[data-site-language-control] [role="status"]')
+        ?.textContent.startsWith('Tradução automática'),
     );
     assert.equal(
       await page.locator('input[type="email"]').first().inputValue(),
       'private-seller@example.test',
     );
     assert.doesNotMatch(JSON.stringify(posts), /private-seller/);
+    if (width === 1440) {
+      assert.ok(preservedTestId);
+      assert.match(
+        await page
+          .locator('[data-site-language-control] [role="status"]')
+          .innerText(),
+        /texto original/,
+      );
+    }
     await page.evaluate(() => {
       localStorage.setItem('rwas-language', 'en');
       window.dispatchEvent(
@@ -252,7 +270,7 @@ try {
         .click();
       await page.waitForFunction(
         () =>
-          /^(Traducción automática|Tradução automática)$/.test(
+          /^(Traducción automática|Tradução automática)/.test(
             document.querySelector(
               '[data-site-language-control] [role="status"]',
             )?.textContent || '',
@@ -281,7 +299,7 @@ try {
       await page.goto(origin + '/services');
       await page.waitForFunction(
         () =>
-          /^(Traducción automática|Tradução automática)$/.test(
+          /^(Traducción automática|Tradução automática)/.test(
             document.querySelector(
               '[data-site-language-control] [role="status"]',
             )?.textContent || '',
@@ -292,7 +310,7 @@ try {
       await page.goto(origin + '/contact');
       await page.waitForFunction(
         () =>
-          /^(Traducción automática|Tradução automática)$/.test(
+          /^(Traducción automática|Tradução automática)/.test(
             document.querySelector(
               '[data-site-language-control] [role="status"]',
             )?.textContent || '',

@@ -46,7 +46,7 @@ export default function LanguageExperience() {
     if (!document.querySelector('script[data-site-language-runtime]')) {
       const script = document.createElement('script');
       script.dataset.siteLanguageRuntime = 'true';
-      script.src = '/site-language.js?v=20261024-sitewide-v2';
+      script.src = '/site-language.js?v=20261024-sitewide-v3';
       script.async = true;
       document.head.appendChild(script);
     }

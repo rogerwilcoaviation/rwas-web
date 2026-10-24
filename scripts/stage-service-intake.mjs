@@ -48,7 +48,7 @@ export default { ...app, async fetch(request, env, ctx) {
  const withLanguage = (response) => {
    if (!['GET','HEAD'].includes(request.method) || path.startsWith('/api/') || /^\\/(?:ops|work-order-system)(?:\\/|$)/.test(path) || !(response.headers.get('Content-Type') || '').includes('text/html')) return response;
    let react = false;
-   return new HTMLRewriter().on('meta[name="rwas-react-language"]', {element(){react=true;}}).on('body', {element(body){body.onEndTag(end=>{if(!react)end.before('<link rel="stylesheet" href="/site-language.css?v=20261024"><script data-site-language-runtime defer src="/site-language.js?v=20261024-sitewide-v2"></script>',{html:true});});}}).transform(response);
+   return new HTMLRewriter().on('meta[name="rwas-react-language"]', {element(){react=true;}}).on('body', {element(body){body.onEndTag(end=>{if(!react)end.before('<link rel="stylesheet" href="/site-language.css?v=20261024"><script data-site-language-runtime defer src="/site-language.js?v=20261024-sitewide-v3"></script>',{html:true});});}}).transform(response);
  };
  const protect = (response) => {
    if (!isolated) return response;

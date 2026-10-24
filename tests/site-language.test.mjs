@@ -209,7 +209,11 @@ test('unavailable inference and corrupted identifiers fail closed', async () => 
   f.env.SITE_AI.run = async () => ({
     response: '{"translations":["Número 999"]}',
   });
-  assert.equal((await f.send()).status, 503);
+  const guarded = await f.send();
+  assert.equal(guarded.status, 200);
+  const guardedBody = await guarded.json();
+  assert.deepEqual(guardedBody.preserved, [f.entry.id]);
+  assert.equal(guardedBody.translations[f.entry.id], undefined);
   delete f.env.SITE_AI;
   assert.equal((await f.send()).status, 503);
   const protectedText = protectText(

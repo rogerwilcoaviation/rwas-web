@@ -181,7 +181,8 @@ export async function modelTranslations(ai, entries, language, masked = false) {
     value.translations.length !== entries.length
   )
     throw Error('Translation response was incomplete.');
-  return Promise.all(
+  const preserved = [];
+  const translated = await Promise.all(
     value.translations.map(async (text, i) => {
       try {
         if (masked) text = restoreText(text, protectedEntries[i].values);
@@ -202,10 +203,17 @@ export async function modelTranslations(ai, entries, language, masked = false) {
         return restored;
       } catch (error) {
         if (masked) throw error;
-        return (await modelTranslations(ai, [entries[i]], language, true))[0];
+        try {
+          return (await modelTranslations(ai, [entries[i]], language, true))[0];
+        } catch {
+          preserved.push(i);
+          return entries[i].text;
+        }
       }
     }),
   );
+  translated.preserved = preserved;
+  return translated;
 }
 export async function handleSiteLanguage(
   request,
@@ -291,7 +299,8 @@ export async function handleSiteLanguage(
         400,
       );
     const translations = {},
-      missing = [];
+      missing = [],
+      preserved = [];
     for (const entry of entries) {
       const prepared = source.translations[body.language]?.[entry.id];
       if (typeof prepared === 'string') {
@@ -331,6 +340,10 @@ export async function handleSiteLanguage(
         body.language,
       );
       for (let i = 0; i < missing.length; i++) {
+        if (values.preserved?.includes(i)) {
+          preserved.push(missing[i].id);
+          continue;
+        }
         translations[missing[i].id] = values[i];
         const pending = cache?.put(
           new Request(
@@ -351,7 +364,7 @@ export async function handleSiteLanguage(
         if (pending) ctx?.waitUntil?.(pending.catch(() => {}));
       }
     }
-    return reply({ language: body.language, translations });
+    return reply({ language: body.language, translations, preserved });
   } catch (error) {
     console.warn(
       'Site language unavailable:',
