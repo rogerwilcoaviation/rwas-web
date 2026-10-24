@@ -1,5 +1,7 @@
 # Jerry website integration: local phase-one candidate
 
+**Later direction:** John requires subscription OAuth and rejects direct API use. The direct response candidate remains off; its delivery plan is superseded by the [read-only relay assessment](jerry-oauth-assessment-20261024.md). The [provider-neutral local alarm fixture](jerry-alarm-probe-local-20261024.md) is qualified separately. The original phase-one snapshot below remains historical evidence.
+
 Status: implemented for local review and synthetic testing. Not deployed or activated. Production Worker configuration, records, identity access, and the running relay have not been changed.
 
 The [October 24 readiness continuation](jerry-readiness-validation-20261024.md) adds durable provider admission and full candidate wiring qualification. The [provider assessment](jerry-provider-readiness-20261024.md) records the exact remaining project, model, data-handling and hosted-release inputs. Those notes supplement the original phase-one evidence below.

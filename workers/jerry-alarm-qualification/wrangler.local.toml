@@ -1,0 +1,39 @@
+# Unarmed local fixture. No deployment or activation is authorized.
+name = "rwas-jerry-alarm-qa-20261024"
+main = "entry.mjs"
+compatibility_date = "2026-09-01"
+workers_dev = false
+preview_urls = false
+routes = []
+keep_vars = false
+
+[limits]
+cpu_ms = 50
+
+[vars]
+PROBE_ARMED = "false"
+PROBE_BUILD = "prepare-v1"
+JERRY_CONVERSATIONS_ENABLED = "false"
+# No start/window, Cron, credential, provider setting or production resource ID.
+
+[[durable_objects.bindings]]
+name = "JERRY_CONVERSATIONS"
+class_name = "JerryConversationsProbe"
+[[durable_objects.bindings]]
+name = "JERRY_ADMISSION"
+class_name = "JerryAdmissionProbe"
+[[durable_objects.bindings]]
+name = "SELLER_STORE"
+class_name = "ProbeControl"
+[[durable_objects.bindings]]
+name = "PROBE_CONTROL"
+class_name = "ProbeControl"
+[[migrations]]
+tag = "isolated-alarm-probe-v1"
+new_sqlite_classes = ["JerryConversationsProbe", "JerryAdmissionProbe", "ProbeControl"]
+
+[observability]
+enabled = false
+[observability.logs]
+enabled = false
+invocation_logs = false

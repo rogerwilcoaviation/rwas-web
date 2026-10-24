@@ -1,5 +1,7 @@
 # Website Jerry provider assessment — October 24, 2026
 
+**Superseded as a delivery plan:** John subsequently required subscription OAuth and rejected direct API use. Direct-provider work is stopped, with interrupted edits preserved but uncommitted. See the [read-only OAuth/relay assessment](jerry-oauth-assessment-20261024.md). The evidence below is the earlier direct-candidate snapshot, not a request to create/configure an API project or key.
+
 This is a read-only assessment for the gated local candidate, not provider or deployment approval. No API credential was obtained, no new access was acquired, and no live model received a customer message or private website data. Synthetic tests intercept all provider requests. The existing running Jerry relay was not edited or reused.
 
 ## What the candidate enforces

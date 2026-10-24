@@ -1,5 +1,7 @@
 # Jerry local readiness continuation — October 24, 2026
 
+**Later direction:** The direct-provider delivery plan is stopped following John's subscription-only request. See the [OAuth/relay evidence](jerry-oauth-assessment-20261024.md) and the [independent provider-neutral alarm fixture](jerry-alarm-probe-local-20261024.md). Results below qualify the earlier local candidate, not a currently approved provider architecture.
+
 The authorized continuation permits source changes, local synthetic qualification, read-only provider/configuration assessment and a local commit. It excludes deployment, pushing, production record changes, credential acquisition, expanded access and live private-data/model calls. This report supplements the original [phase-one evidence](jerry-phase-one-validation.md); it does not relabel that earlier evidence as a hosted release.
 
 ## Implemented behavior

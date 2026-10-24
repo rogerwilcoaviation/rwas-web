@@ -40,7 +40,9 @@
     "test:language": "node --test tests/site-language.test.mjs",
     "test:jerry": "node --test --test-concurrency=1 tests/aircraft-sale/jerry-conversations.test.mjs tests/aircraft-sale/jerry-intake.test.mjs tests/aircraft-sale/jerry-cleanup.test.mjs tests/aircraft-sale/jerry-native.test.mjs tests/aircraft-sale/jerry-response.test.mjs tests/aircraft-sale/jerry-authorization.test.mjs tests/aircraft-sale/jerry-pages.test.mjs tests/aircraft-sale/jerry-admission.test.mjs tests/aircraft-sale/jerry-release-plan.test.mjs tests/aircraft-sale/jerry-candidate.test.mjs",
     "test:jerry:browser": "node --test tests/aircraft-sale/jerry-browser.test.mjs",
-    "test:jerry:candidate": "node --test tests/aircraft-sale/jerry-candidate.test.mjs"
+    "test:jerry:candidate": "node --test tests/aircraft-sale/jerry-candidate.test.mjs",
+    "test:jerry:alarm-probe": "node --test tests/aircraft-sale/jerry-alarm-probe.test.mjs",
+    "build:jerry:alarm-probe": "node scripts/build-jerry-alarm-probe.mjs"
   },
   "dependencies": {
     "@clerk/clerk-js": "^6.38.1",
