@@ -241,7 +241,9 @@
     });
   }
 
-  // RWAS never reads the old unbound transcript or falls back to the old relay.
+  // Account conversations stay isolated. If that unfinished feature is off,
+  // restore the established PUBLIC FAQ endpoint, never the operational relay.
+  // No old transcript, seller identity or actions enter that public channel.
   // The separate Shopify widget retains its existing integration.
   if (!isShopify) {
     try {
@@ -272,6 +274,12 @@
         }
       }
     } catch (accountError) {}
+    try {
+      var publicChat = await import('/jerry-public-chat.mjs?v=20261024-public-restore');
+      if (publicChat.mountJerryPublicChat({
+        panel: panel, bubble: bubble, backdrop: backdrop, renderMessage: renderMessage,
+      })) return;
+    } catch (publicError) {}
     unavailableChat();
     return;
   }

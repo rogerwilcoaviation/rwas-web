@@ -131,6 +131,10 @@ async function setup(options = {}) {
       await route.fulfill({ contentType: 'text/html', body: '<!doctype html><html><head><link rel="icon" href="data:,"></head><body><script src="/jerry-widget.js"></script></body></html>' });
     } else if (url.href === pageOrigin + '/jerry-widget.js') {
       await route.fulfill({ contentType: 'application/javascript', body: widget });
+    } else if (url.pathname === '/jerry-public-chat.mjs') {
+      // Explicit two-service-outage fixture; successful public restoration is
+      // covered by jerry-public-restoration-browser with the real module.
+      await route.fulfill({ status: 404, body: 'Public UI unavailable in this outage fixture' });
     } else if (url.href === pageOrigin + '/api/jerry/context') {
       assert.equal(options.canonicalWebsite, true, 'Retained Shopify branch must not discover website authority');
       assert.equal(request.method(), 'GET');
@@ -222,7 +226,7 @@ try {
   browser = await chromium.launch({ headless: true });
   for (const gate of ['disabled', 'missing', 'network']) {
     for (const signedOut of [false, true]) {
-      await run(`canonical website ${gate}, ${signedOut ? 'signed out' : 'Clerk envelope present'}: no legacy chat; manual entry remains available`,
+      await run(`canonical website ${gate} and public UI unavailable, ${signedOut ? 'signed out' : 'Clerk envelope present'}: fail closed; manual entry remains available`,
         { canonicalWebsite: true, gate, signedOut }, async ({ page, observed, session }) => {
           await page.getByRole('button', { name: 'Chat with Captain Jerry' }).click();
           await page.getByText('CHAT TEMPORARILY UNAVAILABLE', { exact: true }).waitFor();

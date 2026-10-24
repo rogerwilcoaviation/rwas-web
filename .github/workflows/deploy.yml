@@ -72,6 +72,7 @@ jobs:
           node tests/aircraft-sale/clerk-production-browser.mjs
           node tests/aircraft-sale/clerk-widget-browser.mjs
           node --test tests/aircraft-sale/better-auth-widget-browser.mjs
+          node --test tests/aircraft-sale/jerry-public-restoration-browser.mjs
 
       - name: Site language boundaries and advanced wrapper regressions
         run: npm run test:language

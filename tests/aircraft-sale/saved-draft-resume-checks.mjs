@@ -134,9 +134,9 @@ export async function checkSavedDraftResume({
         .getByRole('button', { name: 'Close seller panel', exact: true })
         .click();
       await openResume();
-      // This exported journey deliberately keeps website chat disabled. A
-      // Resume-with-Jerry intent must show unavailability, not resurrect the
-      // legacy intake/relay or consume an answer. The real seller panel may
+      // This journey keeps account chat disabled and public information chat on. A
+      // Resume-with-Jerry opens public information only, never submits the seed
+      // to private intake/relay or consumes an answer. The real seller panel may
       // explicitly sync its existing manual recovery snapshot before opening
       // chat; verify that complete snapshot, not an obsolete storage format.
       const recoveryBefore = await page.evaluate(() => {
@@ -154,13 +154,13 @@ export async function checkSavedDraftResume({
         await dialog
           .getByRole('button', { name: 'Resume with Jerry', exact: true })
           .click();
-        await page.getByText('CHAT TEMPORARILY UNAVAILABLE', { exact: true }).waitFor();
-        assert.equal(await page.locator('.jerry-widget-text-input').isVisible(), false);
+        await page.getByText('ONLINE — RWAS PUBLIC CHAT', { exact: true }).waitFor();
+        assert.equal(await page.locator('.jerry-widget-text-input').isVisible(), true);
         const after = await savedDraft();
         if (recoveryBefore) {
           assert.equal(after.manual, true);
           assert.deepEqual(after.values, recoveryBefore.values, 'Explicit recovery sync preserves every field, including empty and category-specific values');
-          assert.equal(after.step, recoveryBefore.step, 'Opening disabled Jerry cannot advance the saved step');
+          assert.equal(after.step, recoveryBefore.step, 'Opening public Jerry cannot advance the saved step');
           assert.equal(after.listingId, recoveryBefore.listingId);
           assert.equal(after.listingRevision, recoveryBefore.listingRevision);
         } else {
@@ -169,7 +169,7 @@ export async function checkSavedDraftResume({
         await page
           .getByRole('button', { name: 'Continue listing manually', exact: true })
           .click();
-        assert.deepEqual(chatRequests, [], 'Disabled resume/manual fallback must not invoke any chat or intake endpoint');
+        assert.deepEqual(chatRequests, [], 'A seller resume seed/manual fallback must not invoke any chat or intake endpoint');
       } finally {
         page.off('request', observe);
       }

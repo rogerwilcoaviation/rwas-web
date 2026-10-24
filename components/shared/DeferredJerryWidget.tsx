@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { deferUntilIdle } from './deferUntilIdle';
 
-const JERRY_WIDGET_SRC = '/jerry-widget.js?v=20261024-jerry-phase-one';
+const JERRY_WIDGET_SRC = '/jerry-widget.js?v=20261024-jerry-public-restore';
 
 export default function DeferredJerryWidget() {
   useEffect(() => {

@@ -23,11 +23,15 @@ assert.ok(
     "if (m.role === 'assistant') renderMessage(bubble, m.content)",
   ),
 );
+const deferred = read('components/shared/DeferredJerryWidget.tsx');
 assert.ok(
-  read('components/shared/DeferredJerryWidget.tsx').includes(
-    '20261023-jerry-log-details',
+  deferred.includes(
+    "const JERRY_WIDGET_SRC = '/jerry-widget.js?v=20261024-jerry-public-restore'",
   ),
+  'The deferred loader must cache-bust to the restored isolated public-chat widget',
 );
+assert.ok(deferred.includes('script.src = JERRY_WIDGET_SRC'));
+assert.ok(!deferred.includes('20261023-jerry-log-details'));
 class Node {
   constructor(tag, text = '') {
     this.tag = tag;

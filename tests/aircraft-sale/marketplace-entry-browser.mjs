@@ -34,6 +34,7 @@ const server = createServer(async (request, response) => {
         {
           '.html': 'text/html',
           '.js': 'text/javascript',
+          '.mjs': 'text/javascript',
           '.css': 'text/css',
           '.svg': 'image/svg+xml',
           '.txt': 'text/x-component',
@@ -332,11 +333,11 @@ try {
           `marketplace-${width}-${signedIn ? 'signed-in' : 'signed-out'}.png`,
         ),
       });
-      // Real exported widget -> real seller-panel listener. The disabled chat
-      // must neither send text to the old relay nor bypass account/manual entry.
+      // Real exported public widget -> real seller-panel listener. Opening and
+      // manual entry must not send chat text or bypass account authorization.
       await page.getByRole('button', { name: 'Chat with Captain Jerry', exact: true }).click();
-      await page.getByText('CHAT TEMPORARILY UNAVAILABLE', { exact: true }).waitFor();
-      assert.equal(await page.locator('.jerry-widget-text-input').isVisible(), false);
+      await page.getByText('ONLINE — RWAS PUBLIC CHAT', { exact: true }).waitFor();
+      assert.equal(await page.locator('.jerry-widget-text-input').isVisible(), true);
       await page.getByRole('button', { name: 'Continue listing manually', exact: true }).click();
       let fallbackDialog = page.getByRole('dialog');
       if (signedIn) {
@@ -581,7 +582,7 @@ try {
         width,
         signedIn,
         controls: boxes.length,
-        disabledChatManualEntry: 'passed',
+        publicChatManualEntry: 'passed',
         legacyChatCallsBeforeOtherWorkflows: 0,
         ...(signedIn
           ? {
