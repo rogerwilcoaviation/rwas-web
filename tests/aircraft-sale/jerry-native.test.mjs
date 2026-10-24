@@ -3,6 +3,68 @@ import assert from 'node:assert/strict';
 import { build } from 'esbuild';
 import { Miniflare } from './fixtures/workerd-options.mjs';
 
+test('canonical content and alarm changes roll back together on initial scheduling acknowledgment failure', async () => {
+  const script = (
+    await build({
+      stdin: {
+        resolveDir: process.cwd(),
+        contents: `import {JerryConversations as Base} from './workers/aircraft-sale/jerry-conversations.mjs';
+ export class JerryConversations extends Base {async schedule(){await super.schedule();if(this.env.FAIL==='true'&&(await this.ctx.storage.list({prefix:'t:'})).size)throw Error('Synthetic alarm registration failure');}async fetch(r){if(new URL(r.url).pathname==='/__test/inspect'){await r.arrayBuffer();return Response.json({entries:[...await this.ctx.storage.list()],alarm:await this.ctx.storage.getAlarm()});}return super.fetch(r);}}
+ export default {fetch(r,env){return env.C.get(env.C.idFromName('canonical-fixture')).fetch(r)}};`,
+      },
+      bundle: true,
+      write: false,
+      format: 'esm',
+      platform: 'neutral',
+      logLevel: 'silent',
+    })
+  ).outputFiles[0].text;
+  let fail = false;
+  const options = () => ({
+    script,
+    modules: true,
+    compatibilityDate: '2026-09-01',
+    bindings: { FAIL: String(fail) },
+    durableObjects: { C: { className: 'JerryConversations', useSQLite: true } },
+  });
+  const mf = new Miniflare(options());
+  const call = async (path, body = {}) => {
+    const r = await mf.dispatchFetch('http://localhost/' + path, {
+      method: 'POST',
+      headers: { 'X-Jerry-Owner': 'a'.repeat(64), 'X-Jerry-Surface': 'public' },
+      body: JSON.stringify(body),
+    });
+    return { status: r.status, body: await r.json() };
+  };
+  try {
+    const id = crypto.randomUUID();
+    assert.equal((await call('create', { id })).status, 200);
+    const before = (await call('__test/inspect')).body;
+    fail = true;
+    await mf.setOptions(options());
+    const request = {
+      id,
+      generation: 1,
+      turnId: crypto.randomUUID(),
+      input: {
+        message: 'CANONICAL FAILURE MUST ROLL BACK',
+        mode: 'chat',
+        locale: 'en',
+        page: '/',
+      },
+    };
+    assert.equal((await call('reserve', request)).status, 503);
+    const after = (await call('__test/inspect')).body;
+    assert.ok(!JSON.stringify(after).includes(request.input.message));
+    assert.equal(after.alarm, before.alarm);
+    fail = false;
+    await mf.setOptions(options());
+    assert.equal((await call('reserve', request)).status, 200);
+  } finally {
+    await mf.dispose();
+  }
+});
+
 test('native SQLite conversation transactions survive worker restart and block late finalization after deletion', async () => {
   const script = (
     await build({

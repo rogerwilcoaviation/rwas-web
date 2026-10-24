@@ -101,7 +101,7 @@
     } catch (e) {}
   }
 
-  var history = loadHistory();
+  var history = defaultHistory.slice();
   var open = false;
   var loading = false;
   // Listing-intake state mirror (v3 structured protocol).
@@ -191,8 +191,58 @@
   document.body.appendChild(panel);
   document.body.appendChild(bubble);
 
-  // The gated account controller owns all state when enabled. It never reads
-  // the legacy, unbound transcript key above; rollback retains that key intact.
+  function unavailableChat() {
+    panel.querySelector('.jerry-widget-status').textContent =
+      'CHAT TEMPORARILY UNAVAILABLE';
+    panel.querySelector('.jerry-widget-chat').textContent =
+      'Jerry chat is temporarily unavailable. Please try again later.';
+    panel.querySelector('.jerry-widget-input').hidden = true;
+    panel.querySelector('.jerry-widget-input').style.display = 'none';
+    panel.querySelector('.jerry-service-open').hidden = true;
+    panel.querySelector('.jerry-widget-privacy').textContent =
+      'No chat messages are sent while this service is unavailable.';
+    if (LISTING_UI_ENABLED) {
+      var manual = document.createElement('button');
+      manual.type = 'button';
+      manual.textContent = 'Continue listing manually';
+      manual.addEventListener('click', function () {
+        unavailableOpen(false);
+        document.dispatchEvent(new CustomEvent('rwas:open-manual-form'));
+      });
+      panel.querySelector('.jerry-widget-chat').appendChild(manual);
+    }
+    function unavailableOpen(open) {
+      panel.style.display = open ? 'flex' : 'none';
+      backdrop.style.display = open ? 'block' : 'none';
+      bubble.setAttribute('aria-expanded', String(open));
+    }
+    bubble.onclick = function () {
+      unavailableOpen(true);
+    };
+    backdrop.onclick = function () {
+      unavailableOpen(false);
+    };
+    panel.querySelector('.jerry-widget-close').onclick = function () {
+      unavailableOpen(false);
+    };
+    window.openJerryChat = window.jerryChat = function () {
+      unavailableOpen(true);
+    };
+    document.addEventListener('click', function (event) {
+      var link = event.target.closest && event.target.closest('a');
+      if (
+        link &&
+        (link.getAttribute('href') === '#ask-jerry' ||
+          link.textContent.trim() === 'Ask Jerry')
+      ) {
+        event.preventDefault();
+        unavailableOpen(true);
+      }
+    });
+  }
+
+  // RWAS never reads the old unbound transcript or falls back to the old relay.
+  // The separate Shopify widget retains its existing integration.
   if (!isShopify) {
     try {
       var gateResponse = await fetch('/api/jerry/context', {
@@ -221,15 +271,12 @@
             return;
         }
       }
-    } catch (accountError) {
-      panel.textContent =
-        'Jerry account chat is unavailable. Refresh the page to try again.';
-      bubble.onclick = function () {
-        panel.style.display = 'flex';
-      };
-      return;
-    }
+    } catch (accountError) {}
+    unavailableChat();
+    return;
   }
+
+  history = loadHistory();
 
   var chat = panel.querySelector('.jerry-widget-chat');
   var errorBox = panel.querySelector('.jerry-widget-error');

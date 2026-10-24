@@ -5,6 +5,12 @@ import {
   jerryLogReference,
 } from './jerry-authority.mjs';
 import { jerryAssert, jerryUuid, jerryHash } from './jerry-protocol.mjs';
+import {
+  WEBSITE_PROTOCOL,
+  eraseWebsiteCopies,
+  validateScope,
+  sameBinding,
+} from '../jerry-website-transport/contract.mjs';
 import { conversationTurn, reviewSnapshot } from './activity-content.mjs';
 import {
   ActivityLog,
@@ -169,6 +175,7 @@ const empty = () => ({
   idempotency: {},
   jerryConversationRefs: {},
   jerryDeletedConversations: {},
+  jerryTransportCleanup: {},
   audit: [],
   outbox: {},
   supportTickets: {},
@@ -828,6 +835,9 @@ export class SellerStore {
               state.identitySecurity[ref.owner]?.deletedAt),
         )
         .map((ref) => Math.max(Date.now() + 1000, ref.cleanupAfter || 0)),
+      ...Object.values(state.jerryTransportCleanup || {}).map((job) =>
+        Math.max(Date.now() + 1000, job.cleanupAfter),
+      ),
     );
     if (Number.isFinite(next)) await this.ctx.storage.setAlarm(next);
   }
@@ -1969,7 +1979,7 @@ export class SellerStore {
     return reply({ ok: true });
   }
   async cleanupJerryAccounts() {
-    if (!this.env.JERRY_CONVERSATIONS || !this.env.SELLER_STORE) return;
+    if (!this.env.SELLER_STORE) return;
     const internal = (path, body = {}) =>
       this.fetch(
         new Request(
@@ -1983,7 +1993,12 @@ export class SellerStore {
       );
     const response = await internal('cleanup-jobs');
     if (!response.ok) return;
-    for (const job of (await response.json()).jobs) {
+    const pending = await response.json();
+    for (const job of pending.transport || [])
+      await internal('cancel-transport', job)
+        .then((r) => r.arrayBuffer())
+        .catch(() => {});
+    for (const job of pending.jobs) {
       try {
         const stub = this.env.JERRY_CONVERSATIONS.get(
           this.env.JERRY_CONVERSATIONS.idFromName(
@@ -2026,9 +2041,18 @@ export class SellerStore {
     this.state = await this.loadState();
     this.state.jerryConversationRefs ||= {};
     this.state.jerryDeletedConversations ||= {};
+    this.state.jerryTransportCleanup ||= {};
     try {
       if (path === 'cleanup-jobs')
         return reply({
+          transport: Object.entries(this.state.jerryTransportCleanup)
+            .filter(([, job]) => job.cleanupAfter <= Date.now())
+            .map(([key, job]) => ({
+              key,
+              owner: job.scope.owner,
+              surface: job.scope.surface,
+              id: job.scope.conversationId,
+            })),
           jobs: Object.entries(this.state.jerryConversationRefs)
             .filter(
               ([, ref]) =>
@@ -2039,6 +2063,33 @@ export class SellerStore {
             )
             .map(([id, ref]) => ({ id, ...ref })),
         });
+      if (path === 'cancel-transport') {
+        const body = await this.json(req),
+          job = this.state.jerryTransportCleanup[body.key];
+        if (!job) return reply({ ok: true });
+        jerryAssert(
+          job.scope.owner === body.owner &&
+            job.scope.surface === body.surface &&
+            job.scope.conversationId === body.id,
+          403,
+          'Website cleanup owner mismatch.',
+        );
+        try {
+          await eraseWebsiteCopies(this.env, {
+            scope: job.scope,
+            operationId: job.operationId,
+            kind: job.kind,
+          });
+          delete this.state.jerryTransportCleanup[body.key];
+          await this.saveState(this.state);
+          return reply({ ok: true });
+        } catch {
+          job.cleanupAfter = Date.now() + 60000;
+          await this.saveState(this.state);
+          await this.scheduleAuth0ReceiptExpiry(this.state);
+          return reply({ error: 'Website operation cleanup pending.' }, 503);
+        }
+      }
       if (path === 'cleanup-retry') {
         const body = await this.json(req),
           ref = this.state.jerryConversationRefs[body.id];
@@ -2086,6 +2137,24 @@ export class SellerStore {
           body.owner,
           reference?.profileId,
         );
+        if (reference?.transportContract === WEBSITE_PROTOCOL)
+          await eraseWebsiteCopies(this.env, {
+            scope: {
+              category: 'account',
+              owner: body.owner,
+              surface: body.surface,
+              conversationId: body.id,
+            },
+          });
+        for (const [key, job] of Object.entries(
+          this.state.jerryTransportCleanup,
+        ))
+          if (
+            job.scope.owner === body.owner &&
+            job.scope.surface === body.surface &&
+            job.scope.conversationId === body.id
+          )
+            delete this.state.jerryTransportCleanup[key];
         if (reference) {
           reference.cleanupComplete = true;
           await this.saveState(this.state);
@@ -2174,6 +2243,55 @@ export class SellerStore {
       );
       if (path === 'snapshot')
         return reply(await jerrySnapshot(this, identity));
+      if (path === 'transport-used' || path === 'transport-committed') {
+        validateScope(body.scope);
+        const reference = this.state.jerryConversationRefs[body.id];
+        jerryAssert(
+          reference &&
+            !reference.deleted &&
+            !this.state.jerryDeletedConversations[body.id] &&
+            reference.owner === identity.owner &&
+            reference.surface === body.surface &&
+            identity.role === body.role &&
+            body.scope?.category === 'account' &&
+            body.scope.owner === identity.owner &&
+            body.scope.surface === body.surface &&
+            body.scope.conversationId === body.id &&
+            body.scope.sessionRef === identity.sessionRef &&
+            body.scope.generation === reference.generation &&
+            body.scope.sessionExpiresAt === identity.expiresAt &&
+            jerryUuid(body.operationId) &&
+            ['respond', 'translate'].includes(body.kind),
+          403,
+          'Website operation authority changed.',
+        );
+        const key = body.kind + ':' + body.operationId;
+        const prior = this.state.jerryTransportCleanup[key];
+        jerryAssert(
+          !prior || sameBinding(prior.scope, body.scope),
+          403,
+          'Website cleanup operation owner changed.',
+        );
+        if (path === 'transport-used') {
+          const old = this.state.jerryTransportCleanup[key];
+          jerryAssert(
+            !old || sameBinding(old.scope, body.scope),
+            409,
+            'Website operation session changed.',
+            'JERRY_REPLAY_CONFLICT',
+          );
+          reference.transportContract = WEBSITE_PROTOCOL;
+          this.state.jerryTransportCleanup[key] ??= {
+            scope: body.scope,
+            operationId: body.operationId,
+            kind: body.kind,
+            cleanupAfter: Date.now() + 90000,
+          };
+        } else delete this.state.jerryTransportCleanup[key];
+        await this.saveState(this.state);
+        await this.scheduleAuth0ReceiptExpiry(this.state);
+        return reply({ ok: true });
+      }
       if (path === 'register') {
         jerryAssert(
           jerryUuid(body.id) && ['public', 'exchange'].includes(body.surface),
@@ -2193,6 +2311,7 @@ export class SellerStore {
           'Conversation reference changed.',
         );
         this.state.jerryConversationRefs[body.id] = {
+          ...old,
           owner: identity.owner,
           profileId: identity.profileId,
           surface: body.surface,

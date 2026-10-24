@@ -5,7 +5,7 @@ import {
   jerryPage,
   JERRY_LOCALES,
 } from './jerry-protocol.mjs';
-import { responseAdmission } from './jerry-admission-context.mjs';
+import { sendWebsiteResponse } from './jerry-website-client.mjs';
 
 // Only these website operations cross the service binding. Browser input never
 // selects a seller route, remote host, identity, role, or authorization policy.
@@ -91,20 +91,12 @@ async function current(env, proof, expected) {
 async function localized(env, result, locale, admissionContext) {
   if (locale === 'en') return result;
   try {
-    jerryAssert(
-      env.JERRY_RESPONSE?.translate,
-      503,
-      'Translation is unavailable.',
-    );
     const source = result.reply;
     const payload = { text: source, locale };
-    const translated = await env.JERRY_RESPONSE.translate({
-      ...payload,
-      admission: await responseAdmission(env, {
-        ...admissionContext,
-        payload,
-        kind: 'translate',
-      }),
+    const translated = await sendWebsiteResponse(env, {
+      ...admissionContext,
+      payload,
+      kind: 'translate',
     });
     const reply = translated.reply;
     const tokens = (text) =>
@@ -140,31 +132,17 @@ async function relay(
 ) {
   // No cookies, email addresses, private operational data or business credentials
   // are forwarded to the public website chat service. Its actions are discarded.
-  jerryAssert(
-    env.JERRY_RESPONSE?.respond,
-    503,
-    'The website response service is unavailable. Your message is saved; retry it from this conversation.',
-  );
   const payload = {
     history,
     input,
     reference,
     pageContext: pageContext || '',
   };
-  const body = await env.JERRY_RESPONSE.respond({
-    ...payload,
-    admission: await responseAdmission(env, {
-      ...admissionContext,
-      payload,
-      kind: 'respond',
-    }),
+  const body = await sendWebsiteResponse(env, {
+    ...admissionContext,
+    payload,
+    kind: 'respond',
   });
-  if (body.error)
-    throw Object.assign(Error(body.error), {
-      status: body.status || 503,
-      code: body.code || 'JERRY_RESPONSE_UNAVAILABLE',
-      retryAfterMs: body.retryAfterMs,
-    });
   jerryAssert(
     typeof body.reply === 'string' &&
       body.reply.trim() &&
@@ -365,8 +343,33 @@ export async function jerryWebsite(env, request) {
       'Saved work tools are available in Aviation Exchange.',
     );
   const reservation = await call('reserve', body);
-  if (reservation.cached)
+  if (reservation.cached) {
+    await current(env, proof, authenticated);
     return { ...reservation, result: reservation.turn.result };
+  }
+  const tracked = [];
+  const transportContext = {
+    identity,
+    proof,
+    surface: request.surface,
+    conversationId: body.id,
+    generation: body.generation,
+    operationId: body.turnId,
+    issuedAt: reservation.turn.createdAt,
+    tracked,
+    mark: (operation) =>
+      seller(
+        env,
+        'transport-used',
+        {
+          ...authenticated,
+          id: body.id,
+          surface: request.surface,
+          ...operation,
+        },
+        proof,
+      ),
+  };
   try {
     let result;
     if (body.input.mode === 'status' || body.input.mode === 'resume') {
@@ -437,22 +440,15 @@ export async function jerryWebsite(env, request) {
         body.input,
         reference,
         request.pageContext,
-        {
-          identity,
-          proof,
-          surface: request.surface,
-          operationId: body.turnId,
-          issuedAt: reservation.turn.createdAt,
-        },
+        transportContext,
       );
     if (body.input.mode !== 'chat')
-      result = await localized(env, result, body.input.locale, {
-        identity,
-        proof,
-        surface: request.surface,
-        operationId: body.turnId,
-        issuedAt: reservation.turn.createdAt,
-      });
+      result = await localized(
+        env,
+        result,
+        body.input.locale,
+        transportContext,
+      );
     await current(env, proof, authenticated);
     const finalized = await call('finalize', {
       id: body.id,
@@ -474,8 +470,44 @@ export async function jerryWebsite(env, request) {
         /* The durable metadata outbox retries without saving session credentials. */
       }
     }
+    await current(env, proof, authenticated);
+    for (const operation of tracked)
+      await seller(
+        env,
+        'transport-committed',
+        {
+          ...authenticated,
+          id: body.id,
+          surface: request.surface,
+          ...operation,
+        },
+        proof,
+      ).catch(() => {});
     return { ...finalized, result };
   } catch (error) {
+    if (
+      error.status === 401 ||
+      error.status === 410 ||
+      [
+        'JERRY_REPLAY_CONFLICT',
+        'JERRY_ATTEMPT_UNCERTAIN',
+        'JERRY_ATTEMPT_EXPIRED',
+        'JERRY_ATTEMPT_COMPLETED',
+        'JERRY_ATTEMPT_FAILED',
+      ].includes(error.code)
+    )
+      for (const operation of tracked)
+        await seller(
+          env,
+          'cancel-transport',
+          {
+            owner: identity.owner,
+            surface: request.surface,
+            id: body.id,
+            key: operation.kind + ':' + operation.operationId,
+          },
+          proof,
+        ).catch(() => {});
     await call('fail', {
       id: body.id,
       generation: body.generation,

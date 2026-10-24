@@ -1,15 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { serviceFixture } from './jerry-fixture.mjs';
+import { serviceFixture, transportReply } from './jerry-fixture.mjs';
 import { jerrySnapshot } from '../../workers/aircraft-sale/jerry-authority.mjs';
 import { digest } from '../../workers/aircraft-sale/identity.mjs';
 test('role changes during private status translation reject finalization', async () => {
   const f = await serviceFixture(),
     c = await f.create();
   f.identity.isAdministrator = true;
-  f.env.JERRY_RESPONSE.translate = async ({ text }) => {
+  f.env.JERRY_WEBSITE_TRANSPORT.translate = async (envelope) => {
     f.identity.isAdministrator = false;
-    return { reply: text };
+    return transportReply(envelope, envelope.payload.text);
   };
   await assert.rejects(
     f.call('message', f.message(c, 'Status', 'status', { locale: 'es' })),

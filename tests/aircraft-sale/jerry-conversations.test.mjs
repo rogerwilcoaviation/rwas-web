@@ -1,6 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { conversationFixture, serviceFixture } from './jerry-fixture.mjs';
+import {
+  conversationFixture,
+  serviceFixture,
+  transportReply,
+} from './jerry-fixture.mjs';
 import { JERRY_RETENTION_MS } from '../../workers/aircraft-sale/jerry-protocol.mjs';
 import { handleJerry } from '../../functions/_jerry/gateway.mjs';
 
@@ -149,9 +153,8 @@ test('deletion fences an in-flight reply, removes copies, retries cleanup and pr
 test('localization carries locale and preserves identifiers, explicit fallback on invalid translation', async () => {
   const f = await serviceFixture(),
     c = await f.create();
-  f.env.JERRY_RESPONSE.translate = async ({ text }) => ({
-    reply: 'Respuesta: ' + text,
-  });
+  f.env.JERRY_WEBSITE_TRANSPORT.translate = async (envelope) =>
+    transportReply(envelope, 'Respuesta: ' + envelope.payload.text);
   await f.f.call(
     '/draft',
     'PUT',
@@ -164,9 +167,8 @@ test('localization carries locale and preserves identifiers, explicit fallback o
   );
   assert.match(first.result.reply, /Respuesta:/);
   assert.equal(first.result.notice, undefined);
-  f.env.JERRY_RESPONSE.translate = async () => ({
-    reply: 'Invented N999ZZ, 999.',
-  });
+  f.env.JERRY_WEBSITE_TRANSPORT.translate = async (envelope) =>
+    transportReply(envelope, 'Invented N999ZZ, 999.');
   const fallback = await f.call(
     'message',
     f.message(c, 'Question again', 'status', { locale: 'pt-BR' }),

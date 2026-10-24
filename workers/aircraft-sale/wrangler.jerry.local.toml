@@ -43,8 +43,8 @@ binding = "MEDIA"
 bucket_name = "rwas-jerry-media-local-only"
 
 [[services]]
-binding = "JERRY_RESPONSE"
-service = "rwas-jerry-website-response-local-only"
+binding = "JERRY_WEBSITE_TRANSPORT"
+service = "rwas-jerry-website-contract-local-only"
 
 [observability]
 enabled = false

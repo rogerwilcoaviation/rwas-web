@@ -28,7 +28,13 @@ export class JerryConversations {
     return task;
   }
   async tx(fn) {
-    return this.ctx.storage.transaction(fn);
+    // SQLite namespaces include alarm writes made through ctx.storage in the
+    // transaction. Never commit retained content without its cleanup schedule.
+    return this.ctx.storage.transaction(async (tx) => {
+      const result = await fn(tx);
+      await this.schedule();
+      return result;
+    });
   }
   async items(storage, prefix) {
     return [...(await storage.list({ prefix })).values()];
@@ -491,7 +497,6 @@ export class JerryConversations {
           status: 404,
         });
       });
-      await this.schedule();
       return jerryResult(result);
     } catch (error) {
       await this.schedule().catch(() => {});

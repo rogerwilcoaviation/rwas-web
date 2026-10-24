@@ -1,0 +1,27 @@
+# Local synthetic contract only. No supported live transport is selected.
+name = "rwas-jerry-website-contract-local-only"
+main = "entry.mjs"
+compatibility_date = "2026-09-01"
+workers_dev = false
+preview_urls = false
+routes = []
+keep_vars = false
+
+[vars]
+JERRY_TRANSPORT_MODE = "disabled"
+
+[[durable_objects.bindings]]
+name = "JERRY_TRANSPORT_COPIES"
+class_name = "WebsiteTransportCopies"
+[[durable_objects.bindings]]
+name = "JERRY_ADMISSION"
+class_name = "JerryAdmission"
+[[migrations]]
+tag = "website-contract-local-only-v1"
+new_sqlite_classes = ["WebsiteTransportCopies", "JerryAdmission"]
+
+[observability]
+enabled = false
+[observability.logs]
+enabled = false
+invocation_logs = false

@@ -2,6 +2,18 @@ import { JerryConversations } from '../../workers/aircraft-sale/jerry-conversati
 import { jerryWebsite } from '../../workers/aircraft-sale/jerry-service.mjs';
 import { digest } from '../../workers/aircraft-sale/identity.mjs';
 import { fixture } from './fixture.mjs';
+import {
+  WEBSITE_PROTOCOL,
+  SYNTHETIC_CAPABILITIES,
+} from '../../workers/jerry-website-transport/contract.mjs';
+export const transportReply = (envelope, reply) => ({
+  protocol: WEBSITE_PROTOCOL,
+  scope: envelope.scope,
+  operationId: envelope.operationId,
+  kind: envelope.kind,
+  expiresAt: envelope.expiresAt,
+  reply,
+});
 
 export function conversationFixture(env = {}, existing = new Map()) {
   let failed = false,
@@ -114,17 +126,30 @@ export async function serviceFixture() {
       return { fetch: (request) => objects.get(name).object().fetch(request) };
     },
   };
-  env.JERRY_RESPONSE = {
-    respond: async (payload) => {
+  env.JERRY_WEBSITE_TRANSPORT = {
+    status: async () => ({ ...SYNTHETIC_CAPABILITIES }),
+    erase: async (request) => ({
+      protocol: WEBSITE_PROTOCOL,
+      scope: request.scope,
+      ...(request.operationId
+        ? { operationId: request.operationId, kind: request.kind }
+        : {}),
+      erased: true,
+      contentCopies: 0,
+    }),
+    translate: async (envelope) =>
+      transportReply(envelope, envelope.payload.text),
+    respond: async (envelope) => {
       relayCalls++;
-      const response = await relay(payload);
+      const response = await relay(envelope.payload);
       if (!response.ok)
         return {
           error: 'Synthetic response service unavailable',
           status: response.status,
           ...(await response.json().catch(() => ({}))),
         };
-      return response.json();
+      const value = await response.json();
+      return transportReply(envelope, value.reply);
     },
   };
   const proof = {

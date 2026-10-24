@@ -8,7 +8,7 @@ test('offline binding/migration plan preserves the complete seller baseline and 
     'utf8',
   );
   const plan = planJerrySellerConfig(source, {
-    responseService: 'rwas-jerry-response-synthetic',
+    transportService: 'rwas-jerry-transport-synthetic',
   });
   const existing = plan
     .split('\n# Offline candidate:')[0]
@@ -25,24 +25,29 @@ test('offline binding/migration plan preserves the complete seller baseline and 
   assert.throws(
     () =>
       planJerrySellerConfig(plan, {
-        responseService: 'rwas-jerry-response-synthetic',
+        transportService: 'rwas-jerry-transport-synthetic',
       }),
     /already appear/,
   );
   assert.throws(
-    () => planJerrySellerConfig(source, { responseService: 'invalid"\n' }),
-    /reviewed response service/,
+    () => planJerrySellerConfig(source, { transportService: 'invalid"\n' }),
+    /reviewed website transport service/,
   );
   const local = await readFile(
     'workers/aircraft-sale/wrangler.jerry.local.toml',
     'utf8',
   );
   assert.match(local, /JERRY_CONVERSATIONS_ENABLED = "false"/);
+  assert.match(plan, /binding = "JERRY_WEBSITE_TRANSPORT"/);
+  assert.ok(!plan.includes('binding = "JERRY_RESPONSE"'));
   const response = await readFile(
-    'workers/jerry-response/wrangler.local.toml',
+    'workers/jerry-website-transport/wrangler.local.toml',
     'utf8',
   );
-  assert.match(response, /new_sqlite_classes = \["JerryAdmission"\]/);
+  assert.match(
+    response,
+    /new_sqlite_classes = \["WebsiteTransportCopies", "JerryAdmission"\]/,
+  );
   assert.ok(!/^OPENAI_API_KEY\s*=/m.test(response));
   assert.ok(!/^JERRY_MODEL\s*=/m.test(response));
 });

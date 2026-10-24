@@ -102,9 +102,9 @@ const send = async (page, text) => {
 test('guest retry keeps its operation ID across reload and only an explicit resend starts new work', async () =>
   fixture(async ({ f, page }) => {
     f.signedIn(false);
-    const respond = f.env.JERRY_RESPONSE.respond,
+    const respond = f.env.JERRY_WEBSITE_TRANSPORT.respond,
       seen = new Set();
-    f.env.JERRY_RESPONSE.respond = async (payload) => {
+    f.env.JERRY_WEBSITE_TRANSPORT.respond = async (payload) => {
       const id = payload.admission.operationId;
       if (seen.has(id))
         return {
@@ -194,7 +194,7 @@ test('long guest replies stay complete in the tab while the next inference conte
     assert.equal(history[1].content.length, 6000);
     assert.equal(f.relayCalls(), 2);
   }));
-test('feature-off widget never loads account chat or copies canonical history into the legacy store', async () =>
+test('feature-off widget closes the old relay path and preserves manual listing access', async () =>
   fixture(async ({ f, page, requests }) => {
     await page.route('**/api/jerry/context', (route) =>
       route.fulfill({ json: { enabled: false } }),
@@ -213,8 +213,14 @@ test('feature-off widget never loads account chat or copies canonical history in
     await page.goto('http://localhost/aircraft-for-sale');
     await page.locator('.jerry-widget-bubble').click();
     await page
-      .getByText('LEGACY PRIVATE MUST NOT IMPORT', { exact: true })
+      .getByText('CHAT TEMPORARILY UNAVAILABLE', { exact: true })
       .waitFor();
+    assert.equal(
+      await page
+        .getByText('LEGACY PRIVATE MUST NOT IMPORT', { exact: true })
+        .count(),
+      0,
+    );
     assert.equal(
       await page
         .getByText('CANONICAL HISTORY MUST STAY SEPARATE', { exact: true })
@@ -222,8 +228,56 @@ test('feature-off widget never loads account chat or copies canonical history in
       0,
     );
     assert.ok(!requests.includes('/jerry-account-chat.mjs'));
+    await page.evaluate(() => {
+      window.manualOpens = 0;
+      document.addEventListener(
+        'rwas:open-manual-form',
+        () => window.manualOpens++,
+      );
+      window.jerryChat('DO NOT SEND THIS');
+    });
+    await page
+      .getByRole('button', { name: 'Continue listing manually' })
+      .click();
+    assert.equal(await page.evaluate(() => window.manualOpens), 1);
+    assert.ok(!requests.includes('/api/chat'));
+    assert.equal(
+      await page.evaluate(
+        () =>
+          JSON.parse(sessionStorage.getItem('jerry-chat-history'))[0].content,
+      ),
+      'LEGACY PRIVATE MUST NOT IMPORT',
+    );
     assert.equal(f.relayCalls(), 0);
   }));
+for (const unavailable of ['missing', 'network failure']) {
+  test(`unavailable account service (${unavailable}) cannot fall back to the old relay`, async () =>
+    fixture(async ({ f, page, requests }) => {
+      await page.route('**/api/jerry/context', (route) =>
+        unavailable === 'missing'
+          ? route.fulfill({ status: 404, body: 'Not found' })
+          : route.abort(),
+      );
+      await page.goto('http://localhost/aircraft-for-sale');
+      await page.locator('.jerry-widget-bubble').click();
+      await page
+        .getByText('CHAT TEMPORARILY UNAVAILABLE', { exact: true })
+        .waitFor();
+      await page.evaluate(() => window.jerryChat('PRIVATE UNSENT TEXT'));
+      await page
+        .getByRole('button', { name: 'Continue listing manually' })
+        .waitFor();
+      assert.ok(!requests.includes('/api/chat'));
+      assert.ok(!requests.includes('/jerry-account-chat.mjs'));
+      assert.equal(f.relayCalls(), 0);
+      assert.equal(
+        await page
+          .getByText('LEGACY PRIVATE MUST NOT IMPORT', { exact: true })
+          .count(),
+        0,
+      );
+    }));
+}
 test('account switch during conversation creation cannot submit the first account’s text under the second account', async () =>
   fixture(async ({ f, page }) => {
     await open(page);
