@@ -10,7 +10,7 @@ import {
 } from '@/components/shared/broadsheet';
 import { genPageMetadata } from '@/app/seo';
 
-const pageUrl = 'https://www.rogerwilcoaviation.com/es/';
+const pageUrl = 'https://www.rogerwilcoaviation.com/es';
 const englishUrl = 'https://www.rogerwilcoaviation.com/';
 export const metadata = genPageMetadata({
   title: 'Herramientas Papa-Alpha para Piper en español | RWAS',
@@ -20,7 +20,7 @@ export const metadata = genPageMetadata({
   locale: 'es_US',
   languages: {
     'en-US': englishUrl,
-    'pt-BR': 'https://www.rogerwilcoaviation.com/pt-br/',
+    'pt-BR': 'https://www.rogerwilcoaviation.com/pt-br',
     es: pageUrl,
     'x-default': englishUrl,
   },

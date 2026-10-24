@@ -20,8 +20,8 @@ export const metadata = genPageMetadata({
   canonical: 'https://www.rogerwilcoaviation.com/',
   languages: {
     'en-US': 'https://www.rogerwilcoaviation.com/',
-    'pt-BR': 'https://www.rogerwilcoaviation.com/pt-br/',
-    es: 'https://www.rogerwilcoaviation.com/es/',
+    'pt-BR': 'https://www.rogerwilcoaviation.com/pt-br',
+    es: 'https://www.rogerwilcoaviation.com/es',
     'x-default': 'https://www.rogerwilcoaviation.com/',
   },
 });
@@ -173,6 +173,7 @@ export default function Home() {
                   alt="Garmin AXIS 8-inch portrait, 11.6-inch, and 8-inch landscape flight displays"
                   width={800}
                   height={366}
+                  loading="eager"
                   fetchPriority="high"
                   decoding="async"
                 />

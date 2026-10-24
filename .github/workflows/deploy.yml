@@ -80,6 +80,7 @@ jobs:
         run: |
           node scripts/jerry-message-regression.mjs
           node scripts/product-snippet-eligibility-test.mjs
+          node --test scripts/tests/catalog-schema-status.test.mjs
           node scripts/catalog-read-only-guard-test.mjs
           node scripts/seo-remediation-test.mjs
           node scripts/seo-technical-test.mjs

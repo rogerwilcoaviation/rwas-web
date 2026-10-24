@@ -10,7 +10,7 @@ import {
 } from '@/components/shared/broadsheet';
 import { genPageMetadata } from '@/app/seo';
 
-const pageUrl = 'https://www.rogerwilcoaviation.com/pt-br/';
+const pageUrl = 'https://www.rogerwilcoaviation.com/pt-br';
 
 export const metadata = genPageMetadata({
   title: 'Ferramentas Papa-Alpha para Piper — Brasil | RWAS',
@@ -21,7 +21,7 @@ export const metadata = genPageMetadata({
   languages: {
     'en-US': 'https://www.rogerwilcoaviation.com/',
     'pt-BR': pageUrl,
-    es: 'https://www.rogerwilcoaviation.com/es/',
+    es: 'https://www.rogerwilcoaviation.com/es',
     'x-default': 'https://www.rogerwilcoaviation.com/',
   },
 });

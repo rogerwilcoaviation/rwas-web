@@ -10,17 +10,27 @@ import {
 } from '@/components/shared/broadsheet';
 import { genPageMetadata } from '@/app/seo';
 import FinishingInquiry from '@/components/custom-finishing/FinishingInquiry';
+import { ServiceStructuredData } from '@/components/services/ServiceStructuredData';
 import '../custom-finishing.css';
 export const metadata = genPageMetadata({
-  title: 'Powder Coating | RWAS',
+  title: 'Powder Coating in Yankton, SD | RWAS',
   description:
-    'Powder coating inquiries for reviewed aviation shop and decorative work.',
+    'Request powder coating in Yankton, SD for fabricated metal parts, shop pieces, and decorative hardware. Preparation, dimensions, and finish reviewed before quoting.',
   canonical:
     'https://www.rogerwilcoaviation.com/services/custom-printing-finishing/powder-coating',
 });
 export default function Page() {
   return (
     <BroadsheetLayout>
+      <ServiceStructuredData
+        name="Powder Coating"
+        description="Powder coating review in Yankton for fabricated metal parts, shop pieces, decorative hardware, and combined coat-and-print work."
+        path="/services/custom-printing-finishing/powder-coating"
+        parent={{
+          name: 'UV Printing & Powder Coating',
+          path: '/services/custom-printing-finishing',
+        }}
+      />
       <Dateline />
       <Masthead />
       <BroadsheetNav activeHref="/services" />

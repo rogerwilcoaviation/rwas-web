@@ -267,6 +267,8 @@ function ProductTile({
                 displayImage.altText,
                 product.title,
               )}
+              width={600}
+              height={450}
               loading={eager ? 'eager' : 'lazy'}
               fetchPriority={eager ? 'high' : 'low'}
               decoding="async"

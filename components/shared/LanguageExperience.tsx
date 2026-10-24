@@ -46,12 +46,12 @@ function translatedPaths(pathname: string): LanguagePaths {
     };
   }
   if (pathname.startsWith('/pt-br')) {
-    return { en: '/', pt: '/pt-br/', es: '/es/' };
+    return { en: '/', pt: '/pt-br', es: '/es' };
   }
   if (pathname.startsWith('/es')) {
-    return { en: '/', pt: '/pt-br/', es: '/es/' };
+    return { en: '/', pt: '/pt-br', es: '/es' };
   }
-  return { en: pathname === '/' ? '/' : '/', pt: '/pt-br/', es: '/es/' };
+  return { en: '/', pt: '/pt-br', es: '/es' };
 }
 
 export default function LanguageExperience() {

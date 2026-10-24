@@ -18,14 +18,17 @@
 - [Aircraft NDT Inspection](https://www.rogerwilcoaviation.com/services/ndt-inspection) — Eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing
 - [Papa-Alpha Tools](https://www.rogerwilcoaviation.com/services/papa-alpha-tools) — Story and application guide for RWAS-built Piper rigging reference tools
 - [Fiber Laser Fabrication](https://www.rogerwilcoaviation.com/services/fiber-laser-fabrication) — Aircraft panel cutting, laser welding, powder coating, UV printing, and fabrication support
+- [UV Printing and Powder Coating](https://www.rogerwilcoaviation.com/services/custom-printing-finishing) — Material and application review for aviation shop work, branded pieces, and decorative items
+- [UV Printing](https://www.rogerwilcoaviation.com/services/custom-printing-finishing/uv-printing) — Direct-to-surface color graphics and markings on reviewed materials
+- [Powder Coating](https://www.rogerwilcoaviation.com/services/custom-printing-finishing/powder-coating) — Finish, preparation, and suitability review for metal parts and shop items
 - [Garmin Installation in Yankton](https://www.rogerwilcoaviation.com/services/garmin-installation-northern-plains) — Garmin G3X Touch, GTN Xi, GFC 500, ADS-B, and panel installation support at KYKN for SD, NE, IA, MN, and ND
 - [G3X Touch Installation](https://www.rogerwilcoaviation.com/services/g3x-touch-installation) — Garmin G3X Touch glass panel planning, EIS, ADAHRS, Connext workflow, panel fabrication, configuration, and documentation support
 - [GTN Xi Navigator Installation](https://www.rogerwilcoaviation.com/services/gtn-xi-navigator-installation) — Garmin GTN 650Xi and GTN 750Xi WAAS GPS/NAV/COMM navigator installation, antenna planning, panel integration, testing, and documentation
 - [GFC 500 Autopilot Installation](https://www.rogerwilcoaviation.com/services/gfc-500-autopilot-installation) — Garmin GFC 500 eligibility review, quote planning, panel integration, installation, testing, and documentation
 - [ADS-B Installation](https://www.rogerwilcoaviation.com/services/ads-b-installation) — ADS-B Out compliance, Garmin transponder upgrade planning, GPS source review, antenna planning, configuration, and documentation support
 - [Rotax Repair](https://www.rogerwilcoaviation.com/services/rotax-repair) — Rotax aircraft engine maintenance support, inspection planning, troubleshooting, and documentation review
-- [Aircraft Maintenance in Yankton](https://www.rogerwilcoaviation.com/services/aircraft-maintenance) — Annual inspections, 100-hour inspections, pre-buy support, AOG service, and repair-station documentation at KYKN
-- [Pre-Buy Inspection](https://www.rogerwilcoaviation.com/services/pre-buy-inspection) — Aircraft logbook review, physical condition checks, avionics review, NDT coordination, and buyer decision support
+- [Aircraft Maintenance in Yankton](https://www.rogerwilcoaviation.com/services/aircraft-maintenance) — Annual inspections, 100-hour inspections, AOG service, and repair-station documentation at KYKN
+- [Pre-Purchase Inspection Facility Recommendations](https://www.rogerwilcoaviation.com/services/pre-buy-inspection) — Recommendations for facilities near an aircraft; RWAS does not perform pre-buy inspections
 - [Garmin](https://www.rogerwilcoaviation.com/garmin) — Garmin product updates, bulletins, promotions
 - [Blog](https://www.rogerwilcoaviation.com/blog) — Aviation news, service bulletins, Garmin memos, shop dispatches
 - [Aircraft for Sale](https://www.rogerwilcoaviation.com/aircraft-for-sale) — Aircraft marketplace powered by Captain Jerry's guided intake
@@ -44,7 +47,7 @@ Certified Garmin dealer offering full glass-cockpit upgrades and STC'd installat
 Full FAR 43 / Part 91 / Part 135 aircraft maintenance with logbook documentation.
 - Annual inspections
 - 100-hour inspections
-- Pre-buy & condition inspections
+- Condition inspections; pre-purchase inspection facility recommendations are available separately
 - AOG "Go-Van" service
 - Propeller balancing
 - Aircraft weight certification (up to 30,000 lbs)
@@ -74,10 +77,11 @@ Precision flight-control rigging reference tools for Piper aircraft, designed in
 
 - Covers stabilator, rudder, aileron, flap, and bell crank rigging
 - Compatible with Piper PA-28, PA-30, PA-31, and PA-36 series
-- Complete rigging kit from $264
-- Individual tools from $59.99
+- Current tool prices and availability are shown on the product pages in the Papa-Alpha collection
 - Available at: rogerwilcoaviation.com, Aircraft Spruce, and Amazon (coming soon)
 - Shop collection: https://www.rogerwilcoaviation.com/collections/papa-alpha-tools
+- Portuguese application guide: https://www.rogerwilcoaviation.com/pt-br/papa-alpha
+- Spanish application guide: https://www.rogerwilcoaviation.com/es/papa-alpha
 
 ## Captain Jerry
 

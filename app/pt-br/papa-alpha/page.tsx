@@ -52,7 +52,7 @@ export default function PapaAlphaPortuguesePage() {
                     '@type': 'ListItem',
                     position: 1,
                     name: 'Início',
-                    item: 'https://www.rogerwilcoaviation.com/pt-br/',
+                    item: 'https://www.rogerwilcoaviation.com/pt-br',
                   },
                   {
                     '@type': 'ListItem',

@@ -2,6 +2,7 @@
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { productSchemaExpected as expectsProductSchema } from './lib/catalog-schema-status.mjs';
 
 const baseUrl =
   process.env.CATALOG_AUDIT_BASE_URL || 'https://www.rogerwilcoaviation.com';
@@ -73,8 +74,11 @@ for (const [index, url] of productUrls.entries()) {
     const handle = decodeURIComponent(
       new URL(url).pathname.split('/').filter(Boolean).at(-1) || '',
     );
-    const productSchemaExpected =
-      !intentionallyOmittedProductSchemaHandles.has(handle);
+    const productSchemaExpected = expectsProductSchema({
+      html,
+      handle,
+      legacyQuoteOnlyHandles: intentionallyOmittedProductSchemaHandles,
+    });
     const productSchemaStatus = productSchema
       ? 'present'
       : productSchemaExpected

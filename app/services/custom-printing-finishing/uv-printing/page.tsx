@@ -10,17 +10,27 @@ import {
 } from '@/components/shared/broadsheet';
 import { genPageMetadata } from '@/app/seo';
 import FinishingInquiry from '@/components/custom-finishing/FinishingInquiry';
+import { ServiceStructuredData } from '@/components/services/ServiceStructuredData';
 import '../custom-finishing.css';
 export const metadata = genPageMetadata({
-  title: 'UV Printing | RWAS',
+  title: 'UV Printing in Yankton, SD | RWAS',
   description:
-    'UV printing inquiries for primarily flat aviation and decorative parts.',
+    'Request UV printing in Yankton, SD for aircraft panel graphics, labels, branded pieces, and decorative parts. Surface and artwork reviewed before quoting.',
   canonical:
     'https://www.rogerwilcoaviation.com/services/custom-printing-finishing/uv-printing',
 });
 export default function Page() {
   return (
     <BroadsheetLayout>
+      <ServiceStructuredData
+        name="UV Printing"
+        description="UV printing in Yankton for full-color graphics, labels, personalization, and shop markings on primarily flat surfaces, subject to material and preparation review."
+        path="/services/custom-printing-finishing/uv-printing"
+        parent={{
+          name: 'UV Printing & Powder Coating',
+          path: '/services/custom-printing-finishing',
+        }}
+      />
       <Dateline />
       <Masthead />
       <BroadsheetNav activeHref="/services" />

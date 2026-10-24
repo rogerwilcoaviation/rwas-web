@@ -1355,7 +1355,14 @@ export default async function ProductDetailPage({
       <CredentialsBar />
       <BulletinBar />
 
-      <main id="main-content" tabIndex={-1} className="bs-stage">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="bs-stage"
+        data-product-snippet-eligible={hasProductSnippetEligibility(
+          productSchema,
+        )}
+      >
         {/* Hero — photo + summary */}
         <section className="bs-hero">
           <figure className="bs-photo-box">

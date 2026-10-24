@@ -141,6 +141,10 @@ export default function AboutPage() {
               <img
                 src="/newspaper/images/n5171s_panel.jpg"
                 alt="Custom laser-cut instrument panel — enlarged"
+                width={1200}
+                height={521}
+                loading="lazy"
+                decoding="async"
               />
             </div>
 

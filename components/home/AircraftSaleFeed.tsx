@@ -19,7 +19,7 @@ type Listing = {
 const LOADING_STYLE: React.CSSProperties = {
   fontStyle: 'italic',
   fontSize: '12px',
-  color: '#888',
+  color: 'var(--ink-600, #3f4a55)',
   padding: '8px 0',
 };
 
