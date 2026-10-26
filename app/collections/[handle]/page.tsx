@@ -6,6 +6,7 @@ import PartFinder, {
   type PartFinderProduct,
 } from '@/components/shopify/PartFinder';
 import { PapaAlphaLaunchFrame } from '@/components/shared/PapaAlphaLaunchFrame';
+import { PapaAlphaDemoGallery } from '@/components/shared/PapaAlphaDemoGallery';
 import {
   BroadsheetLayout,
   Dateline,
@@ -359,6 +360,24 @@ export default async function CollectionDetailPage({
                 &mdash; complete Piper rigging kits &mdash;
               </p>
               <PapaAlphaLaunchFrame />
+            </Specimen>
+
+            <Specimen variant="flat" as="section">
+              <p className="bs-kicker">Product demonstrations</p>
+              <p className="bs-script-accent">
+                &mdash; see the tools in a general workflow &mdash;
+              </p>
+              <h2
+                className="bs-headline"
+                style={{ marginTop: 6, marginBottom: 12 }}
+              >
+                Tool demonstrations
+              </h2>
+              <p className="bs-body" style={{ maxWidth: 820 }}>
+                Select a tool to watch its demonstration here, then open the
+                matching product page for current options and details.
+              </p>
+              <PapaAlphaDemoGallery />
             </Specimen>
 
             <Specimen variant="flat">
