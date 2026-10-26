@@ -48,8 +48,10 @@ import { createSellerRequestFacade } from './seller-request-facade';
 import { ListingDraftWorkflow } from './listing-draft-workflow';
 import {
   useListingAutosave,
+  isAutosaveNetworkError,
   readRecovery,
   recoveryKey,
+  savedDraftMatches,
   type RecoveryDraft,
 } from './listing-autosave';
 import {
@@ -977,14 +979,26 @@ export default function SellerAuthPanel() {
     listingId: editing?.id || null,
     listingRevision: editing?.revision || null,
     revision: sourceDraftRevision,
-    request: (body) => {
+    request: async (body) => {
       if (currentAuth.current !== autosaveSession)
-        return Promise.reject(
-          Error(
-            'Your sign-in changed. Reopen this draft under its original account.',
-          ),
+        throw Error(
+          'Your sign-in changed. Reopen this draft under its original account.',
         );
-      return api('/draft/autosave', 'PUT', body);
+      try {
+        return await api('/draft/autosave', 'PUT', body);
+      } catch (error) {
+        if (!isAutosaveNetworkError(error)) throw error;
+        // A dropped response is ambiguous: the first PUT may already be durable.
+        // Read back before retrying so recovery never overwrites a newer draft.
+        const online = await api('/draft');
+        if (savedDraftMatches(online.draft, body))
+          return { revision: online.revision as string };
+        if (online.revision !== body.expectedRevision)
+          throw Error(
+            'The online draft changed while this device was reconnecting. Reopen it before syncing; this device’s recovery copy is retained.',
+          );
+        return api('/draft/autosave', 'PUT', body);
+      }
     },
   });
   useEffect(() => {

@@ -80,6 +80,7 @@ try {
       const proofreader = {
         mode: 'success',
         uploads: 0,
+        autosaveNetworkFailures: 0,
         release: () => {},
         liveSmoke:
           process.env.LIVE_PROOFREAD_SMOKE === 'true' && width === 1440,
@@ -210,6 +211,13 @@ try {
         }
         if (url.pathname.startsWith('/api/aircraft-sale/identity/'))
           throw Error('Unexpected identity operation: ' + url.pathname);
+        if (
+          url.pathname === '/api/aircraft-sale/draft/autosave' &&
+          proofreader.autosaveNetworkFailures > 0
+        ) {
+          proofreader.autosaveNetworkFailures--;
+          return route.abort('failed');
+        }
         if (
           url.pathname === '/api/aircraft-sale/draft/autosave' &&
           proofreader.autosaveOffline

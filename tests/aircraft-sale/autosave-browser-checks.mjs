@@ -62,6 +62,7 @@ export async function checkAutosave({
   await jump('Year');
   await dialog.locator('#listing-step-input').fill('19');
   await jump('Description');
+  proofreader.autosaveNetworkFailures = 1;
   const synced = page.waitForResponse(
     (r) =>
       r.request().method() === 'PUT' &&
@@ -73,6 +74,11 @@ export async function checkAutosave({
     .locator('#listing-step-input')
     .fill('  First line\nSecond line  ');
   assert.equal((await synced).status(), 200);
+  assert.equal(
+    proofreader.autosaveNetworkFailures,
+    0,
+    'A transient browser network failure is consumed and retried',
+  );
   await dialog
     .getByText('All changes saved online.', { exact: true })
     .waitFor();

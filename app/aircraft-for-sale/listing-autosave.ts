@@ -28,6 +28,30 @@ export function readRecovery(owner: string): RecoveryDraft | null {
     return null;
   }
 }
+export function isAutosaveNetworkError(error: unknown) {
+  return error instanceof TypeError && !(error as { status?: number }).status;
+}
+export function savedDraftMatches(
+  saved: unknown,
+  pending: RecoveryDraft,
+): boolean {
+  if (!saved || typeof saved !== 'object') return false;
+  const draft = saved as Partial<RecoveryDraft>;
+  if (
+    draft.step !== pending.step ||
+    draft.listingId !== pending.listingId ||
+    draft.listingRevision !== pending.listingRevision ||
+    !draft.values ||
+    typeof draft.values !== 'object'
+  )
+    return false;
+  const savedEntries = Object.entries(draft.values);
+  const pendingEntries = Object.entries(pending.values);
+  return (
+    savedEntries.length === pendingEntries.length &&
+    pendingEntries.every(([key, value]) => draft.values?.[key] === value)
+  );
+}
 type Config = {
   owner: string;
   enabled: boolean;
