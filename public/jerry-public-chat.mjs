@@ -61,7 +61,7 @@ export function mountJerryPublicChat({ panel, bubble, backdrop, renderMessage })
     busy(true);
     const controller = new AbortController();
     pending = controller;
-    const timer = setTimeout(() => controller.abort(), 20000);
+    const timer = setTimeout(() => controller.abort(), 100000);
     try {
       const response = await fetch('https://rogerwilcoaviation.com/api/chat', {
         method: 'POST', credentials: 'omit', redirect: 'error', cache: 'no-store',
