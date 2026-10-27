@@ -26,7 +26,7 @@ assert.ok(
 const deferred = read('components/shared/DeferredJerryWidget.tsx');
 assert.ok(
   deferred.includes(
-    "const JERRY_WIDGET_SRC = '/jerry-widget.js?v=20261024-jerry-public-restore'",
+    "const JERRY_WIDGET_SRC = '/jerry-widget.js?v=20261027-jerry-terra-timeout'",
   ),
   'The deferred loader must cache-bust to the restored isolated public-chat widget',
 );

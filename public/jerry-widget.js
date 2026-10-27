@@ -275,7 +275,7 @@
       }
     } catch (accountError) {}
     try {
-      var publicChat = await import('/jerry-public-chat.mjs?v=20261024-public-restore');
+      var publicChat = await import('/jerry-public-chat.mjs?v=20261027-terra-timeout');
       if (publicChat.mountJerryPublicChat({
         panel: panel, bubble: bubble, backdrop: backdrop, renderMessage: renderMessage,
       })) return;
