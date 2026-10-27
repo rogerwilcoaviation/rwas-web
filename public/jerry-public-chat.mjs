@@ -4,7 +4,7 @@ export function mountJerryPublicChat({ panel, bubble, backdrop, renderMessage })
   const input = panel.querySelector('.jerry-widget-text-input');
   const send = panel.querySelector('.jerry-widget-send');
   const error = panel.querySelector('.jerry-widget-error');
-  const initial = 'Captain Jerry here. Ask about RWAS services, pricing and scheduling guidance, or how to reach the shop. Seller records and drafts stay in the secure seller panel.';
+  const initial = 'Captain Jerry here. Ask about RWAS services, pricing and scheduling guidance, or how to reach the shop. Seller records and drafts stay in the secure seller panel. Public chat may be processed by OpenAI; please do not share sensitive information.';
   let history = [{ role: 'assistant', content: initial }];
   let generation = 0;
   let pending;
@@ -47,6 +47,7 @@ export function mountJerryPublicChat({ panel, bubble, backdrop, renderMessage })
   }
   function busy(value) {
     send.disabled = input.disabled = value;
+    panel.querySelector('.jerry-widget-status').textContent = value ? 'CAPTAIN JERRY IS THINKING…' : 'ONLINE — RWAS PUBLIC CHAT';
   }
   async function submit() {
     const text = input.value.trim();
