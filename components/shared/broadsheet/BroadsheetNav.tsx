@@ -36,8 +36,7 @@ const DEFAULT_ITEMS: NavItem[] = [
 ];
 
 /**
- * BroadsheetNav — single-row primary nav with gold-light ASK JERRY accent.
- * Matches the approved D2 PDP mockup (.np-nav).
+ * BroadsheetNav — consistently highlighted primary navigation.
  */
 export default function BroadsheetNav({
   items = DEFAULT_ITEMS,
@@ -46,7 +45,7 @@ export default function BroadsheetNav({
   const renderItems = () =>
     items.map((item) => {
       const classes = [
-        item.accent ? 'bs-nav__accent' : '',
+        'bs-nav__accent',
         activeHref && activeHref === item.href ? 'bs-nav__active' : '',
       ]
         .filter(Boolean)
