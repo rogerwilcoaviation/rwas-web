@@ -196,6 +196,12 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     handle: 'sub-assy-ap-disc-trim-int-switch',
   },
   {
+    sku: '330-00070-03',
+    productId: 'gid://shopify/Product/8961745486043',
+    variantId: 'gid://shopify/ProductVariant/47408685187291',
+    handle: 'conn-coax-blind-thd-w-groove',
+  },
+  {
     sku: '233-20003-00',
     productId: 'gid://shopify/Product/8961743519963',
     variantId: 'gid://shopify/ProductVariant/47408683811035',

@@ -355,6 +355,22 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '330-00070-03',
+    family: 'Blind threaded coaxial connector with groove',
+    eligibilityAuthority: 'Ryan authorized exact-SKU retail on 2026-10-28',
+    catalogObservation:
+      'Authenticated Garmin DRC exact product page on 2026-10-28 identifies 330-00070-03 at $10.00 List, in stock and order-enabled. Operator authorization is not a manufacturer eligibility determination.',
+    productId: 'gid://shopify/Product/8961745486043',
+    variantId: 'gid://shopify/ProductVariant/47408685187291',
+    handle: 'conn-coax-blind-thd-w-groove',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+      'garmin-subcategory:install-hardware-fallback',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '233-20003-00',
     family: 'Cable assembly with ball ends, 25 inch',
     eligibilityAuthority:
@@ -488,6 +504,13 @@ const PUBLIC_PRICE_AUTHORITIES = {
       'Fresh authenticated Garmin DRC exact product page for 117-00931-00, read 2026-10-12; customer List Price shown as $70.00',
     priceType: 'List',
     accessed: '2026-10-12',
+  },
+  '330-00070-03': {
+    list_price: 10,
+    source:
+      'Authenticated Garmin DRC exact product page for 330-00070-03, read 2026-10-28; customer List Price $10.00',
+    priceType: 'List',
+    accessed: '2026-10-28',
   },
   '233-20003-00': {
     list_price: 70,
