@@ -59,6 +59,19 @@ const PAPA_ALPHA_DEMOS = [
       },
     ] satisfies PapaAlphaProductLink[],
   },
+  {
+    id: 'chqGUY3FBEI',
+    title: 'Rudder Trim Reference Tools',
+    description:
+      'An illustrated overview of a general workflow using Papa-Alpha rudder-trim reference tools to check the trim tab in relation to its parent rudder.',
+    thumbnailUrl: 'https://i.ytimg.com/vi/chqGUY3FBEI/hqdefault.jpg',
+    productLinks: [
+      {
+        href: '/products/pa-31-rudder-trim-rigging-tool',
+        label: 'View PA-31 rudder trim tool',
+      },
+    ] satisfies PapaAlphaProductLink[],
+  },
 ] as const;
 
 export function PapaAlphaDemoGallery() {
