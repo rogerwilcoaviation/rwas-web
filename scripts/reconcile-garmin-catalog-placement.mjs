@@ -196,6 +196,12 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     handle: 'sub-assy-ap-disc-trim-int-switch',
   },
   {
+    sku: '360-00009-00',
+    productId: 'gid://shopify/Product/8961791197403',
+    variantId: 'gid://shopify/ProductVariant/47408724082907',
+    handle: 'lithium-cell-3v-pc-mount',
+  },
+  {
     sku: '330-00070-03',
     productId: 'gid://shopify/Product/8961745486043',
     variantId: 'gid://shopify/ProductVariant/47408685187291',

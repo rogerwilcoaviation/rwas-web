@@ -355,6 +355,23 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '360-00009-00',
+    family: '3V circuit-board-mount lithium cell',
+    eligibilityAuthority:
+      'Ryan authorized exact-SKU retail on 2026-10-28; manufacturer OTC authorization remains unconfirmed',
+    catalogObservation:
+      'Ryan supplied Garmin dealer product screen dated 2026-10-28 showing exact 360-00009-00 at $20.00 list and in stock; dealer purchasing availability does not establish OTC authorization.',
+    productId: 'gid://shopify/Product/8961791197403',
+    variantId: 'gid://shopify/ProductVariant/47408724082907',
+    handle: 'lithium-cell-3v-pc-mount',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:install-hardware',
+      'garmin-subcategory:rack-backplate-mounting',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '330-00070-03',
     family: 'Blind threaded coaxial connector with groove',
     eligibilityAuthority: 'Ryan authorized exact-SKU retail on 2026-10-28',
@@ -504,6 +521,13 @@ const PUBLIC_PRICE_AUTHORITIES = {
       'Fresh authenticated Garmin DRC exact product page for 117-00931-00, read 2026-10-12; customer List Price shown as $70.00',
     priceType: 'List',
     accessed: '2026-10-12',
+  },
+  '360-00009-00': {
+    list_price: 20,
+    source:
+      'Ryan-supplied Garmin dealer product screen for 360-00009-00 on 2026-10-28; list price $20.00',
+    priceType: 'List',
+    accessed: '2026-10-28',
   },
   '330-00070-03': {
     list_price: 10,
