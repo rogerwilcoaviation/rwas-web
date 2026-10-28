@@ -139,18 +139,17 @@ function chart() {
   );
 }
 function tools(r) {
-  const sn = r.serials.replaceAll(' ', '');
-  if (r.model === 'PA-28-161 Warrior III' && sn === '2842001thru2842420')
-    return 'CONFLICT: Main chart says BC-04; KT-07 BOM says 2× BC-06. Package includes both pairs. Verify with Papa-Alpha before aircraft-specific use.';
-  if (r.model === 'PA-28-161 Warrior III' && sn === '2816110thru2816119')
-    return 'CONFLICT: Main chart says BC-06; KT-08 BOM says 2× BC-04. Package includes both pairs. Verify with Papa-Alpha before aircraft-specific use.';
+  if (r.applicabilityWarning)
+    return `${r.applicabilityWarning} Both pairs are included as package contents; inclusion does not resolve applicability.`;
   return BOMS.get(r.kit);
 }
 function description() {
   const coverage = chart().map((r) => [
     r.model,
     r.serials.replace(/\s+/g, ' '),
-    r.kit,
+    r.applicabilityWarning
+      ? `${r.kit} (source reference only; applicability unresolved)`
+      : r.kit,
     tools(r),
   ]);
   return `<h2>One shared PA-28 / PA-32 shop tooling package</h2>
