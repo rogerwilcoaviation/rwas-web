@@ -35,8 +35,6 @@ export default function Page() {
       <BulletinBar />
       <main id="main-content" tabIndex={-1} className="bs-stage">
         <section className="finishing-hero" aria-labelledby="finishing-title">
-          <span className="finishing-eyebrow">Specialized shop services</span>
-          <p className="bs-script-accent">— color, graphics &amp; finish —</p>
           <h1 id="finishing-title" className="bs-headline bs-headline--hero">
             UV Printing &amp; <em>Powder Coating</em>
           </h1>
@@ -48,6 +46,10 @@ export default function Page() {
           <div className="finishing-actions">
             <a href="#inquiry">Ask About UV Printing &amp; Powder Coating</a>
             <a href="#inquiry">Request a Printing or Coating Quote</a>
+          </div>
+          <div style={{ marginTop: 24 }}>
+            <span className="finishing-eyebrow">Specialized shop services</span>
+            <p className="bs-script-accent">— color, graphics &amp; finish —</p>
           </div>
           <p className="finishing-planner-link">
             <strong>Planning a full aircraft panel?</strong> Use our{' '}
