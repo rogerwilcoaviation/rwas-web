@@ -1211,11 +1211,15 @@ export default async function ProductDetailPage({
   const isAxisSystemListing = product.handle.startsWith('garmin-axis-');
   const isScbfFixture =
     product.handle === 'papa-alpha-scbf-1-surface-control-balancing-fixture';
+  const isBaggageLockTool =
+    product.handle === 'papa-alpha-baggage-door-lock-tool';
   const hasItemizedKitContents = /<h2[^>]*>[^<]*kit contents\b/i.test(
     product.descriptionHtml || '',
   );
   const cleanDescText = isScbfFixture
     ? 'A surface control balancing fixture for measuring the static balance moment of applicable Cessna ailerons, elevators and rudders.'
+    : isBaggageLockTool
+      ? 'A purpose-made specialty wrench for technicians servicing the retaining nut on the back of an applicable Piper baggage-door lock assembly.'
     : isAxisSystemListing
       ? ''
       : hasItemizedKitContents
@@ -1416,8 +1420,27 @@ export default async function ProductDetailPage({
                 : 'From the workbench'}
             </p>
             <h1 className="bs-product-headline">{product.title}</h1>
+            {isBaggageLockTool ? (
+              <PdpPriceCard
+                productTitle={product.title}
+                variants={variantPayload}
+                otc={gating.otc}
+                stockCheckRequired={gating.stockCheckRequired}
+                isGarmin={gating.isGarmin}
+                mapLocked={gating.mapLocked}
+                isDealerInstall={gating.isDealerInstall}
+                cartPurchaseException={cartPurchaseException}
+              />
+            ) : null}
             {cleanDescText ? (
               <p className="bs-product-subhead">{cleanDescText}</p>
+            ) : null}
+            {isBaggageLockTool ? (
+              <ul className="bs-body" style={{ paddingLeft: 22, marginTop: 12 }}>
+                <li>Offset working head and extended handle</li>
+                <li>Finished black with Papa-Alpha branding</li>
+                <li>For maintenance use; not a replacement lock</li>
+              </ul>
             ) : null}
 
             <div className="bs-byline">
@@ -1435,7 +1458,7 @@ export default async function ProductDetailPage({
             </div>
 
             {/* Price card — variant dropdown + single CTA live inside this client component */}
-            <PdpPriceCard
+            {!isBaggageLockTool ? <PdpPriceCard
               productTitle={product.title}
               variants={variantPayload}
               otc={gating.otc}
@@ -1451,16 +1474,17 @@ export default async function ProductDetailPage({
               }
               isDealerInstall={gating.isDealerInstall}
               cartPurchaseException={cartPurchaseException}
-            />
+            /> : null}
           </div>
         </section>
 
         {/* Detail — article + spec aside */}
         <section className="bs-detail">
           <article>
-            {!cleanDescText || hasItemizedKitContents || isScbfFixture ? (
+            {isBaggageLockTool ? <h2>Detailed description</h2> : null}
+            {!cleanDescText || hasItemizedKitContents || isScbfFixture || isBaggageLockTool ? (
               <div
-                className={`bs-body bs-body--rich${isScbfFixture ? ' bs-pa31-table-wrap' : ''}`}
+                className={`bs-body bs-body--rich${isScbfFixture || isBaggageLockTool ? ' bs-pa31-table-wrap' : ''}`}
                 dangerouslySetInnerHTML={{
                   __html: sanitizeProductHtml(
                     product.descriptionHtml || product.description || '',
@@ -1546,7 +1570,7 @@ export default async function ProductDetailPage({
                   </>
                 )}
               </div>
-              <div className="cell">
+              {!isBaggageLockTool && !isScbfFixture ? <div className="cell">
                 <span className="lab">Warranty &amp; service</span>
                 {gating.isGarmin ? (
                   <>
@@ -1560,7 +1584,7 @@ export default async function ProductDetailPage({
                     repair station at KYKN in Yankton.
                   </>
                 )}
-              </div>
+              </div> : null}
               <div className="cell">
                 <span className="lab">Talk to a pilot</span>
                 Call (605) 299-8178 — staffed by pilots and A&amp;Ps, not a call
