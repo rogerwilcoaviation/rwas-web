@@ -1209,24 +1209,28 @@ export default async function ProductDetailPage({
   const showDualG5KitDetails =
     product.handle === 'garmin-dual-g5-ai-hsi-kit-k10-00280-51';
   const isAxisSystemListing = product.handle.startsWith('garmin-axis-');
+  const isScbfFixture =
+    product.handle === 'papa-alpha-scbf-1-surface-control-balancing-fixture';
   const hasItemizedKitContents = /<h2[^>]*>[^<]*kit contents\b/i.test(
     product.descriptionHtml || '',
   );
-  const cleanDescText = isAxisSystemListing
-    ? ''
-    : hasItemizedKitContents
-      ? 'Garmin kit components and part numbers are listed below.'
-      : showDualG5KitDetails
-        ? 'A complete certified dual-display package for an electronic attitude indicator and HSI configuration.'
-        : showPa31RudderTrimApplicability || showPapaAlphaApplicability
-          ? papaAlphaApplicabilityIntro(product) || PA31_RUDDER_TRIM_INTRO
-          : (product.description || '')
-              .replace(/^[^\n]*Buy\s*&\s*Save rebate form\.?\s*\n*/i, '')
-              .replace(
-                /Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi,
-                '',
-              )
-              .trim();
+  const cleanDescText = isScbfFixture
+    ? 'A surface control balancing fixture for measuring the static balance moment of applicable Cessna ailerons, elevators and rudders.'
+    : isAxisSystemListing
+      ? ''
+      : hasItemizedKitContents
+        ? 'Garmin kit components and part numbers are listed below.'
+        : showDualG5KitDetails
+          ? 'A complete certified dual-display package for an electronic attitude indicator and HSI configuration.'
+          : showPa31RudderTrimApplicability || showPapaAlphaApplicability
+            ? papaAlphaApplicabilityIntro(product) || PA31_RUDDER_TRIM_INTRO
+            : (product.description || '')
+                .replace(/^[^\n]*Buy\s*&\s*Save rebate form\.?\s*\n*/i, '')
+                .replace(
+                  /Click here for Garmin's Buy\s*&\s*Save rebate form\.?\s*/gi,
+                  '',
+                )
+                .trim();
   const breadcrumbs = ['Pilot Shop', productTypeLabel, vendor].filter(Boolean);
 
   // Variant payload for the client component — keep only what we need.
@@ -1454,9 +1458,9 @@ export default async function ProductDetailPage({
         {/* Detail — article + spec aside */}
         <section className="bs-detail">
           <article>
-            {!cleanDescText || hasItemizedKitContents ? (
+            {!cleanDescText || hasItemizedKitContents || isScbfFixture ? (
               <div
-                className="bs-body bs-body--rich"
+                className={`bs-body bs-body--rich${isScbfFixture ? ' bs-pa31-table-wrap' : ''}`}
                 dangerouslySetInnerHTML={{
                   __html: sanitizeProductHtml(
                     product.descriptionHtml || product.description || '',
