@@ -1373,7 +1373,7 @@ export default async function ProductDetailPage({
       >
         {/* Hero — photo + summary */}
         <section className="bs-hero">
-          <figure className="bs-photo-box">
+          <figure className="bs-photo-box" style={isBaggageLockTool ? { minWidth: 0, width: '100%' } : undefined}>
             {heroImg ? (
               <PdpImageGallery
                 images={
