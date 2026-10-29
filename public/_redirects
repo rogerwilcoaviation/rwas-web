@@ -93,3 +93,7 @@
 /work-order-system/portal/* /work-order-system/ 200
 
 /brochures/papa-alpha-tools-trifold.pdf /brochures/papa-alpha-tools/papa-alpha-tools-trifold.pdf 301
+
+# Consolidate Papa-Alpha information and catalog.
+/services/papa-alpha-tools /collections/papa-alpha-tools 301
+/services/papa-alpha-tools/ /collections/papa-alpha-tools 301

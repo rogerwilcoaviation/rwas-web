@@ -221,7 +221,7 @@ export default function YanktonLocationPage() {
                   </li>
                   <li className="bs-svc">
                     <p className="bs-svc-name">
-                      <Link href="/services/papa-alpha-tools">
+                      <Link href="/collections/papa-alpha-tools">
                         Papa-Alpha Piper rigging tools
                       </Link>
                     </p>

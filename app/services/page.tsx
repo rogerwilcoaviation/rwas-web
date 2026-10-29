@@ -95,7 +95,7 @@ const serviceGroups = [
       },
       {
         name: 'Papa-Alpha Piper rigging tools',
-        href: '/services/papa-alpha-tools',
+        href: '/collections/papa-alpha-tools',
         description:
           'RWAS-designed Piper rigging reference tools for PA-series aircraft, built for practical flight-control setup work.',
       },

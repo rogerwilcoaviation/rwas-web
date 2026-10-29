@@ -79,7 +79,7 @@ const SERVICES = [
   ],
   [
     'Papa-Alpha Tools',
-    '/services/papa-alpha-tools',
+    '/collections/papa-alpha-tools',
     'RWAS-built rigging tools and support for Piper Papa-Alpha airframes.',
   ],
   [

@@ -12,7 +12,7 @@ import { genPageMetadata } from '@/app/seo';
 
 const pageUrl = 'https://www.rogerwilcoaviation.com/es/papa-alpha';
 const englishUrl =
-  'https://www.rogerwilcoaviation.com/services/papa-alpha-tools';
+  'https://www.rogerwilcoaviation.com/collections/papa-alpha-tools';
 export const metadata = genPageMetadata({
   title: 'Herramientas de reglaje Piper Papa-Alpha | RWAS',
   description:

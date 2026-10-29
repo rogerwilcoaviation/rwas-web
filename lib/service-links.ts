@@ -66,7 +66,7 @@ const links: SeoServiceLink[] = [
       'Rotax aircraft engine maintenance support, inspection planning, troubleshooting, and documentation review.',
   },
   {
-    href: '/services/papa-alpha-tools',
+    href: '/collections/papa-alpha-tools',
     label: 'Papa-Alpha Piper rigging tools',
     description:
       'RWAS-designed Piper rigging reference tools for PA-series flight-control setup work.',

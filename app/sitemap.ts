@@ -15,7 +15,6 @@ const STATIC_ROUTES = [
   'garmin',
   'services',
   'services/ndt-inspection',
-  'services/papa-alpha-tools',
   'services/fiber-laser-fabrication',
   'services/custom-printing-finishing',
   'services/custom-printing-finishing/uv-printing',

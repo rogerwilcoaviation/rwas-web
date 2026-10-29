@@ -247,7 +247,7 @@ export default async function CollectionDetailPage({
   const relatedServiceLinks = serviceLinksForCollection(
     collection.handle,
     collection.title,
-  );
+  ).filter((service) => service.href !== `/collections/${collection.handle}`);
   const canonicalUrl = `https://www.rogerwilcoaviation.com/collections/${encodeURIComponent(collection.handle)}`;
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -449,6 +449,46 @@ export default async function CollectionDetailPage({
                 matching product page for current options and details.
               </p>
               <PapaAlphaDemoGallery />
+            </Specimen>
+
+            <Specimen variant="flat" as="section">
+              <p className="bs-kicker">About Papa-Alpha</p>
+              <h2 className="bs-headline" style={{ marginTop: 6, marginBottom: 12 }}>
+                Designed and made by mechanics
+              </h2>
+              <div className="bs-body">
+                <p>
+                  Papa-Alpha tools grew out of hands-on aircraft maintenance at
+                  Roger Wilco Aviation Services. Our Piper rigging references
+                  help mechanics establish repeatable physical reference points
+                  for control-surface work, including stabilator, rudder,
+                  aileron, flap, and bell crank tasks.
+                </p>
+                <p>
+                  The range includes tools for selected PA-28, PA-30, PA-31,
+                  PA-32, PA-34, PA-36, PA-39, and PA-44 applications, depending
+                  on the specific tool. See each product for its applicability
+                  and contents, and use the applicable aircraft maintenance data.
+                  Papa-Alpha also offers tools for other aircraft, including Cessna.
+                </p>
+                <p>
+                  Designed and manufactured in-house using CAD, CNC routing,
+                  fiber laser cutting, powder coating, and UV printing, these
+                  tools are made for practical shop use.
+                </p>
+                <p>
+                  Questions about which tool fits? Contact RWAS with the aircraft
+                  model, serial number, and the work you are planning.
+                </p>
+              </div>
+              <p style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginTop: 16 }}>
+                <Link className="bs-cta-secondary" href="/contact?reason=papa-alpha&source=papa-alpha-collection">
+                  Ask about applicability
+                </Link>
+                <a className="bs-cta-secondary" href="/brochures/papa-alpha-tools/papa-alpha-tools-trifold.pdf" download="papa-alpha-tools-trifold.pdf">
+                  Download brochure
+                </a>
+              </p>
             </Specimen>
 
             <Specimen variant="flat">

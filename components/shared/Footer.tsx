@@ -96,7 +96,7 @@ export const Footer = ({ className }: { className?: string }) => {
         <LandingFooterLink href="/services/ndt-inspection">
           NDT inspection
         </LandingFooterLink>
-        <LandingFooterLink href="/services/papa-alpha-tools">
+        <LandingFooterLink href="/collections/papa-alpha-tools">
           Papa-Alpha story
         </LandingFooterLink>
         <LandingFooterLink href="/services/fiber-laser-fabrication">

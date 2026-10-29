@@ -16,7 +16,7 @@
 - [Shop Capabilities](https://www.rogerwilcoaviation.com/shop-capabilities) — Full catalog of services: Garmin installations, A&P maintenance, NDT, fabrication
 - [Aircraft Services](https://www.rogerwilcoaviation.com/services) — Crawlable service hub linking RWAS avionics, maintenance, NDT, fabrication, Rotax, pre-buy, and Papa-Alpha service pages
 - [Aircraft NDT Inspection](https://www.rogerwilcoaviation.com/services/ndt-inspection) — Eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing
-- [Papa-Alpha Tools](https://www.rogerwilcoaviation.com/services/papa-alpha-tools) — Story and application guide for RWAS-built Piper rigging reference tools
+- [Papa-Alpha Tools](https://www.rogerwilcoaviation.com/collections/papa-alpha-tools) — Story and application guide for RWAS-built Piper rigging reference tools
 - [Fiber Laser Fabrication](https://www.rogerwilcoaviation.com/services/fiber-laser-fabrication) — Aircraft panel cutting, laser welding, powder coating, UV printing, and fabrication support
 - [UV Printing and Powder Coating](https://www.rogerwilcoaviation.com/services/custom-printing-finishing) — Material and application review for aviation shop work, branded pieces, and decorative items
 - [UV Printing](https://www.rogerwilcoaviation.com/services/custom-printing-finishing/uv-printing) — Direct-to-surface color graphics and markings on reviewed materials

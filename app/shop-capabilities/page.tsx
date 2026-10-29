@@ -502,7 +502,7 @@ export default function ShopCapabilitiesPage() {
                       Read more about aircraft fiber laser fabrication at RWAS
                     </a>{' '}
                     &middot;{' '}
-                    <a href="/services/papa-alpha-tools">
+                    <a href="/collections/papa-alpha-tools">
                       Read the Papa-Alpha tools story
                     </a>{' '}
                     &middot;{' '}

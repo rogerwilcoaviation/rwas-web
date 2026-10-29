@@ -360,7 +360,7 @@ export default function Home() {
               <ul className="bs-svc-list">
                 <li className="bs-svc">
                   <p className="bs-svc-name">
-                    <a href="/services/papa-alpha-tools">
+                    <a href="/collections/papa-alpha-tools">
                       Piper Rigging Reference Tools
                     </a>
                   </p>

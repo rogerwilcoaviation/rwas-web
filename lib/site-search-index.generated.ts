@@ -72,7 +72,7 @@ export const SITE_SEARCH_INDEX = [
   {
     group: 'Services',
     title: 'Papa-Alpha Tools',
-    href: '/services/papa-alpha-tools',
+    href: '/collections/papa-alpha-tools',
     description:
       'RWAS-built rigging tools and support for Piper Papa-Alpha airframes.',
   },
