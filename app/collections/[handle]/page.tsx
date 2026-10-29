@@ -369,6 +369,16 @@ export default async function CollectionDetailPage({
       <CredentialsBar />
       <BulletinBar />
       <main id="main-content" tabIndex={-1} className="bs-stage">
+        {collection.handle === 'papa-alpha-tools' ? (
+          <section style={{ textAlign: 'center', padding: '36px 16px 30px' }}>
+            <h1 className="bs-headline bs-headline--hero" style={{ fontWeight: 700 }}>
+              Papa-Alpha Tool Collection
+            </h1>
+            <p className="bs-subhead" style={{ margin: '12px auto 0' }}>
+              {collection.description || 'RWAS-built Papa-Alpha tools for practical aircraft maintenance work.'}
+            </p>
+          </section>
+        ) : (
         <section className="hero-headline-group">
           <p className="bs-kicker">
             Collection &middot; {indexableProducts.length} items
@@ -403,16 +413,19 @@ export default async function CollectionDetailPage({
             >
               {quoteOnly ? 'Request a quote' : 'Open cart'}
             </Link>
-            {collection.handle === 'papa-alpha-tools' ? (
-              <a href="#tool-demonstrations" className="bs-cta-secondary">
-                Tool Demonstrations
-              </a>
-            ) : null}
           </div>
         </section>
+        )}
 
         {finderProducts.length && !catalogDataUrl ? (
           <Specimen variant="flat">
+            {collection.handle === 'papa-alpha-tools' ? (
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
+                <Link href="/collections" className="bs-cta-secondary">Back to collections</Link>
+                <a href="#tool-demonstrations" className="bs-cta-secondary">Tool Demonstrations</a>
+                <Link href="/cart" className="bs-cta-primary">Open cart</Link>
+              </div>
+            ) : null}
             <PartFinder
               products={finderProducts}
               scopeLabel={collection.title}
