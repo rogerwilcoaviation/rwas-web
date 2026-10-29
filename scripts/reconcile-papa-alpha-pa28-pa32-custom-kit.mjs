@@ -3,7 +3,7 @@ import fs from 'node:fs';
 
 const ENV = '/Users/rwas/.openclaw/workspace/configs/shopify.env';
 const HANDLE = 'papa-alpha-pa-28-pa-32-shared-shop-rigging-tool-package';
-const TITLE = 'Papa-Alpha PA-28 / PA-32 Shared Shop Rigging Tool Package';
+const TITLE = 'Papa-Alpha PA-28 / PA-32 Shop Starter Rigging Tool Kit — 17 Tools';
 const SKU = 'RWAS-PA28-PA32-SHOP-17';
 const PRICE = '3499.99';
 const TYPE = 'Papa-Alpha Tools';

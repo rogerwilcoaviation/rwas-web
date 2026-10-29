@@ -53,6 +53,7 @@ export function PdpImageGallery({ images, title, handle }: Props) {
 
   if (!current) return null;
   const currentAlt = productImageAlt(current.url, current.altText, title);
+  const isBaggageLockTool = handle === 'papa-alpha-baggage-door-lock-tool';
 
   return (
     <>
@@ -96,6 +97,7 @@ export function PdpImageGallery({ images, title, handle }: Props) {
         ref={opener}
         type="button"
         className="bs-product-image-link pa-gallery-open"
+        style={isBaggageLockTool ? { position: 'relative', aspectRatio: '4 / 3', overflow: 'hidden', background: '#fff' } : undefined}
         onClick={() => dialog.current?.showModal()}
         aria-label={`Click image to enlarge: ${title}`}
       >
@@ -106,7 +108,10 @@ export function PdpImageGallery({ images, title, handle }: Props) {
           height={600}
           style={{
             width: '100%',
-            height: 'auto',
+            height: isBaggageLockTool ? '100%' : 'auto',
+            objectFit: isBaggageLockTool ? (index === 1 || index === 2 ? 'contain' : 'cover') : undefined,
+            objectPosition: isBaggageLockTool && index === 0 ? 'center 73%' : 'center',
+            transform: isBaggageLockTool && index === 2 ? 'translateY(14%) scale(2)' : undefined,
             display: 'block',
             background: '#fff',
           }}
@@ -180,6 +185,11 @@ export function PdpImageGallery({ images, title, handle }: Props) {
                 height={150}
                 loading="lazy"
                 decoding="async"
+                style={isBaggageLockTool ? {
+                  objectFit: i === 1 || i === 2 ? 'contain' : 'cover',
+                  objectPosition: i === 0 ? 'center 73%' : 'center',
+                  transform: i === 2 ? 'translateY(14%) scale(2)' : undefined,
+                } : undefined}
               />
             </button>
           ))}

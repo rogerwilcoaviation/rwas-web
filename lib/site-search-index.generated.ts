@@ -13319,7 +13319,7 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
-    title: 'Papa-Alpha PA-28 / PA-32 Shared Shop Rigging Tool Package',
+    title: 'Papa-Alpha PA-28 / PA-32 Shop Starter Rigging Tool Kit — 17 Tools',
     href: '/products/papa-alpha-pa-28-pa-32-shared-shop-rigging-tool-package',
     handle: 'papa-alpha-pa-28-pa-32-shared-shop-rigging-tool-package',
     description:
