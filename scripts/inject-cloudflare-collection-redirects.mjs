@@ -45,6 +45,7 @@ const redirects = {
   '/collections/avionics-experimental': '/collections/avionics-certified',
   '/collections/retail-experimental': '/collections/avionics-certified',
   '/collections/rigging-tools': '/collections/papa-alpha-tools',
+  '/services/papa-alpha-tools': '/collections/papa-alpha-tools',
   '/collections/garmin-marine': '/collections',
   '/collections/garmin-cycling-fitness': '/collections',
   '/collections/garmin-golf': '/collections',
