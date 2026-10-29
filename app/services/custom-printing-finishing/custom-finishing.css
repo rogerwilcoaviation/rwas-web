@@ -2,6 +2,12 @@
   padding: clamp(2rem, 6vw, 5rem) 0 2.5rem;
   text-align: center;
 }
+#finishing-title {
+  max-width: none;
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
 .finishing-hero .bs-subhead {
   max-width: 760px;
   margin-inline: auto;

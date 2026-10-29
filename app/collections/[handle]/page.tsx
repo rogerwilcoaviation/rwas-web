@@ -371,7 +371,7 @@ export default async function CollectionDetailPage({
       <main id="main-content" tabIndex={-1} className="bs-stage">
         {collection.handle === 'papa-alpha-tools' ? (
           <section style={{ textAlign: 'center', padding: '36px 16px 30px' }}>
-            <h1 className="bs-headline bs-headline--hero" style={{ fontWeight: 700 }}>
+            <h1 className="bs-headline bs-headline--hero" style={{ fontWeight: 700, fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: 1.1 }}>
               Papa-Alpha Tool Collection
             </h1>
             <p className="bs-subhead" style={{ margin: '12px auto 0' }}>

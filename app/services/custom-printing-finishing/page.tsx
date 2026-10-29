@@ -38,9 +38,7 @@ export default function Page() {
           <span className="finishing-eyebrow">Specialized shop services</span>
           <p className="bs-script-accent">— color, graphics &amp; finish —</p>
           <h1 id="finishing-title" className="bs-headline bs-headline--hero">
-            UV Printing &amp;
-            <br />
-            <em>Powder Coating</em>
+            UV Printing &amp; <em>Powder Coating</em>
           </h1>
           <p className="bs-subhead">
             Printing and coating inquiries for aviation shop work, branded
