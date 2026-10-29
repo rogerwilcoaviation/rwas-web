@@ -812,6 +812,11 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
 }
+@media (min-width: 861px) {
+  .broadsheet .bs-trust-strip--tool-cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
 @media (max-width: 860px) {
   .broadsheet .bs-trust-strip {
     grid-template-columns: 1fr;

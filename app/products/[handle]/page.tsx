@@ -1530,7 +1530,7 @@ export default async function ProductDetailPage({
             ) : null}
 
             {/* Trust strip */}
-            <div className="bs-trust-strip">
+            <div className={`bs-trust-strip${isBaggageLockTool || isScbfFixture ? ' bs-trust-strip--tool-cards' : ''}`}>
               <div className="cell">
                 <span className="lab">Order &amp; fulfillment</span>
                 {gating.isGarmin &&
@@ -1590,9 +1590,17 @@ export default async function ProductDetailPage({
                 Call (605) 299-8178 — staffed by pilots and A&amp;Ps, not a call
                 center.
               </div>
+              {isBaggageLockTool || isScbfFixture ? relatedServiceLinks.map((service) => (
+                <div className="cell" key={service.href}>
+                  <span className="lab">Related service</span>
+                  <Link href={service.href}>{service.label}</Link>
+                  <br />
+                  {service.description}
+                </div>
+              )) : null}
             </div>
 
-            {relatedServiceLinks.length ? (
+            {!isBaggageLockTool && !isScbfFixture && relatedServiceLinks.length ? (
               <section
                 className="bs-trust-strip"
                 aria-label="Related RWAS services"
