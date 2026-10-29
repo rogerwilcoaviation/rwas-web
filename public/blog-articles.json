@@ -1536,18 +1536,18 @@
       "id": "garmin-g3x-touch-software-update-8-20",
       "status": "published",
       "category": "product-update",
-      "title": "Garmin G3X Touch Software Version 8.20 Released with Enhanced Engine Monitoring",
-      "subtitle": "Update adds lean-assist improvements, fuel flow totalizer refinements, and new EIS page layouts",
+      "title": "Correction: G3X Touch Software Update Information",
+      "subtitle": "Confirm the applicable software, installation requirements, and service cost with RWAS",
       "author": "Roger Wilco Aviation Services",
       "byline": "RWAS Avionics Desk",
       "date": "2026-03-15",
-      "source": "Garmin Aviation Bulletin",
-      "source_url": "https://fly.garmin.com/fly-garmin/support/software/",
-      "lead": "Garmin has released software version 8.20 for the G3X Touch flight display system, delivering improvements to the engine information system (EIS) pages, lean-assist functionality, and fuel flow totalizer accuracy. The update is available as a free download for all G3X Touch installations.",
+      "source": "Garmin certified G3X Touch software listing",
+      "source_url": "https://www8.garmin.com/support/collection.jsp?product=G3X-TCERT-00",
+      "lead": "Correction added October 28, 2026: This article previously described version 8.20 as a newly released, free update for all G3X Touch installations. That broad claim and its feature and service-time details have not been verified and should not be used to select or install software.",
       "body": [
-        "The updated lean-assist feature now provides a graphical bar display showing EGT deviation from peak for each cylinder during the leaning process. This replaces the previous numerical-only display and gives pilots a more intuitive view of engine operation during mixture adjustment.",
-        "Fuel flow totalizer calculations have been refined to improve accuracy during low-flow taxi and descent operations. The new algorithm reduces cumulative drift over long flights, keeping fuel remaining estimates within tighter tolerances.",
-        "Roger Wilco Aviation Services can perform the software update during your next scheduled maintenance visit or as a standalone service call. The update typically takes 30 to 45 minutes and includes verification of all display and sensor functions."
+        "Garmin maintains separate software listings and update guidance for certificated and experimental aircraft. On October 28, 2026, Garmin’s certificated GDU 4xx-STC display listing showed version 9.18. That listing can change and does not establish the approved version for a particular aircraft.",
+        "For certificated aircraft, Garmin directs approved avionics installers who can make the required logbook entry to the certified update process. The applicable installation data, software and compatibility must be reviewed for the aircraft and equipment.",
+        "Contact Roger Wilco Aviation Services at (605) 299-8178 to review the installed system, applicable documentation, required verification, scheduling and labor price. A downloadable software file does not establish a free installation or guarantee a 30–45 minute service."
       ],
       "tags": [
         "garmin",
@@ -1558,17 +1558,17 @@
       ],
       "social": {
         "facebook": {
-          "text": "Garmin G3X Touch owners — software version 8.20 is out. Better lean-assist graphics, improved fuel totalizer accuracy, and new EIS layouts. Free update, takes about 30 minutes.\n\nSwing by or call (605) 299-8178 to schedule.\n\n#Garmin #G3XTouch #AvionicsUpdate #RogerWilcoAviation",
+          "text": "G3X Touch owners: software and installation requirements depend on your aircraft and equipment. Contact RWAS at (605) 299-8178 for a review of applicable Garmin data, scheduling and service cost.",
           "status": "pending"
         },
         "instagram": {
-          "text": "G3X Touch v8.20 is here.\n\nNew graphical lean-assist display, refined fuel totalizer, updated EIS pages. Free update for all G3X installations.\n\nSchedule yours: (605) 299-8178\n\n#Garmin #G3XTouch #GlassCockpit #AvionicsUpdate #FlyGA #RogerWilcoAviation #YanktonSD #KYKN",
+          "text": "G3X Touch owners: software and installation requirements depend on your aircraft and equipment. Contact RWAS at (605) 299-8178 for a review of applicable Garmin data, scheduling and service cost.",
           "status": "pending"
         }
       },
       "approved_at": "2026-03-15T10:00:00Z",
       "published_at": "2026-03-15T11:00:00Z",
-      "body_markdown": "## Enhanced Lean-Assist Display\n\nThe updated lean-assist feature now provides a graphical bar display showing EGT deviation from peak for each cylinder during the leaning process. This replaces the previous numerical-only display and gives pilots a more intuitive view of engine operation during mixture adjustment.\n\n## Improved Fuel Flow Accuracy\n\nFuel flow totalizer calculations have been refined to improve accuracy during low-flow taxi and descent operations. The new algorithm reduces cumulative drift over long flights, keeping fuel remaining estimates within tighter tolerances.\n\n## Getting the Update Installed\n\nRoger Wilco Aviation Services can perform the software update during your next scheduled maintenance visit or as a standalone service call. The update typically takes 30 to 45 minutes and includes verification of all display and sensor functions."
+      "body_markdown": "## Certified and experimental software\n\nGarmin maintains separate software listings and update guidance for certificated and experimental aircraft. On October 28, 2026, Garmin’s certificated GDU 4xx-STC display listing showed version 9.18. That listing can change and does not establish the approved version for a particular aircraft.\n\n## Installation and documentation\n\nFor certificated aircraft, Garmin directs approved avionics installers who can make the required logbook entry to the certified update process. The applicable installation data, software and compatibility must be reviewed for the aircraft and equipment.\n\n## Ask the shop\n\nContact Roger Wilco Aviation Services at (605) 299-8178 to review the installed system, applicable documentation, required verification, scheduling and labor price. A downloadable software file does not establish a free installation or guarantee a 30–45 minute service."
     },
     {
       "id": "garmin-spring-2026-pricing",
