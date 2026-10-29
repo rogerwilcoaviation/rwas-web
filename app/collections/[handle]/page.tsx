@@ -290,6 +290,69 @@ export default async function CollectionDetailPage({
     })),
   };
 
+  const productSection = (
+        <Specimen variant="flat">
+          <div style={{ marginBottom: 20 }}>
+            <p className="bs-kicker">Products</p>
+            <p className="bs-body" style={{ marginTop: 4 }}>
+              {quoteOnly
+                ? 'These are install-only or quote-driven items. Use the request-quote CTA to start the conversation.'
+                : collection.handle === 'avionics-certified'
+                  ? 'Choose Experimental Products, Certified Retail, or Accessories below. Current listed prices are shown; contact RWAS for an aircraft-specific equipment and installation quote.'
+                  : 'Browse current products, availability, and purchase options below.'}
+            </p>
+          </div>
+
+          {indexableProducts.length ? (
+            catalogDataUrl ? (
+              <CollectionCatalog
+                initialProducts={browserProducts.slice(0, 24)}
+                dataUrl={catalogDataUrl}
+                total={browserProducts.length}
+                collectionTitle={collection.title}
+                collectionHandle={collection.handle}
+                quoteOnly={quoteOnly}
+              />
+            ) : (
+              <CollectionProductBrowser
+                products={browserProducts}
+                collectionTitle={collection.title}
+                collectionHandle={collection.handle}
+                quoteOnly={quoteOnly}
+              />
+            )
+          ) : (
+            <p className="bs-body">No products in this collection yet.</p>
+          )}
+
+          {indexableProducts.length > 24 ? (
+            <details className="mt-10 rounded-xl border border-black/15 bg-[#f8f4e8] p-5">
+              <summary className="cursor-pointer font-bold text-[#111111]">
+                Complete product index (
+                {indexableProducts.length.toLocaleString('en-US')})
+              </summary>
+              <p className="bs-body mt-3">
+                Browse every item in this collection alphabetically. This index
+                remains usable when filtering scripts are unavailable.
+              </p>
+              <ul className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-3 [&_a]:underline [&_a]:decoration-black/30 [&_a]:underline-offset-2 [&_a:hover]:decoration-[#C49A2A]">
+                {[...indexableProducts]
+                  .sort((a, b) => a.title.localeCompare(b.title))
+                  .map((product) => (
+                    <li key={product.id}>
+                      <a
+                        href={`/products/${encodeURIComponent(product.handle)}`}
+                      >
+                        {product.title}
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </details>
+          ) : null}
+        </Specimen>
+  );
+
   return (
     <BroadsheetLayout>
       <script
@@ -352,21 +415,23 @@ export default async function CollectionDetailPage({
           </Specimen>
         ) : null}
 
+        {collection.handle === 'papa-alpha-tools' ? productSection : null}
+
         {collection.handle === 'papa-alpha-tools' && (
           <>
             <Specimen variant="flat">
               <p className="bs-kicker">Launch video</p>
-              <p className="bs-script-accent">
-                &mdash; complete Piper rigging kits &mdash;
-              </p>
+              <h2 className="bs-script-accent" style={{ textAlign: 'center', fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 700 }}>
+                Complete Piper Rigging Kits
+              </h2>
               <PapaAlphaLaunchFrame />
             </Specimen>
 
             <Specimen variant="flat" as="section">
               <p className="bs-kicker">Product demonstrations</p>
-              <p className="bs-script-accent">
-                &mdash; see the tools in a general workflow &mdash;
-              </p>
+              <h2 className="bs-script-accent" style={{ textAlign: 'center', fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 700 }}>
+                See the Tools in a General Workflow
+              </h2>
               <h2
                 className="bs-headline"
                 style={{ marginTop: 6, marginBottom: 12 }}
@@ -382,9 +447,9 @@ export default async function CollectionDetailPage({
 
             <Specimen variant="flat">
               <p className="bs-kicker">Worldwide delivery</p>
-              <p className="bs-script-accent">
-                &mdash; from the RWAS shop to wherever you fly &mdash;
-              </p>
+              <h2 className="bs-script-accent" style={{ textAlign: 'center', fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 700 }}>
+                From the RWAS Shop to Wherever You Fly
+              </h2>
               <h2
                 className="bs-headline"
                 style={{ marginTop: 6, marginBottom: 12 }}
@@ -428,66 +493,7 @@ export default async function CollectionDetailPage({
           </Specimen>
         ) : null}
 
-        <Specimen variant="flat">
-          <div style={{ marginBottom: 20 }}>
-            <p className="bs-kicker">Products</p>
-            <p className="bs-body" style={{ marginTop: 4 }}>
-              {quoteOnly
-                ? 'These are install-only or quote-driven items. Use the request-quote CTA to start the conversation.'
-                : collection.handle === 'avionics-certified'
-                  ? 'Choose Experimental Products, Certified Retail, or Accessories below. Current listed prices are shown; contact RWAS for an aircraft-specific equipment and installation quote.'
-                  : 'Browse current products, availability, and purchase options below.'}
-            </p>
-          </div>
-
-          {indexableProducts.length ? (
-            catalogDataUrl ? (
-              <CollectionCatalog
-                initialProducts={browserProducts.slice(0, 24)}
-                dataUrl={catalogDataUrl}
-                total={browserProducts.length}
-                collectionTitle={collection.title}
-                collectionHandle={collection.handle}
-                quoteOnly={quoteOnly}
-              />
-            ) : (
-              <CollectionProductBrowser
-                products={browserProducts}
-                collectionTitle={collection.title}
-                collectionHandle={collection.handle}
-                quoteOnly={quoteOnly}
-              />
-            )
-          ) : (
-            <p className="bs-body">No products in this collection yet.</p>
-          )}
-
-          {indexableProducts.length > 24 ? (
-            <details className="mt-10 rounded-xl border border-black/15 bg-[#f8f4e8] p-5">
-              <summary className="cursor-pointer font-bold text-[#111111]">
-                Complete product index (
-                {indexableProducts.length.toLocaleString('en-US')})
-              </summary>
-              <p className="bs-body mt-3">
-                Browse every item in this collection alphabetically. This index
-                remains usable when filtering scripts are unavailable.
-              </p>
-              <ul className="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-3 [&_a]:underline [&_a]:decoration-black/30 [&_a]:underline-offset-2 [&_a:hover]:decoration-[#C49A2A]">
-                {[...indexableProducts]
-                  .sort((a, b) => a.title.localeCompare(b.title))
-                  .map((product) => (
-                    <li key={product.id}>
-                      <a
-                        href={`/products/${encodeURIComponent(product.handle)}`}
-                      >
-                        {product.title}
-                      </a>
-                    </li>
-                  ))}
-              </ul>
-            </details>
-          ) : null}
-        </Specimen>
+        {collection.handle !== 'papa-alpha-tools' ? productSection : null}
       </main>
       <BroadsheetFooter />
     </BroadsheetLayout>
