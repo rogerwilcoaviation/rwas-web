@@ -17109,11 +17109,10 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Articles',
-    title:
-      'Garmin G3X Touch Software Version 8.20 Released with Enhanced Engine Monitoring',
+    title: 'Correction: G3X Touch Software Update Information',
     href: '/blog/garmin-g3x-touch-software-update-8-20',
     description:
-      'Update adds lean-assist improvements, fuel flow totalizer refinements, and new EIS page layouts',
+      'Confirm the applicable software, installation requirements, and service cost with RWAS',
     keywords: [
       'product-update',
       'garmin',
