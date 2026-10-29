@@ -84,6 +84,9 @@ export function PdpImageGallery({ images, title, handle }: Props) {
           width: 100%; height: 100%;
           object-fit: cover; display: block;
         }
+        .broadsheet .bs-photo-box .pa-thumb--baggage img {
+          width: 100%; height: 100%; display: block;
+        }
         .pa-counter {
           font-family: Arial, sans-serif;
           font-size: 11px;
@@ -173,7 +176,7 @@ export function PdpImageGallery({ images, title, handle }: Props) {
             <button
               key={img.url}
               type="button"
-              className="pa-thumb"
+              className={`pa-thumb${isBaggageLockTool ? ' pa-thumb--baggage' : ''}`}
               onClick={() => setIndex(i)}
               aria-label={`View photo ${i + 1} of ${total}: ${productImageAlt(img.url, img.altText, title)}`}
               aria-current={i === index ? 'true' : undefined}
@@ -188,7 +191,7 @@ export function PdpImageGallery({ images, title, handle }: Props) {
                 style={isBaggageLockTool ? {
                   objectFit: i === 1 || i === 2 ? 'contain' : 'cover',
                   objectPosition: i === 0 ? 'center 73%' : 'center',
-                  transform: i === 2 ? 'translateY(14%) scale(2)' : undefined,
+                  transform: i === 2 ? 'translateY(14%) scale(2.8)' : undefined,
                 } : undefined}
               />
             </button>
