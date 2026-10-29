@@ -13281,6 +13281,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Papa Alpha SCBF #1 Surface Control Balancing Fixture',
+    href: '/products/papa-alpha-scbf-1-surface-control-balancing-fixture',
+    handle: 'papa-alpha-scbf-1-surface-control-balancing-fixture',
+    description:
+      'The Papa Alpha SCBF #1 is a surface control balancing fixture for measuring the static balance moment of applicable Cessna ailerons, elevators and rudders about their hinge axis. Intended for maintenance professionals, it brings together…',
+    skus: [],
+  },
+  {
+    group: 'Products',
     title: 'Papa-Alpha Aileron and Flap Rigging Tool',
     href: '/products/pa-28-32-34-44-aileron-and-flap-rigging-tool-1',
     handle: 'pa-28-32-34-44-aileron-and-flap-rigging-tool-1',
