@@ -403,6 +403,11 @@ export default async function CollectionDetailPage({
             >
               {quoteOnly ? 'Request a quote' : 'Open cart'}
             </Link>
+            {collection.handle === 'papa-alpha-tools' ? (
+              <a href="#tool-demonstrations" className="bs-cta-secondary">
+                Tool Demonstrations
+              </a>
+            ) : null}
           </div>
         </section>
 
@@ -419,6 +424,7 @@ export default async function CollectionDetailPage({
 
         {collection.handle === 'papa-alpha-tools' && (
           <>
+            <div id="tool-demonstrations" />
             <Specimen variant="flat">
               <p className="bs-kicker">Launch video</p>
               <h2 className="bs-script-accent" style={{ textAlign: 'center', fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 700 }}>
