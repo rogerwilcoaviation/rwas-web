@@ -199,6 +199,9 @@ export default function CartClient() {
             <Link href="/collections" className="bs-cta-primary">
               Browse collections
             </Link>
+            <Link href="/collections/papa-alpha-tools" className="bs-cta-secondary">
+              Papa-Alpha Tools
+            </Link>
             <Link href="/" className="bs-cta-secondary">
               Back to front page
             </Link>
