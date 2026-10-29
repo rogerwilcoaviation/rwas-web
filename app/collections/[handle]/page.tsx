@@ -430,6 +430,11 @@ export default async function CollectionDetailPage({
               products={finderProducts}
               scopeLabel={collection.title}
             />
+            {collection.handle === 'papa-alpha-tools' ? (
+              <p className="bs-body" style={{ marginTop: 16 }}>
+                Read our article: <Link href="/blog/how-to-rig-your-piper-aircraft-20260731" style={{ textDecoration: 'underline', fontWeight: 700 }}>How to Rig Your Piper Aircraft</Link>
+              </p>
+            ) : null}
           </Specimen>
         ) : null}
 
