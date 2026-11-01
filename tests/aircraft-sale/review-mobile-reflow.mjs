@@ -103,6 +103,7 @@ try {
   await page.goto(origin + '/seller-review');
   const load = page.getByRole('button', { name: 'Load Review Queue', exact: true });
   await load.click();
+  await page.locator('details.admin-document-group summary').first().click();
   await page.getByRole('link', { name: filename, exact: true }).waitFor();
   async function verifyLayout(name) {
     await page.waitForFunction(() => ![...document.querySelectorAll('main button')].find(b => b.textContent.trim() === 'Load Review Queue')?.disabled);
