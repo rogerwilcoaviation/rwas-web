@@ -1753,7 +1753,7 @@ test('listing approval and management panels show readable grouped cards and pre
       assert.equal(
         await card
           .locator('dt')
-          .filter({ hasText: /^N-number$/ })
+          .filter({ hasText: /^Tail Number$/ })
           .count(),
         1,
       );

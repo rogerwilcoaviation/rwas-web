@@ -10,6 +10,7 @@ import { draftFields, getDraftFields } from './listing-draft-fields';
 import { marketplaceStaffMediaPath } from '@/lib/marketplace-staff-fetch';
 
 export const fieldLabel = (key: string) =>
+  (key === 'nNumber' ? 'Tail Number' : '') ||
   key
     .replace(/([a-z])([A-Z])/g, '$1 $2')
     .replace(/[-_]/g, ' ')
@@ -93,7 +94,9 @@ export function ListingDetails({
       value === undefined
     )
       continue;
-    const definition = definitions.find((field) => field.name === key);
+    const definition =
+      definitions.find((field) => field.name === key) ||
+      draftFields.find((field) => field.name === key);
     const long =
       ['description', 'avionics', 'equipmentList', 'damageHistory'].includes(
         key,
@@ -126,6 +129,7 @@ export function ListingDetails({
             price: 'Asking price',
             priceMode: 'Price display',
             transactionType: 'Sale or lease',
+            nNumber: 'Tail Number',
           } as Record<string, string>
         )[key] ||
         definition?.label ||
@@ -362,20 +366,31 @@ export function AdminListingStyles() {
       .admin-listing-panel .admin-listing-detail-group h3,
       .admin-listing-panel .admin-listing-detail-group h4 {
         font:
-          600 16px/1.4 Arial,
-          sans-serif;
+          700 21px/1.25 Georgia,
+          serif;
         margin: 0 0 12px;
-        padding-bottom: 9px;
-        border-bottom: 1px solid #e4dfd4;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #292820;
       }
       .admin-listing-panel .admin-listing-detail-group dl {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px 24px;
+        gap: 0 24px;
         margin: 0;
+      }
+      .admin-listing-panel .admin-listing-detail-group dl > div {
+        padding: 12px 0;
+        border-bottom: 1px solid #d8d1c4;
+      }
+      .admin-listing-panel .admin-listing-detail-group dt {
+        color: #514b40;
+        font-size: 13px;
+        letter-spacing: 0.025em;
       }
       .admin-listing-panel .admin-listing-detail-group dd {
         margin: 0;
+        color: #25251f;
+        font-size: 16px;
         white-space: pre-wrap;
         line-height: 1.6;
       }

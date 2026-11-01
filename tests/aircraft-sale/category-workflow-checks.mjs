@@ -125,7 +125,7 @@ export async function checkCategoryWorkflows({
     if (type === 'hangars') {
       assert.equal(
         await dialog
-          .getByRole('button', { name: 'Edit N-number', exact: true })
+          .getByRole('button', { name: 'Edit Tail Number', exact: true })
           .count(),
         0,
       );

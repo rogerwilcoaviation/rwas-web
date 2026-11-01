@@ -458,10 +458,50 @@ function publicPage(l) {
     (n, v) => n + v.count,
     0,
   );
+  const detailRows = [
+    ['Tail Number', l.nNumber],
+    ['Serial Number', l.serialNumber],
+    ['Total Time', l.totalTime],
+    ['Engine Time', l.engineTime],
+    ['Engine Model', l.engineModel],
+    ['Propeller Time', l.propTime],
+    ['Annual Inspection Due', l.annualDue],
+    ['Useful Load', l.usefulLoad],
+    ['Category', categoryFor(l)?.label || l.category],
+    ['Condition', l.condition],
+    ['Part Number', l.partNumber],
+    ['Quantity', l.quantity],
+    ['Unit of Sale', l.unitOfSale === 'EA' ? 'Each' : l.unitOfSale],
+    ['Hangar Type', l.hangarType],
+    ['Airport', l.airport],
+    ['Location', l.sellerLocation],
+    ['Transaction', { sale: 'For Sale', lease: 'For Lease', fractional: 'Fractional Ownership' }[l.transactionType] || l.transactionType],
+  ];
+  const renderRows = (rows) => rows
+    .filter(([, value]) => value !== undefined && value !== null && value !== '')
+    .map(([label, value]) => '<div class="detail-row"><dt>' + escape(label) + '</dt><dd>' + escape(value) + '</dd></div>')
+    .join('');
+  const specGroups = new Map();
+  let delivery = '';
+  for (const field of categoryFields(l)) {
+    const value = l.specifications?.[field.name.slice(5)];
+    if (value === undefined || value === null || value === '') continue;
+    if (field.name === 'spec:tools-delivery') {
+      delivery = '<div class="spec-group"><h3>Pickup &amp; Delivery</h3><p class="copy">' + escape(value) + '</p></div>';
+      continue;
+    }
+    const group = field.group || 'Additional Specifications';
+    const rows = specGroups.get(group) || [];
+    rows.push([field.label.replace(/([a-z])([A-Z])/g, '$1 $2'), value]);
+    specGroups.set(group, rows);
+  }
+  const specifications = Array.from(specGroups, ([group, rows]) =>
+    '<div class="spec-group"><h3>' + escape(group) + '</h3><dl class="details-grid">' + renderRows(rows) + '</dl></div>',
+  ).join('');
   return new Response(
     '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' +
       escape(title) +
-      ' — RWAS Aircraft Marketplace</title><link rel="canonical" href="' +
+      ' — Aviation Exchange | RWAS</title><link rel="canonical" href="' +
       escape(canonical) +
       '">' +
       (schema
@@ -469,57 +509,19 @@ function publicPage(l) {
           JSON.stringify(schema).replace(/</g, '\\u003c') +
           '</script>'
         : '') +
-      '<style>body{background:#f7f4ef;color:#222;max-width:1000px;margin:auto;padding:24px;font:18px Arial,sans-serif}h1{font-size:40px}a{color:inherit}img,video{width:100%;max-height:600px;object-fit:contain}main{display:grid;gap:20px}dl{display:grid;grid-template-columns:1fr 2fr}dd{margin:8px}dt{margin:8px}section{border-top:1px solid #aaa;padding:20px 0}</style></head><body><nav><a href="/aircraft-for-sale">← Marketplace</a> · <a href="/">Roger Wilco Aviation</a></nav><main><header><p>RWAS Marketplace · ' +
-      escape(l.status) +
-      '</p><h1>' +
+      `<style>
+        *{box-sizing:border-box}body{margin:0;background:#f7f4ef;color:#222;font:16px/1.6 Arial,sans-serif}a{color:inherit}a:focus-visible{outline:3px solid #9a741b;outline-offset:3px}.page-shell{max-width:1180px;margin:auto;padding:0 24px 48px}.masthead{text-align:center;border-bottom:3px double #222;padding:20px 0 12px}.masthead a{text-decoration:none}.masthead-title{display:block;font:700 clamp(28px,4vw,44px)/1.1 Georgia,serif}.masthead-subtitle,.section-kicker{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.masthead-subtitle{margin:6px 0 0}.page-nav{display:flex;flex-wrap:wrap;gap:8px 20px;padding:12px 0;border-bottom:1px solid #222;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}.page-nav a{text-decoration:none}.page-nav a:hover{text-decoration:underline}main{max-width:1040px;margin:auto}header.listing-header{padding:30px 0 22px;border-bottom:3px double #222}.section-kicker{display:inline-block;background:#c49a2a;color:#17150f;padding:4px 9px;margin:0 0 10px}h1,h2,h3{font-family:Georgia,'Times New Roman',serif;line-height:1.2;color:#1a1a1a}h1{font-size:clamp(32px,5vw,48px);margin:0}h2{font-size:28px;margin:0 0 16px}h3{font-size:21px;margin:24px 0 10px}.price{font:700 24px/1.3 Georgia,serif;margin:12px 0 0}.listing-status{margin:8px 0 0;color:#514b40;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}section{border-bottom:1px solid #aaa;padding:24px 0}.media{display:grid;gap:12px}.media:empty{display:none}img,video{display:block;width:100%;max-height:600px;object-fit:contain;background:#e9e4d9}.details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin:0;border-top:2px solid #222}.detail-row{display:grid;grid-template-columns:minmax(135px, 45%) minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid #d5cec1;min-width:0}.detail-row dt{font-size:13px;font-weight:700;color:#514b40;letter-spacing:.02em}.detail-row dd{margin:0;min-width:0;overflow-wrap:anywhere;font-size:16px;font-weight:600}.spec-group h3{border-bottom:1px solid #222;padding-bottom:8px}.spec-group .details-grid{border-top:0}.copy{white-space:pre-wrap;overflow-wrap:anywhere}.seller-contact{display:inline-block;background:#c49a2a;border:1px solid #222;padding:10px 16px;font-weight:700;text-decoration:none}.seller-contact:hover{background:#d5ad40}@media(max-width:640px){.page-shell{padding:0 16px 32px}.masthead{padding-top:16px}.page-nav{gap:8px 16px}.details-grid{grid-template-columns:minmax(0,1fr)}.detail-row{grid-template-columns:minmax(120px,42%) minmax(0,1fr)}h2{font-size:24px}section{padding:20px 0}}
+      </style></head><body><div class="page-shell"><div class="masthead"><a href="/"><span class="masthead-title">Roger Wilco Aviation Services</span></a><p class="masthead-subtitle">Aviation Exchange · Yankton, South Dakota</p></div><nav class="page-nav" aria-label="Marketplace navigation"><a href="/">Home</a><a href="/aircraft-for-sale">Aviation Exchange</a><a href="/contact">Contact</a></nav><main><header class="listing-header"><p class="section-kicker">Aviation Exchange · Listing</p><h1>` +
       escape(title) +
-      '</h1><p>' +
+      '</h1><p class="price">' +
       escape(listingPrice(l)) +
-      '</p></header><section>' +
+      '</p><p class="listing-status">' +
+      escape(l.status) +
+      '</p></header><section class="media" aria-label="Listing photos and videos">' +
       media +
-      '</section><section><h2>Listing details</h2><dl>' +
-      [
-        'nNumber',
-        'serialNumber',
-        'totalTime',
-        'engineTime',
-        'engineModel',
-        'propTime',
-        'annualDue',
-        'usefulLoad',
-      ]
-        .filter((k) => l[k])
-        .map((k) => '<dt>' + escape(k) + '</dt><dd>' + escape(l[k]) + '</dd>')
-        .join('') +
-      [
-        ['Category', categoryFor(l)?.label || l.category],
-        ['Condition', l.condition],
-        ['Part number', l.partNumber],
-        ['Quantity', l.quantity],
-        ['Unit of sale', l.unitOfSale],
-        ['Hangar type', l.hangarType],
-        ['Airport', l.airport],
-        ['Location', l.sellerLocation],
-        ['Transaction', l.transactionType],
-      ]
-        .filter(([, value]) => value)
-        .map(
-          ([label, value]) =>
-            '<dt>' + escape(label) + '</dt><dd>' + escape(value) + '</dd>',
-        )
-        .join('') +
-      categoryFields(l)
-        .filter((field) => l.specifications?.[field.name.slice(5)])
-        .map(
-          (field) =>
-            '<dt>' +
-            escape(field.group + ': ' + field.label) +
-            '</dt><dd>' +
-            escape(l.specifications[field.name.slice(5)]) +
-            '</dd>',
-        )
-        .join('') +
-      '</dl><p>' +
+      '</section><section><h2>Listing details</h2><dl class="details-grid">' +
+      renderRows(detailRows) +
+      '</dl>' + specifications + delivery + '<p class="copy">' +
       escape(l.description) +
       '</p>' +
       (!l.listingType || l.listingType === 'aircraft'
@@ -545,7 +547,7 @@ function publicPage(l) {
           encodeURIComponent(l.id) +
           '">Email seller</a><p>Sign in or create an account to email the seller for more information. Your email app will open with the listing details included.</p>'
         : '<p>This listing is not currently accepting seller inquiries.</p>') +
-      '</section></main><script src="/aviation-exchange-activity.js?v=20261023-activity-content" defer></script></body></html>',
+      '</section></main></div><script src="/aviation-exchange-activity.js?v=20261023-activity-content" defer></script></body></html>',
     {
       headers: {
         'Content-Type': 'text/html;charset=UTF-8',

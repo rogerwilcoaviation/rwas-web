@@ -47,7 +47,7 @@ export const draftFields: DraftField[] = [
   },
   {
     name: 'nNumber',
-    label: 'N-number',
+    label: 'Tail Number',
     required: true,
     help: 'Enter the aircraft’s US tail number, such as N123AB. This is required before submitting an aircraft listing.',
   },

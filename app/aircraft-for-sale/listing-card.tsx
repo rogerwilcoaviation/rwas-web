@@ -128,7 +128,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
           height: 100%;
           color: #8a8679;
           font-family: Arial, sans-serif;
-          font-size: 12px;
+          font-size: 14px;
           letter-spacing: 0.12em;
           text-transform: uppercase;
         }
@@ -170,14 +170,14 @@ export function ListingCard({ listing }: { listing: Listing }) {
           grid-template-columns: auto 1fr;
           gap: 4px 10px;
           font-family: Arial, sans-serif;
-          font-size: 12px;
+          font-size: 14px;
           color: #333;
         }
         .a4s-card-specs dt {
           text-transform: uppercase;
           letter-spacing: 0.08em;
           color: #6a6a6a;
-          font-size: 10px;
+          font-size: 12px;
           align-self: center;
         }
         .a4s-card-specs dd {
@@ -205,11 +205,11 @@ export function ListingCard({ listing }: { listing: Listing }) {
             font-size: 15px;
           }
           .a4s-card-specs {
-            font-size: 11px;
+            font-size: 14px;
             gap: 4px 8px;
           }
           .a4s-card-specs dt {
-            font-size: 9px;
+            font-size: 12px;
           }
         }
       `}</style>
@@ -254,7 +254,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
           <dl className="a4s-card-specs">
             {listing.nNumber ? (
               <>
-                <dt>Tail</dt>
+                <dt>Tail Number</dt>
                 <dd>{listing.nNumber}</dd>
               </>
             ) : null}

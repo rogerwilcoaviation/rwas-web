@@ -444,23 +444,25 @@ export default async function AircraftDetailPage({ params }: PageProps) {
           margin: 4px 0;
         }
         .a4s-spec {
-          padding: 10px 14px;
+          padding: 14px 16px;
           border-bottom: 1px solid #e0ddd5;
           border-right: 1px solid #e0ddd5;
         }
         .a4s-spec dt {
           font-family: Arial, sans-serif;
-          font-size: 10px;
+          font-size: 12px;
           text-transform: uppercase;
           letter-spacing: 0.1em;
-          color: #6a6a6a;
-          margin-bottom: 2px;
+          color: #514b40;
+          margin-bottom: 5px;
         }
         .a4s-spec dd {
           font-family: Georgia, serif;
-          font-size: 15px;
+          font-size: 17px;
           font-weight: 600;
           margin: 0;
+          line-height: 1.45;
+          overflow-wrap: anywhere;
         }
 
         .a4s-prose {

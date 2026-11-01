@@ -180,20 +180,20 @@ export async function checkListingWorkflow({
     path: resolve(artifacts, `workflow-description-${width}.png`),
   });
   await next();
-  await label('N-number').fill('invalid');
+  await label('Tail Number').fill('invalid');
   await next();
   await dialog
     .getByRole('alert')
     .filter({ hasText: 'valid US N-number' })
     .waitFor();
-  await label('N-number').fill('');
+  await label('Tail Number').fill('');
   await next();
   await dialog.getByRole('alert').filter({ hasText: 'required' }).waitFor();
   // Back navigation preserves entered text; optional items can be skipped.
   await button('Back').click();
   assert.equal(await label('Description').inputValue(), original);
   await next();
-  await label('N-number').fill('N123AB');
+  await label('Tail Number').fill('N123AB');
   await next();
   for (
     let count = 0;
