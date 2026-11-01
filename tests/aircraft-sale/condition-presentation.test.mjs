@@ -16,7 +16,7 @@ async function render() {
   );
   await build({
     stdin: {
-      contents: `import React from 'react'; import {renderToStaticMarkup} from 'react-dom/server'; import {ConditionReport} from './app/aircraft-for-sale/condition-report'; import {ListingDetails} from './app/aircraft-for-sale/admin-listing-presentation'; import {ListingCard} from './app/aircraft-for-sale/listing-card'; export const report=(fields,compact=false)=>renderToStaticMarkup(React.createElement(ConditionReport,{fields,compact})); export const admin=fields=>renderToStaticMarkup(React.createElement(ListingDetails,{fields})); export const card=fields=>renderToStaticMarkup(React.createElement(ListingCard,{listing:fields}));`,
+      contents: `import React from 'react'; import {renderToStaticMarkup} from 'react-dom/server'; import {ConditionReport} from './app/aircraft-for-sale/condition-report'; import {ListingDetails} from './app/aircraft-for-sale/admin-listing-presentation'; import {ListingCard} from './app/aircraft-for-sale/listing-card'; import Masthead from './components/shared/broadsheet/Masthead'; import Footer from './components/shared/broadsheet/BroadsheetFooter'; export const chrome=(showLocation)=>renderToStaticMarkup(React.createElement(React.Fragment,null,React.createElement(Masthead,showLocation?{}:{certLocation:''}),React.createElement(Footer,{showLocation}))); export const report=(fields,compact=false)=>renderToStaticMarkup(React.createElement(ConditionReport,{fields,compact})); export const admin=fields=>renderToStaticMarkup(React.createElement(ListingDetails,{fields})); export const card=fields=>renderToStaticMarkup(React.createElement(ListingCard,{listing:fields}));`,
       resolveDir: process.cwd(),
       loader: 'tsx',
     },
@@ -128,4 +128,10 @@ test('public Worker detail uses RWAS homepage chrome, condition report and actua
   assert.match(html, /Tulsa, Oklahoma/);
   assert.doesNotMatch(html, /Yankton|South Dakota|KYKN|aggregateRating/);
   assert.match(html, /<main id="main-content" tabindex="-1">/);
+});
+
+test('Exchange chrome omits the fixed location while default site chrome retains it', async () => {
+  const { chrome } = await render();
+  assert.doesNotMatch(chrome(false), /Yankton|South Dakota|KYKN/i);
+  assert.match(chrome(true), /Yankton/);
 });

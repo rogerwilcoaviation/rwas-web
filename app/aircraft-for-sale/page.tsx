@@ -175,7 +175,7 @@ export default async function AircraftForSalePage() {
       `}</style>
 
       <Dateline />
-      <Masthead />
+      <Masthead certLocation="" />
       <BroadsheetNav activeHref="/aircraft-for-sale" />
       <CredentialsBar />
       <BulletinBar />
@@ -268,7 +268,7 @@ export default async function AircraftForSalePage() {
         </Specimen>
       </main>
 
-      <BroadsheetFooter />
+      <BroadsheetFooter showLocation={false} />
     </BroadsheetLayout>
   );
 }

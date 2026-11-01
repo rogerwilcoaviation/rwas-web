@@ -185,7 +185,7 @@ export async function generateMetadata({
   const title = `${titleCore}${titleSuffix}`;
   const description = truncateMeta(
     l.description ||
-      `${headline(l)} listed by Roger Wilco Aviation Services at KYKN in Yankton. Tail ${l.nNumber || 'n/a'}.`,
+      `${headline(l)} listed on Aviation Exchange. Tail ${l.nNumber || 'n/a'}.`,
   );
   const url = `https://www.rogerwilcoaviation.com/aircraft-for-sale/${encodeURIComponent(l.id)}`;
   const firstPhoto = (l.photos || [])[0];
@@ -559,7 +559,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
       `}</style>
 
       <Dateline />
-      <Masthead />
+      <Masthead certLocation="" />
       <BroadsheetNav activeHref="/aircraft-for-sale" />
       <CredentialsBar />
       <BulletinBar />
@@ -799,7 +799,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
         </Specimen>
       </main>
 
-      <BroadsheetFooter />
+      <BroadsheetFooter showLocation={false} />
     </BroadsheetLayout>
   );
 }

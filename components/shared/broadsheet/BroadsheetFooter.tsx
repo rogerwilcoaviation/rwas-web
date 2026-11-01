@@ -4,6 +4,7 @@ import Link from 'next/link';
 export type BroadsheetFooterProps = {
   brand?: string;
   copyright?: string;
+  showLocation?: boolean;
 };
 
 type PolicyLink = { href: string; label: string };
@@ -25,12 +26,15 @@ const DEFAULT_POLICIES: PolicyLink[] = [
  */
 export default function BroadsheetFooter({
   brand = 'Roger Wilco Aviation Services',
-  copyright = `\u00a9 ${new Date().getFullYear()} Roger Wilco Aviation Services \u00b7 KYKN \u00b7 Yankton, SD`,
+  copyright,
+  showLocation = true,
 }: BroadsheetFooterProps) {
   return (
     <footer className="bs-footer">
       <nav className="bs-footer__policies" aria-label="Footer navigation">
-        {DEFAULT_POLICIES.map((p, i) => (
+        {DEFAULT_POLICIES.filter(
+          (p) => showLocation || p.href !== '/locations/yankton',
+        ).map((p, i) => (
           <React.Fragment key={p.href}>
             {i > 0 && (
               <span className="bs-footer__sep" aria-hidden="true">
@@ -45,7 +49,10 @@ export default function BroadsheetFooter({
       </nav>
       <div className="bs-footer__inner">
         <span className="bs-footer__brand">{brand}</span>
-        <span className="bs-footer__copy">{copyright}</span>
+        <span className="bs-footer__copy">
+          {copyright ??
+            `\u00a9 ${new Date().getFullYear()} Roger Wilco Aviation Services${showLocation ? ' \u00b7 KYKN \u00b7 Yankton, SD' : ''}`}
+        </span>
       </div>
     </footer>
   );
