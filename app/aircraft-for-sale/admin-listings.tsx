@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ListingDraftWorkflow } from './listing-draft-workflow';
 import { draftFields, getDraftFields } from './listing-draft-fields';
 import {
+  clearInapplicableConditionFields,
   listingFormValues,
   listingPayload,
   listingTitle,
@@ -207,7 +208,9 @@ export default function AdminListings({
                     if (key.startsWith('spec:')) delete next[key];
                   if (name === 'listingType') next.category = '';
                 }
-                return next;
+                return ['listingType', 'category'].includes(name)
+                  ? clearInapplicableConditionFields(next)
+                  : next;
               })
             }
             busy={busy || !canManage}

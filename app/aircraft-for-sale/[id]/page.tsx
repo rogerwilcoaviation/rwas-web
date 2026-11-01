@@ -29,6 +29,7 @@ import {
 } from '@/components/shared/broadsheet';
 import { truncateMeta } from '@/lib/seo';
 import { PhotoCarousel } from './photo-carousel';
+import { ConditionReport } from '../condition-report';
 
 export const revalidate = 60;
 
@@ -110,6 +111,11 @@ interface Listing {
   range?: string;
   category?: string;
   condition?: string;
+  exteriorRating?: string | number;
+  interiorRating?: string | number;
+  exteriorConditionNotes?: string;
+  interiorConditionNotes?: string;
+  specifications?: Record<string, string | number>;
   damageHistory?: string;
   photos?: Photo[];
   logbooks?: {
@@ -629,6 +635,10 @@ export default async function AircraftDetailPage({ params }: PageProps) {
             </dl>
           </Specimen>
         ) : null}
+
+        <Specimen variant="flat" as="section">
+          <ConditionReport fields={listing} headingLevel={2} />
+        </Specimen>
 
         {/* ── DESCRIPTION ────────────────────────────────────────────── */}
         {listing.description ? (

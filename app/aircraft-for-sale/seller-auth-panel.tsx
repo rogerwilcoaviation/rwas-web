@@ -63,6 +63,7 @@ import {
   validateUpload,
 } from './listing-draft-fields';
 import {
+  clearInapplicableConditionFields,
   listingFormValues,
   listingPayload,
   listingTitle,
@@ -2180,8 +2181,11 @@ export default function SellerAuthPanel() {
                       if (key.startsWith('spec:')) delete next[key];
                     if (name === 'listingType') next.category = '';
                   }
-                  autosave.capture(next, workflowStep);
-                  return next;
+                  const updated = ['listingType', 'category'].includes(name)
+                    ? clearInapplicableConditionFields(next)
+                    : next;
+                  autosave.capture(updated, workflowStep);
+                  return updated;
                 })
               }
               busy={busy}

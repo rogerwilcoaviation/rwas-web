@@ -5,9 +5,11 @@ import {
   listingFormValues,
   listingPrice,
   listingTypes,
+  conditionReport,
 } from '@/lib/marketplace/schema.mjs';
 import { draftFields, getDraftFields } from './listing-draft-fields';
 import { marketplaceStaffMediaPath } from '@/lib/marketplace-staff-fetch';
+import { ConditionReport } from './condition-report';
 
 export const fieldLabel = (key: string) =>
   (key === 'nNumber' ? 'Tail Number' : '') ||
@@ -75,6 +77,7 @@ export function ListingDetails({
 }) {
   const Heading = headingLevel === 4 ? 'h4' : 'h3';
   const definitions = getDraftFields(listingFormValues(fields, draftFields));
+  const conditionRows = conditionReport(fields);
   const groups = new Map<
     string,
     { key: string; label: string; value: string; long: boolean }[]
@@ -88,7 +91,23 @@ export function ListingDetails({
   );
   for (const [key, value] of flat) {
     if (
-      ['workflowVersion', 'title', 'specifications'].includes(key) ||
+      [
+        'workflowVersion',
+        'title',
+        'specifications',
+        'exteriorRating',
+        'interiorRating',
+        'exteriorConditionNotes',
+        'interiorConditionNotes',
+      ].includes(key) ||
+      (key === 'spec:exterior-exterior-notes' &&
+        conditionRows.some(
+          (row: { side: string }) => row.side === 'exterior',
+        )) ||
+      (key === 'spec:interior-interior-notes' &&
+        conditionRows.some(
+          (row: { side: string }) => row.side === 'interior',
+        )) ||
       value === '' ||
       value === null ||
       value === undefined
@@ -141,6 +160,11 @@ export function ListingDetails({
   }
   return (
     <div className="admin-listing-details">
+      {conditionRows.length ? (
+        <div className="admin-listing-detail-group">
+          <ConditionReport fields={fields} headingLevel={headingLevel} />
+        </div>
+      ) : null}
       {Array.from(groups, ([group, rows]) => (
         <div className="admin-listing-detail-group" key={group}>
           <Heading>{group}</Heading>

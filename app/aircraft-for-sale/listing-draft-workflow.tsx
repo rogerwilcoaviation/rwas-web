@@ -181,12 +181,52 @@ export function ListingDraftWorkflow({
           }}
         >
           <p id="listing-step-help">{field.help}</p>
-          <label className="workflow-field" htmlFor="listing-step-input">
+          <div className="workflow-field">
             <span>
               {field.label}{' '}
               <small>{field.required ? '(Required)' : '(Optional)'}</small>
             </span>
-            {field.options ? (
+            {field.type === 'rating' ? (
+              <div
+                role="radiogroup"
+                aria-label={field.label}
+                aria-describedby="listing-step-help"
+                style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}
+              >
+                {[
+                  { value: '', label: 'Not rated' },
+                  ...(field.options || []).map((option) =>
+                    typeof option === 'string'
+                      ? { value: option, label: option }
+                      : option,
+                  ),
+                ].map((option, index) => (
+                  <label
+                    key={option.value}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.3rem',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <input
+                      id={index === 0 ? 'listing-step-input' : undefined}
+                      type="radio"
+                      name={field.name}
+                      value={option.value}
+                      checked={(values[field.name] || '') === option.value}
+                      disabled={busy}
+                      onChange={() => {
+                        setError('');
+                        onChange(field.name, option.value);
+                      }}
+                    />
+                    <span>{option.label}</span>
+                  </label>
+                ))}
+              </div>
+            ) : field.options ? (
               <select
                 key={field.name}
                 id="listing-step-input"
@@ -269,7 +309,7 @@ export function ListingDraftWorkflow({
                 }}
               />
             )}
-          </label>
+          </div>
           {field.multiline && (
             <p id="listing-field-count" className="workflow-hint">
               {(values[field.name] || '').length.toLocaleString()} /{' '}

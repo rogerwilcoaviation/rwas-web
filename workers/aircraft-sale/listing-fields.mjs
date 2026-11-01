@@ -5,6 +5,7 @@ import {
   categoryFor,
   categoryFields,
   cleanSpecifications,
+  conditionFields,
 } from '../../lib/marketplace/schema.mjs';
 // Shared destination validation for API writes and offline migration planning.
 const fail = (status, message) => {
@@ -53,10 +54,36 @@ export function cleanListing(body, complete = false) {
       fail(400, 'Invalid ' + k);
     if (
       String(v).length >
-      (['description', 'avionics', 'equipmentList'].includes(k) ? 10000 : 300)
+      ([
+        'description',
+        'avionics',
+        'equipmentList',
+        'exteriorConditionNotes',
+        'interiorConditionNotes',
+      ].includes(k)
+        ? 10000
+        : 300)
     )
       fail(400, k + ' is too long.');
     out[k] = String(v).trim();
+  }
+  const allowedConditionFields = new Set(
+    conditionFields(out).map((field) => field.name),
+  );
+  for (const side of ['exterior', 'interior']) {
+    const ratingKey = side + 'Rating';
+    const notesKey = side + 'ConditionNotes';
+    if (out[ratingKey]) {
+      if (!/^[1-5]$/.test(out[ratingKey]))
+        fail(400, 'Choose an ' + side + ' condition rating from 1 to 5 stars.');
+      out[ratingKey] = Number(out[ratingKey]);
+    }
+    for (const key of [ratingKey, notesKey])
+      if (out[key] && !allowedConditionFields.has(key))
+        fail(
+          400,
+          'This category does not support ' + side + ' condition reports.',
+        );
   }
   if (out.workflowVersion && out.workflowVersion !== '3')
     fail(400, 'Unsupported listing workflow.');

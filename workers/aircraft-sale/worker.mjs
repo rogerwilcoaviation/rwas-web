@@ -126,6 +126,8 @@ import {
   categoryFields,
   categoryFor,
   newListingFields,
+  conditionReport,
+  conditionRatingLabels,
 } from '../../lib/marketplace/schema.mjs';
 import {
   ConservationCapture,
@@ -434,26 +436,27 @@ function publicPage(l) {
   const canonical =
     'https://www.rogerwilcoaviation.com/aircraft-for-sale/' +
     encodeURIComponent(l.id);
-  const title = listingTitle(l),
-    media =
-      l.photos
-        .map(
-          (f) =>
-            '<img src="/api/aircraft-sale/files/' +
-            encodeURIComponent(f.key) +
-            '" alt="' +
-            escape(f.name) +
-            '" loading="lazy">',
-        )
-        .join('') +
-      l.videos
-        .map(
-          (f) =>
-            '<video controls preload="metadata" src="/api/aircraft-sale/files/' +
-            encodeURIComponent(f.key) +
-            '"></video>',
-        )
-        .join('');
+  const title = listingTitle(l);
+  const conditionRows = conditionReport(l);
+  const media =
+    l.photos
+      .map(
+        (f) =>
+          '<img src="/api/aircraft-sale/files/' +
+          encodeURIComponent(f.key) +
+          '" alt="' +
+          escape(f.name) +
+          '" loading="lazy">',
+      )
+      .join('') +
+    l.videos
+      .map(
+        (f) =>
+          '<video controls preload="metadata" src="/api/aircraft-sale/files/' +
+          encodeURIComponent(f.key) +
+          '"></video>',
+      )
+      .join('');
   const records = Object.values(l.logbooks || {}).reduce(
     (n, v) => n + v.count,
     0,
@@ -475,19 +478,46 @@ function publicPage(l) {
     ['Hangar Type', l.hangarType],
     ['Airport', l.airport],
     ['Location', l.sellerLocation],
-    ['Transaction', { sale: 'For Sale', lease: 'For Lease', fractional: 'Fractional Ownership' }[l.transactionType] || l.transactionType],
+    [
+      'Transaction',
+      {
+        sale: 'For Sale',
+        lease: 'For Lease',
+        fractional: 'Fractional Ownership',
+      }[l.transactionType] || l.transactionType,
+    ],
   ];
-  const renderRows = (rows) => rows
-    .filter(([, value]) => value !== undefined && value !== null && value !== '')
-    .map(([label, value]) => '<div class="detail-row"><dt>' + escape(label) + '</dt><dd>' + escape(value) + '</dd></div>')
-    .join('');
+  const renderRows = (rows) =>
+    rows
+      .filter(
+        ([, value]) => value !== undefined && value !== null && value !== '',
+      )
+      .map(
+        ([label, value]) =>
+          '<div class="detail-row"><dt>' +
+          escape(label) +
+          '</dt><dd>' +
+          escape(value) +
+          '</dd></div>',
+      )
+      .join('');
   const specGroups = new Map();
   let delivery = '';
   for (const field of categoryFields(l)) {
     const value = l.specifications?.[field.name.slice(5)];
     if (value === undefined || value === null || value === '') continue;
+    if (
+      (field.name === 'spec:exterior-exterior-notes' &&
+        conditionRows.some((row) => row.side === 'exterior')) ||
+      (field.name === 'spec:interior-interior-notes' &&
+        conditionRows.some((row) => row.side === 'interior'))
+    )
+      continue;
     if (field.name === 'spec:tools-delivery') {
-      delivery = '<div class="spec-group"><h3>Pickup &amp; Delivery</h3><p class="copy">' + escape(value) + '</p></div>';
+      delivery =
+        '<div class="spec-group"><h3>Pickup &amp; Delivery</h3><p class="copy">' +
+        escape(value) +
+        '</p></div>';
       continue;
     }
     const group = field.group || 'Additional Specifications';
@@ -495,9 +525,91 @@ function publicPage(l) {
     rows.push([field.label.replace(/([a-z])([A-Z])/g, '$1 $2'), value]);
     specGroups.set(group, rows);
   }
-  const specifications = Array.from(specGroups, ([group, rows]) =>
-    '<div class="spec-group"><h3>' + escape(group) + '</h3><dl class="details-grid">' + renderRows(rows) + '</dl></div>',
+  const specifications = Array.from(
+    specGroups,
+    ([group, rows]) =>
+      '<div class="spec-group"><h3>' +
+      escape(group) +
+      '</h3><dl class="details-grid">' +
+      renderRows(rows) +
+      '</dl></div>',
   ).join('');
+  const conditionHtml = conditionRows.length
+    ? '<section class="condition-report" aria-label="Seller-reported condition"><h2>Condition report</h2><p class="condition-attribution">Seller-reported ratings. 1 star: Poor · 5 stars: Excellent.</p><dl class="details-grid">' +
+      conditionRows
+        .map((row) => {
+          const rating = row.rating;
+          const stars =
+            rating === null
+              ? '<span>Not rated</span>'
+              : '<span class="condition-rating" role="img" aria-label="' +
+                escape(
+                  row.label +
+                    ': ' +
+                    rating +
+                    ' of 5 stars — ' +
+                    conditionRatingLabels[rating],
+                ) +
+                '"><span class="condition-stars" aria-hidden="true">' +
+                '★'.repeat(rating) +
+                '☆'.repeat(5 - rating) +
+                '</span><span aria-hidden="true">' +
+                rating +
+                '/5 — ' +
+                escape(conditionRatingLabels[rating]) +
+                '</span></span>';
+          return (
+            '<div class="detail-row condition-row"><dt>' +
+            escape(row.label) +
+            '</dt><dd>' +
+            stars +
+            (row.notes
+              ? '<p class="copy condition-notes">' + escape(row.notes) + '</p>'
+              : '') +
+            '</dd></div>'
+          );
+        })
+        .join('') +
+      '</dl></section>'
+    : '';
+  // Keep the established homepage brand, navigation and same-origin assets on
+  // the standalone Worker route, without assigning every listing a location.
+  const navigation = [
+    ['/', 'Home'],
+    ['/#ask-jerry', 'Ask Jerry'],
+    ['/axis-system-planner?source=homepage-navigation', 'AXIS System Builder'],
+    ['/panel-planner', 'Panel Layout Planner'],
+    ['/collections', 'Garmin'],
+    ['/collections/papa-alpha-tools', 'Papa-Alpha Tools'],
+    ['/aircraft-for-sale', 'Aviation Exchange'],
+    ['/financing', 'Financing'],
+    ['/services', 'Services'],
+    ['/services/custom-printing-finishing', 'Printing & Coating'],
+    ['/blog', 'Blog Articles'],
+    ['/about', 'About'],
+    ['/contact', 'Contact'],
+  ]
+    .map(
+      ([href, label]) =>
+        '<a href="' +
+        escape(href) +
+        '"' +
+        (href === '/aircraft-for-sale' ? ' aria-current="page"' : '') +
+        '>' +
+        escape(label) +
+        '</a>',
+    )
+    .join('');
+  const footerLinks = [
+    ['/terms', 'Terms'],
+    ['/privacy', 'Privacy'],
+    ['/cookies', 'Cookies'],
+    ['/security', 'Security'],
+    ['/status', 'Status'],
+    ['/seller-review', 'Staff Login'],
+  ]
+    .map(([href, label]) => '<a href="' + href + '">' + label + '</a>')
+    .join('');
   return new Response(
     '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' +
       escape(title) +
@@ -510,8 +622,14 @@ function publicPage(l) {
           '</script>'
         : '') +
       `<style>
-        *{box-sizing:border-box}body{margin:0;background:#f7f4ef;color:#222;font:16px/1.6 Arial,sans-serif}a{color:inherit}a:focus-visible{outline:3px solid #9a741b;outline-offset:3px}.page-shell{max-width:1180px;margin:auto;padding:0 24px 48px}.masthead{text-align:center;border-bottom:3px double #222;padding:20px 0 12px}.masthead a{text-decoration:none}.masthead-title{display:block;font:700 clamp(28px,4vw,44px)/1.1 Georgia,serif}.masthead-subtitle,.section-kicker{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.masthead-subtitle{margin:6px 0 0}.page-nav{display:flex;flex-wrap:wrap;gap:8px 20px;padding:12px 0;border-bottom:1px solid #222;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}.page-nav a{text-decoration:none}.page-nav a:hover{text-decoration:underline}main{max-width:1040px;margin:auto}header.listing-header{padding:30px 0 22px;border-bottom:3px double #222}.section-kicker{display:inline-block;background:#c49a2a;color:#17150f;padding:4px 9px;margin:0 0 10px}h1,h2,h3{font-family:Georgia,'Times New Roman',serif;line-height:1.2;color:#1a1a1a}h1{font-size:clamp(32px,5vw,48px);margin:0}h2{font-size:28px;margin:0 0 16px}h3{font-size:21px;margin:24px 0 10px}.price{font:700 24px/1.3 Georgia,serif;margin:12px 0 0}.listing-status{margin:8px 0 0;color:#514b40;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}section{border-bottom:1px solid #aaa;padding:24px 0}.media{display:grid;gap:12px}.media:empty{display:none}img,video{display:block;width:100%;max-height:600px;object-fit:contain;background:#e9e4d9}.details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin:0;border-top:2px solid #222}.detail-row{display:grid;grid-template-columns:minmax(135px, 45%) minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid #d5cec1;min-width:0}.detail-row dt{font-size:13px;font-weight:700;color:#514b40;letter-spacing:.02em}.detail-row dd{margin:0;min-width:0;overflow-wrap:anywhere;font-size:16px;font-weight:600}.spec-group h3{border-bottom:1px solid #222;padding-bottom:8px}.spec-group .details-grid{border-top:0}.copy{white-space:pre-wrap;overflow-wrap:anywhere}.seller-contact{display:inline-block;background:#c49a2a;border:1px solid #222;padding:10px 16px;font-weight:700;text-decoration:none}.seller-contact:hover{background:#d5ad40}@media(max-width:640px){.page-shell{padding:0 16px 32px}.masthead{padding-top:16px}.page-nav{gap:8px 16px}.details-grid{grid-template-columns:minmax(0,1fr)}.detail-row{grid-template-columns:minmax(120px,42%) minmax(0,1fr)}h2{font-size:24px}section{padding:20px 0}}
-      </style></head><body><div class="page-shell"><div class="masthead"><a href="/"><span class="masthead-title">Roger Wilco Aviation Services</span></a><p class="masthead-subtitle">Aviation Exchange · Yankton, South Dakota</p></div><nav class="page-nav" aria-label="Marketplace navigation"><a href="/">Home</a><a href="/aircraft-for-sale">Aviation Exchange</a><a href="/contact">Contact</a></nav><main><header class="listing-header"><p class="section-kicker">Aviation Exchange · Listing</p><h1>` +
+        @font-face{font-family:'Source Serif 4';src:url('/fonts/source-serif-4/source-serif-4-latin-roman.woff2') format('woff2');font-style:normal;font-weight:200 900;font-display:swap}
+        *{box-sizing:border-box}body{margin:0;background:#f4efe3;color:#0f1418;font:15px/1.55 Arial,sans-serif}a{color:inherit}a:focus-visible,summary:focus-visible{outline:3px solid #9e7826;outline-offset:3px}.broadsheet{min-height:100vh;position:relative;isolation:isolate}.broadsheet:before{content:'';position:fixed;inset:0;background:url('/newspaper/images/enr_h05.webp') center/cover no-repeat;opacity:.25;z-index:-1;pointer-events:none}.skip-link{position:absolute;left:16px;top:-100px;z-index:10;background:#fbf7ec;padding:10px}.skip-link:focus{top:10px}.bs-dateline{background:#0f1418;color:#f4efe3;border-bottom:2px solid #9e7826;font-size:11px;letter-spacing:.12em;text-transform:uppercase}.bs-dateline__inner{max-width:1200px;margin:auto;padding:8px 28px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.bs-dateline__left,.bs-dateline__right{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.bs-dateline a{text-decoration:none;color:#e6cf8f}.bs-masthead{background:#fbf7ec;border-top:1px solid #9e7826;border-bottom:6px double #9e7826;padding:22px 28px 18px}.bs-masthead__inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:24px;align-items:center}.bs-masthead__logo{width:84px;height:84px;object-fit:contain}.bs-masthead__titles{text-align:center}.bs-masthead__brand{font:900 clamp(27px,3.6vw,40px)/1.05 'Source Serif 4',Georgia,serif;text-decoration:none}.bs-masthead__tagline{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#2a333c;margin-top:8px}.bs-masthead__cert{text-align:right;font-size:11px;letter-spacing:.15em;text-transform:uppercase}.bs-nav{background:#fbf7ec;border-bottom:1px solid #2a333c;padding:12px 28px}.bs-nav__desktop,.bs-nav__mobile-links{max-width:1200px;margin:auto;display:flex;justify-content:center;flex-wrap:wrap;gap:8px}.bs-nav a{background:#e6cf8f;padding:4px 10px;text-decoration:none;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}.bs-nav a:hover,.bs-nav a[aria-current=page]{background:#c19a3f}.bs-nav__mobile{display:none}.bs-credentials{background:#fbf7ec;border-bottom:1px solid #c8bfa8;padding:10px 24px;display:flex;gap:12px 22px;justify-content:center;flex-wrap:wrap;font-size:11px;letter-spacing:.1em;text-transform:uppercase}.bs-dealer-plate{border:1px solid #2a333c;padding:3px 10px}.page-shell{max-width:1200px;margin:auto;padding:26px 28px 48px}main{max-width:1040px;margin:auto}.listing-header,main>section{background:#fbf7ec;border:1px solid #2a333c;padding:22px 24px;margin:0 0 24px}.listing-header{box-shadow:4px 4px 0 #0f1418}.section-kicker{display:inline-block;color:#7a5a1e;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin:0 0 10px}h1,h2,h3{font-family:'Source Serif 4',Georgia,serif;line-height:1.2;color:#0f1418}h1{font-size:clamp(30px,5vw,44px);margin:0}h2{font-size:25px;margin:0 0 16px}h3{font-size:20px;margin:24px 0 10px}.price{font:700 24px/1.3 'Source Serif 4',Georgia,serif;margin:12px 0 0}.listing-status{margin:8px 0 0;color:#3f4a55;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.media{display:grid;gap:12px}.media:empty{display:none}.media img,.media video{display:block;width:100%;max-height:600px;object-fit:contain;background:#efe7d2}.details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin:0;border-top:2px solid #2a333c}.detail-row{display:grid;grid-template-columns:minmax(125px,45%) minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid #c8bfa8;min-width:0}.detail-row dt{font-size:13px;font-weight:700;color:#3f4a55}.detail-row dd{margin:0;min-width:0;overflow-wrap:anywhere;font-size:15px;font-weight:600}.spec-group h3{border-bottom:1px solid #2a333c;padding-bottom:8px}.spec-group .details-grid{border-top:0}.copy{white-space:pre-wrap;overflow-wrap:anywhere}.condition-attribution{font-size:13px;color:#3f4a55}.condition-row{grid-template-columns:minmax(0,1fr);align-content:start}.condition-rating{display:flex;flex-wrap:wrap;gap:5px 10px;align-items:center}.condition-stars{font-size:22px;letter-spacing:2px;color:#7a5a1e}.condition-notes{font-weight:400;margin:8px 0 0}.seller-contact{display:inline-block;background:#9e7826;border:1px solid #2a333c;padding:10px 16px;font-weight:700;text-decoration:none}.seller-contact:hover{background:#c19a3f}.bs-footer{background:#1a2128;color:#f4efe3;border-top:6px double #9e7826;padding:22px 28px;font-size:12px}.bs-footer__policies,.bs-footer__inner{max-width:1200px;margin:auto;display:flex;flex-wrap:wrap;gap:12px 20px;justify-content:space-between}.bs-footer__policies{justify-content:center;padding-bottom:18px}.bs-footer a{color:#e6cf8f}.bs-footer__brand{font-weight:700}.bs-footer__copy{color:#d2cbbd}
+        @media(max-width:760px){.bs-masthead{padding:18px 16px}.bs-masthead__inner{grid-template-columns:64px minmax(0,1fr);gap:12px}.bs-masthead__logo{width:64px;height:64px}.bs-masthead__cert{grid-column:1/-1;text-align:center}.bs-masthead__tagline{letter-spacing:.12em;font-size:9px}.bs-nav{padding:10px 16px}.bs-nav__desktop{display:none}.bs-nav__mobile{display:block}.bs-nav__mobile summary{display:flex;justify-content:space-between;gap:10px;cursor:pointer;font-weight:700}.bs-nav__mobile summary small{font-weight:400}.bs-nav__mobile-links{padding-top:12px;justify-content:flex-start}.broadsheet:before{background-image:none}.page-shell{padding:22px 16px 32px}.bs-dateline__inner{padding:8px 16px}.bs-dateline__volume{display:none}.bs-credentials{padding:10px 16px;gap:8px;font-size:10px}.listing-header,main>section{padding:18px 16px}.details-grid{grid-template-columns:minmax(0,1fr)}.detail-row{grid-template-columns:minmax(110px,42%) minmax(0,1fr)}.condition-row{grid-template-columns:minmax(0,1fr)}.bs-footer{padding:20px 16px}.bs-footer__inner{justify-content:center;text-align:center}}
+      </style></head><body><div class="broadsheet"><a class="skip-link" href="#main-content">Skip to listing</a><div class="bs-dateline"><div class="bs-dateline__inner"><div class="bs-dateline__left"><span>Current Edition</span><span class="bs-dateline__volume">Vol. XL · No. 1</span><span>rogerwilcoaviation.com</span></div><div class="bs-dateline__right"><a href="tel:+16052998178">(605) 299-8178</a><a href="/contact">Book Service</a></div></div></div><header class="bs-masthead"><div class="bs-masthead__inner"><a href="/" aria-label="RWAS homepage"><img class="bs-masthead__logo" src="/newspaper/images/logo-128.webp" alt="Roger Wilco Aviation Services" width="128" height="128"></a><div class="bs-masthead__titles"><a class="bs-masthead__brand" href="/">Roger Wilco Aviation Services</a><div class="bs-masthead__tagline">FAA Cert. Repair Station · Avionics · Airframe &amp; Powerplant · NDT · Fabrication</div></div><div class="bs-masthead__cert">Cert. No. RWSR491E<br>Aviation Exchange</div></div></header><nav class="bs-nav" aria-label="Primary"><div class="bs-nav__desktop">` +
+      navigation +
+      '</div><details class="bs-nav__mobile"><summary><span>Menu</span><small>Services · Store · Contact</small></summary><div class="bs-nav__mobile-links">' +
+      navigation +
+      '</div></details></nav><div class="bs-credentials"><span>FAA Part 145 Repair Station · Cert. RWSR491E</span><span class="bs-dealer-plate">Authorized <strong>Garmin</strong> Dealer</span><span>AEA Member</span><span>NBAA Member</span></div><div class="page-shell"><main id="main-content" tabindex="-1"><header class="listing-header"><p class="section-kicker">Aviation Exchange · Listing</p><h1>' +
       escape(title) +
       '</h1><p class="price">' +
       escape(listingPrice(l)) +
@@ -521,7 +639,10 @@ function publicPage(l) {
       media +
       '</section><section><h2>Listing details</h2><dl class="details-grid">' +
       renderRows(detailRows) +
-      '</dl>' + specifications + delivery + '<p class="copy">' +
+      '</dl>' +
+      specifications +
+      delivery +
+      '<p class="copy">' +
       escape(l.description) +
       '</p>' +
       (!l.listingType || l.listingType === 'aircraft'
@@ -533,7 +654,9 @@ function publicPage(l) {
           escape(l.damageHistory || 'Ask seller') +
           '</p>'
         : '') +
-      '</section><section><h2>Documents and records</h2><p>' +
+      '</section>' +
+      conditionHtml +
+      '<section><h2>Documents and records</h2><p>' +
       records +
       ' private records held by the seller. Contact the seller to request records.</p></section><section><h2>Seller</h2><p>' +
       escape(l.sellerName) +
@@ -547,7 +670,11 @@ function publicPage(l) {
           encodeURIComponent(l.id) +
           '">Email seller</a><p>Sign in or create an account to email the seller for more information. Your email app will open with the listing details included.</p>'
         : '<p>This listing is not currently accepting seller inquiries.</p>') +
-      '</section></main></div><script src="/aviation-exchange-activity.js?v=20261023-activity-content" defer></script></body></html>',
+      '</section></main></div><footer class="bs-footer"><nav class="bs-footer__policies" aria-label="Footer navigation">' +
+      footerLinks +
+      '</nav><div class="bs-footer__inner"><span class="bs-footer__brand">Roger Wilco Aviation Services</span><span class="bs-footer__copy">© ' +
+      new Date().getUTCFullYear() +
+      ' Roger Wilco Aviation Services</span></div></footer></div><script src="/aviation-exchange-activity.js?v=20261023-activity-content" defer></script></body></html>',
     {
       headers: {
         'Content-Type': 'text/html;charset=UTF-8',

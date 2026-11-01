@@ -17,6 +17,7 @@
 
 import { listingTitle, listingPrice } from '@/lib/marketplace/schema.mjs';
 import { useState } from 'react';
+import { ConditionReport } from './condition-report';
 import {
   marketplaceListingHref,
   marketplaceListingPhoto,
@@ -277,6 +278,7 @@ export function ListingCard({ listing }: { listing: Listing }) {
               </>
             ) : null}
           </dl>
+          <ConditionReport fields={listing} compact />
         </div>
       </a>
     </>

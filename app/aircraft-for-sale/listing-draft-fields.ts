@@ -1,10 +1,13 @@
-import { newListingFields } from '@/lib/marketplace/schema.mjs';
+import {
+  conditionFields,
+  newListingFields,
+} from '@/lib/marketplace/schema.mjs';
 export type DraftField = {
   name: string;
   label: string;
   help: string;
   required?: boolean;
-  type?: 'number' | 'tel' | 'text';
+  type?: 'number' | 'tel' | 'text' | 'rating';
   options?: (string | { value: string; label: string })[];
   group?: string;
   multiline?: boolean;
@@ -169,7 +172,7 @@ export function getDraftFields(values: Record<string, string>): DraftField[] {
       (!values.workflowVersion &&
         (values.make || values.model || values.year || values.price)))
   )
-    return draftFields;
+    return [...draftFields, ...(conditionFields(values) as DraftField[])];
   return newListingFields(values, draftFields) as DraftField[];
 }
 export function getMediaSteps(values: Record<string, string>) {
