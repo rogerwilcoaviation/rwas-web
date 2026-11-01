@@ -36,7 +36,9 @@ test('seller can choose and clear an accessible condition rating', async () => {
     headless: true,
     executablePath:
       process.env.CHROME_PATH ||
-      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      (process.platform === 'darwin'
+        ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+        : undefined),
   });
   try {
     const page = await browser.newPage();
