@@ -216,6 +216,28 @@ export async function checkListingWorkflow({
     await next();
     if (lastDetail) break;
   }
+  const exterior = dialog.getByRole('radiogroup', {
+    name: 'Exterior condition',
+  });
+  const unrated = exterior.getByRole('radio', { name: 'Not rated' });
+  assert.equal(await unrated.isChecked(), true);
+  await unrated.focus();
+  for (let count = 0; count < 4; count++)
+    await page.keyboard.press('ArrowRight');
+  assert.equal(
+    await exterior.getByRole('radio', { name: /4 stars/ }).isChecked(),
+    true,
+  );
+  await next();
+  await label('Exterior condition notes').fill('Synthetic paint wear.');
+  await next();
+  const interior = dialog.getByRole('radiogroup', {
+    name: 'Interior condition',
+  });
+  await interior.getByRole('radio', { name: /3 stars/ }).check();
+  await next();
+  await label('Interior condition notes').fill('Synthetic seat wear.');
+  await next();
   await dialog.getByRole('heading', { name: 'Photos', exact: true }).waitFor();
   assert.equal(await dialog.locator('input[type=file]').count(), 1);
   assert.equal(
@@ -287,6 +309,11 @@ export async function checkListingWorkflow({
   await dialog
     .getByRole('heading', { name: 'Review your listing', exact: true })
     .waitFor();
+  const summary = await dialog.locator('.workflow-summary').innerText();
+  assert.match(summary, /4 stars \(Very good\)/);
+  assert.match(summary, /3 stars \(Good\)/);
+  assert.match(summary, /Synthetic paint wear\./);
+  assert.match(summary, /Synthetic seat wear\./);
   await button('Edit Model').click();
   await label('Model').fill('Updated Model');
   await button('Review draft').click();
@@ -300,6 +327,10 @@ export async function checkListingWorkflow({
   const listing = Object.values(f.state().listings)[0];
   assert.equal(listing.fields.model, 'Updated Model');
   assert.equal(listing.fields.description, original);
+  assert.equal(listing.fields.exteriorRating, 4);
+  assert.equal(listing.fields.interiorRating, 3);
+  assert.equal(listing.fields.exteriorConditionNotes, 'Synthetic paint wear.');
+  assert.equal(listing.fields.interiorConditionNotes, 'Synthetic seat wear.');
   assert.equal(listing.status, 'pending');
   assert.equal(
     Object.values(f.state().files).filter(
