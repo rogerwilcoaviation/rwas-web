@@ -13281,6 +13281,15 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
+    title: 'Papa-Alpha Baggage Door Lock Tool',
+    href: '/products/papa-alpha-baggage-door-lock-tool',
+    handle: 'papa-alpha-baggage-door-lock-tool',
+    description:
+      'The Papa-Alpha Baggage Door Lock Tool is a purpose-made specialty wrench for maintenance personnel working on the retaining nut behind an applicable Piper baggage-door lock assembly. Its offset working head and extended handle are…',
+    skus: [],
+  },
+  {
+    group: 'Products',
     title: 'Papa Alpha SCBF #1 Surface Control Balancing Fixture',
     href: '/products/papa-alpha-scbf-1-surface-control-balancing-fixture',
     handle: 'papa-alpha-scbf-1-surface-control-balancing-fixture',

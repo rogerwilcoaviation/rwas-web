@@ -45,7 +45,7 @@ test('index contains only public route groups and no price fields', () => {
   for (const entry of index) {
     assert.match(
       entry.href,
-      /^\/(services|products|blog|panel-planner|axis-system-planner|financing)(\/|$)/,
+      /^\/(?:(?:services|products|blog|panel-planner|axis-system-planner|financing)(?:\/|$)|collections\/papa-alpha-tools$)/,
     );
     assert.doesNotMatch(
       entry.href,
@@ -76,6 +76,14 @@ test('empty and unknown queries have no results', () => {
   assert.deepEqual(
     searchSiteIndex(index, 'zzzz-no-such-public-result-zzzz'),
     [],
+  );
+});
+
+test('public baggage door lock tool is discoverable by name', () => {
+  assert.ok(
+    searchSiteIndex(index, 'baggage door lock').some(
+      (entry) => entry.href === '/products/papa-alpha-baggage-door-lock-tool',
+    ),
   );
 });
 
