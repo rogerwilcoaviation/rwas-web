@@ -106,6 +106,14 @@ const serviceGroups = [
 const serviceFaq = [
   {
     '@type': 'Question',
+    name: 'Does RWAS perform pre-buy aircraft inspections?',
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: 'No. RWAS does not perform pre-buy inspections or vet seller aircraft. We can recommend an independent inspection facility near the aircraft.',
+    },
+  },
+  {
+    '@type': 'Question',
     name: 'What does Roger Wilco Aviation Services do?',
     acceptedAnswer: {
       '@type': 'Answer',

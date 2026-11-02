@@ -14,9 +14,9 @@
 - [About](https://www.rogerwilcoaviation.com/about) — Company history, founder bio, contact details
 - [Yankton Location and Services](https://www.rogerwilcoaviation.com/locations/yankton) — RWAS Avionics Desk address, regional service area, and links to RWAS service capabilities
 - [Shop Capabilities](https://www.rogerwilcoaviation.com/shop-capabilities) — Full catalog of services: Garmin installations, A&P maintenance, NDT, fabrication
-- [Aircraft Services](https://www.rogerwilcoaviation.com/services) — Crawlable service hub linking RWAS avionics, maintenance, NDT, fabrication, Rotax, pre-buy, and Papa-Alpha service pages
+- [Aircraft Services](https://www.rogerwilcoaviation.com/services) — Garmin avionics, maintenance, NDT, fabrication, Rotax support, pre-buy facility recommendations, and Papa-Alpha tools
 - [Aircraft NDT Inspection](https://www.rogerwilcoaviation.com/services/ndt-inspection) — Eddy current, dye penetrant, magnetic particle, ultrasound, visual, and Rockwell hardness testing
-- [Papa-Alpha Tools](https://www.rogerwilcoaviation.com/collections/papa-alpha-tools) — Story and application guide for RWAS-built Piper rigging reference tools
+- [Papa-Alpha Tools](https://www.rogerwilcoaviation.com/collections/papa-alpha-tools) — Shop RWAS-built Piper rigging reference tools and review product-specific applications
 - [Fiber Laser Fabrication](https://www.rogerwilcoaviation.com/services/fiber-laser-fabrication) — Aircraft panel cutting, laser welding, powder coating, UV printing, and fabrication support
 - [UV Printing and Powder Coating](https://www.rogerwilcoaviation.com/services/custom-printing-finishing) — Material and application review for aviation shop work, branded pieces, and decorative items
 - [UV Printing](https://www.rogerwilcoaviation.com/services/custom-printing-finishing/uv-printing) — Direct-to-surface color graphics and markings on reviewed materials
@@ -85,7 +85,7 @@ Precision flight-control rigging reference tools for Piper aircraft, designed in
 
 ## Captain Jerry
 
-Captain Jerry is an AI avionics expert available 24/7 via the floating chat widget on every page. Jerry handles service inquiries, aircraft listing intake, technical questions about Garmin products, and general scheduling. Accessible from the homepage anchor [#ask-jerry](https://www.rogerwilcoaviation.com/#ask-jerry).
+Captain Jerry is an AI assistant available through the website's floating chat widget. It can help with service inquiries, aircraft listing intake, Garmin product questions, and scheduling. Accessible from the homepage anchor [#ask-jerry](https://www.rogerwilcoaviation.com/#ask-jerry).
 
 ## Optional
 

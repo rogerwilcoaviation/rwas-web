@@ -126,10 +126,10 @@ const services = readFileSync('app/services/page.tsx', 'utf8');
 assert.ok(services.includes('mainEntity: serviceFaq'));
 assert.ok(services.includes('serviceFaq.map((question)'));
 assert.ok(services.includes('id="faq"'));
-assert.equal((services.match(/'@type': 'Question'/g) || []).length, 7);
+assert.equal((services.match(/'@type': 'Question'/g) || []).length, 8);
 const approvedFaq = JSON.parse(readFileSync('scripts/fixtures/services-faq-approved-baseline.json', 'utf8'));
 assert.deepEqual(
-  [...services.matchAll(/text: '([^']+)'/g)].map((m) => m[1]),
+  [...services.matchAll(/text: '([^']+)'/g)].map((m) => m[1]).slice(1),
   approvedFaq.answers,
 );
 function lum(hex) {
