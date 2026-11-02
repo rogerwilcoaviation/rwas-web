@@ -22,11 +22,11 @@ export function manualDraft(body, owned) {
   ]);
   if (
     Object.keys(values).length > 350 ||
-    JSON.stringify(values).length > 100000
+    JSON.stringify(values).length > 220000
   )
     fail('Draft recovery data exceeds the limit.');
   for (const [key, value] of Object.entries(values)) {
-    if (!allowed.has(key) || typeof value !== 'string' || value.length > 10000)
+    if (!allowed.has(key) || typeof value !== 'string' || value.length > (key.endsWith('RichText') ? 60000 : 10000))
       fail('Invalid draft recovery field.');
   }
   if (!Number.isInteger(body.step) || body.step < 0 || body.step > 600)

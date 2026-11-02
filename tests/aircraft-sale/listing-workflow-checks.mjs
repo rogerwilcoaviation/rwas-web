@@ -103,37 +103,37 @@ export async function checkListingWorkflow({
     1,
     await dialog.innerText(),
   );
-  assert.equal(await label('Description').inputValue(), original);
+  assert.equal((await label('Description').innerText()).replace(/\u00a0/g, ' '), original);
   assert.equal(await label('Suggested description').inputValue(), revised);
   await button('Keep my original').click();
-  assert.equal(await label('Description').inputValue(), original);
+  assert.equal((await label('Description').innerText()).replace(/\u00a0/g, ' '), original);
   proofreader.mode = 'numbers';
   await button('Ask Jerry to proofread').click();
   await dialog
     .getByRole('alert')
     .filter({ hasText: 'changed numerical details' })
     .waitFor();
-  assert.equal(await label('Description').inputValue(), original);
+  assert.equal((await label('Description').innerText()).replace(/\u00a0/g, ' '), original);
   proofreader.mode = 'failure';
   await button('Ask Jerry to proofread').click();
   await dialog
     .getByRole('alert')
     .filter({ hasText: 'could not proofread' })
     .waitFor();
-  assert.equal(await label('Description').inputValue(), original);
+  assert.equal((await label('Description').innerText()).replace(/\u00a0/g, ' '), original);
   proofreader.mode = 'network';
   await button('Ask Jerry to proofread').click();
   await dialog
     .getByRole('alert')
     .filter({ hasText: 'could not be reached' })
     .waitFor();
-  assert.equal(await label('Description').inputValue(), original);
+  assert.equal((await label('Description').innerText()).replace(/\u00a0/g, ' '), original);
   proofreader.mode = 'success';
   await button('Ask Jerry to proofread').click();
   await button('Use Jerry’s suggestion').click();
-  assert.equal(await label('Description').inputValue(), revised);
+  assert.equal((await label('Description').innerText()).replace(/\u00a0/g, ' '), revised);
   await button('Undo Jerry’s edit').click();
-  assert.equal(await label('Description').inputValue(), original);
+  assert.equal((await label('Description').innerText()).replace(/\u00a0/g, ' '), original);
   proofreader.mode = 'slow';
   const sent = page.waitForRequest(
     (request) => request.url() === 'https://rogerwilcoaviation.com/api/chat',
@@ -150,7 +150,7 @@ export async function checkListingWorkflow({
   );
   assert.equal(await label('Suggested description').count(), 0);
   assert.equal(
-    await label('Description').inputValue(),
+    (await label('Description').innerText()).replace(/\u00a0/g, ' '),
     original + ' New seller wording.',
   );
   await label('Description').fill(original);
@@ -168,7 +168,7 @@ export async function checkListingWorkflow({
       1,
       await dialog.innerText(),
     );
-    assert.equal(await label('Description').inputValue(), source);
+    assert.equal((await label('Description').innerText()).replace(/\u00a0/g, ' '), source);
     proofreader.liveResult = {
       source,
       suggestion: await label('Suggested description').inputValue(),
@@ -191,7 +191,7 @@ export async function checkListingWorkflow({
   await dialog.getByRole('alert').filter({ hasText: 'required' }).waitFor();
   // Back navigation preserves entered text; optional items can be skipped.
   await button('Back').click();
-  assert.equal(await label('Description').inputValue(), original);
+  assert.equal((await label('Description').innerText()).replace(/\u00a0/g, ' '), original);
   await next();
   await label('Tail Number').fill('N123AB');
   await next();

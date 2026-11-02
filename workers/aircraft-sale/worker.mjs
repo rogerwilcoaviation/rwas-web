@@ -4,6 +4,7 @@ import {
   jerrySnapshot,
   jerryLogReference,
 } from './jerry-authority.mjs';
+import { richTextHtml, richTextPlain } from '../../lib/marketplace/rich-text.mjs';
 import { jerryAssert, jerryUuid, jerryHash } from './jerry-protocol.mjs';
 import {
   WEBSITE_PROTOCOL,
@@ -453,6 +454,10 @@ export function aircraftProductSchema(listing) {
   return hasProductSnippetEligibility(product) ? product : null;
 }
 function publicPage(l) {
+  const formattedCopy = (text, format) =>
+    richTextPlain(format)?.trim() === String(text ?? '').trim() && !!format
+      ? '<div class="copy">' + richTextHtml(text, format) + '</div>'
+      : '<p class="copy">' + escape(text) + '</p>';
   const schema = aircraftProductSchema(l);
   const canonical =
     'https://www.rogerwilcoaviation.com/aircraft-for-sale/' +
@@ -728,15 +733,13 @@ function publicPage(l) {
       '</dl>' +
       specifications +
       delivery +
-      '<p class="copy">' +
-      escape(l.description) +
-      '</p>' +
+      formattedCopy(l.description, l.descriptionRichText) +
       (!l.listingType || l.listingType === 'aircraft'
-        ? '<h3>Avionics</h3><p class="copy">' +
-          escape(l.avionics) +
-          '</p><h3>Equipment</h3><p class="copy">' +
-          escape(l.equipmentList) +
-          '</p><h3>Damage history</h3><p>' +
+        ? '<h3>Avionics</h3>' +
+          formattedCopy(l.avionics, l.avionicsRichText) +
+          '<h3>Equipment</h3>' +
+          formattedCopy(l.equipmentList, l.equipmentListRichText) +
+          '<h3>Damage history</h3><p>' +
           escape(l.damageHistory || 'Ask seller') +
           '</p>'
         : '') +
@@ -1360,7 +1363,9 @@ export class SellerStore {
     }
   }
   async json(req, allowEmpty = false) {
-    if (Number(req.headers.get('content-length') || 0) > 64000)
+    const path = new URL(req.url).pathname;
+    const limit = /\/(?:draft\/autosave|listings(?:\/[^/]+)?)$/.test(path) && ['POST', 'PUT'].includes(req.method) ? 900000 : 64000;
+    if (Number(req.headers.get('content-length') || 0) > limit)
       fail(413, 'Request too large.');
     const reader = req.body?.getReader();
     if (!reader) {
@@ -1373,7 +1378,7 @@ export class SellerStore {
       const { done, value } = await reader.read();
       if (done) break;
       size += value.byteLength;
-      if (size > 64000) {
+      if (size > limit) {
         await reader.cancel();
         fail(413, 'Request too large.');
       }

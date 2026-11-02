@@ -111,7 +111,7 @@ export async function checkAutosave({
     .click();
   await dialog.getByLabel('Description', { exact: true }).waitFor();
   assert.equal(
-    await dialog.getByLabel('Description', { exact: true }).inputValue(),
+    (await dialog.getByLabel('Description', { exact: true }).innerText()).replace(/\u00a0/g, ' '),
     expected,
     'Closing the page before debounce recovers every character on this device',
   );
@@ -206,8 +206,8 @@ export async function checkAutosave({
   await dialog.getByRole('button', { name: /Edit current listing/ }).click();
   await jump('Description');
   assert.equal(
-    await dialog.getByLabel('Description', { exact: true }).inputValue(),
-    listing.fields.description || '',
+    (await dialog.getByLabel('Description', { exact: true }).innerText()).replace(/\u00a0/g, ' ').trim(),
+    (listing.fields.description || '').trim(),
     'Edit current listing starts from the current listing, not the saved changes',
   );
   assert.equal((await current()).values.description, 'Linked listing recovery', 'Viewing current details does not discard the saved draft');
@@ -219,7 +219,7 @@ export async function checkAutosave({
     .getByLabel('Description', { exact: true })
     .waitFor({ timeout: 4000 });
   assert.equal(
-    await dialog.getByLabel('Description', { exact: true }).inputValue(),
+    (await dialog.getByLabel('Description', { exact: true }).innerText()).replace(/\u00a0/g, ' '),
     'Linked listing recovery',
     'Edit on the listing restores its saved online changes',
   );
@@ -235,7 +235,7 @@ export async function checkAutosave({
     .click();
   await dialog.getByLabel('Description', { exact: true }).waitFor();
   assert.equal(
-    await dialog.getByLabel('Description', { exact: true }).inputValue(),
+    (await dialog.getByLabel('Description', { exact: true }).innerText()).replace(/\u00a0/g, ' '),
     'Linked listing recovery',
   );
   const before = Object.keys(f.state().listings).length;
@@ -264,7 +264,7 @@ export async function checkAutosave({
     .click();
   await jump('Description');
   assert.equal(
-    await dialog.getByLabel('Description', { exact: true }).inputValue(),
+    (await dialog.getByLabel('Description', { exact: true }).innerText()).replace(/\u00a0/g, ' '),
     'Linked listing recovery',
     'Applied draft edits survive a backend restart and browser reload',
   );

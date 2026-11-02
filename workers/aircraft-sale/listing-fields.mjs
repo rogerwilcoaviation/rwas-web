@@ -29,8 +29,11 @@ export const listingFields = [
   'price',
   'priceLabel',
   'description',
+  'descriptionRichText',
   'avionics',
+  'avionicsRichText',
   'equipmentList',
+  'equipmentListRichText',
   'annualDue',
   'usefulLoad',
   'fuelCapacity',
@@ -54,7 +57,7 @@ export function cleanListing(body, complete = false) {
       fail(400, 'Invalid ' + k);
     if (
       String(v).length >
-      ([
+      (k.endsWith('RichText') ? 60000 : [
         'description',
         'avionics',
         'equipmentList',

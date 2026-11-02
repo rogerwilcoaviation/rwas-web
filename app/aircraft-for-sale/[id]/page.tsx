@@ -30,6 +30,7 @@ import {
 import { truncateMeta } from '@/lib/seo';
 import { PhotoCarousel } from './photo-carousel';
 import { ConditionReport } from '../condition-report';
+import { richTextHtml } from '@/lib/marketplace/rich-text.mjs';
 
 export const revalidate = 60;
 
@@ -102,8 +103,11 @@ interface Listing {
   price?: string;
   priceLabel?: string;
   description?: string;
+  descriptionRichText?: string;
   avionics?: string;
+  avionicsRichText?: string;
   equipmentList?: string;
+  equipmentListRichText?: string;
   annualDue?: string;
   usefulLoad?: string;
   fuelCapacity?: string;
@@ -646,7 +650,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
             <span className="bs-kicker">Section B3</span>
             <h2 className="bs-headline bs-headline--section">Description</h2>
             <hr className="section-rule" />
-            <p className="a4s-prose">{listing.description}</p>
+            <div className="a4s-prose" dangerouslySetInnerHTML={{__html: richTextHtml(listing.description, listing.descriptionRichText)}} />
           </Specimen>
         ) : null}
 
@@ -656,7 +660,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
             <span className="bs-kicker">Section B4</span>
             <h2 className="bs-headline bs-headline--section">Avionics</h2>
             <hr className="section-rule" />
-            <p className="a4s-prose">{listing.avionics}</p>
+            <div className="a4s-prose" dangerouslySetInnerHTML={{__html: richTextHtml(listing.avionics, listing.avionicsRichText)}} />
           </Specimen>
         ) : null}
 
@@ -666,7 +670,7 @@ export default async function AircraftDetailPage({ params }: PageProps) {
             <span className="bs-kicker">Section B5</span>
             <h2 className="bs-headline bs-headline--section">Equipment</h2>
             <hr className="section-rule" />
-            <p className="a4s-prose">{listing.equipmentList}</p>
+            <div className="a4s-prose" dangerouslySetInnerHTML={{__html: richTextHtml(listing.equipmentList, listing.equipmentListRichText)}} />
           </Specimen>
         ) : null}
 

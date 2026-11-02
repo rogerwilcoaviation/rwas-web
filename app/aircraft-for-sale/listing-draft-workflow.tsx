@@ -8,10 +8,13 @@ import {
   validateDraftField,
 } from './listing-draft-fields';
 import { proofreadDescription } from './description-proofreader';
+import { RichTextEditor } from './rich-text-editor';
+import { richTextFields, richTextHtml, richTextKey } from '@/lib/marketplace/rich-text.mjs';
 
 type Props = {
   values: Record<string, string>;
   onChange: (name: string, value: string) => void;
+  onRichChange?: (name: string, value: string, format: string) => void;
   busy: boolean;
   saved: boolean;
   onSave: () => Promise<boolean>;
@@ -28,6 +31,7 @@ type Props = {
 export function ListingDraftWorkflow({
   values,
   onChange,
+  onRichChange,
   busy,
   saved,
   onSave,
@@ -244,6 +248,20 @@ export function ListingDraftWorkflow({
                   );
                 })}
               </select>
+            ) : field.multiline && richTextFields.includes(field.name) && onRichChange ? (
+              <RichTextEditor
+                key={field.name}
+                label={field.label}
+                value={values[field.name] || ''}
+                format={values[richTextKey(field.name)] || ''}
+                maxLength={field.maxLength || 300}
+                disabled={busy}
+                invalid={!!error}
+                onChange={(value, format) => {
+                  setError('');
+                  onRichChange(field.name, value, format);
+                }}
+              />
             ) : field.multiline ? (
               <textarea
                 key={field.name}
@@ -309,11 +327,14 @@ export function ListingDraftWorkflow({
             </p>
           )}
           {field.name === 'description' && (
+            <>
+            {values.descriptionRichText && <p className="workflow-hint">Applying a proofreading suggestion replaces the current formatting.</p>}
             <DescriptionProofreading
               value={values.description || ''}
               onChange={(value) => onChange('description', value)}
               disabled={busy}
             />
+            </>
           )}
           {error && (
             <p id="listing-step-error" role="alert" className="workflow-error">
@@ -391,7 +412,9 @@ export function ListingDraftWorkflow({
                   {item.required ? ' · Required' : ''}
                 </dt>
                 <dd>
-                  {displayValue(item)}
+                  {richTextFields.includes(item.name) && values[richTextKey(item.name)]
+                    ? <div dangerouslySetInnerHTML={{__html: richTextHtml(values[item.name], values[richTextKey(item.name)])}} />
+                    : displayValue(item)}
                   <button
                     disabled={busy}
                     onClick={() => go(index)}
@@ -510,6 +533,12 @@ export function ListingDraftWorkflow({
           margin: 24px 0 8px;
           font-weight: 700;
         }
+        :global(.rich-editor) { font-weight: 400; }
+        :global(.rich-toolbar) { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+        :global(.rich-toolbar button) { min-height: 40px; padding: 6px 12px; border: 1px solid #7b7871; border-radius: 4px; background: white; color: #222; cursor: pointer; }
+        :global(.rich-toolbar button:focus-visible) { outline: 2px solid #9a741b; outline-offset: 3px; }
+        :global(.rich-editor-input) { box-sizing: border-box; min-height: 170px; padding: 12px; border: 1px solid #7b7871; border-radius: 4px; background: white; color: #222; white-space: pre-wrap; overflow-wrap: anywhere; font: 16px/1.5 Arial, sans-serif; }
+        :global(.rich-editor-input:focus-visible) { outline: 2px solid #9a741b; outline-offset: 3px; }
         .workflow-rating-group {
           display: grid;
           grid-template-columns: repeat(

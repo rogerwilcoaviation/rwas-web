@@ -10,6 +10,7 @@ import {
 import { draftFields, getDraftFields } from './listing-draft-fields';
 import { marketplaceStaffMediaPath } from '@/lib/marketplace-staff-fetch';
 import { ConditionReport } from './condition-report';
+import { richTextFields, richTextHtml, richTextKey } from '@/lib/marketplace/rich-text.mjs';
 
 export const fieldLabel = (key: string) =>
   (key === 'nNumber' ? 'Tail Number' : '') ||
@@ -80,7 +81,7 @@ export function ListingDetails({
   const conditionRows = conditionReport(fields);
   const groups = new Map<
     string,
-    { key: string; label: string; value: string; long: boolean }[]
+    { key: string; label: string; value: string; long: boolean; html?: string }[]
   >();
   const flat = Object.entries(fields).flatMap(([key, value]) =>
     key === 'specifications' && value && typeof value === 'object'
@@ -100,6 +101,7 @@ export function ListingDetails({
         'exteriorConditionNotes',
         'interiorConditionNotes',
       ].includes(key) ||
+      richTextFields.some((name: string) => richTextKey(name) === key) ||
       (key === 'spec:exterior-exterior-notes' &&
         conditionRows.some(
           (row: { side: string }) => row.side === 'exterior',
@@ -155,6 +157,9 @@ export function ListingDetails({
         fieldLabel(key.replace(/^spec:/, '')),
       value: formatted,
       long,
+      ...(richTextFields.includes(key) && fields[richTextKey(key)]
+        ? { html: richTextHtml(formatted, fields[richTextKey(key)]) }
+        : {}),
     });
     groups.set(group, rows);
   }
@@ -175,7 +180,7 @@ export function ListingDetails({
                 key={row.key}
               >
                 <dt>{row.label}</dt>
-                <dd>{row.value}</dd>
+                <dd>{row.html ? <div dangerouslySetInnerHTML={{ __html: row.html }} /> : row.value}</dd>
               </div>
             ))}
           </dl>

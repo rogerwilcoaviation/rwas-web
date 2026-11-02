@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- Authenticated blob previews cannot use the public image optimizer. */
 'use client';
 import { editSource } from '../../lib/marketplace/edit-source.mjs';
+import { richTextFields, richTextKey } from '../../lib/marketplace/rich-text.mjs';
 import {
   useEffect,
   useLayoutEffect,
@@ -1325,7 +1326,7 @@ export default function SellerAuthPanel() {
       Object.fromEntries(
         Object.entries(form).filter(
           ([name, value]) =>
-            (visible.has(name) || name === 'workflowVersion') &&
+            (visible.has(name) || name === 'workflowVersion' || richTextFields.some(field => visible.has(field) && richTextKey(field) === name)) &&
             (value.trim() !== '' ||
               (editing && !['year', 'price'].includes(name))),
         ),
@@ -2233,6 +2234,7 @@ export default function SellerAuthPanel() {
               onChange={(name, value) =>
                 setForm((previous) => {
                   const next = { ...previous, [name]: value };
+                  if (richTextFields.includes(name)) next[richTextKey(name)] = '';
                   if (['listingType', 'category'].includes(name)) {
                     for (const key of Object.keys(next))
                       if (key.startsWith('spec:')) delete next[key];
@@ -2245,6 +2247,11 @@ export default function SellerAuthPanel() {
                   return updated;
                 })
               }
+              onRichChange={(name, value, format) => setForm((previous) => {
+                const updated = { ...previous, [name]: value, [richTextKey(name)]: format };
+                autosave.capture(updated, workflowStep);
+                return updated;
+              })}
               busy={busy}
               saved={!!editing}
               onSave={async () => {
