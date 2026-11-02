@@ -202,6 +202,19 @@ export async function checkAutosave({
     .filter({ hasText: 'Offline recovery part' })
     .getByRole('button', { name: 'Edit', exact: true })
     .click();
+  await dialog.getByRole('button', { name: /Edit current listing/ }).waitFor();
+  await dialog.getByRole('button', { name: /Edit current listing/ }).click();
+  await jump('Description');
+  assert.equal(
+    await dialog.getByLabel('Description', { exact: true }).inputValue(),
+    listing.fields.description || '',
+    'Edit current listing starts from the current listing, not the saved changes',
+  );
+  assert.equal((await current()).values.description, 'Linked listing recovery', 'Viewing current details does not discard the saved draft');
+  await dialog.getByRole('button', { name: 'Close seller panel', exact: true }).click();
+  await page.getByRole('button', { name: 'My Listings', exact: true }).click();
+  await dialog.locator('.seller-listing').filter({ hasText: 'Offline recovery part' }).getByRole('button', { name: 'Edit', exact: true }).click();
+  await dialog.getByRole('button', { name: /Resume saved changes/ }).click();
   await dialog
     .getByLabel('Description', { exact: true })
     .waitFor({ timeout: 4000 });

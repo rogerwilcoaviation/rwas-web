@@ -61,6 +61,7 @@ type Config = {
   listingId: string | null;
   listingRevision: number | null;
   revision: { current: string | null };
+  preserveUntilChange?: boolean;
   request: (body: RecoveryDraft) => Promise<{ revision: string }>;
 };
 export function useListingAutosave(config: Config) {
@@ -69,6 +70,7 @@ export function useListingAutosave(config: Config) {
   const queue = useRef(Promise.resolve());
   const last = useRef('');
   const activeEditor = useRef(-1);
+  const protectedValues = useRef<string | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [notice, setNotice] = useState('');
   const [issue, setIssue] = useState(false);
@@ -104,6 +106,8 @@ export function useListingAutosave(config: Config) {
     const c = current.current,
       editor = c.editor;
     if (!c.enabled) return queue.current;
+    if (protectedValues.current === JSON.stringify(c.values)) return queue.current;
+    protectedValues.current = null;
     const sig = signature(c.values, c.step);
     if (sig === last.current) return queue.current;
     const draft = capture();
@@ -162,6 +166,9 @@ export function useListingAutosave(config: Config) {
     if (!config.enabled) return;
     if (activeEditor.current !== config.editor) {
       activeEditor.current = config.editor;
+      protectedValues.current = config.preserveUntilChange
+        ? JSON.stringify(config.values)
+        : null;
       const recovered = readRecovery(config.owner);
       last.current =
         recovered &&
@@ -173,6 +180,8 @@ export function useListingAutosave(config: Config) {
       setIssue(false);
       if (last.current) return;
     }
+    if (protectedValues.current === JSON.stringify(config.values)) return;
+    protectedValues.current = null;
     if (signature(config.values, config.step) === last.current) return;
     capture();
     setNotice('Changes saved on this device. Syncing…');
@@ -186,6 +195,7 @@ export function useListingAutosave(config: Config) {
   useEffect(() => {
     if (!config.enabled) return;
     const persist = () => {
+      if (protectedValues.current === JSON.stringify(current.current.values)) return;
       if (
         signature(current.current.values, current.current.step) === last.current
       )

@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- Authenticated blob previews cannot use the public image optimizer. */
 'use client';
+import { editSource } from '../../lib/marketplace/edit-source.mjs';
 import {
   useEffect,
   useLayoutEffect,
@@ -218,6 +219,7 @@ export default function SellerAuthPanel() {
     | 'listings'
     | 'create'
     | 'resume'
+    | 'edit-choice'
     | 'edit'
     | 'account'
     | 'admin'
@@ -242,6 +244,8 @@ export default function SellerAuthPanel() {
   );
   const [items, setItems] = useState<Listing[]>([]),
     [editing, setEditing] = useState<Listing | null>(null);
+  const [editChoice, setEditChoice] = useState<Listing | null>(null);
+  const [preserveDraftUntilChange, setPreserveDraftUntilChange] = useState(false);
   const [form, setForm] = useState<Record<string, string>>({}),
     [account, setAccount] = useState<Account | null>(null);
   const [initialDraftStep, setInitialDraftStep] = useState(0);
@@ -980,6 +984,7 @@ export default function SellerAuthPanel() {
     listingId: editing?.id || null,
     listingRevision: editing?.revision || null,
     revision: sourceDraftRevision,
+    preserveUntilChange: preserveDraftUntilChange,
     request: async (body) => {
       if (currentAuth.current !== autosaveSession)
         throw Error(
@@ -1197,6 +1202,7 @@ export default function SellerAuthPanel() {
     requireSaved = false,
     fallbackDetails?: Record<string, unknown>,
     requestedListing?: Listing,
+    choice?: 'current' | 'saved',
   ) {
     if (currentAuth.current && accessRole.current !== 'seller') {
       if (accessRole.current === 'admin') setView('admin');
@@ -1216,45 +1222,61 @@ export default function SellerAuthPanel() {
       )
         return;
       const recovery = draftOwner ? readRecovery(draftOwner) : null;
-      if (
-        requestedListing &&
-        ((saved.draft && saved.draft.listingId !== requestedListing.id) ||
-          (recovery && recovery.listingId !== requestedListing.id))
-      )
+      const source = editSource(requestedListing, saved.draft, recovery);
+      if (source === 'different')
         throw Error(
           'A different unfinished draft is saved. Resume and save it before editing another listing.',
         );
-      if (saved.listingConflict)
+      if (source === 'choose' && !choice) {
+        setEditChoice(requestedListing || null);
+        setView('edit-choice');
+        return;
+      }
+      if (saved.listingConflict && choice !== 'current')
         throw Error(
           'This listing was edited elsewhere. Open its latest version from My Listings; your saved recovery copy is retained.',
         );
       if (requireSaved && !saved.draft && !recovery)
         throw Error('No saved draft is available. Refresh My Listings.');
-      let snapshot = saved.draft;
+      if (choice === 'saved' && !saved.draft && !recovery)
+        throw Error('The saved draft is no longer available. Return to My Listings.');
+      let snapshot = choice === 'current' ? null : saved.draft;
       const canRecover =
+        choice !== 'current' &&
         recovery &&
-        (!snapshot ||
-          (recovery.listingId === (snapshot.listingId || null) &&
-            recovery.expectedRevision === saved.revision));
+        recovery.expectedRevision === saved.revision &&
+        (!snapshot || recovery.listingId === (snapshot.listingId || null));
+      if ((choice === 'saved' || requireSaved) && !saved.draft && recovery && !canRecover)
+        throw Error('The online draft has changed. Your device recovery copy is retained; return to My Listings.');
       if (canRecover) snapshot = { manual: true, ...recovery };
-      const details =
+      const details = choice === 'current' ? null :
         (snapshot?.manual
           ? snapshot.values
           : snapshot?.intake
             ? snapshot.fields
             : snapshot) || fallbackDetails;
       let linked = requestedListing || null;
-      if (snapshot?.listingId) {
+      if (snapshot?.listingId || requestedListing) {
         const result = await api('/my-listings');
         linked = result.listings.find(
-          (listing: Listing) => listing.id === snapshot.listingId,
+          (listing: Listing) => listing.id === (snapshot?.listingId || requestedListing?.id),
         );
         if (!linked)
           throw Error(
             'This saved listing is unavailable. Refresh My Listings.',
           );
       }
+      if (
+        canRecover &&
+        recovery.listingId &&
+        recovery.listingRevision !== linked?.revision &&
+        !saved.draft?.listingFieldsFingerprint
+      )
+        throw Error(
+          'This device’s recovery copy is based on an older listing. Return to My Listings and choose the current listing; the recovery copy is retained.',
+        );
       edit(linked);
+      setPreserveDraftUntilChange(choice === 'current' && source === 'choose');
       sourceDraftRevision.current = saved.revision || null;
       if (details) {
         const values = snapshot?.manual
@@ -1280,7 +1302,7 @@ export default function SellerAuthPanel() {
         setForm(values);
       }
       if (
-        recovery &&
+        choice !== 'current' && recovery &&
         !canRecover &&
         recovery.listingId === (snapshot?.listingId || null)
       )
@@ -1288,7 +1310,9 @@ export default function SellerAuthPanel() {
       setMessage(
         details
           ? 'Your saved details are restored. Continue your listing below.'
-          : 'Enter your listing details and save a private draft.',
+          : requestedListing
+            ? 'Showing the current listing.'
+            : 'Enter your listing details and save a private draft.',
       );
     });
   }
@@ -1976,6 +2000,23 @@ export default function SellerAuthPanel() {
                 <strong>List manually</strong>
                 <span>Enter the details yourself in the listing form.</span>
               </button>
+            </div>
+          </section>
+        )}
+        {view === 'edit-choice' && access === 'seller' && editChoice && (
+          <section className="listing-start" aria-label="Choose listing information">
+            <p>An unfinished draft exists for this listing. Choose which information to edit.</p>
+            <p>Starting from the current listing will replace the saved draft when you make changes or save. Resume the draft first if you want to keep its unfinished changes.</p>
+            <div className="listing-start-options">
+              <button disabled={busy} onClick={() => void openManualListing(false, undefined, editChoice, 'current')}>
+                <strong>Edit current listing</strong>
+                <span>Start with the latest saved listing details.</span>
+              </button>
+              <button disabled={busy} onClick={() => void openManualListing(false, undefined, editChoice, 'saved')}>
+                <strong>Resume saved changes</strong>
+                <span>Continue the unfinished draft.</span>
+              </button>
+              <button disabled={busy} onClick={() => setView('listings')}>Back to My Listings</button>
             </div>
           </section>
         )}
