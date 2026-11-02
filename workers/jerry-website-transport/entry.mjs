@@ -1,14 +1,16 @@
-// Synthetic-only native capability. No provider transport, token, tool or fallback.
+// Website-only native capability. No OAuth/API credentials, tools or fallback.
 import { WorkerEntrypoint } from 'cloudflare:workers';
 import { admittedResponse } from '../jerry-response/admission.mjs';
 import { jerryAssert, jerryKeys } from '../aircraft-sale/jerry-protocol.mjs';
 import {
   WEBSITE_PROTOCOL,
   SYNTHETIC_CAPABILITIES,
+  WORKERS_AI_CAPABILITIES,
   validateEnvelope,
   validateScope,
   scopeKey,
 } from './contract.mjs';
+import { workersAiReply } from './workers-ai.mjs';
 export { WebsiteTransportCopies } from './copies.mjs';
 export { JerryAdmission } from '../jerry-response/admission.mjs';
 export async function copiesCall(env, scope, path, body) {
@@ -37,7 +39,12 @@ export async function transportStatus(env, request) {
     400,
     'Invalid website protocol.',
   );
-  if (!request.scope)
+  if (!request.scope) {
+    if (
+      env.JERRY_TRANSPORT_MODE === 'workers-ai' &&
+      typeof env.AI?.run === 'function'
+    )
+      return { ...WORKERS_AI_CAPABILITIES };
     return {
       ...SYNTHETIC_CAPABILITIES,
       mode:
@@ -45,6 +52,7 @@ export async function transportStatus(env, request) {
           ? 'synthetic-only'
           : 'disabled',
     };
+  }
   validateScope(request.scope);
   if (request.scope.category === 'guest')
     return {
@@ -59,7 +67,7 @@ export async function syntheticReply(envelope) {
     ? envelope.payload.text
     : 'Synthetic website-only reply. No external request was made.';
 }
-async function boundedSynthetic(envelope, complete) {
+async function boundedResponse(envelope, complete) {
   let timer;
   try {
     return await Promise.race([
@@ -68,7 +76,7 @@ async function boundedSynthetic(envelope, complete) {
         timer = setTimeout(
           () =>
             reject(
-              Object.assign(Error('Synthetic response deadline reached.'), {
+              Object.assign(Error('Website response deadline reached.'), {
                 status: 503,
                 code: 'JERRY_ATTEMPT_UNCERTAIN',
               }),
@@ -81,14 +89,11 @@ async function boundedSynthetic(envelope, complete) {
     clearTimeout(timer);
   }
 }
-export async function runWebsiteResponse(
-  env,
-  kind,
-  envelope,
-  complete = syntheticReply,
-) {
+export async function runWebsiteResponse(env, kind, envelope, complete) {
   jerryAssert(
-    env.JERRY_TRANSPORT_MODE === 'synthetic-fixture' &&
+    ['synthetic-fixture', 'workers-ai'].includes(env.JERRY_TRANSPORT_MODE) &&
+      (env.JERRY_TRANSPORT_MODE !== 'workers-ai' ||
+        typeof env.AI?.run === 'function') &&
       !Object.keys(env).some((k) =>
         /^(OPENAI_|OAUTH_|JERRY_MODEL|JERRY_RESPONSE|JERRY_RELAY)/.test(k),
       ),
@@ -97,6 +102,11 @@ export async function runWebsiteResponse(
     'JERRY_TRANSPORT_UNAVAILABLE',
   );
   validateEnvelope(envelope);
+  const invoke =
+    complete ||
+    (env.JERRY_TRANSPORT_MODE === 'workers-ai'
+      ? (value) => workersAiReply(env, value)
+      : syntheticReply);
   jerryAssert(envelope.kind === kind, 400, 'Website capability mismatch.');
   const { scope, operationId } = envelope;
   if (scope.category === 'guest')
@@ -105,7 +115,7 @@ export async function runWebsiteResponse(
       scope,
       operationId,
       kind,
-      reply: await boundedSynthetic(envelope, complete),
+      reply: await boundedResponse(envelope, invoke),
       expiresAt: envelope.expiresAt,
     }));
   const reservation = await copiesCall(env, scope, 'reserve', envelope);
@@ -114,7 +124,7 @@ export async function runWebsiteResponse(
   try {
     return await admittedResponse(env, envelope.admission, async () => {
       await copiesCall(env, scope, 'start', receipt);
-      const reply = await boundedSynthetic(envelope, complete);
+      const reply = await boundedResponse(envelope, invoke);
       return copiesCall(env, scope, 'finish', { ...receipt, reply });
     });
   } catch (error) {
@@ -156,7 +166,7 @@ export async function transportResult(operation) {
     };
   }
 }
-export default class SyntheticWebsiteTransport extends WorkerEntrypoint {
+export default class WebsiteTransport extends WorkerEntrypoint {
   fetch() {
     return new Response('Not found', { status: 404 });
   }

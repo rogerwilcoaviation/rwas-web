@@ -124,9 +124,12 @@ export async function jerrySnapshot(store, identity, resource) {
         id: l.id,
         status: l.status,
         revision: l.revision,
-        title: [l.fields?.year, l.fields?.make, l.fields?.model]
-          .filter(Boolean)
-          .join(' '),
+        title: String(
+          l.fields?.title ||
+            [l.fields?.year, l.fields?.make, l.fields?.model]
+              .filter(Boolean)
+              .join(' '),
+        ).slice(0, 512),
       }))
       .slice(0, 50),
     support: Object.values(state.supportTickets || {})

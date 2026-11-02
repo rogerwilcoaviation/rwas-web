@@ -1,0 +1,41 @@
+name = "rwas-jerry-accounts-qa-20261101"
+account_id = "08c51088fd98ea9214af8a0ae226663c"
+main = "entry.mjs"
+compatibility_date = "2026-09-01"
+workers_dev = true
+preview_urls = false
+routes = []
+keep_vars = false
+
+[vars]
+QA_EXPIRES_AT = "0"
+JERRY_TRANSPORT_MODE = "workers-ai"
+JERRY_CONVERSATIONS_ENABLED = "false"
+
+[ai]
+binding = "AI"
+
+[[durable_objects.bindings]]
+name = "QA_CONTROL"
+class_name = "QualificationControl"
+[[durable_objects.bindings]]
+name = "SELLER_STORE"
+class_name = "QualificationControl"
+[[durable_objects.bindings]]
+name = "JERRY_CONVERSATIONS"
+class_name = "QualificationConversations"
+[[durable_objects.bindings]]
+name = "JERRY_TRANSPORT_COPIES"
+class_name = "QualificationCopies"
+[[durable_objects.bindings]]
+name = "JERRY_ADMISSION"
+class_name = "JerryAdmission"
+[[migrations]]
+tag = "jerry-account-qualification-v1"
+new_sqlite_classes = ["QualificationControl", "QualificationConversations", "QualificationCopies", "JerryAdmission"]
+
+[observability]
+enabled = false
+[observability.logs]
+enabled = false
+invocation_logs = false

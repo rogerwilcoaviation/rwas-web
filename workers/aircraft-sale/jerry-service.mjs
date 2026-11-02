@@ -191,7 +191,14 @@ export async function jerryWebsite(env, request) {
   const context = await current(env, proof, request.expected),
     identity = context.identity;
   if (request.operation === 'context')
-    return { enabled: true, identity, draftStamp: context.draftStamp };
+    return {
+      enabled: true,
+      identity,
+      draftStamp: context.draftStamp,
+      ...(env.JERRY_ACCOUNT_CHAT_ONLY === 'true' && !identity
+        ? { guestMode: 'public' }
+        : {}),
+    };
   jerryAssert(
     ['public', 'exchange'].includes(request.surface),
     400,
@@ -210,6 +217,11 @@ export async function jerryWebsite(env, request) {
       )
     : null;
   if (!identity) {
+    jerryAssert(
+      env.JERRY_ACCOUNT_CHAT_ONLY !== 'true',
+      401,
+      'Sign in to use account-linked Jerry. Public questions remain available in the website chatbot.',
+    );
     jerryAssert(
       request.operation === 'message' && !request.expected,
       401,

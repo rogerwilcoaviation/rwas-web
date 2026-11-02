@@ -1,19 +1,57 @@
 // Established public /api/chat only. No seller identity, storage, actions or tools.
-export function mountJerryPublicChat({ panel, bubble, backdrop, renderMessage }) {
+export async function requestPublicJerry(messages, signal) {
+  try {
+    const response = await fetch('https://rogerwilcoaviation.com/api/chat', {
+      method: 'POST',
+      credentials: 'omit',
+      redirect: 'error',
+      cache: 'no-store',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages, state: null, listingUi: false }),
+      signal,
+    });
+    const result = await response.json();
+    if (
+      !response.ok ||
+      result.publicFaqOnly !== true ||
+      typeof result.reply !== 'string' ||
+      !result.reply.trim() ||
+      result.reply.length > 14000
+    )
+      throw Error('Public chat is unavailable');
+    return { reply: result.reply };
+  } catch {
+    throw Object.assign(
+      Error(
+        'Public chat is temporarily unavailable. You can still use the secure seller panel.',
+      ),
+      { code: 'JERRY_ATTEMPT_UNCERTAIN', status: 503 },
+    );
+  }
+}
+export function mountJerryPublicChat({
+  panel,
+  bubble,
+  backdrop,
+  renderMessage,
+}) {
   const chat = panel.querySelector('.jerry-widget-chat');
   const input = panel.querySelector('.jerry-widget-text-input');
   const send = panel.querySelector('.jerry-widget-send');
   const error = panel.querySelector('.jerry-widget-error');
-  const initial = 'Captain Jerry here. Ask about RWAS services, pricing and scheduling guidance, or how to reach the shop. Seller records and drafts stay in the secure seller panel. Public chat may be processed by OpenAI; please do not share sensitive information.';
+  const initial =
+    'Captain Jerry here. Ask about RWAS services, pricing and scheduling guidance, or how to reach the shop. Seller records and drafts stay in the secure seller panel. Public chat may be processed by OpenAI; please do not share sensitive information.';
   let history = [{ role: 'assistant', content: initial }];
   let generation = 0;
   let pending;
-  panel.querySelector('.jerry-widget-status').textContent = 'ONLINE — RWAS PUBLIC CHAT';
+  panel.querySelector('.jerry-widget-status').textContent =
+    'ONLINE — RWAS PUBLIC CHAT';
   panel.querySelector('.jerry-widget-input').hidden = false;
   panel.querySelector('.jerry-widget-input').style.display = '';
   panel.querySelector('.jerry-widget-attach').hidden = true;
   panel.querySelector('.jerry-service-open').hidden = true;
-  panel.querySelector('.jerry-widget-privacy').textContent = 'Public RWAS information only. Do not enter passwords, payment details or private records. This conversation stays in this page; seller drafts require the secure seller panel.';
+  panel.querySelector('.jerry-widget-privacy').textContent =
+    'Public RWAS information only. Do not enter passwords, payment details or private records. This conversation stays in this page; seller drafts require the secure seller panel.';
   input.maxLength = 2000;
   function open(value) {
     panel.style.display = value ? 'flex' : 'none';
@@ -47,7 +85,9 @@ export function mountJerryPublicChat({ panel, bubble, backdrop, renderMessage })
   }
   function busy(value) {
     send.disabled = input.disabled = value;
-    panel.querySelector('.jerry-widget-status').textContent = value ? 'CAPTAIN JERRY IS THINKING…' : 'ONLINE — RWAS PUBLIC CHAT';
+    panel.querySelector('.jerry-widget-status').textContent = value
+      ? 'CAPTAIN JERRY IS THINKING…'
+      : 'ONLINE — RWAS PUBLIC CHAT';
   }
   async function submit() {
     const text = input.value.trim();
@@ -64,23 +104,16 @@ export function mountJerryPublicChat({ panel, bubble, backdrop, renderMessage })
     pending = controller;
     const timer = setTimeout(() => controller.abort(), 100000);
     try {
-      const response = await fetch('https://rogerwilcoaviation.com/api/chat', {
-        method: 'POST', credentials: 'omit', redirect: 'error', cache: 'no-store',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history, state: null, listingUi: false }),
-        signal: controller.signal,
-      });
-      const result = await response.json();
+      const result = await requestPublicJerry(history, controller.signal);
       if (generation !== current) return;
-      if (!response.ok || result.publicFaqOnly !== true || typeof result.reply !== 'string' || !result.reply.trim() || result.reply.length > 14000)
-        throw Error('Public chat is unavailable');
       // Ignore all action/state fields. Chat never mutates seller data.
       history.push({ role: 'assistant', content: result.reply });
       history = history.slice(-8);
       render();
     } catch {
       if (generation === current) {
-        error.textContent = 'Chat is temporarily unavailable. Call (605) 299-8178 or email avionics@rwas.team. You can still use the secure seller panel.';
+        error.textContent =
+          'Chat is temporarily unavailable. Call (605) 299-8178 or email avionics@rwas.team. You can still use the secure seller panel.';
         error.style.display = 'block';
       }
     } finally {
@@ -94,22 +127,36 @@ export function mountJerryPublicChat({ panel, bubble, backdrop, renderMessage })
   panel.querySelector('.jerry-widget-close').onclick = () => open(false);
   send.onclick = submit;
   input.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') { event.preventDefault(); void submit(); }
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      void submit();
+    }
   });
   window.openJerryChat = () => open(true);
   window.jerryChat = () => open(true); // Seller intent seeds never submit private data.
   document.addEventListener('click', (event) => {
     const link = event.target.closest?.('a');
-    if (link && (link.getAttribute('href') === '#ask-jerry' || link.textContent.trim() === 'Ask Jerry')) {
-      event.preventDefault(); open(true);
+    if (
+      link &&
+      (link.getAttribute('href') === '#ask-jerry' ||
+        link.textContent.trim() === 'Ask Jerry')
+    ) {
+      event.preventDefault();
+      open(true);
     }
   });
   document.addEventListener('rwas:session-changed', () => {
     generation++;
-    pending?.abort(); pending = null;
+    pending?.abort();
+    pending = null;
     history = [{ role: 'assistant', content: initial }];
-    input.value = ''; error.textContent = ''; error.style.display = 'none'; busy(false); render();
+    input.value = '';
+    error.textContent = '';
+    error.style.display = 'none';
+    busy(false);
+    render();
   });
-  render(); open(false);
+  render();
+  open(false);
   return true;
 }

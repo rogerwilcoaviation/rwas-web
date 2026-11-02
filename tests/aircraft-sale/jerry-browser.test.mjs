@@ -16,6 +16,10 @@ const widgetSource = await readFile(
   new URL('../../public/jerry-widget.js', import.meta.url),
   'utf8',
 );
+const publicSource = await readFile(
+  new URL('../../public/jerry-public-chat.mjs', import.meta.url),
+  'utf8',
+);
 async function fixture(run) {
   const f = await serviceFixture(),
     browser = await chromium.launch({ headless: true }),
@@ -93,12 +97,109 @@ const open = async (page) => {
   await page.waitForSelector('.jerry-account-chat', { state: 'attached' });
   await page.locator('.jerry-widget-bubble').click();
 };
+test('signed-out visitors keep public chat while signing in switches to the account service without sending private history publicly', async () =>
+  fixture(async ({ f, page }) => {
+    f.env.JERRY_ACCOUNT_CHAT_ONLY = 'true';
+    f.signedIn(false);
+    await page.route('**/jerry-public-chat.mjs*', (route) =>
+      route.fulfill({
+        contentType: 'application/javascript',
+        body: publicSource,
+      }),
+    );
+    let publicCalls = 0;
+    await page.route(
+      'https://rogerwilcoaviation.com/api/chat',
+      async (route) => {
+        publicCalls++;
+        const body = JSON.parse(route.request().postData());
+        assert.equal(body.state, null);
+        assert.equal(body.listingUi, false);
+        assert.ok(!JSON.stringify(body).includes('PRIVATE ACCOUNT QUESTION'));
+        assert.ok(!route.request().headers().authorization);
+        return route.fulfill({
+          json: { publicFaqOnly: true, reply: 'Synthetic public OAuth answer' },
+        });
+      },
+    );
+    await open(page);
+    await send(page, 'Public guest question');
+    await page
+      .getByText('Synthetic public OAuth answer', { exact: true })
+      .waitFor();
+    assert.equal(publicCalls, 1);
+    assert.equal(f.relayCalls(), 0);
+    f.signedIn(true);
+    await page.evaluate(() =>
+      document.dispatchEvent(new CustomEvent('rwas:session-changed')),
+    );
+    await page.getByText('Seller account', { exact: true }).waitFor();
+    await send(page, 'PRIVATE ACCOUNT QUESTION');
+    await page
+      .getByText('Synthetic reply N123AB, 145.', { exact: true })
+      .waitFor();
+    assert.equal(publicCalls, 1);
+    assert.equal(f.relayCalls(), 1);
+  }));
 const send = async (page, text) => {
   await page
     .locator('.jerry-widget-text-input,.jerry-widget-input input')
     .fill(text);
   await page.locator('.jerry-widget-input button').click();
 };
+for (const role of ['seller', 'admin', 'super-admin']) {
+  test(`account chat preserves history and exposes only ${role} controls`, async () =>
+    fixture(async ({ f, page }) => {
+      f.identity.isAdministrator = role === 'admin';
+      if (role === 'super-admin')
+        f.env.BETTER_AUTH_ADMIN_USER_IDS = f.identity.subject;
+      await open(page);
+      await page
+        .getByText(
+          role === 'seller'
+            ? 'Seller account'
+            : role === 'admin'
+              ? 'Administrator'
+              : 'Super administrator',
+          { exact: true },
+        )
+        .waitFor();
+      const status =
+        role === 'seller' ? 'My saved work' : 'Administration overview';
+      await page.getByRole('button', { name: status, exact: true }).click();
+      await page
+        .getByText(
+          role === 'seller'
+            ? /You have no saved draft/
+            : /moderation queue contains/,
+        )
+        .waitFor();
+      assert.equal(f.relayCalls(), 0);
+      assert.equal(
+        await page
+          .getByRole('button', { name: 'Resume saved draft', exact: true })
+          .isVisible(),
+        role === 'seller',
+      );
+      assert.equal(
+        await page
+          .getByRole('button', { name: 'Continue manually', exact: true })
+          .isVisible(),
+        role === 'seller',
+      );
+      await page.reload();
+      await page.locator('.jerry-widget-bubble').click();
+      await page
+        .getByText(
+          role === 'seller'
+            ? /You have no saved draft/
+            : /moderation queue contains/,
+        )
+        .waitFor();
+      assert.equal(Object.keys(f.f.state().drafts).length, 0);
+      assert.equal(Object.keys(f.f.state().listings).length, 0);
+    }));
+}
 test('guest retry keeps its operation ID across reload and only an explicit resend starts new work', async () =>
   fixture(async ({ f, page }) => {
     f.signedIn(false);

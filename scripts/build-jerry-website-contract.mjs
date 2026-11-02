@@ -6,6 +6,7 @@ const dependencies = [
   'workers/jerry-website-transport/entry.mjs',
   'workers/jerry-website-transport/contract.mjs',
   'workers/jerry-website-transport/copies.mjs',
+  'workers/jerry-website-transport/workers-ai.mjs',
   'workers/jerry-response/admission.mjs',
   'workers/aircraft-sale/jerry-protocol.mjs',
 ].sort();

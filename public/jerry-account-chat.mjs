@@ -86,6 +86,29 @@ const strings = {
     'A resposta anterior não é mantida no serviço. Reenviar inicia uma nova solicitação.',
   ],
 };
+const accountLabels = {
+  en: {
+    seller: 'Seller account',
+    admin: 'Administrator',
+    'super-admin': 'Super administrator',
+    restricted: 'Restricted account',
+    overview: 'Administration overview',
+  },
+  es: {
+    seller: 'Cuenta de vendedor',
+    admin: 'Administrador',
+    'super-admin': 'Superadministrador',
+    restricted: 'Cuenta restringida',
+    overview: 'Resumen de administración',
+  },
+  'pt-BR': {
+    seller: 'Conta de vendedor',
+    admin: 'Administrador',
+    'super-admin': 'Superadministrador',
+    restricted: 'Conta restrita',
+    overview: 'Visão geral da administração',
+  },
+};
 export async function mountJerryAccountChat({
   panel,
   bubble,
@@ -117,6 +140,9 @@ export async function mountJerryAccountChat({
   panel.replaceChildren();
   const header = text('div', '', 'jerry-widget-header');
   header.append(text('strong', 'CAPTAIN JERRY'));
+  const accountRole = text('span', '', 'jerry-account-role');
+  accountRole.setAttribute('aria-live', 'polite');
+  header.append(accountRole);
   const close = text('button', '×', 'jerry-widget-close');
   close.type = 'button';
   close.setAttribute('aria-label', 'Close');
@@ -319,10 +345,16 @@ export async function mountJerryAccountChat({
     if (open) input.focus();
   }
   function labels() {
+    const role = context?.identity?.role;
+    const administrative = ['admin', 'super-admin'].includes(role);
+    accountRole.textContent = accountLabels[language][role] || '';
+    accountRole.hidden = !context?.identity;
     select.setAttribute('aria-label', s(0));
     newButton.textContent = s(1);
     deleteButton.textContent = s(2);
-    statusButton.textContent = s(3);
+    statusButton.textContent = administrative
+      ? accountLabels[language].overview
+      : s(3);
     resumeButton.textContent = s(4);
     manual.textContent = s(5);
     send.textContent = s(6);
@@ -335,6 +367,16 @@ export async function mountJerryAccountChat({
       document.createTextNode((context?.identity ? s(12) : s(13)) + ' '),
       privacy,
     );
+    if (context?.identity)
+      note.append(
+        document.createTextNode(
+          language === 'es'
+            ? ' Las respuestas de IA se procesan con Cloudflare Workers AI.'
+            : language === 'pt-BR'
+              ? ' As respostas de IA são processadas pelo Cloudflare Workers AI.'
+              : ' AI replies are processed by Cloudflare Workers AI.',
+        ),
+      );
     refreshButton.textContent = s(18);
     refreshButton.hidden =
       !!context && !context.error && errorBox.style.display !== 'block';
@@ -744,22 +786,36 @@ export async function mountJerryAccountChat({
       render();
     }
     try {
-      const result = await api(
-        'message',
-        context.identity
-          ? request
-          : {
-              operationId: guestRequest.operationId,
-              issuedAt: guestRequest.issuedAt,
-              input: {
-                message: guestRequest.input.message,
-                mode: 'chat',
-                locale: guestRequest.input.locale,
+      let result;
+      if (!context.identity && context.guestMode === 'public') {
+        const publicChat = await import(
+          '/jerry-public-chat.mjs?v=20261101-account-public'
+        );
+        if (!valid(t)) return;
+        result = {
+          guest: true,
+          result: await publicChat.requestPublicJerry(
+            [...guestRequest.history, { role: 'user', content: value }],
+            signal,
+          ),
+        };
+      } else
+        result = await api(
+          'message',
+          context.identity
+            ? request
+            : {
+                operationId: guestRequest.operationId,
+                issuedAt: guestRequest.issuedAt,
+                input: {
+                  message: guestRequest.input.message,
+                  mode: 'chat',
+                  locale: guestRequest.input.locale,
+                },
+                history: guestRequest.history,
               },
-              history: guestRequest.history,
-            },
-        signal,
-      );
+          signal,
+        );
       if (!valid(t)) return;
       if (context.identity) {
         put(key('pending:' + active.id), null);
@@ -900,7 +956,7 @@ export async function mountJerryAccountChat({
   deleteButton.onclick = () => void remove();
   resumeJerry.onclick = () =>
     void submit('I want to resume my saved listing.', 'listing');
-  statusButton.onclick = () => void submit(s(3), 'status');
+  statusButton.onclick = () => void submit(statusButton.textContent, 'status');
   resumeButton.onclick = () => void submit(s(4), 'resume');
   manual.onclick = () => {
     if (context?.identity?.role === 'seller') {

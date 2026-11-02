@@ -76,10 +76,10 @@ export default function PrivacyPolicyPage() {
             established.
           </p>
           <p>
-            Captain Jerry keeps recent conversation history in your tab’s
-            sessionStorage. Sending a message transmits your conversation
-            through our Cloudflare-hosted service and RWAS-operated relay to our
-            AI response service, configured to request OpenAI GPT models.
+            Public Captain Jerry chat keeps recent conversation history in the
+            current page. Sending a message transmits that conversation through
+            our Cloudflare-hosted service and RWAS-operated relay to our AI
+            response service, configured to request OpenAI GPT models.
             Server-side processing can create conversation records and
             operational logs; a fixed retention period covering those records
             has not been established. Do not enter passwords, payment-card
@@ -96,10 +96,12 @@ export default function PrivacyPolicyPage() {
             related transcript copies; independently saved drafts, listings,
             uploads and support records remain. Content-free deletion and
             troubleshooting records may remain. This saved-chat path does not
-            create internal Jerry operational sessions. AI providers may retain
-            data under their own processing, abuse-monitoring or legal policies;
-            disabling provider response storage does not guarantee zero provider
-            retention.
+            create internal Jerry operational sessions. Account-linked answers
+            and translations are processed by Cloudflare Workers AI, separately
+            from the public chatbot. Account authentication credentials are not
+            sent to the model. AI providers may retain data under their own
+            processing, abuse-monitoring or legal policies; disabling provider
+            response storage does not guarantee zero provider retention.
           </p>
           <p>
             Aviation Exchange has a separate administrator activity log for

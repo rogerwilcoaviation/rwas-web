@@ -3,6 +3,39 @@ import assert from 'node:assert/strict';
 import { serviceFixture, transportReply } from './jerry-fixture.mjs';
 import { jerrySnapshot } from '../../workers/aircraft-sale/jerry-authority.mjs';
 import { digest } from '../../workers/aircraft-sale/identity.mjs';
+test('production account-only service refuses guest inference and advertises the separate public chatbot', async () => {
+  const f = await serviceFixture();
+  f.env.JERRY_ACCOUNT_CHAT_ONLY = 'true';
+  f.signedIn(false);
+  const context = await f.call('context', {}, { expected: undefined });
+  assert.equal(context.guestMode, 'public');
+  await assert.rejects(f.call('message', {}, { expected: undefined }), {
+    status: 401,
+  });
+  assert.equal(f.relayCalls(), 0);
+});
+test('seller saved-work summaries retain component and tool listing titles', async () => {
+  const f = await serviceFixture();
+  f.store.state = f.f.state();
+  const id = crypto.randomUUID();
+  f.store.state.listings[id] = {
+    id,
+    ownerId: f.profile.id,
+    status: 'pending',
+    revision: 1,
+    fields: { title: 'Synthetic aircraft component', listingType: 'parts' },
+  };
+  const snapshot = await jerrySnapshot(f.store, {
+    profileId: f.profile.id,
+    role: 'seller',
+  });
+  assert.equal(snapshot.listings[0].title, 'Synthetic aircraft component');
+  const other = await jerrySnapshot(f.store, {
+    profileId: 'unrelated',
+    role: 'seller',
+  });
+  assert.deepEqual(other.listings, []);
+});
 test('role changes during private status translation reject finalization', async () => {
   const f = await serviceFixture(),
     c = await f.create();
