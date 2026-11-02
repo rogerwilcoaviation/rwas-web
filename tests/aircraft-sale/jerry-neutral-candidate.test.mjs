@@ -12,6 +12,8 @@ import { tmpdir } from 'node:os';
 import { join, resolve, sep } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { build } from 'esbuild';
+import { createOTP } from '@better-auth/utils/otp';
+import { base32 } from '@better-auth/utils/base32';
 import { Miniflare } from './fixtures/workerd-options.mjs';
 import { LANGUAGE_VERSION } from '../../lib/site-language.mjs';
 import { listingCategories } from '../../lib/marketplace/schema.mjs';
@@ -351,6 +353,76 @@ test('actual website sessions and native synthetic transport preserve account/su
       (await snapshot.json()).result.action.type,
       'resume_saved_draft',
     );
+    const adminDb = await mf.getD1Database('SELLER_AUTH_DB', 'seller');
+    await adminDb
+      .prepare('UPDATE user SET role=? WHERE email=?')
+      .bind('admin', 'jerry+neutral-b@example.test')
+      .run();
+    assert.equal((await call('/api/jerry/context', b)).status, 403);
+    const enrollment = await call(
+      '/api/aircraft-sale/identity/two-factor/enable',
+      {
+        method: 'POST',
+        ...b,
+        body: { password: 'synthetic-neutral-password-2026', method: 'totp' },
+      },
+    );
+    assert.equal(enrollment.status, 200);
+    const details = await enrollment.json();
+    const secret = new TextDecoder().decode(
+      base32.decode(new URL(details.totpURI).searchParams.get('secret')),
+    );
+    const verified = await call(
+      '/api/aircraft-sale/identity/two-factor/verify-totp',
+      { method: 'POST', ...b, body: { code: await createOTP(secret).totp() } },
+    );
+    assert.equal(verified.status, 200);
+    const adminContext = await call('/api/jerry/context', b);
+    assert.equal(adminContext.status, 200);
+    const adminData = await adminContext.json();
+    const adminIdentity = adminData.identity;
+    assert.equal(adminIdentity.role, 'admin');
+    const adminConversation = await website(
+      'create',
+      { id: crypto.randomUUID() },
+      b,
+      adminIdentity,
+    );
+    assert.equal(adminConversation.status, 200);
+    const ac = (await adminConversation.json()).conversation;
+    const adminTurn = {
+      ...turn,
+      id: ac.id,
+      turnId: crypto.randomUUID(),
+      input: {
+        ...turn.input,
+        message: 'Administration overview',
+        mode: 'status',
+      },
+    };
+    const overview = await website('message', adminTurn, b, adminIdentity);
+    assert.equal(overview.status, 200);
+    assert.match((await overview.json()).result.reply, /moderation queue/);
+    assert.equal(
+      (await website('read', { id: c.id }, b, adminIdentity)).status,
+      410,
+    );
+    const listingAttempt = await website(
+      'message',
+      {
+        ...adminTurn,
+        turnId: crypto.randomUUID(),
+        input: {
+          ...turn.input,
+          message: 'Create a listing',
+          mode: 'listing',
+          draftStamp: adminData.draftStamp,
+        },
+      },
+      b,
+      adminIdentity,
+    );
+    assert.equal(listingAttempt.status, 403);
     const beforeDraft = await (
       await call('/api/aircraft-sale/draft', a)
     ).json();

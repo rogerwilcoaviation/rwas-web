@@ -1,5 +1,7 @@
 # Jerry website integration: local contract and qualification
 
+**November 1 continuation:** John selected Cloudflare Workers AI for account-linked Jerry. See the [new implementation and release sequence](jerry-account-release-20261101.md). The synthetic-only constraints and unresolved provider choice below describe the October 24 snapshot.
+
 Status: local implementation and synthetic qualification only. No push, deployment, production record mutation, live inference, credential access or relay configuration change. The selected candidate has no direct API path, OAuth proxy, provider fallback or automatic RWAS fallback to the old shared-bearer relay. The separate Shopify widget remains outside this candidate.
 
 John approved the first-phase product decisions and local source/tests. His later subscription-only direction supersedes direct-API delivery. Token usage is not a release criterion here. The [earlier read-only transport assessment](jerry-oauth-assessment-20261024.md) records the existing relay gaps; those observations were not refreshed by this local change.

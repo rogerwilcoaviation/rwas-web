@@ -3,10 +3,14 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { planJerrySellerConfig } from '../../workers/aircraft-sale/jerry-release-plan.mjs';
 test('offline binding/migration plan preserves the complete seller baseline and stays off', async () => {
-  const source = await readFile(
+  const production = await readFile(
     'workers/aircraft-sale/wrangler.production.toml',
     'utf8',
   );
+  const source = production
+    .split('\n# Account-linked Jerry.')[0]
+    .replace('JERRY_CONVERSATIONS_ENABLED = "true"\n', '')
+    .replace('JERRY_ACCOUNT_CHAT_ONLY = "true"\n', '');
   const plan = planJerrySellerConfig(source, {
     transportService: 'rwas-jerry-transport-synthetic',
   });
@@ -50,4 +54,29 @@ test('offline binding/migration plan preserves the complete seller baseline and 
   );
   assert.ok(!/^OPENAI_API_KEY\s*=/m.test(response));
   assert.ok(!/^JERRY_MODEL\s*=/m.test(response));
+});
+test('production activation preserves the seller namespace and uses only the approved account transport', async () => {
+  const source = await readFile(
+    'workers/aircraft-sale/wrangler.production.toml',
+    'utf8',
+  );
+  assert.equal(
+    (source.match(/new_sqlite_classes = \["SellerStore"\]/g) || []).length,
+    1,
+  );
+  assert.equal(
+    (source.match(/new_sqlite_classes = \["JerryConversations"\]/g) || [])
+      .length,
+    1,
+  );
+  assert.match(source, /JERRY_ACCOUNT_CHAT_ONLY = "true"/);
+  assert.match(source, /service = "rwas-jerry-accounts-20261101"/);
+  assert.ok(!source.includes('binding = "JERRY_RESPONSE"'));
+  assert.throws(
+    () =>
+      planJerrySellerConfig(source, {
+        transportService: 'rwas-jerry-accounts-20261101',
+      }),
+    /already appear/,
+  );
 });

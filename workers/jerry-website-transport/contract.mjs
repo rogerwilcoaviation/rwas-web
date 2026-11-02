@@ -17,6 +17,14 @@ export const SYNTHETIC_CAPABILITIES = Object.freeze({
   inheritedContext: false,
   externalTransport: false,
 });
+export const WORKERS_AI_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast';
+export const WORKERS_AI_CAPABILITIES = Object.freeze({
+  ...SYNTHETIC_CAPABILITIES,
+  mode: 'workers-ai',
+  externalTransport: true,
+  provider: 'cloudflare-workers-ai',
+  model: WORKERS_AI_MODEL,
+});
 export function sameBinding(a, b) {
   if (
     !a ||
@@ -256,7 +264,8 @@ export async function websiteTransport(env) {
   );
   const caps = await transport.status({ protocol: WEBSITE_PROTOCOL });
   jerryAssert(
-    sameBinding(caps, SYNTHETIC_CAPABILITIES),
+    sameBinding(caps, SYNTHETIC_CAPABILITIES) ||
+      sameBinding(caps, WORKERS_AI_CAPABILITIES),
     503,
     'No supported website-only transport is configured.',
     'JERRY_TRANSPORT_UNAVAILABLE',

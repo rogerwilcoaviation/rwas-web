@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { deferUntilIdle } from './deferUntilIdle';
 
-const JERRY_WIDGET_SRC = '/jerry-widget.js?v=20261027-jerry-terra-timeout';
+const JERRY_WIDGET_SRC = '/jerry-widget.js?v=20261101-account-linked';
 
 export default function DeferredJerryWidget() {
   useEffect(() => {

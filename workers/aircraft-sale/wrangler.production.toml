@@ -13,6 +13,8 @@ keep_vars = true
 cpu_ms = 30000
 
 [vars]
+JERRY_CONVERSATIONS_ENABLED = "true"
+JERRY_ACCOUNT_CHAT_ONLY = "true"
 JERRY_REVIEW_ENABLED = "true"
 ACCESS_AUD = "7af12c6b5590fb8587bf05051942c48da7a93677b2f8918cbb550afa48d22f97"
 ACCESS_TEAM_DOMAIN = "john-08c.cloudflareaccess.com"
@@ -81,3 +83,17 @@ persist = true
 
 [ai]
 binding = "AI"
+
+# Account-linked Jerry. Keep these bindings during feature-off rollback so
+# pending deletion, retention and activity outboxes can finish.
+[[durable_objects.bindings]]
+name = "JERRY_CONVERSATIONS"
+class_name = "JerryConversations"
+
+[[migrations]]
+tag = "jerry-conversations-v1"
+new_sqlite_classes = ["JerryConversations"]
+
+[[services]]
+binding = "JERRY_WEBSITE_TRANSPORT"
+service = "rwas-jerry-accounts-20261101"

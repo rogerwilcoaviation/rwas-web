@@ -77,6 +77,13 @@ jobs:
       - name: Site language boundaries and advanced wrapper regressions
         run: npm run test:language
 
+      - name: Account-linked Jerry role isolation, persistence and provider contracts
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/rwas-browser-runtime/node_modules/playwright/index.mjs
+        run: |
+          npm run test:jerry
+          npm run test:jerry:browser
+
       - name: Lint
         run: npm run lint
 

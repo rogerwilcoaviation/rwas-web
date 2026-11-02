@@ -255,7 +255,7 @@
         var gate = await gateResponse.json();
         if (gate.enabled !== false) {
           var accountChat = await import(
-            '/jerry-account-chat.mjs?v=20261024-phase-one'
+            '/jerry-account-chat.mjs?v=20261101-account-linked'
           );
           if (
             await accountChat.mountJerryAccountChat({
@@ -275,10 +275,18 @@
       }
     } catch (accountError) {}
     try {
-      var publicChat = await import('/jerry-public-chat.mjs?v=20261027-terra-timeout');
-      if (publicChat.mountJerryPublicChat({
-        panel: panel, bubble: bubble, backdrop: backdrop, renderMessage: renderMessage,
-      })) return;
+      var publicChat = await import(
+        '/jerry-public-chat.mjs?v=20261101-account-public'
+      );
+      if (
+        publicChat.mountJerryPublicChat({
+          panel: panel,
+          bubble: bubble,
+          backdrop: backdrop,
+          renderMessage: renderMessage,
+        })
+      )
+        return;
     } catch (publicError) {}
     unavailableChat();
     return;
