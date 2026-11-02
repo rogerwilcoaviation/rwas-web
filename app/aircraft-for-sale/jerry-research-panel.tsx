@@ -33,10 +33,14 @@ export default function JerryResearchPanel({
   review,
   onRefresh,
   disabled = false,
+  requesting = false,
+  requestError,
 }: {
   review?: JerryResearch;
   onRefresh?: () => void;
   disabled?: boolean;
+  requesting?: boolean;
+  requestError?: string;
 }) {
   return (
     <section
@@ -51,6 +55,8 @@ export default function JerryResearchPanel({
           </button>
         )}
       </div>
+      {requesting && <p role="status">Requesting research…</p>}
+      {requestError && <p role="alert">{requestError}</p>}
       <p className="research-authority">
         Advisory only. Administrators make the approval decision. Verified
         accounts remain usable while research runs.

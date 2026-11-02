@@ -63,6 +63,9 @@ const checkpoints = [],
   decisions = [];
 let queueFailure;
 let availabilityFailure;
+let blockResearch = false,
+  researchStatus = 401,
+  releaseResearch;
 try {
   browser = await chromium.launch({ headless: true });
   const context = await browser.newContext();
@@ -95,6 +98,27 @@ try {
     const input = request.postData()
       ? JSON.parse(request.postData())
       : undefined;
+    if (
+      url.pathname.endsWith('/admin/review') &&
+      input?.decision === 'research' &&
+      blockResearch
+    ) {
+      await new Promise((resolve) => {
+        releaseResearch = resolve;
+      });
+      blockResearch = false;
+      if (researchStatus === 0) {
+        await route.abort('failed');
+        return;
+      }
+      await route.fulfill({
+        status: researchStatus,
+        contentType: 'application/json',
+        body:
+          researchStatus === 200 ? '{"ok":true}' : '{"error":"unauthorized"}',
+      });
+      return;
+    }
     if (url.pathname.endsWith('/admin/review')) decisions.push(input);
     const response = await f.call(
       url.pathname.replace('/api/aircraft-sale', ''),
@@ -245,6 +269,101 @@ try {
   checkpoints.push(
     'Jerry advisory evidence and FAA sources render without approving a listing',
   );
+  blockResearch = true;
+  const researchPanel = firstCard.getByRole('region', {
+    name: 'Jerry research and recommendation',
+  });
+  await researchPanel.getByRole('button', { name: 'Research again' }).click();
+  await researchPanel
+    .getByRole('status')
+    .filter({ hasText: 'Requesting research' })
+    .waitFor({ timeout: 2500 });
+  assert.equal(
+    await researchPanel
+      .getByRole('button', { name: 'Research again' })
+      .isDisabled(),
+    true,
+  );
+  releaseResearch();
+  await researchPanel
+    .getByRole('alert')
+    .filter({ hasText: 'Sign in with your approved staff account' })
+    .waitFor({ timeout: 2500 });
+  assert.equal(
+    await researchPanel
+      .getByRole('button', { name: 'Research again' })
+      .isEnabled(),
+    true,
+  );
+  checkpoints.push(
+    'Research request shows immediate progress and an inline sign-in error',
+  );
+  blockResearch = true;
+  researchStatus = 200;
+  await researchPanel.getByRole('button', { name: 'Research again' }).click();
+  await researchPanel
+    .getByRole('status')
+    .filter({ hasText: 'Requesting research' })
+    .waitFor();
+  queueFailure = {
+    status: 503,
+    contentType: 'application/json',
+    body: '{"error":"temporary"}',
+  };
+  releaseResearch();
+  await researchPanel
+    .getByRole('alert')
+    .filter({
+      hasText: 'Research was requested, but its status could not be refreshed',
+    })
+    .waitFor();
+  assert.equal(
+    await researchPanel
+      .getByRole('button', { name: 'Research again' })
+      .isDisabled(),
+    true,
+  );
+  await load.click();
+  await page.getByText('2 listings are awaiting review.').waitFor();
+  assert.equal(
+    await researchPanel
+      .getByRole('button', { name: 'Research again' })
+      .isEnabled(),
+    true,
+  );
+  checkpoints.push(
+    'Accepted research with a failed refresh prevents duplicate requests until the queue reloads',
+  );
+  blockResearch = true;
+  researchStatus = 0;
+  await researchPanel.getByRole('button', { name: 'Research again' }).click();
+  await researchPanel
+    .getByRole('status')
+    .filter({ hasText: 'Requesting research' })
+    .waitFor();
+  releaseResearch();
+  await researchPanel
+    .getByRole('alert')
+    .filter({ hasText: 'Research request outcome could not be confirmed' })
+    .waitFor({ timeout: 2500 });
+  assert.equal(
+    await researchPanel
+      .getByRole('button', { name: 'Research again' })
+      .isDisabled(),
+    true,
+  );
+  await load.click();
+  await page.getByText('2 listings are awaiting review.').waitFor();
+  assert.equal(
+    await researchPanel
+      .getByRole('button', { name: 'Research again' })
+      .isEnabled(),
+    true,
+  );
+  checkpoints.push(
+    'An uncertain request outcome prevents a duplicate until the queue is checked',
+  );
+
   for (const availability of [
     { publicListings: false },
     {},

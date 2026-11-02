@@ -93,6 +93,11 @@ export default function SellerReview({
   const [items, setItems] = useState<Review[]>([]),
     [selectedId, setSelectedId] = useState(''),
     [error, setError] = useState(''),
+    [researchAction, setResearchAction] = useState<{
+      id: string;
+      phase: 'requesting' | 'error' | 'unknown';
+      message?: string;
+    } | null>(null),
     [busy, setBusy] = useState(false),
     [queueLoaded, setQueueLoaded] = useState(false),
     [publicationAllowed, setPublicationAllowed] = useState(false),
@@ -167,6 +172,9 @@ export default function SellerReview({
       );
     setPublicationAllowed(publicationAvailable);
     setItems(reviewable);
+    setResearchAction((current) =>
+      current?.phase === 'unknown' ? null : current,
+    );
     setSelectedId((previous) =>
       reviewable.some((listing) => listing.id === previous)
         ? previous
@@ -525,10 +533,31 @@ export default function SellerReview({
               )}
               <JerryResearchPanel
                 review={l.jerryReview}
-                disabled={busy || !['pending', 'active'].includes(l.status)}
+                disabled={
+                  busy ||
+                  !['pending', 'active'].includes(l.status) ||
+                  ['queued', 'researching'].includes(
+                    l.jerryReview?.status || '',
+                  ) ||
+                  (researchAction?.id === l.id &&
+                    researchAction.phase === 'unknown')
+                }
+                requesting={
+                  researchAction?.id === l.id &&
+                  researchAction.phase === 'requesting'
+                }
+                requestError={
+                  researchAction?.id === l.id &&
+                  researchAction.phase !== 'requesting'
+                    ? researchAction.message
+                    : undefined
+                }
                 onRefresh={() =>
                   void (async () => {
+                    setResearchAction({ id: l.id, phase: 'requesting' });
+                    setError('');
                     setBusy(true);
+                    let accepted = false;
                     try {
                       await marketplaceStaffFetch('/admin/review', {
                         method: 'POST',
@@ -539,13 +568,23 @@ export default function SellerReview({
                           decision: 'research',
                         }),
                       }).then(reviewResponse);
+                      accepted = true;
                       await loadQueue();
+                      setResearchAction(null);
                     } catch (error) {
-                      setError(
-                        error instanceof Error
-                          ? error.message
-                          : 'Research could not be requested.',
-                      );
+                      const rejected =
+                        !accepted &&
+                        error instanceof ReviewRequestError &&
+                        [400, 401, 403, 409, 429].includes(error.status);
+                      setResearchAction({
+                        id: l.id,
+                        phase: rejected ? 'error' : 'unknown',
+                        message: accepted
+                          ? 'Research was requested, but its status could not be refreshed. Select Load Review Queue before trying again.'
+                          : rejected
+                            ? error.message
+                            : 'Research request outcome could not be confirmed. Select Load Review Queue before trying again.',
+                      });
                     } finally {
                       setBusy(false);
                     }
