@@ -1,6 +1,10 @@
 import { digest } from './identity.mjs';
 import { accountHeld } from './account-admin.mjs';
 import { REVIEW_POLICY } from './jerry-review.mjs';
+const eligibleListing = (listing) =>
+  listing.status === 'pending' ||
+  (listing.status === 'active' &&
+    listing.approvedRevision === listing.revision);
 const identity = (p) =>
   JSON.stringify({ email: p.email, name: p.name, website: p.website || '' });
 export const reviewFingerprint = (kind, profile, listing) =>
@@ -51,7 +55,7 @@ function candidates(state) {
       profile: record,
     })),
     ...Object.values(state.listings)
-      .filter((record) => record.status === 'pending')
+      .filter(eligibleListing)
       .map((record) => ({
         kind: 'listing',
         record,
@@ -154,7 +158,7 @@ export async function applyResearch(state, job, result) {
   )
     return false;
   if (
-    (job.kind === 'listing' && record.status !== 'pending') ||
+    (job.kind === 'listing' && !eligibleListing(record)) ||
     job.fingerprint !==
       (await reviewFingerprint(
         job.kind,
@@ -172,7 +176,14 @@ export async function applyResearch(state, job, result) {
   const attempts = record.jerryReview.attempts;
   const cooldownUntil = record.jerryReview.cooldownUntil;
   record.jerryReview = { ...result, attempts, fingerprint: job.fingerprint };
-  if (result.aiUnavailable && attempts < 3)
+  const faa = result.evidence?.faa;
+  const sourceBlocked =
+    faa?.status === 'unavailable' && faa.retryable === false;
+  if (
+    !sourceBlocked &&
+    (result.aiUnavailable || faa?.retryable === true) &&
+    attempts < 3
+  )
     Object.assign(record.jerryReview, {
       status: 'queued',
       nextAt: Date.now() + 60000,

@@ -296,3 +296,264 @@ test('a delayed report cannot replace a newly leased report for the same unchang
     true,
   );
 });
+
+test('temporary FAA outage is retried and a later successful result remains advisory', async () => {
+  const t = transport();
+  const state = {
+    profiles: {
+      p: { id: 'p', email: 'owner@syntheticaviation.com', name: 'Synthetic' },
+    },
+    listings: {
+      l: {
+        id: 'l',
+        ownerId: 'p',
+        status: 'pending',
+        revision: 1,
+        fields,
+        jerryReview: queueResearch(),
+      },
+    },
+    rates: {},
+  };
+  const now = Date.now() + 2000;
+  const job = await takeResearchJob(state, now);
+  const outage = await researchSubmission(
+    job,
+    async (url, init) =>
+      String(url).includes('registry.faa.gov')
+        ? new Response('temporary outage', { status: 503 })
+        : t.fetcher(url, init),
+    t.ai,
+  );
+  assert.equal(outage.evidence.faa.status, 'unavailable');
+  assert.equal(outage.recommendation, 'needs_attention');
+  assert.equal(await applyResearch(state, job, outage), true);
+  assert.equal(state.listings.l.jerryReview.status, 'queued');
+  const retry = await takeResearchJob(state, Date.now() + 61000);
+  assert.ok(retry);
+  assert.equal(
+    await applyResearch(
+      state,
+      retry,
+      await researchSubmission(retry, t.fetcher, t.ai),
+    ),
+    true,
+  );
+  assert.equal(state.listings.l.jerryReview.evidence.faa.status, 'collected');
+  assert.equal(state.listings.l.status, 'pending');
+  assert.equal(state.listings.l.approvedRevision, undefined);
+});
+
+test('FAA access denial is reported without automatic repeated requests', async () => {
+  const result = await researchAircraft(
+    fields,
+    async () => new Response('denied', { status: 403 }),
+  );
+  assert.equal(result.status, 'unavailable');
+  assert.equal(result.retryable, false);
+  assert.match(result.summary, /403/);
+});
+
+test('administrator can re-run advisory research on an approved active listing without changing publication', async () => {
+  const f = fixture(),
+    t = transport();
+  f.env.JERRY_REVIEW_ENABLED = 'true';
+  f.env.JERRY_RESEARCH = { fetch: t.fetcher };
+  f.env.AI = t.ai;
+  f.ctx.storage.setAlarm = async () => {};
+  const owner = await f.login('owner@syntheticaviation.com');
+  const listing = (
+    await (
+      await f.call('/listings', 'POST', fields, owner, {
+        'Idempotency-Key': crypto.randomUUID(),
+      })
+    ).json()
+  ).listing;
+  assert.equal(
+    (
+      await f.call(
+        '/listing/' + listing.id + '/status',
+        'POST',
+        { status: 'pending' },
+        owner,
+      )
+    ).status,
+    200,
+  );
+  assert.equal((await approve(f, listing)).status, 200);
+  const response = await f.call(
+    '/admin/review',
+    'POST',
+    { listingId: listing.id, revision: listing.revision, decision: 'research' },
+    'fixture-reviewer',
+  );
+  assert.equal(response.status, 200);
+  assert.equal(f.state().listings[listing.id].jerryReview.status, 'queued');
+  const store = new SellerStore(f.ctx, f.env);
+  const before = Date.now;
+  Date.now = () => before() + 2000;
+  try {
+    await store.alarm();
+    await store.alarm();
+  } finally {
+    Date.now = before;
+  }
+  const result = f.state().listings[listing.id];
+  assert.equal(result.status, 'active');
+  assert.equal(result.approvedRevision, listing.revision);
+  assert.equal(result.jerryReview.status, 'completed');
+  assert.equal(result.jerryReview.evidence.faa.status, 'collected');
+});
+
+test('FAA retries stop at three attempts and do not retry access-denied responses', async () => {
+  const t = transport();
+  for (const [httpStatus, expectedAttempts] of [
+    [503, 3],
+    [403, 1],
+  ]) {
+    const state = {
+      profiles: {
+        p: { id: 'p', email: 'owner@syntheticaviation.com', name: 'Synthetic' },
+      },
+      listings: {
+        l: {
+          id: 'l',
+          ownerId: 'p',
+          status: 'pending',
+          revision: 1,
+          fields,
+          jerryReview: queueResearch(),
+        },
+      },
+      rates: {},
+    };
+    for (let attempt = 1; attempt <= expectedAttempts; attempt++) {
+      const job = await takeResearchJob(state, Date.now() + attempt * 61000);
+      assert.ok(job);
+      const result = await researchSubmission(
+        job,
+        async (url, init) =>
+          String(url).includes('registry.faa.gov')
+            ? new Response('unavailable', { status: httpStatus })
+            : t.fetcher(url, init),
+        t.ai,
+      );
+      assert.equal(await applyResearch(state, job, result), true);
+      assert.equal(
+        state.listings.l.jerryReview.status,
+        attempt < expectedAttempts ? 'queued' : 'completed',
+      );
+    }
+    assert.equal(await takeResearchJob(state, Date.now() + 600000), null);
+    assert.equal(
+      state.listings.l.jerryReview.recommendation,
+      'needs_attention',
+    );
+    assert.equal(state.listings.l.status, 'pending');
+  }
+});
+
+test('active-listing research cannot overwrite its report after the listing is paused', async () => {
+  const state = {
+    profiles: {
+      p: { id: 'p', email: 'owner@syntheticaviation.com', name: 'Synthetic' },
+    },
+    listings: {
+      l: {
+        id: 'l',
+        ownerId: 'p',
+        status: 'active',
+        revision: 1,
+        approvedRevision: 1,
+        fields,
+        jerryReview: queueResearch(),
+      },
+    },
+    rates: {},
+  };
+  const job = await takeResearchJob(state, Date.now() + 2000);
+  assert.ok(job);
+  state.listings.l.status = 'paused';
+  assert.equal(
+    await applyResearch(state, job, {
+      status: 'completed',
+      recommendation: 'ready_for_admin',
+      evidence: {},
+    }),
+    false,
+  );
+  assert.equal(state.listings.l.jerryReview.status, 'stale');
+  assert.equal(state.listings.l.status, 'paused');
+});
+
+test('FAA denial is not retried even when model inference is unavailable', async () => {
+  const t = transport({ badModel: true });
+  const state = {
+    profiles: {
+      p: { id: 'p', email: 'owner@syntheticaviation.com', name: 'Synthetic' },
+    },
+    listings: {
+      l: {
+        id: 'l',
+        ownerId: 'p',
+        status: 'pending',
+        revision: 1,
+        fields,
+        jerryReview: queueResearch(),
+      },
+    },
+    rates: {},
+  };
+  const job = await takeResearchJob(state, Date.now() + 2000);
+  const result = await researchSubmission(
+    job,
+    async (url, init) =>
+      String(url).includes('registry.faa.gov')
+        ? new Response('denied', { status: 403 })
+        : t.fetcher(url, init),
+    t.ai,
+  );
+  assert.equal(result.aiUnavailable, true);
+  assert.equal(await applyResearch(state, job, result), true);
+  assert.equal(state.listings.l.jerryReview.status, 'completed');
+  assert.equal(await takeResearchJob(state, Date.now() + 61000), null);
+});
+
+test('active-listing re-research cannot bypass administrator authorization', async () => {
+  const f = fixture();
+  f.env.JERRY_REVIEW_ENABLED = 'true';
+  const owner = await f.login('owner@syntheticaviation.com');
+  const listing = (
+    await (
+      await f.call('/listings', 'POST', fields, owner, {
+        'Idempotency-Key': crypto.randomUUID(),
+      })
+    ).json()
+  ).listing;
+  assert.equal(
+    (
+      await f.call(
+        '/listing/' + listing.id + '/status',
+        'POST',
+        { status: 'pending' },
+        owner,
+      )
+    ).status,
+    200,
+  );
+  assert.equal((await approve(f, listing)).status, 200);
+  for (const token of [undefined, owner]) {
+    const result = await f.call(
+      '/admin/review',
+      'POST',
+      {
+        listingId: listing.id,
+        revision: listing.revision,
+        decision: 'research',
+      },
+      token,
+    );
+    assert.notEqual(result.status, 200);
+  }
+  assert.equal(f.state().listings[listing.id].status, 'active');
+});

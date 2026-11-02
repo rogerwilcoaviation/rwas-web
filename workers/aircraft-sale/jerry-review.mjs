@@ -236,15 +236,29 @@ export async function researchAircraft(fields, fetcher = fetch) {
   const url =
     'https://registry.faa.gov/aircraftinquiry/Search/NNumberResult?nNumberTxt=' +
     encodeURIComponent(n.slice(1));
+  let retryable = true;
+  let failureSummary =
+    'The FAA inquiry could not be reached automatically. Open the official inquiry for manual verification; no match has been claimed.';
   try {
     const response = await fetcher(url, {
       headers: { Accept: 'text/html', 'User-Agent': researchAgent },
       signal: timeout(),
       redirect: 'manual',
     });
-    if (!response.ok) throw Error('FAA unavailable');
+    if (!response.ok) {
+      retryable = [408, 500, 502, 503, 504].includes(response.status);
+      failureSummary =
+        'The FAA inquiry returned HTTP ' +
+        response.status +
+        '. Open the official inquiry for manual verification; no match has been claimed.';
+      await response.body?.cancel();
+      throw Error('FAA unavailable');
+    }
     const html = await bounded(response, 350000),
       values = {};
+    retryable = false;
+    failureSummary =
+      'The FAA response could not be interpreted automatically. Open the official inquiry for manual verification; no match has been claimed.';
     const cells = [...html.matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)].map((m) =>
       strip(m[1]),
     );
@@ -315,8 +329,8 @@ export async function researchAircraft(fields, fetcher = fetch) {
       status: 'unavailable',
       nNumber: n,
       sources: [url],
-      summary:
-        'The FAA result could not be collected automatically. Open the official inquiry for manual verification; no match has been claimed.',
+      retryable,
+      summary: failureSummary,
     };
   }
 }

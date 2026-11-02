@@ -5083,8 +5083,14 @@ export class SellerStore {
       if (b.decision === 'research') {
         if (this.env.JERRY_REVIEW_ENABLED !== 'true')
           fail(503, 'Jerry research is not enabled.');
-        if (l.status !== 'pending')
-          fail(409, 'Submit the listing for review first.');
+        if (
+          l.status !== 'pending' &&
+          !(l.status === 'active' && l.approvedRevision === l.revision)
+        )
+          fail(
+            409,
+            'Research is available for pending or approved active listings.',
+          );
         l.jerryReview = queueResearch(l.jerryReview);
         this.audit('jerry-research-requested', actor, {
           listingId: l.id,

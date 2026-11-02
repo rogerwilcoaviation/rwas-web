@@ -525,7 +525,7 @@ export default function SellerReview({
               )}
               <JerryResearchPanel
                 review={l.jerryReview}
-                disabled={busy || l.status !== 'pending'}
+                disabled={busy || !['pending', 'active'].includes(l.status)}
                 onRefresh={() =>
                   void (async () => {
                     setBusy(true);
