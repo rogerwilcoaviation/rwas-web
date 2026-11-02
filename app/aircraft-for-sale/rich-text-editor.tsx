@@ -143,12 +143,22 @@ export function RichTextEditor({label, value, format, maxLength, disabled, inval
   const last = useRef('');
   const selection = useRef<Range | null>(null);
   const [error, setError] = useState('');
+  const [active, setActive] = useState({ bold: false, italic: false });
   useEffect(() => {
     const current = JSON.stringify([value, format]);
     if (!editor.current || current === last.current) return;
     editor.current.innerHTML = richTextHtml(value, format);
     last.current = current;
   }, [value, format]);
+  useEffect(() => {
+    const sync = () => {
+      const selected = window.getSelection();
+      if (!editor.current || !selected?.anchorNode || !editor.current.contains(selected.anchorNode)) return;
+      setActive({bold: document.queryCommandState('bold'), italic: document.queryCommandState('italic')});
+    };
+    document.addEventListener('selectionchange', sync);
+    return () => document.removeEventListener('selectionchange', sync);
+  }, []);
   function rememberSelection() {
     const selected = window.getSelection();
     if (selected?.rangeCount && editor.current?.contains(selected.anchorNode))
@@ -178,20 +188,22 @@ export function RichTextEditor({label, value, format, maxLength, disabled, inval
     }
     if (!convertLegacyList(editor.current, action)) document.execCommand(action, false);
     update();
+    setActive({bold: document.queryCommandState('bold'), italic: document.queryCommandState('italic')});
   }
   return (
     <div className="rich-editor">
       <div className="rich-toolbar" role="toolbar" aria-label={`${label} formatting`}>
         {[
-          ['bold', 'Bold', 'B'],
-          ['italic', 'Italic', 'I'],
+          ['bold', 'Bold', 'Bold'],
+          ['italic', 'Italic', 'Italic'],
           ['insertUnorderedList', 'Bulleted list', '• List'],
           ['insertOrderedList', 'Numbered list', '1. List'],
         ].map(([action, title, caption]) => (
-          <button key={action} type="button" aria-label={title} title={title} disabled={disabled} style={{fontWeight: action === 'bold' ? 700 : undefined, fontStyle: action === 'italic' ? 'italic' : undefined}} onMouseDown={event => event.preventDefault()} onClick={() => command(action)}>{caption}</button>
+          <button key={action} type="button" aria-label={title} aria-pressed={action === 'bold' || action === 'italic' ? active[action] : undefined} title={title} disabled={disabled} style={{fontWeight: action === 'bold' ? 700 : undefined, fontStyle: action === 'italic' ? 'italic' : undefined}} onMouseDown={event => event.preventDefault()} onClick={() => command(action)}>{caption}</button>
         ))}
       </div>
-      <div ref={editor} id="listing-step-input" role="textbox" aria-label={label} aria-multiline="true" aria-describedby="listing-step-help listing-field-count" aria-invalid={invalid || !!error} contentEditable={!disabled} suppressContentEditableWarning onInput={update} onKeyUp={rememberSelection} onMouseUp={rememberSelection} onPaste={event => { event.preventDefault(); document.execCommand('insertText', false, event.clipboardData.getData('text/plain')); }} className="rich-editor-input" />
+      <p id="rich-editor-help" className="rich-editor-help">Select text to format it, or choose a style before typing.</p>
+      <div ref={editor} id="listing-step-input" role="textbox" aria-label={label} aria-multiline="true" aria-describedby="listing-step-help rich-editor-help listing-field-count" aria-invalid={invalid || !!error} contentEditable={!disabled} suppressContentEditableWarning onInput={update} onKeyUp={rememberSelection} onMouseUp={rememberSelection} onPaste={event => { event.preventDefault(); document.execCommand('insertText', false, event.clipboardData.getData('text/plain')); }} className="rich-editor-input" />
       {error && <p role="alert">{error}</p>}
     </div>
   );

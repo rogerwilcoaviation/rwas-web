@@ -536,7 +536,9 @@ export function ListingDraftWorkflow({
         :global(.rich-editor) { font-weight: 400; }
         :global(.rich-toolbar) { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
         :global(.rich-toolbar button) { min-height: 40px; padding: 6px 12px; border: 1px solid #7b7871; border-radius: 4px; background: white; color: #222; cursor: pointer; }
+        :global(.rich-toolbar button[aria-pressed='true']) { background: #f0d487; border: 2px solid #73510a; box-shadow: inset 0 0 0 1px #73510a; }
         :global(.rich-toolbar button:focus-visible) { outline: 2px solid #9a741b; outline-offset: 3px; }
+        :global(.rich-editor-help) { margin: 4px 0 8px; font-size: 13px; line-height: 1.4; color: #514b40; }
         :global(.rich-editor-input) { box-sizing: border-box; min-height: 170px; padding: 12px; border: 1px solid #7b7871; border-radius: 4px; background: white; color: #222; white-space: pre-wrap; overflow-wrap: anywhere; font: 16px/1.5 Arial, sans-serif; }
         :global(.rich-editor-input:focus-visible) { outline: 2px solid #9a741b; outline-offset: 3px; }
         :global(.listing-workflow .rich-editor-input ul),

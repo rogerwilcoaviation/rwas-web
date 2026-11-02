@@ -95,6 +95,20 @@ export async function checkListingWorkflow({
   await next();
   await label('Description').fill(original);
   assert.equal(await dialog.locator('#listing-step-input').count(), 1);
+  await label('Description').evaluate((element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    element.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+  });
+  await button('Italic').click();
+  assert.equal(await button('Italic').getAttribute('aria-pressed'), 'true');
+  assert.equal(await label('Description').locator('i,em').first().evaluate(element => getComputedStyle(element).fontStyle), 'italic');
+  assert.notEqual(await button('Italic').evaluate(element => getComputedStyle(element).backgroundColor), 'rgb(255, 255, 255)');
+  await button('Italic').click();
+  assert.equal(await button('Italic').getAttribute('aria-pressed'), 'false');
   // Tailwind resets list markers globally; verify the actual exported editor
   // shows both markers and indentation rather than checking DOM tags alone.
   for (const [control, tag, expected] of [

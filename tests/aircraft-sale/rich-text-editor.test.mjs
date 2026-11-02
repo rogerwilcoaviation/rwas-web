@@ -31,6 +31,31 @@ test('editor adds emphasis and lists, then restores the saved formatting', async
   } finally {await browser.close();}
 });
 
+test('italic indicates its active state and formats selected and newly typed text', async () => {
+  const bundle = await build({stdin:{contents:`
+    import React, {useState} from 'react'; import {createRoot} from 'react-dom/client';
+    import {RichTextEditor} from './app/aircraft-for-sale/rich-text-editor';
+    function App(){const [v,setV]=useState({text:'Aircraft',format:''});const [visible,setVisible]=useState(true);window.saved=v;return <><button onClick={()=>setVisible(!visible)}>Reopen</button>{visible&&<RichTextEditor label="Description" value={v.text} format={v.format} maxLength={10000} onChange={(text,format)=>setV({text,format})}/>}</>}
+    createRoot(document.getElementById('root')).render(<App/>);`,resolveDir:process.cwd(),loader:'tsx'},bundle:true,write:false,format:'iife',platform:'browser',jsx:'automatic',define:{'process.env.NODE_ENV':'"production"'}});
+  const browser = await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH || (process.platform==='darwin'?'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome':undefined)});
+  try {
+    const page=await browser.newPage(); await page.setContent('<div id="root"></div>'); await page.addScriptTag({content:bundle.outputFiles[0].text});
+    const editor=page.getByRole('textbox',{name:'Description'}), italic=page.getByRole('button',{name:'Italic',exact:true});
+    await editor.waitFor();
+    await editor.evaluate(element=>{const range=document.createRange();range.selectNodeContents(element);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);element.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));});
+    await italic.click();
+    assert.equal(await italic.getAttribute('aria-pressed'),'true');
+    assert.equal(await editor.locator('i,em').first().evaluate(el=>getComputedStyle(el).fontStyle),'italic');
+    assert.match((await page.evaluate(()=>window.saved.format)),/"type":"em"/);
+    await page.getByRole('button',{name:'Reopen'}).click();await page.getByRole('button',{name:'Reopen'}).click();
+    assert.equal(await editor.locator('em').first().evaluate(el=>getComputedStyle(el).fontStyle),'italic');
+    await editor.fill('');await editor.focus();await italic.click();
+    assert.equal(await italic.getAttribute('aria-pressed'),'true');
+    await page.keyboard.type('New text');
+    assert.equal(await editor.locator('i,em').first().textContent(),'New text');
+  } finally {await browser.close();}
+});
+
 test('list buttons convert existing asterisk lines into individual list items', async () => {
   const bundle = await build({stdin:{contents:`
     import React, {useState} from 'react'; import {createRoot} from 'react-dom/client';
