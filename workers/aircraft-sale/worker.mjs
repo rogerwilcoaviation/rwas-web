@@ -2943,7 +2943,7 @@ export class SellerStore {
     // never an Access reviewer credential or an email-only role claim.
     if (path.startsWith('/staff/')) {
       if (
-        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|activity(?:\/(?:current|[a-fA-F0-9-]{36}))?|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply|research))?)?|administrators|removals(?:\/(?:preview|apply))?|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
+        !/^\/staff\/(?:listings(?:\/[A-Za-z0-9_-]+)?|review|notifications|activity(?:\/(?:current|[a-fA-F0-9-]{36}))?|accounts(?:\/[A-Za-z0-9_-]+(?:\/(?:preview|apply|research))?)?|administrators|removals(?:\/(?:preview|apply))?|support(?:\/[A-Za-z0-9_-]+)?|files\/.+)$/.test(
           path,
         )
       )
