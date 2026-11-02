@@ -1101,9 +1101,13 @@ export class SellerStore {
                 at: Date.now(),
                 source: 'system',
                 requestId: crypto.randomUUID(),
-                actor: activityActor(
-                  state.profiles[state.listings[receipt.listingId]?.ownerId],
-                ),
+                actor: state.profiles[
+                  state.listings[receipt.listingId]?.ownerId
+                ]
+                  ? activityActor(
+                      state.profiles[state.listings[receipt.listingId].ownerId],
+                    )
+                  : { type: 'system', id: 'listing-notifications', email: '' },
                 action: 'Listing approval notification: ' + receipt.channel,
                 route: '/notifications',
                 resourceId: receipt.listingId,

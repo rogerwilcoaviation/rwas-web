@@ -315,6 +315,15 @@ test('store alarm delivers both channels after durable reservation and records r
   assert.equal(sent.length, 2);
   assert.equal(f.state().outbox[key].notifications.email.status, 'delivered');
   assert.equal(f.state().outbox[key].notifications.teams.status, 'delivered');
+  const events = f.durable
+    .get('exchange-activity')
+    .filter((event) =>
+      event.action.startsWith('Listing approval notification:'),
+    );
+  assert.equal(events.length, 2);
+  assert.ok(
+    events.every((event) => event.actor.email === 'seller@example.test'),
+  );
   await f.restart().alarm();
   assert.equal(sent.length, 2);
   assert.equal(
@@ -335,6 +344,21 @@ test('store alarm delivers both channels after durable reservation and records r
     (await response.json()).notifications.some((n) => n.test),
     true,
   );
+  const testState = f.state();
+  const testJob = Object.values(testState.outbox).find((job) => job.test);
+  for (const delivery of Object.values(testJob.notifications))
+    delivery.nextAt = Date.now() - 1;
+  f.durable.set('state', testState);
+  await f.restart().alarm();
+  const testEvents = f.durable
+    .get('exchange-activity')
+    .filter(
+      (event) =>
+        event.resourceId === testJob.listingId &&
+        event.action.startsWith('Listing approval notification:'),
+    );
+  assert.equal(testEvents.length, 2);
+  assert.ok(testEvents.every((event) => event.actor.type === 'system'));
 });
 
 test('native SQLite alarm and Pages-to-seller RPC deliver both channels without deadlock or customer services', async () => {
