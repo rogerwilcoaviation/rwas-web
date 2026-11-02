@@ -1196,6 +1196,7 @@ export default function SellerAuthPanel() {
   async function openManualListing(
     requireSaved = false,
     fallbackDetails?: Record<string, unknown>,
+    requestedListing?: Listing,
   ) {
     if (currentAuth.current && accessRole.current !== 'seller') {
       if (accessRole.current === 'admin') setView('admin');
@@ -1215,6 +1216,14 @@ export default function SellerAuthPanel() {
       )
         return;
       const recovery = draftOwner ? readRecovery(draftOwner) : null;
+      if (
+        requestedListing &&
+        ((saved.draft && saved.draft.listingId !== requestedListing.id) ||
+          (recovery && recovery.listingId !== requestedListing.id))
+      )
+        throw Error(
+          'A different unfinished draft is saved. Resume and save it before editing another listing.',
+        );
       if (saved.listingConflict)
         throw Error(
           'This listing was edited elsewhere. Open its latest version from My Listings; your saved recovery copy is retained.',
@@ -1234,7 +1243,7 @@ export default function SellerAuthPanel() {
           : snapshot?.intake
             ? snapshot.fields
             : snapshot) || fallbackDetails;
-      let linked = null;
+      let linked = requestedListing || null;
       if (snapshot?.listingId) {
         const result = await api('/my-listings');
         linked = result.listings.find(
@@ -2036,7 +2045,14 @@ export default function SellerAuthPanel() {
                 {l.reviewNote && <p>{l.reviewNote}</p>}
                 <div className="seller-actions">
                   {!['deleted', 'archived'].includes(l.status) && (
-                    <button onClick={() => edit(l)}>Edit</button>
+                    <button
+                      disabled={busy}
+                      onClick={() =>
+                        void openManualListing(false, undefined, l)
+                      }
+                    >
+                      Edit
+                    </button>
                   )}
                   {['draft', 'rejected'].includes(l.status) && (
                     <button

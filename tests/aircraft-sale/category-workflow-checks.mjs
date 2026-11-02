@@ -12,6 +12,7 @@ export async function checkCategoryWorkflows({
 }) {
   async function jump(label) {
     const index = dialog.getByLabel('Listing step index', { exact: true });
+    await index.waitFor();
     const options = await index
       .locator('option')
       .evaluateAll((nodes) =>

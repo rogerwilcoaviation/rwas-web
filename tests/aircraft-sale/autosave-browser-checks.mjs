@@ -42,6 +42,7 @@ export async function checkAutosave({
   await dialog.getByRole('button', { name: 'Continue', exact: true }).click();
   async function jump(label) {
     const index = dialog.getByLabel('Listing step index', { exact: true });
+    await index.waitFor();
     const values = await index
       .locator('option')
       .evaluateAll((nodes) =>
@@ -160,6 +161,55 @@ export async function checkAutosave({
     listing.id,
     'Later autosaves retain the server listing identity',
   );
+  const other = await f.call(
+    '/listings',
+    'POST',
+    {
+      make: 'Other',
+      model: 'Fixture',
+      year: 2000,
+      price: 5,
+      nNumber: 'N456AB',
+      sellerLocation: 'Synthetic Airport',
+    },
+    token,
+    { 'Idempotency-Key': 'other-listing-autosave-check' },
+  );
+  assert.equal(other.status, 201);
+  await dialog
+    .getByRole('button', { name: 'Close seller panel', exact: true })
+    .click();
+  // Force the regular Edit flow to recover from the server, not local storage.
+  await clear();
+  await page.getByRole('button', { name: 'My Listings', exact: true }).click();
+  await dialog
+    .locator('.seller-listing')
+    .filter({ hasText: 'Other Fixture' })
+    .getByRole('button', { name: 'Edit', exact: true })
+    .click();
+  await dialog
+    .getByRole('alert')
+    .filter({ hasText: 'A different unfinished draft is saved' })
+    .waitFor();
+  assert.equal(
+    (await current()).listingId,
+    listing.id,
+    'Another listing cannot replace the saved draft',
+  );
+  assert.equal((await current()).values.description, 'Linked listing recovery');
+  await dialog
+    .locator('.seller-listing')
+    .filter({ hasText: 'Offline recovery part' })
+    .getByRole('button', { name: 'Edit', exact: true })
+    .click();
+  await dialog
+    .getByLabel('Description', { exact: true })
+    .waitFor({ timeout: 4000 });
+  assert.equal(
+    await dialog.getByLabel('Description', { exact: true }).inputValue(),
+    'Linked listing recovery',
+    'Edit on the listing restores its saved online changes',
+  );
   await dialog
     .getByRole('button', { name: 'Close seller panel', exact: true })
     .click();
@@ -186,6 +236,24 @@ export async function checkAutosave({
   assert.equal(
     f.state().listings[listing.id].fields.description,
     'Linked listing recovery',
+  );
+  await dialog
+    .getByRole('button', { name: 'Close seller panel', exact: true })
+    .click();
+  await clear();
+  f.restart();
+  await page.reload();
+  await page.getByRole('button', { name: 'My Listings', exact: true }).click();
+  await dialog
+    .locator('.seller-listing')
+    .filter({ hasText: 'Offline recovery part' })
+    .getByRole('button', { name: 'Edit', exact: true })
+    .click();
+  await jump('Description');
+  assert.equal(
+    await dialog.getByLabel('Description', { exact: true }).inputValue(),
+    'Linked listing recovery',
+    'Applied draft edits survive a backend restart and browser reload',
   );
   await dialog
     .getByRole('button', { name: 'Close seller panel', exact: true })
