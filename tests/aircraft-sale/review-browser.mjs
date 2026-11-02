@@ -48,6 +48,12 @@ const second = await create(f, owner, { ...fields, model: 'Second Review' });
 for (const listing of [first, second])
   assert.equal((await submit(f, owner, listing)).status, 200);
 const seeded = f.state();
+seeded.listings[first.id].updatedAt = Date.now() - 60000;
+seeded.listings[second.id].updatedAt = Date.now();
+seeded.outbox[first.id + ':' + first.revision].createdAt =
+  seeded.listings[first.id].updatedAt;
+seeded.outbox[second.id + ':' + second.revision].createdAt =
+  seeded.listings[second.id].updatedAt;
 seeded.listings[first.id].jerryReview = advisoryResearch;
 f.durable.set('state', seeded);
 let browser;
@@ -107,6 +113,8 @@ try {
   page.on('dialog', (dialog) => dialog.accept());
   await page.goto(origin + '/seller-review');
   const load = page.getByRole('button', { name: 'Load Review Queue' });
+  const selectListing = (title) =>
+    page.getByRole('radio', { name: 'Select ' + title, exact: true }).check();
   assert.equal(
     await page.getByText('No listings are awaiting review.').count(),
     0,
@@ -189,8 +197,34 @@ try {
   const secondCard = page.locator('main section').filter({
     has: page.getByRole('heading', { name: '2000 Synthetic Second Review' }),
   });
-  await firstCard.waitFor();
   await page.getByText('2 listings are awaiting review.').waitFor();
+  assert.deepEqual(
+    await page
+      .locator('.admin-review-table tbody .admin-review-row-title')
+      .allTextContents(),
+    ['2000 Synthetic Second Review', '2000 Synthetic First Review'],
+  );
+  await secondCard.waitFor();
+  assert.equal(await page.locator('main section').count(), 1);
+  for (const width of [1440, 390, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    assert.equal(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth > innerWidth,
+      ),
+      false,
+    );
+    await selectListing('2000 Synthetic First Review');
+    await firstCard.waitFor();
+    await selectListing('2000 Synthetic Second Review');
+    await secondCard.waitFor();
+  }
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await selectListing('2000 Synthetic First Review');
+  await firstCard.waitFor();
+  checkpoints.push(
+    'Newest pending listing is selected first; row selection shows one detail panel at desktop and mobile widths',
+  );
   checkpoints.push('Successful pending queue reports its count');
   await firstCard
     .getByText(advisoryResearch.summary, { exact: true })
@@ -298,6 +332,7 @@ try {
     .waitFor();
   assert.equal(await page.locator('main section').count(), 0);
   await load.click();
+  await selectListing('2000 Synthetic First Review');
   await firstCard.waitFor();
   assert.equal(
     await firstCard.getByRole('textbox', { name: 'Review note' }).inputValue(),
@@ -309,11 +344,13 @@ try {
   await firstCard
     .getByRole('textbox', { name: 'Review note' })
     .fill('Correct first record only');
+  await selectListing('2000 Synthetic Second Review');
   await secondCard
     .getByRole('textbox', { name: 'Review note' })
     .fill('Correct second record only');
   f.env.PUBLIC_LISTINGS_ENABLED = 'false';
   await load.click();
+  await selectListing('2000 Synthetic First Review');
   await page
     .getByText(
       'Ordinary publication is unavailable. You can still request changes.',
@@ -525,27 +562,32 @@ try {
       exact: true,
     }),
   });
+  await selectListing('2000 Synthetic Scoped QA');
   await qaCard
     .getByRole('button', { name: 'Publish QA Test Temporarily' })
     .waitFor();
+  await selectListing('2000 Synthetic Other Seller QA');
   assert.equal(
     await otherQaCard
       .getByRole('button', { name: 'Publish QA Test Temporarily' })
       .count(),
     0,
   );
+  await selectListing('2000 Synthetic Scoped QA');
   assert.equal(
     await qaCard
       .getByRole('button', { name: 'Approve and Publish' })
       .isDisabled(),
     true,
   );
+  await selectListing('2000 Synthetic Other Seller QA');
   assert.equal(
     await otherQaCard
       .getByRole('button', { name: 'Approve and Publish' })
       .isDisabled(),
     true,
   );
+  await selectListing('2000 Synthetic Scoped QA');
   await qaCard
     .getByRole('button', { name: 'Publish QA Test Temporarily' })
     .click();
@@ -578,6 +620,48 @@ try {
   assert.equal(f.state().listings[otherQa.id].status, 'pending');
   checkpoints.push(
     'Staff can remove QA publication after scope and global acceptance are disabled',
+  );
+  await page.getByText('Submission notifications', { exact: true }).click();
+  await page
+    .getByRole('button', { name: 'Refresh delivery status', exact: true })
+    .click();
+  await page
+    .getByText('No submission notifications are recorded yet.')
+    .waitFor();
+  f.env.LISTING_NOTIFICATIONS_ENABLED = 'true';
+  f.env.FROM_EMAIL = 'Synthetic notifications <accounts@example.test>';
+  const listingCount = Object.keys(f.state().listings).length;
+  await page
+    .getByRole('button', { name: 'Send test notification', exact: true })
+    .click();
+  await page.getByRole('cell', { name: /Delivery test/ }).waitFor();
+  assert.equal(Object.keys(f.state().listings).length, listingCount);
+  const notificationState = f.state();
+  const testJob = Object.values(notificationState.outbox).find(
+    (job) => job.test,
+  );
+  assert.ok(testJob);
+  for (const delivery of Object.values(testJob.notifications))
+    Object.assign(delivery, {
+      status: 'delivered',
+      code: 'accepted',
+      attempts: 1,
+      completedAt: Date.now(),
+    });
+  f.durable.set('state', notificationState);
+  await page
+    .getByRole('button', { name: 'Refresh delivery status', exact: true })
+    .click();
+  await page
+    .getByRole('cell', { name: /Accepted for delivery/ })
+    .first()
+    .waitFor();
+  assert.equal(
+    await page.getByRole('cell', { name: /Accepted for delivery/ }).count(),
+    2,
+  );
+  checkpoints.push(
+    'Administrator notification test and per-channel receipts render without creating listings or making external sends',
   );
   queueFailure = {
     status: 403,

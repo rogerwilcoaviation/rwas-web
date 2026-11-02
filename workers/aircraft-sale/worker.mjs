@@ -78,6 +78,16 @@ import {
 import { manualDraft, manualIntakeFields } from './manual-draft.mjs';
 import { researchSubmission } from './jerry-review.mjs';
 import {
+  planListingNotifications,
+  nextListingNotificationAt,
+  takeListingNotification,
+  dispatchListingNotification,
+  finishListingNotification,
+  claimListingNotification,
+  createNotificationTest,
+  notificationStatus,
+} from './review-notifications.mjs';
+import {
   planResearch,
   queueResearch,
   nextResearchAt,
@@ -690,7 +700,7 @@ const worker = {
   async fetch(request, env) {
     // Mail tickets/codes are available only through private service-binding RPC.
     if (
-      /^\/(?:api\/aircraft-sale\/)?_(?:mail|activity|jerry)(?:\/|$)/.test(
+      /^\/(?:api\/aircraft-sale\/)?_(?:mail|activity|jerry|notifications)(?:\/|$)/.test(
         new URL(request.url).pathname,
       ) ||
       /^\/(?:api\/aircraft-sale\/)?_identity-deletion-intent(?:\/|$)/.test(
@@ -967,6 +977,7 @@ export class SellerStore {
       ...Object.values(state.jerryTransportCleanup || {}).map((job) =>
         Math.max(Date.now() + 1000, job.cleanupAfter),
       ),
+      nextListingNotificationAt(state, this.env),
     );
     if (Number.isFinite(next)) await this.ctx.storage.setAlarm(next);
   }
@@ -975,6 +986,7 @@ export class SellerStore {
     this.queue = operation.catch(() => {});
     const job = await operation;
     await this.cleanupJerryAccounts();
+    await this.deliverListingNotifications();
     if (!job) return;
     let result;
     try {
@@ -1055,6 +1067,59 @@ export class SellerStore {
     await this.scheduleAuth0ReceiptExpiry(state);
     return job;
   }
+  async deliverListingNotifications() {
+    for (let i = 0; i < 2; i++) {
+      const reserve = this.queue.then(async () => {
+        const state = await this.loadState();
+        const job = await takeListingNotification(state, this.env);
+        await this.saveState(state);
+        await this.scheduleAuth0ReceiptExpiry(state);
+        return job;
+      });
+      this.queue = reserve.catch(() => {});
+      const job = await reserve;
+      if (!job) break;
+      // The Pages broker claims a one-use ticket through this same serialized
+      // store. Network I/O must remain outside the queue to avoid RPC deadlock.
+      const result = await dispatchListingNotification(this.env, job);
+      const finish = this.queue.then(async () => {
+        const state = await this.loadState();
+        const receipt = await finishListingNotification(state, job, result);
+        if (receipt)
+          state.audit.push({
+            at: Date.now(),
+            action: 'listing-notification',
+            actor: 'listing-notifications',
+            ...receipt,
+          });
+        await this.saveState(state);
+        await this.scheduleAuth0ReceiptExpiry(state);
+        if (receipt) {
+          try {
+            await this.activityLog.append([
+              {
+                at: Date.now(),
+                source: 'system',
+                requestId: crypto.randomUUID(),
+                actor: activityActor(
+                  state.profiles[state.listings[receipt.listingId]?.ownerId],
+                ),
+                action: 'Listing approval notification: ' + receipt.channel,
+                route: '/notifications',
+                resourceId: receipt.listingId,
+                result: receipt.status === 'delivered' ? 'success' : 'failure',
+                status: null,
+                durationMs: null,
+                details: { notification: receipt },
+              },
+            ]);
+          } catch {}
+        }
+      });
+      this.queue = finish.catch(() => {});
+      await finish;
+    }
+  }
   async run(req) {
     // Wider account/business digests require the separately scoped account-read
     // administrator. Keep this on the queue, outside BOTH persistence paths:
@@ -1076,10 +1141,12 @@ export class SellerStore {
           this.activityContext.listingConversationId;
       if (this.env.JERRY_REVIEW_ENABLED === 'true')
         planResearch(this.state, this.rollbackState);
+      planListingNotifications(this.state, this.rollbackState, this.env);
       await this.saveState(this.state);
       if (
         this.env.JERRY_REVIEW_ENABLED === 'true' ||
-        this.env.JERRY_CONVERSATIONS_ENABLED === 'true'
+        this.env.JERRY_CONVERSATIONS_ENABLED === 'true' ||
+        this.env.LISTING_NOTIFICATIONS_ENABLED === 'true'
       )
         await this.scheduleAuth0ReceiptExpiry(this.state);
       return result;
@@ -3153,6 +3220,23 @@ export class SellerStore {
     }
     if (path.startsWith('/_mail/') && method === 'POST')
       return this.mailRequest(req, path);
+    if (path === '/_notifications/claim') {
+      if (
+        method !== 'POST' ||
+        new URL(req.url).origin !== 'https://seller-service.internal'
+      )
+        fail(404, 'Not found.');
+      const body = await this.json(req);
+      if (Object.keys(body).join(',') !== 'ticket')
+        fail(400, 'Invalid notification ticket.');
+      const claimed = await claimListingNotification(
+        this.state,
+        this.env,
+        body.ticket,
+      );
+      if (!claimed) fail(409, 'Notification ticket is unavailable.');
+      return reply(claimed);
+    }
     if (method === 'OPTIONS') return new Response(null, { status: 204 }); // Same-origin service; no wildcard CORS.
     if (path === '/health') return reply({ service: 'seller-v2', schema: 2 });
     if (path === '/_identity-deletion-intent') {
@@ -4858,12 +4942,40 @@ export class SellerStore {
       });
       return reply({ ok: true, ticket });
     }
+    if (path === '/admin/notifications' && ['GET', 'POST'].includes(method)) {
+      const actor = await this.admin(req);
+      if (method === 'POST') {
+        if (this.env.LISTING_NOTIFICATIONS_ENABLED !== 'true')
+          fail(503, 'Listing notifications are not enabled.');
+        const body = await this.json(req);
+        if (body?.test !== true || Object.keys(body).join(',') !== 'test')
+          fail(400, 'Confirm a notification delivery test.');
+        this.rate('listing-notification-tests', 3);
+        const job = createNotificationTest(this.state, this.env);
+        this.audit('listing-notification-test', actor, {
+          listingId: job.listingId,
+        });
+      }
+      return reply({
+        notifications: Object.values(this.state.outbox)
+          .map(notificationStatus)
+          .filter(Boolean)
+          .sort((a, b) => b.submittedAt - a.submittedAt)
+          .slice(0, 20),
+      });
+    }
     if (path === '/admin/listings' && method === 'GET') {
       await this.admin(req);
       return reply({
         listings: Object.values(this.state.listings).map((l) => ({
           ...this.hydrate(l),
           reviewActions: staffReviewActions(l, this.env),
+          reviewSubmittedAt:
+            this.state.outbox[l.id + ':' + l.revision]?.createdAt ||
+            l.updatedAt,
+          reviewNotifications: notificationStatus(
+            this.state.outbox[l.id + ':' + l.revision],
+          ),
         })),
       });
     }
