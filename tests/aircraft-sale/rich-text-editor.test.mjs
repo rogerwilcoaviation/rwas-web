@@ -30,3 +30,68 @@ test('editor adds emphasis and lists, then restores the saved formatting', async
     assert.equal(await page.evaluate(()=>window.saved.text),'  First line\nSecond line  \nLast line\nAnother line');
   } finally {await browser.close();}
 });
+
+test('list buttons convert existing asterisk lines into individual list items', async () => {
+  const bundle = await build({stdin:{contents:`
+    import React, {useState} from 'react'; import {createRoot} from 'react-dom/client';
+    import {RichTextEditor} from './app/aircraft-for-sale/rich-text-editor';
+    function App(){const [v,setV]=useState({text:'* GPS navigator\\n* Autopilot\\n* Transponder',format:''});window.saved=v;window.setDraft=setV;return <RichTextEditor label="Avionics" value={v.text} format={v.format} maxLength={10000} onChange={(text,format)=>setV({text,format})}/>}
+    createRoot(document.getElementById('root')).render(<App/>);`,resolveDir:process.cwd(),loader:'tsx'},bundle:true,write:false,format:'iife',platform:'browser',jsx:'automatic',define:{'process.env.NODE_ENV':'"production"'}});
+  const browser = await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH || (process.platform==='darwin'?'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome':undefined)});
+  try {
+    const page=await browser.newPage(); await page.setContent('<div id="root"></div>'); await page.addScriptTag({content:bundle.outputFiles[0].text});
+    const editor=page.getByRole('textbox',{name:'Avionics'}); await editor.waitFor();
+    await editor.click();
+    await page.getByRole('button',{name:'Bulleted list',exact:true}).click();
+    assert.deepEqual(await editor.locator('ul > li').allTextContents(),['GPS navigator','Autopilot','Transponder']);
+    const blockText='* GPS navigator\n* Autopilot\n* Transponder';
+    const blockFormat=JSON.stringify({v:1,nodes:['* GPS navigator','* Autopilot','* Transponder'].map(text=>({type:'div',children:[{type:'text',text}]}))});
+    await page.evaluate(({text,format})=>window.setDraft({text,format}),{text:blockText,format:blockFormat});
+    await page.waitForFunction(()=>document.querySelectorAll('[role=textbox] > div').length===3);
+    await editor.click();
+    await page.getByRole('button',{name:'Bulleted list',exact:true}).click();
+    assert.deepEqual(await editor.locator('ul > li').allTextContents(),['GPS navigator','Autopilot','Transponder']);
+    assert.equal(await page.evaluate(()=>window.saved.text),'GPS navigator\nAutopilot\nTransponder');
+    await editor.press(process.platform === 'darwin' ? 'Meta+z' : 'Control+z');
+    assert.equal(await page.evaluate(()=>window.saved.text),'* GPS navigator\n* Autopilot\n* Transponder');
+    await page.evaluate(()=>window.setDraft({text:'* GPS navigator\n* Autopilot\n* Transponder',format:''}));
+    await page.waitForFunction(()=>{const e=document.querySelector('[role=textbox]');return e?.childNodes.length === 1 && e.firstChild.nodeType === Node.TEXT_NODE && window.saved.format === '';});
+    await editor.evaluate(element=>{const node=element.firstChild;const range=document.createRange();range.setStart(node,2);range.setEnd(node,15);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);element.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));});
+    await page.getByRole('button',{name:'Bold',exact:true}).click();
+    await editor.click();
+    await page.getByRole('button',{name:'Numbered list',exact:true}).click();
+    assert.deepEqual(await editor.locator('ol > li').allTextContents(),['GPS navigator','Autopilot','Transponder']);
+    assert.equal(await editor.locator('ol > li').first().locator('strong,b').textContent(),'GPS navigator');
+    await editor.fill('* GPS navigator\n* Autopilot\n* Transponder');
+    const enteredHtml=await editor.innerHTML();
+    await editor.click();
+    await page.getByRole('button',{name:'Bulleted list',exact:true}).click();
+    assert.deepEqual(await editor.locator('ul > li').allTextContents(),['GPS navigator','Autopilot','Transponder'],enteredHtml + ' => ' + await editor.innerHTML());
+    const badText='* GPS navigator\n* Autopilot\n* Transponder';
+    const badFormat=JSON.stringify({v:1,nodes:[{type:'ul',children:[{type:'li',children:[{type:'text',text:badText}]}]}]});
+    await page.evaluate(({text,format})=>window.setDraft({text,format}),{text:badText,format:badFormat});
+    await page.waitForFunction(()=>document.querySelectorAll('[role=textbox] ul > li').length===1);
+    await editor.click();
+    await page.getByRole('button',{name:'Bulleted list',exact:true}).click();
+    assert.deepEqual(await editor.locator('ul > li').allTextContents(),['GPS navigator','Autopilot','Transponder']);
+    await page.evaluate(()=>window.setDraft({text:'* GPS navigator\n* Autopilot\n* Transponder\n\n',format:''}));
+    await page.waitForFunction(()=>document.querySelector('[role=textbox]')?.textContent === '* GPS navigator\n* Autopilot\n* Transponder\n\n');
+    await editor.click();
+    await page.getByRole('button',{name:'Bulleted list',exact:true}).click();
+    assert.deepEqual(await editor.locator('ul > li').allTextContents(),['GPS navigator','Autopilot','Transponder']);
+    assert.equal(await page.evaluate(()=>window.saved.text),'GPS navigator\nAutopilot\nTransponder\n\n');
+    await page.evaluate(()=>window.setDraft({text:'GPS navigator\nAutopilot\nTransponder',format:''}));
+    await page.waitForFunction(()=>document.querySelector('[role=textbox]')?.textContent === 'GPS navigator\nAutopilot\nTransponder');
+    await editor.click();
+    await page.getByRole('button',{name:'Numbered list',exact:true}).click();
+    assert.deepEqual(await editor.locator('ol > li').allTextContents(),['GPS navigator','Autopilot','Transponder']);
+    await page.evaluate(()=>window.setDraft({text:'GPS navigator\nAutopilot\nTransponder',format:''}));
+    await page.waitForFunction(()=>!document.querySelector('[role=textbox] ol'));
+    await editor.evaluate(element=>{const range=document.createRange();range.selectNodeContents(element);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);element.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));});
+    await page.getByRole('button',{name:'Numbered list',exact:true}).click();
+    assert.deepEqual(await editor.locator('ol > li').allTextContents(),['GPS navigator','Autopilot','Transponder']);
+    await editor.evaluate(element=>{const range=document.createRange();range.selectNodeContents(element);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);element.dispatchEvent(new MouseEvent('mouseup',{bubbles:true}));});
+    await page.getByRole('button',{name:'Numbered list',exact:true}).click();
+    assert.equal(await editor.locator('ol').count(),0,'An existing numbered list can be switched off');
+  } finally {await browser.close();}
+});

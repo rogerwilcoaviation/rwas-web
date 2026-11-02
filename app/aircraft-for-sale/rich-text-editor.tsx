@@ -31,6 +31,113 @@ function documentNodes(parent: Node): unknown[] {
   });
 }
 
+// Existing listings can contain several lines in a single text node, sometimes
+// prefixed with literal asterisks. Convert these into separate list items while
+// keeping any bold or italic spans intact.
+function convertLegacyList(editor: HTMLElement, action: string): boolean {
+  if (!['insertUnorderedList', 'insertOrderedList'].includes(action)) return false;
+  const selected = window.getSelection();
+  if (!selected) return false;
+  const selectedText = selected.toString().replace(/\u00a0/g, ' ');
+  const allSelected = !!selectedText && [editor.innerText, editor.textContent || ''].some(
+    text => selectedText === text.replace(/\u00a0/g, ' '),
+  );
+  if (selectedText && !allSelected) return false;
+  const lines: DocumentFragment[] = [document.createDocumentFragment()];
+  let supported = true;
+  let existingItems = 0;
+  const append = (text: string, marks: string[]) => {
+    if (!text) return;
+    let child: Node = document.createTextNode(text);
+    for (const mark of [...marks].reverse()) {
+      const wrapper = document.createElement(mark);
+      wrapper.appendChild(child);
+      child = wrapper;
+    }
+    lines[lines.length - 1].appendChild(child);
+  };
+  const walk = (node: Node, marks: string[] = []) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const pieces = (node.textContent || '').replace(/\u00a0/g, ' ').split('\n');
+      pieces.forEach((piece, index) => {
+        if (index) lines.push(document.createDocumentFragment());
+        append(piece, marks);
+      });
+      return;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    const tag = (node as Element).tagName.toLowerCase();
+    if (tag === 'br') { lines.push(document.createDocumentFragment()); return; }
+    if (tag === 'div' || tag === 'p') {
+      if (lines[lines.length - 1].textContent) lines.push(document.createDocumentFragment());
+      node.childNodes.forEach(child => walk(child, marks));
+      if (node.nextSibling && lines[lines.length - 1].textContent)
+        lines.push(document.createDocumentFragment());
+      return;
+    }
+    const mark = ({ b: 'strong', i: 'em', strong: 'strong', em: 'em' } as Record<string, string>)[tag];
+    if (!mark) { supported = false; return; }
+    node.childNodes.forEach(child => walk(child, [...marks, mark]));
+  };
+  editor.childNodes.forEach(node => {
+    if (node instanceof HTMLElement && ['UL', 'OL'].includes(node.tagName)) {
+      const items = Array.from(node.children);
+      if (!items.length || items.some(item => item.tagName !== 'LI')) { supported = false; return; }
+      existingItems += items.length;
+      items.forEach((item, index) => {
+        if (index) lines.push(document.createDocumentFragment());
+        item.childNodes.forEach(child => walk(child));
+      });
+    } else walk(node);
+  });
+  let start = 0, end = lines.length;
+  while (start < end && !lines[start].textContent) start++;
+  while (end > start && !lines[end - 1].textContent) end--;
+  const content = lines.slice(start, end);
+  const prefixes = content.map(line => (line.textContent || '').match(/^[ \t]*(?:[*•-]|\d+[.)])[ \t]+/)?.[0]);
+  const allPrefixed = prefixes.every(Boolean);
+  if (!supported || content.length < 2 || content.some(line => !line.textContent) ||
+      (existingItems && !allPrefixed && content.length <= existingItems)) return false;
+  const list = document.createElement(action === 'insertOrderedList' ? 'ol' : 'ul');
+  content.forEach((line, index) => {
+    let remaining = allPrefixed ? prefixes[index]!.length : 0;
+    const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode as Text);
+    for (const node of textNodes) {
+      if (!remaining) break;
+      const removed = Math.min(remaining, node.data.length);
+      node.deleteData(0, removed);
+      remaining -= removed;
+    }
+    const item = document.createElement('li');
+    item.appendChild(line);
+    list.appendChild(item);
+  });
+  const range = document.createRange();
+  range.selectNodeContents(editor);
+  selected.removeAllRanges();
+  selected.addRange(range);
+  const wrapper = document.createElement('div');
+  for (let index = 0; index < start; index++) wrapper.appendChild(document.createElement('br'));
+  wrapper.appendChild(list);
+  const trailing = lines.length - end;
+  for (let index = 1; index < trailing; index++) wrapper.appendChild(document.createElement('br'));
+  if (trailing) wrapper.appendChild(document.createElement('div'));
+  const inserted = document.execCommand('insertHTML', false, wrapper.innerHTML);
+  const desired = action === 'insertOrderedList' ? 'OL' : 'UL';
+  if (inserted && editor.children.length === 1 &&
+      ['OL', 'UL'].includes(editor.children[0].tagName) &&
+      editor.children[0].tagName !== desired) {
+    const insertedRange = document.createRange();
+    insertedRange.selectNodeContents(editor);
+    selected.removeAllRanges();
+    selected.addRange(insertedRange);
+    document.execCommand(action, false);
+  }
+  return inserted;
+}
+
 export function RichTextEditor({label, value, format, maxLength, disabled, invalid, onChange}: Props) {
   const editor = useRef<HTMLDivElement>(null);
   const last = useRef('');
@@ -69,7 +176,7 @@ export function RichTextEditor({label, value, format, maxLength, disabled, inval
       current?.removeAllRanges();
       current?.addRange(selection.current);
     }
-    document.execCommand(action, false);
+    if (!convertLegacyList(editor.current, action)) document.execCommand(action, false);
     update();
   }
   return (

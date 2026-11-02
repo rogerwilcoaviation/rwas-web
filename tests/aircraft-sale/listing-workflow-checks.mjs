@@ -119,6 +119,14 @@ export async function checkListingWorkflow({
     assert.equal(visual.marker, expected, control + ' marker is visible');
     assert.ok(visual.padding >= 16, control + ' is indented');
   }
+  await label('Description').fill('* GPS navigator\n* Autopilot\n* Transponder');
+  await label('Description').click();
+  await button('Bulleted list').click();
+  assert.deepEqual(
+    await label('Description').locator('ul > li').allTextContents(),
+    ['GPS navigator', 'Autopilot', 'Transponder'],
+    'Existing asterisk lines become separate visible list items',
+  );
   await label('Description').fill(original);
   proofreader.mode = 'success';
   await button('Ask Jerry to proofread').click();
