@@ -708,7 +708,11 @@ test('bulk account deletion is optional, previews the listing count and binds th
   assert.equal(await confirm.isDisabled(),true);
   await page.getByLabel('Type account email to permanently delete',{exact:true}).fill('customer@example.test');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
-  await confirm.click();await page.getByRole('tab',{name:'Account directory',exact:true}).waitFor();
+  await Promise.all([
+   page.waitForResponse(response=>new URL(response.url()).pathname.endsWith('/removals/apply')),
+   confirm.click(),
+  ]);
+  await page.getByRole('tab',{name:'Account directory',exact:true}).waitFor();
   assert.equal(requests.findLast(r=>r.path.endsWith('/removals/apply')).body.includeListings,true);
  },{account:{id:'customer-account',name:'Synthetic Customer',email:'customer@example.test',phone:'',location:'',status:'deleted',adminDeleted:true,adminSuspended:false,securityHeld:false,listingCount:2,activeSessions:0,createdAt:Date.now(),loginMethods:['better-auth'],sessions:[],listings:[],hasSavedDraft:false,mediaCount:0},listings:[{id:'one'},{id:'two'}]});
 });
