@@ -9,7 +9,7 @@ const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE ||
     '/Users/rwas/Documents/ChatGPT/New Project/node_modules/playwright/index.mjs'
 );
-const base = resolve('out');
+const base = resolve(process.env.TEST_REVIEW_EXPORT_DIR || 'out');
 const html = await readFile(resolve(base, 'seller-review.html'), 'utf8');
 assert.match(html, /name="robots" content="noindex, nofollow"/);
 const server = createServer(async (req, res) => {
@@ -205,7 +205,10 @@ try {
     ['2000 Synthetic Second Review', '2000 Synthetic First Review'],
   );
   await secondCard.waitFor();
-  assert.equal(await page.locator('main section').count(), 1);
+  assert.equal(
+    await page.locator('.admin-listing-list > .admin-listing-card').count(),
+    1,
+  );
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 });
     assert.equal(
