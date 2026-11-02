@@ -48,6 +48,31 @@ test('seller can choose and clear an accessible condition rating', async () => {
     await group.waitFor();
     const choices = group.getByRole('radio');
     assert.equal(await choices.count(), 6);
+    for (const width of [320, 390, 900]) {
+      await page.setViewportSize({ width, height: 900 });
+      const layout = await group.evaluate((element) => {
+        const inputs = [...element.querySelectorAll('input[type="radio"]')];
+        return {
+          inputSizes: inputs.map((input) => ({
+            width: input.getBoundingClientRect().width,
+            height: input.getBoundingClientRect().height,
+          })),
+          pageWidth: document.documentElement.scrollWidth,
+          viewport: window.innerWidth,
+        };
+      });
+      assert.ok(
+        layout.inputSizes.every(
+          ({ width, height }) =>
+            width >= 16 && width <= 26 && height >= 16 && height <= 26,
+        ),
+        `radio dimensions at ${width}px: ${JSON.stringify(layout.inputSizes)}`,
+      );
+      assert.ok(
+        layout.pageWidth <= layout.viewport + 1,
+        `no horizontal overflow at ${width}px`,
+      );
+    }
     await choices.nth(4).check();
     assert.equal(await choices.nth(4).isChecked(), true);
     await choices.nth(0).check();

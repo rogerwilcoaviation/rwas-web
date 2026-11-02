@@ -191,7 +191,7 @@ export function ListingDraftWorkflow({
                 role="radiogroup"
                 aria-label={field.label}
                 aria-describedby="listing-step-help"
-                style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}
+                className="workflow-rating-group"
               >
                 {[
                   { value: '', label: 'Not rated' },
@@ -201,15 +201,7 @@ export function ListingDraftWorkflow({
                       : option,
                   ),
                 ].map((option, index) => (
-                  <label
-                    key={option.value}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.3rem',
-                      cursor: 'pointer',
-                    }}
-                  >
+                  <label key={option.value} className="workflow-rating-option">
                     <input
                       id={index === 0 ? 'listing-step-input' : undefined}
                       type="radio"
@@ -514,6 +506,32 @@ export function ListingDraftWorkflow({
           gap: 10px;
           margin: 24px 0 8px;
           font-weight: 700;
+        }
+        .workflow-rating-group {
+          display: grid;
+          grid-template-columns: repeat(
+            auto-fit,
+            minmax(min(100%, 220px), 1fr)
+          );
+          gap: 8px 16px;
+        }
+        .workflow-rating-option {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          min-height: 44px;
+          min-width: 0;
+          cursor: pointer;
+          font-weight: 400;
+        }
+        .workflow-rating-option input[type='radio'] {
+          width: 18px;
+          height: 18px;
+          min-height: 18px;
+          flex: 0 0 18px;
+          margin: 0;
+          padding: 0;
+          accent-color: #9a741b;
         }
         small {
           font-size: 13px;
