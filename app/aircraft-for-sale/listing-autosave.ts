@@ -89,6 +89,7 @@ export function useListingAutosave(config: Config) {
       expectedRevision: c.revision.current,
       updatedAt: Date.now(),
     };
+    if (protectedValues.current === JSON.stringify(values)) return draft;
     if (c.owner && c.enabled) {
       try {
         localStorage.setItem(recoveryKey(c.owner), JSON.stringify(draft));

@@ -14,8 +14,8 @@ test('viewing current listing preserves saved draft until a field changes', asyn
         function App() {
           const [values,setValues]=useState({description:'Current listing'});
           const [step,setStep]=useState(0); const revision=useRef('old');
-          useListingAutosave({owner:'test',enabled:true,editor:1,values,step,listingId:'listing',listingRevision:1,revision,preserveUntilChange:true,request:async body=>{window.requests.push(body);return {revision:'new'};}});
-          return <><button onClick={()=>setStep(1)}>Navigate</button><input aria-label="Description" value={values.description} onChange={e=>setValues({description:e.target.value})}/></>;
+          const autosave=useListingAutosave({owner:'test',enabled:true,editor:1,values,step,listingId:'listing',listingRevision:1,revision,preserveUntilChange:true,request:async body=>{window.requests.push(body);return {revision:'new'};}});
+          return <><button onClick={()=>{autosave.capture(values,1);setStep(1);}}>Navigate</button><input aria-label="Description" value={values.description} onChange={e=>setValues({description:e.target.value})}/></>;
         }
         window.requests=[]; createRoot(document.getElementById('root')).render(<App/>);
       `,
