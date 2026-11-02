@@ -277,10 +277,15 @@ export default function SellerReview({
     >
       <AdminListingStyles />
       <style jsx global>{`
+        .seller-review {
+          width: 100%;
+        }
         .seller-review .admin-review-queue {
           margin: 20px 0 24px;
         }
         .seller-review .admin-review-table-scroll {
+          min-width: 0;
+          max-width: 100%;
           overflow-x: auto;
           border: 1px solid #d5cec1;
           border-radius: 6px;

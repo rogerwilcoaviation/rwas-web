@@ -216,6 +216,9 @@ try {
         () => document.documentElement.scrollWidth > innerWidth,
       ),
       false,
+      'Approval page must fit the ' +
+        width +
+        'px viewport; the queue can scroll within its own region.',
     );
     await selectListing('2000 Synthetic First Review');
     await firstCard.waitFor();
