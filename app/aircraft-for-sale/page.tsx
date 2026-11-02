@@ -235,16 +235,16 @@ export default async function AircraftForSalePage() {
               <h3>2. Prepare your listing</h3>
               <p>
                 Tell Captain Jerry about your aircraft, save a draft, and add
-                photos, video, and optional logbook PDFs. You control the
-                information you provide.
+                photos, video, and optional logbook PDFs. Photos, videos, and
+                logbooks are public once the listing is published.
               </p>
             </div>
             <div className="a4s-how-step">
               <h3>3. Submit your draft</h3>
               <p>
-                New submissions remain private during this launch. RWAS reviews
-                listing content for publication; this is not an inspection or
-                verification of the aircraft or its condition.
+                Drafts remain private while RWAS reviews them for publication.
+                This review is not an inspection or verification of the aircraft
+                or its condition.
               </p>
             </div>
             <div className="a4s-how-step">

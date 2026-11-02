@@ -2940,9 +2940,9 @@ function SellerMedia({
     <section aria-label="Listing media">
       {!onlyCategory && <h3>Photos, video and records</h3>}
       <p>
-        Photos, video and aircraft records remain private to your account and
-        the RWAS review team during this intake launch. Attachments are
-        optional.
+        Draft attachments are private while your listing is under review. Once
+        published, photos, videos and airframe, engine and propeller logbooks
+        are public. Other documents remain private. Attachments are optional.
       </p>
       {error && <p role="alert">{error}</p>}
       {previewError && <p role="alert">{previewError}</p>}

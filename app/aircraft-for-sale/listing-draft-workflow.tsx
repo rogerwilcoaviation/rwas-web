@@ -341,6 +341,9 @@ export function ListingDraftWorkflow({
       {media && (
         <>
           <p>{mediaLimits(media[0])}</p>
+          {['airframe', 'powerplant', 'propeller'].includes(media[0]) && (
+            <p>These logbooks will be public when your listing is published.</p>
+          )}
           {saved ? (
             renderMedia(media[0])
           ) : (

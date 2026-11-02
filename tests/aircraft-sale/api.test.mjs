@@ -304,7 +304,7 @@ test('archive and trash private; restore draft; permanent delete gated and error
   );
   assert.equal(f.objects.size, 0);
 });
-test('owned photos/PDF/video, reorder, foreign delete forbidden, private files and publish media-only', async () => {
+test('owned photos/PDF/video, reorder, foreign delete forbidden, logbooks public after publication', async () => {
   const f = fixture(),
     a = await f.login(),
     b = await f.login('other@example.test'),
@@ -377,7 +377,7 @@ test('owned photos/PDF/video, reorder, foreign delete forbidden, private files a
   );
   assert.equal(
     (await f.call('/files/' + encodeURIComponent(doc.key))).status,
-    401,
+    200,
   );
 });
 test('validation rejects missing year/price on submission, arbitrary fields, unsupported category/junk docs/video', async () => {
