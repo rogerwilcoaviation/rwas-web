@@ -430,6 +430,12 @@ try {
   await secondCard.getByRole('button', { name: 'Approve and Publish' }).click();
   await secondCard.getByRole('button', { name: 'Unpublish Listing' }).waitFor();
   assert.equal(f.state().listings[second.id].status, 'active');
+  assert.equal(
+    await secondCard
+      .getByRole('button', { name: 'Research again' })
+      .isEnabled(),
+    true,
+  );
   assert.equal(decisions.at(-1).note, '');
   checkpoints.push(
     'Explicit approval of the refreshed revision succeeds in disposable fixture',
