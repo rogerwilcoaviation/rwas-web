@@ -1194,7 +1194,10 @@ export class SellerStore {
                       state.profiles[state.listings[receipt.listingId].ownerId],
                     )
                   : { type: 'system', id: 'listing-notifications', email: '' },
-                action: 'Listing approval notification: ' + receipt.channel,
+                action:
+                  (receipt.kind === 'seller_decision'
+                    ? 'Seller decision notification: '
+                    : 'Listing approval notification: ') + receipt.channel,
                 route: '/notifications',
                 resourceId: receipt.listingId,
                 result: receipt.status === 'delivered' ? 'success' : 'failure',
@@ -5053,7 +5056,7 @@ export class SellerStore {
       }
       return reply({
         notifications: Object.values(this.state.outbox)
-          .map(notificationStatus)
+          .map((job) => notificationStatus(job, this.env))
           .filter(Boolean)
           .sort((a, b) => b.submittedAt - a.submittedAt)
           .slice(0, 20),
@@ -5070,6 +5073,7 @@ export class SellerStore {
             l.updatedAt,
           reviewNotifications: notificationStatus(
             this.state.outbox[l.id + ':' + l.revision],
+            this.env,
           ),
         })),
       });
@@ -5130,6 +5134,14 @@ export class SellerStore {
       if (l.status !== 'pending') fail(409, 'Listing is not awaiting review.');
       if (!['approve', 'reject', 'acceptance-approve'].includes(b.decision))
         fail(400, 'Invalid review decision.');
+      if (
+        b.decision === 'reject' &&
+        (typeof b.note !== 'string' || !b.note.trim() || b.note.length > 1000)
+      )
+        fail(
+          400,
+          'Enter a reason for requesting changes (up to 1,000 characters).',
+        );
       if (b.decision === 'approve' && !sellerPublicListingsEnabled(this.env))
         fail(409, 'Public listing activation is disabled.');
       if (b.decision === 'acceptance-approve') {
@@ -5143,13 +5155,11 @@ export class SellerStore {
         clean(l.fields, true);
         l.approvedRevision = l.revision;
         l.status = 'active';
+        delete l.reviewNote;
         delete this.state.outbox[l.id + ':' + l.revision];
       } else {
         l.status = 'rejected';
-        l.reviewNote = String(b.note || 'Please update your listing.').slice(
-          0,
-          1000,
-        );
+        l.reviewNote = b.note.trim().replace(/\r\n?/g, '\n');
         delete this.state.outbox[l.id + ':' + l.revision];
       }
       l.updatedAt = Date.now();

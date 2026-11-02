@@ -466,6 +466,10 @@ try {
   checkpoints.push(
     'Expired staff access clears visible private records and unsent notes',
   );
+  await firstCard.getByRole('button', { name: 'Request Changes' }).click();
+  await page.getByRole('alert').filter({ hasText: 'Enter a reason for requesting changes' }).waitFor();
+  assert.equal(f.state().listings[first.id].status, 'pending');
+  assert.deepEqual(decisions, []);
   await firstCard
     .getByRole('textbox', { name: 'Review note' })
     .fill('Correct first record only');
@@ -752,12 +756,12 @@ try {
   checkpoints.push(
     'Staff can remove QA publication after scope and global acceptance are disabled',
   );
-  await page.getByText('Submission notifications', { exact: true }).click();
+  await page.getByText('Listing notifications', { exact: true }).click();
   await page
     .getByRole('button', { name: 'Refresh delivery status', exact: true })
     .click();
   await page
-    .getByText('No submission notifications are recorded yet.')
+    .getByRole('cell', { name: new RegExp('Seller email: Changes requested.*Listing ' + first.id.slice(0, 8)) })
     .waitFor();
   f.env.LISTING_NOTIFICATIONS_ENABLED = 'true';
   f.env.FROM_EMAIL = 'Synthetic notifications <accounts@example.test>';

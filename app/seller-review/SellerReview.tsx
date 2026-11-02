@@ -211,6 +211,12 @@ export default function SellerReview({
     }
   }
   async function review(l: Review, decision: Decision) {
+    if (decision === 'reject' && !notes[noteKey(l)]?.trim()) {
+      setError(
+        'Enter a reason for requesting changes before returning the listing.',
+      );
+      return;
+    }
     if (
       decision === 'approve' &&
       (!publicationAllowed || !l.reviewActions?.includes('approve'))
@@ -665,7 +671,12 @@ export default function SellerReview({
                 {l.status === 'pending' && (
                   <label className="admin-review-note">
                     Review note
+                    <span>
+                      Required when requesting changes; the seller will receive
+                      this reason by email.
+                    </span>
                     <textarea
+                      aria-label="Review note"
                       value={notes[noteKey(l)] || ''}
                       onChange={(e) =>
                         setNotes((previous) => ({
@@ -675,7 +686,7 @@ export default function SellerReview({
                       }
                       maxLength={1000}
                       rows={3}
-                      placeholder="Add feedback for the seller, if needed."
+                      placeholder="Explain the changes needed."
                     />
                   </label>
                 )}

@@ -12,12 +12,81 @@ const clean = (value, max = 200) =>
     .slice(0, max);
 const pending = (delivery) =>
   ['queued', 'retry', 'sending', 'claimed'].includes(delivery?.status);
+const validRecipient = (address) =>
+  address.length <= 254 && /^\S+@[^\s@]+\.[^\s@]+$/.test(address);
 const valid = (state, job) =>
-  job.notificationVersion === 1 &&
-  (job.test === true ||
-    (state.listings[job.listingId]?.status === 'pending' &&
-      state.listings[job.listingId]?.revision === job.revision &&
-      !accountHeld(state.profiles[state.listings[job.listingId]?.ownerId])));
+  job.notificationVersion === 2 && job.kind === 'seller_decision'
+    ? !!state.listings[job.listingId] &&
+      state.listings[job.listingId].ownerId === job.sellerId &&
+      !['deleted', 'archived'].includes(state.listings[job.listingId].status) &&
+      !accountHeld(state.profiles[job.sellerId])
+    : job.notificationVersion === 1 &&
+      (job.test === true ||
+        (state.listings[job.listingId]?.status === 'pending' &&
+          state.listings[job.listingId]?.revision === job.revision &&
+          !accountHeld(
+            state.profiles[state.listings[job.listingId]?.ownerId],
+          )));
+
+function makeSellerDecision(env, listing, profile, now) {
+  const approved = listing.status === 'active';
+  const title = clean(listingTitle(listing.fields));
+  const recipient =
+    typeof profile?.email === 'string'
+      ? profile.email.trim().toLowerCase()
+      : '';
+  const hasRecipient = validRecipient(recipient);
+  const text = [
+    approved
+      ? 'Your Aviation Exchange listing was approved and published.'
+      : 'Your Aviation Exchange listing was not approved and needs changes.',
+    'Listing: ' + title,
+    'Listing ID: ' + listing.id,
+    'Revision: ' + listing.revision,
+    ...(approved
+      ? [
+          'View listing: https://www.rogerwilcoaviation.com/aircraft-for-sale/' +
+            listing.id,
+        ]
+      : [
+          'Reason:',
+          listing.reviewNote,
+          'Open My Listings to update and resubmit your listing: https://www.rogerwilcoaviation.com/aircraft-for-sale',
+        ]),
+  ].join('\n');
+  const notificationId = 'aviation-decision/' + crypto.randomUUID();
+  return {
+    kind: 'seller_decision',
+    decision: approved ? 'approved' : 'rejected',
+    sellerId: listing.ownerId,
+    recipientEmail: hasRecipient ? recipient : '',
+    listingId: listing.id,
+    revision: listing.revision,
+    createdAt: now,
+    notificationVersion: 2,
+    notificationId,
+    emailBody: JSON.stringify({
+      from: env.FROM_EMAIL,
+      to: hasRecipient ? [recipient] : [],
+      subject:
+        'Aviation Exchange listing ' +
+        (approved ? 'approved' : 'needs changes') +
+        ' — ' +
+        title,
+      text,
+    }),
+    notifications: {
+      email: hasRecipient
+        ? { status: 'queued', attempts: 0, nextAt: now + 1000 }
+        : {
+            status: 'needs_review',
+            attempts: 0,
+            code: 'recipient_missing',
+            completedAt: now,
+          },
+    },
+  };
+}
 
 function makeJob(env, listing, profile, test = false, now = Date.now()) {
   const id = listing.id + ':' + listing.revision;
@@ -71,9 +140,22 @@ export function planListingNotifications(
   env,
   now = Date.now(),
 ) {
-  if (env.LISTING_NOTIFICATIONS_ENABLED !== 'true') return;
   for (const listing of Object.values(state.listings)) {
     const old = previous.listings[listing.id];
+    if (
+      old?.status === 'pending' &&
+      old.revision === listing.revision &&
+      ['active', 'rejected'].includes(listing.status)
+    ) {
+      const job = makeSellerDecision(
+        env,
+        listing,
+        state.profiles[listing.ownerId],
+        now,
+      );
+      state.outbox[job.notificationId] = job;
+    }
+    if (env.LISTING_NOTIFICATIONS_ENABLED !== 'true') continue;
     if (
       listing.status !== 'pending' ||
       (old?.status === 'pending' && old?.revision === listing.revision)
@@ -145,6 +227,26 @@ export async function takeListingNotification(state, env, now = Date.now()) {
         ? delivery.leaseUntil
         : delivery.nextAt;
       if (next > now) continue;
+      if (job.kind === 'seller_decision') {
+        const currentEmail = String(state.profiles[job.sellerId]?.email || '')
+          .trim()
+          .toLowerCase();
+        if (currentEmail !== job.recipientEmail) {
+          if (!delivery.attempts && validRecipient(currentEmail)) {
+            const body = JSON.parse(job.emailBody);
+            body.to = [currentEmail];
+            job.emailBody = JSON.stringify(body);
+            job.recipientEmail = currentEmail;
+          } else {
+            Object.assign(delivery, {
+              status: 'needs_review',
+              code: 'recipient_changed',
+              completedAt: now,
+            });
+            continue;
+          }
+        }
+      }
       if (
         delivery.status === 'claimed' ||
         delivery.attempts >= 6 ||
@@ -157,6 +259,19 @@ export async function takeListingNotification(state, env, now = Date.now()) {
         delivery.status = 'needs_review';
         delivery.completedAt = now;
         continue;
+      }
+      if (
+        job.kind === 'seller_decision' &&
+        (!delivery.attempts || delivery.code === 'email_not_configured') &&
+        typeof env.FROM_EMAIL === 'string' &&
+        env.FROM_EMAIL &&
+        !/[\r\n]/.test(env.FROM_EMAIL)
+      ) {
+        const body = JSON.parse(job.emailBody);
+        if (!body.from) {
+          body.from = env.FROM_EMAIL;
+          job.emailBody = JSON.stringify(body);
+        }
       }
       const ticket = key + ':' + crypto.randomUUID();
       Object.assign(delivery, {
@@ -288,6 +403,10 @@ export async function finishListingNotification(
       completedAt: now,
       ...(result.providerId ? { providerId: result.providerId } : {}),
     });
+    if (record.kind === 'seller_decision') {
+      delete record.emailBody;
+      delete record.recipientEmail;
+    }
   } else {
     const uncertain = job.channel === 'teams' && delivery.status === 'claimed';
     const stop =
@@ -302,6 +421,9 @@ export async function finishListingNotification(
   }
   delete delivery.ticketHash;
   return {
+    ...(record.kind === 'seller_decision'
+      ? { kind: record.kind, decision: record.decision }
+      : {}),
     listingId: record.listingId,
     revision: record.revision,
     channel: job.channel,
@@ -311,9 +433,16 @@ export async function finishListingNotification(
   };
 }
 
-export function notificationStatus(job) {
-  return job?.notificationVersion === 1
+export function notificationStatus(job, env) {
+  return [1, 2].includes(job?.notificationVersion)
     ? {
+        ...(job.notificationVersion === 2
+          ? {
+              kind: job.kind,
+              decision: job.decision,
+              notificationId: job.notificationId,
+            }
+          : {}),
         listingId: job.listingId,
         revision: job.revision,
         submittedAt: job.createdAt,
@@ -322,9 +451,19 @@ export function notificationStatus(job) {
           Object.entries(job.notifications).map(([channel, d]) => [
             channel,
             {
-              status: d.status,
+              status:
+                env &&
+                env.LISTING_NOTIFICATIONS_ENABLED !== 'true' &&
+                pending(d)
+                  ? 'paused'
+                  : d.status,
               attempts: d.attempts,
-              code: d.code || '',
+              code:
+                env &&
+                env.LISTING_NOTIFICATIONS_ENABLED !== 'true' &&
+                pending(d)
+                  ? 'notifications_disabled'
+                  : d.code || '',
               at: d.completedAt || d.firstAttemptAt || job.createdAt,
             },
           ]),

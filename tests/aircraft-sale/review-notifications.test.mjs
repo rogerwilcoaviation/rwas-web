@@ -65,6 +65,152 @@ test('submission atomically queues fixed email and Teams alerts once per revisio
   assert.equal(f.state().listings[listing.id].status, 'pending');
 });
 
+test('approval queues one durable seller email for the approved listing revision', async () => {
+  const {f, listing} = await pendingFixture();
+  const response = await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'approve'},'fixture-reviewer');
+  assert.equal(response.status,200,await response.clone().text());
+  f.restart();
+  const jobs=Object.values(f.state().outbox).filter(job=>job.kind==='seller_decision');
+  assert.equal(jobs.length,1);
+  const body=JSON.parse(jobs[0].emailBody);
+  assert.deepEqual(body.to,['seller@example.test']);
+  assert.match(body.subject,/approved/i);
+  assert.match(body.text,/approved.*published/i);
+  assert.match(body.text,new RegExp(listing.id));
+  assert.equal(jobs[0].notifications.email.status,'queued');
+  const duplicate=await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'approve'},'fixture-reviewer');
+  assert.equal(duplicate.status,409);
+  assert.equal(Object.values(f.state().outbox).filter(job=>job.kind==='seller_decision').length,1);
+});
+
+test('denial requires a reason and queues it only to the listing owner', async () => {
+  const {f, listing}=await pendingFixture();
+  const missing=await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'reject',note:'  '},'fixture-reviewer');
+  assert.equal(missing.status,400);
+  assert.equal(f.state().listings[listing.id].status,'pending');
+  const note='Please add the engine logbook.\nThe hours need confirmation.';
+  const denied=await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'reject',note},'fixture-reviewer');
+  assert.equal(denied.status,200,await denied.clone().text());
+  const job=Object.values(f.state().outbox).find(item=>item.kind==='seller_decision');
+  assert.ok(job);
+  const body=JSON.parse(job.emailBody);
+  assert.deepEqual(body.to,['seller@example.test']);
+  assert.match(body.subject,/changes|not approved/i);
+  assert.ok(body.text.includes(note));
+  assert.equal(f.state().listings[listing.id].reviewNote,note);
+});
+
+test('seller decision email retries with the same idempotency key and payload', async () => {
+  const {f, listing}=await pendingFixture();
+  assert.equal((await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'approve'},'fixture-reviewer')).status,200);
+  const state=f.state(), now=Date.now()+2000, requests=[];
+  f.env.LISTING_NOTIFICATION_FETCH={fetch:async request=>{requests.push({key:request.headers.get('Idempotency-Key'),body:await request.text()});return requests.length===1?Response.json({error:'temporary'},{status:503}):Response.json({id:'synthetic-delivery'});}};
+  let job=await takeListingNotification(state,f.env,now);
+  assert.equal(job.channel,'email');
+  await finishListingNotification(state,job,await dispatchListingNotification(f.env,job),now);
+  job=await takeListingNotification(state,f.env,now+60001);
+  await finishListingNotification(state,job,await dispatchListingNotification(f.env,job),now+60001);
+  assert.deepEqual(requests[0],requests[1]);
+  assert.equal(state.outbox[job.key].notifications.email.status,'delivered');
+  assert.equal(await takeListingNotification(state,f.env,now+120000),null);
+  assert.equal(state.outbox[job.key].emailBody,undefined,'Delivered messages do not retain the seller email body');
+});
+
+test('seller decision email can recover when the sender is configured after the decision', async () => {
+  const {f, listing}=await pendingFixture();
+  f.env.FROM_EMAIL='';
+  assert.equal((await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'approve'},'fixture-reviewer')).status,200);
+  const state=f.state(), now=Date.now()+2000, sent=[];
+  f.env.LISTING_NOTIFICATION_FETCH={fetch:async request=>{sent.push(await request.json());return Response.json({id:'synthetic-delivery'});}};
+  let job=await takeListingNotification(state,f.env,now);
+  const failure=await dispatchListingNotification(f.env,job);
+  assert.equal(failure.code,'email_not_configured');
+  await finishListingNotification(state,job,failure,now);
+  f.env.FROM_EMAIL='Aviation Exchange <accounts@example.test>';
+  job=await takeListingNotification(state,f.env,now+60001);
+  const result=await dispatchListingNotification(f.env,job);
+  assert.equal(result.ok,true);
+  assert.equal(sent[0].from,f.env.FROM_EMAIL);
+});
+
+test('decision emails remain queued while notifications are disabled and resume when enabled', async () => {
+  const {f, listing}=await pendingFixture();
+  f.env.LISTING_NOTIFICATIONS_ENABLED='false';
+  assert.equal((await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'approve'},'fixture-reviewer')).status,200);
+  const state=f.state(), decision=Object.values(state.outbox).find(job=>job.kind==='seller_decision');
+  assert.equal(decision.notifications.email.status,'queued');
+  assert.equal(notificationStatus(decision,f.env).channels.email.status,'paused');
+  assert.equal(await takeListingNotification(state,f.env,Date.now()+2000),null);
+  f.env.LISTING_NOTIFICATIONS_ENABLED='true';
+  assert.equal((await takeListingNotification(state,f.env,Date.now()+2000)).notificationId,decision.notificationId);
+});
+
+test('a verified email change before delivery sends to the current seller address', async () => {
+  const {f, listing}=await pendingFixture();
+  assert.equal((await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'approve'},'fixture-reviewer')).status,200);
+  const state=f.state(), decision=Object.values(state.outbox).find(job=>job.kind==='seller_decision');
+  state.profiles[state.listings[listing.id].ownerId].email='new-address@example.test';
+  const job=await takeListingNotification(state,f.env,Date.now()+2000);
+  assert.deepEqual(JSON.parse(job.emailBody).to,['new-address@example.test']);
+  assert.equal(decision.notifications.email.status,'sending');
+  assert.doesNotMatch(JSON.stringify(notificationStatus(decision)),/seller@example.test|new-address@example.test/);
+});
+
+test('an email change after an uncertain attempt stops retrying to either address', async () => {
+  const {f, listing}=await pendingFixture();
+  assert.equal((await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'approve'},'fixture-reviewer')).status,200);
+  const state=f.state(), now=Date.now()+2000;
+  const job=await takeListingNotification(state,f.env,now);
+  await finishListingNotification(state,job,{ok:false,code:'network_unknown'},now);
+  state.profiles[state.listings[listing.id].ownerId].email='new-address@example.test';
+  assert.equal(await takeListingNotification(state,f.env,now+60001),null);
+  assert.equal(state.outbox[job.key].notifications.email.status,'needs_review');
+  assert.equal(state.outbox[job.key].notifications.email.code,'recipient_changed');
+});
+
+test('a rejection followed by resubmission and approval queues distinct decision emails', async () => {
+  const {f, owner, listing}=await pendingFixture();
+  assert.equal((await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'reject',note:'Please update the details.'},'fixture-reviewer')).status,200);
+  assert.equal((await submit(f,owner,listing)).status,200);
+  assert.equal((await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'approve'},'fixture-reviewer')).status,200);
+  const decisions=Object.values(f.state().outbox).filter(job=>job.kind==='seller_decision');
+  assert.equal(decisions.length,2);
+  assert.deepEqual(decisions.map(job=>job.decision).sort(),['approved','rejected']);
+  assert.notEqual(decisions[0].notificationId,decisions[1].notificationId);
+});
+
+test('durable alarm sends a decision email once to the owner and records delivery', async () => {
+  const {f, listing}=await pendingFixture();
+  const note='Please add an airframe logbook.';
+  assert.equal((await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'reject',note},'fixture-reviewer')).status,200);
+  const state=f.state(), job=Object.values(state.outbox).find(item=>item.kind==='seller_decision');
+  job.notifications.email.nextAt=Date.now()-1;
+  f.durable.set('state',state);
+  const sent=[];
+  f.env.LISTING_NOTIFICATION_FETCH={fetch:async request=>{sent.push({url:request.url,body:await request.json()});return Response.json({id:'synthetic-seller-email'});}};
+  await f.restart().alarm();
+  assert.equal(sent.length,1);
+  assert.equal(sent[0].url,'https://api.resend.com/emails');
+  assert.deepEqual(sent[0].body.to,['seller@example.test']);
+  assert.ok(sent[0].body.text.includes(note));
+  const saved=Object.values(f.state().outbox).find(item=>item.kind==='seller_decision');
+  assert.equal(saved.notifications.email.status,'delivered');
+  assert.equal(saved.emailBody,undefined);
+  await f.restart().alarm();
+  assert.equal(sent.length,1);
+});
+
+test('a failed durable save cannot commit a decision or its email', async () => {
+  const {f, listing}=await pendingFixture();
+  f.storageFailure(true);
+  const response=await f.call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'approve'},'fixture-reviewer');
+  assert.equal(response.status,503);
+  f.storageFailure(false);
+  f.restart();
+  assert.equal(f.state().listings[listing.id].status,'pending');
+  assert.equal(Object.values(f.state().outbox).filter(item=>item.kind==='seller_decision').length,0);
+});
+
 test('Teams tickets are private, single-use, expiring and return canonical text only; caller cannot select a destination', async () => {
   const { f, key } = await pendingFixture();
   const state = f.state(),
@@ -527,6 +673,18 @@ test('native SQLite alarm and Pages-to-seller RPC deliver both channels without 
     ).json();
     assert.equal(after.notifications[0].channels.teams.attempts, 1);
     assert.equal(after.notifications[0].channels.email.attempts, 1);
+    const reason='Please supply the logbook.';
+    const denied=await call('/admin/review','POST',{listingId:listing.id,revision:listing.revision,decision:'reject',note:reason},'fixture-admin');
+    assert.equal(denied.status,200,await denied.clone().text());
+    const sellerDeadline=Date.now()+15000;
+    do {
+      await new Promise(resolve=>setTimeout(resolve,250));
+      status=await (await call('/admin/notifications','GET',undefined,'fixture-admin')).json();
+    } while(Date.now()<sellerDeadline && !status.notifications?.some(row=>row.kind==='seller_decision' && row.channels.email.status==='delivered'));
+    assert.equal(emails.length,2,JSON.stringify(status));
+    assert.deepEqual(emails[1].to,['native-notifications@example.test']);
+    assert.ok(emails[1].text.includes(reason));
+    assert.equal(teams.length,1,'Seller decisions do not post to the administrator Teams channel');
   } finally {
     await mf.dispose();
   }

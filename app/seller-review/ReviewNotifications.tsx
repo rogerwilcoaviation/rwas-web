@@ -7,6 +7,9 @@ export type NotificationReceipt = {
   revision: number;
   submittedAt: number;
   test?: boolean;
+  kind?: string;
+  decision?: string;
+  notificationId?: string;
   channels: Record<
     string,
     { status: string; attempts: number; code: string; at: number }
@@ -18,6 +21,7 @@ const labels: Record<string, string> = {
   claimed: 'Sending',
   delivered: 'Accepted for delivery',
   retry: 'Retry scheduled',
+  paused: 'Delivery paused',
   needs_review: 'Needs attention',
 };
 export function NotificationSummary({
@@ -93,10 +97,11 @@ export default function ReviewNotifications() {
   }, [rows, busy]);
   return (
     <details className="admin-document-group admin-review-notifications">
-      <summary>Submission notifications</summary>
+      <summary>Listing notifications</summary>
       <p className="admin-muted">
-        New submissions notify admin@rwas.team and Teams Shop Talk. Test
-        messages are clearly labeled and do not create a listing.
+        New submissions notify admin@rwas.team and Teams Shop Talk. Approval and
+        change requests email the seller. Test messages are clearly labeled and
+        do not create a listing.
       </p>
       <div className="admin-action-row">
         <button
@@ -128,7 +133,7 @@ export default function ReviewNotifications() {
       )}
       {loaded && !rows.length && (
         <p className="admin-muted">
-          No submission notifications are recorded yet.
+          No listing notifications are recorded yet.
         </p>
       )}
       {rows.length > 0 && (
@@ -141,18 +146,27 @@ export default function ReviewNotifications() {
           <table className="admin-review-table">
             <thead>
               <tr>
-                <th scope="col">Submission</th>
+                <th scope="col">Notification</th>
                 <th scope="col">Email</th>
                 <th scope="col">Teams Shop Talk</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
-                <tr key={row.listingId + ':' + row.revision}>
+                <tr
+                  key={row.notificationId || row.listingId + ':' + row.revision}
+                >
                   <td>
-                    {row.test
-                      ? 'Delivery test'
-                      : 'Listing ' + row.listingId.slice(0, 8)}
+                    {row.kind === 'seller_decision'
+                      ? 'Seller email: ' +
+                        (row.decision === 'approved'
+                          ? 'Approved'
+                          : 'Changes requested') +
+                        ' · Listing ' +
+                        row.listingId.slice(0, 8)
+                      : row.test
+                        ? 'Delivery test'
+                        : 'Listing ' + row.listingId.slice(0, 8)}
                     <br />
                     <time dateTime={new Date(row.submittedAt).toISOString()}>
                       {new Date(row.submittedAt).toLocaleString()}
@@ -160,7 +174,10 @@ export default function ReviewNotifications() {
                   </td>
                   {['email', 'teams'].map((channel) => (
                     <td key={channel}>
-                      {labels[row.channels[channel]?.status] || 'Not recorded'}
+                      {row.kind === 'seller_decision' && channel === 'teams'
+                        ? 'Not applicable'
+                        : labels[row.channels[channel]?.status] ||
+                          'Not recorded'}
                       {row.channels[channel]?.code && (
                         <>
                           <br />

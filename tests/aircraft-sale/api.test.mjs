@@ -1464,7 +1464,7 @@ test('ordinary unpublish rejects private, unknown and purging states without mut
     await t.test(status, async () => {
       const { f, owner, listing } = await publicationFixture(false);
       if (['pending', 'rejected', 'purging'].includes(status)) await submit(f, owner, listing);
-      if (status === 'rejected') assert.equal((await reviewPublication(f, listing, 'reject')).status, 200);
+      if (status === 'rejected') assert.equal((await reviewPublication(f, listing, 'reject', 'fixture-reviewer', { note: 'Please update the listing.' })).status, 200);
       if (['archived', 'deleted'].includes(status))
         assert.equal((await f.call('/listing/' + listing.id + '/status', 'POST', { status }, owner)).status, 200);
       if (status === 'purging') {
