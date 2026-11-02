@@ -84,3 +84,66 @@ test('public gallery shows one photo or video at a time and exposes only publish
     await browser.close();
   }
 });
+
+test('airframe, engine and propeller logbooks are public only for published or sold listings', async () => {
+  const f = fixture(),
+    owner = await f.login(),
+    listing = await create(f, owner);
+  const documents = [];
+  for (const category of ['airframe', 'powerplant', 'propeller', 'misc']) {
+    const response = await f.call(
+      `/upload?listingId=${listing.id}&category=${category}&filename=${category}.pdf`,
+      'POST',
+      pdf,
+      owner,
+    );
+    assert.equal(response.status, 200);
+    documents.push({ category, ...(await response.json()).file });
+  }
+  for (const file of documents)
+    assert.equal(
+      (await f.call('/files/' + encodeURIComponent(file.key))).status,
+      401,
+    );
+  const current = f.state().listings[listing.id];
+  assert.equal((await submit(f, owner, current)).status, 200);
+  assert.equal((await approve(f, current)).status, 200);
+  for (const expectedStatus of ['active', 'sold']) {
+    if (expectedStatus === 'sold')
+      assert.equal(
+        (
+          await f.call(
+            '/listing/' + listing.id + '/status',
+            'POST',
+            { status: 'sold' },
+            owner,
+          )
+        ).status,
+        200,
+      );
+    for (const file of documents) {
+      const response = await f.call('/files/' + encodeURIComponent(file.key));
+      assert.equal(
+        response.status,
+        file.category === 'misc' ? 401 : 200,
+        `${expectedStatus}: ${file.category}`,
+      );
+    }
+  }
+  assert.equal(
+    (
+      await f.call(
+        '/listing/' + listing.id + '/status',
+        'POST',
+        { status: 'archived' },
+        owner,
+      )
+    ).status,
+    200,
+  );
+  for (const file of documents)
+    assert.equal(
+      (await f.call('/files/' + encodeURIComponent(file.key))).status,
+      401,
+    );
+});
