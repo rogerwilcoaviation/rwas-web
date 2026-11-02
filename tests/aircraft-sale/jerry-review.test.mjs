@@ -557,3 +557,43 @@ test('active-listing re-research cannot bypass administrator authorization', asy
   }
   assert.equal(f.state().listings[listing.id].status, 'active');
 });
+
+test('a blank seller website is not inferred from the email domain', async () => {
+  const t = transport();
+  const result = await researchSubmission(
+    {
+      kind: 'listing',
+      profile: {
+        email: 'owner@syntheticaviation.com',
+        name: 'Synthetic',
+        website: 'https://profile.example.com',
+      },
+      listing: { fields: { ...fields, sellerWebsite: '' } },
+    },
+    t.fetcher,
+    t.ai,
+  );
+  assert.equal(result.evidence.business.status, 'not_provided');
+  assert.ok(
+    !t.calls.some(({ url }) => url === 'https://syntheticaviation.com/'),
+  );
+});
+
+test('an explicitly supplied website is researched', async () => {
+  const t = transport();
+  const result = await researchSubmission(
+    {
+      kind: 'listing',
+      profile: { email: 'owner@syntheticaviation.com' },
+      listing: {
+        fields: { ...fields, sellerWebsite: 'https://syntheticaviation.com' },
+      },
+    },
+    t.fetcher,
+    t.ai,
+  );
+  assert.equal(result.evidence.business.status, 'collected');
+  assert.ok(
+    t.calls.some(({ url }) => url === 'https://syntheticaviation.com/'),
+  );
+});

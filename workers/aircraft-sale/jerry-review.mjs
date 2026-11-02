@@ -360,11 +360,9 @@ export async function researchSubmission(
   const fields = listing?.fields || {};
   const email = await researchEmail(profile.email, fetcher);
   const website =
-    fields.sellerWebsite ||
-    profile.website ||
-    (!email.personalProvider && publicHost(email.domain)
-      ? 'https://' + email.domain
-      : '');
+    kind === 'listing' && Object.hasOwn(fields, 'sellerWebsite')
+      ? fields.sellerWebsite || ''
+      : profile.website || '';
   const [business, faa] = await Promise.all([
     researchWebsite(website, fetcher),
     kind === 'listing'
