@@ -60,6 +60,23 @@ const PAPA_ALPHA_DEMOS = [
     ] satisfies PapaAlphaProductLink[],
   },
   {
+    id: '0u0eplZD74Y',
+    title: 'Flap Rigging Tool',
+    description:
+      'An illustrated overview of using Papa-Alpha flap contour fixtures to establish a wing reference, compare the flap at its prescribed neutral condition, and complete the follow-up operational checks.',
+    thumbnailUrl: 'https://i.ytimg.com/vi/0u0eplZD74Y/hqdefault.jpg',
+    productLinks: [
+      {
+        href: '/products/pa-28-32-34-44-aileron-and-flap-rigging-tool-1',
+        label: 'PA-28/32/34/44 aileron & flap tool',
+      },
+      {
+        href: '/products/pa-36-flap-rigging-tool-1',
+        label: 'View PA-36 flap tool',
+      },
+    ] satisfies PapaAlphaProductLink[],
+  },
+  {
     id: 'chqGUY3FBEI',
     title: 'Rudder Trim Reference Tools',
     description:
