@@ -147,3 +147,63 @@ test('airframe, engine and propeller logbooks are public only for published or s
       401,
     );
 });
+
+test('listing details preserve bullet lines and group public logbooks by category', async () => {
+  const f = fixture(),
+    owner = await f.login();
+  const listing = await create(f, owner, {
+    ...(await import('./fixture.mjs')).fields,
+    avionics: '* First avionics item\n* Second avionics item',
+    equipmentList: '* First equipment item\n* Second equipment item',
+  });
+  for (const category of ['airframe', 'powerplant', 'propeller']) {
+    const response = await f.call(
+      `/upload?listingId=${listing.id}&category=${category}&filename=${category}.pdf`,
+      'POST',
+      pdf,
+      owner,
+    );
+    assert.equal(response.status, 200);
+  }
+  const current = f.state().listings[listing.id];
+  assert.equal((await submit(f, owner, current)).status, 200);
+  assert.equal((await approve(f, current)).status, 200);
+  const html = await (
+    await f.call('/listing/' + listing.id, 'GET', undefined, undefined, {
+      Accept: 'text/html',
+    })
+  ).text();
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const page = await browser.newPage({
+      viewport: { width: 390, height: 900 },
+    });
+    await page.setContent(html);
+    for (const title of ['Avionics', 'Equipment']) {
+      const paragraph = page
+        .getByRole('heading', { name: title, exact: true })
+        .locator('xpath=following-sibling::p[1]');
+      assert.match(await paragraph.textContent(), /item\n\* Second/);
+      assert.equal(
+        await paragraph.evaluate((el) => getComputedStyle(el).whiteSpace),
+        'pre-wrap',
+      );
+    }
+    for (const [heading, name] of [
+      ['Airframe logbooks', 'airframe.pdf'],
+      ['Engine logbooks', 'powerplant.pdf'],
+      ['Propeller logbooks', 'propeller.pdf'],
+    ]) {
+      const group = page
+        .getByRole('heading', { name: heading, exact: true })
+        .locator('xpath=..');
+      assert.equal(
+        await group.getByRole('link', { name, exact: true }).count(),
+        1,
+      );
+    }
+    await page.close();
+  } finally {
+    await browser.close();
+  }
+});

@@ -522,18 +522,27 @@ function publicPage(l) {
     propeller: 'Propeller logbooks',
   };
   const logbooks = Object.entries(logbookLabels)
-    .flatMap(([category, label]) =>
-      (l.logbooks?.[category]?.files || []).map(
-        (file) =>
-          '<li><a href="/api/aircraft-sale/files/' +
-          encodeURIComponent(file.key) +
-          '">' +
-          escape(label) +
-          ': ' +
-          escape(file.name || 'Download PDF') +
-          '</a></li>',
-      ),
-    )
+    .map(([category, label]) => {
+      const files = l.logbooks?.[category]?.files || [];
+      if (!files.length) return '';
+      const links = files
+        .map(
+          (file) =>
+            '<li><a href="/api/aircraft-sale/files/' +
+            encodeURIComponent(file.key) +
+            '">' +
+            escape(file.name || 'Download PDF') +
+            '</a></li>',
+        )
+        .join('');
+      return (
+        '<div class="logbook-category"><h3>' +
+        escape(label) +
+        '</h3><ul>' +
+        links +
+        '</ul></div>'
+      );
+    })
     .join('');
   const detailRows = [
     ['Tail Number', l.nNumber],
@@ -723,9 +732,9 @@ function publicPage(l) {
       escape(l.description) +
       '</p>' +
       (!l.listingType || l.listingType === 'aircraft'
-        ? '<h3>Avionics</h3><p>' +
+        ? '<h3>Avionics</h3><p class="copy">' +
           escape(l.avionics) +
-          '</p><h3>Equipment</h3><p>' +
+          '</p><h3>Equipment</h3><p class="copy">' +
           escape(l.equipmentList) +
           '</p><h3>Damage history</h3><p>' +
           escape(l.damageHistory || 'Ask seller') +
@@ -735,7 +744,7 @@ function publicPage(l) {
       conditionHtml +
       '<section><h2>Logbooks and documents</h2>' +
       (logbooks
-        ? '<p>Open the available logbooks below.</p><ul>' + logbooks + '</ul>'
+        ? '<p>Open the available logbooks below.</p>' + logbooks
         : '<p>No logbooks provided.</p>') +
       (records
         ? '<p>' +
