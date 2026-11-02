@@ -1,0 +1,15 @@
+# Aviation Exchange approval queue and submission notifications
+
+The administrator approval queue uses selectable rows with the newest pending submissions first. Published listings with an available unpublish action remain after the pending queue. Selecting a row shows only that listing's details, media, Jerry recommendation and review actions. Notes remain scoped to listing ID and revision. Reloads preserve selection while it remains available. Submission links select the requested listing after staff authentication. Queue timestamps use the revision's outbox submission time, with existing listing update/create timestamps as a fallback.
+
+When an enabled seller service commits a transition into pending review, it creates immutable email and Teams notification jobs in the existing durable review outbox. Existing pending revisions are not backfilled. Each new revision can notify admin@rwas.team and the existing Teams Shop Talk relay independently. Listing submission succeeds independently of delivery outages. No message publishes or approves a listing.
+
+The existing seller Resend binding delivers email with a stable per-revision idempotency key. Retries are bounded to six attempts and a 23-hour window inside Resend's documented 24-hour deduplication period. Expired attempts cannot dispatch. Accepted email is not resent when Teams needs a retry.
+
+Teams uses the existing Pages-held relay credential. The seller service sends only an expiring, one-use capability to a fixed website endpoint. That endpoint obtains canonical text through the private seller service binding and atomically consumes the capability before calling the fixed Shop Talk relay. Guests cannot supply message text, recipients, channel names or destination URLs. Preview destinations are denied. No existing credential is copied to another service.
+
+A failure before a Teams capability is consumed may retry. Once consumed, an uncertain delivery is marked Needs attention and is not resent automatically; the operator should check Shop Talk. This prevents duplicate posts after a timeout or crash without assuming the relay offers a durable deduplication guarantee. Delivery receipts and sanitized results appear in the administrator panel and activity log. Accepted for delivery describes provider/relay acknowledgement, not a claim that a human read a message.
+
+The administrator can send a clearly labeled delivery test without creating an account or listing. This action requires existing staff authorization and is rate limited. The status panel shows separate attempts and results for email and Teams.
+
+Validation includes native local SQLite alarms and Pages-to-seller RPC with all external services replaced by fixtures; replay, expiry, preview, destination, stale revision, retry window and authorization checks; existing seller/Jerry/intake tests; and rendered row selection, note isolation, stale approval and notification UI checks in the hosted release pipeline. Live release and actual delivery evidence must be recorded separately after deployment.

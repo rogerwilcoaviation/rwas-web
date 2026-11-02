@@ -359,6 +359,10 @@ test('actual website sessions and native synthetic transport preserve account/su
       .bind('admin', 'jerry+neutral-b@example.test')
       .run();
     assert.equal((await call('/api/jerry/context', b)).status, 403);
+    assert.notEqual(
+      (await call('/api/aircraft-sale/staff/notifications', b)).status,
+      200,
+    );
     const enrollment = await call(
       '/api/aircraft-sale/identity/two-factor/enable',
       {
@@ -377,6 +381,42 @@ test('actual website sessions and native synthetic transport preserve account/su
       { method: 'POST', ...b, body: { code: await createOTP(secret).totp() } },
     );
     assert.equal(verified.status, 200);
+    const adminBusiness = await call('/api/aircraft-sale/auth/better-auth', {
+      method: 'POST',
+      cookies: b.cookies,
+      body: {},
+    });
+    assert.equal(adminBusiness.status, 200);
+    b.seller = await adminBusiness.json();
+    const notificationStatus = await call(
+      '/api/aircraft-sale/staff/notifications',
+      b,
+    );
+    assert.equal(
+      notificationStatus.status,
+      200,
+      await notificationStatus.clone().text(),
+    );
+    assert.deepEqual((await notificationStatus.json()).notifications, []);
+    assert.equal(
+      (
+        await call('/api/aircraft-sale/staff/notifications', {
+          ...b,
+          method: 'POST',
+          body: { test: true },
+        })
+      ).status,
+      503,
+      'Verified admin reaches the disabled notification handler rather than a missing staff route.',
+    );
+    assert.equal(
+      (await call('/api/aircraft-sale/staff/notifications', a)).status,
+      403,
+    );
+    assert.equal(
+      (await call('/api/aircraft-sale/staff/notifications/other', b)).status,
+      404,
+    );
     const adminContext = await call('/api/jerry/context', b);
     assert.equal(adminContext.status, 200);
     const adminData = await adminContext.json();

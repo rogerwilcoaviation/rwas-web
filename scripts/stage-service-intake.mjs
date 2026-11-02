@@ -20,6 +20,7 @@ import { STAGING_ORIGIN } from './functions/_intake/core';
 import { sellerMail, sellerDestinationAllowed } from './functions/_seller/mail.mjs';
 export { handleSiteLanguage } from './functions/_site-language/translate.mjs';
 export { handleJerry } from './functions/_jerry/gateway.mjs';
+export { reviewNotification } from './functions/_seller/review-notifications.mjs';
 export { intake, receipt, dispatch, config, STAGING_ORIGIN, sellerMail, sellerDestinationAllowed };`,
     resolveDir: process.cwd(),
     sourcefile: 'intake-entry.ts',
@@ -35,7 +36,7 @@ renameSync(index, resolve(directory, 'rwas-csp-wrapper.js'));
 writeFileSync(
   index,
   `import app from './rwas-csp-wrapper.js';
-import { intake, receipt, dispatch, config, STAGING_ORIGIN, sellerMail, sellerDestinationAllowed, handleSiteLanguage, handleJerry } from './rwas-intake.js';
+import { intake, receipt, dispatch, config, STAGING_ORIGIN, sellerMail, sellerDestinationAllowed, handleSiteLanguage, handleJerry, reviewNotification } from './rwas-intake.js';
 export default { ...app, async fetch(request, env, ctx) {
  const url = new URL(request.url);
  const path = url.pathname;
@@ -83,6 +84,8 @@ export default { ...app, async fetch(request, env, ctx) {
  if (path === '/api/aircraft-sale' || path.startsWith('/api/aircraft-sale/')) {
    if (!sellerDestinationAllowed(request, env, STAGING_ORIGIN)) return protect(new Response('Staging destination not allowed', {status:503}));
    if (!env.SELLER_API) return protect(Response.json({error:'Seller service is not configured.'},{status:503}));
+   const notified = await reviewNotification(request, env);
+   if (notified) return protect(notified);
    const activityId = /^\\/api\\/aircraft-sale\\/(?:admin|staff)\\/activity\\/([A-Za-z0-9_-]{1,128})$/.exec(path);
    if (activityId && request.method === 'GET' && env.JERRY_CONVERSATIONS_ENABLED === 'true' && env.SELLER_API.jerryActivity) {
      const result = await env.SELLER_API.jerryActivity({eventId:activityId[1],staff:path.includes('/staff/'),proof:{cookie:request.headers.get('Cookie')||'',origin:url.origin,authorization:request.headers.get('Authorization')||'',csrf:request.headers.get('X-RWAS-CSRF')||''}});

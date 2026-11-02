@@ -12,6 +12,23 @@ export { JerryConversations } from './jerry-conversations.mjs';
 // No public endpoint returns a verification code. Pages alone invokes these
 // methods over its service binding; the backend has no public route in staging.
 export default class SellerService extends WorkerEntrypoint {
+  async claimReviewNotification({ ticket }) {
+    if (!this.env.SELLER_STORE) return { status: 503 };
+    const store = this.env.SELLER_STORE.get(
+      this.env.SELLER_STORE.idFromName('seller-v2'),
+    );
+    const response = await store.fetch(
+      new Request(
+        'https://seller-service.internal/api/aircraft-sale/_notifications/claim',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ticket }),
+        },
+      ),
+    );
+    return { status: response.status, ...(await response.json()) };
+  }
   async jerryWebsite(request) {
     try {
       return await jerryWebsite(this.env, request);

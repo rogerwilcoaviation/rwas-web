@@ -13,6 +13,7 @@ keep_vars = true
 cpu_ms = 30000
 
 [vars]
+LISTING_NOTIFICATIONS_ENABLED = "true"
 JERRY_CONVERSATIONS_ENABLED = "true"
 JERRY_ACCOUNT_CHAT_ONLY = "true"
 JERRY_REVIEW_ENABLED = "true"

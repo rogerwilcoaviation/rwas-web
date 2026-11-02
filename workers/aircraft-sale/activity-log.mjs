@@ -68,6 +68,7 @@ export function activityRoute(request) {
     'activity',
     'current',
     'review',
+    'notifications',
     'accounts',
     'preview',
     'apply',
@@ -102,6 +103,8 @@ export function activityRoute(request) {
       })
       .join('/');
   const names = {
+    'GET /admin/notifications': 'View listing notification delivery',
+    'POST /admin/notifications': 'Send test listing notification',
     'GET /browse': 'Browse listings',
     'GET /listing/:id': 'View listing',
     'POST /listings': 'Create listing',
