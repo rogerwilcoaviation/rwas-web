@@ -423,6 +423,16 @@ export function AdminListingStyles() {
         white-space: pre-wrap;
         line-height: 1.6;
       }
+      .admin-listing-panel .admin-listing-detail-group dd ul {
+        list-style-type: disc;
+        list-style-position: outside;
+        padding-inline-start: 1.6em;
+      }
+      .admin-listing-panel .admin-listing-detail-group dd ol {
+        list-style-type: decimal;
+        list-style-position: outside;
+        padding-inline-start: 1.6em;
+      }
       .admin-listing-panel .admin-detail-wide {
         grid-column: 1 / -1;
       }

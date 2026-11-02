@@ -95,6 +95,31 @@ export async function checkListingWorkflow({
   await next();
   await label('Description').fill(original);
   assert.equal(await dialog.locator('#listing-step-input').count(), 1);
+  // Tailwind resets list markers globally; verify the actual exported editor
+  // shows both markers and indentation rather than checking DOM tags alone.
+  for (const [control, tag, expected] of [
+    ['Bulleted list', 'ul', 'disc'],
+    ['Numbered list', 'ol', 'decimal'],
+  ]) {
+    await label('Description').fill(original);
+    await label('Description').evaluate((element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
+    await button(control).click();
+    const list = label('Description').locator(tag);
+    await list.waitFor();
+    const visual = await list.evaluate((element) => ({
+      marker: getComputedStyle(element).listStyleType,
+      padding: parseFloat(getComputedStyle(element).paddingInlineStart),
+    }));
+    assert.equal(visual.marker, expected, control + ' marker is visible');
+    assert.ok(visual.padding >= 16, control + ' is indented');
+  }
+  await label('Description').fill(original);
   proofreader.mode = 'success';
   await button('Ask Jerry to proofread').click();
   await label('Suggested description').or(dialog.getByRole('alert')).waitFor();

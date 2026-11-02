@@ -483,6 +483,8 @@ export default async function AircraftDetailPage({ params }: PageProps) {
           white-space: pre-line;
           margin: 0;
         }
+        .a4s-prose ul { list-style-type: disc; list-style-position: outside; padding-inline-start: 1.6em; }
+        .a4s-prose ol { list-style-type: decimal; list-style-position: outside; padding-inline-start: 1.6em; }
         .a4s-logbooks { display: flex; flex-direction: column; gap: 12px; }
         .a4s-logbook-section {
           padding: 10px 12px;

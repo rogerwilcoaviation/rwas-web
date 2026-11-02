@@ -539,6 +539,18 @@ export function ListingDraftWorkflow({
         :global(.rich-toolbar button:focus-visible) { outline: 2px solid #9a741b; outline-offset: 3px; }
         :global(.rich-editor-input) { box-sizing: border-box; min-height: 170px; padding: 12px; border: 1px solid #7b7871; border-radius: 4px; background: white; color: #222; white-space: pre-wrap; overflow-wrap: anywhere; font: 16px/1.5 Arial, sans-serif; }
         :global(.rich-editor-input:focus-visible) { outline: 2px solid #9a741b; outline-offset: 3px; }
+        :global(.listing-workflow .rich-editor-input ul),
+        :global(.listing-workflow .workflow-summary dd ul) {
+          list-style-type: disc;
+          list-style-position: outside;
+          padding-inline-start: 1.6em;
+        }
+        :global(.listing-workflow .rich-editor-input ol),
+        :global(.listing-workflow .workflow-summary dd ol) {
+          list-style-type: decimal;
+          list-style-position: outside;
+          padding-inline-start: 1.6em;
+        }
         .workflow-rating-group {
           display: grid;
           grid-template-columns: repeat(
