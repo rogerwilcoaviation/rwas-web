@@ -19,4 +19,14 @@
 
 ## Remaining assessment
 
-The current review includes the repository's production SEO smoke crawl, Search Console page groups, targeted public search and answer-content checks, and the changes above. It does not include a fresh full link-graph crawl, Core Web Vitals field data, an external backlink inventory, or independent prompt tests across ChatGPT, Gemini, Claude, and Perplexity. No cross-platform AI visibility score or ranking improvement is claimed. External directory corrections remain subject to account access. The earlier detailed audit is in `docs/seo/seo-audit-2026-10-23.md`.
+### Follow-up: November 2, 2026
+
+Four public web searches were run for a Yankton avionics shop, GFC 500 installation in South Dakota, Piper rigging tools, and Roger Wilco reviews. The results included RWAS's location and Papa-Alpha pages. These are ordinary search results; they are not measurements of AI-generated answers and their placement must not be interpreted as AI recommendation ranking.
+
+Independent sources found in this targeted sample include [Aircraft Spruce's Papa-Alpha kit listing](https://www.aircraftspruce.com/catalog/topages/rw-rigging-tool-kits.php), [Electronics International's dealer directory](https://iflyei.com/dealers/), and [Yankton city records](https://www.cityofyankton.org/home/showpublisheddocument/10255/637874236751400000). These establish independently discoverable mentions, not a complete backlink inventory or evidence that any particular assistant cites them.
+
+Citation consistency remains an issue: [AEA](https://aea.net/memberdetails.asp?ID=3310) lists 700 E. 31st Street and airport KFSD, while [Insight Avionics](https://www.insightavionics.com/Dealers/dealers%20us.htm) lists that old address and an older phone number. The [RWAS location page](https://www.rogerwilcoaviation.com/locations/yankton) identifies 3309 Douglas Avenue Unit #3, Yankton, SD 57078 and KYKN. Authorized directory account holders should correct and verify those records; historical government documents should not be altered.
+
+Some search-engine cached results still describe pre-buy support on the location page. The current live page and current source were checked separately and no longer contain that wording. The cached result may persist until recrawled; do not treat it as proof that the current page offers pre-buy inspections.
+
+Direct independent prompt tests across ChatGPT, Gemini, Claude, and Perplexity could not be completed: browser use is disabled in Work settings and no connected answer-engine tools were available. An external backlink inventory and real-user Core Web Vitals also remain unavailable. No cross-platform AI visibility score or ranking improvement is claimed. Enable browser access or supply an authorized answer-engine research connector to finish the prompt tests. External directory corrections remain subject to account access. The earlier detailed audit is in `docs/seo/seo-audit-2026-10-23.md`.
