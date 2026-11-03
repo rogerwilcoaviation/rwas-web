@@ -1217,7 +1217,7 @@ export default async function ProductDetailPage({
     product.descriptionHtml || '',
   );
   const cleanDescText = isScbfFixture
-    ? 'A surface control balancing fixture for measuring the static balance moment of applicable Cessna ailerons, elevators and rudders.'
+    ? 'A flight control balancing tool for measuring the static balance moment of applicable Cessna ailerons, elevators and rudders.'
     : isBaggageLockTool
       ? 'A purpose-made specialty wrench for technicians servicing the retaining nut on the back of an applicable Piper baggage-door lock assembly.'
     : isAxisSystemListing
