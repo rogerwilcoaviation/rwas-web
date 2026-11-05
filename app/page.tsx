@@ -151,6 +151,26 @@ export default function Home() {
                 aircraft-grade aluminum.
               </Specimen.Caption>
             </Specimen>
+
+            <aside
+              className="bs-ad"
+              aria-label="Subscribe to Roger Wilco Aviation on YouTube"
+            >
+              <div className="bs-ad__kicker">Watch &amp; Subscribe</div>
+              <h3 className="bs-ad__title">Check us out on YouTube</h3>
+              <p className="bs-ad__sub">
+                Aviation stories, shop projects, and Papa-Alpha tool
+                demonstrations.
+              </p>
+              <a
+                className="bs-ad__cta"
+                href="https://www.youtube.com/@RogerWilcoAviation?sub_confirmation=1"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Subscribe on YouTube
+              </a>
+            </aside>
           </div>
 
           {/* CENTER HERO ----------------------------------------------- */}
