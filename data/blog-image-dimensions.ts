@@ -24,6 +24,26 @@ export const blogImageDimensions: Record<
     width: 1320,
     height: 912,
   },
+  '/images/blog/axis-g3x-upgrade/airport-surface.svg': {
+    width: 1500,
+    height: 680,
+  },
+  '/images/blog/axis-g3x-upgrade/axis-garmin-hero.jpg': {
+    width: 1000,
+    height: 1000,
+  },
+  '/images/blog/axis-g3x-upgrade/smart-glide.svg': {
+    width: 1500,
+    height: 680,
+  },
+  '/images/blog/axis-g3x-upgrade/synthetic-vision.svg': {
+    width: 1500,
+    height: 680,
+  },
+  '/images/blog/axis-g3x-upgrade/vertical-profile.svg': {
+    width: 1500,
+    height: 680,
+  },
   '/images/blog/class-a-coflyt-official-logos-20261016.png': {
     width: 858,
     height: 292,
