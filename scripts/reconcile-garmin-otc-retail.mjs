@@ -167,6 +167,106 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '011-02977-00',
+    family: 'GTX 335 / GTX 35R connector kit',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-11-04',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC Quick Order readback on 2026-11-04 identifies exact SKU 011-02977-00 as GTX 335 Connector Kit at $120.00 List and In Stock. Garmin manual 190-01499-10 Rev. 3 Table 3-2 also maps this kit to GTX 35R. Authorization excludes the transponder and every other kit or suffix.',
+    productId: 'gid://shopify/Product/8961824162011',
+    variantId: 'gid://shopify/ProductVariant/47408757276891',
+    handle: 'sub-assy-gtx325-connector-kit',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:install-hardware',
+      'otc-disabled',
+      'stock-check-required',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '011-01360-00',
+    family: 'GTS 8XX processor connector kit',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-11-04',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC Quick Order readback on 2026-11-04 identifies exact SKU 011-01360-00 as Sub-Assy, Connector Kit, GTS Processor at $570.00 List and In Stock. Authorization excludes the GTS processor and every related kit or suffix.',
+    productId: 'gid://shopify/Product/8961823899867',
+    variantId: 'gid://shopify/ProductVariant/47408756981979',
+    handle: 'sub-assy-connector-kit-gts8xx',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:install-hardware',
+      'otc-disabled',
+      'stock-check-required',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '336-00044-00',
+    family: 'Size 22D crimp contact for 18 and 20 AWG wire',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-11-04',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC Quick Order readback on 2026-11-04 identifies exact SKU 336-00044-00 as Contact, Crimp, size 22D, 18 & 20 AWG at $5.00 List each and In Stock.',
+    productId: 'gid://shopify/Product/8961746305243',
+    variantId: 'gid://shopify/ProductVariant/47408685940955',
+    handle: 'contact-crimp-size-22d-18-20-awg',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '211-63234-11',
+    family: '4-40 x .437-inch flat-head passivated screw with nylon patch',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-11-04',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC Quick Order readback on 2026-11-04 identifies exact SKU 211-63234-11 as Scr, 4-40x.437, FLHP100, SS/P, Nyl at $5.00 List each and In Stock.',
+    productId: 'gid://shopify/Product/8961815544027',
+    variantId: 'gid://shopify/ProductVariant/47408748331227',
+    handle: 'scr-4-40x-437-flhp100-ss-p-nyl',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:certified-manual-review',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '011-01364-10',
+    family: 'QMA right-angle connector kit, four pieces',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-11-04',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC Quick Order readback on 2026-11-04 identifies exact SKU 011-01364-10 as QMA Right Angle Connector Kit (4 pieces) at $160.00 List and In Stock. Authorization does not extend to a straight connector kit or another suffix.',
+    productId: 'gid://shopify/Product/8961803518171',
+    variantId: 'gid://shopify/ProductVariant/47408736108763',
+    handle: 'qma-right-angle-connector-kit-4-pieces',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:install-hardware',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
+    sku: '011-01364-11',
+    family: 'QMA straight connector kit, four pieces',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from Ryan on 2026-11-04',
+    catalogObservation:
+      'Fresh authenticated Garmin DRC Quick Order readback on 2026-11-04 identifies exact SKU 011-01364-11 as QMA Straight Connector Kit (4 pieces) at $160.00 List and In Stock. Authorization does not extend to a right-angle connector kit or another suffix.',
+    productId: 'gid://shopify/Product/8961803649243',
+    variantId: 'gid://shopify/ProductVariant/47408736272603',
+    handle: 'qma-straight-connector-kit-4-pieces',
+    removeTags: [
+      'garmin-category:garmin-dealer-install',
+      'garmin-family:install-hardware',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '011-05779-10',
     family: 'GTR 205 / GTR 25R connector kit',
     eligibilityAuthority:
@@ -599,6 +699,48 @@ const PUBLIC_PRICE_AUTHORITIES = {
     priceType: 'List',
     accessed: '2026-09-29',
   },
+  '011-02977-00': {
+    list_price: 120,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 011-02977-00 on 2026-11-04; customer List Price shown as $120.00 and In Stock',
+    priceType: 'List',
+    accessed: '2026-11-04',
+  },
+  '011-01360-00': {
+    list_price: 570,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 011-01360-00 on 2026-11-04; customer List Price shown as $570.00 and In Stock',
+    priceType: 'List',
+    accessed: '2026-11-04',
+  },
+  '336-00044-00': {
+    list_price: 5,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 336-00044-00 on 2026-11-04; customer List Price shown as $5.00 each and In Stock',
+    priceType: 'List each',
+    accessed: '2026-11-04',
+  },
+  '211-63234-11': {
+    list_price: 5,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 211-63234-11 on 2026-11-04; customer List Price shown as $5.00 each and In Stock',
+    priceType: 'List each',
+    accessed: '2026-11-04',
+  },
+  '011-01364-10': {
+    list_price: 160,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 011-01364-10 on 2026-11-04; customer List Price shown as $160.00 and In Stock',
+    priceType: 'List',
+    accessed: '2026-11-04',
+  },
+  '011-01364-11': {
+    list_price: 160,
+    source:
+      'Fresh authenticated Garmin DRC Quick Order exact product readback for 011-01364-11 on 2026-11-04; customer List Price shown as $160.00 and In Stock',
+    priceType: 'List',
+    accessed: '2026-11-04',
+  },
   '011-05779-10': {
     list_price: 145,
     source:
@@ -795,6 +937,18 @@ const POLICY_DESCRIPTIONS = {
     '<p><strong>Garmin 37/62-Pin Backshell with Hardware</strong></p><p>Garmin part number <strong>011-00950-03</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one 37/62-pin backshell-with-hardware subassembly to the order.</p><p>Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>',
   '011-02977-01':
     "<p><strong>Garmin GTX 345 Connector Kit</strong></p><p>Garmin part number <strong>011-02977-01</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one Garmin GTX 345 connector kit to the order.</p><p>This listing does not make a separate claim about the kit's individual contents. Confirm compatibility with the intended installation before ordering.</p>",
+  '011-02977-00':
+    '<p><strong>Garmin GTX 335 / GTX 35R Connector Kit</strong></p><p>Garmin part number <strong>011-02977-00</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one Garmin connector kit to the order. Garmin DRC identifies this as the GTX 335 connector kit, and Garmin manual 190-01499-10 Revision 3 maps the same kit part number to the GTX 35R.</p><p>Confirm the exact transponder model and installation compatibility before ordering. This listing is for the connector kit only; it does not include a transponder, rack, backplate, antenna, installation, or return-to-service approval.</p><p>Garmin reported this exact item in stock when RWAS verified it on November 4, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
+  '011-01360-00':
+    '<p><strong>Garmin GTS 8XX Processor Connector Kit</strong></p><p>Garmin part number <strong>011-01360-00</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one connector-kit subassembly to the order. This listing is for the connector kit only; it does not include a GTS processor, installation, configuration, testing, or return-to-service approval.</p><p>Confirm the intended GTS equipment and installation compatibility before ordering.</p><p>Garmin reported this exact item in stock when RWAS verified it on November 4, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
+  '336-00044-00':
+    '<p><strong>Garmin Size 22D Crimp Contact for 18 and 20 AWG Wire</strong></p><p>Garmin part number <strong>336-00044-00</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one crimp contact to the order. This is not a pack, connector, backshell, or connector kit.</p><p>Confirm wire size, connector compatibility, approved tooling, installation data, and required authorized-personnel work before ordering or use.</p><p>Garmin reported this exact item in stock when RWAS verified it on November 4, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
+  '211-63234-11':
+    '<p><strong>Garmin 4-40 x .437-Inch Flat-Head Screw with Nylon Patch</strong></p><p>Garmin part number <strong>211-63234-11</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one passivated flat-head screw to the order. This is not a hardware pack or connector kit.</p><p>Confirm dimensional, material, installation-data, and equipment applicability before ordering or use.</p><p>Garmin reported this exact item in stock when RWAS verified it on November 4, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
+  '011-01364-10':
+    '<p><strong>Garmin QMA Right-Angle Connector Kit</strong></p><p>Garmin part number <strong>011-01364-10</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one four-piece right-angle QMA connector kit to the order.</p><p>This is the right-angle kit, not the straight 011-01364-11 kit. Confirm connector geometry, equipment, cable, and installation compatibility before ordering.</p><p>Garmin reported this exact item in stock when RWAS verified it on November 4, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
+  '011-01364-11':
+    '<p><strong>Garmin QMA Straight Connector Kit</strong></p><p>Garmin part number <strong>011-01364-11</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one four-piece straight QMA connector kit to the order.</p><p>This is the straight kit, not the right-angle 011-01364-10 kit. Confirm connector geometry, equipment, cable, and installation compatibility before ordering.</p><p>Garmin reported this exact item in stock when RWAS verified it on November 4, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
   '011-05779-10':
     '<p><strong>Garmin GTR 205 / GTR 25R Connector Kit</strong></p><p>Garmin part number <strong>011-05779-10</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one Garmin connector kit to the order. This listing is for the connector kit only; it does not include a GTR 205 or GTR 25R radio.</p><h3>Compatibility and availability</h3><p>Confirm compatibility with the intended radio and installation before ordering. Installation and return to service must be completed by appropriately authorized personnel when required.</p><p>Garmin reported this exact kit in stock when RWAS verified quantity five on October 22, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
   '011-01169-00':

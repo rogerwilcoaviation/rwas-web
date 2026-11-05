@@ -222,6 +222,86 @@ test('340-00035-00 keeps exact operator-authorized retail identity and current L
   assert.doesNotThrow(() => assertReviewedCommercialWrites([sku]));
 });
 
+test('November PARPRO RFQ exact-SKU retail authorizations stay bounded', () => {
+  const expected = [
+    {
+      sku: '011-02977-00',
+      productId: 'gid://shopify/Product/8961824162011',
+      variantId: 'gid://shopify/ProductVariant/47408757276891',
+      handle: 'sub-assy-gtx325-connector-kit',
+      listPrice: 120,
+      descriptionMarker: 'GTX 335 / GTX 35R Connector Kit',
+    },
+    {
+      sku: '011-01360-00',
+      productId: 'gid://shopify/Product/8961823899867',
+      variantId: 'gid://shopify/ProductVariant/47408756981979',
+      handle: 'sub-assy-connector-kit-gts8xx',
+      listPrice: 570,
+      descriptionMarker: 'GTS 8XX Processor Connector Kit',
+    },
+    {
+      sku: '336-00044-00',
+      productId: 'gid://shopify/Product/8961746305243',
+      variantId: 'gid://shopify/ProductVariant/47408685940955',
+      handle: 'contact-crimp-size-22d-18-20-awg',
+      listPrice: 5,
+      descriptionMarker: 'Sold individually',
+    },
+    {
+      sku: '211-63234-11',
+      productId: 'gid://shopify/Product/8961815544027',
+      variantId: 'gid://shopify/ProductVariant/47408748331227',
+      handle: 'scr-4-40x-437-flhp100-ss-p-nyl',
+      listPrice: 5,
+      descriptionMarker: 'Sold individually',
+    },
+    {
+      sku: '011-01364-10',
+      productId: 'gid://shopify/Product/8961803518171',
+      variantId: 'gid://shopify/ProductVariant/47408736108763',
+      handle: 'qma-right-angle-connector-kit-4-pieces',
+      listPrice: 160,
+      descriptionMarker: 'right-angle',
+    },
+    {
+      sku: '011-01364-11',
+      productId: 'gid://shopify/Product/8961803649243',
+      variantId: 'gid://shopify/ProductVariant/47408736272603',
+      handle: 'qma-straight-connector-kit-4-pieces',
+      listPrice: 160,
+      descriptionMarker: 'straight',
+    },
+  ];
+  for (const item of expected) {
+    const policies = OTC_RETAIL_PRODUCTS.filter((p) => p.sku === item.sku);
+    assert.equal(policies.length, 1);
+    assert.deepEqual(
+      {
+        productId: policies[0].productId,
+        variantId: policies[0].variantId,
+        handle: policies[0].handle,
+      },
+      {
+        productId: item.productId,
+        variantId: item.variantId,
+        handle: item.handle,
+      },
+    );
+    assert.equal(PUBLIC_PRICE_AUTHORITIES[item.sku].list_price, item.listPrice);
+    assert.equal(PUBLIC_PRICE_AUTHORITIES[item.sku].accessed, '2026-11-04');
+    assert.match(PUBLIC_PRICE_AUTHORITIES[item.sku].source, /Fresh authenticated Garmin DRC Quick Order/);
+    assert.ok(POLICY_DESCRIPTIONS[item.sku].includes(item.descriptionMarker));
+    assert.deepEqual(
+      OPERATOR_CONFIRMED_CERTIFIED_OTC.filter((p) => p.sku === item.sku),
+      [{ sku: item.sku, productId: item.productId, variantId: item.variantId, handle: item.handle }],
+    );
+    assert.doesNotThrow(() => assertReviewedCommercialWrites([item.sku]));
+  }
+  assert.ok(!OTC_RETAIL_PRODUCTS.some((p) => p.sku === '011-02977-03'));
+  assert.equal(PUBLIC_PRICE_AUTHORITIES['011-02977-03'], undefined);
+});
+
 test('September exact-SKU contracts and mocked reconciliation', async (t) => {
   const originalFetch = globalThis.fetch;
   const envKeys = [
@@ -499,7 +579,6 @@ test('conflicting evidence and operator price disclaimers remain explicit', () =
   for (const sku of [
     '011-00950-04',
     '011-03258-01',
-    '011-02977-00',
     '330-00408-61',
     '325-00122-01',
     '310-00196-01',

@@ -154,6 +154,42 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     handle: 'sub-assy-gtx345-connector-kit',
   },
   {
+    sku: '011-02977-00',
+    productId: 'gid://shopify/Product/8961824162011',
+    variantId: 'gid://shopify/ProductVariant/47408757276891',
+    handle: 'sub-assy-gtx325-connector-kit',
+  },
+  {
+    sku: '011-01360-00',
+    productId: 'gid://shopify/Product/8961823899867',
+    variantId: 'gid://shopify/ProductVariant/47408756981979',
+    handle: 'sub-assy-connector-kit-gts8xx',
+  },
+  {
+    sku: '336-00044-00',
+    productId: 'gid://shopify/Product/8961746305243',
+    variantId: 'gid://shopify/ProductVariant/47408685940955',
+    handle: 'contact-crimp-size-22d-18-20-awg',
+  },
+  {
+    sku: '211-63234-11',
+    productId: 'gid://shopify/Product/8961815544027',
+    variantId: 'gid://shopify/ProductVariant/47408748331227',
+    handle: 'scr-4-40x-437-flhp100-ss-p-nyl',
+  },
+  {
+    sku: '011-01364-10',
+    productId: 'gid://shopify/Product/8961803518171',
+    variantId: 'gid://shopify/ProductVariant/47408736108763',
+    handle: 'qma-right-angle-connector-kit-4-pieces',
+  },
+  {
+    sku: '011-01364-11',
+    productId: 'gid://shopify/Product/8961803649243',
+    variantId: 'gid://shopify/ProductVariant/47408736272603',
+    handle: 'qma-straight-connector-kit-4-pieces',
+  },
+  {
     sku: '011-05779-10',
     productId: 'gid://shopify/Product/8961819377883',
     variantId: 'gid://shopify/ProductVariant/47408752034011',
