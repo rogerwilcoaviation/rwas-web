@@ -1,7 +1,7 @@
 {
   "meta": {
-    "last_updated": "2026-11-05T01:45:05.745895+00:00",
-    "total_articles": 37,
+    "last_updated": "2026-11-05T16:26:08.128334+00:00",
+    "total_articles": 38,
     "categories": [
       "regulatory",
       "product-update",
@@ -13,6 +13,32 @@
     ]
   },
   "articles": [
+    {
+      "id": "garmin-gsa-28-servo-service-life-extension",
+      "status": "published",
+      "category": "service-bulletin",
+      "title": "Garmin GSA 28 Servo Service-Life Extension: What Aircraft Owners Should Know",
+      "subtitle": "A warranty exchange opportunity for eligible Garmin autopilot servos ends May 4, 2028.",
+      "author": "Roger Wilco Aviation Services",
+      "byline": "RWAS Avionics Team",
+      "date": "2026-11-05",
+      "source": "Garmin Aviation",
+      "source_url": "https://support.garmin.com/en-US/aviation/faq/kmkaZ5NWGfA8aH2UTROcI9/",
+      "lead": "Eligible Garmin GSA 28 autopilot servos may qualify for an exchange under Garmin’s Service-Life Extension Program through May 4, 2028. Here is what aircraft owners should know.",
+      "body": [],
+      "body_markdown": "## A small component with an important job\n\nYour autopilot depends on servos to translate commands into movement of the aircraft’s flight controls. Garmin’s GSA 28 is a smart servo used in several Garmin autopilot installations. Garmin has made design and manufacturing improvements intended to improve the servo’s reliability and has established a Service-Life Extension Program to exchange eligible earlier units for updated Mod 1 servos.\n\n## What is the program?\n\nGarmin announced the program on May 4, 2023. Eligible servos may be exchanged under warranty for updated units marked Mod 1 during the five-year program, through May 4, 2028. Garmin reports that newly manufactured Mod 1 units began shipping in September 2022. Do not assume your aircraft’s servos are eligible—or already updated—based solely on their installation date; have each unit identified.\n\n## Which servos are affected?\n\nFor certified-aircraft installations, Garmin Service Bulletin 23024 identifies all GSA 28 part number 011-02927-11 units and 011-02927-21 units not marked Mod 1. Garmin’s serial-number list helps identify affected -21 units. For experimental installations, Service Bulletin 23038 addresses the -00/-20 versions; Garmin identifies all -00 units and affected -20 units without Mod 1. Verify the applicable bulletin and Garmin’s current serial-number list for each servo.\n\n## Is the exchange free?\n\nGarmin’s certified-aircraft service notification describes warranty reimbursement for eligible parts and labor during the program, subject to Garmin’s terms. For experimental aircraft, Garmin describes a parts-only warranty exchange; installation labor is not included in that parts-only coverage. Additional work, shipping, accessibility and any charges outside the warranty should be discussed with your shop before work begins. An exchange is not a promise that every associated expense is covered.\n\n## How to check your aircraft\n\nContact Roger Wilco Aviation Services with your aircraft make, model, registration, autopilot configuration and available GSA 28 part and serial numbers. Your maintenance provider can review the records and unit markings, confirm eligibility and warranty terms, and coordinate the exchange and any required installation, configuration, testing and maintenance documentation. Aircraft may have more than one servo, so each should be checked.\n\n## Plan ahead\n\nGarmin classifies Service Bulletin 23024 as recommended. The bulletin and warranty program should not be confused with a blanket statement that every installation is subject to an airworthiness directive or that continued operation is automatically unsafe. Other applicable instructions or directives may apply to a particular aircraft. If you experience an autopilot fault, follow the aircraft flight manual and applicable procedures, and have the system evaluated.\n\n## Questions?\n\nRoger Wilco Aviation Services can help review your installation and discuss the next steps. Contact service@rwas.team or 605-299-8178. Schedule early enough to allow time for eligibility verification, parts availability and shop coordination before the program deadline.\n\n## Garmin resources\n\n[Certified aircraft: Garmin Service Bulletin 23024 and affected servo list](https://support.garmin.com/en-US/aviation/faq/kmkaZ5NWGfA8aH2UTROcI9/)\n\n[Experimental aircraft: Garmin Service Bulletin 23038](https://support.garmin.com/en-US/?faq=fDr3LoWvVh73y7YNV5WnjA)",
+      "tags": [
+        "garmin",
+        "gsa-28",
+        "autopilot",
+        "service-bulletin"
+      ],
+      "image": "/images/blog/gsa28-service-life/garmin-gsa28.jpg",
+      "image_alt": "Garmin GSA 28 smart autopilot servo",
+      "image_caption": "Garmin GSA 28 smart autopilot servo. Image: Garmin.",
+      "approved_at": "2026-11-05T16:26:08.128334+00:00",
+      "published_at": "2026-11-05T16:26:08.128334+00:00"
+    },
     {
       "id": "garmin-axis-g3x-touch-upgrade",
       "status": "published",
