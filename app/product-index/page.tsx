@@ -9,12 +9,9 @@ import {
   Masthead,
   Specimen,
 } from '@/components/shared/broadsheet';
-import {
-  getPartFinderProducts,
-  getSeoProductHandles,
-  isSeoSafeProductHandle,
-} from '@/lib/shopify';
+import { getPartFinderProducts, getSeoProductHandles } from '@/lib/shopify';
 import { genPageMetadata } from '@/app/seo';
+import { isDiscoverableProductHandle } from '@/lib/public-product-route.mjs';
 
 export const metadata = genPageMetadata({
   title: 'Complete Aviation Product Index | RWAS',
@@ -33,7 +30,7 @@ export default async function ProductIndexPage() {
     const productsByHandle = new Map(
       finderProducts.map((product) => [product.handle, product]),
     );
-    products = handles.filter(isSeoSafeProductHandle).map((handle) => {
+    products = handles.filter(isDiscoverableProductHandle).map((handle) => {
       const product = productsByHandle.get(handle);
       return {
         id: product?.id || `catalog:${handle}`,
