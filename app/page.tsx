@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
+import Image from 'next/image';
 import {
   BroadsheetLayout,
   Dateline,
@@ -153,11 +154,24 @@ export default function Home() {
             </Specimen>
 
             <aside
-              className="bs-ad"
-              aria-label="Subscribe to Roger Wilco Aviation on YouTube"
+              className="bs-ad bs-youtube-card"
+              aria-label="Roger Wilco Aviation Services YouTube channel"
             >
-              <div className="bs-ad__kicker">Watch &amp; Subscribe</div>
-              <h3 className="bs-ad__title">Check us out on YouTube</h3>
+              <div className="bs-youtube-card__identity">
+                <Image
+                  className="bs-youtube-card__avatar"
+                  src="/images/youtube/roger-wilco-youtube-channel-avatar.jpg"
+                  alt="Roger Wilco Aviation Services YouTube channel"
+                  width={900}
+                  height={900}
+                />
+                <div className="bs-youtube-card__copy">
+                  <div className="bs-ad__kicker">YouTube Channel</div>
+                  <h3 className="bs-ad__title">
+                    Roger Wilco Aviation Services
+                  </h3>
+                </div>
+              </div>
               <p className="bs-ad__sub">
                 Aviation stories, shop projects, and Papa-Alpha tool
                 demonstrations.
@@ -168,7 +182,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Subscribe on YouTube
+                Check us out on YouTube
               </a>
             </aside>
           </div>

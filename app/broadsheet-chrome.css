@@ -1726,6 +1726,29 @@ body {
   background: var(--gold-800);
   border-color: var(--gold-800);
 }
+.broadsheet .bs-youtube-card__identity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.broadsheet .bs-youtube-card__avatar {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+}
+.broadsheet .bs-youtube-card__copy {
+  max-width: 250px;
+  text-align: left;
+}
+.broadsheet .bs-youtube-card__copy .bs-ad__title {
+  margin-bottom: 0;
+  font-size: 18px;
+}
 
 /* ── Drop cap for hero lede paragraph ─────────────────────────────── */
 
