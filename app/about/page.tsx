@@ -88,31 +88,23 @@ export default function AboutPage() {
               <hr className="section-rule" />
               <div className="bs-body">
                 <p>
-                  RWAS was founded by John Halsted, a veteran Delta Air Lines
-                  captain with more than 40 years of aviation experience
-                  spanning airline operations, aircraft maintenance, avionics
-                  systems, and flight instruction. What started as a
-                  single-hangar maintenance shop has evolved into a full-service
-                  FAA-certificated repair station serving aircraft owners and
-                  operators across the upper Midwest and beyond.
+                  RWAS began in 2022 as a single-hangar maintenance shop serving
+                  the local general-aviation fleet. John Halsted founded the
+                  company after recognizing that aircraft owners across the
+                  Northern Plains often had to travel hundreds of miles for
+                  advanced avionics work.
                 </p>
                 <p>
-                  Halsted earned his Airline Transport Pilot certificate at 21
-                  and has spent the decades since building deep expertise on
-                  both sides of the cockpit, flying the line and turning
-                  wrenches. That dual perspective shapes everything RWAS does.
+                  Early work centered on annual inspections, airframe repair,
+                  and conventional avionics service. The shop then expanded into
+                  Garmin panel upgrades, non-destructive testing, precision
+                  fabrication, and the in-house Papa-Alpha tool line.
                 </p>
                 <p>
-                  In its early years the shop focused on annual inspections,
-                  airframe repair, and basic avionics work for the local
-                  general-aviation fleet. When the Garmin glass-cockpit
-                  revolution reshaped the industry, Halsted saw an opportunity:
-                  bring modern avionics capability to the Northern Plains, a
-                  region where most owners had been forced to ferry their
-                  aircraft hundreds of miles to metro shops for panel upgrades.
-                  RWAS became a certified Garmin dealer and installation center,
-                  specializing in the G3X Touch suite, GTN Xi navigator series,
-                  and GFC 500 autopilot.
+                  That steady expansion led to today&rsquo;s FAA-certificated repair
+                  station: one Yankton operation combining airframe, powerplant,
+                  avionics, NDT, and fabrication capabilities for general
+                  aviation, corporate, and commercial operators.
                 </p>
               </div>
             </Specimen>
@@ -140,51 +132,49 @@ export default function AboutPage() {
 
                 <div className="bs-body ryan-about-inline__copy">
                   <p className="bs-drop">
-                    John Halsted founded Roger Wilco Aviation Services to bring
-                    airline-level discipline, practical maintenance experience,
-                    and modern avionics capability to aircraft owners across the
-                    Northern Plains. A veteran Delta Air Lines captain with more
-                    than 40 years of aviation experience, John has worked across
-                    airline operations, aircraft maintenance, avionics systems,
-                    and flight instruction.
-                  </p>
-                  <p>
-                    John earned his Airline Transport Pilot certificate at 21 and
+                    John Halsted is a veteran Delta Air Lines captain with more
+                    than 40 years of experience in airline operations, aircraft
+                    maintenance, avionics systems, and flight instruction. He
+                    earned his Airline Transport Pilot certificate at 21 and has
                     built his career on both sides of the cockpit&mdash;flying the
-                    line and turning wrenches. That perspective guides how RWAS
-                    approaches every inspection, installation, repair, and
-                    customer decision.
+                    line and turning wrenches.
                   </p>
                   <p>
-                    His leadership has grown RWAS from a single-hangar
-                    maintenance shop into an FAA-certificated repair station, an
-                    authorized Garmin dealer and installation center, and the home
-                    of Papa-Alpha tools. John continues to shape the standards,
-                    capabilities, and long-term direction of the company.
+                    At RWAS, John sets the technical standards behind inspections,
+                    repairs, and avionics installations. His operational
+                    experience keeps the work focused on how aircraft are actually
+                    flown, maintained, documented, and supported after delivery.
+                  </p>
+                  <p>
+                    John also guides Garmin installation strategy, shop
+                    capability development, and the practical problems that become
+                    Papa-Alpha tools. He remains responsible for the company&rsquo;s
+                    long-term technical direction.
                   </p>
                 </div>
               </div>
 
               <div className="ryan-focus-grid" aria-label="John's focus areas">
                 <article className="ryan-focus-card">
-                  <h3>Aviation Leadership</h3>
+                  <h3>Airline &amp; Flight Experience</h3>
                   <p>
-                    More than 40 years across airline operations, flight
-                    instruction, aircraft maintenance, and avionics.
+                    Delta Air Lines captain and Airline Transport Pilot since age
+                    21, with experience in flight instruction and aircraft
+                    operations.
                   </p>
                 </article>
                 <article className="ryan-focus-card">
-                  <h3>Garmin &amp; Technical Direction</h3>
+                  <h3>Technical Oversight</h3>
                   <p>
-                    Leading RWAS&rsquo;s growth as an authorized Garmin dealer and
-                    installation center for modern panel upgrades.
+                    Setting practical standards for maintenance, documentation,
+                    avionics installation, and post-delivery support.
                   </p>
                 </article>
                 <article className="ryan-focus-card">
-                  <h3>Maintenance &amp; Innovation</h3>
+                  <h3>Product Development</h3>
                   <p>
-                    Applying cockpit and shop experience to maintenance,
-                    fabrication, and Papa-Alpha tool development.
+                    Turning recurring shop and rigging problems into fabrication
+                    improvements and Papa-Alpha tools.
                   </p>
                 </article>
               </div>
