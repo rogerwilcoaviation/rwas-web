@@ -11,6 +11,7 @@ import {
   Specimen,
 } from '@/components/shared/broadsheet';
 import Link from 'next/link';
+import Image from 'next/image';
 import { genPageMetadata } from '@/app/seo';
 
 export const metadata = genPageMetadata({
@@ -113,6 +114,77 @@ export default function AboutPage() {
                   specializing in the G3X Touch suite, GTN Xi navigator series,
                   and GFC 500 autopilot.
                 </p>
+              </div>
+            </Specimen>
+
+            {/* Ryan profile */}
+            <Specimen variant="hero" as="section" className="ryan-about-section">
+              <span className="bs-kicker">Operations &amp; Project Manager</span>
+              <h2 className="bs-headline bs-headline--section">
+                Meet Ryan Snell
+              </h2>
+              <hr className="section-rule" />
+
+              <div className="ryan-about-inline">
+                <figure className="ryan-about-inline__portrait">
+                  <Image
+                    src="/images/about/ryan-snell-portrait.jpg"
+                    alt="Ryan Snell of Roger Wilco Aviation Services"
+                    width={1254}
+                    height={1254}
+                  />
+                  <figcaption>
+                    Ryan Snell · Operations &amp; Project Manager · Yankton, South Dakota
+                  </figcaption>
+                </figure>
+
+                <div className="bs-body ryan-about-inline__copy">
+                  <p className="bs-drop">
+                    Ryan helps turn ideas into finished work at Roger Wilco
+                    Aviation Services. As Operations &amp; Project Manager, he
+                    connects customer communication, logistics, fabrication,
+                    shop operations, and the day-to-day details that keep projects
+                    moving forward.
+                  </p>
+                  <p>
+                    Ryan also supports RWAS&rsquo;s Garmin avionics work by
+                    coordinating customer questions, product information, parts,
+                    schedules, and project details for aircraft upgrades. He helps
+                    keep the many moving pieces organized from the first
+                    conversation through delivery.
+                  </p>
+                  <p>
+                    From managing Papa-Alpha tool orders to helping develop new
+                    fabrication capabilities, Ryan brings a practical, hands-on
+                    approach to every project. He values clear communication,
+                    thoughtful problem-solving, and dependable work customers can
+                    trust.
+                  </p>
+                </div>
+              </div>
+
+              <div className="ryan-focus-grid" aria-label="Ryan's focus areas">
+                <article className="ryan-focus-card">
+                  <h3>Garmin &amp; Customer Support</h3>
+                  <p>
+                    Coordinating product information, customer questions, parts,
+                    schedules, and project details for Garmin avionics work.
+                  </p>
+                </article>
+                <article className="ryan-focus-card">
+                  <h3>Operations &amp; Logistics</h3>
+                  <p>
+                    Keeping orders, materials, schedules, and team details moving
+                    from the first question through delivery.
+                  </p>
+                </article>
+                <article className="ryan-focus-card">
+                  <h3>Fabrication &amp; Projects</h3>
+                  <p>
+                    Helping move Papa-Alpha tools and new shop capabilities from
+                    practical ideas to finished work.
+                  </p>
+                </article>
               </div>
             </Specimen>
 

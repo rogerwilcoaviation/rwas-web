@@ -2838,3 +2838,78 @@ body {
 .broadsheet .bs-nav:has(.bs-site-search button[aria-expanded='true']) {
   z-index: 10000;
 }
+
+
+/* Ryan section on existing About page */
+.broadsheet .ryan-about-section {
+  overflow: hidden;
+}
+.broadsheet .ryan-about-inline {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.15fr);
+  gap: 22px;
+  align-items: start;
+}
+.broadsheet .ryan-about-inline__portrait {
+  border: 1px solid var(--rule);
+  background: var(--parchment);
+  box-shadow: 3px 3px 0 var(--ink-900);
+  margin: 0;
+  padding: 10px;
+}
+.broadsheet .ryan-about-inline__portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+.broadsheet .ryan-about-inline__portrait figcaption {
+  border-top: 1px solid var(--rule-soft);
+  color: var(--ink-600);
+  font-family: var(--font-ui);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  line-height: 1.45;
+  margin-top: 9px;
+  padding-top: 7px;
+  text-transform: uppercase;
+}
+.broadsheet .ryan-about-inline__copy p:first-child {
+  margin-top: 0;
+}
+.broadsheet .ryan-focus-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+.broadsheet .ryan-focus-card {
+  border-top: 3px solid var(--gold-800);
+  background: var(--parchment);
+  padding: 12px;
+}
+.broadsheet .ryan-focus-card h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.15;
+  margin: 0 0 6px;
+}
+.broadsheet .ryan-focus-card p {
+  color: var(--ink-700);
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+}
+@media (max-width: 720px) {
+  .broadsheet .ryan-about-inline {
+    grid-template-columns: 1fr;
+  }
+  .broadsheet .ryan-about-inline__portrait {
+    max-width: 520px;
+  }
+  .broadsheet .ryan-focus-grid {
+    grid-template-columns: 1fr;
+  }
+}
