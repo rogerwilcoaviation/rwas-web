@@ -117,6 +117,79 @@ export default function AboutPage() {
               </div>
             </Specimen>
 
+            {/* John profile */}
+            <Specimen variant="hero" as="section" className="ryan-about-section john-about-section">
+              <span className="bs-kicker">Founder &amp; President</span>
+              <h2 className="bs-headline bs-headline--section">
+                Meet John Halsted
+              </h2>
+              <hr className="section-rule" />
+
+              <div className="ryan-about-inline">
+                <figure className="ryan-about-inline__portrait">
+                  <Image
+                    src="/images/about/john-halsted-portrait.png"
+                    alt="John Halsted, founder and president of Roger Wilco Aviation Services"
+                    width={1254}
+                    height={1254}
+                  />
+                  <figcaption>
+                    John Halsted · Founder &amp; President · Yankton, South Dakota
+                  </figcaption>
+                </figure>
+
+                <div className="bs-body ryan-about-inline__copy">
+                  <p className="bs-drop">
+                    John Halsted founded Roger Wilco Aviation Services to bring
+                    airline-level discipline, practical maintenance experience,
+                    and modern avionics capability to aircraft owners across the
+                    Northern Plains. A veteran Delta Air Lines captain with more
+                    than 40 years of aviation experience, John has worked across
+                    airline operations, aircraft maintenance, avionics systems,
+                    and flight instruction.
+                  </p>
+                  <p>
+                    John earned his Airline Transport Pilot certificate at 21 and
+                    built his career on both sides of the cockpit&mdash;flying the
+                    line and turning wrenches. That perspective guides how RWAS
+                    approaches every inspection, installation, repair, and
+                    customer decision.
+                  </p>
+                  <p>
+                    His leadership has grown RWAS from a single-hangar
+                    maintenance shop into an FAA-certificated repair station, an
+                    authorized Garmin dealer and installation center, and the home
+                    of Papa-Alpha tools. John continues to shape the standards,
+                    capabilities, and long-term direction of the company.
+                  </p>
+                </div>
+              </div>
+
+              <div className="ryan-focus-grid" aria-label="John's focus areas">
+                <article className="ryan-focus-card">
+                  <h3>Aviation Leadership</h3>
+                  <p>
+                    More than 40 years across airline operations, flight
+                    instruction, aircraft maintenance, and avionics.
+                  </p>
+                </article>
+                <article className="ryan-focus-card">
+                  <h3>Garmin &amp; Technical Direction</h3>
+                  <p>
+                    Leading RWAS&rsquo;s growth as an authorized Garmin dealer and
+                    installation center for modern panel upgrades.
+                  </p>
+                </article>
+                <article className="ryan-focus-card">
+                  <h3>Maintenance &amp; Innovation</h3>
+                  <p>
+                    Applying cockpit and shop experience to maintenance,
+                    fabrication, and Papa-Alpha tool development.
+                  </p>
+                </article>
+              </div>
+            </Specimen>
+
             {/* Ryan profile */}
             <Specimen variant="hero" as="section" className="ryan-about-section">
               <span className="bs-kicker">Operations &amp; Project Manager</span>
