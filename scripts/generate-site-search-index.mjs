@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { isPublicProductHandle } from '../lib/public-product-route.mjs';
+import { isDiscoverableProductHandle } from '../lib/public-product-route.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -186,7 +186,9 @@ async function fetchProducts() {
       ? connection.pageInfo.endCursor
       : null;
   } while (after);
-  return products.filter((product) => isPublicProductHandle(product.handle));
+  return products.filter((product) =>
+    isDiscoverableProductHandle(product.handle),
+  );
 }
 
 await loadLocalEnv();

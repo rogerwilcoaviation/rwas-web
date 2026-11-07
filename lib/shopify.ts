@@ -1,5 +1,8 @@
 import { formatCatalogCopy } from '@/lib/seo';
-import { isPublicProductHandle } from '@/lib/public-product-route.mjs';
+import {
+  isDiscoverableProductHandle,
+  isPublicProductHandle,
+} from '@/lib/public-product-route.mjs';
 
 type Money = {
   amount: string;
@@ -638,9 +641,8 @@ export async function getCollectionByHandle(
 }
 
 export async function getSeoProductHandles(): Promise<string[]> {
-  // Sitemap coverage must come from the complete published Storefront
-  // catalog, not only the seven featured collections. Collection membership
-  // is merchandising and is not an indexing policy.
+  // Static product pages need the complete published Storefront catalog,
+  // including products excluded from discovery.
   const handles = await getProductHandles();
   const uniqueHandles = Array.from(
     new Set([...PRIORITY_PRODUCT_HANDLES, ...handles]),
@@ -690,7 +692,9 @@ export async function getSeoProducts(
       : null;
   } while (cursor && products.length < limit);
 
-  return products.filter((product) => isSeoSafeProductHandle(product.handle));
+  return products.filter((product) =>
+    isDiscoverableProductHandle(product.handle),
+  );
 }
 
 export async function getPartFinderProducts(): Promise<
