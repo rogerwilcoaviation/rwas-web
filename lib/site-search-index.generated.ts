@@ -17173,4 +17173,21 @@ export const SITE_SEARCH_INDEX = [
       'Estimate aircraft financing and monthly payments before requesting details.',
     keywords: ['loan calculator'],
   },
+  {
+    group: 'Products',
+    title: 'Papa-Alpha #10 Cessna Main Landing Gear Rigging Tool Set',
+    href: '/products/papa-alpha-10-cessna-main-landing-gear-rigging-tool-set',
+    handle: 'papa-alpha-10-cessna-main-landing-gear-rigging-tool-set',
+    description:
+      'The Papa-Alpha #10 is a three-piece main landing gear rigging tool set for applicable Cessna aircraft. The set includes one left-hand shim, one right-hand shim, and one triangular downlock check gauge. Reference tool numbersFor…',
+    skus: ['10'],
+  },
+  {
+    group: 'Articles',
+    title: 'Garmin Aviation Holiday Savings for Pilots',
+    href: '/blog/garmin-aviation-holiday-promotions-2026',
+    description:
+      'Save on select inReach satellite communicators and D2 aviation smartwatches through December 28',
+    keywords: ['product-update', 'garmin', 'pilot-gear', 'holiday'],
+  },
 ] as const satisfies readonly SiteSearchEntry[];
