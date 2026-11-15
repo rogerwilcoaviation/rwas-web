@@ -53,10 +53,11 @@ export default function BlogPage() {
           </h1>
           <p className="bs-subhead">
             Garmin updates, service bulletins, shop notes, and industry memos
-            &mdash; current as of {blogData.meta.last_updated.slice(0, 10)}.
+            &mdash; current as of{' '}
+            {leadArticle?.date || blogData.meta.last_updated.slice(0, 10)}.
           </p>
           <p className="bs-byline">
-            {blogData.meta.total_articles} published dispatches &middot; Topics:{' '}
+            {publishedArticles.length} published dispatches &middot; Topics:{' '}
             {topics.join(' / ')}
           </p>
         </section>
@@ -68,7 +69,10 @@ export default function BlogPage() {
               href={`/blog/${leadArticle.id}`}
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
-              <h2 className="bs-headline" style={{ marginTop: 6 }}>
+              <h2
+                className="bs-headline"
+                style={{ marginTop: 6, fontSize: '1.4rem' }}
+              >
                 {leadArticle.title}
               </h2>
             </Link>
