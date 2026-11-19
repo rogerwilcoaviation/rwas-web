@@ -2,10 +2,12 @@
 
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
+import {
+  isDiscoverableProductHandle,
+  isPublicProductHandle,
+} from '../lib/public-product-route.mjs';
 
-const outputRoot = path.resolve(
-  process.argv[2] || '.vercel/output/static',
-);
+const outputRoot = path.resolve(process.argv[2] || '.vercel/output/static');
 
 function fail(message) {
   throw new Error(`SEO build artifact check failed: ${message}`);
@@ -76,6 +78,22 @@ if (new Set(sitemapProductRoutes).size !== sitemapProductRoutes.length) {
 if (new Set(searchProductRoutes).size !== searchProductRoutes.length) {
   fail('search index contains duplicate product routes');
 }
+for (const [label, routes] of [
+  ['sitemap', sitemapProductRoutes],
+  ['search index', searchProductRoutes],
+]) {
+  const excluded = routes.filter((route) => {
+    const handle = route.slice('/products/'.length);
+    return (
+      isPublicProductHandle(handle) && !isDiscoverableProductHandle(handle)
+    );
+  });
+  if (excluded.length) {
+    fail(
+      `${label} contains discovery-excluded product routes: ${excluded.join(', ')}`,
+    );
+  }
+}
 const sitemapSet = new Set(sitemapProductRoutes);
 const searchSet = new Set(searchProductRoutes);
 const missingFromSearch = sitemapProductRoutes.filter(
@@ -86,7 +104,7 @@ const missingFromSitemap = searchProductRoutes.filter(
 );
 if (missingFromSearch.length || missingFromSitemap.length) {
   fail(
-    `public product route mismatch: ${missingFromSearch.length} missing from search, ${missingFromSitemap.length} missing from sitemap`,
+    `public product route mismatch: ${missingFromSearch.length} missing from search [${missingFromSearch.join(', ')}], ${missingFromSitemap.length} missing from sitemap [${missingFromSitemap.join(', ')}]`,
   );
 }
 
