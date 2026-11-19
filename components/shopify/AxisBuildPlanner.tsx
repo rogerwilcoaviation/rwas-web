@@ -1428,7 +1428,7 @@ export default function AxisBuildPlanner({
               </div>
             ) : null}
 
-            <div className="border-l-4 border-black bg-[#f2ecde] p-4">
+            <div className="axis-summary-disclaimers border-l-4 border-black bg-[#f2ecde] p-4">
               <p className="font-bold">Pricing and planning disclaimers</p>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-5">
                 {SUMMARY_DISCLAIMERS.map((text) => (

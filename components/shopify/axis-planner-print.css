@@ -40,5 +40,5 @@
   .axis-summary-table thead { display: table-header-group; }
   .axis-summary-table tfoot { display: table-row-group; }
   .axis-summary-table tr { break-inside: avoid; page-break-inside: avoid; }
-  .axis-summary-advisories { break-inside: avoid; page-break-inside: avoid; }
+  .axis-summary-advisories, .axis-summary-disclaimers { break-inside: avoid; page-break-inside: avoid; }
 }
