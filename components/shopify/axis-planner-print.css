@@ -1,7 +1,22 @@
 .axis-print-masthead { display: none; }
 
 @media print {
-  @page { size: auto; margin: 0.45in; }
+  @page {
+    size: auto;
+    margin: 1.15in 0.45in 0.45in;
+    @top-left {
+      content: url('/newspaper/images/axis-print-logo.svg');
+      vertical-align: middle;
+    }
+    @top-center {
+      content: 'Roger Wilco Aviation Services\A Avionics Desk · KYKN · Yankton, SD\A (605) 299-8178 · avionics@rwas.team\A www.rogerwilcoaviation.com';
+      white-space: pre;
+      text-align: left;
+      vertical-align: middle;
+      font: 9pt/1.3 Arial, sans-serif;
+      color: #111;
+    }
+  }
   body:has(.axis-planner-document) .rwas-skip-link,
   body:has(.axis-planner-document) .rwas-cart-floater,
   body:has(.axis-planner-document) .jerry-widget-bubble,
@@ -15,18 +30,7 @@
     background: white !important;
     overflow: visible !important;
   }
-  .axis-print-masthead {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 0 0 10px;
-    margin: 0 0 14px;
-    border-bottom: 2px solid #111;
-    color: #111;
-    font: 9pt/1.35 Arial, sans-serif;
-  }
-  .axis-print-masthead img { width: 56px; height: 56px; object-fit: contain; }
-  .axis-print-masthead strong { display: block; font-size: 14pt; }
+  .axis-print-masthead { display: none; }
   .axis-interview-slide { overflow: visible !important; }
   .axis-summary-table-wrap { overflow: visible !important; border: 0 !important; }
   .axis-summary-table { width: 100% !important; min-width: 0 !important; table-layout: fixed; font-size: 8pt !important; }

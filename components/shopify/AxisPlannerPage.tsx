@@ -78,7 +78,7 @@ export default async function AxisPlannerPage({ kind }: { kind: AxisPlannerKind 
         <header className="axis-print-masthead" aria-label="RWAS contact information">
           {/* The regular site masthead is hidden in print. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/newspaper/images/logo-128.webp" alt="Roger Wilco Aviation Services logo" width="72" height="72" />
+          <img src="/newspaper/images/axis-print-logo.svg" alt="Roger Wilco Aviation Services logo" width="56" height="56" />
           <div>
             <strong>Roger Wilco Aviation Services</strong>
             <div>Avionics Desk · KYKN · Yankton, SD</div>
