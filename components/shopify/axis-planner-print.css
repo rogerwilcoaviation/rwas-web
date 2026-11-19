@@ -31,7 +31,11 @@
     overflow: visible !important;
   }
   .axis-print-masthead { display: none; }
-  .axis-interview-slide { overflow: visible !important; }
+  .axis-interview-slide {
+    overflow: visible !important;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
   .axis-summary-table-wrap { overflow: visible !important; border: 0 !important; }
   .axis-summary-table { width: 100% !important; min-width: 0 !important; table-layout: fixed; font-size: 8pt !important; }
   .axis-summary-table th, .axis-summary-table td { padding: 5px 3px !important; overflow-wrap: anywhere; vertical-align: top; }
