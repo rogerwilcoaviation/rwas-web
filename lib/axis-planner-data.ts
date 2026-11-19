@@ -372,7 +372,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '1',
       title: 'Select Displays',
       guidance:
-        'Choose up to four AXIS displays. Mix formats as panel space and the approved configuration allow. No AXIS display contains the autopilot itself. When connected to a GFC 500, the selected AXIS GDU displays flight-director cues, autopilot modes and status; the separate GMC 507 remains the dedicated autopilot mode controller and is included with the aircraft-specific GFC 500 package selected in Step 5.',
+        'Garmin AXIS Part 23 AML STC installation manual 190-03123-10 Rev. 3 states a maximum of three displays total, including no more than two PFDs and two MFDs. Mix formats only as the approved configuration allows; RWAS must verify the current revision and aircraft eligibility. No AXIS display contains the autopilot itself. When connected to a GFC 500, the selected AXIS GDU displays flight-director cues, autopilot modes and status; the separate GMC 507 remains the dedicated autopilot mode controller and is included with the aircraft-specific GFC 500 package selected in Step 5.',
     },
     {
       id: '1A',
@@ -384,7 +384,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '2',
       title: 'System Sensors',
       guidance:
-        'Choose at least one sensor LRU kit and its matching installation kit. A certified system may use a maximum of two ADAHRS, one of each listed sensor-kit type.',
+        'Choose at least one sensor LRU kit and its matching installation kit. A certified system may interface no more than two ADAHRS; this limit does not apply to G5 or GI 275 standbys. The listed system sensor-kit types have specific configuration limits. Dual PFD installations require dual ADAHRS, including at least one GSU 75; the GSU 75 cannot interface to the GDU 116B. With a GFC 500, ADAHRS 1 must be a GSU 25D. Verify the actual PFD roles and existing equipment with RWAS. Source: Garmin AXIS Part 23 AML STC Installation Manual 190-03123-10 Rev. 3, Sections 2.2 and 3.2.',
     },
     {
       id: '3',
@@ -396,7 +396,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '4',
       title: 'Engine / Airframe Interface',
       guidance:
-        'Typically one GEA module is required per engine. GEA 110 requires an AXIS display with integrated COMM or NAV/COMM.',
+        'Typically one GEA module is required per engine. The GEA 110 interfaces only with a GDU 116C or 116NC, not the GDU 116B. In a mixed-display system, loss of the GEA 110-connected display can result in loss of EIS on a GDU 116B reversionary display. RWAS must verify the interface, system configuration and installation approval. Source: Garmin 190-03123-10 Rev. 3, Sections 1.4 and 3.2.12.',
     },
     {
       id: '4A',
@@ -414,19 +414,19 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '6',
       title: 'IFR GPS, Radios and Audio Panel',
       guidance:
-        'Skip external equipment already provided by an integrated AXIS display. Otherwise select the navigator, radios and audio panel needed for the mission.',
+        'Skip external equipment already provided by an integrated AXIS display. The AXIS STC permits at most one external VHF NAV and one external VHF COM source to the internal audio panel. A Flight Stream 210 cannot be installed with a GNS-series navigator in the AXIS system. GTR 20/200B intercom cannot replace an existing audio panel or intercom that feeds a cockpit speaker with aural alerts from retained equipment; an IFR installation requires a listed Garmin GPS navigator. No removable media should be inserted into a GTR 200B or GMA 245RM. Review the approved manuals and existing equipment with RWAS. Source: Garmin 190-03123-10 Rev. 3, Section 2.1 and Table 2-1.',
     },
     {
       id: '7',
       title: 'Transponder and Datalinks',
       guidance:
-        'Select ADS-B Out/In and weather options. Remote GDL units require the connector kit; SiriusXM receivers require the GA 24 TNC antenna.',
+        'Select ADS-B Out/In and weather options. Only one transponder may be interfaced to the AXIS system under this STC. When a GTX transponder interfaces directly to a GSU 25D, the system is limited to a single AHRS; if a GSU 75 is installed, AXIS transponder control is limited to a GTX 345 interfaced via HSDB. RWAS must verify the complete architecture. Remote GDL units require the connector kit; SiriusXM receivers require the GA 24 TNC antenna. Source: Garmin 190-03123-10 Rev. 3, Table 2-1.',
     },
     {
       id: '7A',
       title: 'Active Traffic',
       guidance:
-        'GTS 8XX active traffic is compatible through the approved HSDB interface path. GTS 820 is the current model with a published July 2026 list price; only one ADS-B In source can be configured at a time.',
+        'GTS 8XX active traffic is compatible through an approved HSDB interface path. Under the AXIS STC, only one traffic source can be configured; a GTS 8XX cannot be installed with another traffic source except a GTX 3X5 that correlates the GTS traffic data. RWAS must verify the actual interface and current approved data. Source: Garmin 190-03123-10 Rev. 3, Table 2-1.',
     },
     {
       id: '8A',
@@ -438,13 +438,13 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '8B',
       title: 'Safety Sensors and Awareness',
       guidance:
-        'Select awareness hardware as applicable. A complete GI 260 AOA kit may duplicate the AXIS sensor package or a separately selected GAP 26; certified-aircraft installation requires current model eligibility and approved Garmin/FAA data.',
+        'Select awareness hardware as applicable. A complete GI 260 AOA kit may duplicate the AXIS sensor package or a separately selected GAP 26. Under the AXIS STC, GAP 26 AOA does not replace the original stall-warning system, which must be retained. The STC excludes the GAP 26 probe on FIKI-certified aircraft, aircraft with wing-mounted engines, aircraft with a GSU 25D connected to an under-wing static port, and aircraft with a pitot probe located other than under the wing. The STC also prohibits combining its GAP 26 installation with a non-certified standalone Garmin AOA system. RWAS must verify the current approved installation data and aircraft applicability. Source: Garmin 190-03123-10 Rev. 3, Table 2-1.',
     },
     {
       id: '8C',
       title: 'Navigation and Electrical Interfaces',
       guidance:
-        'GAD 27 provides keep-alive power and optional landing/taxi-light wig-wag functions. Certified GAD 29D selection and applicability guidance is provided in Step 1A.',
+        'GAD 27 provides keep-alive power and optional landing/taxi-light wig-wag functions. For an IFR aircraft with a 14-volt electrical system, a single PFD using a GSU 25D, and vacuum-gyro backup instruments, the GAD 27 is required with keep-alive power connected to the GSU 25D. Other installations require case-specific review; do not assume this condition applies to every aircraft. Certified GAD 29D guidance is in Step 1A. Source: Garmin 190-03123-10 Rev. 3, Section 3.3.11.',
     },
     {
       id: '8D',
@@ -458,7 +458,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '1',
       title: 'Select Displays',
       guidance:
-        'Choose up to six displays. AXIS X models are non-TSO; certified displays with integrated IFR GPS/radios may be mixed into an experimental system. No AXIS display contains the autopilot itself. When connected to a GFC 500, the selected AXIS GDU displays flight-director cues, autopilot modes and status; the separate GMC 507 remains the dedicated autopilot mode controller and is included with the aircraft-specific GFC 500 package selected in Step 5.',
+        'Choose up to six displays, with up to three PFD identities and three MFD identities, as described in Garmin AXIS experimental installation manual 190-03123-20 Rev. 4. AXIS X models are non-TSO; certified displays with integrated IFR GPS/radios may be mixed into an experimental system. No AXIS display contains the autopilot itself. When connected to a GFC 500, the selected AXIS GDU displays flight-director cues, autopilot modes and status; the separate GMC 507 remains the dedicated autopilot mode controller and is included with the aircraft-specific GFC 500 package selected in Step 5.',
     },
     {
       id: '1A',
@@ -470,7 +470,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '2',
       title: 'System Sensors',
       guidance:
-        'Choose a core AXIS X sensor kit. Aircraft exceeding 300 KIAS should use the GSU 25D/GMU 22 kit. Unit-only sensors are supplemental.',
+        'Choose a core AXIS X sensor kit. Aircraft exceeding 300 KIAS should use the GSU 25D/GMU 22 kit. Unit-only sensors are supplemental. For reuse of an existing GSU 73, the experimental AXIS manual specifies a direct GMU 22 or GMU 44(B) interface; it does not support a GMU 11. RWAS must confirm the exact components and installation. Source: Garmin 190-03123-20 Rev. 4, Section 1.2.2.3.',
     },
     {
       id: '2A',
@@ -536,7 +536,7 @@ export const AXIS_STEPS: Record<AxisPlannerKind, AxisPlannerStep[]> = {
       id: '8B',
       title: 'Safety Sensors and Awareness',
       guidance:
-        'Select awareness hardware as applicable. A complete GI 260 AOA kit includes its own indicator, probe and air-data hardware; do not combine it with duplicate standalone components unless RWAS confirms the architecture.',
+        'Select awareness hardware as applicable. GHA 15 cannot be interfaced to the AXIS system when TAWS-B is enabled. A complete GI 260 AOA kit includes its own indicator, probe and air-data hardware; do not combine it with duplicate standalone components unless RWAS confirms the architecture. Source: Garmin 190-03123-20 Rev. 4, Sections 1.2.22 and 2.1.10.',
     },
     {
       id: '8C',

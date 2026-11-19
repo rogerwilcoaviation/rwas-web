@@ -66,27 +66,32 @@ export default async function AxisPlannerPage({ kind }: { kind: AxisPlannerKind 
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <Dateline />
-      <Masthead />
-      <BroadsheetNav activeHref="/collections" />
-      <CredentialsBar />
-      <BulletinBar />
+      <div className="print:hidden">
+        <Dateline />
+        <Masthead />
+        <BroadsheetNav activeHref="/collections" />
+        <CredentialsBar />
+        <BulletinBar />
+      </div>
       <main id="main-content" tabIndex={-1} className="bs-stage">
-        <section className="hero-headline-group">
+        <section className="hero-headline-group print:hidden">
           <p className="bs-kicker">Garmin AXIS System Planner</p>
           <h1 className="bs-headline bs-headline--hero">
             AXIS System for {certified ? 'Certified' : 'Experimental'} Aircraft
           </h1>
           <p className="bs-subhead">
-            Build a preliminary Garmin AXIS hardware package in the same logical
-            order as the official Build-A-System Guide, see the estimated
-            hardware list-price total, then send it to RWAS for compatibility
-            review and an equipment and installation quote.
+            A guided, slide-by-slide interview that builds a preliminary Garmin
+            AXIS hardware package in the same logical order as the official
+            Build-A-System Guide. Each slide explains the options; the final
+            slide shows the estimated hardware list-price total, which you can
+            print, download or send to RWAS for compatibility review and an
+            equipment and installation quote.
           </p>
           <p className="bs-byline">
             RWAS Avionics Desk · Garmin Authorized Dealer · FAA Repair Station
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
+            <a href="#axis-interview" className="bs-cta-primary">Start guided interview</a>
             <Link href="/collections" className="bs-cta-secondary">
               Back to collections
             </Link>
@@ -109,7 +114,7 @@ export default async function AxisPlannerPage({ kind }: { kind: AxisPlannerKind 
         </p>
         <AxisBuildPlanner kind={kind} productMedia={productMedia} />
         <section
-          className="mt-8 grid gap-6 md:grid-cols-2"
+          className="mt-8 grid gap-6 md:grid-cols-2 print:hidden"
           aria-label="Garmin AXIS accessory planning"
         >
           <article className="border-2 border-black bg-white p-5">
@@ -131,7 +136,9 @@ export default async function AxisPlannerPage({ kind }: { kind: AxisPlannerKind 
           </article>
         </section>
       </main>
-      <BroadsheetFooter />
+      <div className="print:hidden">
+        <BroadsheetFooter />
+      </div>
     </BroadsheetLayout>
   );
 }

@@ -5,8 +5,14 @@ import {
   AXIS_STEPS,
   type AxisPlannerKind,
 } from '@/lib/axis-planner-data';
+import {
+  axisDisplayScenarios,
+  axisInterviewAudioSrc,
+  axisInterviewNarration,
+} from '@/lib/axis-interview-content';
 import { GFC500_CERTIFIED_AIRCRAFT } from '@/lib/gfc500-certified-catalog';
 import type { ShopifySkuMedia } from '@/lib/shopify';
+import AxisInterviewNarration from '@/components/shopify/AxisInterviewNarration';
 import {
   Dialog,
   DialogClose,
@@ -16,7 +22,7 @@ import {
 } from '@/components/shared/ui/dialog';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 type Selection = Record<string, number>;
 
@@ -312,16 +318,18 @@ function compatibilityFor(
     );
   }
 
+  const visibleForSelection = (candidate: (typeof AXIS_ITEMS)[AxisPlannerKind][number]) =>
+    !(kind === 'certified' && (candidate.step === '5' || candidate.step === '5A'));
   const related = [...new Set(relatedSkus)]
     .map((sku) => AXIS_ITEMS[kind].find((candidate) => candidate.sku === sku))
     .filter(
       (candidate): candidate is (typeof AXIS_ITEMS)[AxisPlannerKind][number] =>
-        Boolean(candidate),
+        Boolean(candidate) && visibleForSelection(candidate!),
     );
   const mutuallyExclusiveGroups = [
-    kind === 'certified'
-      ? ['010-04557-00', '010-02003-05']
-      : ['010-04556-00', '010-04556-01'],
+    // Sensor kits are not globally mutually exclusive: a dual-PFD AXIS STC
+    // installation needs two ADAHRS including a GSU 75. Exact roles and
+    // hardware remain subject to the applicable Garmin installation data.
     kind === 'certified'
       ? ['K10-00280-01', '010-02326-10', '010-02326-20']
       : [],
@@ -365,7 +373,7 @@ function compatibilityFor(
   ]);
   const mayCoexist = AXIS_ITEMS[kind].filter(
     (candidate) =>
-      !relatedSet.has(candidate.sku) && !knownIncompatible.has(candidate.sku),
+      visibleForSelection(candidate) && !relatedSet.has(candidate.sku) && !knownIncompatible.has(candidate.sku),
   );
 
   if (knownIncompatible.size) {
@@ -391,6 +399,71 @@ const money = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 
+type SummaryLine = {
+  stepId: string;
+  title: string;
+  sku: string;
+  quantity: number;
+  unitPrice: number;
+  extendedPrice: number;
+};
+
+const SUMMARY_DISCLAIMERS = [
+  'Preliminary hardware planning only - not an approved configuration or installation quote.',
+  'All prices are manufacturer list prices (Garmin July 2026 Build-A-System Guide pricing) and are subject to change.',
+  'Prices exclude tax, freight, installation labor, fabrication, wiring, configuration, certification and additional required hardware.',
+  'Discounted equipment pricing may be available after RWAS reviews a submitted preliminary build; no discount amount is promised.',
+  'The planner surfaces advisories but does not perform full compatibility validation. RWAS will confirm aircraft eligibility, compatibility, required hardware and labor.',
+];
+
+const csvCell = (value: string | number) =>
+  `"${String(value).replace(/"/g, '""')}"`;
+
+/** Builds the downloadable CSV for the review slide. */
+function buildSummaryCsv({
+  kind,
+  lines,
+  total,
+  advisories,
+}: {
+  kind: AxisPlannerKind;
+  lines: SummaryLine[];
+  total: number;
+  advisories: string[];
+}): string {
+  const rows: (string | number)[][] = [
+    [
+      `RWAS AXIS ${kind === 'certified' ? 'Certified' : 'Experimental'} preliminary build`,
+    ],
+    [`Generated ${new Date().toISOString()}`],
+    ...SUMMARY_DISCLAIMERS.map((text) => [text]),
+    [],
+    [
+      'Step',
+      'Part',
+      'SKU',
+      'Quantity',
+      'Manufacturer list unit price (USD)',
+      'Extended list price (USD)',
+    ],
+    ...lines.map((line) => [
+      line.stepId,
+      line.title,
+      line.sku,
+      line.quantity,
+      line.unitPrice,
+      line.extendedPrice,
+    ]),
+    [],
+    ['', 'Estimated hardware list-price total', '', '', '', total],
+    [],
+    ...(advisories.length
+      ? [['Planner advisories'], ...advisories.map((text) => [text])]
+      : [['Planner advisories: None shown.']]),
+  ];
+  return rows.map((row) => row.map(csvCell).join(',')).join('\r\n');
+}
+
 function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
   const has = (sku: string) => Boolean(selection[sku]);
   const quantityInStep = (step: string) =>
@@ -401,18 +474,33 @@ function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
   const displays = quantityInStep('1');
 
   if (!displays) notices.push('Select at least one AXIS display in Step 1.');
-  if (displays > (kind === 'certified' ? 4 : 6)) {
+  if (displays > (kind === 'certified' ? 3 : 6)) {
     notices.push(
-      `${kind === 'certified' ? 'Certified' : 'Experimental'} systems are limited to ${kind === 'certified' ? 'four' : 'six'} displays.`,
+      kind === 'certified'
+        ? 'Certified STC installation manual 190-03123-10 Rev. 3 states a maximum of three displays, with separate PFD/MFD role limits. RWAS must verify the current approved configuration.'
+        : 'Experimental installation manual 190-03123-20 Rev. 4 supports up to six displays, with up to three PFD and three MFD identities. RWAS must verify the current configuration.',
     );
   }
-  if (quantityInStep('1A') < displays) {
-    notices.push(
-      'Confirm one compatible display install kit for every selected display.',
-    );
+  const qty = (sku: string) => selection[sku] || 0;
+  const baseKitPrefix = kind === 'certified' ? '010-14469' : '010-14468';
+  const smallDisplays = qty('010-04143-00') + qty('010-04145-00');
+  const baseDisplays = qty('010-03000-00');
+  const integratedDisplays = qty('010-03001-00') + qty('010-03002-00');
+  const smallKits = qty(`${baseKitPrefix}-00`);
+  const baseKits = qty(`${baseKitPrefix}-01`);
+  const sharedKits = qty(`${baseKitPrefix}-10`);
+  const integratedKits = qty('010-14469-02') + qty('010-14469-12');
+  if (smallDisplays > smallKits + sharedKits ||
+      baseDisplays > baseKits + sharedKits ||
+      smallDisplays + baseDisplays > smallKits + baseKits + sharedKits ||
+      integratedDisplays > integratedKits) {
+    notices.push('Confirm one compatible display install kit for every selected display; antennas, printed material and interface adapters do not count as display install kits.');
   }
-  if (!quantityInStep('2'))
-    notices.push('Select the required core system sensor kit.');
+  const coreSensorKits = kind === 'certified'
+    ? ['010-04557-00', '010-02003-05']
+    : ['010-04556-00', '010-04556-01'];
+  if (!coreSensorKits.some(has))
+    notices.push('Confirm a compatible core system sensor kit is selected or already installed.');
   if (kind === 'certified' && !quantityInStep('3')) {
     notices.push(
       'Certified AXIS installations require a standby flight instrument.',
@@ -428,6 +516,22 @@ function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
     notices.push(
       'GEA 110 requires an AXIS display with integrated COMM or NAV/COMM.',
     );
+  }
+  if (has('006-B5211-02') && has(kind === 'certified' ? '010-02895-00' : '010-02942-00')) {
+    notices.push(`GHA 15 cannot be interfaced to the AXIS system when TAWS-B is enabled. Verify selected and existing equipment with RWAS. Source: ${kind === 'certified' ? 'Garmin 190-03123-10 Rev. 3, Table 2-1' : 'Garmin 190-03123-20 Rev. 4, Sections 1.2.22 and 2.1.10'}.`);
+  }
+  if (kind === 'certified' && has('010-02003-05') && has('010-03000-00')) {
+    notices.push('The GSU 75 cannot interface to the GDU 116B. Confirm the approved interface and reversionary architecture. Source: Garmin 190-03123-10 Rev. 3, Table 2-1.');
+  }
+  if (kind === 'certified' && has('010-01329-01') && has('010-03000-00')) {
+    notices.push('The GEA 110 cannot interface to a GDU 116B. In a mixed-display system, loss of the GEA 110-connected display can result in loss of EIS on the GDU 116B reversionary display. RWAS must verify the architecture. Source: Garmin 190-03123-10 Rev. 3, Section 3.2.12.');
+  }
+  if (kind === 'certified' && has('010-01074-71')) {
+    notices.push('GAP 26 under the AXIS STC has specific stall-warning, FIKI, engine-placement, static-port, pitot-location and standalone AOA restrictions. Review Step 8B and the current approved manual with RWAS.');
+  }
+  const certifiedTransponders = ['010-01214-01','010-01215-01','010-01216-06','010-01217-06'].reduce((sum, sku) => sum + (selection[sku] || 0), 0);
+  if (kind === 'certified' && certifiedTransponders > 1) {
+    notices.push('Only one transponder may be interfaced to the AXIS system under the Part 23 STC. Review selected and existing transponders with RWAS. Source: Garmin 190-03123-10 Rev. 3, Table 2-1.');
   }
   const hasRemoteGdl = AXIS_ITEMS[kind].some(
     (item) =>
@@ -459,6 +563,9 @@ function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
   if (kind === 'certified' && has('010-01172-21') && !has('011-03271-00')) {
     notices.push('The selected GAD 29D requires its connector kit.');
   }
+  const hasRemoteTraffic = AXIS_ITEMS[kind].some(
+    (item) => item.step === '7' && /GDL (50|52)R/.test(item.title) && has(item.sku),
+  );
   if (has('010-00562-00')) {
     const hasSupportedTrafficPath =
       has('010-01216-06') ||
@@ -472,7 +579,7 @@ function buildAdvisories(kind: AxisPlannerKind, selection: Selection) {
         'GTS 820 requires an approved indirect HSDB interface path through compatible equipment such as GTX 345, GTN Xi or GI 275.',
       );
     }
-    if (hasRemoteGdl) {
+    if (hasRemoteTraffic) {
       notices.push(
         'Review traffic-source compatibility: GTS 8XX cannot be combined with another ADS-B traffic source except an approved GTX 345 configuration.',
       );
@@ -517,9 +624,64 @@ export default function AxisBuildPlanner({
   const detailOpenerRef = useRef<HTMLButtonElement | null>(null);
   const [detailSku, setDetailSku] = useState<string | null>(null);
   const items = AXIS_ITEMS[kind];
-  const steps = AXIS_STEPS[kind].filter(
-    (step) => kind !== 'certified' || step.id !== '5A',
+  const kindLabel = kind === 'certified' ? 'Certified' : 'Experimental';
+  const steps = useMemo(
+    () =>
+      AXIS_STEPS[kind].filter(
+        (step) => kind !== 'certified' || step.id !== '5A',
+      ),
+    [kind],
   );
+  const slides = useMemo(
+    () => [
+      {
+        id: 'intro',
+        label: 'Start',
+        title: `Your AXIS ${kindLabel} aircraft interview`,
+      },
+      ...steps.map((step) => ({
+        id: step.id,
+        label: `Step ${step.id}`,
+        title: step.title,
+      })),
+      {
+        id: 'summary',
+        label: 'Review',
+        title: 'Review and send your preliminary build',
+      },
+    ],
+    [steps, kindLabel],
+  );
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [narrationEnabled, setNarrationEnabled] = useState(false);
+  const plannerTopRef = useRef<HTMLDivElement | null>(null);
+  const slideHeadingRef = useRef<HTMLHeadingElement | null>(null);
+  const hasNavigatedRef = useRef(false);
+  const slide = slides[slideIndex];
+  const currentStep = steps.find((step) => step.id === slide.id) || null;
+  const isFirstSlide = slideIndex === 0;
+  const isLastSlide = slideIndex === slides.length - 1;
+  const goToSlide = (index: number) => {
+    hasNavigatedRef.current = true;
+    setSlideIndex(Math.min(slides.length - 1, Math.max(0, index)));
+  };
+  const goToStep = (stepId: string) => {
+    const index = slides.findIndex((candidate) => candidate.id === stepId);
+    if (index >= 0) {
+      goToSlide(index);
+    }
+  };
+
+  useEffect(() => {
+    if (!hasNavigatedRef.current) {
+      return;
+    }
+    const top = plannerTopRef.current;
+    if (top && top.getBoundingClientRect().top < 0) {
+      top.scrollIntoView({ block: 'start' });
+    }
+    slideHeadingRef.current?.focus({ preventScroll: true });
+  }, [slideIndex]);
   const gfcAircraft = GFC500_CERTIFIED_AIRCRAFT.find(
     (aircraft) => aircraft.id === gfcAircraftId,
   );
@@ -549,6 +711,9 @@ export default function AxisBuildPlanner({
       0,
     ) + (gfcConfiguration?.listPrice || 0);
   const advisories = buildAdvisories(kind, selection);
+  if (kind === 'certified' && gfcConfiguration && !selection['010-04557-00']) {
+    advisories.push('GFC 500 with AXIS requires GSU 25D as ADAHRS 1. Confirm an eligible existing GSU 25D or select the required kit and applicable installation hardware with RWAS. Source: Garmin 190-03123-10 Rev. 3, Section 1.4.');
+  }
   if (kind === 'certified' && gfcAircraft && !gfcConfiguration) {
     advisories.push(
       'Select a GFC 500 servo configuration for the chosen aircraft eligibility group.',
@@ -573,9 +738,12 @@ export default function AxisBuildPlanner({
   }, []);
 
   const setQuantity = (sku: string, quantity: number) => {
+    if (!Number.isFinite(quantity)) return;
+    const item = items.find((candidate) => candidate.sku === sku);
+    if (quantity > 0 && kind === 'certified' && (item?.step === '5' || item?.step === '5A')) return;
     setSelection((current) => {
       const next = { ...current };
-      if (quantity > 0) next[sku] = Math.min(6, Math.max(1, quantity));
+      if (quantity > 0) next[sku] = Math.min(6, Math.max(1, Math.floor(quantity)));
       else delete next[sku];
       return next;
     });
@@ -650,26 +818,270 @@ export default function AxisBuildPlanner({
     ...attribution,
   });
 
+  const selectedCount = selectedItems.length + (gfcConfiguration ? 1 : 0);
+  const slideOrder = (stepId: string) =>
+    slides.findIndex((candidate) => candidate.id === stepId);
+  const summaryLines: SummaryLine[] = [
+    ...selectedItems.map((item) => ({
+      stepId: item.step,
+      title: item.title,
+      sku: item.sku,
+      quantity: selection[item.sku],
+      unitPrice: item.price,
+      extendedPrice: item.price * selection[item.sku],
+    })),
+    ...(gfcAircraft && gfcConfiguration
+      ? [
+          {
+            stepId: '5',
+            title: `GFC 500 — ${gfcAircraft.label} — ${gfcConfiguration.name}`,
+            sku: `GARMIN-CATALOG-PAGE-${gfcAircraft.page}`,
+            quantity: 1,
+            unitPrice: gfcConfiguration.listPrice,
+            extendedPrice: gfcConfiguration.listPrice,
+          },
+        ]
+      : []),
+  ].sort((a, b) => slideOrder(a.stepId) - slideOrder(b.stepId));
+
+  const downloadSummary = () => {
+    const csv = buildSummaryCsv({
+      kind,
+      lines: summaryLines,
+      total,
+      advisories,
+    });
+    const byteOrderMark = String.fromCharCode(0xfeff);
+    const blob = new Blob([byteOrderMark, csv], {
+      type: 'text/csv;charset=utf-8',
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `rwas-axis-${kind}-preliminary-build-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  const compactButton =
+    'border-2 border-black bg-white px-3 py-1 text-xs font-black uppercase tracking-wide hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-40';
+
   return (
-    <div className="space-y-7">
-      <div className="border-l-4 border-black bg-white p-5">
-        <p className="bs-kicker">Garmin July 2026 guide pricing</p>
-        <p className="bs-body mt-2">
-          Check each component and set its quantity. This planning estimate
-          covers listed hardware only; it is not an approved configuration or
-          installation quote. RWAS will confirm aircraft eligibility,
-          compatibility, required hardware and labor.
-        </p>
-        <p className="bs-body mt-2">
-          All prices shown are manufacturer list prices. Discounted equipment
-          pricing may be available after RWAS reviews a submitted preliminary
-          build. Prices are subject to change and exclude tax, freight,
-          installation labor, fabrication, wiring, configuration, certification
-          and additional required hardware.
-        </p>
+    <div id="axis-interview" ref={plannerTopRef} className="space-y-5 scroll-mt-3">
+      <div className="sticky top-0 z-30 border-2 border-black bg-[#fffdf7] px-3 py-3 shadow-[0_3px_0_rgba(0,0,0,0.12)] sm:px-4 print:hidden">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <p className="min-w-0 text-sm font-bold leading-5 [overflow-wrap:anywhere]">
+            <span className="font-black tabular-nums">
+              {slideIndex + 1}/{slides.length}
+            </span>{' '}
+            · {slide.label}: {slide.title}
+          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm tabular-nums">
+              {selectedCount} selected ·{' '}
+              <strong>{money.format(total)}</strong> list
+            </span>
+            <button
+              type="button"
+              onClick={() => setNarrationEnabled((current) => !current)}
+              className={`${compactButton} ${narrationEnabled ? '!bg-black !text-white' : ''}`}
+            >
+              {narrationEnabled ? 'Mute narration' : 'Turn narration on'}
+            </button>
+          </div>
+        </div>
+        <div
+          role="progressbar"
+          aria-label="AXIS interview progress"
+          aria-valuemin={1}
+          aria-valuemax={slides.length}
+          aria-valuenow={slideIndex + 1}
+          aria-valuetext={`Slide ${slideIndex + 1} of ${slides.length}: ${slide.title}`}
+          className="mt-2 h-2.5 w-full border border-black bg-white"
+        >
+          <div
+            className="h-full bg-black transition-[width] duration-300 motion-reduce:transition-none"
+            style={{
+              width: `${((slideIndex + 1) / slides.length) * 100}%`,
+            }}
+          />
+        </div>
+        <div className="mt-2 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => goToSlide(slideIndex - 1)}
+            disabled={isFirstSlide}
+            className={compactButton}
+          >
+            Back
+          </button>
+          <nav aria-label="Interview slides" className="min-w-0 flex-1">
+            <ol className="flex gap-1 overflow-x-auto py-1">
+              {slides.map((candidate, index) => (
+                <li key={candidate.id} className="shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => goToSlide(index)}
+                    aria-current={index === slideIndex ? 'step' : undefined}
+                    aria-label={`${candidate.label}: ${candidate.title}`}
+                    className={`min-w-9 border border-black px-2 py-1 text-xs font-black focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-1 ${
+                      index === slideIndex
+                        ? 'bg-black text-white'
+                        : index < slideIndex
+                          ? 'bg-amber-100 hover:bg-amber-200'
+                          : 'bg-white hover:bg-neutral-100'
+                    }`}
+                  >
+                    {candidate.id === 'intro'
+                      ? 'Start'
+                      : candidate.id === 'summary'
+                        ? 'Review'
+                        : candidate.id}
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </nav>
+          <button
+            type="button"
+            onClick={() => goToSlide(slideIndex + 1)}
+            disabled={isLastSlide}
+            className={compactButton}
+          >
+            Next
+          </button>
+        </div>
       </div>
 
-      {steps.map((step) => {
+      <section
+        aria-labelledby="axis-interview-slide-heading"
+        className="border-2 border-black bg-white"
+      >
+        <header className="border-b-2 border-black bg-neutral-100 px-5 py-4">
+          <p className="bs-kicker">
+            {currentStep ? `Step ${currentStep.id}` : slide.label} · Slide{' '}
+            {slideIndex + 1} of {slides.length}
+          </p>
+          <h2
+            id="axis-interview-slide-heading"
+            ref={slideHeadingRef}
+            tabIndex={-1}
+            className="bs-section-head mt-1 focus:outline-none"
+          >
+            {slide.title}
+          </h2>
+          {currentStep ? (
+            <p className="bs-body mt-2 max-w-4xl">{currentStep.guidance}</p>
+          ) : null}
+        </header>
+
+        <AxisInterviewNarration
+          key={`${kind}-${slide.id}`}
+          enabled={narrationEnabled}
+          src={axisInterviewAudioSrc({ kind, slideId: slide.id })}
+          transcript={axisInterviewNarration({ kind, slideId: slide.id })}
+        />
+
+        {slide.id === 'intro' ? (
+          <div className="space-y-5 px-5 py-5">
+            <div className="border-l-4 border-black bg-white p-5">
+              <p className="bs-kicker">Garmin July 2026 guide pricing</p>
+              <p className="bs-body mt-2">
+                Check each component and set its quantity. This planning
+                estimate covers listed hardware only; it is not an approved
+                configuration or installation quote. RWAS will confirm aircraft
+                eligibility, compatibility, required hardware and labor.
+              </p>
+              <p className="bs-body mt-2">
+                All prices shown are manufacturer list prices. Discounted
+                equipment pricing may be available after RWAS reviews a
+                submitted preliminary build. Prices are subject to change and
+                exclude tax, freight, installation labor, fabrication, wiring,
+                configuration, certification and additional required hardware.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-bold text-black">How this interview works</h3>
+              <ol className="mt-2 max-w-4xl list-decimal space-y-1 pl-5 text-sm leading-6 text-neutral-800">
+                <li>
+                  Each slide covers one step of Garmin&rsquo;s AXIS
+                  Build-A-System Guide for {kind} aircraft, with an explanation
+                  of the options.
+                </li>
+                <li>
+                  Check the parts you are considering and set quantities.
+                  Select a product photo or name for details and compatibility
+                  notes.
+                </li>
+                <li>
+                  Use Back and Next, or the step buttons in the progress bar.
+                  Your selections stay in place as you move between slides
+                  (until you leave or reload this page).
+                </li>
+                <li>
+                  The final slide lists every selected part with manufacturer
+                  list unit and extended prices and the total, so you can print
+                  it, download it, or submit it to RWAS.
+                </li>
+                <li>
+                  Narration audio is optional and off by default. The narration
+                  text is always shown on each slide.
+                </li>
+              </ol>
+            </div>
+          </div>
+        ) : null}
+
+        {currentStep?.id === '1' ? (
+          <div className="border-b-2 border-black px-5 py-5">
+            <h3 className="font-bold text-black">
+              Common display scenarios (illustrations)
+            </h3>
+            <p className="mt-1 max-w-4xl text-sm leading-5 text-neutral-700">
+              These examples explain the display choices listed below. They
+              are not selections, do not change your build and do not show
+              the specific equipment you choose.
+            </p>
+            <ul className="mt-4 grid gap-5 md:grid-cols-3">
+              {axisDisplayScenarios({ kind }).map((scenario) => (
+                <li
+                  key={scenario.id}
+                  className="border border-black bg-white"
+                >
+                  <figure>
+                    <div className="relative aspect-[4/3] w-full border-b border-black bg-neutral-100">
+                      <Image
+                        src={scenario.imageUrl}
+                        alt={scenario.imageAlt}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 360px"
+                        className="object-cover"
+                      />
+                      <span className="absolute left-2 top-2 bg-black px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-white">
+                        Illustrative photo
+                      </span>
+                    </div>
+                    <figcaption className="p-3">
+                      <span className="block font-bold text-black">
+                        {scenario.title}
+                      </span>
+                      <span className="mt-1 block text-sm leading-5 text-neutral-700">
+                        {scenario.explanation}
+                      </span>
+                      <span className="mt-2 block text-xs italic leading-4 text-neutral-600">
+                        {scenario.credit}
+                      </span>
+                    </figcaption>
+                  </figure>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {(currentStep ? [currentStep] : []).map((step) => {
         const stepItems = items.filter(
           (item) =>
             item.step === step.id &&
@@ -679,12 +1091,7 @@ export default function AxisBuildPlanner({
             ),
         );
         return (
-          <section key={step.id} className="border-2 border-black bg-white">
-            <header className="border-b-2 border-black bg-neutral-100 px-5 py-4">
-              <p className="bs-kicker">Step {step.id}</p>
-              <h2 className="bs-section-head mt-1">{step.title}</h2>
-              <p className="bs-body mt-2 max-w-4xl">{step.guidance}</p>
-            </header>
+          <div key={step.id}>
             {kind === 'certified' && step.id === '5' ? (
               <div className="space-y-5 px-5 py-5">
                 <label className="block max-w-3xl">
@@ -870,13 +1277,13 @@ export default function AxisBuildPlanner({
                               type="number"
                               min={1}
                               max={6}
+                              step={1}
                               value={quantity}
-                              onChange={(event) =>
-                                setQuantity(
-                                  item.sku,
-                                  Number(event.target.value),
-                                )
-                              }
+                              onChange={(event) => {
+                                if (event.target.value === '') return;
+                                const nextQuantity = Number(event.target.value);
+                                if (Number.isFinite(nextQuantity)) setQuantity(item.sku, Math.max(1, nextQuantity));
+                              }}
                               className="w-16 border-2 border-black px-2 py-1 text-center"
                             />
                           </label>
@@ -895,9 +1302,225 @@ export default function AxisBuildPlanner({
                 step.
               </p>
             )}
-          </section>
+          </div>
         );
       })}
+
+        {slide.id === 'summary' ? (
+          <div className="space-y-6 px-5 py-5">
+            <div className="flex flex-wrap items-end justify-between gap-3 border-b-2 border-black pb-4">
+              <h3 className="bs-section-head">
+                Estimated hardware list-price total
+              </h3>
+              <p className="text-3xl font-black tabular-nums md:text-4xl">
+                {money.format(total)}
+              </p>
+            </div>
+            <p className="bs-body">
+              {selectedCount} selected component
+              {selectedCount === 1 ? '' : 's'} · Manufacturer list prices are
+              reference values and subject to change.
+            </p>
+
+            {summaryLines.length ? (
+              <div className="overflow-x-auto border-2 border-black">
+                <table className="w-full min-w-[680px] border-collapse text-left text-sm">
+                  <caption className="sr-only">
+                    Selected AXIS parts with manufacturer list unit price,
+                    extended price and total
+                  </caption>
+                  <thead className="bg-neutral-100">
+                    <tr className="border-b-2 border-black">
+                      <th scope="col" className="px-3 py-2">
+                        Step
+                      </th>
+                      <th scope="col" className="px-3 py-2">
+                        Part
+                      </th>
+                      <th scope="col" className="px-3 py-2">
+                        SKU
+                      </th>
+                      <th scope="col" className="px-3 py-2 text-right">
+                        Qty
+                      </th>
+                      <th scope="col" className="px-3 py-2 text-right">
+                        List unit price
+                      </th>
+                      <th scope="col" className="px-3 py-2 text-right">
+                        Extended price
+                      </th>
+                      <th scope="col" className="px-3 py-2 print:hidden">
+                        <span className="sr-only">Edit</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-300">
+                    {summaryLines.map((line) => (
+                      <tr key={`${line.stepId}-${line.sku}`}>
+                        <td className="px-3 py-2 font-mono text-xs">
+                          {line.stepId}
+                        </td>
+                        <td className="px-3 py-2 font-bold">{line.title}</td>
+                        <td className="px-3 py-2 font-mono text-xs">
+                          {line.sku}
+                        </td>
+                        <td className="px-3 py-2 text-right tabular-nums">
+                          {line.quantity}
+                        </td>
+                        <td className="px-3 py-2 text-right tabular-nums">
+                          {money.format(line.unitPrice)}
+                        </td>
+                        <td className="px-3 py-2 text-right font-bold tabular-nums">
+                          {money.format(line.extendedPrice)}
+                        </td>
+                        <td className="px-3 py-2 print:hidden">
+                          <button
+                            type="button"
+                            onClick={() => goToStep(line.stepId)}
+                            className="text-xs font-bold underline underline-offset-2 hover:text-amber-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-black"
+                            aria-label={`Edit ${line.title} in Step ${line.stepId}`}
+                          >
+                            Edit
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot>
+                    <tr className="border-t-2 border-black bg-neutral-100">
+                      <th
+                        scope="row"
+                        colSpan={5}
+                        className="px-3 py-2 text-right"
+                      >
+                        Estimated hardware list-price total
+                      </th>
+                      <td className="px-3 py-2 text-right text-base font-black tabular-nums">
+                        {money.format(total)}
+                      </td>
+                      <td className="print:hidden" />
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            ) : (
+              <p className="border-l-4 border-black bg-neutral-50 p-4 text-sm">
+                No hardware is selected yet.{' '}
+                <button
+                  type="button"
+                  onClick={() => goToStep('1')}
+                  className="font-bold underline underline-offset-2"
+                >
+                  Start with Step 1 displays
+                </button>
+                .
+              </p>
+            )}
+
+            {advisories.length ? (
+              <div className="border-l-4 border-amber-500 bg-amber-50 p-4">
+                <p className="font-bold">Review before submitting</p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+                  {advisories.map((advisory) => (
+                    <li key={advisory}>{advisory}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            <div className="border-l-4 border-black bg-[#f2ecde] p-4">
+              <p className="font-bold">Pricing and planning disclaimers</p>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-5">
+                {SUMMARY_DISCLAIMERS.map((text) => (
+                  <li key={text}>{text}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex flex-wrap gap-3 print:hidden">
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="bs-cta-secondary"
+              >
+                Print summary
+              </button>
+              <button
+                type="button"
+                onClick={downloadSummary}
+                disabled={!summaryLines.length}
+                className="bs-cta-secondary disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Download summary (CSV)
+              </button>
+            </div>
+
+            <div className="border-4 border-black bg-white p-5 print:hidden">
+              <h3 className="bs-section-head">
+                Submit to RWAS for package-pricing review
+              </h3>
+              <p className="bs-body mt-2 max-w-4xl">
+                Submitting opens the RWAS contact form with this preliminary
+                build attached, so you can add your aircraft details and send
+                it. RWAS reviews submitted builds for compatibility and for any
+                available package or discounted equipment pricing. No discount
+                or specific price is promised.
+              </p>
+              {selectedItems.length || gfcConfiguration ? (
+                <a
+                  href={`/contact?${contactParams.toString()}`}
+                  onClick={submitBuild}
+                  className="bs-cta-primary mt-5 inline-flex"
+                >
+                  {advisories.length
+                    ? 'Submit Preliminary Build with Advisories'
+                    : 'Submit Preliminary Build to RWAS'}
+                </a>
+              ) : (
+                <span
+                  aria-disabled="true"
+                  className="bs-cta-primary mt-5 inline-flex cursor-not-allowed opacity-50"
+                >
+                  Select hardware before submitting
+                </span>
+              )}
+              <p className="mt-3 text-sm text-neutral-600">
+                Selected equipment is sent to the RWAS service desk by email
+                and, after email delivery succeeds, to Shop Talk in Microsoft
+                Teams. The planner does not perform full compatibility
+                validation.
+              </p>
+            </div>
+          </div>
+        ) : null}
+      </section>
+
+      <nav
+        aria-label="Interview navigation"
+        className="flex flex-wrap items-center justify-between gap-3 print:hidden"
+      >
+        <button
+          type="button"
+          onClick={() => goToSlide(slideIndex - 1)}
+          disabled={isFirstSlide}
+          className="bs-cta-secondary disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          ← Back
+          {isFirstSlide ? '' : `: ${slides[slideIndex - 1].label}`}
+        </button>
+        {isLastSlide ? null : (
+          <button
+            type="button"
+            onClick={() => goToSlide(slideIndex + 1)}
+            className="bs-cta-primary"
+          >
+            {isFirstSlide
+              ? 'Begin interview'
+              : `Next: ${slides[slideIndex + 1].label}`}{' '}
+            →
+          </button>
+        )}
+      </nav>
 
       <Dialog
         open={Boolean(detailItem)}
@@ -1077,6 +1700,11 @@ export default function AxisBuildPlanner({
                       ? 'Keep selected'
                       : 'Add to build'}
                   </button>
+                  {selection[detailItem.sku] ? (
+                    <button type="button" className="bs-cta-secondary" onClick={() => { setQuantity(detailItem.sku, 0); setDetailSku(null); }}>
+                      Remove from build
+                    </button>
+                  ) : null}
                   {detailMedia?.productUrl ? (
                     <Link
                       href={detailMedia.productUrl}
@@ -1097,59 +1725,6 @@ export default function AxisBuildPlanner({
           </DialogContent>
         ) : null}
       </Dialog>
-
-      <section
-        className="border-4 border-black bg-white p-5 md:p-7"
-        aria-live="polite"
-      >
-        <p className="bs-kicker">Preliminary build summary</p>
-        <div className="mt-2 flex flex-wrap items-end justify-between gap-3 border-b-2 border-black pb-4">
-          <h2 className="bs-section-head">
-            Estimated hardware list-price total
-          </h2>
-          <p className="text-3xl font-black tabular-nums md:text-4xl">
-            {money.format(total)}
-          </p>
-        </div>
-        <p className="bs-body mt-4">
-          {selectedItems.length + (gfcConfiguration ? 1 : 0)} selected component
-          {selectedItems.length + (gfcConfiguration ? 1 : 0) === 1 ? '' : 's'} ·
-          Manufacturer list prices are reference values and subject to change.
-        </p>
-        {advisories.length ? (
-          <div className="mt-5 border-l-4 border-amber-500 bg-amber-50 p-4">
-            <p className="font-bold">Review before submitting</p>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
-              {advisories.map((advisory) => (
-                <li key={advisory}>{advisory}</li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-        {selectedItems.length || gfcConfiguration ? (
-          <a
-            href={`/contact?${contactParams.toString()}`}
-            onClick={submitBuild}
-            className="bs-cta-primary mt-6 inline-flex"
-          >
-            {advisories.length
-              ? 'Submit Preliminary Build with Advisories'
-              : 'Submit Preliminary Build to RWAS'}
-          </a>
-        ) : (
-          <span
-            aria-disabled="true"
-            className="bs-cta-primary mt-6 inline-flex cursor-not-allowed opacity-50"
-          >
-            Select hardware before submitting
-          </span>
-        )}
-        <p className="mt-3 text-sm text-neutral-600">
-          Selected equipment is sent to the RWAS service desk by email and,
-          after email delivery succeeds, to Shop Talk in Microsoft Teams. The
-          planner does not perform full compatibility validation.
-        </p>
-      </section>
     </div>
   );
 }

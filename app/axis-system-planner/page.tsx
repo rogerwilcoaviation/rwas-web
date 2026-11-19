@@ -38,20 +38,30 @@ export default function AxisSystemPlannerLanding() {
             Choose the right AXIS planning path.
           </h1>
           <p className="bs-subhead">
-            Start with Garmin&rsquo;s AXIS equipment builder for a preliminary
+            Start the guided AXIS equipment interview for a preliminary
             hardware plan, or use the separate visual Panel Layout Planner to
             explore how equipment could fit in your panel.
           </p>
         </section>
         <section className="grid gap-6 md:grid-cols-2">
           <article className="border-4 border-black bg-white p-6">
-            <p className="bs-kicker">Equipment planning</p>
+            <p className="bs-kicker">Guided equipment interview</p>
             <h2 className="bs-section-head mt-2">AXIS System Builder</h2>
             <p className="bs-body mt-3">
-              Compare certified and experimental equipment, quantities, and
-              Garmin July 2026 guide pricing. The result is preliminary hardware
-              planning for RWAS review—not an approved configuration or
-              installed quote.
+              Answer one slide at a time, in the order of Garmin&rsquo;s AXIS
+              Build-A-System Guide: displays, install kits, sensors, standby
+              instrument, engine monitoring, autopilot, radios, ADS-B and
+              traffic, enablements, safety equipment and accessories. Each
+              slide explains the options and shows Garmin July 2026 guide list
+              pricing. The final slide lists every selected part with unit and
+              extended list prices and the total, ready to print, download or
+              send to RWAS.
+            </p>
+            <p className="bs-body mt-3">
+              The result is preliminary hardware planning for RWAS review—not
+              an approved configuration or installed quote. Optional narration
+              is off by default; every slide&rsquo;s narration is also shown as
+              text.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
               <Suspense
@@ -60,7 +70,7 @@ export default function AxisSystemPlannerLanding() {
                     href="/axis-system-planner/certified?source=axis-landing"
                     className="bs-cta-primary"
                   >
-                    Certified aircraft
+                    Start certified aircraft interview
                   </Link>
                 }
               >
@@ -69,7 +79,7 @@ export default function AxisSystemPlannerLanding() {
                   defaultSource="axis-landing"
                   className="bs-cta-primary"
                 >
-                  Certified aircraft
+                  Start certified aircraft interview
                 </AxisPlannerAttributedLink>
               </Suspense>
               <Suspense
@@ -78,7 +88,7 @@ export default function AxisSystemPlannerLanding() {
                     href="/axis-system-planner/experimental?source=axis-landing"
                     className="bs-cta-secondary"
                   >
-                    Experimental aircraft
+                    Start experimental aircraft interview
                   </Link>
                 }
               >
@@ -87,7 +97,7 @@ export default function AxisSystemPlannerLanding() {
                   defaultSource="axis-landing"
                   className="bs-cta-secondary"
                 >
-                  Experimental aircraft
+                  Start experimental aircraft interview
                 </AxisPlannerAttributedLink>
               </Suspense>
             </div>
