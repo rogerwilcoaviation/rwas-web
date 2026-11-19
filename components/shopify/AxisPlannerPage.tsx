@@ -12,6 +12,7 @@ import type { AxisPlannerKind } from '@/lib/axis-planner-data';
 import { AXIS_ITEMS } from '@/lib/axis-planner-data';
 import { getSkuMedia } from '@/lib/shopify';
 import Link from 'next/link';
+import './axis-planner-print.css';
 
 export default async function AxisPlannerPage({ kind }: { kind: AxisPlannerKind }) {
   const certified = kind === 'certified';
@@ -61,7 +62,7 @@ export default async function AxisPlannerPage({ kind }: { kind: AxisPlannerKind 
     kind,
   );
   return (
-    <BroadsheetLayout>
+    <BroadsheetLayout className="axis-planner-document">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -73,7 +74,18 @@ export default async function AxisPlannerPage({ kind }: { kind: AxisPlannerKind 
         <CredentialsBar />
         <BulletinBar />
       </div>
-      <main id="main-content" tabIndex={-1} className="bs-stage">
+      <main id="main-content" tabIndex={-1} className="bs-stage axis-planner-document__main">
+        <header className="axis-print-masthead" aria-label="RWAS contact information">
+          {/* The regular site masthead is hidden in print. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/newspaper/images/logo-128.webp" alt="Roger Wilco Aviation Services logo" width="72" height="72" />
+          <div>
+            <strong>Roger Wilco Aviation Services</strong>
+            <div>Avionics Desk · KYKN · Yankton, SD</div>
+            <div>(605) 299-8178 · avionics@rwas.team</div>
+            <div>www.rogerwilcoaviation.com</div>
+          </div>
+        </header>
         <section className="hero-headline-group print:hidden">
           <p className="bs-kicker">Garmin AXIS System Planner</p>
           <h1 className="bs-headline bs-headline--hero">

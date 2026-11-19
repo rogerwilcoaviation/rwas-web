@@ -1,0 +1,44 @@
+.axis-print-masthead { display: none; }
+
+@media print {
+  @page { size: auto; margin: 0.45in; }
+  body:has(.axis-planner-document) .rwas-skip-link,
+  body:has(.axis-planner-document) .rwas-cart-floater,
+  body:has(.axis-planner-document) .jerry-widget-bubble,
+  body:has(.axis-planner-document) .jerry-widget-panel,
+  body:has(.axis-planner-document) .jerry-widget-backdrop { display: none !important; }
+  .axis-planner-document, .axis-planner-document__main {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    overflow: visible !important;
+  }
+  .axis-print-masthead {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 0 10px;
+    margin: 0 0 14px;
+    border-bottom: 2px solid #111;
+    color: #111;
+    font: 9pt/1.35 Arial, sans-serif;
+  }
+  .axis-print-masthead img { width: 56px; height: 56px; object-fit: contain; }
+  .axis-print-masthead strong { display: block; font-size: 14pt; }
+  .axis-interview-slide { overflow: visible !important; }
+  .axis-summary-table-wrap { overflow: visible !important; border: 0 !important; }
+  .axis-summary-table { width: 100% !important; min-width: 0 !important; table-layout: fixed; font-size: 8pt !important; }
+  .axis-summary-table th, .axis-summary-table td { padding: 5px 3px !important; overflow-wrap: anywhere; vertical-align: top; }
+  .axis-summary-table th:nth-child(1), .axis-summary-table td:nth-child(1) { width: 6%; }
+  .axis-summary-table th:nth-child(2), .axis-summary-table td:nth-child(2) { width: 34%; }
+  .axis-summary-table th:nth-child(3), .axis-summary-table td:nth-child(3) { width: 19%; }
+  .axis-summary-table th:nth-child(4), .axis-summary-table td:nth-child(4) { width: 7%; }
+  .axis-summary-table th:nth-child(5), .axis-summary-table td:nth-child(5),
+  .axis-summary-table th:nth-child(6), .axis-summary-table td:nth-child(6) { width: 17%; }
+  .axis-summary-table thead { display: table-header-group; }
+  .axis-summary-table tfoot { display: table-row-group; }
+  .axis-summary-table tr { break-inside: avoid; page-break-inside: avoid; }
+  .axis-summary-advisories { break-inside: avoid; page-break-inside: avoid; }
+}

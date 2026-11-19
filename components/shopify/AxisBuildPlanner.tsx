@@ -957,7 +957,7 @@ export default function AxisBuildPlanner({
 
       <section
         aria-labelledby="axis-interview-slide-heading"
-        className="border-2 border-black bg-white"
+        className="axis-interview-slide border-2 border-black bg-white"
       >
         <header className="border-b-2 border-black bg-neutral-100 px-5 py-4">
           <p className="bs-kicker">
@@ -1323,8 +1323,8 @@ export default function AxisBuildPlanner({
             </p>
 
             {summaryLines.length ? (
-              <div className="overflow-x-auto border-2 border-black">
-                <table className="w-full min-w-[680px] border-collapse text-left text-sm">
+              <div className="axis-summary-table-wrap overflow-x-auto border-2 border-black">
+                <table className="axis-summary-table w-full min-w-[680px] border-collapse text-left text-sm">
                   <caption className="sr-only">
                     Selected AXIS parts with manufacturer list unit price,
                     extended price and total
@@ -1418,7 +1418,7 @@ export default function AxisBuildPlanner({
             )}
 
             {advisories.length ? (
-              <div className="border-l-4 border-amber-500 bg-amber-50 p-4">
+              <div className="axis-summary-advisories border-l-4 border-amber-500 bg-amber-50 p-4">
                 <p className="font-bold">Review before submitting</p>
                 <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
                   {advisories.map((advisory) => (
