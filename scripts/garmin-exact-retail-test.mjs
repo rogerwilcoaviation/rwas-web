@@ -176,7 +176,56 @@ test('011-05779-10 keeps exact connector-kit identity and current List price', (
       },
     ],
   );
-  assert.ok(!OTC_RETAIL_PRODUCTS.some((policy) => policy.sku === '011-05779-11'));
+  assert.ok(
+    !OTC_RETAIL_PRODUCTS.some((policy) => policy.sku === '011-05779-11'),
+  );
+  assert.doesNotThrow(() => assertReviewedCommercialWrites([sku]));
+});
+
+test('011-02817-00 keeps exact operator-authorized heat-shrink identity and $15 price', () => {
+  const sku = '011-02817-00';
+  const policies = OTC_RETAIL_PRODUCTS.filter((policy) => policy.sku === sku);
+  assert.equal(policies.length, 1);
+  assert.deepEqual(
+    {
+      productId: policies[0].productId,
+      variantId: policies[0].variantId,
+      handle: policies[0].handle,
+    },
+    {
+      productId: 'gid://shopify/Product/8961772814555',
+      variantId: 'gid://shopify/ProductVariant/47408705863899',
+      handle: 'heat-shrink-kit-color-coded-gts-processor',
+    },
+  );
+  assert.match(policies[0].eligibilityAuthority, /John on 2026-11-25/);
+  assert.match(
+    policies[0].catalogObservation,
+    /does not show an OTC designation/,
+  );
+  assert.deepEqual(PUBLIC_PRICE_AUTHORITIES[sku], {
+    list_price: 15,
+    source:
+      'October 2026 Garmin aftermarket catalog exact row for 011-02817-00; customer List Price shown as $15.00. John authorized retail for this exact SKU on 2026-11-25 despite the catalog having no OTC designation.',
+    priceType: 'List',
+    accessed: '2026-11-25',
+  });
+  assert.ok(POLICY_DESCRIPTIONS[sku].includes('heat-shrink kit only'));
+  assert.ok(POLICY_DESCRIPTIONS[sku].includes('Quantity 7 adds seven kits'));
+  assert.deepEqual(
+    OPERATOR_CONFIRMED_CERTIFIED_OTC.filter((entry) => entry.sku === sku),
+    [
+      {
+        sku,
+        productId: 'gid://shopify/Product/8961772814555',
+        variantId: 'gid://shopify/ProductVariant/47408705863899',
+        handle: 'heat-shrink-kit-color-coded-gts-processor',
+      },
+    ],
+  );
+  assert.ok(
+    !OTC_RETAIL_PRODUCTS.some((policy) => policy.sku === '011-02817-01'),
+  );
   assert.doesNotThrow(() => assertReviewedCommercialWrites([sku]));
 });
 
@@ -290,11 +339,21 @@ test('November PARPRO RFQ exact-SKU retail authorizations stay bounded', () => {
     );
     assert.equal(PUBLIC_PRICE_AUTHORITIES[item.sku].list_price, item.listPrice);
     assert.equal(PUBLIC_PRICE_AUTHORITIES[item.sku].accessed, '2026-11-04');
-    assert.match(PUBLIC_PRICE_AUTHORITIES[item.sku].source, /Fresh authenticated Garmin DRC Quick Order/);
+    assert.match(
+      PUBLIC_PRICE_AUTHORITIES[item.sku].source,
+      /Fresh authenticated Garmin DRC Quick Order/,
+    );
     assert.ok(POLICY_DESCRIPTIONS[item.sku].includes(item.descriptionMarker));
     assert.deepEqual(
       OPERATOR_CONFIRMED_CERTIFIED_OTC.filter((p) => p.sku === item.sku),
-      [{ sku: item.sku, productId: item.productId, variantId: item.variantId, handle: item.handle }],
+      [
+        {
+          sku: item.sku,
+          productId: item.productId,
+          variantId: item.variantId,
+          handle: item.handle,
+        },
+      ],
     );
     assert.doesNotThrow(() => assertReviewedCommercialWrites([item.sku]));
   }
@@ -343,10 +402,10 @@ test('September exact-SKU contracts and mocked reconciliation', async (t) => {
   };
   try {
     assert.deepEqual(POLICY_SOURCE, fixture.policySource);
-    assert.equal(fixture.products.length, 16);
+    assert.equal(fixture.products.length, 17);
     assert.equal(
       new Set(fixture.products.map(({ policy }) => policy.sku)).size,
-      16,
+      17,
     );
     for (const expected of fixture.products) {
       const { policy, price, descriptionHtml, retailAuthority } = expected;

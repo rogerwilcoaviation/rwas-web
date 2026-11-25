@@ -203,6 +203,23 @@ const OTC_RETAIL_PRODUCTS = [
     removeDealerOnlyMetafield: true,
   },
   {
+    sku: '011-02817-00',
+    family: 'Color-coded heat-shrink kit for GTS processor',
+    eligibilityAuthority:
+      'Operator-confirmed exact-SKU retail authorization from John on 2026-11-25',
+    catalogObservation:
+      'The October 2026 Garmin aftermarket catalog identifies exact SKU 011-02817-00 as Heat Shrink Kit, Color Coded, GTS Processor at $15.00 List but does not show an OTC designation. John explicitly authorized this exact-SKU retail exception on 2026-11-25; no other Garmin product, kit, or suffix inherits it.',
+    productId: 'gid://shopify/Product/8961772814555',
+    variantId: 'gid://shopify/ProductVariant/47408705863899',
+    handle: 'heat-shrink-kit-color-coded-gts-processor',
+    removeTags: [
+      'garmin-family:certified-manual-review',
+      'otc-disabled',
+      'stock-check-required',
+    ],
+    removeDealerOnlyMetafield: true,
+  },
+  {
     sku: '336-00044-00',
     family: 'Size 22D crimp contact for 18 and 20 AWG wire',
     eligibilityAuthority:
@@ -713,6 +730,13 @@ const PUBLIC_PRICE_AUTHORITIES = {
     priceType: 'List',
     accessed: '2026-11-04',
   },
+  '011-02817-00': {
+    list_price: 15,
+    source:
+      'October 2026 Garmin aftermarket catalog exact row for 011-02817-00; customer List Price shown as $15.00. John authorized retail for this exact SKU on 2026-11-25 despite the catalog having no OTC designation.',
+    priceType: 'List',
+    accessed: '2026-11-25',
+  },
   '336-00044-00': {
     list_price: 5,
     source:
@@ -941,6 +965,8 @@ const POLICY_DESCRIPTIONS = {
     '<p><strong>Garmin GTX 335 / GTX 35R Connector Kit</strong></p><p>Garmin part number <strong>011-02977-00</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one Garmin connector kit to the order. Garmin DRC identifies this as the GTX 335 connector kit, and Garmin manual 190-01499-10 Revision 3 maps the same kit part number to the GTX 35R.</p><p>Confirm the exact transponder model and installation compatibility before ordering. This listing is for the connector kit only; it does not include a transponder, rack, backplate, antenna, installation, or return-to-service approval.</p><p>Garmin reported this exact item in stock when RWAS verified it on November 4, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
   '011-01360-00':
     '<p><strong>Garmin GTS 8XX Processor Connector Kit</strong></p><p>Garmin part number <strong>011-01360-00</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one connector-kit subassembly to the order. This listing is for the connector kit only; it does not include a GTS processor, installation, configuration, testing, or return-to-service approval.</p><p>Confirm the intended GTS equipment and installation compatibility before ordering.</p><p>Garmin reported this exact item in stock when RWAS verified it on November 4, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
+  '011-02817-00':
+    '<p><strong>Garmin Color-Coded Heat-Shrink Kit for GTS Processor</strong></p><p>Garmin part number <strong>011-02817-00</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one color-coded heat-shrink kit to the order. Quantity 7 adds seven kits.</p><p>This listing is for the heat-shrink kit only. It does not include a GTS processor, connector kit, installation, configuration, testing, or return-to-service approval. Confirm the intended GTS equipment and installation compatibility before ordering.</p>',
   '336-00044-00':
     '<p><strong>Garmin Size 22D Crimp Contact for 18 and 20 AWG Wire</strong></p><p>Garmin part number <strong>336-00044-00</strong>.</p><p><strong>Sold individually:</strong> quantity 1 adds one crimp contact to the order. This is not a pack, connector, backshell, or connector kit.</p><p>Confirm wire size, connector compatibility, approved tooling, installation data, and required authorized-personnel work before ordering or use.</p><p>Garmin reported this exact item in stock when RWAS verified it on November 4, 2026. Availability and delivery timing can change; RWAS confirms current Garmin availability after purchase.</p>',
   '211-63234-11':

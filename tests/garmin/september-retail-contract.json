@@ -374,6 +374,31 @@
       },
       "descriptionHtml": "<p><strong>Garmin Slide Lock Kit</strong></p><p>Garmin part number <strong>330-90006-02</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one slide lock kit to the order. Confirm connector size and compatibility with the intended Garmin installation before ordering.</p>",
       "retailAuthority": "operator-exception"
+    },
+    {
+      "policy": {
+        "sku": "011-02817-00",
+        "family": "Color-coded heat-shrink kit for GTS processor",
+        "eligibilityAuthority": "Operator-confirmed exact-SKU retail authorization from John on 2026-11-25",
+        "catalogObservation": "The October 2026 Garmin aftermarket catalog identifies exact SKU 011-02817-00 as Heat Shrink Kit, Color Coded, GTS Processor at $15.00 List but does not show an OTC designation. John explicitly authorized this exact-SKU retail exception on 2026-11-25; no other Garmin product, kit, or suffix inherits it.",
+        "productId": "gid://shopify/Product/8961772814555",
+        "variantId": "gid://shopify/ProductVariant/47408705863899",
+        "handle": "heat-shrink-kit-color-coded-gts-processor",
+        "removeTags": [
+          "garmin-family:certified-manual-review",
+          "otc-disabled",
+          "stock-check-required"
+        ],
+        "removeDealerOnlyMetafield": true
+      },
+      "price": {
+        "list_price": 15,
+        "source": "October 2026 Garmin aftermarket catalog exact row for 011-02817-00; customer List Price shown as $15.00. John authorized retail for this exact SKU on 2026-11-25 despite the catalog having no OTC designation.",
+        "priceType": "List",
+        "accessed": "2026-11-25"
+      },
+      "descriptionHtml": "<p><strong>Garmin Color-Coded Heat-Shrink Kit for GTS Processor</strong></p><p>Garmin part number <strong>011-02817-00</strong>.</p><p><strong>Order unit:</strong> quantity 1 adds one color-coded heat-shrink kit to the order. Quantity 7 adds seven kits.</p><p>This listing is for the heat-shrink kit only. It does not include a GTS processor, connector kit, installation, configuration, testing, or return-to-service approval. Confirm the intended GTS equipment and installation compatibility before ordering.</p>",
+      "retailAuthority": "operator-exception"
     }
   ]
 }

@@ -166,6 +166,12 @@ const OPERATOR_CONFIRMED_CERTIFIED_OTC = [
     handle: 'sub-assy-connector-kit-gts8xx',
   },
   {
+    sku: '011-02817-00',
+    productId: 'gid://shopify/Product/8961772814555',
+    variantId: 'gid://shopify/ProductVariant/47408705863899',
+    handle: 'heat-shrink-kit-color-coded-gts-processor',
+  },
+  {
     sku: '336-00044-00',
     productId: 'gid://shopify/Product/8961746305243',
     variantId: 'gid://shopify/ProductVariant/47408685940955',
