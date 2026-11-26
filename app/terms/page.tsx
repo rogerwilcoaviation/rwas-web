@@ -336,8 +336,7 @@ export default function TermsPage() {
               calendar position.
             </li>
             <li>
-              NDT inspections that take longer than one hour will be billed at
-              $150 per additional hour.
+              NDT inspections are billed at $180 per hour.
             </li>
           </ul>
         </div>
