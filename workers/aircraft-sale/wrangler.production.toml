@@ -98,3 +98,8 @@ new_sqlite_classes = ["JerryConversations"]
 [[services]]
 binding = "JERRY_WEBSITE_TRANSPORT"
 service = "rwas-jerry-accounts-20261101"
+
+# Listing photo thumbnails (env.IMAGES). Billed as unique transformations;
+# one per photo, stored in MEDIA.
+[images]
+binding = "IMAGES"

@@ -148,6 +148,41 @@ import {
 } from './conservation.mjs';
 // Versioned seller API. Requires explicitly provisioned Durable Object + private R2.
 // No legacy KV fallback: migration/import is a separately reviewed operation.
+// Listing photo thumbnails: one 640px WebP per photo, stored beside the original
+// (same listings/<id>/ prefix, so listing purges remove it). Generated at upload
+// and lazily for older photos. Never blocks or fails an upload.
+const THUMB_WIDTH = 640,
+  THUMB_MAX_REQUEST = 800,
+  THUMB_INPUT_LIMIT = 20 * 1024 * 1024,
+  thumbnailKey = (key) => key + '.w640.webp',
+  thumbnailEligible = (file) =>
+    !!file &&
+    file.category === 'photos' &&
+    ['image/jpeg', 'image/png', 'image/webp'].includes(file.type);
+async function storeThumbnail(env, key, input) {
+  if (!env.IMAGES || !env.MEDIA) return null;
+  try {
+    const result = await env.IMAGES.input(input)
+      .transform({ width: THUMB_WIDTH, fit: 'scale-down' })
+      .output({ format: 'image/webp', quality: 80 });
+    const bytes = await result.response().arrayBuffer();
+    if (!bytes.byteLength) return null;
+    await env.MEDIA.put(thumbnailKey(key), bytes, {
+      httpMetadata: { contentType: 'image/webp' },
+    });
+    return bytes;
+  } catch (error) {
+    console.warn('thumbnail generation failed', key, String(error?.message || error));
+    return null;
+  }
+}
+// Thumbnails only exist where the binding is configured; best-effort removal.
+async function deleteThumbnail(env, key) {
+  if (!env.IMAGES || !env.MEDIA) return;
+  try {
+    await env.MEDIA.delete(thumbnailKey(key));
+  } catch {}
+}
 const HOUR = 3600000,
   DAY = 86400000,
   MAX = 50 * 1024 * 1024;
@@ -420,6 +455,8 @@ const escape = (s) =>
         c
       ],
   );
+const publicMediaPath = (key) =>
+  '/api/aircraft-sale/files/' + encodeURIComponent(key);
 export function aircraftProductSchema(listing) {
   if (!['active', 'sold'].includes(listing.status)) return null;
   if (
@@ -436,6 +473,21 @@ export function aircraftProductSchema(listing) {
     name: listingTitle(listing),
     url: canonical,
   };
+  const photos = (listing.photos || [])
+    .filter((photo) => typeof photo.key === 'string' && photo.key)
+    .map(
+      (photo) => 'https://www.rogerwilcoaviation.com' + publicMediaPath(photo.key),
+    );
+  if (photos.length) product.image = photos;
+  if (typeof listing.description === 'string' && listing.description.trim())
+    product.description = listing.description;
+  const make = typeof listing.make === 'string' ? listing.make.trim() : '';
+  if (
+    make &&
+    make.toLowerCase() !== 'unknown' &&
+    product.name.toLowerCase().includes(make.toLowerCase())
+  )
+    product.brand = { '@type': 'Brand', name: make };
   if (
     listing.price &&
     Number.isFinite(Number(listing.price)) &&
@@ -470,7 +522,7 @@ function publicPage(l) {
   ];
   const media = mediaItems
     .map(({ file, type }, index) => {
-      const source = '/api/aircraft-sale/files/' + encodeURIComponent(file.key);
+      const source = publicMediaPath(file.key);
       const id = 'listing-media-' + index;
       const selector =
         mediaItems.length > 1
@@ -713,7 +765,7 @@ function publicPage(l) {
         @font-face{font-family:'Source Serif 4';src:url('/fonts/source-serif-4/source-serif-4-latin-roman.woff2') format('woff2');font-style:normal;font-weight:200 900;font-display:swap}
         *{box-sizing:border-box}body{margin:0;background:#f4efe3;color:#0f1418;font:15px/1.55 Arial,sans-serif}a{color:inherit}a:focus-visible,summary:focus-visible{outline:3px solid #9e7826;outline-offset:3px}.broadsheet{min-height:100vh;position:relative;isolation:isolate}.broadsheet:before{content:'';position:fixed;inset:0;background:url('/newspaper/images/enr_h05.webp') center/cover no-repeat;opacity:.25;z-index:-1;pointer-events:none}.skip-link{position:absolute;left:16px;top:-100px;z-index:10;background:#fbf7ec;padding:10px}.skip-link:focus{top:10px}.bs-dateline{background:#0f1418;color:#f4efe3;border-bottom:2px solid #9e7826;font-size:11px;letter-spacing:.12em;text-transform:uppercase}.bs-dateline__inner{max-width:1200px;margin:auto;padding:8px 28px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.bs-dateline__left,.bs-dateline__right{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.bs-dateline a{text-decoration:none;color:#e6cf8f}.bs-masthead{background:#fbf7ec;border-top:1px solid #9e7826;border-bottom:6px double #9e7826;padding:22px 28px 18px}.bs-masthead__inner{max-width:1200px;margin:auto;display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:24px;align-items:center}.bs-masthead__logo{width:84px;height:84px;object-fit:contain}.bs-masthead__titles{text-align:center}.bs-masthead__brand{font:900 clamp(27px,3.6vw,40px)/1.05 'Source Serif 4',Georgia,serif;text-decoration:none}.bs-masthead__tagline{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#2a333c;margin-top:8px}.bs-masthead__cert{text-align:right;font-size:11px;letter-spacing:.15em;text-transform:uppercase}.bs-nav{background:#fbf7ec;border-bottom:1px solid #2a333c;padding:12px 28px}.bs-nav__desktop,.bs-nav__mobile-links{max-width:1200px;margin:auto;display:flex;justify-content:center;flex-wrap:wrap;gap:8px}.bs-nav a{background:#e6cf8f;padding:4px 10px;text-decoration:none;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}.bs-nav a:hover,.bs-nav a[aria-current=page]{background:#c19a3f}.bs-nav__mobile{display:none}.bs-credentials{background:#fbf7ec;border-bottom:1px solid #c8bfa8;padding:10px 24px;display:flex;gap:12px 22px;justify-content:center;flex-wrap:wrap;font-size:11px;letter-spacing:.1em;text-transform:uppercase}.bs-dealer-plate{border:1px solid #2a333c;padding:3px 10px}.page-shell{max-width:1200px;margin:auto;padding:26px 28px 48px}main{max-width:1040px;margin:auto}.listing-header,main>section{background:#fbf7ec;border:1px solid #2a333c;padding:22px 24px;margin:0 0 24px}.listing-header{box-shadow:4px 4px 0 #0f1418}.section-kicker{display:inline-block;color:#7a5a1e;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin:0 0 10px}h1,h2,h3{font-family:'Source Serif 4',Georgia,serif;line-height:1.2;color:#0f1418}h1{font-size:clamp(30px,5vw,44px);margin:0}h2{font-size:25px;margin:0 0 16px}h3{font-size:20px;margin:24px 0 10px}.price{font:700 24px/1.3 'Source Serif 4',Georgia,serif;margin:12px 0 0}.listing-status{margin:8px 0 0;color:#3f4a55;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.media{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.media:empty{display:none}.media-item{order:0;width:100%;min-width:0}.media img,.media video{display:block;width:100%;max-height:600px;object-fit:contain;background:#efe7d2}.media-counter{margin:6px 0;color:#3f4a55;font-size:13px}.media-select{position:absolute;opacity:0;width:1px;height:1px}.media-prompt{order:1;width:100%;margin:2px 0;font-size:13px}.media-choice{order:2;display:inline-flex;align-items:center;justify-content:center;min-width:40px;min-height:40px;border:1px solid #2a333c;cursor:pointer;background:#fbf7ec;font-weight:700}.media-select:checked+.media-choice{background:#9e7826;color:#fff}.media-select:focus-visible+.media-choice{outline:3px solid #9e7826;outline-offset:3px}.media-select:not(:checked)+.media-choice+.media-item{display:none}.details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin:0;border-top:2px solid #2a333c}.detail-row{display:grid;grid-template-columns:minmax(125px,45%) minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid #c8bfa8;min-width:0}.detail-row dt{font-size:13px;font-weight:700;color:#3f4a55}.detail-row dd{margin:0;min-width:0;overflow-wrap:anywhere;font-size:15px;font-weight:600}.spec-group h3{border-bottom:1px solid #2a333c;padding-bottom:8px}.spec-group .details-grid{border-top:0}.copy{white-space:pre-wrap;overflow-wrap:anywhere}.condition-attribution{font-size:13px;color:#3f4a55}.condition-row{grid-template-columns:minmax(0,1fr);align-content:start}.condition-rating{display:flex;flex-wrap:wrap;gap:5px 10px;align-items:center}.condition-stars{font-size:22px;letter-spacing:2px;color:#7a5a1e}.condition-notes{font-weight:400;margin:8px 0 0}.seller-contact{display:inline-block;background:#9e7826;border:1px solid #2a333c;padding:10px 16px;font-weight:700;text-decoration:none}.seller-contact:hover{background:#c19a3f}.bs-footer{background:#1a2128;color:#f4efe3;border-top:6px double #9e7826;padding:22px 28px;font-size:12px}.bs-footer__policies,.bs-footer__inner{max-width:1200px;margin:auto;display:flex;flex-wrap:wrap;gap:12px 20px;justify-content:space-between}.bs-footer__policies{justify-content:center;padding-bottom:18px}.bs-footer a{color:#e6cf8f}.bs-footer__brand{font-weight:700}.bs-footer__copy{color:#d2cbbd}
         @media(max-width:760px){.bs-masthead{padding:18px 16px}.bs-masthead__inner{grid-template-columns:64px minmax(0,1fr);gap:12px}.bs-masthead__logo{width:64px;height:64px}.bs-masthead__cert{grid-column:1/-1;text-align:center}.bs-masthead__tagline{letter-spacing:.12em;font-size:9px}.bs-nav{padding:10px 16px}.bs-nav__desktop{display:none}.bs-nav__mobile{display:block}.bs-nav__mobile summary{display:flex;justify-content:space-between;gap:10px;cursor:pointer;font-weight:700}.bs-nav__mobile summary small{font-weight:400}.bs-nav__mobile-links{padding-top:12px;justify-content:flex-start}.broadsheet:before{background-image:none}.page-shell{padding:22px 16px 32px}.bs-dateline__inner{padding:8px 16px}.bs-dateline__volume{display:none}.bs-credentials{padding:10px 16px;gap:8px;font-size:10px}.listing-header,main>section{padding:18px 16px}.details-grid{grid-template-columns:minmax(0,1fr)}.detail-row{grid-template-columns:minmax(110px,42%) minmax(0,1fr)}.condition-row{grid-template-columns:minmax(0,1fr)}.bs-footer{padding:20px 16px}.bs-footer__inner{justify-content:center;text-align:center}}
-      </style></head><body><div class="broadsheet"><a class="skip-link" href="#main-content">Skip to listing</a><div class="bs-dateline"><div class="bs-dateline__inner"><div class="bs-dateline__left"><span>Current Edition</span><span class="bs-dateline__volume">Vol. XL · No. 1</span><span>rogerwilcoaviation.com</span></div><div class="bs-dateline__right"><a href="tel:+16052998178">(605) 299-8178</a><a href="/contact">Book Service</a></div></div></div><header class="bs-masthead"><div class="bs-masthead__inner"><a href="/" aria-label="RWAS homepage"><img class="bs-masthead__logo" src="/newspaper/images/logo-128.webp" alt="Roger Wilco Aviation Services" width="128" height="128"></a><div class="bs-masthead__titles"><a class="bs-masthead__brand" href="/">Roger Wilco Aviation Services</a><div class="bs-masthead__tagline">FAA Cert. Repair Station · Avionics · Airframe &amp; Powerplant · NDT · Fabrication</div></div><div class="bs-masthead__cert">Cert. No. RWSR491E<br>Aviation Exchange</div></div></header><nav class="bs-nav" aria-label="Primary"><div class="bs-nav__desktop">` +
+      </style></head><body><div class="broadsheet"><a class="skip-link" href="#main-content">Skip to listing</a><div class="bs-dateline"><div class="bs-dateline__inner"><div class="bs-dateline__left"><span>Current Edition</span><span class="bs-dateline__volume">Vol. XL · No. 1</span><span>rogerwilcoaviation.com</span></div><div class="bs-dateline__right"><a href="tel:+16052998178">(605) 299-8178</a><a href="/contact">Book Service</a></div></div></div><header class="bs-masthead"><div class="bs-masthead__inner"><a href="/" aria-label="RWAS homepage"><img class="bs-masthead__logo" src="/newspaper/images/logo-128.webp" alt="Roger Wilco Aviation Services" width="128" height="128"></a><div class="bs-masthead__titles"><a class="bs-masthead__brand" href="/">Roger Wilco Aviation Services</a><div class="bs-masthead__tagline">FAA Cert. Repair Station · Limited Airframe, Instrument &amp; Radio · NDT · Fabrication</div></div><div class="bs-masthead__cert">Cert. No. RWSR491E<br>Aviation Exchange</div></div></header><nav class="bs-nav" aria-label="Primary"><div class="bs-nav__desktop">` +
       navigation +
       '</div><details class="bs-nav__mobile"><summary><span>Menu</span><small>Services · Store · Contact</small></summary><div class="bs-nav__mobile-links">' +
       navigation +
@@ -1024,6 +1076,7 @@ export class SellerStore {
         try {
           if (!this.env.MEDIA) throw Error('Media storage unavailable.');
           await this.env.MEDIA.delete(receipt.file.key);
+          await deleteThumbnail(this.env, receipt.file.key);
         } catch {
           // Keep the bounded reservation until deletion succeeds. Expired IDs
           // are rejected independently, so cleanup cannot enable a replay.
@@ -1291,6 +1344,7 @@ export class SellerStore {
           if (!this.rollbackState.files[k]) {
             try {
               await this.env.MEDIA.delete(k);
+              await deleteThumbnail(this.env, k);
             } catch {}
           }
         this.state = this.rollbackState;
@@ -4864,6 +4918,35 @@ export class SellerStore {
         if (f.ownerId !== u.id || !l || l.status === 'deleted')
           fail(404, 'File not found.');
       }
+      const requestedWidth = Number(url.searchParams.get('w') || 0);
+      if (
+        this.env.IMAGES &&
+        thumbnailEligible(f) &&
+        !req.headers.get('Range') &&
+        requestedWidth > 0 &&
+        requestedWidth <= THUMB_MAX_REQUEST
+      ) {
+        let thumbnail = (await this.env.MEDIA.get(thumbnailKey(key)))?.body;
+        if (!thumbnail && f.size <= THUMB_INPUT_LIMIT) {
+          const original = await this.env.MEDIA.get(key);
+          if (original) thumbnail = await storeThumbnail(this.env, key, original.body);
+        }
+        if (thumbnail)
+          return new Response(thumbnail, {
+            headers: {
+              'Content-Type': 'image/webp',
+              // Seller media stays no-store (REVIEW.md): unpublished or deleted
+              // listings must not linger in shared or browser caches.
+              'Cache-Control': 'no-store',
+              'X-Content-Type-Options': 'nosniff',
+              'Content-Disposition':
+                'inline; filename="' +
+                f.name.replace(/[^a-zA-Z0-9._-]/g, '_') +
+                '.webp"',
+              'Content-Security-Policy': "sandbox; default-src 'none'",
+            },
+          });
+      }
       const range = req.headers.get('Range');
       let offset = 0,
         length = f.size;
@@ -5835,6 +5918,8 @@ export class SellerStore {
       await this.env.MEDIA.put(receipt.file.key, bytes, {
         httpMetadata: { contentType: type },
       });
+      if (thumbnailEligible({ category, type }) && size <= THUMB_INPUT_LIMIT)
+        await storeThumbnail(this.env, receipt.file.key, new Response(bytes).body);
       // Commit file metadata, completion receipt and the one listing revision
       // atomically. Keep the live state at the durable pending checkpoint while
       // saving so generic error rollback cannot delete this stable R2 object.
@@ -5892,6 +5977,7 @@ export class SellerStore {
         this.rollbackState = structuredClone(this.state);
       }
       await this.env.MEDIA.delete(f.key);
+      await deleteThumbnail(this.env, f.key);
       delete this.state.files[f.key];
       return reply({ ok: true });
     }
