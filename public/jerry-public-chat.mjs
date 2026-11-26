@@ -1,4 +1,9 @@
 // Established public /api/chat only. No seller identity, storage, actions or tools.
+// Seller-panel guidance only makes sense on the aircraft-for-sale pages; on the
+// rest of the site it confuses avionics/maintenance customers.
+const onSellerPage = () =>
+  /^\/aircraft-for-sale(?:\/|$)/.test(location.pathname || '');
+const sellerNote = (text) => (onSellerPage() ? ' ' + text : '');
 export async function requestPublicJerry(messages, signal) {
   try {
     const response = await fetch('https://rogerwilcoaviation.com/api/chat', {
@@ -23,7 +28,8 @@ export async function requestPublicJerry(messages, signal) {
   } catch {
     throw Object.assign(
       Error(
-        'Public chat is temporarily unavailable. You can still use the secure seller panel.',
+        'Public chat is temporarily unavailable. Call (605) 299-8178 or email avionics@rwas.team.' +
+          sellerNote('You can still use the secure seller panel.'),
       ),
       { code: 'JERRY_ATTEMPT_UNCERTAIN', status: 503 },
     );
@@ -40,7 +46,9 @@ export function mountJerryPublicChat({
   const send = panel.querySelector('.jerry-widget-send');
   const error = panel.querySelector('.jerry-widget-error');
   const initial =
-    'Captain Jerry here. Ask about RWAS services, pricing and scheduling guidance, or how to reach the shop. Seller records and drafts stay in the secure seller panel. Public chat may be processed by OpenAI; please do not share sensitive information.';
+    'Captain Jerry here. Ask about RWAS services, pricing and scheduling guidance, or how to reach the shop.' +
+    sellerNote('Seller records and drafts stay in the secure seller panel.') +
+    ' Public chat may be processed by OpenAI; please do not share sensitive information.';
   let history = [{ role: 'assistant', content: initial }];
   let generation = 0;
   let pending;
@@ -51,7 +59,8 @@ export function mountJerryPublicChat({
   panel.querySelector('.jerry-widget-attach').hidden = true;
   panel.querySelector('.jerry-service-open').hidden = true;
   panel.querySelector('.jerry-widget-privacy').textContent =
-    'Public RWAS information only. Do not enter passwords, payment details or private records. This conversation stays in this page; seller drafts require the secure seller panel.';
+    'Public RWAS information only. Do not enter passwords, payment details or private records. This conversation stays in this page.' +
+    sellerNote('Seller drafts require the secure seller panel.');
   input.maxLength = 2000;
   function open(value) {
     panel.style.display = value ? 'flex' : 'none';
@@ -113,7 +122,8 @@ export function mountJerryPublicChat({
     } catch {
       if (generation === current) {
         error.textContent =
-          'Chat is temporarily unavailable. Call (605) 299-8178 or email avionics@rwas.team. You can still use the secure seller panel.';
+          'Chat is temporarily unavailable. Call (605) 299-8178 or email avionics@rwas.team.' +
+          sellerNote('You can still use the secure seller panel.');
         error.style.display = 'block';
       }
     } finally {
@@ -157,6 +167,8 @@ export function mountJerryPublicChat({
     render();
   });
   render();
-  open(false);
+  // "Ask Jerry" clicked before the deferred widget mounted leaves #ask-jerry in
+  // the URL with no handler having run; honor it now.
+  open(location.hash === '#ask-jerry');
   return true;
 }
