@@ -177,7 +177,7 @@ export default function RootLayout({
                         'Thursday',
                         'Friday',
                       ],
-                      opens: '07:00',
+                      opens: '08:00',
                       closes: '17:00',
                     },
                   ],

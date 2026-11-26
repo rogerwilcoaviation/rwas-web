@@ -362,15 +362,6 @@
       }
     },
     {
-      "id": "ad220b318097b1c2b658a580fd46c1c60206ff5c207b996e0adec62eaf5e220c",
-      "text": "FAA CERT. REPAIR STATION · AVIONICS · AIRFRAME & POWERPLANT · NDT · FABRICATION",
-      "language": "en",
-      "translations": {
-        "es": "FAA CERT. ESTACIÓN DE REPARACIÓN · AVIÓNICA · ESTRUCTURA Y MOTOR · NDT · FABRICACIÓN",
-        "pt-BR": "FAA CERT. REPAIR STATION · AVIONICS · AIRFRAME & POWERPLANT · NDT · FABRICAÇÃO"
-      }
-    },
-    {
       "id": "09f185ad034b921704c57fda46b715d469f8778218afa33a1aca830bd6838ced",
       "text": "FAA Certificate RWSR491E. All work by certificated mechanics with full logbook documentation.",
       "language": "en",
@@ -875,15 +866,6 @@
       }
     },
     {
-      "id": "939e084c04fdfd47afe5f8c244bedd54a734be4ac373cc2701a7d48a95643eae",
-      "text": "Powerplant diagnostics, mag checks, compression testing, and engine runs.",
-      "language": "en",
-      "translations": {
-        "es": "Diagnósticos del motor, revisiones magnéticas, pruebas de compresión y pruebas de motor.",
-        "pt-BR": "Diagnósticos de motor, verificações magnéticas, teste de compressão e testes de funcionamento do motor."
-      }
-    },
-    {
       "id": "53b2134170b73e94255abb2250ccccb2b22b287f82224901f4d99988e7d55427",
       "text": "Precision Piper rigging tools · Tiered pricing",
       "language": "en",
@@ -1343,15 +1325,6 @@
       }
     },
     {
-      "id": "8b79ea0686ade3fdeef00c33f77233bd6343c5977cfe7a9f4d50377c71aa25f6",
-      "text": "rogerwilcoaviation.com, Aircraft Spruce, Amazon (coming soon). Made by mechanics, for mechanics.",
-      "language": "en",
-      "translations": {
-        "es": "rogerwilcoaviation.com, Aircraft Spruce, Amazon (próximamente). Hecho por mecánicos, para mecánicos.",
-        "pt-BR": "rogerwilcoaviation.com, Aircraft Spruce, Amazon (em breve). Feito por mecânicos, para mecânicos."
-      }
-    },
-    {
       "id": "d760ed6d182ef51e6dc31a06e762f6e8f38c1032d732745d14fe7dcafdec1368",
       "text": "wheels-up since 2022",
       "language": "en",
@@ -1565,15 +1538,6 @@
       "translations": {
         "es": "Mensaje *",
         "pt-BR": "Mensagem *"
-      }
-    },
-    {
-      "id": "476f17a26117ef04fad4fcbb3817233e13723bf44fb28b02e14a1b8ef0271f27",
-      "text": "Mon–Fri, 7:00a–5:00p CT",
-      "language": "en",
-      "translations": {
-        "es": "Lun–Vie, 7:00a–5:00p CT",
-        "pt-BR": "Seg–Sex, 7:00a–5:00p CT"
       }
     },
     {
@@ -1916,6 +1880,42 @@
       "translations": {
         "es": "Inicio de sesión de usuario",
         "pt-BR": "Login do Usuário"
+      }
+    },
+    {
+      "id": "02867c16c1cce01e000f85f58953aed4ec044708e25ff39b0e043b6caf44aebd",
+      "text": "FAA CERT. REPAIR STATION · LIMITED AIRFRAME, INSTRUMENT & RADIO · NDT · FABRICATION",
+      "language": "en",
+      "translations": {
+        "es": "FAA CERT. ESTACIÓN DE REPARACIÓN · ESTRUCTURA, INSTRUMENTOS Y RADIO (LIMITADOS) · NDT · FABRICACIÓN",
+        "pt-BR": "FAA CERT. REPAIR STATION · ESTRUTURA, INSTRUMENTOS E RÁDIO (LIMITADOS) · NDT · FABRICAÇÃO"
+      }
+    },
+    {
+      "id": "c97d7c5973a06569ae7ad3a48ecb5f7ef1782a3134c211ab14096ae0a1c44ff5",
+      "text": "Powerplant diagnostics, ignition checks, compression testing, and engine runs.",
+      "language": "en",
+      "translations": {
+        "es": "Diagnósticos del motor, revisiones del encendido, pruebas de compresión y pruebas de motor.",
+        "pt-BR": "Diagnósticos de motor, verificações de ignição, teste de compressão e testes de funcionamento do motor."
+      }
+    },
+    {
+      "id": "a4d26b43032e7d3e2fe51192cdb8c44c58baa58dc75e879200260d4fb635c310",
+      "text": "rogerwilcoaviation.com and Aircraft Spruce. Made by mechanics, for mechanics.",
+      "language": "en",
+      "translations": {
+        "es": "rogerwilcoaviation.com y Aircraft Spruce. Hecho por mecánicos, para mecánicos.",
+        "pt-BR": "rogerwilcoaviation.com e Aircraft Spruce. Feito por mecânicos, para mecânicos."
+      }
+    },
+    {
+      "id": "d0e562eeab2b6f25bb9ef13fc16ae6f30cae7b4c122f3b78b09ac1710b0e3087",
+      "text": "Mon–Fri, 8:00a–5:00p CT",
+      "language": "en",
+      "translations": {
+        "es": "Lun–Vie, 8:00a–5:00p CT",
+        "pt-BR": "Seg–Sex, 8:00a–5:00p CT"
       }
     }
   ]

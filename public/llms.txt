@@ -5,7 +5,7 @@
 - **Phone:** (605) 299-8178
 - **Email:** avionics@rwas.team
 - **Repair Station Headquarters:** 3309 Douglas Avenue Unit #3, Yankton, SD 57078
-- **Hours:** Monday–Friday, 7:00 AM – 5:00 PM CT
+- **Hours:** Monday–Friday, 8:00 AM – 5:00 PM CT
 - **Certifications:** FAA Part 145 Certificate RWSR491E, Certified Garmin Dealer, NBAA Member, AEA Member
 
 ## Core Pages
@@ -78,7 +78,7 @@ Precision flight-control rigging reference tools for Piper aircraft, designed in
 - Covers stabilator, rudder, aileron, flap, and bell crank rigging
 - Compatible with Piper PA-28, PA-30, PA-31, and PA-36 series
 - Current tool prices and availability are shown on the product pages in the Papa-Alpha collection
-- Available at: rogerwilcoaviation.com, Aircraft Spruce, and Amazon (coming soon)
+- Available at: rogerwilcoaviation.com and Aircraft Spruce
 - Shop collection: https://www.rogerwilcoaviation.com/collections/papa-alpha-tools
 - Portuguese application guide: https://www.rogerwilcoaviation.com/pt-br/papa-alpha
 - Spanish application guide: https://www.rogerwilcoaviation.com/es/papa-alpha

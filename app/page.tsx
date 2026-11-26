@@ -425,8 +425,8 @@ export default function Home() {
                 <li className="bs-svc">
                   <p className="bs-svc-name">Available At</p>
                   <p className="bs-svc-desc">
-                    rogerwilcoaviation.com, Aircraft Spruce, Amazon (coming
-                    soon). Made by mechanics, for mechanics.
+                    rogerwilcoaviation.com and Aircraft Spruce. Made by
+                    mechanics, for mechanics.
                   </p>
                 </li>
               </ul>

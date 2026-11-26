@@ -59,18 +59,20 @@ export default function AboutPage() {
           </p>
           <div className="bs-byline">
             Founded 2022 &nbsp;&middot;&nbsp; Avionics &middot; Airframe
-            &middot; Powerplant &middot; NDT &middot; Fabrication
+            &middot; NDT &middot; A&amp;P Maintenance &middot; Fabrication
             &nbsp;&middot;&nbsp; Authorized Garmin Dealer
           </div>
           <div className="bs-body">
             <p>
               Roger Wilco Aviation Services is an FAA-certificated repair
-              station at KYKN in Yankton, providing full-spectrum airframe,
-              powerplant, avionics, and non-destructive testing services to
-              general aviation, corporate, and commercial operators across the
-              Northern Plains. The station is authorized under Certificate No.
-              RWSR491E for a complete range of maintenance, repair, and
-              alteration work.
+              station at KYKN in Yankton, providing airframe, avionics, and
+              non-destructive testing services to general aviation, corporate,
+              and commercial operators across the Northern Plains. Under
+              Certificate No. RWSR491E, the station holds Limited Airframe,
+              Limited Instrument, Limited Radio, and NDT Inspection &amp;
+              Testing ratings. Engine and other maintenance outside those
+              ratings is performed and returned to service by certificated
+              A&amp;P mechanics.
             </p>
           </div>
         </section>
@@ -102,9 +104,10 @@ export default function AboutPage() {
                 </p>
                 <p>
                   That steady expansion led to today&rsquo;s FAA-certificated repair
-                  station: one Yankton operation combining airframe, powerplant,
-                  avionics, NDT, and fabrication capabilities for general
-                  aviation, corporate, and commercial operators.
+                  station: one Yankton operation combining repair-station
+                  airframe, avionics, and NDT capability with A&amp;P
+                  maintenance and in-house fabrication for general aviation,
+                  corporate, and commercial operators.
                 </p>
               </div>
             </Specimen>
@@ -307,7 +310,7 @@ export default function AboutPage() {
                   plagued Piper rigging for decades. Papa-Alpha tools are now
                   shipped worldwide to maintenance shops, flight schools, and
                   individual owners, and are available through
-                  rogerwilcoaviation.com, Aircraft Spruce, and Amazon.
+                  rogerwilcoaviation.com and Aircraft Spruce.
                 </p>
               </div>
             </Specimen>
@@ -410,7 +413,7 @@ export default function AboutPage() {
               <p>
                 Monday &ndash; Friday
                 <br />
-                7:00 AM &ndash; 5:00 PM CT
+                8:00 AM &ndash; 5:00 PM CT
               </p>
             </Specimen>
 

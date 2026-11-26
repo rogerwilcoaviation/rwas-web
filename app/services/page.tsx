@@ -133,7 +133,7 @@ const serviceFaq = [
     name: 'What are your business hours?',
     acceptedAnswer: {
       '@type': 'Answer',
-      text: 'Monday through Friday, 7:00 AM to 5:00 PM Central Time.',
+      text: 'Monday through Friday, 8:00 AM to 5:00 PM Central Time.',
     },
   },
   {

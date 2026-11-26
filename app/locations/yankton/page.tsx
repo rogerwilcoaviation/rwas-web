@@ -298,7 +298,7 @@ export default function YanktonLocationPage() {
               <p>
                 Monday&ndash;Friday
                 <br />
-                7:00 AM &ndash; 5:00 PM CT
+                8:00 AM &ndash; 5:00 PM CT
               </p>
             </Specimen>
 

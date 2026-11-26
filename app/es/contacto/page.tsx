@@ -116,7 +116,7 @@ export default function SpanishContactPage() {
               <p>
                 <a href="tel:+16052998178">+1 605 299 8178</a>
                 <br />
-                Lunes a viernes, 7:00–17:00, hora central de EE. UU.
+                Lunes a viernes, 8:00–17:00, hora central de EE. UU.
               </p>
             </Specimen>
             <Specimen as="section">

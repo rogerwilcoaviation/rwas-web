@@ -23,7 +23,7 @@ export default function Masthead({
   logoSrc = '/newspaper/images/logo-128.webp',
   logoAlt = 'Roger Wilco Aviation Services',
   brand = 'Roger Wilco Aviation Services',
-  tagline = 'FAA CERT. REPAIR STATION \u00b7 AVIONICS \u00b7 AIRFRAME & POWERPLANT \u00b7 NDT \u00b7 FABRICATION',
+  tagline = 'FAA CERT. REPAIR STATION \u00b7 LIMITED AIRFRAME, INSTRUMENT & RADIO \u00b7 NDT \u00b7 FABRICATION',
   certMain = 'Cert. No. RWSR491E',
   certLocation = 'RWAS Avionics Desk \u00b7 KYKN \u00b7 Yankton, SD',
 }: MastheadProps) {

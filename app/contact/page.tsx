@@ -107,7 +107,7 @@ export default function ContactPage() {
               <dt>Phone</dt>
               <dd>
                 <a href="tel:+16052998178">(605) 299-8178</a>
-                <span className="contact-hours">Mon–Fri, 7:00a–5:00p CT</span>
+                <span className="contact-hours">Mon–Fri, 8:00a–5:00p CT</span>
               </dd>
             </div>
             <div>

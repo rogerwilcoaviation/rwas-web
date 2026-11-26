@@ -143,7 +143,7 @@ for (const [label, value] of [
   ],
   ['structured locality', '"addressLocality":"Yankton"'],
   ['structured postal code', '"postalCode":"57078"'],
-  ['structured opening time', '"opens":"07:00"'],
+  ['structured opening time', '"opens":"08:00"'],
   ['structured closing time', '"closes":"17:00"'],
   ['structured legal name', '"legalName":"Roger Wilco Aviation Services LLC"'],
 ]) {

@@ -117,7 +117,7 @@ export default function PortugueseContactPage() {
               <p>
                 <a href="tel:+16052998178">+1 605 299 8178</a>
                 <br />
-                Segunda a sexta, 7h–17h, Central Time (EUA).
+                Segunda a sexta, 8h–17h, Central Time (EUA).
               </p>
             </Specimen>
             <Specimen as="section">
