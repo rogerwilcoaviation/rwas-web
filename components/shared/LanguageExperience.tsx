@@ -94,10 +94,10 @@ export default function LanguageExperience() {
                   lang={choice}
                   aria-label={
                     choice === 'en'
-                      ? 'English'
+                      ? 'EN English'
                       : choice === 'pt-BR'
-                        ? 'Português do Brasil'
-                        : 'Español'
+                        ? 'PT-BR Português do Brasil'
+                        : 'ES Español'
                   }
                   aria-pressed={language === choice}
                   onClick={() => choose(choice)}

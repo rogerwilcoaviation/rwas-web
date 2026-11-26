@@ -251,6 +251,7 @@ function ProductTile({
       <Link
         href={`/products/${encodeURIComponent(product.handle)}`}
         className="group block"
+        aria-label={displayImage ? undefined : product.title}
       >
         <div className="relative aspect-[4/3] bg-[#f5f3ef]">
           {displayImage ? (
@@ -274,7 +275,14 @@ function ProductTile({
               decoding="async"
               className="h-full w-full object-contain p-6 transition duration-300 group-hover:scale-[1.03]"
             />
-          ) : null}
+          ) : (
+            <span
+              aria-hidden="true"
+              className="flex h-full w-full items-center justify-center text-xs font-semibold uppercase tracking-[0.18em] text-black/70"
+            >
+              Image coming soon
+            </span>
+          )}
         </div>
       </Link>
       <div className="space-y-3 p-5">

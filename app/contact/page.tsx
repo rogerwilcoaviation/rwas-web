@@ -113,13 +113,13 @@ export default function ContactPage() {
             <div>
               <dt>Avionics email</dt>
               <dd>
-                <a href="mailto:service@rwas.team">service@rwas.team</a>
+                <a href="mailto:avionics@rwas.team">avionics@rwas.team</a>
               </dd>
             </div>
             <div>
               <dt>General / service</dt>
               <dd>
-                <a href="mailto:avionics@rwas.team">avionics@rwas.team</a>
+                <a href="mailto:service@rwas.team">service@rwas.team</a>
               </dd>
             </div>
             <div>

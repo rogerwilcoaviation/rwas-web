@@ -538,7 +538,7 @@ export default function Home() {
                     <a href="/services/rotax-repair">Rotax Engine Support</a>
                   </p>
                   <p className="bs-svc-desc">
-                    Powerplant diagnostics, mag checks, compression testing, and
+                    Powerplant diagnostics, ignition checks, compression testing, and
                     engine runs.
                   </p>
                 </li>

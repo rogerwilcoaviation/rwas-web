@@ -92,7 +92,7 @@
         value === 'en' ? 'EN' : value === 'pt-BR' ? 'PT-BR' : 'ES';
       button.setAttribute(
         'aria-label',
-        { en: 'English', 'pt-BR': 'Português do Brasil', es: 'Español' }[value],
+        { en: 'EN English', 'pt-BR': 'PT-BR Português do Brasil', es: 'ES Español' }[value],
       );
       button.setAttribute('aria-pressed', String(value === language));
       button.onclick = () => choose(value);

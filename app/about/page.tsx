@@ -120,10 +120,10 @@ export default function AboutPage() {
               <div className="ryan-about-inline">
                 <figure className="ryan-about-inline__portrait">
                   <Image
-                    src="/images/about/john-halsted-portrait.png"
+                    src="/images/about/john-halsted-portrait.webp"
                     alt="John Halsted, founder and president of Roger Wilco Aviation Services"
-                    width={1254}
-                    height={1254}
+                    width={1040}
+                    height={1040}
                   />
                   <figcaption>
                     John Halsted · Founder &amp; President · Yankton, South Dakota

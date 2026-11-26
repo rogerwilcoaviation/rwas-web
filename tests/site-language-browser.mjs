@@ -118,7 +118,7 @@ try {
       });
     });
     const heading = await page.locator('h1').first().textContent();
-    await page.getByRole('button', { name: 'Español', exact: true }).click();
+    await page.getByRole('button', { name: 'ES Español', exact: true }).click();
     await page.waitForFunction(
       () =>
         document.querySelector('[data-site-language-control] [role="status"]')
@@ -264,7 +264,7 @@ try {
       const start = Date.now();
       await page
         .getByRole('button', {
-          name: language === 'es' ? 'Español' : 'Português do Brasil',
+          name: language === 'es' ? 'ES Español' : 'PT-BR Português do Brasil',
           exact: true,
         })
         .click();

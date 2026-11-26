@@ -294,17 +294,26 @@ export default function YanktonLocationPage() {
             </Specimen>
 
             <Specimen as="section">
+              <span className="bs-kicker">Hours</span>
+              <p>
+                Monday&ndash;Friday
+                <br />
+                7:00 AM &ndash; 5:00 PM CT
+              </p>
+            </Specimen>
+
+            <Specimen as="section">
               <span className="bs-kicker">Email</span>
               <p>
                 <a
-                  href="mailto:service@rwas.team"
+                  href="mailto:avionics@rwas.team"
                   style={{
                     color: 'var(--ink-900)',
                     textDecoration: 'underline',
                     textUnderlineOffset: '2px',
                   }}
                 >
-                  service@rwas.team
+                  avionics@rwas.team
                 </a>
               </p>
             </Specimen>

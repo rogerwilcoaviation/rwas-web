@@ -342,7 +342,7 @@ body > * { position: relative; z-index: 1; }
 <div class="page">
 
   <div class="dateline">
-    <span>Spring 2026 Edition</span>
+    <span>Current Edition</span>
     <span>Vol. XL &middot; No. 1</span>
     <span>rogerwilcoaviation.com</span>
   </div>
@@ -361,33 +361,35 @@ body > * { position: relative; z-index: 1; }
   </div>
 
   <div class="edition-bar">
-    <span>Garmin Spring 2026 pricing now active</span>
+    <span>Authorized Garmin dealer</span>
     <span>GFC 500 autopilot installations available</span>
-    <span>Now accepting spring scheduling</span>
+    <span>Now booking Garmin install slots</span>
   </div>
 
   <nav class="np-nav" aria-label="Primary navigation">
     <a href="/">Home</a>
     <a class="jerry" href="#" onclick="window.openJerryChat();return false;">Ask Jerry</a>
-    <a class="active" href="/collections/avionics-certified">Garmin</a>
-    <a class="panel-planner" href="https://panelplanner.rwas.team/customer" target="_blank" rel="noopener">Build My Panel</a>
-    <a href="/collections/papa-alpha-tools/">Papa-Alpha Tools</a>
-    <a href="/aircraft-for-sale">Aircraft 4 Sale</a>
+    <a class="panel-planner" href="/axis-system-planner">AXIS System Builder</a>
+    <a class="panel-planner" href="/panel-planner">Panel Layout Planner</a>
+    <a class="active" href="/collections">Garmin</a>
+    <a href="/collections/papa-alpha-tools">Papa-Alpha Tools</a>
+    <a href="/aircraft-for-sale">Aviation Exchange</a>
     <a href="/financing">Financing</a>
-    <a href="/shop-capabilities">Shop Capabilities</a>
-    <a href="/blog/">Blog Articles</a>
+    <a href="/services">Services</a>
+    <a href="/blog">Blog Articles</a>
     <a href="/about">About</a>
+    <a href="/contact">Contact</a>
   </nav>
 
   <div class="ticker-bar">
     <span class="ticker-label">Bulletin</span>
     <span class="ticker-text">
-      Papa-Alpha rigging reference tools now shipping worldwide &nbsp;&bull;&nbsp;
-      Garmin G3X Touch installations booking into summer 2026 &nbsp;&bull;&nbsp;
-      Annual inspection slots available &mdash; call (605) 299-8178 &nbsp;&bull;&nbsp;
-      Papa-Alpha rigging reference tools now shipping worldwide &nbsp;&bull;&nbsp;
-      Garmin G3X Touch installations booking into summer 2026 &nbsp;&bull;&nbsp;
-      Annual inspection slots available &mdash; call (605) 299-8178
+      Now booking Garmin install slots &mdash; schedule early &nbsp;&bull;&nbsp;
+      GFC 500 installs: Bonanza, Mooney, Cessna &mdash; same-day quote &nbsp;&bull;&nbsp;
+      Papa-Alpha tools ship same day from the RWAS shop &nbsp;&bull;&nbsp;
+      Now booking Garmin install slots &mdash; schedule early &nbsp;&bull;&nbsp;
+      GFC 500 installs: Bonanza, Mooney, Cessna &mdash; same-day quote &nbsp;&bull;&nbsp;
+      Papa-Alpha tools ship same day from the RWAS shop
     </span>
   </div>
 
@@ -410,7 +412,7 @@ body > * { position: relative; z-index: 1; }
 
       <!-- ── LEFT: Memo news feed ── -->
       <div class="memo-feed">
-        <h2 class="memo-feed-title">Latest Garmin Dealer Memos</h2>
+        <h2 class="memo-feed-title">Latest Garmin News from RWAS</h2>
         <div id="memo-list">
           <div class="loading">Loading dealer memos&hellip;</div>
         </div>
@@ -432,8 +434,8 @@ body > * { position: relative; z-index: 1; }
     <div class="cta-bar">
       <div class="cta-text">Ready to upgrade your panel? Talk to our avionics team.</div>
       <a class="cta-phone" href="tel:+16052998178">(605) 299-8178</a>
-      <div class="cta-sub">Or <a href="https://panelplanner.rwas.team/customer" target="_blank" rel="noopener">build a Garmin panel draft</a> with Jerry</div>
-      <div class="cta-sub">Need help? <a href="#" onclick="window.openJerryChat();return false;">Chat with Captain Jerry</a> for a quick quote</div>
+      <div class="cta-sub">Or <a href="/panel-planner">plan your Garmin panel layout</a> or <a href="/axis-system-planner">build an AXIS system</a></div>
+      <div class="cta-sub">Need help? <a href="#" onclick="window.openJerryChat();return false;">Chat with Captain Jerry</a></div>
     </div>
 
         <div class="garmin-services" style="margin:32px 0 8px;padding:24px 0;border-top:1px solid rgba(0,0,0,0.12)">
@@ -475,6 +477,12 @@ body > * { position: relative; z-index: 1; }
     return months[parseInt(parts[1],10)-1] + ' ' + parseInt(parts[2],10) + ', ' + parts[0];
   }
 
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
   function renderMemos(memos) {
     var el = document.getElementById('memo-list');
     if (!memos || memos.length === 0) {
@@ -487,8 +495,9 @@ body > * { position: relative; z-index: 1; }
       var m = memos[i];
       html += '<div class="memo-item">';
       html += '<div class="memo-date">' + formatDate(m.date) + (m.category ? ' &middot; ' + m.category.toUpperCase() : '') + '</div>';
-      html += '<div class="memo-title">' + m.title + '</div>';
-      html += '<div class="memo-summary">' + m.summary + '</div>';
+      var title = esc(m.title);
+      html += '<div class="memo-title">' + (m.link ? '<a href="' + esc(m.link) + '">' + title + '</a>' : title) + '</div>';
+      html += '<div class="memo-summary">' + esc(m.summary) + '</div>';
       if (m.products && m.products.length) {
         html += '<div class="memo-products">';
         for (var j = 0; j < m.products.length; j++) {
@@ -541,7 +550,7 @@ body > * { position: relative; z-index: 1; }
         renderMemos(data.memos || []);
         renderProducts(data.products || []);
         if (data.last_updated) {
-          document.getElementById('updated-stamp').textContent = 'Offerings last updated ' + formatDate(data.last_updated);
+          document.getElementById('updated-stamp').textContent = 'Updated ' + formatDate(data.last_updated);
         }
       } catch(e) {
         document.getElementById('memo-list').innerHTML = '<div class="memo-empty">Unable to load memo data.</div>';
