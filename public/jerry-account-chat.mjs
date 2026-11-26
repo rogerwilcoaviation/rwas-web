@@ -1028,7 +1028,9 @@ export async function mountJerryAccountChat({
   }, 250);
   context = initial;
   render();
-  openPanel(false);
+  // "Ask Jerry" clicked before the deferred widget mounted leaves #ask-jerry in
+  // the URL with no handler having run; honor it now.
+  openPanel(location.hash === '#ask-jerry');
   if (initial.error) fail(initial.error);
   else await refresh();
   return true;
