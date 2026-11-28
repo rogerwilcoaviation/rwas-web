@@ -117,15 +117,6 @@ export const SITE_SEARCH_INDEX = [
   },
   {
     group: 'Products',
-    title: '16 GB microSD™ Class 10 Card with SD Adapter',
-    href: '/products/16-gb-microsd-class-10-card-with-sd-adapter',
-    handle: '16-gb-microsd-class-10-card-with-sd-adapter',
-    description:
-      '16 GB microSD™ Class 10 Card with SD AdapterGarmin part number 010-10683-07. Catalog description: 16 GB microSD™ Class 10 Card with SD Adapter. Garmin data card or database media item. Confirm region, database type, and compatible…',
-    skus: ['010-10683-07'],
-  },
-  {
-    group: 'Products',
     title: '8GB SD Data Card, Blank',
     href: '/products/8gb-sd-data-card-blank',
     handle: '8gb-sd-data-card-blank',
